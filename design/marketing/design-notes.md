@@ -12,11 +12,22 @@ single line under the hero.
 into `app.motir.co`; the marketing site draws **no** connect, import-source, index, generate or chat
 UI of its own. Those live downstream in 7.15 / 7.17 / 7.3 and are owned by their own designs.
 
-**Asset files (three, shared basename):** `landing.design-notes.md` (this file) ·
-`landing.mock.html` (the source of truth — standalone, re-stating the shipped `--el-*` values so it
-paints without a Tailwind build, exactly as `motir-core/design/onboarding-entrance/*.mock.html`
-does) · `landing.png` (full-page Playwright chromium export, light theme,
-`deviceScaleFactor: 2`).
+**Asset files (three):** `design-notes.md` (this file, the AREA's note) · `landing.mock.html` (the
+source of truth — standalone, re-stating the shipped `--el-*` values so it paints without a Tailwind
+build, exactly as `motir-core/design/onboarding-entrance/*.mock.html` does) · `landing.png`
+(full-page Playwright chromium export, light theme, `deviceScaleFactor: 2`).
+
+> **⚠️ The note is `design-notes.md`, NOT `landing.design-notes.md` — and this is a mechanism, not a
+> style preference.** MOTIR-1143's acceptance criterion asked for three files "sharing a basename";
+> the design-result publisher cannot see a note named that way. `classifyDesignPath` in
+> `motir-core/scripts/upload-design-assets.mjs` matches the mock and the export on SUFFIX
+> (`.mock.html`, `.png`) but the note on **exact basename** — `path.basename(filePath) === 'design-notes.md'`
+> — so `landing.design-notes.md` classifies as `null`, lands in `ignored`, and is never published,
+> while its two siblings publish normally. The card would get the pictures and none of the words.
+>
+> It is also the convention 44 of motir-core's 45 areas already follow: ONE `design-notes.md` per
+> AREA, with the mock and the export sharing a per-surface basename. The criterion was amended on the
+> record; the defect in the classifier and the one non-conforming file it strands are **MOTIR-3750**.
 
 ---
 
@@ -375,6 +386,7 @@ re-introduce the pattern** by marking a nav item current in accent ink on the so
 | `motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card            | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
 | `?intent=import` has **no reader and no owning card**, while its tracker twin got MOTIR-3639                                                        | **MOTIR-3746**                                              |
 | `--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm | **MOTIR-3745**                                              |
+| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository | **MOTIR-3750**                                              |
 
 **Consequence of MOTIR-3743 for this repository, worth stating where the next runner will read it:**
 until `motir-marketing` is connected, no card in it can carry a `targetRepo` pin, `link_pull_request`
