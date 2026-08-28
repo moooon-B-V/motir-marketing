@@ -1,0 +1,14 @@
+# Not a workspace — this repository is a single package. The file exists because
+# pnpm 11 reads its BUILD ALLOWLIST from here, and an install that leaves a
+# native dependency's build script undecided exits 1 with
+# ERR_PNPM_IGNORED_BUILDS. Both entries below are decisions, not noise.
+allowBuilds:
+  # Next's optional image-optimisation dependency. Its install script picks up
+  # the prebuilt @img/sharp-linux-* binary for the platform rather than
+  # compiling libvips, so allowing it costs nothing and skipping it would leave
+  # `next/image` unoptimised in production.
+  sharp: true
+  # The native resolver behind eslint-import-resolver-typescript, which
+  # eslint-config-next pulls in. Its postinstall only selects the prebuilt
+  # binding for the platform.
+  unrs-resolver: true
