@@ -22,6 +22,22 @@ RUN corepack enable
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# ⚠️ A BUILD ARG, NOT A FLY SECRET, AND THE DIFFERENCE IS NOT A PREFERENCE.
+# `NEXT_PUBLIC_*` is INLINED by `next build`, so this value has to exist HERE,
+# in the builder stage — a Fly secret is a runtime environment variable and
+# arrives hours too late, after an image has already been built with the doors
+# pointing at `undefined`. `fly.toml`'s `[build.args]` is what supplies it on a
+# release; `.env.example` documents it for local development.
+#
+# Deliberately NO DEFAULT. `lib/appOrigin.ts` throws when it is unset, which
+# fails this layer with the variable's name — the one moment the mistake is
+# cheap. A default here would make that guard unreachable and let a
+# misconfigured deployment ship a landing page whose every button leads to a
+# domain that is not serving (MOTIR-1152, acceptance criterion 4).
+ARG NEXT_PUBLIC_MOTIR_APP_ORIGIN
+ENV NEXT_PUBLIC_MOTIR_APP_ORIGIN=${NEXT_PUBLIC_MOTIR_APP_ORIGIN}
+
 RUN pnpm next build
 
 # ── runner ──────────────────────────────────────────────────────────────────
