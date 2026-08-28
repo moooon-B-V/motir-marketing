@@ -65,6 +65,113 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
+  # ── Publish the DESIGN RESULT to its work item (MOTIR-3750) ───────────────
+  #
+  # This repository holds design assets (`design/<area>/`) and, until this job,
+  # published none of them: the design-result publisher is a STEP of motir-core's
+  # `design-guards` job, and that job has no counterpart here. So MOTIR-1143's
+  # asset merged into a card that showed nothing — the deliverable is the design
+  # RESULT on the card, not the pull request (motir-core
+  # `docs/decisions/design-result.md`).
+  #
+  # ⚠️ A JOB HERE, A STEP THERE, AND THAT IS NOT AN INCONSISTENCY. In motir-core
+  # the publish is a step because `design-guards` already runs on every pull
+  # request to read `design/**` — a step adds no check anywhere. This repository
+  # has no such host job, and hanging a publish off `lint` would run it on
+  # push-to-main too. A gated job is the shape THIS file already uses for
+  # `deploy`, so the greyed `Skipped` a job-level `if:` reports on the other
+  # trigger is a cost this repository has already accepted once.
+  #
+  # ⚠️ NOT IN `deploy`'s `needs`. The header above says to add a gate as the
+  # repository grows one — a publish is NOT a gate. A release must not wait on
+  # it, and must not fail because of it.
+  #
+  # ⚠️ NO `continue-on-error`, matching motir-core. Every case that should pass
+  # quietly is handled INSIDE the script, which returns 0 for each: no design
+  # artifact in the diff, no resolvable card in the branch/title, and no
+  # credential. What is left for red to mean is a publish that should have
+  # happened and did not.
+  design-result:
+    name: Design result
+    runs-on: ubuntu-latest
+    # `pull_request` ONLY — re-publishing an identical result after the merge is
+    # what motir-core's own step avoids (`design-result.md` §6).
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      # ⚠️ DELIBERATELY NO `id-token: write` — adding it TODAY turns this job
+      # RED, it does not make it keyless. motir-core's publisher prefers OIDC
+      # whenever it can mint a token (`authHeadersFor`), and the server resolves
+      # the tenant from the verified `repository` claim through
+      # `githubRepoRepository.findConnectedByName` — which answers
+      # `403 repo_not_connected` for this repository, because it is not connected
+      # to Motir (MOTIR-3743). The script would obtain a token, send it, get 403,
+      # throw, and exit 1 on every pull request.
+      #
+      # ▶ WHEN MOTIR-3743 CLOSES: add `id-token: write` here and delete the
+      #   `MOTIR_UPLOAD_TOKEN` secret. That is the whole change — the keyless
+      #   path then works exactly as it does in motir-core, with no credential
+      #   to store or rotate.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      # ⚠️ FETCHED FROM motir-core, NOT FORKED. `upload-design-assets.mjs` is ~980
+      # lines of load-bearing publisher logic guarded by specs that live in
+      # motir-core (`vitest.design.config.ts`); a second copy is the kind of
+      # duplication where one copy quietly gets a fix and the other does not —
+      # the reason `@motir/design-system` and `@motir/brand` exist at all.
+      #
+      # It is fetchable because motir-core is a PUBLIC repository, and runnable
+      # because the script imports only `node:child_process`, `node:fs` and
+      # `node:path` plus global `fetch` — zero external dependencies, so bare
+      # `node` runs it with no install.
+      #
+      # PINNED TO A COMMIT, never to `main`: a git SHA is content-addressed, so
+      # this fetch is reproducible and a motir-core change cannot alter what runs
+      # here without a diff in this file. Bump the pin deliberately.
+      #
+      # ⚠️ The long-term home of this mechanism is a DECISION, not this comment —
+      # a script shared by two repositories is the same question MOTIR-3724
+      # answered for the brand chrome. Filed with MOTIR-3750.
+      - name: Fetch the design-result publisher from motir-core
+        env:
+          # motir-core@6e71acf21c1426180bf502c387e221108930e381 (2026-08-28)
+          PUBLISHER_REF: 6e71acf21c1426180bf502c387e221108930e381
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 -o "${RUNNER_TEMP}/upload-design-assets.mjs" \
+            "https://raw.githubusercontent.com/moooon-B-V/motir-core/${PUBLISHER_REF}/scripts/upload-design-assets.mjs"
+          echo "Fetched publisher from motir-core@${PUBLISHER_REF}"
+
+      - name: Publish the design result
+        env:
+          # A Motir API token granted `work_item:edit` (motir-core
+          # `lib/tokens/grant.ts` → `DESIGN_PUBLISH_PERMISSION`). The PAT path is
+          # repository-AGNOSTIC — it authenticates the token, resolves its
+          # workspace and resolves the card by identifier, with no repository
+          # check — which is what lets this repository publish while it is still
+          # unconnected. UNSET until somebody creates it: the script then logs
+          # "No OIDC identity and no MOTIR_UPLOAD_TOKEN — publishing is opt-in;
+          # skipping" and returns 0, so this job is green and INERT rather than
+          # broken. A green run that logged `skipping` is NOT a publish.
+          MOTIR_UPLOAD_TOKEN: ${{ secrets.MOTIR_UPLOAD_TOKEN }}
+          MOTIR_BASE_URL: ${{ vars.MOTIR_BASE_URL || 'https://app.motir.co' }}
+          DESIGN_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          DESIGN_PR_REF: ${{ github.head_ref }}
+          DESIGN_PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+          # A pull_request checkout is the MERGE commit at depth 1, which carries
+          # both parents — so the base is normally already present. Fetch it if
+          # it is not, rather than paying `fetch-depth: 0` on every run. The
+          # script's own `resolveDiffBase` deepens by one commit when a shallow
+          # clone has grafted HEAD's parents away; this line covers the base sha
+          # itself, which that deepen does not reach.
+          git cat-file -e "${DESIGN_BASE_SHA}^{commit}" 2>/dev/null ||
+            git fetch --depth=1 origin "${DESIGN_BASE_SHA}"
+          node "${RUNNER_TEMP}/upload-design-assets.mjs"
+
   deploy:
     name: Deploy to Fly
     runs-on: ubuntu-latest
