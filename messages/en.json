@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Motir — AI planning, project management and agent orchestration",
+    "description": "The AI planning, project-management and agent orchestration platform. Describe what you want to build — Motir drafts the plan, then agents take over the work."
+  },
+  "nav": {
+    "ariaLabel": "Main",
+    "brandAriaLabel": "Motir — home",
+    "explore": "Explore",
+    "docs": "Docs",
+    "signIn": "Sign in",
+    "startFree": "Start free"
+  },
+  "landing": {
+    "hero": {
+      "eyebrow": "Build with AI",
+      "headline": "What do you want to build?",
+      "lede": "The AI planning, project-management and agent orchestration platform. Describe what you want to build — Motir drafts the plan with you, then agents take over the work.",
+      "ideaLabel": "Your idea",
+      "placeholder": "Describe what you want to build — who it's for, and the core things people should be able to do. For example: a tool for freelancers to send invoices and track which clients have paid.",
+      "cta": "Start planning",
+      "hint": "Start with a rough idea — Motir asks follow-up questions next. Free to start, no credit card.",
+      "ctaSubmitting": "Starting…",
+      "statusSubmitting": "Saving your idea and taking you to Motir…",
+      "errorTitle": "We couldn't save your idea just now.",
+      "errorBody": "Nothing you typed has been lost. Try again, or continue to Motir and bring your idea with you.",
+      "errorRetry": "Try again",
+      "errorFallback": "Continue to Motir"
+    },
+    "doors": {
+      "or": "OR",
+      "import": {
+        "title": "Import an existing project",
+        "description": "Already building something? Connect your repository, or bring over your work items from Jira, Linear or Plane — Motir reads what's there and plans on top of it.",
+        "cta": "Import"
+      },
+      "free": {
+        "title": "Just want the project-management tool?",
+        "description": "Motir is a complete project-management tool on its own — boards, sprints, roadmaps and work items. AI planning is there when you want it, not something you have to pass through.",
+        "cta": "Start free"
+      }
+    },
+    "pillars": {
+      "eyebrow": "A vibe project",
+      "headline": "You've heard of vibe coding. This is a vibe project.",
+      "lede": "You bring the idea. Motir carries it from a sentence to a shipped project — the planning, the tracking, and the work itself. And not only the code: design, decisions, content and tests are work items too.",
+      "planning": {
+        "title": "AI planning",
+        "body": "Describe what you want in your own words. Motir asks follow-up questions, then drafts a plan you read before anything is built — epics, stories and work items, with the dependencies between them."
+      },
+      "projectManagement": {
+        "title": "Project management",
+        "body": "A complete project-management tool underneath it all: boards, sprints, a backlog, roadmaps, dependencies, comments and reports. It stands on its own, whether or not you ever use the AI."
+      },
+      "agents": {
+        "title": "Agent orchestration",
+        "body": "Approve the plan and agents take over the work, one work item at a time, each arriving as a pull request you review. Use Motir's agents, or your own."
+      }
+    },
+    "openCore": {
+      "title": "Open core",
+      "body": "The project-management core is open source under the GPL — the whole tool, not a cut-down edition. Run it yourself, read every line of it, or let us host it. AI planning and agent orchestration are the commercial layers on top.",
+      "cta": "Motir on GitHub"
+    }
+  },
+  "footer": {
+    "ariaLabel": "Footer",
+    "tagline": "The AI planning, project-management and agent orchestration platform.",
+    "productHeading": "Product",
+    "resourcesHeading": "Resources",
+    "legalHeading": "Legal",
+    "explore": "Explore projects",
+    "docs": "Docs",
+    "signIn": "Sign in",
+    "startFree": "Start free",
+    "github": "GitHub",
+    "openSource": "The project-management core is open source, GPL-3.0.",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "legalIndex": "All legal documents",
+    "entity": "Motir is a product of moooon B.V.",
+    "copyright": "© {year} moooon B.V."
+  }
+}
