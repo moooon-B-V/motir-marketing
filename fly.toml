@@ -49,6 +49,21 @@ primary_region = "iad"               # beside motir-core and motir-ai.
   # upward: the first real traffic reading that shows one machine saturating, or
   # a decision that marketing-site downtime is user-visible in a way this
   # paragraph says it is not.
+  #
+  # ⚠️ THE POOL IS 2 AND THE FLOOR IS 1 — read from the platform on 2026-08-28,
+  # after the first release, not from this file:
+  #
+  #   fly machine list -a motir-marketing
+  #     85761d2a4134e8  app  iad  started  shared-cpu-1x:512MB
+  #     d893299a5d4708  app  iad  started  shared-cpu-1x:512MB
+  #
+  # `flyctl deploy` created BOTH — Fly's default for a new app's first release is
+  # two machines, and no `fly scale count` was run. The pool is therefore 2 and
+  # is KEPT at 2: a stopped machine bills no compute, so the second one costs
+  # nothing until the proxy starts it, and running `fly scale count 1` against a
+  # group already at its intended count risks destroying a machine to save
+  # nothing. The floor below is what decides how many of those two stay WARM,
+  # and that is the line that costs money.
   min_machines_running = 1
 
   # ⚠️ NOT MEASURED. A Next standalone server has never been measured on this
@@ -61,13 +76,20 @@ primary_region = "iad"               # beside motir-core and motir-ai.
     soft_limit = 100
     hard_limit = 150
 
-# ⚠️ THE VM SIZE IS A STARTING POINT, and the memory reading that justifies it is
-# taken from the platform AFTER the first deploy and recorded on MOTIR-1455 —
-# not asserted here. motir-core measured a 390 MB resident set for an
-# application with hundreds of routes; this app has one page and no database
-# client, so 512 MB is chosen as the smallest size with plausible headroom
-# rather than as a measurement. TRIGGER: a VmRSS reading above ~350 MB, or an
-# OOM in the machine's events.
+# ⚠️ THE VM SIZE WAS A GUESS AND IS NOW A MEASUREMENT. 512 MB was chosen as the
+# smallest size with plausible headroom, on the reasoning that motir-core needs
+# 390 MB for an application with hundreds of routes and a database client while
+# this app has one page and neither.
+#
+# MEASURED 2026-08-28 on machine 85761d2a4134e8, reading /proc/<next-server>/status
+# through `fly machine exec` after the first release had served traffic:
+#
+#   VmRSS 81,980 kB = 80 MB   ·   VmHWM 81,980 kB   ·   MemTotal 469,900 kB
+#
+# ~5.7x headroom, comparable to motir-core's measured 4.9x. ⚠️ AT IDLE, so it
+# sizes the BASELINE and says nothing about load — it is recorded so the trigger
+# below has something to fire against. TRIGGER: a VmRSS reading above ~350 MB,
+# or an OOM in the machine's events.
 [[vm]]
   size   = "shared-cpu-1x"
   memory = "512mb"
