@@ -1,0 +1,2481 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>motir.co landing — three entry doors · MOTIR-1143 / 8.3.3</title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of motir-core's `--el-*` element
+         tokens (light + dark, `warm-editorial` style, `motir` palette), copied
+         from `@motir/design-system/theme.css` on origin/main.
+
+         This mock is STANDALONE by the same convention every motir-core design
+         asset uses (design/onboarding-entrance/*.mock.html,
+         design/ai-planning/*.mock.html): it RE-STATES the shipped values so a
+         plain browser paints the real palette without a Tailwind build. It
+         re-defines no semantics. In the real app these are derived —
+         `--el-accent: var(--color-primary-fill)` and so on — and the Tier-1
+         dark block re-skins them; here both resolutions are written out, which
+         is what lets the dark panel below exist in one file.
+
+         The page this draws lives in motir-marketing and gets its tokens from
+         `@motir/design-system@0.1.0` (public npm) and `@motir/brand`
+         (MOTIR-1456, both `done`). NOTHING here is an invented hue: every
+         product colour is an `--el-*` token or a `color-mix()` over two of
+         them. The only raw values are the non-semantic elevation shadows and
+         the doc-annotation scaffold (sheet, panel captions, ref chips, the
+         viewport rulers), which are not product UI.
+      ---------------------------------------------------------------------- */
+      :root {
+        /* ── page + text ─────────────────────────────────────────────── */
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        /* ── borders ─────────────────────────────────────────────────── */
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        /* ── accent + link ───────────────────────────────────────────── */
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-highlight: #ff64c8;
+        --el-link: #0070d2;
+        --el-link-pressed: #005bab;
+        /* ── status ──────────────────────────────────────────────────── */
+        --el-danger: #e03131;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #fde0ec;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        /* ── tints ───────────────────────────────────────────────────── */
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        /* ── shape (element-semantic — never a raw radius) ───────────── */
+        --radius-card: 12px;
+        --radius-btn: 8px;
+        --radius-input: 8px;
+        --radius-control: 6px;
+        --radius-badge: 9999px;
+        --radius-kbd: 4px;
+        /* ── spacing + sizing ────────────────────────────────────────── */
+        --spacing-card-padding: 24px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 10px;
+        --spacing-control-y: 6px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-control: 36px;
+        /* ── elevation (raw by design — non-semantic) ────────────────── */
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-card: 0 4px 12px rgba(15, 15, 15, 0.08);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        /* ── type ────────────────────────────────────────────────────── */
+        --font-sans-source: 'Inter';
+        --font-serif-source: 'Source Serif 4';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      /* The dark half of the SAME layer. On the real page this is the Tier-1
+         `[data-theme='dark']` block re-skinning `--color-*`; here the resolved
+         `--el-*` are restated so a nested `.dark` subtree can be drawn beside a
+         light one in a single static file — the same thing motir-core does with
+         `data-appearance-scope`. */
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #7b6ce5;
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-link-pressed: #79b8ff;
+        --el-danger-surface: #3a1f2a;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 38px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-muted);
+        max-width: 78ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        background: var(--el-page-bg);
+      }
+      .rule {
+        font: 600 10px var(--font-mono);
+        color: var(--el-text-muted);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin: 0 0 7px;
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         PRODUCT SURFACE — the motir.co landing.
+         A PUBLIC, SIGNED-OUT page in the standalone motir-marketing repo.
+         It draws no app shell: it has its own top bar + footer, mirroring
+         motir-core's shipped public chrome (ExploreTopBar / ExploreFooter)
+         so the two properties read as one product. Every door is a
+         cross-origin hand-off into app.motir.co; no connect / import /
+         chat UI is drawn here.
+      ═══════════════════════════════════════════════════════════════ */
+      .site {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+      }
+
+      /* ── top bar (mirrors ExploreTopBar's structure + rhythm) ──────── */
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 12px var(--spacing-card-padding);
+      }
+      .brand-lockup {
+        --brand-size: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: calc(var(--brand-size) * 0.33);
+        text-decoration: none;
+      }
+      .brand-glyph {
+        color: var(--el-accent-on-surface);
+        flex: none;
+        display: block;
+      }
+      .brand-word {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: calc(var(--brand-size) * 0.72);
+        line-height: 1;
+        color: var(--el-text);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .nav a:hover {
+        color: var(--el-text);
+      }
+      .bar-cta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+
+      /* ── buttons (the shipped Button primitive's variants) ─────────── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font: 600 14px/1 var(--font-sans);
+        border-radius: var(--radius-btn);
+        padding: 0 18px;
+        height: var(--height-btn-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn.sm {
+        height: var(--height-btn-sm);
+        font-size: 13px;
+        padding: 0 12px;
+      }
+      .btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn.sm svg {
+        width: 14px;
+        height: 14px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+      }
+      .btn.primary:hover {
+        background: var(--el-accent-pressed);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text);
+      }
+      .btn.ghost:hover {
+        background: var(--el-muted);
+      }
+      .btn:focus-visible {
+        outline: 2px solid var(--el-accent-on-surface);
+        outline-offset: 2px;
+      }
+      .btn[disabled] {
+        cursor: default;
+        opacity: 0.72;
+      }
+
+      /* ── hero ─────────────────────────────────────────────────────── */
+      .hero {
+        /* 1080, not 720: the fork below is TWO co-equal columns and the idea
+           textarea sits in one of them. The onboarding entrance rejected a
+           two-up fork partly because "a half-width column can't hold a long
+           first idea" — at a 660px centred column that is true (~310px each).
+           At 1080 each door is ~510px, which is wider than the entrance's own
+           full-width box, so the objection does not carry over. */
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 72px 28px 8px;
+        text-align: center;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--el-tint-lavender);
+        color: var(--el-text-strong);
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: var(--radius-badge);
+        padding: calc(var(--spacing-chip-y) + 2px)
+          calc(var(--spacing-chip-x) + 1px);
+        margin-bottom: 16px;
+      }
+      .eyebrow svg {
+        width: 14px;
+        height: 14px;
+      }
+      .hero h1 {
+        font: 700 46px/1.1 var(--font-serif);
+        letter-spacing: -0.02em;
+        margin: 0 0 12px;
+        color: var(--el-text);
+      }
+      .hero .lede {
+        margin: 0 auto;
+        max-width: 56ch;
+        color: var(--el-text-secondary);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      /* ── THE FORK — two CO-EQUAL doors (new project · existing project) ───
+         Yue, 2026-08-28: "I have an existing project" is first-class, as
+         important as the new-idea door. So the two share EVERY treatment that
+         carries weight — the same grid track, the same accent border, the same
+         elevation, the same `h2`, the same primary Button — and the `OR`
+         divider is GONE, because a divider is what makes one side an
+         alternative to the other. Door 3 stays tertiary and is unaffected. */
+      .fork {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-top: 28px;
+        text-align: left;
+        align-items: stretch;
+      }
+      .door {
+        display: flex;
+        flex-direction: column;
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-accent);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-elevated);
+        padding: 18px 18px 16px;
+      }
+      .door-head {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+      .door-head .tile {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-control);
+        display: grid;
+        place-items: center;
+        color: var(--el-text-strong);
+        flex: none;
+      }
+      .door-head .tile svg {
+        width: 19px;
+        height: 19px;
+      }
+      .door-head .tile.lav {
+        background: var(--el-tint-lavender);
+      }
+      .door-head .tile.sky {
+        background: var(--el-tint-sky);
+      }
+      .door-head h2 {
+        margin: 0 0 4px;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--el-text);
+      }
+      .door-head p {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+      }
+      .door .lbl {
+        display: block;
+        font: 600 11px var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--el-text-muted);
+        margin-bottom: 8px;
+      }
+      .door textarea {
+        width: 100%;
+        flex: 1;
+        min-height: 148px;
+        border: 0;
+        background: transparent;
+        resize: none;
+        font-family: inherit;
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--el-text);
+        outline: none;
+        display: block;
+      }
+      .door textarea::placeholder {
+        color: var(--el-text-muted);
+      }
+      .door-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 12px;
+        padding-top: 13px;
+        border-top: 1px solid var(--el-border-soft);
+      }
+      /* The three real import SOURCES, drawn as choices rather than described in
+         a line of prose — this is what makes door 2 first-class rather than a
+         link wearing a card. Each is its own focusable row. */
+      .sources {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .sources a {
+        display: block;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-input);
+        padding: 10px 12px;
+        text-decoration: none;
+        background: var(--el-page-bg);
+      }
+      .sources a:hover {
+        border-color: var(--el-border-strong);
+        background: var(--el-surface-soft);
+      }
+      .sources a:focus-visible {
+        outline: 2px solid var(--el-accent-on-surface);
+        outline-offset: 2px;
+      }
+      .sources .s-t {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .sources .s-d {
+        display: block;
+        margin-top: 3px;
+        font-size: 12.5px;
+        line-height: 1.45;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── The idea box, as PANEL 3 draws it in close-up ───────────── */
+      .idea {
+        margin-top: 26px;
+        text-align: left;
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-accent);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-elevated);
+        padding: 18px 18px 16px;
+      }
+      .idea .lbl {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font: 600 11px var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        /* --el-text-muted, NOT --el-text-faint: this is an informational field
+           label, and theme.css marks faint as decoration/disabled ONLY
+           (2.37–2.82:1 on every surface). Muted is 4.54:1 on the white card. */
+        color: var(--el-text-muted);
+        margin-bottom: 8px;
+      }
+      .idea textarea {
+        width: 100%;
+        min-height: 172px;
+        border: 0;
+        background: transparent;
+        resize: none;
+        font-family: inherit;
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--el-text);
+        outline: none;
+        display: block;
+      }
+      .idea textarea::placeholder {
+        color: var(--el-text-muted);
+      }
+      .idea-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 12px;
+        padding-top: 13px;
+        border-top: 1px solid var(--el-border-soft);
+      }
+      .counter {
+        font: 500 12px var(--font-mono);
+        color: var(--el-text-muted);
+      }
+      .counter.hidden {
+        visibility: hidden;
+      }
+      .hint {
+        margin: 12px 2px 0;
+        font-size: 12.5px;
+        color: var(--el-text-secondary);
+        text-align: center;
+      }
+
+      /* ── OR divider ───────────────────────────────────────────────── */
+      .or {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 24px 2px 16px;
+        color: var(--el-text-muted);
+        font: 600 11px var(--font-mono);
+        letter-spacing: 0.06em;
+      }
+      .or::before,
+      .or::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--el-border);
+      }
+
+      /* ── DOOR 3 (TERTIARY) — ONE line, not a third card ───────────── */
+      .door3 {
+        margin: 14px 2px 0;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+        text-align: center;
+      }
+      .door3 a {
+        color: var(--el-link);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .door3 a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── the three pillars ────────────────────────────────────────── */
+      .band {
+        margin-top: 72px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 56px var(--spacing-card-padding);
+      }
+      .band-head {
+        max-width: 720px;
+        margin: 0 auto 30px;
+        text-align: center;
+      }
+      .band-head h2 {
+        font: 700 30px/1.2 var(--font-serif);
+        letter-spacing: -0.015em;
+        margin: 0 0 8px;
+        color: var(--el-text);
+      }
+      .band-head p {
+        margin: 0 auto;
+        max-width: 58ch;
+        color: var(--el-text-secondary);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .pillars {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      .pillar {
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        padding: var(--spacing-card-padding);
+        box-shadow: var(--shadow-subtle);
+      }
+      .pillar .tile {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-control);
+        display: grid;
+        place-items: center;
+        color: var(--el-text-strong);
+        margin-bottom: 14px;
+      }
+      .pillar .tile svg {
+        width: 20px;
+        height: 20px;
+      }
+      .pillar .tile.lav {
+        background: var(--el-tint-lavender);
+      }
+      .pillar .tile.sky {
+        background: var(--el-tint-sky);
+      }
+      .pillar .tile.mint {
+        background: var(--el-tint-mint);
+      }
+      .pillar h3 {
+        margin: 0 0 8px;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--el-text);
+      }
+      .pillar p {
+        margin: 0;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .pillar .ord {
+        font: 600 11px var(--font-mono);
+        color: var(--el-text-muted);
+        letter-spacing: 0.06em;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      /* ── open-core framing ────────────────────────────────────────── */
+      .opencore {
+        max-width: 1080px;
+        margin: 24px auto 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        padding: var(--spacing-card-padding);
+      }
+      .opencore .icn {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-control);
+        background: var(--el-tint-peach);
+        color: var(--el-text-strong);
+        display: grid;
+        place-items: center;
+        flex: none;
+      }
+      .opencore .icn svg {
+        width: 20px;
+        height: 20px;
+      }
+      .opencore h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--el-text);
+      }
+      .opencore p {
+        margin: 0;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+        max-width: 72ch;
+      }
+      .opencore a {
+        color: var(--el-link);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      /* ── social proof / directory badges (content fed by MOTIR-1156) ─ */
+      .proof {
+        padding: 40px var(--spacing-card-padding);
+        border-top: 1px solid var(--el-border);
+        text-align: center;
+        background: var(--el-page-bg);
+      }
+      .proof .cap {
+        font: 600 11px var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--el-text-muted);
+        margin-bottom: 16px;
+      }
+      .badges {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .badge-slot {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 16px;
+        border: 1px dashed var(--el-border-strong);
+        border-radius: var(--radius-control);
+        background: var(--el-surface);
+        color: var(--el-text-secondary);
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+
+      /* ── footer (mirrors ExploreFooter's 4-column shape) ──────────── */
+      .foot {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 40px var(--spacing-card-padding);
+      }
+      .foot h2 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .foot ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .foot li,
+      .foot li a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .foot li a:hover {
+        color: var(--el-link);
+      }
+      .foot .tag {
+        margin: 10px 0 0;
+        max-width: 30rem;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .foot .legal {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--el-border);
+        padding-top: 16px;
+        font-size: 12px;
+        color: var(--el-text-muted);
+      }
+
+      /* ── mobile frame ─────────────────────────────────────────────── */
+      .mobile {
+        width: 390px;
+      }
+      .mobile .topbar {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .mobile .hero {
+        padding: 36px 16px 8px;
+      }
+      .mobile .hero h1 {
+        font-size: 30px;
+      }
+      .mobile .hero .lede {
+        font-size: 14.5px;
+      }
+      .mobile .idea textarea {
+        min-height: 128px;
+      }
+      .mobile .fork {
+        grid-template-columns: 1fr;
+      }
+      .mobile .door textarea {
+        min-height: 112px;
+      }
+      .mobile .band {
+        margin-top: 44px;
+        padding: 36px 16px;
+      }
+      .mobile .pillars {
+        grid-template-columns: 1fr;
+      }
+      .mobile .opencore {
+        flex-direction: column;
+      }
+      .mobile .foot {
+        grid-template-columns: 1fr 1fr;
+        padding: 28px 16px;
+      }
+      .mobile .foot .brandcol {
+        grid-column: 1 / -1;
+      }
+
+      /* ── state close-ups ──────────────────────────────────────────── */
+      .states {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .state {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        background: var(--el-page-bg);
+        padding: 18px;
+        box-shadow: var(--shadow-subtle);
+      }
+      .state .st-cap {
+        font: 600 11px var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--el-text-muted);
+        margin-bottom: 12px;
+      }
+      .state .idea {
+        margin-top: 0;
+        box-shadow: var(--shadow-card);
+      }
+      .state .idea textarea {
+        min-height: 92px;
+      }
+      .st-note {
+        margin: 12px 2px 0;
+        font-size: 12.5px;
+        line-height: 1.55;
+        color: var(--el-text-secondary);
+      }
+      .spin {
+        animation: spin 900ms linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .spin {
+          animation: none;
+        }
+      }
+      .errbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 12px;
+        border: 1px solid var(--el-danger);
+        border-radius: var(--radius-input);
+        background: var(--el-danger-surface);
+        padding: 11px 13px;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--el-danger-on-surface);
+      }
+      .errbox .ic {
+        flex: none;
+        margin-top: 1px;
+      }
+      .errbox .ic svg {
+        width: 16px;
+        height: 16px;
+      }
+      .errbox strong {
+        color: var(--el-danger-on-surface);
+      }
+      .errbox .retry {
+        margin-top: 8px;
+        display: inline-flex;
+        gap: 14px;
+      }
+      .errbox .retry a {
+        color: var(--el-danger-on-surface);
+        font-weight: 700;
+        text-decoration: underline;
+      }
+      .focus-demo {
+        outline: 2px solid var(--el-accent-on-surface);
+        outline-offset: 2px;
+      }
+
+      /* ── routing map ──────────────────────────────────────────────── */
+      .routes {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .route {
+        display: grid;
+        grid-template-columns: 74px 1fr 26px 1fr;
+        align-items: center;
+        gap: 14px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-page-bg);
+        padding: 14px 18px;
+      }
+      .route .rank {
+        font: 700 10px var(--font-mono);
+        letter-spacing: 0.06em;
+        text-align: center;
+        border-radius: var(--radius-badge);
+        padding: 4px 0;
+        color: var(--el-text-strong);
+      }
+      .route .rank.p1 {
+        background: var(--el-tint-lavender);
+      }
+      .route .rank.p2 {
+        background: var(--el-tint-sky);
+      }
+      .route .rank.p3 {
+        background: var(--el-tint-mint);
+      }
+      .route .who {
+        font-size: 13px;
+        color: var(--el-text);
+      }
+      .route .who b {
+        display: block;
+        font-size: 13.5px;
+        margin-bottom: 3px;
+      }
+      .route .who span {
+        color: var(--el-text-secondary);
+      }
+      .route .arr {
+        color: var(--el-text-muted);
+        display: grid;
+        place-items: center;
+      }
+      .route .arr svg {
+        width: 18px;
+        height: 18px;
+      }
+      .route code {
+        font: 500 12px var(--font-mono);
+        background: var(--el-muted);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-kbd);
+        padding: 2px 6px;
+        color: var(--el-text-strong);
+        word-break: break-all;
+      }
+      .route .dest {
+        font-size: 12.5px;
+        color: var(--el-text-secondary);
+        line-height: 1.6;
+      }
+      .shipped {
+        display: inline-block;
+        font: 600 10px var(--font-mono);
+        border-radius: var(--radius-badge);
+        padding: 2px 8px;
+        margin-left: 6px;
+        vertical-align: 1px;
+      }
+      .shipped.yes {
+        background: var(--el-tint-mint);
+        color: var(--el-text-strong);
+      }
+      .shipped.no {
+        background: var(--el-tint-peach);
+        color: var(--el-text-strong);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <div class="doc-head">
+        <h1>motir.co landing — three entry doors, one idea box</h1>
+        <p>
+          The public front door for <strong>all three</strong> of Motir's
+          first-time journeys, drawn for the standalone
+          <strong>motir-marketing</strong> repo. It opens on a SYMMETRIC FORK:
+          <strong>start something new</strong> and
+          <strong>I have an existing project</strong> as two CO-EQUAL doors —
+          same card, same accent border, same elevation, same heading, side by
+          side, no <code>OR</code> between them. It then adds
+          <strong>Start free — project management only</strong> as a genuinely
+          tertiary door (door&nbsp;3): a nav entry plus a single line under the
+          hero, never a third card. Every door is a
+          <strong>cross-origin hand-off</strong> into <code>app.motir.co</code>;
+          this site draws no connect, import-source or chat UI of its own —
+          those are owned by 7.15 / 7.17 / 7.3. The hero deliberately continues
+          the shipped <code>/onboarding</code> entrance's exact vocabulary
+          (Sparkles chip on <code>--el-tint-lavender</code>, serif headline,
+          idea Card + textarea + ArrowRight primary Button) so a visitor who
+          types here and lands there does not see two products. Copy shown is
+          <em>placeholder at the specified register</em> — the final words are
+          MOTIR-1144's.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-1143 · 8.3.3</span>
+          <span class="ref muted">Story MOTIR-656 · 8.3</span>
+          <span class="ref muted">build → MOTIR-1152</span>
+          <span class="ref muted">copy → MOTIR-1144</span>
+          <span class="ref muted">continues entrance MOTIR-1461</span>
+          <span class="ref muted">draft receiver → MOTIR-1458</span>
+          <span class="ref muted">brand → MOTIR-1139 / 1456</span>
+          <span class="ref muted">badges → MOTIR-1156</span>
+        </div>
+      </div>
+
+      <!-- ==========================================================
+           PANEL 1 — the whole landing, desktop, light
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">1</span>
+          <h2>The landing — desktop, light theme</h2>
+          <span class="note"
+            >the full page top to bottom: top bar · hero (door 1 + door 2 + door
+            3) · the three pillars · open-core framing · directory badges ·
+            footer</span
+          >
+        </div>
+        <p class="rule">viewport 1280 · signed-out · motir.co</p>
+
+        <div class="frame">
+          <div class="site">
+            <!-- ── TOP BAR ────────────────────────────────────────── -->
+            <header class="topbar">
+              <a class="brand-lockup" href="https://motir.co">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="https://app.motir.co/explore">Explore</a>
+                <a href="https://app.motir.co/docs">Docs</a>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <!-- DOOR 3, half one of two: the nav entry. -->
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                >
+                  Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <!-- ── HERO ───────────────────────────────────────────── -->
+            <main>
+              <div class="hero">
+                <span class="eyebrow"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                    />
+                    <path d="M20 2v4" />
+                    <path d="M22 4h-4" />
+                    <circle cx="4" cy="20" r="2" />
+                  </svg>
+                  Build with AI</span
+                >
+                <h1>Bring an idea, or bring your project.</h1>
+                <p class="lede">
+                  Motir plans it with you, tracks it on a real board, and hands
+                  it to agents that do the work — the AI planning,
+                  project-management and agent orchestration platform.
+                </p>
+
+                <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
+                     elevation, same heading level, side by side at equal width. Neither is an
+                     alternative to the other and there is no OR divider: a visitor arrives already
+                     belonging to one of these two, and the page must not tell them which is the
+                     real way in. -->
+                <div class="fork">
+                  <!-- DOOR 1 — a NEW project -->
+                  <form class="door">
+                    <div class="door-head">
+                      <span class="tile lav" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                          />
+                          <path d="M20 2v4" />
+                          <path d="M22 4h-4" />
+                          <circle cx="4" cy="20" r="2" /></svg
+                      ></span>
+                      <div>
+                        <h2>Start something new</h2>
+                        <p>
+                          Describe it and Motir plans it with you — no code, no
+                          board, nothing yet.
+                        </p>
+                      </div>
+                    </div>
+                    <label class="lbl" for="idea">Your idea</label>
+                    <textarea
+                      id="idea"
+                      rows="7"
+                      maxlength="2000"
+                      placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. For example: a booking app for a hair salon where clients pick a stylist and time, get SMS reminders, and the owner sees a daily schedule with no-show rates. Don't worry about getting it perfect — we'll ask follow-up questions next."
+                    ></textarea>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <button class="btn primary" type="submit">
+                        Start planning
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- DOOR 2 — an EXISTING project. Co-equal, and it earns it by drawing its three
+                       real sources as choices rather than describing them in one line of prose. -->
+                  <div class="door">
+                    <div class="door-head">
+                      <span class="tile sky" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M15 6a9 9 0 0 0-9 9V3" />
+                          <circle cx="18" cy="6" r="3" />
+                          <circle cx="6" cy="18" r="3" /></svg
+                      ></span>
+                      <div>
+                        <h2>I have an existing project</h2>
+                        <p>
+                          Motir reads what is already there and plans on top of
+                          it.
+                        </p>
+                      </div>
+                    </div>
+                    <span class="lbl">Bring it from</span>
+                    <ul class="sources">
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Your codebase</span>
+                          <span class="s-d"
+                            >Connect a repository — Motir reads the code and
+                            plans on top of what is already built.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Jira</span>
+                          <span class="s-d"
+                            >Bring existing work items across, with their
+                            structure intact.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Linear or Plane</span>
+                          <span class="s-d">Same import, same structure.</span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <a
+                        class="btn primary"
+                        href="https://app.motir.co/sign-in?intent=import"
+                        >Import a project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+                <p class="hint">
+                  Either way you end up with a plan you read and edit before
+                  anything is built. No credit card.
+                </p>
+
+                <!-- DOOR 3 (TERTIARY), half two of two: ONE line. Not a card, and unchanged by the
+                     fork above — it is the way in for somebody who wants neither AI door. -->
+                <p class="door3">
+                  Just want project management?
+                  <a href="https://app.motir.co/sign-up?intent=tracker"
+                    >Start free</a
+                  >
+                  — boards, sprints and a backlog, with no AI in the way.
+                </p>
+              </div>
+              <section class="band">
+                <div class="band-head">
+                  <h2>One loop, three pieces</h2>
+                  <p>
+                    Motir is not a planner bolted onto a project-management
+                    tool. Planning feeds the board, and the board feeds the
+                    agents that do the work.
+                  </p>
+                </div>
+                <div class="pillars">
+                  <article class="pillar">
+                    <span class="tile lav" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                        />
+                        <path d="M20 2v4" />
+                        <path d="M22 4h-4" />
+                        <circle cx="4" cy="20" r="2" />
+                      </svg>
+                    </span>
+                    <span class="ord">01</span>
+                    <h3>AI planning</h3>
+                    <p>
+                      Describe an idea in your own words. Motir asks the
+                      follow-up questions, then drafts an epic → story → task
+                      tree you read and edit before a line is written.
+                    </p>
+                  </article>
+                  <article class="pillar">
+                    <span class="tile sky" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect width="7" height="7" x="3" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="14" rx="1" />
+                        <rect width="7" height="7" x="3" y="14" rx="1" />
+                      </svg>
+                    </span>
+                    <span class="ord">02</span>
+                    <h3>Project management</h3>
+                    <p>
+                      Real project management underneath: boards, sprints, a
+                      backlog, estimates, dependencies and blocked-by views,
+                      comments, search and reports. Usable on its own, with no
+                      AI at all.
+                    </p>
+                  </article>
+                  <article class="pillar">
+                    <span class="tile mint" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 8V4H8" />
+                        <rect width="16" height="12" x="4" y="8" rx="2" />
+                        <path d="M2 14h2" />
+                        <path d="M20 14h2" />
+                        <path d="M15 13v2" />
+                        <path d="M9 13v2" />
+                      </svg>
+                    </span>
+                    <span class="ord">03</span>
+                    <h3>Agent orchestration</h3>
+                    <p>
+                      Hand a card to an agent and it takes over the work —
+                      design, decisions, content, tests, code — and reports back
+                      on the board. Bring your own agent, or use a Motir-hosted
+                      one.
+                    </p>
+                  </article>
+                </div>
+
+                <!-- open-core framing -->
+                <div class="opencore">
+                  <span class="icn" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="18" r="3" />
+                      <circle cx="6" cy="6" r="3" />
+                      <circle cx="18" cy="6" r="3" />
+                      <path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9" />
+                      <path d="M12 12v3" />
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>Open core — Motir is yours, GPL-3.0</h3>
+                    <p>
+                      The whole project-management layer is open source and
+                      self-hostable: work items, boards, sprints, collaboration,
+                      search, reporting and admin. The AI planning and agent
+                      layers are the commercial part.
+                      <a href="https://github.com/moooon-B-V/motir-core"
+                        >Read the source →</a
+                      >
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ── SOCIAL PROOF / DIRECTORY BADGES ──────────────── -->
+              <section class="proof">
+                <p class="cap">Find Motir on</p>
+                <div class="badges">
+                  <span class="badge-slot">Product Hunt</span>
+                  <span class="badge-slot">G2</span>
+                  <span class="badge-slot">GitHub</span>
+                  <span class="badge-slot">AlternativeTo</span>
+                </div>
+              </section>
+            </main>
+
+            <!-- ── FOOTER ─────────────────────────────────────────── -->
+            <footer class="foot">
+              <div class="brandcol">
+                <a
+                  class="brand-lockup"
+                  href="https://motir.co"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform. Open core, built in the open.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>Overview</li>
+                  <li>AI planning</li>
+                  <li>Boards &amp; sprints</li>
+                  <li><a href="https://app.motir.co/docs">Documentation</a></li>
+                  <li>Pricing</li>
+                </ul>
+              </div>
+              <div>
+                <h2>Explore</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/explore">Public projects</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >Open source</a
+                    >
+                  </li>
+                  <li>Blog</li>
+                </ul>
+              </div>
+              <div>
+                <h2>Company</h2>
+                <ul>
+                  <li>About</li>
+                  <li>Contact</li>
+                  <li>
+                    <a href="https://app.motir.co/legal/privacy">Privacy</a>
+                  </li>
+                  <li><a href="https://app.motir.co/legal/terms">Terms</a></li>
+                  <li><a href="https://app.motir.co/legal">All legal</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is open core — motir-core is GPL-3.0.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 2 — mobile
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">2</span>
+          <h2>The landing — mobile</h2>
+          <span class="note"
+            >390 px. The nav links collapse behind the menu; the two things that
+            survive into the bar are the brand and
+            <strong>Start free</strong> (door 3's nav half). The doors keep
+            their order and their weighting — the idea box never becomes one of
+            three cards.</span
+          >
+        </div>
+        <p class="rule">viewport 390 · signed-out · motir.co</p>
+
+        <div class="frame mobile">
+          <div class="site">
+            <header class="topbar">
+              <a
+                class="brand-lockup"
+                href="https://motir.co"
+                style="--brand-size: 22px"
+              >
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <div class="bar-cta">
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free</a
+                >
+                <button
+                  class="btn ghost sm"
+                  type="button"
+                  aria-label="Menu"
+                  style="width: 32px; padding: 0"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 5h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 19h16" />
+                  </svg>
+                </button>
+              </div>
+            </header>
+            <main>
+              <div class="hero">
+                <span class="eyebrow"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                    />
+                    <path d="M20 2v4" />
+                    <path d="M22 4h-4" />
+                    <circle cx="4" cy="20" r="2" />
+                  </svg>
+                  Build with AI</span
+                >
+                <h1>Bring an idea, or bring your project.</h1>
+                <p class="lede">
+                  Motir plans it with you, tracks it on a real board, and hands
+                  it to agents that do the work — the AI planning,
+                  project-management and agent orchestration platform.
+                </p>
+
+                <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
+                     elevation, same heading level, side by side at equal width. Neither is an
+                     alternative to the other and there is no OR divider: a visitor arrives already
+                     belonging to one of these two, and the page must not tell them which is the
+                     real way in. -->
+                <div class="fork">
+                  <!-- DOOR 1 — a NEW project -->
+                  <form class="door">
+                    <div class="door-head">
+                      <span class="tile lav" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                          />
+                          <path d="M20 2v4" />
+                          <path d="M22 4h-4" />
+                          <circle cx="4" cy="20" r="2" /></svg
+                      ></span>
+                      <div>
+                        <h2>Start something new</h2>
+                        <p>
+                          Describe it and Motir plans it with you — no code, no
+                          board, nothing yet.
+                        </p>
+                      </div>
+                    </div>
+                    <label class="lbl" for="idea-m">Your idea</label>
+                    <textarea
+                      id="idea-m"
+                      rows="5"
+                      maxlength="2000"
+                      placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. Don't worry about getting it perfect — we'll ask follow-up questions next."
+                    ></textarea>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <button class="btn primary" type="submit">
+                        Start planning
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- DOOR 2 — an EXISTING project. Co-equal, and it earns it by drawing its three
+                       real sources as choices rather than describing them in one line of prose. -->
+                  <div class="door">
+                    <div class="door-head">
+                      <span class="tile sky" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M15 6a9 9 0 0 0-9 9V3" />
+                          <circle cx="18" cy="6" r="3" />
+                          <circle cx="6" cy="18" r="3" /></svg
+                      ></span>
+                      <div>
+                        <h2>I have an existing project</h2>
+                        <p>
+                          Motir reads what is already there and plans on top of
+                          it.
+                        </p>
+                      </div>
+                    </div>
+                    <span class="lbl">Bring it from</span>
+                    <ul class="sources">
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Your codebase</span>
+                          <span class="s-d"
+                            >Connect a repository — Motir reads the code and
+                            plans on top of what is already built.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Jira</span>
+                          <span class="s-d"
+                            >Bring existing work items across, with their
+                            structure intact.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Linear or Plane</span>
+                          <span class="s-d">Same import, same structure.</span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <a
+                        class="btn primary"
+                        href="https://app.motir.co/sign-in?intent=import"
+                        >Import a project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+                <p class="hint">
+                  Either way you end up with a plan you read and edit before
+                  anything is built. No credit card.
+                </p>
+
+                <!-- DOOR 3 (TERTIARY), half two of two: ONE line. Not a card, and unchanged by the
+                     fork above — it is the way in for somebody who wants neither AI door. -->
+                <p class="door3">
+                  Just want project management?
+                  <a href="https://app.motir.co/sign-up?intent=tracker"
+                    >Start free</a
+                  >
+                  — boards, sprints and a backlog, with no AI in the way.
+                </p>
+              </div>
+              <section class="band">
+                <div class="band-head">
+                  <h2>One loop, three pieces</h2>
+                </div>
+                <div class="pillars">
+                  <article class="pillar">
+                    <span class="tile lav" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                        />
+                        <path d="M20 2v4" />
+                        <path d="M22 4h-4" />
+                        <circle cx="4" cy="20" r="2" />
+                      </svg>
+                    </span>
+                    <span class="ord">01</span>
+                    <h3>AI planning</h3>
+                    <p>
+                      Describe an idea. Motir asks the follow-up questions, then
+                      drafts a tree you read and edit before a line is written.
+                    </p>
+                  </article>
+                  <article class="pillar">
+                    <span class="tile sky" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect width="7" height="7" x="3" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="14" rx="1" />
+                        <rect width="7" height="7" x="3" y="14" rx="1" />
+                      </svg>
+                    </span>
+                    <span class="ord">02</span>
+                    <h3>Project management</h3>
+                    <p>
+                      Boards, sprints, a backlog, dependencies and reports.
+                      Usable on its own, with no AI at all.
+                    </p>
+                  </article>
+                  <article class="pillar">
+                    <span class="tile mint" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 8V4H8" />
+                        <rect width="16" height="12" x="4" y="8" rx="2" />
+                        <path d="M2 14h2" />
+                        <path d="M20 14h2" />
+                        <path d="M15 13v2" />
+                        <path d="M9 13v2" />
+                      </svg>
+                    </span>
+                    <span class="ord">03</span>
+                    <h3>Agent orchestration</h3>
+                    <p>
+                      Hand a card to an agent and it takes over the work, then
+                      reports back on the board.
+                    </p>
+                  </article>
+                </div>
+              </section>
+              <section class="proof">
+                <p class="cap">Find Motir on</p>
+                <div class="badges">
+                  <span class="badge-slot">Product Hunt</span>
+                  <span class="badge-slot">G2</span>
+                  <span class="badge-slot">GitHub</span>
+                </div>
+              </section>
+            </main>
+            <footer class="foot">
+              <div class="brandcol">
+                <a
+                  class="brand-lockup"
+                  href="https://motir.co"
+                  style="--brand-size: 20px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>Overview</li>
+                  <li>AI planning</li>
+                  <li><a href="https://app.motir.co/docs">Documentation</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Company</h2>
+                <ul>
+                  <li>About</li>
+                  <li>
+                    <a href="https://app.motir.co/legal/privacy">Privacy</a>
+                  </li>
+                  <li><a href="https://app.motir.co/legal">All legal</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · motir-core is GPL-3.0.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 3 — the idea box's four states
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">3</span>
+          <h2>Door 1 — the idea box's four states</h2>
+          <span class="note"
+            >the submit is a CROSS-ORIGIN POST, so the failure state is drawn
+            rather than left to be improvised: a hero that only draws the happy
+            path loses the visitor's idea the first time the network
+            blinks.</span
+          >
+        </div>
+
+        <div class="states">
+          <div class="state">
+            <div class="st-cap">A · empty (rest) — and the focus ring</div>
+            <form class="idea">
+              <label class="lbl" for="s-a">Your idea</label>
+              <textarea
+                id="s-a"
+                class="focus-demo"
+                rows="3"
+                placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves…"
+              ></textarea>
+              <div class="idea-foot">
+                <span class="counter hidden">0 / 2000</span>
+                <button class="btn primary" type="submit">
+                  Start planning
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+            <p class="st-note">
+              The textarea holds focus on load; the visible ring is a 2 px
+              <code>--el-accent-on-surface</code> outline at 2 px offset (6.57:1
+              light / 4.67:1 dark, over WCAG 1.4.11's 3:1). The counter is
+              present but <code>visibility: hidden</code>, so revealing it never
+              reflows the footer. Submit is ENABLED on an empty idea — the box
+              is a head-start, not a gate, exactly as the
+              <code>/onboarding</code> entrance decided.
+            </p>
+          </div>
+
+          <div class="state">
+            <div class="st-cap">B · typing</div>
+            <form class="idea">
+              <label class="lbl" for="s-b">Your idea</label>
+              <textarea id="s-b" rows="3">
+A time-off and leave app for a 20-person startup. Employees request days off, a manager approves or declines with a note, and everyone sees a shared team calendar plus their remaining balance per leave type.</textarea>
+              <div class="idea-foot">
+                <span class="counter">203 / 2000</span>
+                <button class="btn primary" type="submit">
+                  Start planning
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+            <p class="st-note">
+              The counter appears on first keystroke. The 2000 cap is not
+              decorative: motir-core's
+              <code>MAX_PENDING_IDEA_LENGTH</code> is 2000 and
+              <code>normalizePendingIdea()</code> TRUNCATES past it — so a
+              visitor who pastes 4000 characters silently loses half unless the
+              bound is visible here. The textarea grows to a max height and then
+              scrolls; it never pushes the CTA off screen.
+            </p>
+          </div>
+
+          <div class="state">
+            <div class="st-cap">C · submitting</div>
+            <form class="idea">
+              <label class="lbl" for="s-c">Your idea</label>
+              <textarea id="s-c" rows="3" disabled>
+A time-off and leave app for a 20-person startup. Employees request days off, a manager approves or declines with a note, and everyone sees a shared team calendar plus their remaining balance per leave type.</textarea>
+              <div class="idea-foot">
+                <span class="counter">203 / 2000</span>
+                <button
+                  class="btn primary"
+                  type="submit"
+                  disabled
+                  aria-busy="true"
+                >
+                  <svg
+                    class="spin"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                  </svg>
+                  Starting…
+                </button>
+              </div>
+            </form>
+            <p class="st-note">
+              The button label CHANGES rather than only spinning — state is
+              never carried by colour or motion alone, and a reduced-motion
+              visitor sees a static glyph plus the word.
+              <code>aria-busy</code> on the control and the textarea disabled,
+              so a second submit cannot double-POST the draft.
+            </p>
+          </div>
+
+          <div class="state">
+            <div class="st-cap">
+              D · submit failed (the cross-origin POST did not land)
+            </div>
+            <form class="idea">
+              <label class="lbl" for="s-d">Your idea</label>
+              <textarea id="s-d" rows="3">
+A time-off and leave app for a 20-person startup. Employees request days off, a manager approves or declines with a note, and everyone sees a shared team calendar plus their remaining balance per leave type.</textarea>
+              <div class="errbox" role="alert">
+                <span class="ic" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" x2="12" y1="8" y2="12" />
+                    <line x1="12" x2="12.01" y1="16" y2="16" />
+                  </svg>
+                </span>
+                <span>
+                  <strong>We couldn't hand your idea over.</strong> Your text is
+                  still here — nothing was lost.
+                  <span class="retry">
+                    <a href="#">Try again</a>
+                    <a href="https://app.motir.co/sign-up"
+                      >Continue without it</a
+                    >
+                  </span>
+                </span>
+              </div>
+              <div class="idea-foot">
+                <span class="counter">203 / 2000</span>
+                <button class="btn primary" type="submit">
+                  Start planning
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+            <p class="st-note">
+              <strong>The typed idea is never cleared.</strong> The banner is
+              <code>role="alert"</code>, an <code>--el-danger</code> hairline
+              over <code>--el-danger-surface</code> with
+              <code>--el-danger-on-surface</code> ink (5.75:1 light / 4.77:1
+              dark), and it carries an icon as well as the colour. Two exits:
+              retry, or continue to sign-up without the hand-off — the visitor
+              is never stranded on a dead button.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 4 — dark theme
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">4</span>
+          <h2>Dark theme — the same surface, no second design</h2>
+          <span class="note"
+            >every colour is the same token resolving to its Tier-1 dark value.
+            The one measured constraint this panel encodes:
+            <strong>no accent-coloured TEXT sits on the top bar</strong> —
+            <code>--el-accent-on-surface</code> on
+            <code>--el-surface-soft</code> is 4.41:1 in dark, under AA. The
+            bar's nav is <code>--el-text-secondary</code> (6.94:1) and the CTA
+            is a filled Button (white on <code>--el-accent</code>,
+            4.99:1).</span
+          >
+        </div>
+        <p class="rule">viewport 1280 · data-theme="dark"</p>
+
+        <div class="frame dark" style="background: var(--el-page-bg)">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="https://motir.co">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="https://app.motir.co/explore">Explore</a>
+                <a href="https://app.motir.co/docs">Docs</a>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                >
+                  Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+            <main>
+              <div class="hero" style="padding-bottom: 48px">
+                <span class="eyebrow"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                    />
+                    <path d="M20 2v4" />
+                    <path d="M22 4h-4" />
+                    <circle cx="4" cy="20" r="2" />
+                  </svg>
+                  Build with AI</span
+                >
+                <h1>Bring an idea, or bring your project.</h1>
+                <p class="lede">
+                  Motir plans it with you, tracks it on a real board, and hands
+                  it to agents that do the work — the AI planning,
+                  project-management and agent orchestration platform.
+                </p>
+
+                <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
+                     elevation, same heading level, side by side at equal width. Neither is an
+                     alternative to the other and there is no OR divider: a visitor arrives already
+                     belonging to one of these two, and the page must not tell them which is the
+                     real way in. -->
+                <div class="fork">
+                  <!-- DOOR 1 — a NEW project -->
+                  <form class="door">
+                    <div class="door-head">
+                      <span class="tile lav" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                          />
+                          <path d="M20 2v4" />
+                          <path d="M22 4h-4" />
+                          <circle cx="4" cy="20" r="2" /></svg
+                      ></span>
+                      <div>
+                        <h2>Start something new</h2>
+                        <p>
+                          Describe it and Motir plans it with you — no code, no
+                          board, nothing yet.
+                        </p>
+                      </div>
+                    </div>
+                    <label class="lbl" for="idea-d">Your idea</label>
+                    <textarea
+                      id="idea-d"
+                      rows="4"
+                      maxlength="2000"
+                      placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. Don't worry about getting it perfect — we'll ask follow-up questions next."
+                    ></textarea>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <button class="btn primary" type="submit">
+                        Start planning
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- DOOR 2 — an EXISTING project. Co-equal, and it earns it by drawing its three
+                       real sources as choices rather than describing them in one line of prose. -->
+                  <div class="door">
+                    <div class="door-head">
+                      <span class="tile sky" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M15 6a9 9 0 0 0-9 9V3" />
+                          <circle cx="18" cy="6" r="3" />
+                          <circle cx="6" cy="18" r="3" /></svg
+                      ></span>
+                      <div>
+                        <h2>I have an existing project</h2>
+                        <p>
+                          Motir reads what is already there and plans on top of
+                          it.
+                        </p>
+                      </div>
+                    </div>
+                    <span class="lbl">Bring it from</span>
+                    <ul class="sources">
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Your codebase</span>
+                          <span class="s-d"
+                            >Connect a repository — Motir reads the code and
+                            plans on top of what is already built.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Jira</span>
+                          <span class="s-d"
+                            >Bring existing work items across, with their
+                            structure intact.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Linear or Plane</span>
+                          <span class="s-d">Same import, same structure.</span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <a
+                        class="btn primary"
+                        href="https://app.motir.co/sign-in?intent=import"
+                        >Import a project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+                <p class="hint">
+                  Either way you end up with a plan you read and edit before
+                  anything is built. No credit card.
+                </p>
+
+                <!-- DOOR 3 (TERTIARY), half two of two: ONE line. Not a card, and unchanged by the
+                     fork above — it is the way in for somebody who wants neither AI door. -->
+                <p class="door3">
+                  Just want project management?
+                  <a href="https://app.motir.co/sign-up?intent=tracker"
+                    >Start free</a
+                  >
+                  — boards, sprints and a backlog, with no AI in the way.
+                </p>
+              </div>
+            </main>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 5 — the routing contract
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">5</span>
+          <h2>The three doors — the routing contract MOTIR-1152 builds to</h2>
+          <span class="note"
+            >every door leaves motir.co. <code>SHIPPED</code> means the
+            receiving half exists on motir-core's
+            <code>origin/main</code> today; <code>NOT READ YET</code> means the
+            parameter is specified here and nothing in motir-core reads it — see
+            the notes' ACCESS PATH section for the fallback.</span
+          >
+        </div>
+
+        <div class="routes">
+          <div class="route">
+            <span class="rank p1">PRIMARY</span>
+            <span class="who">
+              <b>1 · Start something new</b>
+              <span
+                >Starting fresh, wants AI planning. The LEFT door of the
+                fork.</span
+              >
+            </span>
+            <span class="arr" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+            <span class="dest">
+              POST the idea to the pre-auth draft receiver (MOTIR-1458), then
+              <code>https://app.motir.co/sign-in?draft=&lt;id&gt;</code>
+              <span class="shipped yes">SHIPPED</span><br />
+              → the <code>/onboarding</code> entrance pre-fills its CARRIED
+              panel (MOTIR-1462).
+            </span>
+          </div>
+
+          <div class="route">
+            <span class="rank p2">PRIMARY</span>
+            <span class="who">
+              <b>2 · I have an existing project</b>
+              <span
+                >Already has a codebase, or work items in Jira, Linear or Plane.
+                The RIGHT door of the fork, drawing its three sources.</span
+              >
+            </span>
+            <span class="arr" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+            <span class="dest">
+              <code>https://app.motir.co/sign-in?intent=import</code>
+              <span class="shipped no">NOT READ YET</span><br />
+              → the <code>/onboarding</code> entrance's EXISTING branch → 7.15 /
+              7.17.
+            </span>
+          </div>
+
+          <div class="route">
+            <span class="rank p3">TERTIARY</span>
+            <span class="who">
+              <b>3 · Start free — project management only</b>
+              <span
+                >Wants the PM tool, no AI planning. A nav entry + one line under
+                the hero.</span
+              >
+            </span>
+            <span class="arr" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+            <span class="dest">
+              <code>https://app.motir.co/sign-up?intent=tracker</code>
+              <span class="shipped no">NOT READ YET</span><br />
+              → the 8.2 team first-run (MOTIR-655).
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
