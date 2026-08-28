@@ -1,0 +1,13 @@
+/* Intentionally minimal — the design system arrives with the landing build
+   (MOTIR-1152, consuming the @motir/design-system package from MOTIR-1456).
+   Nothing here should be carried forward. */
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  padding: 3rem 1.5rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.5;
+}

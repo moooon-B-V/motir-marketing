@@ -1,0 +1,74 @@
+# motir-marketing on Fly.io — the production runtime configuration (MOTIR-1455).
+#
+# The decision this file implements is `motir-core/docs/decisions/
+# marketing-site-hosting.md` — Q1 (Fly, a second app in org `moooon`, region
+# `iad`), Q2 (the motir.co records), Q3 (the CI shape). §8 of that record hands
+# the machine pool, the availability floor and the VM size to THIS card, which is
+# what the block at the bottom sets and records.
+#
+# ⚠️ THIS FILE CONFIGURES; IT DOES NOT PROVISION — `application-hosting.md`
+# Amendment 7. The app was created by `flyctl apps create`, the machines by the
+# first `flyctl deploy`, and the pool by `fly scale count`. No key here brings
+# anything into existence.
+
+app            = "motir-marketing"   # org `moooon`, fixed at creation — this
+                                     # line is a reading of the platform, not a
+                                     # request to it.
+primary_region = "iad"               # beside motir-core and motir-ai.
+
+[build]
+  dockerfile = "Dockerfile"
+
+# No [deploy] release_command: this app has no database and nothing to migrate.
+# No [processes]: one web process, so Fly runs the image's CMD and routes HTTP to
+# every machine — which is what `http_service` below then means.
+
+[env]
+  PORT = "8080"
+  # HOSTNAME=0.0.0.0 is set in the Dockerfile, not here — see the ⚠️ on it there.
+
+[http_service]
+  internal_port       = 8080
+  force_https         = true
+  auto_stop_machines  = "stop"
+  auto_start_machines = true
+  # ⚠️ 1, AND IT IS AN AVAILABILITY DECISION — not a capacity one
+  # (`application-hosting.md` Amendment 7 §14, which is emphatic that the floor
+  # is the availability decision and that this file cannot create the pool).
+  #
+  # motir-core runs a floor of 2 because losing one machine there is a
+  # user-visible gap in an interactive application. This is a static marketing
+  # page: the cost of a machine being restarted is a few seconds of 502 on a
+  # page nobody is mid-workflow on, and the cost of a floor of 0 is a cold boot
+  # on the FIRST visit after every idle period — including Googlebot's, on the
+  # host whose entire job is to be the entity signal for the domain
+  # (MOTIR-1154). One warm machine is the cheap answer to that: it is what
+  # `auto_stop_machines` would otherwise take away.
+  #
+  # COST: one shared-cpu-1x / 512 MB machine, always warm. TRIGGER to revise
+  # upward: the first real traffic reading that shows one machine saturating, or
+  # a decision that marketing-site downtime is user-visible in a way this
+  # paragraph says it is not.
+  min_machines_running = 1
+
+  # ⚠️ NOT MEASURED. A Next standalone server has never been measured on this
+  # box for this workload, and these are motir-core's numbers scaled down rather
+  # than a reading. Labelled as an estimate so nobody quotes it back as one.
+  # TRIGGER to revise: the first sustained request-concurrency reading from Fly
+  # metrics.
+  [http_service.concurrency]
+    type       = "requests"
+    soft_limit = 100
+    hard_limit = 150
+
+# ⚠️ THE VM SIZE IS A STARTING POINT, and the memory reading that justifies it is
+# taken from the platform AFTER the first deploy and recorded on MOTIR-1455 —
+# not asserted here. motir-core measured a 390 MB resident set for an
+# application with hundreds of routes; this app has one page and no database
+# client, so 512 MB is chosen as the smallest size with plausible headroom
+# rather than as a measurement. TRIGGER: a VmRSS reading above ~350 MB, or an
+# OOM in the machine's events.
+[[vm]]
+  size   = "shared-cpu-1x"
+  memory = "512mb"
+  cpus   = 1

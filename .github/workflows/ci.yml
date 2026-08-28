@@ -1,0 +1,107 @@
+# motir-marketing CI — MOTIR-1455.
+#
+# This MIRRORS motir-core's `ci.yml` rather than copying it: that file declares
+# `needs: [lint, typecheck, build, test, coverage, e2e, e2e-at-scale]`, and four
+# of those jobs do not exist here. The shape to keep, per
+# `motir-core/docs/decisions/marketing-site-hosting.md` Q3, is the deploy job's:
+# gate on what exists, deploy only on a push to main, and give the release its
+# OWN non-cancelling concurrency group. Add a gate to `needs` below as this
+# repository grows one — do not declare a gate before its job exists.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+  deploy:
+    name: Deploy to Fly
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    # A release must NOT be cancelled mid-flight by a newer push — the
+    # workflow-level `cancel-in-progress` above is right for a test run and
+    # wrong for a deploy, so this group overrides it. It is also its OWN group
+    # (`fly-deploy-marketing`, not motir-core's `fly-deploy`): two repositories
+    # sharing one group name would serialise unrelated releases.
+    concurrency:
+      group: fly-deploy-marketing
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    env:
+      # An APP-scoped deploy token (`flyctl tokens create deploy -a
+      # motir-marketing`) — not an org token. An app token cannot create
+      # Machines in, or even see, sibling apps in the same org, and it does
+      # carry `registry.fly.io` write for its own app, which is all a deploy
+      # needs.
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      FLY_APP: motir-marketing
+    steps:
+      - uses: actions/checkout@v6
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      # `--local-only` builds on the runner's own Docker daemon and pushes to
+      # registry.fly.io, instead of Fly's remote builder — which flaked with
+      # repeated 503s for motir-ai even while Fly itself was operational.
+      - run: flyctl deploy --local-only --app "$FLY_APP"
+      # Prove the RELEASE, not a DNS record: this reads the Fly-owned hostname,
+      # so it is green before motir.co points anywhere and stays honest after.
+      - name: Smoke the release on its Fly hostname
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --retry 6 --retry-delay 5 \
+            --retry-all-errors "https://$FLY_APP.fly.dev/")
+          echo "GET https://$FLY_APP.fly.dev/ -> $code"
+          [ "$code" = "200" ]
