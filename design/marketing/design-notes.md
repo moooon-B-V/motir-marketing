@@ -5,7 +5,7 @@ mark) · **Epic 8 · Launch readiness.** **Repository: `motir-marketing`.**
 
 The public front door at **motir.co**, for **all three** of Motir's genuinely different first-time
 visitors. It leads with ONE idea box, keeps _import an existing project_ as a first-class but
-secondary row, and adds _Start free — just the tracker_ as a **tertiary** door: a nav entry plus a
+secondary row, and adds _Start free — project management only_ as a **tertiary** door: a nav entry plus a
 single line under the hero.
 
 **This asset is the ROUTING CONTRACT MOTIR-1152 builds to.** Every door is a cross-origin hand-off
@@ -83,7 +83,7 @@ same question one surface downstream. It applies unchanged here and is not re-de
 stays a visible first-class row because it is a genuinely different journey for a genuinely
 different person. Door 3 gets the two placements the convention gives it — **a nav entry and one
 line beneath the hero** — because a third co-equal card would turn an idea entrance into a source
-picker, and would tell a visitor that "just the tracker" is one of three equal things Motir is. It
+picker, and would tell a visitor that "project management only" is one of three equal things Motir is. It
 is not: it is the way in for someone who does not want the AI, and it needs to be findable, not
 promoted.
 
@@ -100,11 +100,11 @@ Every door leaves motir.co for `app.motir.co`. **SHIPPED** means the receiving h
 motir-core's `origin/main` today; **NOT READ YET** means the parameter is specified here and nothing
 in motir-core reads it (see the disposition below the table).
 
-| #     | door                                         | who it is for                       | placement                                   | target                                                                                                                  | lands on                                                                                                                                 |
-| ----- | -------------------------------------------- | ----------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **1** | **Idea hero** (PRIMARY)                      | starting fresh, wants AI planning   | one full-width `Card` in the fold           | POST the idea to the pre-auth draft receiver (MOTIR-1458), then `https://app.motir.co/sign-in?draft=<id>` **· SHIPPED** | the `/onboarding` entrance pre-fills its **carried** panel (MOTIR-1462), which reads the `motir_pending_idea` cookie the receiver plants |
-| **2** | **Import an existing project** (SECONDARY)   | already has a codebase or a tracker | a slim full-width row under an `OR` divider | `https://app.motir.co/sign-in?intent=import` **· NOT READ YET**                                                         | the `/onboarding` entrance's EXISTING branch → 7.15 (repo) / 7.17 (Jira · Linear · Plane)                                                |
-| **3** | **Start free — just the tracker** (TERTIARY) | wants the PM tool, no AI planning   | a nav entry **and** one line under the hero | `https://app.motir.co/sign-up?intent=tracker` **· NOT READ YET**                                                        | the 8.2 team first-run (MOTIR-655)                                                                                                       |
+| #     | door                                                | who it is for                                                  | placement                                   | target                                                                                                                  | lands on                                                                                                                                 |
+| ----- | --------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | **Idea hero** (PRIMARY)                             | starting fresh, wants AI planning                              | one full-width `Card` in the fold           | POST the idea to the pre-auth draft receiver (MOTIR-1458), then `https://app.motir.co/sign-in?draft=<id>` **· SHIPPED** | the `/onboarding` entrance pre-fills its **carried** panel (MOTIR-1462), which reads the `motir_pending_idea` cookie the receiver plants |
+| **2** | **Import an existing project** (SECONDARY)          | already has a codebase, or work items in Jira, Linear or Plane | a slim full-width row under an `OR` divider | `https://app.motir.co/sign-in?intent=import` **· NOT READ YET**                                                         | the `/onboarding` entrance's EXISTING branch → 7.15 (repo) / 7.17 (Jira · Linear · Plane)                                                |
+| **3** | **Start free — project management only** (TERTIARY) | wants the PM tool, no AI planning                              | a nav entry **and** one line under the hero | `https://app.motir.co/sign-up?intent=tracker` **· NOT READ YET**                                                        | the 8.2 team first-run (MOTIR-655)                                                                                                       |
 
 **Verified on `origin/main`, 2026-08-28:**
 
@@ -116,7 +116,7 @@ in motir-core reads it (see the disposition below the table).
   returns one hit, the word _intentionally_ in a comment. `/sign-up` reads `next` alone and says so.
 
 **Disposition — doors 2 and 3 are specified as the card specifies them, and the gap is FILED, not
-absorbed.** The tracker parameter has an owner (**MOTIR-3639**, _8.2.10 Carry the tracker intent
+absorbed.** The `?intent=tracker` parameter has an owner (**MOTIR-3639**, _8.2.10 Carry the tracker intent
 across the auth round trip_); the import parameter has none, which is **MOTIR-3746**. Both doors
 DEGRADE gracefully in the meantime and MOTIR-1152 should ship them that way: without the parameter a
 visitor lands on the `/onboarding` entrance's default panel, which already draws the import row, or
@@ -159,7 +159,7 @@ parameter is the contract, and the card that reads it is scheduled work.
 **No connect UI. No import-source picker. No index or generate step. No chat.** Door 2 is a
 marketing entry point and nothing more: the repository connection, the source selection, the code
 read and the generate step are all owned by the 7.15 migrate wizard (design **MOTIR-930**,
-orchestration MOTIR-931) and by 7.17 for the external trackers. Door 1 draws an idea box, not the
+orchestration MOTIR-931) and by 7.17 for Jira, Linear and Plane. Door 1 draws an idea box, not the
 discovery chat — the conversation is 7.3's surface and begins after auth. Re-drawing any of it here
 would duplicate a design that already exists and would drift from it the day it changes.
 
@@ -188,7 +188,7 @@ follow into a 404.
 - **`OR` divider**, then **door 2** — the import row: an `--el-tint-sky` icon tile with `GitBranch`,
   a title, a two-line description naming repositories AND Jira / Linear / Plane, and an `Import →`
   affordance at the right.
-- **Door 3's second half** — one centred line: _"Just want the tracker? **Start free** — boards,
+- **Door 3's second half** — one centred line: _"Just want project management? **Start free** — boards,
   sprints and a backlog, with no AI in the way."_ `Start free` is an `--el-link` text link.
 - **The three pillars**, on an `--el-surface-soft` band: a 3-column grid of `Card`s, each with a
   tinted 40 px icon tile (lavender / sky / mint), an ordinal, an `<h3>` and two lines of body. The
@@ -370,7 +370,7 @@ re-introduce the pattern** by marking a nav item current in accent ink on the so
 | The pre-auth idea hand-off                       | MOTIR-1458 (`done`) → the entrance's carried panel, MOTIR-1462 (`done`)  |
 | The `/onboarding` entrance the hero hands off to | MOTIR-1461 (design) / MOTIR-1462 (router)                                |
 | The import wizard behind door 2                  | 7.15 / MOTIR-815, design MOTIR-930 · 7.17 / MOTIR-817                    |
-| The tracker first-run behind door 3              | MOTIR-655 (8.2) · the intent hand-off, MOTIR-3639                        |
+| The no-AI first-run behind door 3                | MOTIR-655 (8.2) · the intent hand-off, MOTIR-3639                        |
 | The brand mark and its lockup CSS                | MOTIR-1139 (design) / MOTIR-1150 (applied) / MOTIR-1456 (`@motir/brand`) |
 | The tokens and primitives                        | MOTIR-1524 → `@motir/design-system@0.1.0`                                |
 | The directory badges' content                    | MOTIR-1156 (8.3.9)                                                       |
@@ -384,7 +384,7 @@ re-introduce the pattern** by marking a nav item current in accent ink on the so
 | finding                                                                                                                                             | card                                                        |
 | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card            | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
-| `?intent=import` has **no reader and no owning card**, while its tracker twin got MOTIR-3639                                                        | **MOTIR-3746**                                              |
+| `?intent=import` has **no reader and no owning card**, while its `?intent=tracker` twin got MOTIR-3639                                              | **MOTIR-3746**                                              |
 | `--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm | **MOTIR-3745**                                              |
 | This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository | **MOTIR-3750**                                              |
 
@@ -438,3 +438,31 @@ The layout fixes the shape of what the words have to do, and it is worth having 
   **all kinds** of work (design, decisions, content, tests, code), so _"takes over the work"_, never
   _"coding agent"_. Outside the import row, no developer jargon at all: a non-technical founder must
   not meet the word _repo_ on the way in.
+
+### ⚠️ Two BANNED words, and this asset shipped both before they were caught
+
+Both are standing rules that predate this card, and both were violated in the first draft of this
+mock. They are recorded here because MOTIR-1144 writes the final copy and MOTIR-1152 renders it, and
+either can reintroduce them.
+
+- **"tracker" — never customer-facing.** The two customer-facing product names are **Motir** (the
+  project-management product) and **Motir AI** (planning + agents). Door 3 is
+  _"Start free — project management only"_, and its hero line reads _"Just want project
+  management?"_. **The word survives ONLY as a code identifier** — the `?intent=tracker` query
+  parameter in the routing table below, the `scaled-tracker` org flag, the
+  `tracker_monthly` / `tracker_annual` Stripe price keys. Never as a rendered label.
+  ⚠️ **MOTIR-1143's own card body still calls door 3 _"Start free — just the tracker"_** — the card
+  is wrong, not this asset; it is flagged for amendment.
+- **"issue" — say "work item".** The open-core block originally read _"issues, boards, sprints"_ and
+  now reads _"work items, boards, sprints"_.
+- **And when copy describes importing, ENUMERATE the products** — _"work items from Jira, Linear or
+  Plane"_ — never _"import your tracker"_ or _"a codebase or a tracker"_.
+
+**The check is mechanical, so run it rather than reading for it:**
+
+```
+grep -niE 'tracker|\bissues?\b' design/marketing/*
+```
+
+Every surviving hit must be a code identifier (`?intent=tracker`) or prose about the rule itself. A
+hit in rendered copy, in a mock's markup or in this file's own prose is a defect.
