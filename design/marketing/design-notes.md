@@ -140,8 +140,8 @@ in motir-core reads it (see the disposition below the table).
 | #     | door                                                | who it is for                                                  | placement                                             | target                                                                                                                  | lands on                                                                                                                                 |
 | ----- | --------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | **1** | **Start something new** (CO-EQUAL)                  | starting fresh, wants AI planning                              | the LEFT door of the fork                             | POST the idea to the pre-auth draft receiver (MOTIR-1458), then `https://app.motir.co/sign-in?draft=<id>` **· SHIPPED** | the `/onboarding` entrance pre-fills its **carried** panel (MOTIR-1462), which reads the `motir_pending_idea` cookie the receiver plants |
-| **2** | **I have an existing project** (CO-EQUAL)           | already has a codebase, or work items in Jira, Linear or Plane | the RIGHT door of the fork, drawing its three sources | `https://app.motir.co/sign-in?intent=import` **· NOT READ YET**                                                         | the `/onboarding` entrance's EXISTING branch → 7.15 (repo) / 7.17 (Jira · Linear · Plane)                                                |
-| **3** | **Start free — project management only** (TERTIARY) | wants the PM tool, no AI planning                              | a nav entry **and** one line under the hero           | `https://app.motir.co/sign-up?intent=tracker` **· NOT READ YET**                                                        | the 8.2 team first-run (MOTIR-655)                                                                                                       |
+| **2** | **I have an existing project** (CO-EQUAL)           | already has a codebase, or work items in Jira, Linear or Plane | the RIGHT door of the fork, drawing its three sources | `https://app.motir.co/sign-in?intent=import` **· NOT READ YET** (owner: **MOTIR-3846**)                                 | the `/onboarding` entrance's EXISTING branch → 7.15 (repo) / 7.17 (Jira · Linear · Plane)                                                |
+| **3** | **Start free — project management only** (TERTIARY) | wants the PM tool, no AI planning                              | a nav entry **and** one line under the hero           | `https://app.motir.co/sign-up?intent=tracker` **· NOT READ YET** (owner: **MOTIR-3639**)                                | the 8.2 team first-run (MOTIR-655)                                                                                                       |
 
 **Verified on `origin/main`, 2026-08-28:**
 
@@ -152,9 +152,22 @@ in motir-core reads it (see the disposition below the table).
 - **`?intent` is read nowhere.** `git grep -n "intent" origin/main -- 'app/(auth)' 'lib/onboarding'`
   returns one hit, the word _intentionally_ in a comment. `/sign-up` reads `next` alone and says so.
 
+**The ownership sweep, PER ROW rather than per table (MOTIR-3746's own criterion — one row having an
+owner is what makes the others invisible):**
+
+| #   | parameter         | read on motir-core `origin/main`?          | owning card                      |
+| --- | ----------------- | ------------------------------------------ | -------------------------------- |
+| 1   | `?draft=<id>`     | **YES** — `sign-in/page.tsx` reads `draft` | MOTIR-1458 (`done`) · MOTIR-1462 |
+| 2   | `?intent=import`  | no                                         | **MOTIR-3846**                   |
+| 3   | `?intent=tracker` | no                                         | **MOTIR-3639**                   |
+
+Every row now has an owner. **When MOTIR-3846 and MOTIR-3639 ship, flip their `NOT READ YET` markers
+to `SHIPPED` here** — the marker is this document's own claim about motir-core, and a claim nobody
+re-reads is how the gap this table records got made in the first place.
+
 **Disposition — doors 2 and 3 are specified as the card specifies them, and the gap is FILED, not
 absorbed.** The `?intent=tracker` parameter has an owner (**MOTIR-3639**, _8.2.10 Carry the tracker intent
-across the auth round trip_); the import parameter has none, which is **MOTIR-3746**. Both doors
+across the auth round trip_); the import parameter had none, which is **MOTIR-3746** — and now has **MOTIR-3846**, the import twin of 3639, carved on 2026-08-28. Both doors
 DEGRADE gracefully in the meantime and MOTIR-1152 should ship them that way: without the parameter a
 visitor lands on the `/onboarding` entrance's default panel, which already draws the import row, or
 on `/sign-up`, which already creates the account. So the link is never dead — it just skips one
@@ -422,12 +435,12 @@ re-introduce the pattern** by marking a nav item current in accent ink on the so
 
 ## Open findings this design surfaced (filed, not deferred)
 
-| finding                                                                                                                                             | card                                                        |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card            | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
-| `?intent=import` has **no reader and no owning card**, while its `?intent=tracker` twin got MOTIR-3639                                              | **MOTIR-3746**                                              |
-| `--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm | **MOTIR-3745**                                              |
-| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository | **MOTIR-3750**                                              |
+| finding                                                                                                                                                                                                                 | card                                                        |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card                                                                                | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
+| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships | **MOTIR-3746** → **MOTIR-3846**                             |
+| `--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm                                                                     | **MOTIR-3745**                                              |
+| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository                                                                     | **MOTIR-3750**                                              |
 
 **Consequence of MOTIR-3743 for this repository, worth stating where the next runner will read it:**
 until `motir-marketing` is connected, no card in it can carry a `targetRepo` pin, `link_pull_request`
