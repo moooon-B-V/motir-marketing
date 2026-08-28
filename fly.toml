@@ -19,6 +19,16 @@ primary_region = "iad"               # beside motir-core and motir-ai.
 [build]
   dockerfile = "Dockerfile"
 
+  # The ONE configured motir-core origin the landing's three cross-origin doors
+  # are built from (MOTIR-1152). It is a BUILD arg rather than a `[env]` entry
+  # or a Fly secret because `NEXT_PUBLIC_*` is inlined by `next build`: a
+  # runtime variable would arrive after the image that needed it already
+  # existed. It is not a secret — it is the public address of the app this site
+  # hands readers across to — so it is stated here, in the repository, where a
+  # reader can see which origin a release points at.
+  [build.args]
+    NEXT_PUBLIC_MOTIR_APP_ORIGIN = "https://app.motir.co"
+
 # No [deploy] release_command: this app has no database and nothing to migrate.
 # No [processes]: one web process, so Fly runs the image's CMD and routes HTTP to
 # every machine — which is what `http_service` below then means.

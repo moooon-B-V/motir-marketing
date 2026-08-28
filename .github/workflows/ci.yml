@@ -7,6 +7,11 @@
 # gate on what exists, deploy only on a push to main, and give the release its
 # OWN non-cancelling concurrency group. Add a gate to `needs` below as this
 # repository grows one — do not declare a gate before its job exists.
+#
+# MOTIR-1152 grew the first one: `test` (vitest, `vitest.config.mts`), added
+# BELOW and to `deploy`'s `needs` in the same change, exactly as that sentence
+# asks. There is still no `coverage`, `e2e` or `e2e-at-scale` job here and
+# `needs` still names none.
 name: CI
 
 on:
@@ -20,6 +25,17 @@ concurrency:
 
 env:
   NEXT_TELEMETRY_DISABLED: '1'
+  # ⚠️ THE BUILD FAILS WITHOUT THIS, BY DESIGN (MOTIR-1152). `lib/appOrigin.ts`
+  # throws `MotirAppOriginError` at module scope when the variable is unset,
+  # which is what stops a release shipping a landing page whose three doors
+  # point at `undefined`. It is set HERE, once, for the `Build` check.
+  #
+  # ⚠️ THIS IS NOT WHAT THE RELEASE USES. `NEXT_PUBLIC_*` is inlined by
+  # `next build`, and the `deploy` job below builds inside DOCKER — where a job
+  # env var does not reach. The released value is `fly.toml`'s `[build.args]`,
+  # and the `Dockerfile`'s `ARG` is what carries it in. Two sites, one meaning;
+  # changing the origin means changing both.
+  NEXT_PUBLIC_MOTIR_APP_ORIGIN: 'https://app.motir.co'
 
 jobs:
   lint:
@@ -64,6 +80,29 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+
+  # ── The unit / component suite (MOTIR-1152) ───────────────────────────────
+  #
+  # This repository's FIRST test job. It is a `needs` gate on `deploy` from the
+  # moment it exists, per the header: a red suite must not reach motir.co.
+  #
+  # Node environment plus jsdom (`vitest.config.mts`) — there is no database
+  # and nothing to seed, so the whole suite is seconds. `tests/appOrigin.test.ts`
+  # is the one acceptance criterion that asks to be asserted "with a test, not
+  # by inspection".
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
 
   # ── Publish the DESIGN RESULT to its work item (MOTIR-3750) ───────────────
   #
@@ -186,7 +225,7 @@ jobs:
   deploy:
     name: Deploy to Fly
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, build]
+    needs: [lint, typecheck, build, test]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # A release must NOT be cancelled mid-flight by a newer push — the
     # workflow-level `cancel-in-progress` above is right for a test run and

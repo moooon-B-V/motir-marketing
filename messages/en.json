@@ -6,6 +6,7 @@
   "nav": {
     "ariaLabel": "Main",
     "brandAriaLabel": "Motir — home",
+    "menu": "Menu",
     "explore": "Explore",
     "docs": "Docs",
     "signIn": "Sign in",
@@ -20,6 +21,7 @@
       "placeholder": "Describe what you want to build — who it's for, and the core things people should be able to do. For example: a tool for freelancers to send invoices and track which clients have paid.",
       "cta": "Start planning",
       "hint": "Start with a rough idea — Motir asks follow-up questions next. Free to start, no credit card.",
+      "counter": "{count} / {max}",
       "ctaSubmitting": "Starting…",
       "statusSubmitting": "Saving your idea and taking you to Motir…",
       "errorTitle": "We couldn't save your idea just now.",
@@ -28,16 +30,35 @@
       "errorFallback": "Continue to Motir"
     },
     "doors": {
-      "or": "OR",
-      "import": {
-        "title": "Import an existing project",
-        "description": "Already building something? Connect your repository, or bring over your work items from Jira, Linear or Plane — Motir reads what's there and plans on top of it.",
-        "cta": "Import"
+      "new": {
+        "title": "Start something new",
+        "description": "Describe it and Motir plans it with you — no code, no board, nothing yet."
       },
+      "import": {
+        "title": "I have an existing project",
+        "description": "Motir reads what is already there and plans on top of it.",
+        "sourcesLabel": "Bring it from",
+        "sources": {
+          "codebase": {
+            "title": "Your codebase",
+            "description": "Connect a repository — Motir reads the code and plans on top of what is already built."
+          },
+          "jira": {
+            "title": "Jira",
+            "description": "Bring existing work items across, with their structure intact."
+          },
+          "linearPlane": {
+            "title": "Linear or Plane",
+            "description": "Same import, same structure."
+          }
+        },
+        "cta": "Import a project"
+      },
+      "hint": "Either way you end up with a plan you read and edit before anything is built. No credit card.",
       "free": {
-        "title": "Just want the project-management tool?",
-        "description": "Motir is a complete project-management tool on its own — boards, sprints, roadmaps and work items. AI planning is there when you want it, not something you have to pass through.",
-        "cta": "Start free"
+        "lead": "Just want project management?",
+        "cta": "Start free",
+        "tail": "— boards, sprints and a backlog, with no AI in the way."
       }
     },
     "pillars": {
@@ -61,6 +82,10 @@
       "title": "Open core",
       "body": "The project-management core is open source under the GPL — the whole tool, not a cut-down edition. Run it yourself, read every line of it, or let us host it. AI planning and agent orchestration are the commercial layers on top.",
       "cta": "Motir on GitHub"
+    },
+    "proof": {
+      "caption": "Find Motir on",
+      "slots": ["Product Hunt", "G2", "GitHub", "AlternativeTo"]
     }
   },
   "footer": {

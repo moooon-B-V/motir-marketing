@@ -12,3 +12,19 @@ allowBuilds:
   # eslint-config-next pulls in. Its postinstall only selects the prebuilt
   # binding for the platform.
   unrs-resolver: true
+# ⚠️ A NARROW, SELF-EXPIRING SUPPLY-CHAIN EXEMPTION — added by MOTIR-1152, and
+# it is load-bearing TODAY rather than tidy-up. pnpm 11 rejects a lockfile
+# entry published inside a rolling ~24h `minimumReleaseAge` cutoff, and
+# `@motir/brand@0.1.0` was hand-published at 2026-08-28T19:58Z (MOTIR-3802) —
+# hours before this landing needed it. Without this line
+# `pnpm install --frozen-lockfile` fails EVERY job in `ci.yml`:
+#
+#   [ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION] @motir/brand@0.1.0 was published
+#   at 2026-08-28T19:58:20Z, within the minimumReleaseAge cutoff
+#
+# It exempts ONE exact version, so it stops matching anything the moment
+# `@motir/brand` is bumped — DELETE IT THEN. It is not a general relaxation of
+# the policy and must not become one: a second entry here is a signal to wait a
+# day rather than to add a line.
+minimumReleaseAgeExclude:
+  - '@motir/brand@0.1.0'
