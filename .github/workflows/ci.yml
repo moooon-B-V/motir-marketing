@@ -99,19 +99,26 @@ jobs:
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
-      # ⚠️ DELIBERATELY NO `id-token: write` — adding it TODAY turns this job
-      # RED, it does not make it keyless. motir-core's publisher prefers OIDC
-      # whenever it can mint a token (`authHeadersFor`), and the server resolves
-      # the tenant from the verified `repository` claim through
-      # `githubRepoRepository.findConnectedByName` — which answers
-      # `403 repo_not_connected` for this repository, because it is not connected
-      # to Motir (MOTIR-3743). The script would obtain a token, send it, get 403,
-      # throw, and exit 1 on every pull request.
+      # KEYLESS. The publish authenticates off this job's GitHub Actions OIDC
+      # identity — no token is minted, stored or rotated — exactly as
+      # motir-core's `design-guards` job does. `authHeadersFor` prefers the OIDC
+      # marker whenever the script can mint one; the server verifies the JWT
+      # against GitHub's JWKS and resolves the tenant from the verified
+      # `repository` claim (`githubRepoRepository.findConnectedByName`).
       #
-      # ▶ WHEN MOTIR-3743 CLOSES: add `id-token: write` here and delete the
-      #   `MOTIR_UPLOAD_TOKEN` secret. That is the whole change — the keyless
-      #   path then works exactly as it does in motir-core, with no credential
-      #   to store or rotate.
+      # ⚠️ THIS LINE HAS A PRECONDITION, and it is the repository being
+      # CONNECTED to Motir. Until 2026-08-28 it was not, and the claim resolved
+      # to `403 repo_not_connected` — so granting this would have turned the job
+      # RED on every pull request rather than making it keyless. That is why the
+      # lane shipped without it (MOTIR-3750) and why this is a separate change.
+      # MOTIR-3743 closed it: `link_pull_request` and a `targetRepo` pin both
+      # now resolve `moooon-B-V/motir-marketing`. **If this repository is ever
+      # disconnected, remove this line in the same change** — the failure mode is
+      # a red check on every pull request, not a quiet skip.
+      #
+      # No `MOTIR_UPLOAD_TOKEN` secret is needed and none is set; the PAT arm
+      # below stays only as the fork-PR fallback, where GitHub denies OIDC.
+      id-token: write
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
@@ -146,15 +153,19 @@ jobs:
 
       - name: Publish the design result
         env:
-          # A Motir API token granted `work_item:edit` (motir-core
-          # `lib/tokens/grant.ts` → `DESIGN_PUBLISH_PERMISSION`). The PAT path is
-          # repository-AGNOSTIC — it authenticates the token, resolves its
-          # workspace and resolves the card by identifier, with no repository
-          # check — which is what lets this repository publish while it is still
-          # unconnected. UNSET until somebody creates it: the script then logs
-          # "No OIDC identity and no MOTIR_UPLOAD_TOKEN — publishing is opt-in;
-          # skipping" and returns 0, so this job is green and INERT rather than
-          # broken. A green run that logged `skipping` is NOT a publish.
+          # The FORK fallback, and nothing else — deliberately left wired and
+          # deliberately UNSET. GitHub denies OIDC to a pull request from a fork,
+          # so `requestGithubOidcToken` returns null there and the script would
+          # reach for a PAT; with no secret it logs "No OIDC identity and no
+          # MOTIR_UPLOAD_TOKEN — publishing is opt-in; skipping" and returns 0,
+          # which is the right outcome for a fork (a publish must not be
+          # attributable to somebody else's branch).
+          #
+          # It is NOT the primary path any more and should stay empty: a token
+          # granted `work_item:edit` (motir-core `lib/tokens/grant.ts` →
+          # `DESIGN_PUBLISH_PERMISSION`) would work — the PAT arm is
+          # repository-agnostic — but it is a stored credential bought for
+          # nothing now that the keyless identity above resolves.
           MOTIR_UPLOAD_TOKEN: ${{ secrets.MOTIR_UPLOAD_TOKEN }}
           MOTIR_BASE_URL: ${{ vars.MOTIR_BASE_URL || 'https://app.motir.co' }}
           DESIGN_BASE_SHA: ${{ github.event.pull_request.base.sha }}
