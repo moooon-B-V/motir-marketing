@@ -4,9 +4,9 @@
 mark) · **Epic 8 · Launch readiness.** **Repository: `motir-marketing`.**
 
 The public front door at **motir.co**, for **all three** of Motir's genuinely different first-time
-visitors. It leads with ONE idea box, keeps _import an existing project_ as a first-class but
-secondary row, and adds _Start free — project management only_ as a **tertiary** door: a nav entry plus a
-single line under the hero.
+visitors. It opens on a **symmetric fork** — _start something new_ and _I have an existing project_
+as two **co-equal** doors, side by side — and adds _Start free — project management only_ as a
+**tertiary** door: a nav entry plus a single line under the hero.
 
 **This asset is the ROUTING CONTRACT MOTIR-1152 builds to.** Every door is a cross-origin hand-off
 into `app.motir.co`; the marketing site draws **no** connect, import-source, index, generate or chat
@@ -62,11 +62,43 @@ and the hierarchy; take the words from 1144.
 
 ---
 
-## Mirror grounding — why door 3 is TERTIARY and not a third card
+## Hierarchy — TWO co-equal doors, then one tertiary
 
-The hierarchy is the load-bearing decision on this page, and the evidence is rung 1, already
-gathered and recorded in `motir-core/design/onboarding-entrance/design-notes.md` (2026-07-01) for the
-same question one surface downstream. It applies unchanged here and is not re-derived:
+### ⚠️ REVISED 2026-08-28 (Yue). Doors 1 and 2 are CO-EQUAL. The prior reasoning is kept below.
+
+> _"'I have an existing project' should be first-class, it should be as important as the 'I have a
+> new idea' — new project."_
+
+This reverses the hierarchy the first draft of this asset shipped, which made the idea box primary
+and import a secondary row under an `OR`. **It is a decision, not a finding** — it sits above the
+rung-1 evidence below, which argued the other way and is preserved rather than deleted, because a
+future reader who finds that research and does not know it was overruled will quietly re-demote
+door 2.
+
+**What "co-equal" is expressed as, so it cannot erode one attribute at a time.** The two doors share
+every treatment that carries weight: the same grid track and width, the same `--el-accent` border,
+the same `--shadow-elevated`, the same `<h2>`, the same tinted icon tile, the same primary `Button`.
+**The `OR` divider is GONE** — a divider is precisely what makes one side an alternative to the
+other. Neither door is "the fold"; a visitor arrives already belonging to one of them, and the page
+must not tell them which is the real way in.
+
+**Door 2 EARNS the weight rather than being padded to fill it.** A card holding one line of prose
+beside a card holding a text area reads as secondary however it is styled. So the existing-project
+door draws its three real sources — **your codebase · Jira · Linear or Plane** — as three focusable
+rows, which is the same information the old row compressed into a sentence, at the weight the
+decision asks for. That also enumerates the products, which the import-copy rule requires anyway.
+
+**⚠️ THE SEAM THIS OPENS, and it is not resolved here.** The shipped `/onboarding` entrance
+(MOTIR-1461) is **idea-first with import demoted to a secondary row** — Yue's own call on 2026-07-01,
+after the research below. A visitor now meets a symmetric fork on motir.co and, one click later, a
+demoted import row inside the app. Visual continuity between the two properties is one of this
+card's stated constraints, so **either the entrance takes the same revision or the asymmetry needs a
+reason on the record**. Flagged for MOTIR-1461; this asset cannot decide another surface's design.
+
+### The rung-1 evidence, kept — it argued for idea-first and was OVERRULED
+
+Gathered and recorded in `motir-core/design/onboarding-entrance/design-notes.md` (2026-07-01) for the
+same question one surface downstream:
 
 - **Idea-first products lead with ONE prompt and demote every other path.** Lovable, Bolt, v0,
   Replit and Firebase Studio all open on a single "describe your app" box and treat "import an
@@ -75,17 +107,22 @@ same question one surface downstream. It applies unchanged here and is not re-de
 - **Two co-equal cards is the pattern for SOURCE pickers, not idea entrances.** Vercel and Railway
   show _Import Git Repository_ beside _Deploy a Template_ — but both sides start from an existing
   artifact, and neither asks for a long idea.
-- **PM tools put "start free" in the NAV.** Linear and Jira both do; it is the standing convention
-  for the no-commitment door, and it is a nav item precisely because it is not the story the page is
-  telling.
+- **PM tools put "start free" in the NAV.** Linear and Jira both do.
 
-**Applied here:** Motir's front door is idea-first (Principle #1), so door 1 owns the fold. Door 2
-stays a visible first-class row because it is a genuinely different journey for a genuinely
-different person. Door 3 gets the two placements the convention gives it — **a nav entry and one
-line beneath the hero** — because a third co-equal card would turn an idea entrance into a source
-picker, and would tell a visitor that "project management only" is one of three equal things Motir is. It
-is not: it is the way in for someone who does not want the AI, and it needs to be findable, not
-promoted.
+**Only the first two are overruled, and only for THIS surface.** Motir is not only an idea-first
+builder — it is also the destination for a team that already has a codebase, or work items in Jira,
+Linear or Plane, and that is a different business than Lovable's. The mirror is evidence about
+idea-first BUILDERS; the decision is that motir.co is not only one.
+
+**The third point still stands and is why door 3 is unchanged.** A third co-equal card would make
+"project management only" one of three equal things Motir is. It is not: it is the way in for
+somebody who wants neither AI door, and it needs to be findable, not promoted — a nav entry plus one
+line, which is the convention Linear and Jira already use.
+
+**One objection the entrance raised does NOT carry over.** It rejected a two-up fork partly because
+"a half-width column can't hold a long first idea" — true of its own 660px centred column (~310px a
+side). This page's fork sits in a **1080px** container, so each door is ~510px, wider than the
+entrance's own full-width box. The constraint was about width, and this surface has it.
 
 **What door 3 fixes.** MOTIR-655 (8.2, the non-AI team first-run) has existed for months and
 **nothing anywhere routed into it from the public web**. The landing drew two doors for three
@@ -100,11 +137,11 @@ Every door leaves motir.co for `app.motir.co`. **SHIPPED** means the receiving h
 motir-core's `origin/main` today; **NOT READ YET** means the parameter is specified here and nothing
 in motir-core reads it (see the disposition below the table).
 
-| #     | door                                                | who it is for                                                  | placement                                   | target                                                                                                                  | lands on                                                                                                                                 |
-| ----- | --------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **1** | **Idea hero** (PRIMARY)                             | starting fresh, wants AI planning                              | one full-width `Card` in the fold           | POST the idea to the pre-auth draft receiver (MOTIR-1458), then `https://app.motir.co/sign-in?draft=<id>` **· SHIPPED** | the `/onboarding` entrance pre-fills its **carried** panel (MOTIR-1462), which reads the `motir_pending_idea` cookie the receiver plants |
-| **2** | **Import an existing project** (SECONDARY)          | already has a codebase, or work items in Jira, Linear or Plane | a slim full-width row under an `OR` divider | `https://app.motir.co/sign-in?intent=import` **· NOT READ YET**                                                         | the `/onboarding` entrance's EXISTING branch → 7.15 (repo) / 7.17 (Jira · Linear · Plane)                                                |
-| **3** | **Start free — project management only** (TERTIARY) | wants the PM tool, no AI planning                              | a nav entry **and** one line under the hero | `https://app.motir.co/sign-up?intent=tracker` **· NOT READ YET**                                                        | the 8.2 team first-run (MOTIR-655)                                                                                                       |
+| #     | door                                                | who it is for                                                  | placement                                             | target                                                                                                                  | lands on                                                                                                                                 |
+| ----- | --------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | **Start something new** (CO-EQUAL)                  | starting fresh, wants AI planning                              | the LEFT door of the fork                             | POST the idea to the pre-auth draft receiver (MOTIR-1458), then `https://app.motir.co/sign-in?draft=<id>` **· SHIPPED** | the `/onboarding` entrance pre-fills its **carried** panel (MOTIR-1462), which reads the `motir_pending_idea` cookie the receiver plants |
+| **2** | **I have an existing project** (CO-EQUAL)           | already has a codebase, or work items in Jira, Linear or Plane | the RIGHT door of the fork, drawing its three sources | `https://app.motir.co/sign-in?intent=import` **· NOT READ YET**                                                         | the `/onboarding` entrance's EXISTING branch → 7.15 (repo) / 7.17 (Jira · Linear · Plane)                                                |
+| **3** | **Start free — project management only** (TERTIARY) | wants the PM tool, no AI planning                              | a nav entry **and** one line under the hero           | `https://app.motir.co/sign-up?intent=tracker` **· NOT READ YET**                                                        | the 8.2 team first-run (MOTIR-655)                                                                                                       |
 
 **Verified on `origin/main`, 2026-08-28:**
 
@@ -181,13 +218,11 @@ follow into a 404.
 - **Hero, centred, 720 px column.** The _Build with AI_ eyebrow chip on `--el-tint-lavender`; a
   serif `<h1>` at 46 px / 1.1 / `-0.02em`; a 16 px lede in `--el-text-secondary` naming the three
   pillars in one sentence.
-- **Door 1 — the idea box.** A `Card` on an `--el-accent` border with `--shadow-elevated`. Mono
-  uppercase field label, a 7-row textarea at `min-height: 172px` (room for a long first idea), a
-  footer row divided by an `--el-border-soft` hairline carrying the counter on the left and the
-  primary CTA on the right. A hint line below the card.
-- **`OR` divider**, then **door 2** — the import row: an `--el-tint-sky` icon tile with `GitBranch`,
-  a title, a two-line description naming repositories AND Jira / Linear / Plane, and an `Import →`
-  affordance at the right.
+- **The FORK — doors 1 and 2, co-equal.** A two-column grid at equal width. Each door is a `Card`
+  on an `--el-accent` border with `--shadow-elevated`, opening with a tinted icon tile + `<h2>` +
+  one line, and closing on a footer row divided by an `--el-border-soft` hairline with a primary
+  `Button`. **Door 1** carries the mono field label and the textarea; **door 2** carries its three
+  source rows. They stretch to equal height. One hint line, centred, sits under both.
 - **Door 3's second half** — one centred line: _"Just want project management? **Start free** — boards,
   sprints and a backlog, with no AI in the way."_ `Start free` is an `--el-link` text link.
 - **The three pillars**, on an `--el-surface-soft` band: a 3-column grid of `Card`s, each with a
@@ -251,12 +286,12 @@ the same thing in prose.
 | Top bar                         | the `ExploreTopBar` header pattern                                          | `--el-surface-soft` fill, `--el-border` bottom hairline, `--spacing-card-padding` inline                                                                                                                            |
 | `Start free` / `Start planning` | `Button` `variant="primary"`, `rightIcon={<ArrowRight/>}`                   | `--el-accent` / `--el-accent-text`; `--radius-btn`, `--height-btn-md` (`--height-btn-sm` in the bar)                                                                                                                |
 | `Sign in`                       | `Button` `variant="ghost"`                                                  | `--el-text`; `--el-muted` hover fill                                                                                                                                                                                |
-| Idea box                        | `Card` + `textarea`, continuing the entrance                                | `--el-page-bg` on an `--el-accent` border + `--shadow-elevated`; `--radius-card`, transparent input fill                                                                                                            |
+| The two fork doors              | `Card`, one grid track each                                                 | `--el-page-bg` on an `--el-accent` border + `--shadow-elevated`; `--radius-card`. **Identical on both — that identity IS the co-equality**                                                                          |
+| Idea box (door 1)               | `Card` + `textarea`, continuing the entrance                                | transparent input fill; `--el-border-soft` footer hairline                                                                                                                                                          |
+| Source rows (door 2)            | option rows, as the entrance's import row                                   | `--el-page-bg` on `--el-border` (→ `--el-border-strong` + `--el-surface-soft` on hover), `--radius-input`                                                                                                           |
 | Idea field label                | mono uppercase label                                                        | **`--el-text-muted`** — see the deliberate divergence below                                                                                                                                                         |
 | Character counter               | mono inline label                                                           | `--el-text-muted`                                                                                                                                                                                                   |
-| `OR` divider                    | hairline rule + mono label                                                  | `--el-border` rule, `--el-text-muted` label                                                                                                                                                                         |
-| Import row (door 2)             | `Card` as a clickable option row                                            | `--el-page-bg` on `--el-border` (→ `--el-border-strong` on hover), `--shadow-subtle`, `--radius-card`; the affordance in `--el-accent-on-surface`                                                                   |
-| Import icon tile                | tinted square                                                               | `--el-tint-sky`; ink `--el-text-strong`; `--radius-control`                                                                                                                                                         |
+| Door icon tiles                 | tinted squares                                                              | `--el-tint-lavender` (door 1) / `--el-tint-sky` (door 2); ink `--el-text-strong`; `--radius-control`                                                                                                                |
 | `Build with AI` eyebrow         | badge chip (as on the entrance)                                             | `--el-tint-lavender` bg, `--el-text-strong` ink, `--radius-badge`, `--spacing-chip-x/y`                                                                                                                             |
 | Door-3 line                     | inline text link in body copy                                               | `--el-link`; underline on hover                                                                                                                                                                                     |
 | Pillar cards                    | `Card`                                                                      | `--el-page-bg` on `--el-border`, `--shadow-subtle`, `--spacing-card-padding`                                                                                                                                        |
@@ -334,12 +369,18 @@ re-introduce the pattern** by marking a nav item current in accent ink on the so
 
 ### The rest of the a11y contract
 
-- **Exactly one `<h1>`** per page — the hero headline. Heading order is `h1` → `h2` (the pillars'
-  band heading, the footer's column headings) → `h3` (each pillar, the open-core row); no level is
-  skipped and none is chosen for its size.
+- **Exactly one `<h1>`** per page — the hero headline. Heading order is `h1` → `h2` (**each of the
+  two fork doors**, the pillars' band heading, the footer's column headings) → `h3` (each pillar, the
+  open-core row); no level is skipped and none is chosen for its size. **The two doors take the SAME
+  level, and that is a co-equality requirement rather than a formatting one** — a screen-reader user
+  navigating by heading meets two peers, which is the whole decision expressed in the one channel
+  where the visual treatment does not reach.
 - **The brand lockup's accessible name comes from the visible wordmark**, and the glyph is
   `aria-hidden` — never both, per the brand notes §8. It is a lockup, so it is decorative + visible
   text, not an `aria-label`.
+- **Door 2's three sources are real links, each its own focusable row** with a visible ring, not one
+  card with a single target — a co-equal door that is one big click target while its peer is a rich
+  form is not co-equal in the tab order either.
 - **Every icon in the page is `aria-hidden`**: each one sits beside text that carries the meaning.
   The mobile menu button, which has no visible label, takes `aria-label="Menu"`.
 - **The idea textarea has a real `<label for>`**, not a placeholder standing in for one — the

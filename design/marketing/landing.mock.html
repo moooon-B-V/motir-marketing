@@ -352,7 +352,13 @@
 
       /* ── hero ─────────────────────────────────────────────────────── */
       .hero {
-        max-width: 720px;
+        /* 1080, not 720: the fork below is TWO co-equal columns and the idea
+           textarea sits in one of them. The onboarding entrance rejected a
+           two-up fork partly because "a half-width column can't hold a long
+           first idea" — at a 660px centred column that is true (~310px each).
+           At 1080 each door is ~510px, which is wider than the entrance's own
+           full-width box, so the objection does not carry over. */
+        max-width: 1080px;
         margin: 0 auto;
         padding: 72px 28px 8px;
         text-align: center;
@@ -388,7 +394,144 @@
         line-height: 1.6;
       }
 
-      /* ── DOOR 1 (PRIMARY) — the idea box ──────────────────────────── */
+      /* ── THE FORK — two CO-EQUAL doors (new project · existing project) ───
+         Yue, 2026-08-28: "I have an existing project" is first-class, as
+         important as the new-idea door. So the two share EVERY treatment that
+         carries weight — the same grid track, the same accent border, the same
+         elevation, the same `h2`, the same primary Button — and the `OR`
+         divider is GONE, because a divider is what makes one side an
+         alternative to the other. Door 3 stays tertiary and is unaffected. */
+      .fork {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-top: 28px;
+        text-align: left;
+        align-items: stretch;
+      }
+      .door {
+        display: flex;
+        flex-direction: column;
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-accent);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-elevated);
+        padding: 18px 18px 16px;
+      }
+      .door-head {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+      .door-head .tile {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-control);
+        display: grid;
+        place-items: center;
+        color: var(--el-text-strong);
+        flex: none;
+      }
+      .door-head .tile svg {
+        width: 19px;
+        height: 19px;
+      }
+      .door-head .tile.lav {
+        background: var(--el-tint-lavender);
+      }
+      .door-head .tile.sky {
+        background: var(--el-tint-sky);
+      }
+      .door-head h2 {
+        margin: 0 0 4px;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--el-text);
+      }
+      .door-head p {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+      }
+      .door .lbl {
+        display: block;
+        font: 600 11px var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--el-text-muted);
+        margin-bottom: 8px;
+      }
+      .door textarea {
+        width: 100%;
+        flex: 1;
+        min-height: 148px;
+        border: 0;
+        background: transparent;
+        resize: none;
+        font-family: inherit;
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--el-text);
+        outline: none;
+        display: block;
+      }
+      .door textarea::placeholder {
+        color: var(--el-text-muted);
+      }
+      .door-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 12px;
+        padding-top: 13px;
+        border-top: 1px solid var(--el-border-soft);
+      }
+      /* The three real import SOURCES, drawn as choices rather than described in
+         a line of prose — this is what makes door 2 first-class rather than a
+         link wearing a card. Each is its own focusable row. */
+      .sources {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .sources a {
+        display: block;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-input);
+        padding: 10px 12px;
+        text-decoration: none;
+        background: var(--el-page-bg);
+      }
+      .sources a:hover {
+        border-color: var(--el-border-strong);
+        background: var(--el-surface-soft);
+      }
+      .sources a:focus-visible {
+        outline: 2px solid var(--el-accent-on-surface);
+        outline-offset: 2px;
+      }
+      .sources .s-t {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .sources .s-d {
+        display: block;
+        margin-top: 3px;
+        font-size: 12.5px;
+        line-height: 1.45;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── The idea box, as PANEL 3 draws it in close-up ───────────── */
       .idea {
         margin-top: 26px;
         text-align: left;
@@ -444,10 +587,10 @@
         visibility: hidden;
       }
       .hint {
-        margin: 10px 2px 0;
+        margin: 12px 2px 0;
         font-size: 12.5px;
         color: var(--el-text-secondary);
-        text-align: left;
+        text-align: center;
       }
 
       /* ── OR divider ───────────────────────────────────────────────── */
@@ -466,68 +609,6 @@
         flex: 1;
         height: 1px;
         background: var(--el-border);
-      }
-
-      /* ── DOOR 2 (SECONDARY) — the import row ──────────────────────── */
-      .import {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        width: 100%;
-        text-align: left;
-        background: var(--el-page-bg);
-        border: 1px solid var(--el-border);
-        border-radius: var(--radius-card);
-        padding: 16px 18px;
-        box-shadow: var(--shadow-subtle);
-        cursor: pointer;
-        text-decoration: none;
-        color: inherit;
-      }
-      .import:hover {
-        border-color: var(--el-border-strong);
-      }
-      .import .icn {
-        width: 38px;
-        height: 38px;
-        border-radius: var(--radius-control);
-        background: var(--el-tint-sky);
-        color: var(--el-text-strong);
-        display: grid;
-        place-items: center;
-        flex: none;
-      }
-      .import .icn svg {
-        width: 19px;
-        height: 19px;
-      }
-      .import .bd {
-        flex: 1;
-        min-width: 0;
-      }
-      .import .bd .t {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--el-text);
-      }
-      .import .bd .d {
-        margin-top: 4px;
-        font-size: 12.5px;
-        line-height: 1.5;
-        color: var(--el-text-secondary);
-      }
-      .import .go {
-        flex: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--el-accent-on-surface);
-      }
-      .import .go svg {
-        width: 15px;
-        height: 15px;
       }
 
       /* ── DOOR 3 (TERTIARY) — ONE line, not a third card ───────────── */
@@ -777,16 +858,11 @@
       .mobile .idea textarea {
         min-height: 128px;
       }
-      .mobile .import {
-        align-items: flex-start;
-        flex-wrap: wrap;
+      .mobile .fork {
+        grid-template-columns: 1fr;
       }
-      .mobile .import .bd {
-        flex: 1 1 calc(100% - 52px);
-      }
-      .mobile .import .go {
-        flex-basis: 100%;
-        justify-content: flex-end;
+      .mobile .door textarea {
+        min-height: 112px;
       }
       .mobile .band {
         margin-top: 44px;
@@ -984,13 +1060,14 @@
         <p>
           The public front door for <strong>all three</strong> of Motir's
           first-time journeys, drawn for the standalone
-          <strong>motir-marketing</strong> repo. It leads with ONE idea box
-          (door&nbsp;1, primary), keeps
-          <strong>import an existing project</strong> as a first-class secondary
-          row (door&nbsp;2), and adds
+          <strong>motir-marketing</strong> repo. It opens on a SYMMETRIC FORK:
+          <strong>start something new</strong> and
+          <strong>I have an existing project</strong> as two CO-EQUAL doors —
+          same card, same accent border, same elevation, same heading, side by
+          side, no <code>OR</code> between them. It then adds
           <strong>Start free — project management only</strong> as a genuinely
           tertiary door (door&nbsp;3): a nav entry plus a single line under the
-          hero, never a third co-equal card. Every door is a
+          hero, never a third card. Every door is a
           <strong>cross-origin hand-off</strong> into <code>app.motir.co</code>;
           this site draws no connect, import-source or chat UI of its own —
           those are owned by 7.15 / 7.17 / 7.3. The hero deliberately continues
@@ -1080,8 +1157,8 @@
             <!-- ── HERO ───────────────────────────────────────────── -->
             <main>
               <div class="hero">
-                <span class="eyebrow">
-                  <svg
+                <span class="eyebrow"
+                  ><svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -1097,97 +1174,156 @@
                     <path d="M22 4h-4" />
                     <circle cx="4" cy="20" r="2" />
                   </svg>
-                  Build with AI
-                </span>
-                <h1>Describe what you want to build.</h1>
+                  Build with AI</span
+                >
+                <h1>Bring an idea, or bring your project.</h1>
                 <p class="lede">
                   Motir plans it with you, tracks it on a real board, and hands
                   it to agents that do the work — the AI planning,
                   project-management and agent orchestration platform.
                 </p>
 
-                <!-- DOOR 1 (PRIMARY) — the idea box -->
-                <form class="idea">
-                  <label class="lbl" for="idea">Your idea</label>
-                  <textarea
-                    id="idea"
-                    rows="7"
-                    maxlength="2000"
-                    placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. For example: a booking app for a hair salon where clients pick a stylist and time, get SMS reminders, and the owner sees a daily schedule with no-show rates. Don't worry about getting it perfect — we'll ask follow-up questions next."
-                  ></textarea>
-                  <div class="idea-foot">
-                    <span class="counter hidden">0 / 2000</span>
-                    <button class="btn primary" type="submit">
-                      Start planning
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                      </svg>
-                    </button>
+                <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
+                     elevation, same heading level, side by side at equal width. Neither is an
+                     alternative to the other and there is no OR divider: a visitor arrives already
+                     belonging to one of these two, and the page must not tell them which is the
+                     real way in. -->
+                <div class="fork">
+                  <!-- DOOR 1 — a NEW project -->
+                  <form class="door">
+                    <div class="door-head">
+                      <span class="tile lav" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                          />
+                          <path d="M20 2v4" />
+                          <path d="M22 4h-4" />
+                          <circle cx="4" cy="20" r="2" /></svg
+                      ></span>
+                      <div>
+                        <h2>Start something new</h2>
+                        <p>
+                          Describe it and Motir plans it with you — no code, no
+                          board, nothing yet.
+                        </p>
+                      </div>
+                    </div>
+                    <label class="lbl" for="idea">Your idea</label>
+                    <textarea
+                      id="idea"
+                      rows="7"
+                      maxlength="2000"
+                      placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. For example: a booking app for a hair salon where clients pick a stylist and time, get SMS reminders, and the owner sees a daily schedule with no-show rates. Don't worry about getting it perfect — we'll ask follow-up questions next."
+                    ></textarea>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <button class="btn primary" type="submit">
+                        Start planning
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- DOOR 2 — an EXISTING project. Co-equal, and it earns it by drawing its three
+                       real sources as choices rather than describing them in one line of prose. -->
+                  <div class="door">
+                    <div class="door-head">
+                      <span class="tile sky" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M15 6a9 9 0 0 0-9 9V3" />
+                          <circle cx="18" cy="6" r="3" />
+                          <circle cx="6" cy="18" r="3" /></svg
+                      ></span>
+                      <div>
+                        <h2>I have an existing project</h2>
+                        <p>
+                          Motir reads what is already there and plans on top of
+                          it.
+                        </p>
+                      </div>
+                    </div>
+                    <span class="lbl">Bring it from</span>
+                    <ul class="sources">
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Your codebase</span>
+                          <span class="s-d"
+                            >Connect a repository — Motir reads the code and
+                            plans on top of what is already built.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Jira</span>
+                          <span class="s-d"
+                            >Bring existing work items across, with their
+                            structure intact.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Linear or Plane</span>
+                          <span class="s-d">Same import, same structure.</span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <a
+                        class="btn primary"
+                        href="https://app.motir.co/sign-in?intent=import"
+                        >Import a project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
                   </div>
-                </form>
+                </div>
                 <p class="hint">
-                  You can start with a rough idea — Motir asks follow-up
-                  questions next. No credit card.
+                  Either way you end up with a plan you read and edit before
+                  anything is built. No credit card.
                 </p>
 
-                <div class="or">OR</div>
-
-                <!-- DOOR 2 (SECONDARY) — import an existing project -->
-                <a
-                  class="import"
-                  href="https://app.motir.co/sign-in?intent=import"
-                >
-                  <span class="icn" aria-hidden="true">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M15 6a9 9 0 0 0-9 9V3" />
-                      <circle cx="18" cy="6" r="3" />
-                      <circle cx="6" cy="18" r="3" />
-                    </svg>
-                  </span>
-                  <span class="bd">
-                    <span class="t"
-                      >I have an existing project — import it</span
-                    >
-                    <span class="d">
-                      Connect your repository and Motir reads your code, then
-                      plans on top of what's already there. You can also bring
-                      over existing work items from Jira, Linear or Plane.
-                    </span>
-                  </span>
-                  <span class="go">
-                    Import
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                  </span>
-                </a>
-
-                <!-- DOOR 3 (TERTIARY), half two of two: ONE line. Not a card. -->
+                <!-- DOOR 3 (TERTIARY), half two of two: ONE line. Not a card, and unchanged by the
+                     fork above — it is the way in for somebody who wants neither AI door. -->
                 <p class="door3">
                   Just want project management?
                   <a href="https://app.motir.co/sign-up?intent=tracker"
@@ -1196,8 +1332,6 @@
                   — boards, sprints and a backlog, with no AI in the way.
                 </p>
               </div>
-
-              <!-- ── THE THREE PILLARS ────────────────────────────── -->
               <section class="band">
                 <div class="band-head">
                   <h2>One loop, three pieces</h2>
@@ -1473,8 +1607,8 @@
             </header>
             <main>
               <div class="hero">
-                <span class="eyebrow">
-                  <svg
+                <span class="eyebrow"
+                  ><svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -1490,88 +1624,156 @@
                     <path d="M22 4h-4" />
                     <circle cx="4" cy="20" r="2" />
                   </svg>
-                  Build with AI
-                </span>
-                <h1>Describe what you want to build.</h1>
+                  Build with AI</span
+                >
+                <h1>Bring an idea, or bring your project.</h1>
                 <p class="lede">
                   Motir plans it with you, tracks it on a real board, and hands
-                  it to agents that do the work.
+                  it to agents that do the work — the AI planning,
+                  project-management and agent orchestration platform.
                 </p>
-                <form class="idea">
-                  <label class="lbl" for="idea-m">Your idea</label>
-                  <textarea
-                    id="idea-m"
-                    rows="5"
-                    maxlength="2000"
-                    placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. Don't worry about getting it perfect — we'll ask follow-up questions next."
-                  ></textarea>
-                  <div class="idea-foot">
-                    <span class="counter hidden">0 / 2000</span>
-                    <button class="btn primary" type="submit">
-                      Start planning
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                      </svg>
-                    </button>
+
+                <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
+                     elevation, same heading level, side by side at equal width. Neither is an
+                     alternative to the other and there is no OR divider: a visitor arrives already
+                     belonging to one of these two, and the page must not tell them which is the
+                     real way in. -->
+                <div class="fork">
+                  <!-- DOOR 1 — a NEW project -->
+                  <form class="door">
+                    <div class="door-head">
+                      <span class="tile lav" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                          />
+                          <path d="M20 2v4" />
+                          <path d="M22 4h-4" />
+                          <circle cx="4" cy="20" r="2" /></svg
+                      ></span>
+                      <div>
+                        <h2>Start something new</h2>
+                        <p>
+                          Describe it and Motir plans it with you — no code, no
+                          board, nothing yet.
+                        </p>
+                      </div>
+                    </div>
+                    <label class="lbl" for="idea-m">Your idea</label>
+                    <textarea
+                      id="idea-m"
+                      rows="5"
+                      maxlength="2000"
+                      placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. Don't worry about getting it perfect — we'll ask follow-up questions next."
+                    ></textarea>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <button class="btn primary" type="submit">
+                        Start planning
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- DOOR 2 — an EXISTING project. Co-equal, and it earns it by drawing its three
+                       real sources as choices rather than describing them in one line of prose. -->
+                  <div class="door">
+                    <div class="door-head">
+                      <span class="tile sky" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M15 6a9 9 0 0 0-9 9V3" />
+                          <circle cx="18" cy="6" r="3" />
+                          <circle cx="6" cy="18" r="3" /></svg
+                      ></span>
+                      <div>
+                        <h2>I have an existing project</h2>
+                        <p>
+                          Motir reads what is already there and plans on top of
+                          it.
+                        </p>
+                      </div>
+                    </div>
+                    <span class="lbl">Bring it from</span>
+                    <ul class="sources">
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Your codebase</span>
+                          <span class="s-d"
+                            >Connect a repository — Motir reads the code and
+                            plans on top of what is already built.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Jira</span>
+                          <span class="s-d"
+                            >Bring existing work items across, with their
+                            structure intact.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Linear or Plane</span>
+                          <span class="s-d">Same import, same structure.</span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <a
+                        class="btn primary"
+                        href="https://app.motir.co/sign-in?intent=import"
+                        >Import a project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
                   </div>
-                </form>
+                </div>
                 <p class="hint">
-                  You can start with a rough idea — Motir asks follow-up
-                  questions next.
+                  Either way you end up with a plan you read and edit before
+                  anything is built. No credit card.
                 </p>
-                <div class="or">OR</div>
-                <a
-                  class="import"
-                  href="https://app.motir.co/sign-in?intent=import"
-                >
-                  <span class="icn" aria-hidden="true">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M15 6a9 9 0 0 0-9 9V3" />
-                      <circle cx="18" cy="6" r="3" />
-                      <circle cx="6" cy="18" r="3" />
-                    </svg>
-                  </span>
-                  <span class="bd">
-                    <span class="t"
-                      >I have an existing project — import it</span
-                    >
-                    <span class="d">
-                      Connect your repository, or bring over work items from
-                      Jira, Linear or Plane.
-                    </span>
-                  </span>
-                  <span class="go">
-                    Import
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                  </span>
-                </a>
+
+                <!-- DOOR 3 (TERTIARY), half two of two: ONE line. Not a card, and unchanged by the
+                     fork above — it is the way in for somebody who wants neither AI door. -->
                 <p class="door3">
                   Just want project management?
                   <a href="https://app.motir.co/sign-up?intent=tracker"
@@ -1986,8 +2188,8 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
             </header>
             <main>
               <div class="hero" style="padding-bottom: 48px">
-                <span class="eyebrow">
-                  <svg
+                <span class="eyebrow"
+                  ><svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -2003,89 +2205,156 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
                     <path d="M22 4h-4" />
                     <circle cx="4" cy="20" r="2" />
                   </svg>
-                  Build with AI
-                </span>
-                <h1>Describe what you want to build.</h1>
+                  Build with AI</span
+                >
+                <h1>Bring an idea, or bring your project.</h1>
                 <p class="lede">
                   Motir plans it with you, tracks it on a real board, and hands
                   it to agents that do the work — the AI planning,
                   project-management and agent orchestration platform.
                 </p>
-                <form class="idea">
-                  <label class="lbl" for="idea-d">Your idea</label>
-                  <textarea
-                    id="idea-d"
-                    rows="4"
-                    maxlength="2000"
-                    placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. Don't worry about getting it perfect — we'll ask follow-up questions next."
-                  ></textarea>
-                  <div class="idea-foot">
-                    <span class="counter hidden">0 / 2000</span>
-                    <button class="btn primary" type="submit">
-                      Start planning
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                      </svg>
-                    </button>
+
+                <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
+                     elevation, same heading level, side by side at equal width. Neither is an
+                     alternative to the other and there is no OR divider: a visitor arrives already
+                     belonging to one of these two, and the page must not tell them which is the
+                     real way in. -->
+                <div class="fork">
+                  <!-- DOOR 1 — a NEW project -->
+                  <form class="door">
+                    <div class="door-head">
+                      <span class="tile lav" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                          />
+                          <path d="M20 2v4" />
+                          <path d="M22 4h-4" />
+                          <circle cx="4" cy="20" r="2" /></svg
+                      ></span>
+                      <div>
+                        <h2>Start something new</h2>
+                        <p>
+                          Describe it and Motir plans it with you — no code, no
+                          board, nothing yet.
+                        </p>
+                      </div>
+                    </div>
+                    <label class="lbl" for="idea-d">Your idea</label>
+                    <textarea
+                      id="idea-d"
+                      rows="4"
+                      maxlength="2000"
+                      placeholder="Describe what you want to build — who it's for, the core things people should be able to do, and any must-haves. Don't worry about getting it perfect — we'll ask follow-up questions next."
+                    ></textarea>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <button class="btn primary" type="submit">
+                        Start planning
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- DOOR 2 — an EXISTING project. Co-equal, and it earns it by drawing its three
+                       real sources as choices rather than describing them in one line of prose. -->
+                  <div class="door">
+                    <div class="door-head">
+                      <span class="tile sky" aria-hidden="true"
+                        ><svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M15 6a9 9 0 0 0-9 9V3" />
+                          <circle cx="18" cy="6" r="3" />
+                          <circle cx="6" cy="18" r="3" /></svg
+                      ></span>
+                      <div>
+                        <h2>I have an existing project</h2>
+                        <p>
+                          Motir reads what is already there and plans on top of
+                          it.
+                        </p>
+                      </div>
+                    </div>
+                    <span class="lbl">Bring it from</span>
+                    <ul class="sources">
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Your codebase</span>
+                          <span class="s-d"
+                            >Connect a repository — Motir reads the code and
+                            plans on top of what is already built.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Jira</span>
+                          <span class="s-d"
+                            >Bring existing work items across, with their
+                            structure intact.</span
+                          >
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://app.motir.co/sign-in?intent=import">
+                          <span class="s-t">Linear or Plane</span>
+                          <span class="s-d">Same import, same structure.</span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="door-foot">
+                      <span class="counter hidden">0 / 2000</span>
+                      <a
+                        class="btn primary"
+                        href="https://app.motir.co/sign-in?intent=import"
+                        >Import a project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
                   </div>
-                </form>
+                </div>
                 <p class="hint">
-                  You can start with a rough idea — Motir asks follow-up
-                  questions next.
+                  Either way you end up with a plan you read and edit before
+                  anything is built. No credit card.
                 </p>
-                <div class="or">OR</div>
-                <a
-                  class="import"
-                  href="https://app.motir.co/sign-in?intent=import"
-                >
-                  <span class="icn" aria-hidden="true">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M15 6a9 9 0 0 0-9 9V3" />
-                      <circle cx="18" cy="6" r="3" />
-                      <circle cx="6" cy="18" r="3" />
-                    </svg>
-                  </span>
-                  <span class="bd">
-                    <span class="t"
-                      >I have an existing project — import it</span
-                    >
-                    <span class="d">
-                      Connect your repository and Motir reads your code, then
-                      plans on top of what's already there.
-                    </span>
-                  </span>
-                  <span class="go">
-                    Import
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                  </span>
-                </a>
+
+                <!-- DOOR 3 (TERTIARY), half two of two: ONE line. Not a card, and unchanged by the
+                     fork above — it is the way in for somebody who wants neither AI door. -->
                 <p class="door3">
                   Just want project management?
                   <a href="https://app.motir.co/sign-up?intent=tracker"
@@ -2119,10 +2388,10 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
           <div class="route">
             <span class="rank p1">PRIMARY</span>
             <span class="who">
-              <b>1 · Idea hero</b>
+              <b>1 · Start something new</b>
               <span
-                >Starting fresh, wants AI planning. The full-width idea
-                box.</span
+                >Starting fresh, wants AI planning. The LEFT door of the
+                fork.</span
               >
             </span>
             <span class="arr" aria-hidden="true">
@@ -2148,12 +2417,12 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
           </div>
 
           <div class="route">
-            <span class="rank p2">SECONDARY</span>
+            <span class="rank p2">PRIMARY</span>
             <span class="who">
-              <b>2 · Import an existing project</b>
+              <b>2 · I have an existing project</b>
               <span
                 >Already has a codebase, or work items in Jira, Linear or Plane.
-                The slim row under the OR.</span
+                The RIGHT door of the fork, drawing its three sources.</span
               >
             </span>
             <span class="arr" aria-hidden="true">
