@@ -34,7 +34,7 @@ shape is what lets copy be swept across both in one pass.
 | namespace              | the block it fills                                                              |
 | ---------------------- | ------------------------------------------------------------------------------- |
 | `meta`                 | the root `<title>` and meta description for motir.co                            |
-| `nav`                  | the top bar — Explore · Docs · Sign in · **Start free**                         |
+| `nav`                  | the top bar — Explore · Docs · Design · Sign in · **Start free**                |
 | `landing.hero`         | door 1 — the idea box, its CTA, its counter, and its submitting / failed states |
 | `landing.doors.new`    | door 1's HEAD — the tinted tile's heading and its one line                      |
 | `landing.doors.import` | door 2 — "I have an existing project", and its three source rows                |
@@ -43,6 +43,7 @@ shape is what lets copy be swept across both in one pass.
 | `landing.proof`        | the directory-badge band's caption and its four slot labels                     |
 | `landing.pillars`      | the three-pillar descriptive blocks                                             |
 | `landing.openCore`     | the open-core line                                                              |
+| `designShowcase`       | `/design` — the public design showcase's heading, axis rail and closing line    |
 | `footer`               | the footer and its legal microcopy                                              |
 
 > **⚠️ `landing.doors` GAINED KEYS AND `free` CHANGED SHAPE — `MOTIR-1152`, on
@@ -73,6 +74,64 @@ The three doors are three different first-time visitors, and the copy addresses 
 one by name: someone with an idea and no code, someone who already has a codebase or
 work items elsewhere, and someone who wants the project-management tool without the AI.
 `MOTIR-1143` owns where they sit; this file owns what they say.
+
+## `designShowcase` — the `/design` page (`MOTIR-3862`)
+
+The site's second page, and its argument is a demonstration rather than a sentence:
+a visitor switches Motir's three design axes and the whole site restyles. **`MOTIR-3861`
+owns the layout and `MOTIR-1043` builds it; this namespace owns the words**, the same
+split `MOTIR-1143` / `MOTIR-1144` took for the landing, and the two ran concurrently
+here for the same reason.
+
+### The key shape follows the SHIPPED picker components, not the card's phrasing
+
+The card asked for "three per-axis notes … as `AxisNote` text beside each picker".
+**`AxisNote` is not that slot**, and the correction is recorded here rather than
+silently applied. In `@motir/design-system@0.1.0`:
+
+- **`AxisField({ name, help, … })`** is where authored copy goes — a `name` and a
+  one-line `help`. That `help` IS the per-axis note the card is asking for, and a
+  `help` with no `name` cannot mount an `AxisField`, which is why each axis carries
+  both.
+- **`AxisNote({ name, tagline })`** renders the ACTIVE selection's registry name and
+  tagline — `STYLE_REGISTRY[styleId].name` and friends. It is generated, never
+  authored, so no key here feeds it and none should.
+- **`StylePicker` / `PalettePicker` / `TypePicker`** each take a `label` (the
+  radiogroup's accessible name); `ThemeSegmentedControl` additionally takes a
+  `labels` record for its three chips. `motir-core`'s `components/onboarding/DesignStep.tsx`
+  wires `label={t('<axis>.name')}` and the chips from `theme.light` / `.dark` /
+  `.system` — this namespace supplies the same set so the page can be built the same way.
+
+**`theme.note.{light,dark,system}` is deliberately absent.** `DesignStep` has it;
+neither `MOTIR-3862` nor `MOTIR-3861` asks for it, and the showcase's rail is measured
+against a fold. If the build wants a per-pattern note, it is a string to add, not one
+to invent in JSX.
+
+### Decisions on the record
+
+1. **The third axis is "Type" here and "Typography" in the app.** Both cards specify
+   "Style, Palette, Type", the component is `TypePicker`, and the rail is
+   fold-constrained. It is a real seam across the two surfaces — the same class as the
+   Import / Migrate one below — and it is named here so a later reader knows it was
+   chosen rather than missed.
+2. **The three axis `help` lines are motir-core's own, verbatim**
+   (`settings.appearance.{style,palette,type}.help`). The page's whole claim is that
+   this is the same design system the app wears; describing it in different words on
+   the two surfaces would undercut that. Same for `theme.help` and `reset` — the app's
+   own "Reset to default".
+3. **The tagline is NOT restated here.** Rule 1 below binds copy that states the
+   positioning, and this namespace does not: a visitor on `/design` meets all three
+   pillars in `footer.tagline`, which the page renders. A fourth copy on a design page
+   would be off-register.
+4. **⚠️ The closing line does NOT say the agent applies your design choice to what it
+   builds, and the card asked for exactly that.** It was cut on rung-2 evidence rather
+   than by preference — see the amendment recorded on `MOTIR-3862` and the planning bug
+   under `MOTIR-1465`. What ships today: the onboarding design step persists the three
+   axes onto the pre-plan baseline (`PreplanSession.designChoice`) and the generation
+   handoff summarises them, but the value is rendered into **no** planner prompt and no
+   dispatch prompt. The half that IS true — the same three axes, over the same design
+   system — is what the line claims. **Do not restore the other half until a prompt
+   reads the value.**
 
 ## Rules a future edit must not break
 
@@ -124,6 +183,12 @@ no "coding agent", the three-pillar tagline intact in all three of its homes,
 the pillar titles exact, no developer jargon in `landing.hero.*` /
 `landing.doors.free.*` / `landing.doors.new.*`, and the key SHAPE the page
 reads. Rule 1 and rule 3 above are one `pnpm test` away from a red check.
+
+The banned-word and "coding agent" sweeps walk EVERY leaf string, so
+`designShowcase` inherited them the moment it existed. What it needed of its own
+is the key SHAPE the build reads and **the unshipped-claim guard**: the closing
+line's `designShowcase` decision 4 is a rule with a reason, and a rule with a
+reason is exactly what a later editor restores in good faith. It is asserted.
 
 ## Deliberately not here
 

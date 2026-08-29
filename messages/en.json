@@ -9,6 +9,7 @@
     "menu": "Menu",
     "explore": "Explore",
     "docs": "Docs",
+    "design": "Design",
     "signIn": "Sign in",
     "startFree": "Start free"
   },
@@ -87,6 +88,31 @@
       "caption": "Find Motir on",
       "slots": ["Product Hunt", "G2", "GitHub", "AlternativeTo"]
     }
+  },
+  "designShowcase": {
+    "heading": "Pick a look. The whole site changes.",
+    "subline": "This is the design system every Motir project starts with. It is here rather than in a styleguide because the fastest way to show what your product could look like is to let you restyle ours.",
+    "theme": {
+      "name": "Theme",
+      "help": "Light, dark, or match your device.",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "style": {
+      "name": "Style",
+      "help": "The shape and feel — silhouette, elevation, density."
+    },
+    "palette": {
+      "name": "Palette",
+      "help": "The colour scheme the interface wears."
+    },
+    "type": {
+      "name": "Type",
+      "help": "The typeface pairing for headings and body."
+    },
+    "reset": "Reset to default",
+    "closing": "The three axes here are the same three your project picks when you start one in Motir — and the same design system underneath. This site is not showing you a demo of it; it is built from it."
   },
   "footer": {
     "ariaLabel": "Footer",

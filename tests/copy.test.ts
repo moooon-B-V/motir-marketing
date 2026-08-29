@@ -99,6 +99,59 @@ describe('the copy catalogue', () => {
     ])
   })
 
+  it('carries the /design showcase, in the shape the pickers read', () => {
+    // MOTIR-3862. The axis keys are `name` + `help` because that is what
+    // `AxisField` takes; `AxisNote` renders the ACTIVE selection from the
+    // registry and is never authored here. A rename is a code change in
+    // MOTIR-1043, so it surfaces here first.
+    expect(Object.keys(copy.designShowcase).sort()).toEqual([
+      'closing',
+      'heading',
+      'palette',
+      'reset',
+      'style',
+      'subline',
+      'theme',
+      'type',
+    ])
+    for (const axis of ['style', 'palette', 'type'] as const) {
+      expect(Object.keys(copy.designShowcase[axis]).sort()).toEqual([
+        'help',
+        'name',
+      ])
+    }
+    expect(Object.keys(copy.designShowcase.theme).sort()).toEqual([
+      'dark',
+      'help',
+      'light',
+      'name',
+      'system',
+    ])
+    // The nav entry the showcase adds, beside Explore and Docs.
+    expect(copy.nav.design).toBe('Design')
+  })
+
+  it('never claims an agent applies your design choice to what it builds', () => {
+    /*
+     * ⚠️ NOT a style rule — a factual one, and it is asserted because it is the
+     * kind of sentence a later editor restores in good faith.
+     *
+     * MOTIR-3862 asked the closing line to say "the agent applies the choice to
+     * what it builds". It does not ship. The onboarding design step persists the
+     * three axes onto the pre-plan baseline (`PreplanSession.designChoice`) and
+     * the generation handoff summarises them, but the value is rendered into NO
+     * planner prompt and no dispatch prompt — verified on `origin/main` in both
+     * motir-core and motir-ai. Restoring the claim puts a false statement on a
+     * public page. Delete this test when a prompt reads the value, not before.
+     */
+    const builds =
+      /\bagents?\b[^.]*\b(build|builds|building|apply|applies)\b|\b(applied|applies)\b[^.]*\bwhat (it|they) builds?\b/i
+    const offenders = leafStrings(copy.designShowcase)
+      .filter(([, text]) => builds.test(text))
+      .map(([key, text]) => `${key}: ${text}`)
+    expect(offenders).toEqual([])
+  })
+
   it('is the file on disk, not a stale build artifact', () => {
     const onDisk = JSON.parse(readFileSync('messages/en.json', 'utf8'))
     expect(onDisk).toEqual(copy)
