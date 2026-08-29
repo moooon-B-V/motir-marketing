@@ -458,7 +458,17 @@ item to mark.
 | ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                           | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
 | ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                  | **MOTIR-3746** → **MOTIR-3846**                             |
 | ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version** | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**            |
-| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository                                                                                                      | **MOTIR-3750**                                              |
+| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository — **but a lane is no longer how a result is published; see below**                                   | **MOTIR-3750**                                              |
+
+**⚠️ AND THE MISSING LANE NO LONGER STOPS A DESIGN RESULT REACHING THE CARD (MOTIR-3874).** MOTIR-3780
+retired the branch-derived publisher in every repository: the AGENT publishes, by naming its own card
+in a **`publish_design_result`** MCP call, so a repository with no lane is not a repository whose
+design results cannot be published. Measured here rather than assumed — this card's own result
+published from this repository at `2026-08-29T11:42:47Z`, five assets, evidence
+`cmteba0wu0070hvn8i4rfe5yb`. **So a design card in `motir-marketing` OWES that call**, and MOTIR-3750
+is now only about the classifier's basename rule. (There is no MCP read-back door for a published
+result — `get_work_item` carries no field for it — so the receipt id the call returns is the evidence
+a run can quote; the reviewer reads the result on the card in Motir.)
 
 **⚠️ CORRECTED 2026-08-29 (MOTIR-3874) — MOTIR-3743 IS `done`, AND THE PARAGRAPH BELOW NOW READS
 BACKWARDS FOR THE ONE RUNNER IT WAS WRITTEN FOR.** ~~Consequence of MOTIR-3743 for this repository,
