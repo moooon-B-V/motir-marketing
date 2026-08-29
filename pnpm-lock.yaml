@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@motir/brand':
-        specifier: 0.1.0
-        version: 0.1.0(@motir/design-system@0.1.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)
+        specifier: 0.2.0
+        version: 0.2.0(@motir/design-system@0.1.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)
       '@motir/design-system':
         specifier: 0.1.0
         version: 0.1.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)
@@ -467,8 +467,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@motir/brand@0.1.0':
-    resolution: {integrity: sha512-CsuLudA3EJ3LCYMZnOVPyv0PIaiIvADjzlCHY8HLC5UuzY8Umyw/NVyCa3Uy/dD57aXarcpVBBwbYXUpWDx+Mw==}
+  '@motir/brand@0.2.0':
+    resolution: {integrity: sha512-xDb7AEftrcJTjWL/skc+7xF18az0oWp0e0u3MyocZVk405A7/TAX3yeZ9TI5o3oyZQ+ZImAjlX3vWSNSNRjDAg==}
     engines: {node: '>=22'}
     peerDependencies:
       '@motir/design-system': ^0.1.0
@@ -3407,7 +3407,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@motir/brand@0.1.0(@motir/design-system@0.1.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)':
+  '@motir/brand@0.2.0(@motir/design-system@0.1.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)':
     dependencies:
       '@motir/design-system': 0.1.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)
       react: 19.2.4
