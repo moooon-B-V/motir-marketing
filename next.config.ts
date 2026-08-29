@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
    * `.ttf` files through `process.cwd()`, which a WEBPACK dependency trace
    * cannot see — so the directory is named here for it.
    *
+   * ⚠️ THE DIRECTORY MOVED (MOTIR-3848). The faces are `@motir/brand`'s now —
+   * one home across both Motir properties, per MOTIR-3724 — so the glob names
+   * the installed package's `fonts/` rather than a copy committed in this
+   * repository. Getting this wrong is silent in BOTH directions under the build
+   * that runs, which is the reason the paragraph below exists.
+   *
    * ⚠️ THIS KEY IS INERT UNDER THE BUILD THAT ACTUALLY RUNS, and it is kept
    * anyway. `outputFileTracingIncludes` is read in exactly one module,
    * `next/dist/build/collect-build-traces.js`, which `next/dist/build/index.js`
@@ -31,7 +37,7 @@ const nextConfig: NextConfig = {
    * to a metadata route (`/opengraph-image-1br99b`).
    */
   outputFileTracingIncludes: {
-    '/opengraph-image': ['./app/_brand/fonts/**'],
+    '/opengraph-image': ['./node_modules/@motir/brand/fonts/**'],
   },
 }
 
