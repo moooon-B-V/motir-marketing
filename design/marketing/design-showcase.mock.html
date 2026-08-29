@@ -1,0 +1,1631 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/design — the public design showcase · MOTIR-3861 / 8.3.14
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of the `--el-*` element tokens
+         (light + dark, `warm-editorial` style, `motir` palette).
+
+         ⚠️ NOT copied from a file by hand. Every value below was READ OUT OF A
+         BROWSER: `app/globals.css` was compiled with this repository's own
+         Tailwind (`@tailwindcss/postcss`), loaded in headless chromium with
+         `data-theme` / `-style` / `-palette` set on <html>, and each token read
+         with `getComputedStyle(document.documentElement).getPropertyValue()`.
+         So these are the values the page actually paints, not the `var()`
+         chains it declares. The method is in `design-notes.md` § "How this
+         asset was measured".
+
+         ⚠️ THE SOURCE IS `@motir/design-system@0.1.0` AS INSTALLED HERE —
+         NOT motir-core's `packages/design-system/`. The two have DIVERGED and
+         the divergence is a filed bug (MOTIR-3872): the published package
+         predates both accent-ink AA fixes. Restating motir-core's values here
+         would draw a site that does not exist.
+
+         This mock is STANDALONE by the same convention `landing.mock.html`
+         uses: it RE-STATES the shipped values so a plain browser paints the
+         real palette with no Tailwind build. It re-defines no semantics. The
+         only raw values are the doc-annotation scaffold (sheet, captions, ref
+         chips, viewport rulers), which is not product UI.
+      ---------------------------------------------------------------------- */
+      :root {
+        /* ── page + text ─────────────────────────────────────────────── */
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        /* ── borders ─────────────────────────────────────────────────── */
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        /* ── accent + link ───────────────────────────────────────────── */
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-link: #0070d2;
+        /* ── status ──────────────────────────────────────────────────── */
+        --el-danger: #e03131;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        /* ── tints ───────────────────────────────────────────────────── */
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        /* ── shape + spacing (element-semantic, never raw) ───────────── */
+        --radius-badge: 9999px;
+        --radius-btn: 8px;
+        --radius-card: 12px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-card-padding: 24px;
+        --height-btn-sm: 32px;
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --focus-ring-color: #5645d4;
+        /* ── type roles. The real site re-points these per `[data-type]`
+             via next/font `-source` variables; a standalone mock has no
+             loader, so the three default roles are drawn with the system
+             stacks `theme.css` itself falls back to. `landing.mock.html`
+             does the same. Panel 5 shows the re-typing effect. ───────── */
+        --font-sans:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-serif: Georgia, 'Times New Roman', serif;
+        --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+      }
+
+      /*
+       * The DARK resolution, as a class so a dark panel can sit beside a light
+       * one in one document. In the real app this is `[data-theme='dark']` on
+       * <html>, written by the package's `themeInitScript` before first paint.
+       */
+      .t-dark {
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #7b6ce5;
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+        --focus-ring-color: #7b6ce5;
+      }
+
+      /* The two DISTANT cells panel 5 draws. Both are real registry members;
+         the values are the shape/colour dimensions those styles declare. */
+      .s-brutal {
+        --radius-badge: 0px;
+        --radius-btn: 0px;
+        --radius-card: 0px;
+        --el-border: #1a1a1a;
+        --el-border-strong: #1a1a1a;
+        --shadow-subtle: 3px 3px 0 #1a1a1a;
+        --shadow-elevated: 6px 6px 0 #1a1a1a;
+      }
+      .p-graphite {
+        --el-accent: #1a1d21;
+        --el-accent-on-surface: #1a1d21;
+        --el-tint-lavender: #e8e8ea;
+        --focus-ring-color: #1a1d21;
+      }
+      .p-graphite.t-dark {
+        --el-accent: #d4d4d8;
+        --el-accent-on-surface: #e4e4e7;
+        --el-accent-text: #1a1d21;
+        --el-tint-lavender: #26262a;
+      }
+      .ty-mono {
+        --font-sans: ui-monospace, 'SF Mono', Menlo, monospace;
+        --font-serif: ui-monospace, 'SF Mono', Menlo, monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0 0 8px;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 92ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .ref.warn {
+        color: #8a2b2b;
+        background: #fdeaea;
+        border-color: #f5cccc;
+      }
+      .panel {
+        margin-top: 40px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: #5645d4;
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-muted);
+        max-width: 84ch;
+      }
+      .frame {
+        border: 1px solid #d9d6d1;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(15, 15, 15, 0.09);
+        background: var(--el-page-bg);
+      }
+      .rule {
+        font: 600 10px var(--font-mono);
+        color: #787671;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin: 0 0 7px;
+      }
+      .cols {
+        display: grid;
+        gap: 22px;
+      }
+      .cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      /* The FOLD line — annotation. Drawn at the measured viewport height so a
+         reader can see what is above it without trusting a sentence. */
+      .fold {
+        position: relative;
+      }
+      .fold::after {
+        content: 'FOLD — 900px';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 900px;
+        border-top: 2px dashed #e03131;
+        color: #e03131;
+        font: 700 10px var(--font-mono);
+        letter-spacing: 0.08em;
+        padding-top: 3px;
+        pointer-events: none;
+      }
+      .fold-390::after {
+        content: 'FOLD — 844px';
+        top: 844px;
+      }
+
+      /* ═══ PRODUCT UI — every value below is an --el-* token ═════════ */
+
+      /* --- the shipped chrome: SiteHeader (app/_components/SiteHeader.tsx) - */
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 24px;
+        background: var(--el-surface-soft);
+        border-bottom: 1px solid var(--el-border);
+      }
+      .bar-l {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+      }
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font: 700 17px/1 var(--font-serif);
+        color: var(--el-text);
+        letter-spacing: -0.01em;
+      }
+      .glyph {
+        width: 26px;
+        height: 26px;
+        flex: none;
+        color: var(--el-accent-on-surface);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+        padding-bottom: 3px;
+        border-bottom: 2px solid transparent;
+      }
+      /*
+       * ⚠️ THE CURRENT-PAGE TREATMENT. This is the one new pattern the page
+       * forces, and it is a MEASUREMENT, not a taste call.
+       *   colour  --el-text        16.44:1 on --el-surface-soft in DARK
+       *   rule    --el-accent       3.63:1 — a graphical object, 1.4.11's 3:1
+       * NEVER --el-accent-on-surface as TEXT here: 4.41:1 in dark, under AA
+       * (MOTIR-3745). The weight + rule carry the state without colour, so it
+       * survives greyscale and does not rely on hue alone (1.4.1).
+       */
+      .nav a[aria-current='page'] {
+        color: var(--el-text);
+        font-weight: 600;
+        border-bottom-color: var(--el-accent);
+      }
+      .bar-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: var(--height-btn-sm);
+        padding: 0 14px;
+        border-radius: var(--radius-btn);
+        font-size: 13.5px;
+        font-weight: 500;
+        border: 1px solid transparent;
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text-secondary);
+      }
+      .btn.outline {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        border-color: var(--el-border);
+      }
+
+      /* --- the AXIS RAIL ------------------------------------------------- */
+      /*
+       * Composed from the package's OWN AxisField + AxisRadioGroup markup —
+       * mirrored class-for-class from `dist/components/theme/
+       * AppearancePickers.js`, which was SSR-rendered and screenshotted before
+       * this was drawn. See design-notes § "How this asset was measured".
+       */
+      .rail {
+        background: var(--el-surface-soft);
+        border-bottom: 1px solid var(--el-border);
+        padding: 4px 24px 12px;
+      }
+      .rail-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      .rail-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 0 4px;
+        flex-wrap: wrap;
+      }
+      .rail-head .lead {
+        font: 600 12px var(--font-mono);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--el-text-muted);
+      }
+      .axis {
+        border-bottom: 1px solid var(--el-border-soft);
+        padding: 10px 0;
+      }
+      .axis:last-of-type {
+        border-bottom: 0;
+      }
+      .axis-hd {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      .axis-hd .nm {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .axis-hd .help {
+        font-size: 12px;
+        color: var(--el-text-muted);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--el-border);
+        background: var(--el-page-bg);
+        color: var(--el-text-secondary);
+        border-radius: var(--radius-badge);
+        padding: 5px var(--spacing-chip-x);
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      /*
+       * ⚠️ THE SELECTED CHIP IS THE PACKAGE'S OWN TREATMENT, DRAWN AS SHIPPED
+       * — accent ink on --el-tint-lavender. On the INSTALLED 0.1.0 that is
+       * 3.59:1 in dark on the default palette and under AA on four palettes in
+       * light. It is drawn as it really is, and the defect is MOTIR-3872, not
+       * a thing this asset silently repaints. See design-notes § Planning flags.
+       */
+      .chip.sel {
+        border-color: var(--el-accent);
+        background: var(--el-tint-lavender);
+        color: var(--el-accent-on-surface);
+      }
+      .chip .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        flex: none;
+      }
+      .chip .tick {
+        font-size: 11px;
+        line-height: 1;
+      }
+      .chip.ty {
+        font-family: var(--font-serif);
+      }
+      .chip.ty-m {
+        font-family: var(--font-mono);
+      }
+      /* the theme control — ThemeSegmentedControl, mirrored */
+      .seg {
+        display: inline-flex;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid var(--el-border);
+        background: var(--el-muted);
+        border-radius: var(--radius-btn);
+      }
+      .seg button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: var(--height-btn-sm);
+        padding: 0 12px;
+        font: 500 13px var(--font-sans);
+        border: 1px solid transparent;
+        border-radius: calc(var(--radius-btn) - 2px);
+        background: transparent;
+        color: var(--el-text-secondary);
+        cursor: pointer;
+      }
+      .seg button[aria-checked='true'] {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        border-color: var(--el-border);
+        box-shadow: var(--shadow-subtle);
+      }
+      .seg button[aria-checked='true'] .i {
+        color: var(--el-accent);
+      }
+      .reset {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: var(--height-btn-sm);
+        padding: 0 12px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-btn);
+        background: var(--el-page-bg);
+        color: var(--el-text-secondary);
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      /* --- the composed specimen ---------------------------------------- */
+      .page {
+        padding: 28px 24px 36px;
+        background: var(--el-page-bg);
+      }
+      .page-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      .lede h1 {
+        font: 700 30px/1.18 var(--font-serif);
+        margin: 0 0 8px;
+        letter-spacing: -0.015em;
+        color: var(--el-text);
+      }
+      .lede p {
+        margin: 0;
+        max-width: 66ch;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .sect {
+        margin-top: 26px;
+      }
+      .sect-lb {
+        font: 600 11px var(--font-mono);
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--el-text-muted);
+        margin: 0 0 10px;
+      }
+      .card {
+        background: var(--el-surface);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        padding: var(--spacing-card-padding);
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-badge);
+        padding: 2px 10px;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+        background: var(--el-page-bg);
+      }
+      .input {
+        height: 36px;
+        min-width: 190px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-btn);
+        background: var(--el-page-bg);
+        color: var(--el-text-muted);
+        font-size: 13.5px;
+        padding: 0 11px;
+        display: flex;
+        align-items: center;
+      }
+      .field label {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--el-text);
+        margin-bottom: 5px;
+      }
+      .sw {
+        width: 36px;
+        height: 20px;
+        border-radius: 9999px;
+        background: var(--el-accent);
+        position: relative;
+        flex: none;
+      }
+      .sw::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .tip {
+        background: var(--el-text);
+        color: var(--el-text-inverted);
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        display: inline-block;
+      }
+      .pop {
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-elevated);
+        padding: 12px;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        display: inline-block;
+        min-width: 190px;
+      }
+      .state {
+        border: 1px dashed var(--el-border-strong);
+        border-radius: var(--radius-card);
+        padding: 20px;
+        text-align: center;
+        color: var(--el-text-muted);
+        font-size: 13px;
+        background: var(--el-page-bg);
+      }
+      .state b {
+        display: block;
+        font: 600 15px/1.3 var(--font-serif);
+        color: var(--el-text);
+        margin-bottom: 4px;
+      }
+      /* the --el-* swatch grid — the TokensSpecimen slot */
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+        gap: 8px;
+      }
+      .sw-cell {
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-btn);
+        overflow: hidden;
+        background: var(--el-page-bg);
+      }
+      .sw-chip {
+        height: 34px;
+      }
+      .sw-nm {
+        font: 500 10.5px var(--font-mono);
+        color: var(--el-text-muted);
+        padding: 5px 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* the StyleVignette slot */
+      .vig {
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-surface-soft);
+        padding: 14px;
+        box-shadow: var(--shadow-subtle);
+      }
+      .vig-hd {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .vig-hd .d {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--el-accent);
+      }
+      .vig-hd .t {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .vig-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 5px 0;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+      }
+      .vig-bar {
+        height: 5px;
+        border-radius: 3px;
+        background: var(--el-muted);
+        overflow: hidden;
+        margin-top: 6px;
+      }
+      .vig-bar i {
+        display: block;
+        height: 100%;
+        background: var(--el-accent);
+      }
+      .mini {
+        font-size: 11px;
+        color: var(--el-text-muted);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-badge);
+        padding: 1px 7px;
+      }
+      .foot {
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 18px 24px;
+        color: var(--el-text-muted);
+        font-size: 12.5px;
+      }
+      /* narrow-viewport rail: ONE scrolling row per axis (see design-notes) */
+      .chips.scroll {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .menu {
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .menu a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+        display: inline-block;
+        width: fit-content;
+        padding-bottom: 3px;
+        border-bottom: 2px solid transparent;
+      }
+      .menu a[aria-current='page'] {
+        color: var(--el-text);
+        font-weight: 600;
+        border-bottom-color: var(--el-accent);
+      }
+      .measure {
+        font: 500 11px var(--font-mono);
+        color: var(--el-text-muted);
+        margin-top: 8px;
+      }
+      .measure b {
+        color: #1aae39;
+      }
+      .measure s {
+        color: #e03131;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <header class="doc-head">
+        <h1>motir.co/design — the public design showcase</h1>
+        <p>
+          The page where a visitor moves three controls and the site they are
+          standing on becomes a different-looking product. It is a
+          <strong>marketing / credibility surface</strong>, not a token
+          reference: the argument is
+          <em>“the design system Motir gives you is the one Motir wears.”</em>
+          Everything here composes into the shipped motir.co chrome and renders
+          from <code>@motir/design-system@0.1.0</code>, which this repository
+          already installs.
+        </p>
+        <p>
+          <strong>Every string is placeholder at the specified register</strong>
+          — the words are MOTIR-3862's.
+          <strong>Every number in this asset was measured in a browser</strong>,
+          not read off a file; the method is in <code>design-notes.md</code>.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-3861 · 8.3.14</span>
+          <span class="ref muted">story MOTIR-656 · 8.3</span>
+          <span class="ref muted">repo motir-marketing</span>
+          <span class="ref muted">builds → MOTIR-1043</span>
+          <span class="ref muted">words → MOTIR-3862</span>
+          <span class="ref warn">blocks the AA criterion → MOTIR-3872</span>
+        </div>
+      </header>
+
+      <!-- ══ PANEL 1 ══════════════════════════════════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">1</span>
+          <h2>/design — desktop, light</h2>
+          <span class="note"
+            >The arrival state. Bar → rail → composed specimen. The dashed line
+            is the measured 900px fold: the whole rail AND the first composed
+            section sit above it.</span
+          >
+        </div>
+        <p class="rule">viewport 1440 × 900 · signed-out · motir.co/design</p>
+        <div class="frame fold">
+          <!-- the shipped SiteHeader, plus ONE new entry -->
+          <div class="bar">
+            <div class="bar-l">
+              <span class="lockup">
+                <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M2 15c3.5 0 3.5-6 7-6s3.5 6 7 6 3.5-6 6-6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Motir
+              </span>
+              <nav class="nav" aria-label="Main">
+                <a href="#">Explore</a>
+                <a href="#">Docs</a>
+                <a href="#" aria-current="page">Design</a>
+              </nav>
+            </div>
+            <div class="bar-r">
+              <a class="btn ghost" href="#">Sign in</a>
+              <a class="btn" href="#">Start free →</a>
+            </div>
+          </div>
+
+          <!-- THE AXIS RAIL -->
+          <div class="rail">
+            <div class="rail-inner">
+              <div class="rail-head">
+                <span class="lead">Change how this site looks</span>
+                <div class="row" style="gap: 8px">
+                  <div class="seg" role="radiogroup" aria-label="Theme">
+                    <button aria-checked="false">
+                      <span class="i">☀</span> Light
+                    </button>
+                    <button aria-checked="false">
+                      <span class="i">☾</span> Dark
+                    </button>
+                    <button aria-checked="true">
+                      <span class="i">🖵</span> System
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="axis">
+                <div class="axis-hd">
+                  <span class="nm">Style</span
+                  ><span class="help"
+                    >11 styles — shape, stroke, elevation, motion</span
+                  >
+                </div>
+                <div class="chips" role="radiogroup" aria-label="Style">
+                  <button class="chip sel">
+                    Warm Editorial <span class="tick">✓</span>
+                  </button>
+                  <button class="chip">Soft / Playful</button>
+                  <button class="chip">Swiss / Minimal-Flat</button>
+                  <button class="chip">Neo-Brutalism</button>
+                  <button class="chip">Glassmorphism</button>
+                  <button class="chip">Cybercore / Y2K</button>
+                  <button class="chip">Aurora</button>
+                  <button class="chip">3D / Immersive</button>
+                  <button class="chip">Neumorphism</button>
+                  <button class="chip">Hand-Drawn / Indie</button>
+                  <button class="chip">Retrofuturism</button>
+                </div>
+              </div>
+
+              <div class="axis">
+                <div class="axis-hd">
+                  <span class="nm">Palette</span
+                  ><span class="help">10 palettes — colour only</span>
+                </div>
+                <div class="chips" role="radiogroup" aria-label="Palette">
+                  <button class="chip sel">
+                    <span class="dot" style="background: #5645d4"></span> Motir
+                    <span class="tick">✓</span>
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #3650c2"></span> Cobalt
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #1a1d21"></span>
+                    Graphite
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #0c7a52"></span>
+                    Evergreen
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #5a37c9"></span>
+                    Spectrum
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #f0b90b"></span> Amber
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #fa520f"></span> Sienna
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #c30021"></span> Garnet
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #ffd02f"></span>
+                    Citrine
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #efbfdd"></span> Candy
+                  </button>
+                </div>
+              </div>
+
+              <div class="axis">
+                <div class="axis-hd">
+                  <span class="nm">Type</span
+                  ><span class="help"
+                    >6 pairings — each chip is set in its own headline
+                    face</span
+                  >
+                </div>
+                <div class="chips" role="radiogroup" aria-label="Type">
+                  <button class="chip ty sel">
+                    Motir <span class="tick">✓</span>
+                  </button>
+                  <button class="chip">Motir Sans</button>
+                  <button class="chip ty-m">Motir Mono</button>
+                  <button class="chip">Grotesk</button>
+                  <button class="chip ty">Editorial</button>
+                  <button class="chip ty-m">Mono-Technical</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- THE COMPOSED SPECIMEN -->
+          <div class="page">
+            <div class="page-inner">
+              <div class="lede">
+                <h1>This page is the example.</h1>
+                <p>
+                  Placeholder at register. Everything below — and the bar above
+                  it, and the footer — is drawn by the three attributes you just
+                  set. Nothing on this page is a picture of a product; it is the
+                  product's own components.
+                </p>
+              </div>
+
+              <div class="sect">
+                <p class="sect-lb">Composed UI</p>
+                <div class="card">
+                  <div class="row">
+                    <a class="btn" href="#">Primary</a>
+                    <a class="btn outline" href="#">Secondary</a>
+                    <a class="btn ghost" href="#">Ghost</a>
+                    <span class="pill">Badge</span>
+                    <span class="pill" style="background: var(--el-tint-mint)"
+                      >Done</span
+                    >
+                    <span class="pill" style="background: var(--el-tint-peach)"
+                      >In review</span
+                    >
+                    <div class="sw" role="switch" aria-checked="true"></div>
+                    <span class="tip">Tooltip</span>
+                  </div>
+                  <div
+                    class="row"
+                    style="margin-top: 16px; align-items: flex-end"
+                  >
+                    <div class="field">
+                      <label>Work item title</label>
+                      <div class="input">Ship the billing flow</div>
+                    </div>
+                    <div class="field">
+                      <label>Assignee</label>
+                      <div class="input">Select… ⌄</div>
+                    </div>
+                    <div class="seg" role="radiogroup" aria-label="View">
+                      <button aria-checked="true">Board</button>
+                      <button aria-checked="false">List</button>
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    style="margin-top: 16px; align-items: flex-start"
+                  >
+                    <div class="pop">
+                      <strong style="color: var(--el-text); font-size: 12.5px"
+                        >Popover</strong
+                      ><br />An overlay drawn from the same tokens.
+                    </div>
+                    <div class="state" style="flex: 1; min-width: 200px">
+                      <b>Nothing here yet</b>
+                      EmptyState — the shipped primitive.
+                    </div>
+                    <div class="state" style="flex: 1; min-width: 200px">
+                      <b style="color: var(--el-danger)">Something broke</b>
+                      ErrorState — the shipped primitive.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sect">
+                <p class="sect-lb">
+                  Style previews — StyleVignette, one per style
+                </p>
+                <div class="cols cols-3">
+                  <div class="vig">
+                    <div class="vig-hd">
+                      <span class="d"></span
+                      ><span class="t">Warm Editorial</span>
+                    </div>
+                    <div class="vig-row">
+                      <span>Invoice schema</span><span class="mini">Done</span>
+                    </div>
+                    <div class="vig-row">
+                      <span>Dunning emails</span
+                      ><span class="mini">Review</span>
+                    </div>
+                    <div class="vig-bar"><i style="width: 62%"></i></div>
+                  </div>
+                  <div class="vig s-brutal">
+                    <div class="vig-hd">
+                      <span class="d"></span
+                      ><span class="t">Neo-Brutalism</span>
+                    </div>
+                    <div class="vig-row">
+                      <span>Invoice schema</span><span class="mini">Done</span>
+                    </div>
+                    <div class="vig-row">
+                      <span>Dunning emails</span
+                      ><span class="mini">Review</span>
+                    </div>
+                    <div class="vig-bar"><i style="width: 62%"></i></div>
+                  </div>
+                  <div class="vig p-graphite">
+                    <div class="vig-hd">
+                      <span class="d"></span
+                      ><span class="t">Graphite palette</span>
+                    </div>
+                    <div class="vig-row">
+                      <span>Invoice schema</span><span class="mini">Done</span>
+                    </div>
+                    <div class="vig-row">
+                      <span>Dunning emails</span
+                      ><span class="mini">Review</span>
+                    </div>
+                    <div class="vig-bar"><i style="width: 62%"></i></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sect">
+                <p class="sect-lb">
+                  Element tokens — the --el-* grid (TokensSpecimen)
+                </p>
+                <div class="swatches">
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-page-bg)"
+                    ></div>
+                    <div class="sw-nm">--el-page-bg</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-surface)"
+                    ></div>
+                    <div class="sw-nm">--el-surface</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-surface-soft)"
+                    ></div>
+                    <div class="sw-nm">--el-surface-soft</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-muted)"
+                    ></div>
+                    <div class="sw-nm">--el-muted</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-accent)"
+                    ></div>
+                    <div class="sw-nm">--el-accent</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-border)"
+                    ></div>
+                    <div class="sw-nm">--el-border</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-tint-lavender)"
+                    ></div>
+                    <div class="sw-nm">--el-tint-lavender</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-tint-mint)"
+                    ></div>
+                    <div class="sw-nm">--el-tint-mint</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-tint-peach)"
+                    ></div>
+                    <div class="sw-nm">--el-tint-peach</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-tint-rose)"
+                    ></div>
+                    <div class="sw-nm">--el-tint-rose</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-tint-sky)"
+                    ></div>
+                    <div class="sw-nm">--el-tint-sky</div>
+                  </div>
+                  <div class="sw-cell">
+                    <div
+                      class="sw-chip"
+                      style="background: var(--el-tint-yellow)"
+                    ></div>
+                    <div class="sw-nm">--el-tint-yellow</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            Motir — moooon B.V. · Privacy · Terms · Open source
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PANEL 2 ══════════════════════════════════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">2</span>
+          <h2>/design — desktop, dark</h2>
+          <span class="note"
+            >The same document under <code>data-theme="dark"</code>. The nav's
+            current item is <code>--el-text</code> at 16.44:1 here — the one
+            place the bar's no-accent-text rule actually bites.</span
+          >
+        </div>
+        <p class="rule">viewport 1440 · data-theme="dark"</p>
+        <div class="frame t-dark">
+          <div class="bar">
+            <div class="bar-l">
+              <span class="lockup">
+                <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M2 15c3.5 0 3.5-6 7-6s3.5 6 7 6 3.5-6 6-6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Motir
+              </span>
+              <nav class="nav" aria-label="Main">
+                <a href="#">Explore</a>
+                <a href="#">Docs</a>
+                <a href="#" aria-current="page">Design</a>
+              </nav>
+            </div>
+            <div class="bar-r">
+              <a class="btn ghost" href="#">Sign in</a>
+              <a class="btn" href="#">Start free →</a>
+            </div>
+          </div>
+          <div class="rail">
+            <div class="rail-inner">
+              <div class="rail-head">
+                <span class="lead">Change how this site looks</span>
+                <div class="row" style="gap: 8px">
+                  <button class="reset">↺ Reset to default</button>
+                  <div class="seg" role="radiogroup" aria-label="Theme">
+                    <button aria-checked="false">
+                      <span class="i">☀</span> Light
+                    </button>
+                    <button aria-checked="true">
+                      <span class="i">☾</span> Dark
+                    </button>
+                    <button aria-checked="false">
+                      <span class="i">🖵</span> System
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="axis">
+                <div class="axis-hd">
+                  <span class="nm">Style</span
+                  ><span class="help">11 styles</span>
+                </div>
+                <div class="chips" role="radiogroup" aria-label="Style">
+                  <button class="chip">Warm Editorial</button>
+                  <button class="chip sel">
+                    Neo-Brutalism <span class="tick">✓</span>
+                  </button>
+                  <button class="chip">Glassmorphism</button>
+                  <button class="chip">Aurora</button>
+                  <button class="chip">Neumorphism</button>
+                  <button class="chip">Retrofuturism</button>
+                </div>
+              </div>
+              <div class="axis">
+                <div class="axis-hd">
+                  <span class="nm">Palette</span
+                  ><span class="help">10 palettes</span>
+                </div>
+                <div class="chips" role="radiogroup" aria-label="Palette">
+                  <button class="chip sel">
+                    <span class="dot" style="background: #5645d4"></span> Motir
+                    <span class="tick">✓</span>
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #1a1d21"></span>
+                    Graphite
+                  </button>
+                  <button class="chip">
+                    <span class="dot" style="background: #efbfdd"></span> Candy
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page">
+            <div class="page-inner">
+              <div class="lede">
+                <h1>This page is the example.</h1>
+                <p>
+                  Placeholder at register — the dark resolution of the same
+                  document.
+                </p>
+              </div>
+              <div class="sect">
+                <div class="card">
+                  <div class="row">
+                    <a class="btn" href="#">Primary</a>
+                    <a class="btn outline" href="#">Secondary</a>
+                    <span class="pill">Badge</span>
+                    <span class="pill" style="background: var(--el-tint-mint)"
+                      >Done</span
+                    >
+                    <div class="sw" role="switch" aria-checked="true"></div>
+                    <div class="input">Search work items…</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            Motir — moooon B.V. · Privacy · Terms · Open source
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PANEL 3 ══════════════════════════════════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">3</span>
+          <h2>The nav entry — the current-page treatment, proved</h2>
+          <span class="note"
+            >The site's first second route, so the header's founding premise
+            (“no item is ever current”) stops holding. The treatment is weight +
+            an <code>--el-accent</code> rule + <code>--el-text</code> — never
+            accent-coloured text.</span
+          >
+        </div>
+        <div class="cols cols-2">
+          <div>
+            <p class="rule">light</p>
+            <div class="frame">
+              <div class="bar">
+                <div class="bar-l">
+                  <span class="lockup">Motir</span>
+                  <nav class="nav" aria-label="Main">
+                    <a href="#">Explore</a>
+                    <a href="#">Docs</a>
+                    <a href="#" aria-current="page">Design</a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <p class="measure">
+              --el-text on --el-surface-soft <b>16.66:1</b> · rule --el-accent
+              <b>6.29:1</b>
+            </p>
+          </div>
+          <div>
+            <p class="rule">dark — the theme the rule exists for</p>
+            <div class="frame t-dark">
+              <div class="bar">
+                <div class="bar-l">
+                  <span class="lockup">Motir</span>
+                  <nav class="nav" aria-label="Main">
+                    <a href="#">Explore</a>
+                    <a href="#">Docs</a>
+                    <a href="#" aria-current="page">Design</a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <p class="measure">
+              --el-text on --el-surface-soft <b>16.44:1</b> · rule --el-accent
+              <b>3.63:1</b> (1.4.11 needs 3:1) · rejected:
+              --el-accent-on-surface as text
+              <s>4.41:1</s>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PANEL 4 ══════════════════════════════════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">4</span>
+          <h2>Narrow viewport — 390 × 844</h2>
+          <span class="note"
+            >Two changes, both forced by measurement. The nav collapses into the
+            <code>md:hidden</code> panel, which must carry the same current-page
+            treatment. And each axis becomes
+            <strong>one horizontally scrolling row</strong> — 11 style chips
+            WRAP to six rows at 390px, which would push the specimen off the
+            fold entirely.</span
+          >
+        </div>
+        <div class="cols cols-2">
+          <div>
+            <p class="rule">390 · menu OPEN · the current item in the panel</p>
+            <div class="frame" style="max-width: 390px">
+              <div class="bar" style="padding: 10px 16px">
+                <span class="lockup" style="font-size: 15px">Motir</span>
+                <div class="bar-r">
+                  <a class="btn" href="#">Start free</a>
+                  <button class="btn ghost" style="padding: 0 8px">☰</button>
+                </div>
+              </div>
+              <nav class="menu" aria-label="Main">
+                <a href="#">Explore</a>
+                <a href="#">Docs</a>
+                <a href="#" aria-current="page">Design</a>
+                <a href="#">Sign in</a>
+              </nav>
+            </div>
+          </div>
+          <div>
+            <p class="rule">390 · the rail, one scrolling row per axis</p>
+            <div class="frame fold fold-390" style="max-width: 390px">
+              <div class="bar" style="padding: 10px 16px">
+                <span class="lockup" style="font-size: 15px">Motir</span>
+                <div class="bar-r">
+                  <button class="btn ghost" style="padding: 0 8px">☰</button>
+                </div>
+              </div>
+              <div class="rail" style="padding: 4px 16px 10px">
+                <div class="rail-head">
+                  <span class="lead">Change how this looks</span>
+                </div>
+                <div class="axis">
+                  <div class="axis-hd">
+                    <span class="nm">Style</span><span class="help">11</span>
+                  </div>
+                  <div
+                    class="chips scroll"
+                    role="radiogroup"
+                    aria-label="Style"
+                  >
+                    <button class="chip sel">
+                      Warm Editorial <span class="tick">✓</span>
+                    </button>
+                    <button class="chip">Soft / Playful</button>
+                    <button class="chip">Swiss</button>
+                    <button class="chip">Neo-Brutalism</button>
+                  </div>
+                </div>
+                <div class="axis">
+                  <div class="axis-hd">
+                    <span class="nm">Palette</span><span class="help">10</span>
+                  </div>
+                  <div
+                    class="chips scroll"
+                    role="radiogroup"
+                    aria-label="Palette"
+                  >
+                    <button class="chip sel">
+                      <span class="dot" style="background: #5645d4"></span>
+                      Motir
+                      <span class="tick">✓</span>
+                    </button>
+                    <button class="chip">
+                      <span class="dot" style="background: #3650c2"></span>
+                      Cobalt
+                    </button>
+                    <button class="chip">
+                      <span class="dot" style="background: #1a1d21"></span>
+                      Graphite
+                    </button>
+                  </div>
+                </div>
+                <div class="axis">
+                  <div class="axis-hd">
+                    <span class="nm">Type</span><span class="help">6</span>
+                  </div>
+                  <div class="chips scroll" role="radiogroup" aria-label="Type">
+                    <button class="chip ty sel">
+                      Motir <span class="tick">✓</span>
+                    </button>
+                    <button class="chip">Motir Sans</button>
+                    <button class="chip ty-m">Motir Mono</button>
+                  </div>
+                </div>
+                <div class="axis">
+                  <div class="axis-hd"><span class="nm">Theme</span></div>
+                  <div class="seg" role="radiogroup" aria-label="Theme">
+                    <button aria-checked="false">☀</button>
+                    <button aria-checked="false">☾</button>
+                    <button aria-checked="true">🖵 System</button>
+                  </div>
+                </div>
+              </div>
+              <div class="page" style="padding: 18px 16px">
+                <div class="lede">
+                  <h1 style="font-size: 23px">This page is the example.</h1>
+                  <p style="font-size: 14px">Placeholder at register.</p>
+                </div>
+                <div class="sect">
+                  <div class="card" style="padding: 16px">
+                    <div class="row">
+                      <a class="btn" href="#">Primary</a>
+                      <span class="pill">Badge</span>
+                      <div class="sw" role="switch" aria-checked="true"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PANEL 5 ══════════════════════════════════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">5</span>
+          <h2>The grammar — three deliberately distant cells</h2>
+          <span class="note"
+            >11 × 10 × 6 × 2 = <strong>1,320 cells</strong> and none of them is
+            drawable as a panel. What is drawable is the GRAMMAR: one distant
+            style, one distant palette, one pairing that re-types the whole UI.
+            Every other cell is generated by the same three attributes and is
+            asserted by MOTIR-1043's AA matrix, not by more panels.</span
+          >
+        </div>
+        <div class="cols cols-3">
+          <div>
+            <p class="rule">style = neo-brutalism · 0px radius, hard shadow</p>
+            <div class="frame s-brutal" style="border-radius: 0">
+              <div class="page" style="padding: 18px">
+                <div class="card">
+                  <div class="row">
+                    <a class="btn" href="#">Primary</a
+                    ><span class="pill">Badge</span>
+                  </div>
+                  <div class="row" style="margin-top: 12px">
+                    <div class="input">Input</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="rule">
+              palette = graphite · colour only, shape unchanged
+            </p>
+            <div class="frame p-graphite">
+              <div class="page" style="padding: 18px">
+                <div class="card">
+                  <div class="row">
+                    <a class="btn" href="#">Primary</a
+                    ><span class="pill">Badge</span>
+                  </div>
+                  <div class="row" style="margin-top: 12px">
+                    <div class="input">Input</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="rule">type = mono-technical · re-types everything</p>
+            <div class="frame ty-mono">
+              <div class="page" style="padding: 18px">
+                <div class="card">
+                  <div class="row">
+                    <a class="btn" href="#">Primary</a
+                    ><span class="pill">Badge</span>
+                  </div>
+                  <div class="row" style="margin-top: 12px">
+                    <div class="input">Input</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PANEL 6 ══════════════════════════════════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">6</span>
+          <h2>The states this page actually has</h2>
+          <span class="note"
+            >It fetches nothing, so there is
+            <strong>no loading state and no error state</strong> — said rather
+            than left unasked. Three real states: arrival, an axis mid-change,
+            and the off-default rail carrying Reset.</span
+          >
+        </div>
+        <div class="cols cols-3">
+          <div>
+            <p class="rule">a · arrival — every axis at its default</p>
+            <div class="frame">
+              <div class="rail" style="padding: 10px 14px">
+                <div class="rail-head">
+                  <span class="lead">Change how this site looks</span>
+                </div>
+                <div class="axis">
+                  <div class="axis-hd"><span class="nm">Style</span></div>
+                  <div class="chips">
+                    <button class="chip sel">
+                      Warm Editorial <span class="tick">✓</span>
+                    </button>
+                    <button class="chip">Soft / Playful</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="measure">No Reset — nothing is off its default.</p>
+          </div>
+          <div>
+            <p class="rule">
+              b · mid-change — pressed, before the attribute lands
+            </p>
+            <div class="frame">
+              <div class="rail" style="padding: 10px 14px">
+                <div class="rail-head">
+                  <span class="lead">Change how this site looks</span>
+                </div>
+                <div class="axis">
+                  <div class="axis-hd"><span class="nm">Style</span></div>
+                  <div class="chips">
+                    <button class="chip">Warm Editorial</button>
+                    <button
+                      class="chip sel"
+                      style="
+                        outline: 2px solid var(--focus-ring-color);
+                        outline-offset: 2px;
+                      "
+                    >
+                      Neo-Brutalism <span class="tick">✓</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="measure">
+              Selection and focus are separate signals:
+              <code>aria-checked</code> + the ring.
+            </p>
+          </div>
+          <div>
+            <p class="rule">c · off default — Reset appears</p>
+            <div class="frame">
+              <div class="rail" style="padding: 10px 14px">
+                <div class="rail-head">
+                  <span class="lead">Change how this site looks</span>
+                  <button class="reset">↺ Reset to default</button>
+                </div>
+                <div class="axis">
+                  <div class="axis-hd"><span class="nm">Style</span></div>
+                  <div class="chips">
+                    <button class="chip">Warm Editorial</button>
+                    <button class="chip sel">
+                      Neo-Brutalism <span class="tick">✓</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="measure">
+              Present whenever ANY of the four axes is off its default.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

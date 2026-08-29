@@ -520,3 +520,326 @@ grep -niE 'tracker|\bissues?\b' design/marketing/*
 
 Every surviving hit must be a code identifier (`?intent=tracker`) or prose about the rule itself. A
 hit in rendered copy, in a mock's markup or in this file's own prose is a defect.
+
+---
+
+# motir.co/design — the public design showcase (`design-showcase.*`)
+
+**Subtask:** MOTIR-3861 · 8.3.14 (`type: design`) · **Story:** MOTIR-656 (8.3 Marketing site + brand
+mark) · **Epic 8 · Launch readiness.** **Repository: `motir-marketing`.**
+
+The public page at **motir.co/design** where a visitor switches Motir's three design axes and
+watches the whole site restyle. It is a **marketing / credibility surface**, not a token reference:
+the argument it makes is _"the design system Motir gives you is the one Motir wears."_
+
+**Asset files (three):** this section of `design-notes.md` (the AREA's note) ·
+`design-showcase.mock.html` (the source of truth — standalone, re-stating the shipped `--el-*`
+values so it paints without a Tailwind build, exactly as `landing.mock.html` does) ·
+`design-showcase.png` (full-page Playwright chromium export, `deviceScaleFactor: 2`).
+
+> **⚠️ The note is a SECTION of `design-notes.md`, not `design-showcase.design-notes.md`** — the
+> convention this area already states above, ONE `design-notes.md` per AREA with the mock and the
+> export sharing a per-surface basename.
+>
+> **⚠️ MOTIR-3861's criterion 1 justifies that basename by citing `classifyDesignPath` in
+> `motir-core/scripts/upload-design-assets.mjs`. That file no longer exists** —
+> `git ls-tree -r origin/main -- scripts/upload-design-assets.mjs` in motir-core returns empty; it
+> was deleted by MOTIR-3797 on 2026-08-29 at 02:44, about forty minutes after this card was
+> authored, as part of MOTIR-3780 retiring the CI publisher in favour of the agent calling
+> `publish_design_result`. **The requirement is unchanged and the reason for it has changed**: the
+> basename no longer decides whether a note publishes (the agent declares `kind: 'note_file'`
+> explicitly), so what now enforces it is the area convention alone. The criterion was satisfied as
+> written; only its citation is stale.
+
+---
+
+## How this asset was measured
+
+**Nothing in this section was read off a file.** The surface this page composes into already ships,
+and so does every control it draws, so this pass followed _design-against-shipped-reality_ by
+rendering the real thing first and drawing to that:
+
+1. **The real components were server-rendered.** `StylePicker`, `PalettePicker`, `TypePicker`,
+   `ThemeSegmentedControl`, `AxisField`, `StyleVignette` and the primitives were imported from the
+   INSTALLED `@motir/design-system` and put through `renderToStaticMarkup`, so the mock's markup is
+   the package's own, class for class.
+2. **The real CSS was compiled.** `app/globals.css` — the actual file, with its two `@import`s and
+   two `@source` lines — was compiled with this repository's own `@tailwindcss/postcss`.
+3. **Both were loaded in headless chromium**, and every token value in the mock's token block was
+   read with `getComputedStyle(document.documentElement).getPropertyValue()` under each
+   `data-theme`. The contrast figures below are computed from those resolved values.
+
+**The measurement pipeline has a control**: `--el-accent-on-surface` on `--el-surface-soft`, dark,
+`motir` returns **4.41:1** — MOTIR-3745's own independently recorded number, to the digit. A second
+control: the light `--el-tint-lavender` arm fails on exactly **four** palettes, which is
+MOTIR-3774's title. Numbers below are trustworthy to the extent those two reproduce.
+
+> **⚠️ A contrast harness must parse `color()`.** A first run of the palette sweep reported the
+> current motir-core theme as 10/10 failing in dark. That was the harness: the fixed inks are
+> `color-mix()`, which computes to `color(srgb 0.567 0.519 0.910)`, and the parser read those 0–1
+> floats as 0–255. **A fixed theme and a catastrophically broken one are one parser bug apart**, so
+> whoever writes MOTIR-1043's AA matrix should assert the harness against a known pair before
+> trusting a red cell.
+
+---
+
+## Designed against shipped reality
+
+| what                  | read from                                                                                      | how it is used here                                                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| The bar               | `app/_components/SiteHeader.tsx`, **rendered**, not summarised                                 | The mock's bar is that component's structure plus exactly ONE new `<a>`; nothing else in the bar moves                                 |
+| The four controls     | `@motir/design-system` `dist/components/theme/AppearancePickers.js`, SSR-rendered + screenshot | The rail's chips, their selected treatment, the `role="radiogroup"` / `role="radio"` shape and the segmented control are the package's |
+| The per-style preview | the package's `StyleVignette`, SSR-rendered                                                    | The Style previews row. It is a substantial mini-app preview, not a swatch — drawn as what it really is                                |
+| The token grid        | the package's `TokensSpecimen`                                                                 | The `--el-*` grid. The real export is ~170 KB of markup; the mock draws a representative slice and NAMES the export the build mounts   |
+| The tokens            | `@motir/design-system@0.1.0` `theme.css`, **as installed here**                                | Every colour and radius, light AND dark, restated at its resolved value                                                                |
+| The axis membership   | the package's own `STYLE_IDS` / `PALETTE_IDS` / `TYPE_IDS` at runtime                          | **11 / 10 / 6** — counted from the modules, not from a card                                                                            |
+
+**⚠️ Read the INSTALLED package, never motir-core's `packages/design-system/`.** The two have
+diverged, and the divergence is a filed defect — see _Planning flags_. Restating motir-core's values
+here would have drawn a site that does not exist.
+
+---
+
+## ACCESS PATH — how a visitor reaches this page
+
+**This page is the site's first internal second route, and that is the fact that generates its one
+new pattern.** Until now motir.co had exactly one page.
+
+- **INBOUND:** the **`Design` entry in `SiteHeader`'s nav**, beside `Explore` and `Docs` — drawn in
+  panels 1, 2, 3 and 4. It is the ONLY door; there is no in-product link to it and the landing does
+  not otherwise change.
+- It is also the site's first `next/link` to somewhere other than `/` (every other destination in
+  the bar is a different ORIGIN and stays a plain `<a>`).
+- **OUTBOUND:** nothing new. The page's own controls change attributes; they navigate nowhere.
+
+---
+
+## The nav entry, and the current-page treatment it forces
+
+`SiteHeader.tsx` carries a load-bearing comment: _"motir.co is the root, so no nav item here is ever
+the current page and there is nothing to mark … Do not reintroduce the pattern by marking an item
+current."_ **The prohibition it states is on ACCENT-COLOURED TEXT; the premise it rests on — that no
+item is ever current — is what this page ends.** The reason behind it is MOTIR-3745: accent ink as
+text in that bar measures 4.41:1 in dark, under AA.
+
+**The treatment, and its measurement** (panel 3 draws both themes):
+
+| element             | token                                | dark on `--el-surface-soft` | light   | bar                  |
+| ------------------- | ------------------------------------ | --------------------------- | ------- | -------------------- |
+| current item's TEXT | `--el-text` + `font-600`             | **16.44:1**                 | 16.66:1 | AA 4.5:1 ✓           |
+| current item's RULE | `--el-accent`, 2px under             | **3.63:1**                  | 6.29:1  | 1.4.11 3:1 ✓         |
+| the other items     | `--el-text-secondary`                | 6.94:1                      | 6.51:1  | AA 4.5:1 ✓           |
+| ~~rejected~~        | ~~`--el-accent-on-surface` as text~~ | ~~4.41:1~~                  | 6.29:1  | **FAILS AA in dark** |
+
+**Three properties this treatment has and a colour-only one would not:** it passes AA in the theme
+that fails, at 3.7× the threshold; the state survives greyscale, because weight and a rule are not
+hue (1.4.1); and it adds no new token — `--el-text` and `--el-accent` are both already in the bar.
+
+**It is drawn in BOTH places** the nav exists: the desktop bar and the `md:hidden` menu panel
+(panel 4). The panel is easy to miss — it is rendered by a separate branch in the same component —
+and a current-page treatment that exists only on desktop is a bug the build card would have to be
+told about, so it is drawn rather than described.
+
+**`aria-current="page"` carries it to assistive technology**, which is the half the visual treatment
+cannot do.
+
+---
+
+## Surfaces / panels (inspect every panel)
+
+- **Panel 1 — desktop, light (1440 × 900).** The arrival state: bar → axis rail → composed
+  specimen → footer. Carries the measured fold line.
+- **Panel 2 — desktop, dark (1440).** The same document under `data-theme="dark"`, with a
+  non-default style selected so the **Reset to default** control is present.
+- **Panel 3 — the nav entry**, both themes, with the contrast measured under each.
+- **Panel 4 — narrow (390 × 844).** Two frames: the `md:hidden` menu panel carrying the current-page
+  treatment, and the rail in its narrow form.
+- **Panel 5 — the grammar.** Three deliberately distant cells.
+- **Panel 6 — the states the page actually has.** Arrival · an axis mid-change · off-default.
+
+---
+
+## The axis rail
+
+**Layout — a full-width band under the bar, on `--el-surface-soft`, four fields stacked.** It is
+composed from the package's own `AxisField` (`border-b border-(--el-border-soft) py-4`), one per
+axis, each holding an `AxisRadioGroup` of chips; the theme control and Reset sit on the rail's own
+header row, right-aligned.
+
+**Why a full-width band and not a sidebar:** measured, not preferred. The Style axis is **11** chips
+of real words (`Swiss / Minimal-Flat`, `Hand-Drawn / Indie`) and Palette is **10** with a swatch
+each. At 1440 the three groups occupy 2 + 2 + 1 wrapped rows; in a 280px sidebar the Style group
+alone wraps to nine rows and the rail stops fitting any viewport.
+
+**Scroll behaviour: the rail does NOT stick.** The page's argument is that the WHOLE document
+restyles — bar and footer included — so pinning the controls over a scrolling specimen would keep
+the one region a visitor most needs to see changing (the chrome) out of view. The rail is short
+enough to return to, and the page is not long.
+
+**Narrow (< `md`): each axis becomes ONE horizontally scrolling row** (`flex-nowrap` +
+`overflow-x-auto`), rather than wrapping. This is forced by measurement: 11 style chips WRAP to six
+rows at 390px, which is ~190px of rail for one axis and pushes the specimen off the fold. As one
+scrolling row the axis is **31px** and all four fit. Measured in isolation at a true 390 viewport:
+`document.scrollWidth === 390`, so the page itself never scrolls horizontally — only the chip rows do.
+
+### The measured fold
+
+Both taken by rendering the frame at the true viewport and reading `getBoundingClientRect()`
+offsets from the frame's top edge.
+
+| viewport       | bar    | axis rail    | page lede | first composed section | fold |
+| -------------- | ------ | ------------ | --------- | ---------------------- | ---- |
+| **1440 × 900** | 0 → 57 | 57 → **378** | 406 → 521 | 547 → **820**          | 900  |
+| **390 × 844**  | 0 → 53 | 53 → **407** | 425 → 483 | 509 → **575**          | 844  |
+
+**Above the fold in both: the whole rail AND a whole composed section**, which is the criterion.
+At 1440 there is 80px of headroom; at 390, 269px.
+
+---
+
+## Decision — a visitor's choice PERSISTS across motir.co, and Reset discharges it
+
+`ThemeProvider` writes `data-theme` / `-style` / `-palette` / `-type` onto `document.documentElement`
+and persists each to `localStorage` under `motir.theme.*`; `themeInitScript` — already blocking in
+this site's `<head>` — re-applies them on every motir.co page load. **So a visitor who picks
+Neo-Brutalism here sees the LANDING in Neo-Brutalism afterwards.**
+
+**DECIDED: keep it.** Reverting on navigation would contradict the page's own claim. The page says
+_this is the system your product wears_; a demo that forgets the moment you leave it is a preview,
+and the argument it makes is weaker than the one the persistence makes for free — the visitor
+returns to the landing and finds their choice already applied to a page they had already seen.
+
+**What discharges the surprise is the affordance, not a warning.** A **Reset to default** control
+sits in the rail header and is **present whenever any of the four axes is off its default** (panels
+2 and 6c); absent at arrival (panel 6a), because a reset with nothing to reset is noise. Defaults
+are `warm-editorial` / `motir` / `motir` / `system`, from the package's own `THEME_DEFAULTS`.
+
+---
+
+## The matrix, honestly
+
+**11 styles × 10 palettes × 6 pairings × 2 themes = 1,320 cells.** Not drawable, and drawing forty
+of them would still not be a proof.
+
+What panel 5 draws is the **grammar** — that the three axes are independent and each changes a
+different property:
+
+- **`neo-brutalism`** — a distant STYLE: 0px radii, heavy border, hard-offset shadow. Shape moves;
+  colour does not.
+- **`graphite`** — a distant PALETTE: colour moves; shape does not.
+- **`mono-technical`** — a pairing that re-types the entire UI, headlines included.
+
+Plus the default in **light** (panel 1) and **dark** (panel 2). **The remaining cells are generated
+by the same three attributes and are asserted by MOTIR-1043's AA-matrix criterion, not by more
+panels** — which is the right division: a machine can check 1,320 cells and a reader cannot.
+
+---
+
+## The states this page actually has
+
+**It fetches nothing.** There is no loading state and no error state, and this asset says so rather
+than leaving it unasked. `EmptyState` and `ErrorState` appear in the composed specimen as
+_specimens of the primitives_, never as states of this page.
+
+Three real states, drawn in panel 6: **arrival** (every axis default, no Reset) · **mid-change** (the
+pressed chip, with selection and focus as separate signals — `aria-checked` and the focus ring) ·
+**off-default** (Reset present). Plus the narrow rail (panel 4).
+
+---
+
+## Primitives composed — every element, and the export it maps to
+
+Checked against `@motir/design-system@0.1.0`'s own barrel **as installed in this repository**
+(`node_modules/@motir/design-system/dist/index.js`, 68 exports), never against motir-core's source.
+
+| drawn element                    | export it maps to                                                                                                                  |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| the four rail fields             | `AxisField` (+ `AxisNote` for the per-axis line MOTIR-3862 writes)                                                                 |
+| the Style / Palette / Type chips | `StylePicker` · `PalettePicker` · `TypePicker`, each over `AxisRadioGroup`                                                         |
+| light / dark / system            | `ThemeSegmentedControl`                                                                                                            |
+| Reset to default                 | `Button` (`variant="outline"`, `size="sm"`)                                                                                        |
+| the attribute writer             | `ThemeProvider` + `useTheme`; `themeInitScript` already in `app/layout.tsx`                                                        |
+| the axis membership + defaults   | `STYLE_IDS` · `PALETTE_IDS` · `TYPE_IDS` · `STYLE_REGISTRY` · `PALETTE_REGISTRY` · `TYPE_REGISTRY` · `THEME_DEFAULTS`              |
+| per-style previews               | `StyleVignette`                                                                                                                    |
+| the `--el-*` grid                | `TokensSpecimen`                                                                                                                   |
+| specimen controls                | `Button` · `Card` · `Pill` · `Input` · `Textarea` · `FormField` · `Segmented` · `Switch` · `SectionLabel` · `Combobox` · `Spinner` |
+| specimen overlays                | `Tooltip` · `Popover` · `Modal`                                                                                                    |
+| the toast specimen               | **`ToastProvider` + `useToast`** — see below                                                                                       |
+| class merging                    | `cn` · `buttonVariants`                                                                                                            |
+
+**Three corrections to the card's own list, each verified against the barrel:**
+
+1. **There is no `Toast` export.** The card names one; the package exports **`ToastProvider`** and
+   the **`useToast`** hook (the component is internal). A build that writes `import { Toast }` fails.
+2. **The registries are `STYLE_REGISTRY` / `PALETTE_REGISTRY` / `TYPE_REGISTRY`** (plus the
+   `*_IDS` arrays), not `STYLES` / `PALETTES` / `TYPOGRAPHY` as the card's context refs say.
+3. **`StylePicker` renders 11 chips, not 9** — see _Planning flags_.
+
+**Named and deliberately NOT drawn:** `Sidebar`, `CommandPalette`, the charts and `IssueTypeIcon`
+live only in motir-core and are unreachable here, exactly as the card says.
+
+> **⚠️ For whoever builds this: `Tooltip`, `Popover` and `Modal` render nothing under SSR** — 45, 21
+> and 0 bytes respectively, because each is state- or portal-driven. Their OPEN state in this mock is
+> drawn from their source rather than captured from a render, and is the one place in this asset
+> where the _render, don't read_ rule could not be followed. Verify those three in a browser.
+
+---
+
+## Planning flags
+
+1. **⚠️ `motir.co` serves a design system that fails AA in five cells — filed as MOTIR-3872, and it
+   BLOCKS MOTIR-1043.** `@motir/design-system@0.1.0`, which this repository pins, predates **both**
+   accent-ink fixes (MOTIR-3745, MOTIR-3774). Measured over all 10 palettes: **light 4/10 fail**
+   (evergreen 4.19, amber 4.00, sienna 4.13, candy 4.29) and **dark 1/10 fail** (`motir`, the
+   DEFAULT palette, 3.59) for `--el-accent-on-surface` on `--el-tint-lavender` — which is the
+   package's own SELECTED-CHIP treatment, i.e. the rail on this very page. The same sweep over
+   motir-core `origin/main` returns **0/10 on both arms**: the fixes exist and were never published
+   to npm. MOTIR-1043's criterion _"AA holds … for every style × palette pair … reported as a
+   matrix"_ is **unsatisfiable until the package is republished and the pin bumped.**
+   **The mock draws the selected chip as it really is**, low contrast included, rather than quietly
+   repainting it — an asset that hides the defect would let the build card ship it.
+2. **The style count is 9 in two cards and 11 in the package.** MOTIR-3861 says _"`StylePicker` (9
+   styles)"_ and MOTIR-1043 says _"9 styles · 10 palettes · 6 type pairings — the same membership as
+   motir-core `origin/main`"_. Measured from the installed module, `STYLE_IDS.length === 11`:
+   `warm-editorial`, `soft-playful`, `swiss-minimal-flat`, `neo-brutalism`, `glassmorphism`,
+   `cybercore-y2k`, `aurora`, `3d-immersive`, `neumorphism`, `hand-drawn-indie`, `retrofuturism`.
+   Palette (10) and Type (6) are correct. **It is a layout input, not a trivium** — two extra chips
+   are what make the Style axis wrap to a second row at 1440 and what forced the narrow-viewport
+   scrolling row — so a rail drawn to "9" would have been wrong at both viewports.
+3. **The `theme.css` block counts in MOTIR-1043 are wrong for both versions.** It says 35
+   `[data-palette]`, 109 `[data-style]`, 9 `[data-type]`. Measured on the installed 0.1.0:
+   **23 / 107 / 9**; on motir-core `origin/main`: 23 / 112 / 9. Command, so the set is checkable
+   rather than the number: `grep -o "\[data-palette=[^]]*\]" theme.css | wc -l`. Only `[data-type]`
+   matches. Nothing in this asset depends on those numbers; the build card should not either.
+4. **MOTIR-1043 also needs the three missing typefaces before its Type axis is honest** — its own
+   body says so, and this asset assumes it: panel 5's `mono-technical` cell cannot render truthfully
+   until IBM Plex Mono is loaded. Not a new finding, restated because this asset draws the cell.
+
+---
+
+## Out of scope — who owns what
+
+- **The words are MOTIR-3862's.** Every string in the mock is placeholder at the specified register:
+  never _tracker_, never _issue_ for a work item, the three pillars in full where positioning is
+  stated. The nav LABEL (`Design` here) is that card's too — the mock's is a placeholder that
+  happens to be the obvious one.
+- **The build is MOTIR-1043's.** This card ships three files and no code: no route, no component,
+  no font loader, no `sitemap.ts` line.
+- **The landing is not redrawn.** The only change this asset specifies to an existing surface is the
+  single nav entry and the current-page treatment it forces.
+- **The package fix is MOTIR-3872's**, in motir-core and then this repository's pin.
+
+---
+
+## Notes for MOTIR-1043 (the build)
+
+- The bar gains **one** `<a>`, as a `next/link`, with `aria-current="page"` when active. **Update
+  the component's ⚠️ comment rather than deleting it** — its prohibition (no accent-coloured text)
+  survives; only its premise (nothing is ever current) does not.
+- The rail is four `AxisField`s; do not hand-roll the chips — `StylePicker` / `PalettePicker` /
+  `TypePicker` already render them, keyboard behaviour included (arrow keys move within the
+  radiogroup, and only the selected chip is in the tab order).
+- **Reset** sets all four axes back to `THEME_DEFAULTS` and is conditional on any being off default.
+- `app/sitemap.ts` gains its `/design` line in the same change — the file's own comment asks for it.
+- **Before the AA matrix can pass, MOTIR-3872 must land.** Assert the contrast harness against a
+  known pair first (see _How this asset was measured_).
