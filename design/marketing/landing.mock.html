@@ -132,10 +132,27 @@
         --el-border-strong: #3a3a3a;
         --el-accent: #6c5cdd;
         --el-accent-text: #ffffff;
-        --el-accent-on-surface: #7b6ce5;
+        /* ⚠️ NOT a hex, and not #7b6ce5 any more (MOTIR-3874). 0.1.1 computes
+           this ink as color-mix(in srgb, var(--color-primary) 82%, var(--el-text))
+           — MOTIR-3745's AA lift — which resolves to a value no 8-bit hex names.
+           Measured off the INSTALLED @motir/design-system@0.1.1 in headless
+           chromium, `motir`, dark. */
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
         --el-accent-pressed: #5645d4;
         --el-link: #58a6ff;
         --el-link-pressed: #79b8ff;
+        /* ⚠️ RE-DECLARED, not inherited (MOTIR-3874). The :root form above mixes
+           in var(--el-text); `--el-*` are substituted where they are DECLARED,
+           so a nested .dark subtree keeps the LIGHT resolution unless the mix is
+           restated here — the same trap @motir/design-system documents for
+           [data-theme='light'] + data-appearance-scope. The package's own dark
+           value is color(srgb 0.900784 0.421569 0.423922); this restatement
+           resolves to it exactly. */
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
         --el-danger-surface: #3a1f2a;
         --el-tint-peach: #3a2a1a;
         --el-tint-rose: #3a1f2a;
@@ -1971,10 +1988,11 @@
             <p class="st-note">
               The textarea holds focus on load; the visible ring is a 2 px
               <code>--el-accent-on-surface</code> outline at 2 px offset (6.57:1
-              light / 4.67:1 dark, over WCAG 1.4.11's 3:1). The counter is
-              present but <code>visibility: hidden</code>, so revealing it never
-              reflows the footer. Submit is ENABLED on an empty idea — the box
-              is a head-start, not a gate, exactly as the
+              light / 6.11:1 dark — 4.67:1 on 0.1.0, over WCAG 1.4.11's 3:1
+              either way). The counter is present but
+              <code>visibility: hidden</code>, so revealing it never reflows the
+              footer. Submit is ENABLED on an empty idea — the box is a
+              head-start, not a gate, exactly as the
               <code>/onboarding</code> entrance decided.
             </p>
           </div>
@@ -2111,10 +2129,11 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
               <strong>The typed idea is never cleared.</strong> The banner is
               <code>role="alert"</code>, an <code>--el-danger</code> hairline
               over <code>--el-danger-surface</code> with
-              <code>--el-danger-on-surface</code> ink (5.75:1 light / 4.77:1
-              dark), and it carries an icon as well as the colour. Two exits:
-              retry, or continue to sign-up without the hand-off — the visitor
-              is never stranded on a dead button.
+              <code>--el-danger-on-surface</code> ink (5.77:1 light / 4.75:1
+              dark, re-measured on the pinned 0.1.1), and it carries an icon as
+              well as the colour. Two exits: retry, or continue to sign-up
+              without the hand-off — the visitor is never stranded on a dead
+              button.
             </p>
           </div>
         </div>
@@ -2129,13 +2148,17 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
           <h2>Dark theme — the same surface, no second design</h2>
           <span class="note"
             >every colour is the same token resolving to its Tier-1 dark value.
-            The one measured constraint this panel encodes:
-            <strong>no accent-coloured TEXT sits on the top bar</strong> —
+            The constraint this panel used to encode —
+            <strong>no accent-coloured TEXT on the top bar</strong>, because
             <code>--el-accent-on-surface</code> on
-            <code>--el-surface-soft</code> is 4.41:1 in dark, under AA. The
-            bar's nav is <code>--el-text-secondary</code> (6.94:1) and the CTA
-            is a filled Button (white on <code>--el-accent</code>,
-            4.99:1).</span
+            <code>--el-surface-soft</code> measured 4.41:1 in dark — is
+            <strong>RETIRED</strong>: on the pinned 0.1.1 that pair is 5.76:1
+            (MOTIR-3874). Nothing on THIS page changes, because motir.co is the
+            root and no nav item here is ever current; the bar's nav is
+            <code>--el-text-secondary</code> (6.94:1) and the CTA is a filled
+            Button (white on <code>--el-accent</code>, 4.99:1). The current-page
+            treatment the constraint used to shape lives in
+            <code>design-showcase.mock.html</code>.</span
           >
         </div>
         <p class="rule">viewport 1280 · data-theme="dark"</p>

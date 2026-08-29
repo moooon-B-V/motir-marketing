@@ -113,7 +113,14 @@
         --el-border-strong: #3a3a3a;
         --el-accent: #6c5cdd;
         --el-accent-text: #ffffff;
-        --el-accent-on-surface: #7b6ce5;
+        /* ⚠️ NOT a hex, and not #7b6ce5 any more (MOTIR-3874). 0.1.1 computes
+           this ink as color-mix(in srgb, var(--color-primary) 82%, var(--el-text))
+           — MOTIR-3745's AA lift — which resolves to a value no 8-bit hex names.
+           Measured off the INSTALLED @motir/design-system@0.1.1 in headless
+           chromium, `motir`, dark. #7b6ce5 was 0.1.0's flat value and survives
+           below as --focus-ring-color, which the lift did NOT move: the two
+           tokens were the same colour on 0.1.0 and are two colours now. */
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
         --el-accent-pressed: #5645d4;
         --el-link: #58a6ff;
         --el-tint-peach: #3a2a1a;
@@ -320,22 +327,31 @@
         font-size: 13.5px;
         color: var(--el-text-secondary);
         text-decoration: none;
-        padding-bottom: 3px;
-        border-bottom: 2px solid transparent;
       }
       /*
-       * ⚠️ THE CURRENT-PAGE TREATMENT. This is the one new pattern the page
-       * forces, and it is a MEASUREMENT, not a taste call.
-       *   colour  --el-text        16.44:1 on --el-surface-soft in DARK
-       *   rule    --el-accent       3.63:1 — a graphical object, 1.4.11's 3:1
-       * NEVER --el-accent-on-surface as TEXT here: 4.41:1 in dark, under AA
-       * (MOTIR-3745). The weight + rule carry the state without colour, so it
-       * survives greyscale and does not rely on hue alone (1.4.1).
+       * ⚠️ THE CURRENT-PAGE TREATMENT — ExploreTopBar's own, and still a
+       * MEASUREMENT rather than a taste call.
+       *   colour  --el-accent-on-surface  5.76:1 dark / 6.29:1 light on
+       *                                   --el-surface-soft — AA at 13.5px/600
+       *   weight  font-weight: 600        the NON-colour channel, so the state
+       *                                   survives greyscale (1.4.1)
+       * This is byte-for-byte what the app's public bar ships
+       * (`text-[13.5px] font-semibold text-(--el-accent-on-surface)`), so
+       * motir.co's bar and app.motir.co's bar are ONE treatment, not two.
+       *
+       * ⚠️ RE-DECIDED 2026-08-29 (MOTIR-3874). This block used to read "NEVER
+       * --el-accent-on-surface as TEXT here: 4.41:1 in dark, under AA
+       * (MOTIR-3745)" and carried the state in --el-text (16.44:1) plus a 2px
+       * --el-accent rule (3.63:1) instead. That 4.41 was measured against
+       * @motir/design-system@0.1.0; MOTIR-3872 published 0.1.1 — which carries
+       * MOTIR-3745's lift — and pinned this repository to it. The same probe on
+       * the same pair now returns 5.76. The deviation's premise is gone, so the
+       * deviation goes with it: an invented pattern outlives its reason
+       * silently, and this page no longer forces a new one.
        */
       .nav a[aria-current='page'] {
-        color: var(--el-text);
+        color: var(--el-accent-on-surface);
         font-weight: 600;
-        border-bottom-color: var(--el-accent);
       }
       .bar-r {
         display: flex;
@@ -443,10 +459,15 @@
       }
       /*
        * ⚠️ THE SELECTED CHIP IS THE PACKAGE'S OWN TREATMENT, DRAWN AS SHIPPED
-       * — accent ink on --el-tint-lavender. On the INSTALLED 0.1.0 that is
-       * 3.59:1 in dark on the default palette and under AA on four palettes in
-       * light. It is drawn as it really is, and the defect is MOTIR-3872, not
-       * a thing this asset silently repaints. See design-notes § Planning flags.
+       * — accent ink on --el-tint-lavender.
+       * ⚠️ AMENDED 2026-08-29 (MOTIR-3874): it used to read "on the INSTALLED
+       * 0.1.0 that is 3.59:1 in dark on the default palette and under AA on
+       * four palettes in light … the defect is MOTIR-3872". MOTIR-3872 is DONE
+       * and this repository pins 0.1.1, so the same sweep over all ten
+       * palettes now returns 0/10 failures on BOTH arms: light 4.19/4.00/4.13/
+       * 4.29 (evergreen/amber/sienna/candy) → 4.72/4.67/4.69/4.73, dark
+       * `motir` 3.59 → 4.70. Drawn as it really is, as before — the reality
+       * changed, not the principle.
        */
       .chip.sel {
         border-color: var(--el-accent);
@@ -742,13 +763,13 @@
         text-decoration: none;
         display: inline-block;
         width: fit-content;
-        padding-bottom: 3px;
-        border-bottom: 2px solid transparent;
       }
+      /* The same re-decided treatment as .nav — the menu panel sits on
+         --el-surface, where the ink measures 6.03:1 light / 5.54:1 dark
+         (4.24:1 on 0.1.0, so this half failed AA too). */
       .menu a[aria-current='page'] {
-        color: var(--el-text);
+        color: var(--el-accent-on-surface);
         font-weight: 600;
-        border-bottom-color: var(--el-accent);
       }
       .measure {
         font: 500 11px var(--font-mono);
@@ -1168,8 +1189,9 @@
           <h2>/design — desktop, dark</h2>
           <span class="note"
             >The same document under <code>data-theme="dark"</code>. The nav's
-            current item is <code>--el-text</code> at 16.44:1 here — the one
-            place the bar's no-accent-text rule actually bites.</span
+            current item is <code>--el-accent-on-surface</code> at 5.76:1 here —
+            the pairing 0.1.0 could not carry (4.41:1, under AA) and the pinned
+            0.1.1 can.</span
           >
         </div>
         <p class="rule">viewport 1440 · data-theme="dark"</p>
@@ -1293,9 +1315,10 @@
           <h2>The nav entry — the current-page treatment, proved</h2>
           <span class="note"
             >The site's first second route, so the header's founding premise
-            (“no item is ever current”) stops holding. The treatment is weight +
-            an <code>--el-accent</code> rule + <code>--el-text</code> — never
-            accent-coloured text.</span
+            (“no item is ever current”) stops holding. The treatment is the
+            app's own: <code>--el-accent-on-surface</code> at
+            <code>font-weight: 600</code>, re-decided on 0.1.1's measured ink
+            (MOTIR-3874).</span
           >
         </div>
         <div class="cols cols-2">
@@ -1314,12 +1337,12 @@
               </div>
             </div>
             <p class="measure">
-              --el-text on --el-surface-soft <b>16.66:1</b> · rule --el-accent
-              <b>6.29:1</b>
+              --el-accent-on-surface on --el-surface-soft <b>6.29:1</b> · weight
+              600 carries it without colour (1.4.1)
             </p>
           </div>
           <div>
-            <p class="rule">dark — the theme the rule exists for</p>
+            <p class="rule">dark — the theme the number turned on</p>
             <div class="frame t-dark">
               <div class="bar">
                 <div class="bar-l">
@@ -1333,10 +1356,9 @@
               </div>
             </div>
             <p class="measure">
-              --el-text on --el-surface-soft <b>16.44:1</b> · rule --el-accent
-              <b>3.63:1</b> (1.4.11 needs 3:1) · rejected:
-              --el-accent-on-surface as text
-              <s>4.41:1</s>
+              --el-accent-on-surface on --el-surface-soft <b>5.76:1</b> ·
+              <s>4.41:1 on 0.1.0</s>, which is the number this panel was built
+              around
             </p>
           </div>
         </div>
