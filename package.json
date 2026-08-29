@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@motir/brand": "0.2.0",
-    "@motir/design-system": "0.1.0",
+    "@motir/design-system": "0.1.1",
     "@tailwindcss/postcss": "^4.3.3",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",

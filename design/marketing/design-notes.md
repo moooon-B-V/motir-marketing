@@ -594,9 +594,14 @@ MOTIR-3774's title. Numbers below are trustworthy to the extent those two reprod
 | The tokens            | `@motir/design-system@0.1.0` `theme.css`, **as installed here**                                | Every colour and radius, light AND dark, restated at its resolved value                                                                |
 | The axis membership   | the package's own `STYLE_IDS` / `PALETTE_IDS` / `TYPE_IDS` at runtime                          | **11 / 10 / 6** — counted from the modules, not from a card                                                                            |
 
-**⚠️ Read the INSTALLED package, never motir-core's `packages/design-system/`.** The two have
-diverged, and the divergence is a filed defect — see _Planning flags_. Restating motir-core's values
-here would have drawn a site that does not exist.
+**⚠️ Read the INSTALLED package, never motir-core's `packages/design-system/`.** ~~The two have
+diverged, and the divergence is a filed defect — see _Planning flags_.~~ **AMENDED 2026-08-29
+(MOTIR-3872): they no longer diverge** — `@motir/design-system@0.1.1` is published, this repository
+pins it, and its `theme.css` is byte-identical to motir-core `origin/main`. **The instruction is
+unchanged and is not a consequence of the divergence:** read the INSTALLED package, because a
+version that is published and a version that is merged are different things, and the next merge into
+motir-core re-opens the gap with nothing to announce it. Restating motir-core's values here would
+have drawn a site that does not exist.
 
 ---
 
@@ -787,7 +792,20 @@ live only in motir-core and are unreachable here, exactly as the card says.
 
 ## Planning flags
 
-1. **⚠️ `motir.co` serves a design system that fails AA in five cells — filed as MOTIR-3872, and it
+1. **✅ RESOLVED 2026-08-29 by MOTIR-3872 — kept as a record, because the paragraph below is what
+   the mock's dark inks and its rejected-treatment note were drawn against.**
+   `@motir/design-system@0.1.1` is published and this repository now pins it; the same sweep over the
+   INSTALLED package returns **0/10 on both arms**, and the control on `--el-surface-soft` (dark,
+   `motir`) moved **4.41 → 5.76**. The published `theme.css` is byte-identical to motir-core
+   `origin/main`, so the divergence this section describes no longer exists.
+   **⚠️ TWO THINGS IN THIS ASSET STILL PREDATE THAT PUBLISH, and they are filed as MOTIR-3874:** the
+   mocks inline `--el-accent-on-surface: #7b6ce5` for dark (0.1.0's value — 0.1.1 paints
+   `color(srgb 0.567 0.520 0.910)`), and the current-page nav treatment is justified in this file and
+   in `design-showcase.mock.html` by _"NEVER `--el-accent-on-surface` as TEXT here: 4.41:1 in dark,
+   under AA"_, a number that is now **5.76:1 and passes**. Re-deciding that treatment is a design act
+   and is not MOTIR-3872's; **build to MOTIR-3874's outcome, not to the annotation above it.**
+
+   ~~**⚠️ `motir.co` serves a design system that fails AA in five cells — filed as MOTIR-3872, and it
    BLOCKS MOTIR-1043.** `@motir/design-system@0.1.0`, which this repository pins, predates **both**
    accent-ink fixes (MOTIR-3745, MOTIR-3774). Measured over all 10 palettes: **light 4/10 fail**
    (evergreen 4.19, amber 4.00, sienna 4.13, candy 4.29) and **dark 1/10 fail** (`motir`, the
@@ -797,7 +815,8 @@ live only in motir-core and are unreachable here, exactly as the card says.
    to npm. MOTIR-1043's criterion _"AA holds … for every style × palette pair … reported as a
    matrix"_ is **unsatisfiable until the package is republished and the pin bumped.**
    **The mock draws the selected chip as it really is**, low contrast included, rather than quietly
-   repainting it — an asset that hides the defect would let the build card ship it.
+   repainting it — an asset that hides the defect would let the build card ship it.~~
+
 2. **The style count is 9 in two cards and 11 in the package.** MOTIR-3861 says _"`StylePicker` (9
    styles)"_ and MOTIR-1043 says _"9 styles · 10 palettes · 6 type pairings — the same membership as
    motir-core `origin/main`"_. Measured from the installed module, `STYLE_IDS.length === 11`:
