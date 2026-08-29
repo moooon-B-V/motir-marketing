@@ -47,8 +47,13 @@ describe('robots', () => {
 describe('sitemap', () => {
   const entries = sitemap()
 
-  it('lists the site root, absolutely', () => {
-    expect(entries.map((entry) => entry.url)).toEqual(['https://motir.co/'])
+  it('lists every page the site serves, absolutely', () => {
+    // `/design` joined the root in MOTIR-1043 — the same change that added the
+    // route, which is what `app/sitemap.ts`'s own comment asked for.
+    expect(entries.map((entry) => entry.url)).toEqual([
+      'https://motir.co/',
+      'https://motir.co/design',
+    ])
   })
 
   it('lists no URL the site does not serve', () => {
