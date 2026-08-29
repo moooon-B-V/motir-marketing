@@ -357,28 +357,46 @@ themes. Text takes WCAG 1.4.3's **4.5:1**; a focus indicator and a graphical obj
 | eyebrow chip ink                          | `--el-text-strong` → `--el-tint-lavender`        | 9.54:1               | 11.71:1               | ≥4.5 ✓           |
 | icon-tile glyphs (sky / mint / lavender)  | `--el-text-strong` → the tint                    | 10.17 / 10.43 / 9.54 | 11.61 / 11.29 / 11.71 | ≥3 ✓             |
 | primary Button label                      | `--el-accent-text` → `--el-accent`               | 6.57:1               | 4.99:1                | ≥4.5 ✓           |
-| brand glyph                               | `--el-accent-on-surface` → `--el-surface-soft`   | 6.29:1               | 4.41:1                | ≥3 ✓ (graphical) |
+| brand glyph                               | `--el-accent-on-surface` → `--el-surface-soft`   | 6.29:1               | **5.76:1**            | ≥3 ✓ (graphical) |
 | door-3 text link                          | `--el-link` → page                               | 4.94:1               | 7.59:1                | ≥4.5 ✓           |
-| idea field label, counter                 | `--el-text-muted` → `--el-page-bg`               | 4.54:1               | 6.67:1                | ≥4.5 ✓           |
-| error banner ink                          | `--el-danger-on-surface` → `--el-danger-surface` | 5.75:1               | 4.77:1                | ≥4.5 ✓           |
-| focus ring                                | `--el-accent-on-surface` → page                  | 6.57:1               | 4.67:1                | ≥3 ✓             |
+| idea field label, counter                 | `--el-text-muted` → `--el-page-bg`               | 4.54:1               | **7.35:1** [^muted]   | ≥4.5 ✓           |
+| error banner ink                          | `--el-danger-on-surface` → `--el-danger-surface` | **5.77:1**           | **4.75:1**            | ≥4.5 ✓           |
+| focus ring                                | `--el-accent-on-surface` → page                  | 6.57:1               | **6.11:1**            | ≥3 ✓             |
 
-### ⚠️ The measured constraint this design routes around
+[^muted]:
+    **CORRECTED 2026-08-29 (MOTIR-3874), and it is not a version move — the row's two cells were
+    measured on two different surfaces.** `--el-text-muted` → `--el-page-bg` is **4.54:1 light /
+    7.35:1 dark**; the **6.67:1** that stood here is that ink on **`--el-surface`**, whose own light
+    arm is **4.17:1 — under AA**. `.idea` is `background: var(--el-page-bg)`, so `--el-page-bg` is
+    the surface this row is about and the corrected numbers both pass. Identical on 0.1.0 and 0.1.1,
+    so nothing about the pin caused it; it surfaced because MOTIR-3874 re-ran every row of this
+    table against the installed package rather than only the rows it expected to have moved. **The
+    4.17 is worth carrying forward**: `--el-text-muted` on a raised surface is the class motir-core
+    swept and guarded in MOTIR-2477, and nothing in this repository guards it.
 
-**`--el-accent-on-surface` as TEXT on `--el-surface-soft` is 4.41:1 in the dark theme — under AA.**
-That is the exact pairing `ExploreTopBar` ships for its `aria-current` nav item at 13.5 px semibold,
-which is not WCAG large text.
+### ⚠️ The measured constraint this design routed around — RETIRED 2026-08-29 (MOTIR-3874)
 
-**So the landing's top bar paints no accent-coloured text at all.** It does not need to: motir.co is
-the root, none of its nav items is ever the current page, and there is nothing to mark. The nav is
-`--el-text-secondary` (6.94:1 dark) and the CTA is a filled `Button` (white on `--el-accent`,
-4.99:1 dark). The brand glyph keeps `--el-accent-on-surface` and is fine there — it is a graphical
-object at 3:1, not text.
+> **The three rows above marked in bold moved because the PACKAGE moved, not because anything was
+> re-measured more carefully.** ~~`--el-accent-on-surface` as TEXT on `--el-surface-soft` is 4.41:1
+> in the dark theme — under AA. That is the exact pairing `ExploreTopBar` ships for its
+> `aria-current` nav item at 13.5 px semibold, which is not WCAG large text. So the landing's top bar
+> paints no accent-coloured text at all.~~ **On the pinned `@motir/design-system@0.1.1` that pair is
+> `5.76:1` and passes AA** — MOTIR-3745's `color-mix()` lift, published by MOTIR-3872. The
+> prohibition is gone with its premise; see _The nav entry_ below for what replaced the treatment it
+> shaped.
 
-**The motir-core defect is FILED, not absorbed: MOTIR-3745**, together with the reason nothing caught
-it (`tests/theme/inkContrastLint.test.ts` has a faint arm, a muted arm and a danger arm, and no
-accent arm — so this ink is unmeasured on every surface in every palette). **MOTIR-1152 must not
-re-introduce the pattern** by marking a nav item current in accent ink on the soft bar.
+**Nothing on THIS page changes, and that is a property of the page rather than of the number.**
+motir.co is the root: none of its nav items is ever the current page, so there was nothing to mark
+here either way. The nav is `--el-text-secondary` (6.94:1 dark), the CTA is a filled `Button` (white
+on `--el-accent`, 4.99:1 dark), and the brand glyph keeps `--el-accent-on-surface` — which is now
+5.76:1 rather than 4.41:1, and was never at risk anyway as a graphical object at 3:1.
+
+**The motir-core defect was FILED, not absorbed: MOTIR-3745** — `done` — together with the reason
+nothing caught it (`tests/theme/inkContrastLint.test.ts` had a faint arm, a muted arm and a danger
+arm, and no accent arm, so this ink was unmeasured on every surface in every palette). The publish +
+pin that carried the fix here is **MOTIR-3872**, and the correction to this asset is **MOTIR-3874**.
+**MOTIR-1152 may now use the accent ink for a current nav item** — and on this page still has no
+item to mark.
 
 ### The rest of the a11y contract
 
@@ -435,18 +453,30 @@ re-introduce the pattern** by marking a nav item current in accent ink on the so
 
 ## Open findings this design surfaced (filed, not deferred)
 
-| finding                                                                                                                                                                                                                 | card                                                        |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card                                                                                | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
-| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships | **MOTIR-3746** → **MOTIR-3846**                             |
-| `--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm                                                                     | **MOTIR-3745**                                              |
-| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository                                                                     | **MOTIR-3750**                                              |
+| finding                                                                                                                                                                                                                                                  | card                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                           | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
+| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                  | **MOTIR-3746** → **MOTIR-3846**                             |
+| ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version** | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**            |
+| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository                                                                                                      | **MOTIR-3750**                                              |
 
-**Consequence of MOTIR-3743 for this repository, worth stating where the next runner will read it:**
-until `motir-marketing` is connected, no card in it can carry a `targetRepo` pin, `link_pull_request`
-is refused, and the `Motir / work item link` check never runs — so **a merge here closes nothing, and
-every card delivered in this repository has to be transitioned by hand.** That is four cards in Story
-8.3 today (MOTIR-1143, MOTIR-1144, MOTIR-1152, MOTIR-1154).
+**⚠️ CORRECTED 2026-08-29 (MOTIR-3874) — MOTIR-3743 IS `done`, AND THE PARAGRAPH BELOW NOW READS
+BACKWARDS FOR THE ONE RUNNER IT WAS WRITTEN FOR.** ~~Consequence of MOTIR-3743 for this repository,
+worth stating where the next runner will read it: until `motir-marketing` is connected, no card in it
+can carry a `targetRepo` pin, `link_pull_request` is refused, and the `Motir / work item link` check
+never runs — so **a merge here closes nothing, and every card delivered in this repository has to be
+transitioned by hand.** That is four cards in Story 8.3 today (MOTIR-1143, MOTIR-1144, MOTIR-1152,
+MOTIR-1154).~~
+
+**`motir-marketing` is connected. `targetRepo` pins are accepted and `link_pull_request` WORKS
+here** — measured, not assumed: MOTIR-3872 pins `targetRepo: motir-marketing`, and its card carries a
+delivery row for `moooon-B-V/motir-marketing#13` (`linkedManually: true`), which merged at
+`10:33:36Z` and took the card to `done` at `10:33:38Z` — the status sync, two seconds later, with
+nobody transitioning anything. **So a run in this repository MUST call `link_pull_request` after
+`gh pr create`**, exactly as in motir-core; the stale paragraph above told it the opposite, and a
+skipped link is the one omission nothing recovers from (the title/branch parse was retired by
+MOTIR-3674). A card here still has to be transitioned by hand only if its pull request was never
+linked.
 
 ---
 
@@ -569,10 +599,157 @@ rendering the real thing first and drawing to that:
    read with `getComputedStyle(document.documentElement).getPropertyValue()` under each
    `data-theme`. The contrast figures below are computed from those resolved values.
 
-**The measurement pipeline has a control**: `--el-accent-on-surface` on `--el-surface-soft`, dark,
-`motir` returns **4.41:1** — MOTIR-3745's own independently recorded number, to the digit. A second
-control: the light `--el-tint-lavender` arm fails on exactly **four** palettes, which is
-MOTIR-3774's title. Numbers below are trustworthy to the extent those two reproduce.
+**The measurement pipeline has a control**: on `@motir/design-system@0.1.0` — the version this asset
+was drawn against — `--el-accent-on-surface` on `--el-surface-soft`, dark, `motir` returns
+**4.41:1**, MOTIR-3745's own independently recorded number, to the digit. A second control: the light
+`--el-tint-lavender` arm fails on exactly **four** palettes, which is MOTIR-3774's title. Numbers
+here are trustworthy to the extent those two reproduce. **Both still reproduce on 0.1.0 — and both
+are answers about a version this repository no longer installs**; the re-measurement against the
+pinned 0.1.1 is the section directly below.
+
+### ⚠️ Re-measured against the PINNED `@motir/design-system@0.1.1` (MOTIR-3874, 2026-08-29)
+
+Everything above was measured against **0.1.0**. MOTIR-3872 published **0.1.1** and re-pinned this
+repository to it, so every number this asset states about `--el-accent-on-surface` — and, for a
+different reason, `--el-danger-on-surface` — was a measurement of a version the site no longer
+serves. **They were re-taken, not re-reasoned.** This is the command, in full, so the numbers are
+checkable rather than merely quoted:
+
+```js
+// measure-3874.mjs — run from a checkout that has @playwright/test:
+//   node measure-3874.mjs "$(node -p "require.resolve('@motir/design-system/theme.css')")"
+import { chromium } from '@playwright/test'
+import { readFileSync, writeFileSync } from 'node:fs'
+
+const PAIRS = [
+  [
+    '--el-accent-on-surface',
+    '--el-surface-soft',
+    'nav current item / brand glyph',
+  ],
+  ['--el-accent-on-surface', '--el-surface', 'menu current item (panel 4)'],
+  ['--el-accent-on-surface', '--el-page-bg', 'focus ring'],
+  ['--el-accent-on-surface', '--el-tint-lavender', 'selected chip'],
+  ['--el-danger-on-surface', '--el-danger-surface', 'error banner ink'],
+]
+const PALETTES = [
+  null,
+  'cobalt',
+  'graphite',
+  'evergreen',
+  'spectrum',
+  'amber',
+  'sienna',
+  'garnet',
+  'citrine',
+  'candy',
+]
+
+// ⚠️ color-mix() computes to `color(srgb <0-1> …)`. Reading those floats as
+// 0-255 reports a FIXED theme as catastrophically broken (see the harness note).
+const parse = (s) => {
+  const rgb = s.match(/^rgba?\(([^)]+)\)/)
+  if (rgb)
+    return rgb[1]
+      .split(/[,\s/]+/)
+      .slice(0, 3)
+      .map((n) => parseFloat(n) / 255)
+  const srgb = s.match(/^color\(srgb ([^)]+)\)/)
+  if (srgb)
+    return srgb[1]
+      .trim()
+      .split(/[\s/]+/)
+      .slice(0, 3)
+      .map(parseFloat)
+  throw new Error('unparsed colour: ' + s)
+}
+const lum = (c) => {
+  const [r, g, b] = c.map((v) =>
+    v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4,
+  )
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+const ratio = (a, b) => {
+  const [x, y] = [lum(parse(a)), lum(parse(b))].sort((p, q) => q - p)
+  return +((x + 0.05) / (y + 0.05)).toFixed(2)
+}
+
+// Tailwind v4's `@theme` declares its custom properties on :root; a browser
+// skips the unknown at-rule, so rename it. Nothing else is touched.
+const css = readFileSync(process.argv[2], 'utf8').replace('@theme {', ':root {')
+const tokens = [...new Set(PAIRS.flat().filter((t) => t.startsWith('--')))]
+const file = new URL('./_measure-3874.html', import.meta.url)
+writeFileSync(
+  file,
+  `<!doctype html><html><head><style>${css}</style></head><body>${tokens.map((t) => `<div data-t="${t}" style="color:var(${t})"></div>`).join('')}</body></html>`,
+)
+
+const browser = await chromium.launch()
+const page = await browser.newPage()
+await page.goto(file.href)
+for (const theme of ['light', 'dark']) {
+  for (const pal of PALETTES) {
+    // Read the RESOLVED ink off a real element's `color` — never the var() chain.
+    const v = await page.evaluate(
+      ({ theme, pal }) => {
+        const h = document.documentElement
+        h.setAttribute('data-theme', theme)
+        pal
+          ? h.setAttribute('data-palette', pal)
+          : h.removeAttribute('data-palette')
+        return Object.fromEntries(
+          [...document.querySelectorAll('[data-t]')].map((el) => [
+            el.dataset.t,
+            getComputedStyle(el).color,
+          ]),
+        )
+      },
+      { theme, pal },
+    )
+    for (const [ink, surf, label] of PAIRS) {
+      const r = ratio(v[ink], v[surf])
+      console.log(
+        `${theme.padEnd(5)} ${(pal ?? 'motir').padEnd(9)} ${label.padEnd(30)} ${ink} on ${surf} = ${r}${r < 4.5 ? '  ✗ AA' : ''}`,
+      )
+    }
+  }
+}
+await browser.close()
+```
+
+**What it returns on the two versions, `motir` palette** (the full run covers all ten):
+
+| pair                                                    | 0.1.0     | 0.1.1 (pinned) |
+| ------------------------------------------------------- | --------- | -------------- |
+| `--el-accent-on-surface` → `--el-surface-soft`, dark    | 4.41 ✗ AA | **5.76** ✓     |
+| `--el-accent-on-surface` → `--el-surface-soft`, light   | 6.29      | 6.29           |
+| `--el-accent-on-surface` → `--el-surface`, dark         | 4.24 ✗ AA | **5.54** ✓     |
+| `--el-accent-on-surface` → `--el-page-bg`, dark         | 4.67      | **6.11**       |
+| `--el-accent-on-surface` → `--el-tint-lavender`, dark   | 3.59 ✗ AA | **4.70** ✓     |
+| `--el-danger-on-surface` → `--el-danger-surface`, dark  | —         | **4.75** ✓     |
+| `--el-danger-on-surface` → `--el-danger-surface`, light | —         | **5.77** ✓     |
+
+**The ten-palette sweep, both arms, reproduces MOTIR-3872's own result exactly** — which is this
+section's third control: `--el-accent-on-surface` on `--el-tint-lavender` goes **light 4/10 → 0/10**
+(evergreen 4.19 → 4.72, amber 4.00 → 4.67, sienna 4.13 → 4.69, candy 4.29 → 4.73) and **dark 1/10 →
+0/10** (`motir` 3.59 → 4.70); on `--el-surface-soft`, **dark 1/10 → 0/10** (`motir` 4.41 → 5.76) and
+light was already 0/10.
+
+**`--el-danger-on-surface` has an em dash, not a number, in the 0.1.0 column because the token did
+not exist there** — `grep -c 'el-danger-on-surface' theme.css` returns **0** on 0.1.0 and names the
+`color-mix(in srgb, var(--el-danger) 70%, var(--el-text))` declaration on 0.1.1. `landing.mock.html`
+declared it anyway (copied from motir-core `main`, ahead of the publish), which is why the row
+appeared in the table at all. A harness run against 0.1.0 answers **17.05 / 14.90** for it — the
+contrast of an UNDEFINED custom property, i.e. of the initial ink against the surface. **That pair of
+plausible, AA-passing numbers is what an unresolved token looks like from inside a green run**, and
+it is the reason this section reports the absence rather than the measurement.
+
+**And the mock's own copy of that token was wrong in DARK for a third reason, neither staleness nor
+absence:** `--el-danger-on-surface` is a `color-mix()` over `var(--el-text)`, and `--el-*` are
+substituted where they are **declared**, so the single `:root` declaration kept its LIGHT resolution
+inside the `.dark` subtree. The fix is to restate the mix in the dark block — the same pairing the
+package documents for `[data-theme='light']` + `data-appearance-scope`. **A self-contained mock
+inherits that trap along with the values it copies.**
 
 > **⚠️ A contrast harness must parse `color()`.** A first run of the palette sweep reported the
 > current motir-core theme as 10/10 failing in dark. That was the harness: the fixed inks are
@@ -591,8 +768,8 @@ MOTIR-3774's title. Numbers below are trustworthy to the extent those two reprod
 | The four controls     | `@motir/design-system` `dist/components/theme/AppearancePickers.js`, SSR-rendered + screenshot | The rail's chips, their selected treatment, the `role="radiogroup"` / `role="radio"` shape and the segmented control are the package's |
 | The per-style preview | the package's `StyleVignette`, SSR-rendered                                                    | The Style previews row. It is a substantial mini-app preview, not a swatch — drawn as what it really is                                |
 | The token grid        | the package's `TokensSpecimen`                                                                 | The `--el-*` grid. The real export is ~170 KB of markup; the mock draws a representative slice and NAMES the export the build mounts   |
-| The tokens            | `@motir/design-system@0.1.0` `theme.css`, **as installed here**                                | Every colour and radius, light AND dark, restated at its resolved value                                                                |
-| The axis membership   | the package's own `STYLE_IDS` / `PALETTE_IDS` / `TYPE_IDS` at runtime                          | **11 / 10 / 6** — counted from the modules, not from a card                                                                            |
+| The tokens            | `@motir/design-system@0.1.1` `theme.css`, **as installed here** (0.1.0 until MOTIR-3874)       | Every colour and radius, light AND dark, restated at its resolved value                                                                |
+| The axis membership   | the package's own `STYLE_IDS` / `PALETTE_IDS` / `TYPE_IDS` at runtime                          | **11 / 10 / 6** — counted from the modules, not from a card. Re-measured on the pinned 0.1.1 (MOTIR-3874): unchanged                   |
 
 **⚠️ Read the INSTALLED package, never motir-core's `packages/design-system/`.** ~~The two have
 diverged, and the divergence is a filed defect — see _Planning flags_.~~ **AMENDED 2026-08-29
@@ -619,26 +796,43 @@ new pattern.** Until now motir.co had exactly one page.
 
 ---
 
-## The nav entry, and the current-page treatment it forces
+## The nav entry, and the current-page treatment — RE-DECIDED 2026-08-29 (MOTIR-3874)
 
 `SiteHeader.tsx` carries a load-bearing comment: _"motir.co is the root, so no nav item here is ever
 the current page and there is nothing to mark … Do not reintroduce the pattern by marking an item
-current."_ **The prohibition it states is on ACCENT-COLOURED TEXT; the premise it rests on — that no
-item is ever current — is what this page ends.** The reason behind it is MOTIR-3745: accent ink as
-text in that bar measures 4.41:1 in dark, under AA.
+current."_ **It states TWO things, and this page has now ended both of them, one card apart.** The
+premise — that no item is ever current — is what a second route ends. The prohibition — no
+accent-coloured text — rested on MOTIR-3745: that ink measured **4.41:1** on the bar in dark, under
+AA. **MOTIR-3872 published the fix as `@motir/design-system@0.1.1` and pinned this repository to it,
+and the same probe on the same pair now returns 5.76:1.**
 
-**The treatment, and its measurement** (panel 3 draws both themes):
+**So the treatment is the SHIPPED one**, byte for byte what `ExploreTopBar` renders for its
+`aria-current` item — `text-[13.5px] font-semibold text-(--el-accent-on-surface)`:
 
-| element             | token                                | dark on `--el-surface-soft` | light   | bar                  |
-| ------------------- | ------------------------------------ | --------------------------- | ------- | -------------------- |
-| current item's TEXT | `--el-text` + `font-600`             | **16.44:1**                 | 16.66:1 | AA 4.5:1 ✓           |
-| current item's RULE | `--el-accent`, 2px under             | **3.63:1**                  | 6.29:1  | 1.4.11 3:1 ✓         |
-| the other items     | `--el-text-secondary`                | 6.94:1                      | 6.51:1  | AA 4.5:1 ✓           |
-| ~~rejected~~        | ~~`--el-accent-on-surface` as text~~ | ~~4.41:1~~                  | 6.29:1  | **FAILS AA in dark** |
+| element             | token                                 | dark on `--el-surface-soft` | light  | bar        |
+| ------------------- | ------------------------------------- | --------------------------- | ------ | ---------- |
+| current item        | `--el-accent-on-surface` + `font-600` | **5.76:1**                  | 6.29:1 | AA 4.5:1 ✓ |
+| the other items     | `--el-text-secondary`                 | 6.94:1                      | 6.51:1 | AA 4.5:1 ✓ |
+| menu panel (narrow) | the same pair, on `--el-surface`      | **5.54:1**                  | 6.03:1 | AA 4.5:1 ✓ |
 
-**Three properties this treatment has and a colour-only one would not:** it passes AA in the theme
-that fails, at 3.7× the threshold; the state survives greyscale, because weight and a rule are not
-hue (1.4.1); and it adds no new token — `--el-text` and `--el-accent` are both already in the bar.
+**Why the invented treatment goes rather than stays alongside.** ~~`--el-text` + `font-600` (16.44:1
+dark) plus a 2 px `--el-accent` rule under it (3.63:1, WCAG 1.4.11's 3:1 for a graphical object)~~
+was **not a taste call and never claimed to be** — it existed only because the accent ink failed AA,
+and it said so in its own comment. Its premise is gone, and a pattern that outlives its reason is
+just a pattern the app does not have: motir.co's public bar and app.motir.co's public bar would
+differ, for a reason no reader could reconstruct. **`font-weight: 600` is retained and is the whole
+of WCAG 1.4.1 here** — a non-colour channel carries the state, exactly as the shipped bar relies on.
+
+**What this costs, stated rather than glossed:** the dark contrast drops from 16.44:1 to 5.76:1. That
+is 1.28× AA rather than 3.7×, and it is the number the app itself ships at. **The margin was never
+the goal — matching the product was**, and the asset's own governing rule is that the public chrome
+is read from `ExploreTopBar` rather than invented beside it.
+
+**⚠️ AND THE LESSON IS THE CARD'S, NOT THE COLOUR'S.** This asset did not merely show 0.1.0's ink; it
+**reasoned from it**, and a rationale reads exactly the same after its number has flipped. The tell
+was in the writing all along — _"a MEASUREMENT, not a taste call"_ names its own expiry condition. A
+self-contained mock copies the token layer to buy independence, and a copy has no mechanism that
+tells it the original moved; **publishing a package is precisely the event that moves the original.**
 
 **It is drawn in BOTH places** the nav exists: the desktop bar and the `md:hidden` menu panel
 (panel 4). The panel is easy to miss — it is rendered by a separate branch in the same component —
@@ -754,8 +948,13 @@ pressed chip, with selection and focus as separate signals — `aria-checked` an
 
 ## Primitives composed — every element, and the export it maps to
 
-Checked against `@motir/design-system@0.1.0`'s own barrel **as installed in this repository**
-(`node_modules/@motir/design-system/dist/index.js`, 68 exports), never against motir-core's source.
+Checked against `@motir/design-system`'s own barrel **as installed in this repository**
+(`node_modules/@motir/design-system/dist/index.js`), never against motir-core's source.
+**Re-measured on the pinned 0.1.1, 2026-08-29 (MOTIR-3874): 70 exports** — it was **68** on 0.1.0,
+when this section was written. Command:
+`node -e "import('@motir/design-system').then((m) => console.log(Object.keys(m).length))"`. Every
+export the table below names is present on 0.1.1; the count is stated for both versions rather than
+renumbered, because a count with no version beside it is a measurement of nothing.
 
 | drawn element                    | export it maps to                                                                                                                  |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
@@ -798,12 +997,25 @@ live only in motir-core and are unreachable here, exactly as the card says.
    INSTALLED package returns **0/10 on both arms**, and the control on `--el-surface-soft` (dark,
    `motir`) moved **4.41 → 5.76**. The published `theme.css` is byte-identical to motir-core
    `origin/main`, so the divergence this section describes no longer exists.
-   **⚠️ TWO THINGS IN THIS ASSET STILL PREDATE THAT PUBLISH, and they are filed as MOTIR-3874:** the
-   mocks inline `--el-accent-on-surface: #7b6ce5` for dark (0.1.0's value — 0.1.1 paints
-   `color(srgb 0.567 0.520 0.910)`), and the current-page nav treatment is justified in this file and
-   in `design-showcase.mock.html` by _"NEVER `--el-accent-on-surface` as TEXT here: 4.41:1 in dark,
-   under AA"_, a number that is now **5.76:1 and passes**. Re-deciding that treatment is a design act
-   and is not MOTIR-3872's; **build to MOTIR-3874's outcome, not to the annotation above it.**
+   **✅ AND MOTIR-3874 CLOSED THE TWO THINGS THAT STILL PREDATED THE PUBLISH — 2026-08-29.** They
+   were: the mocks inlining `--el-accent-on-surface: #7b6ce5` for dark (0.1.0's value), and the
+   current-page nav treatment being justified by _"NEVER `--el-accent-on-surface` as TEXT here:
+   4.41:1 in dark, under AA"_. **What was decided:**
+   1. **Both mocks now carry `color(srgb 0.567059 0.519529 0.910039)`** — 0.1.1's lifted ink,
+      measured off the installed package, not converted from a hex. Every `--el-*` either mock
+      declares was checked against the installed 0.1.1 the same way: **0 mismatches** across
+      `landing.mock.html` and `design-showcase.mock.html`, light and dark. Two further corrections
+      fell out of that sweep and are recorded in _Re-measured against the PINNED …_ above:
+      `--focus-ring-color` did **not** move and stays `#7b6ce5` (the two tokens were one colour on
+      0.1.0 and are two now), and `landing.mock.html`'s `--el-danger-on-surface` is re-declared
+      inside `.dark` because a `color-mix()` over `var(--el-text)` keeps its light resolution in a
+      nested subtree.
+   2. **The current-page treatment is now `--el-accent-on-surface` at `font-weight: 600`** — the
+      pairing `ExploreTopBar` ships — replacing the `--el-text` + 2 px `--el-accent` rule the retired
+      4.41 forced. 5.76:1 dark, 6.29:1 light; `font-weight` remains the non-colour channel for WCAG
+      1.4.1. The reasoning, its cost, and what MOTIR-1043 must now do to `SiteHeader.tsx`'s comment
+      are in _The nav entry_.
+      **This flag is closed. Build to the asset as it stands.**
 
    ~~**⚠️ `motir.co` serves a design system that fails AA in five cells — filed as MOTIR-3872, and it
    BLOCKS MOTIR-1043.** `@motir/design-system@0.1.0`, which this repository pins, predates **both**
@@ -825,11 +1037,13 @@ live only in motir-core and are unreachable here, exactly as the card says.
    Palette (10) and Type (6) are correct. **It is a layout input, not a trivium** — two extra chips
    are what make the Style axis wrap to a second row at 1440 and what forced the narrow-viewport
    scrolling row — so a rail drawn to "9" would have been wrong at both viewports.
-3. **The `theme.css` block counts in MOTIR-1043 are wrong for both versions.** It says 35
-   `[data-palette]`, 109 `[data-style]`, 9 `[data-type]`. Measured on the installed 0.1.0:
-   **23 / 107 / 9**; on motir-core `origin/main`: 23 / 112 / 9. Command, so the set is checkable
-   rather than the number: `grep -o "\[data-palette=[^]]*\]" theme.css | wc -l`. Only `[data-type]`
-   matches. Nothing in this asset depends on those numbers; the build card should not either.
+3. **The `theme.css` block counts in MOTIR-1043 are wrong for every version.** It says 35
+   `[data-palette]`, 109 `[data-style]`, 9 `[data-type]`. Measured on 0.1.0 (the version installed
+   when this was written): **23 / 107 / 9**. **Re-measured on the pinned 0.1.1, 2026-08-29
+   (MOTIR-3874): 23 / 112 / 9** — which is what motir-core `origin/main` returned then and returns
+   now, the two having been byte-identical since the publish. Command, so the set is checkable rather
+   than the number: `grep -o "\[data-palette=[^]]*\]" theme.css | wc -l`. Only `[data-type]` matches
+   the card. Nothing in this asset depends on those numbers; the build card should not either.
 4. **MOTIR-1043 also needs the three missing typefaces before its Type axis is honest** — its own
    body says so, and this asset assumes it: panel 5's `mono-technical` cell cannot render truthfully
    until IBM Plex Mono is loaded. Not a new finding, restated because this asset draws the cell.
@@ -846,15 +1060,24 @@ live only in motir-core and are unreachable here, exactly as the card says.
   no font loader, no `sitemap.ts` line.
 - **The landing is not redrawn.** The only change this asset specifies to an existing surface is the
   single nav entry and the current-page treatment it forces.
-- **The package fix is MOTIR-3872's**, in motir-core and then this repository's pin.
+- **The package fix was MOTIR-3872's**, in motir-core and then this repository's pin — `done`
+  2026-08-29. **Bringing THIS asset back onto the pinned version is MOTIR-3874's**, which is the
+  card that re-measured the numbers above and re-decided the current-page treatment.
 
 ---
 
 ## Notes for MOTIR-1043 (the build)
 
-- The bar gains **one** `<a>`, as a `next/link`, with `aria-current="page"` when active. **Update
-  the component's ⚠️ comment rather than deleting it** — its prohibition (no accent-coloured text)
-  survives; only its premise (nothing is ever current) does not.
+- The bar gains **one** `<a>`, as a `next/link`, with `aria-current="page"` when active. **Rewrite
+  the component's ⚠️ comment — do not merely delete it, and do not keep it.** ~~Its prohibition (no
+  accent-coloured text) survives; only its premise (nothing is ever current) does not.~~ **AMENDED
+  2026-08-29 (MOTIR-3874): BOTH halves are now retired** — the premise by this page, the prohibition
+  by 0.1.1's ink (4.41:1 → 5.76:1). The replacement comment should record what the pin buys, so the
+  next reader does not re-derive the old rule from the old number: the current item is
+  `--el-accent-on-surface` at `font-weight: 600`, which is `ExploreTopBar`'s own pairing.
+- **The current-page treatment changed after this asset's first export.** Build to _The nav entry_
+  section and to `design-showcase.mock.html` as they stand now — weight + accent ink, no rule. A
+  `--el-text` + 2 px `--el-accent` rule anywhere in a diff for this card is the retired treatment.
 - The rail is four `AxisField`s; do not hand-roll the chips — `StylePicker` / `PalettePicker` /
   `TypePicker` already render them, keyboard behaviour included (arrow keys move within the
   radiogroup, and only the selected chip is in the tab order).
