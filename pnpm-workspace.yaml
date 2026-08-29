@@ -35,5 +35,23 @@ allowBuilds:
 # committed twice — once here and once in motir-core. Drop this entry once the
 # version is more than a day old and CI has gone green without it, or re-point
 # it again on the next bump.
+#
+# ⚠️ THERE ARE TWO ENTRIES TODAY, AND THE PARAGRAPH ABOVE SAYS A SECOND ONE IS A
+# SIGNAL TO WAIT A DAY. Read why this one did not (MOTIR-3872, 2026-08-29), and
+# then hold the rule: `@motir/design-system@0.1.1` is the FIRST publish carrying
+# the two accent-ink AA fixes (MOTIR-3745, MOTIR-3774), so until this repository
+# pins it, motir.co serves five cells that fail AA — the pin bump IS the fix and
+# it cannot wait out a 24h cutoff. Both entries name ONE exact version of ONE
+# package we publish ourselves, which is the condition the rule is actually
+# protecting; neither is a third-party package, and the count is a symptom of
+# two of our own packages shipping on the same day rather than of the exemption
+# widening. **The signal still stands for the NEXT one.**
+#
+# ⚠️ AND BOTH ARE OWED A DELETION, WHICH IS WHY THE CONDITION IS WRITTEN AS A
+# COMMAND: once each version is more than a day old, run
+# `pnpm install --frozen-lockfile` with its line removed — green means delete it.
+# Two stale entries read as a list rather than as an exemption, and a list is
+# what gets appended to.
 minimumReleaseAgeExclude:
   - '@motir/brand@0.2.0'
+  - '@motir/design-system@0.1.1'
