@@ -106,7 +106,9 @@ through the token; every `code` / `strong` / `b` / `s` entry INHERITS its ink fr
 **Re-measured after the sweep: `54 → 0`.** The scan reports one remaining entry in the whole area and
 it is not one of these — the `☾` glyph at 3.85 on `--el-page-bg` in the dark panel, already
 dispositioned below as a decorative glyph beside its own text label (its accessible name is the word,
-and it clears 1.4.11's 3:1 for non-text). **The measurement is what closed this, not the edit**: a
+and it clears 1.4.11's 3:1 for non-text). (**The LANE reports TWO**, because it models `opacity` and
+this scan did not — see § _The lane_ below. The second is `landing.mock.html`'s `disabled` submit
+button, exempt under 1.4.3's _Incidental_ clause, and it was never one of the 54.) **The measurement is what closed this, not the edit**: a
 sweep verified by reading the diff would have missed that `code` and `strong` inherit rather than
 declare.
 
@@ -167,13 +169,29 @@ verdict if nobody says so. A separate `getComputedStyle(el, '::after')` probe re
 hue. It is left as it stands. **That it clears by 0.01, on a raw hex nothing measures, belongs to the
 lane** — MOTIR-4001's acceptance criteria carry it.
 
-### ⚠️ The lane — this repository has NONE, and a PORT of motir-core's guard would be GREEN on all 54
+### The lane — it EXISTS now (MOTIR-4001), and a PORT of motir-core's guard would have been GREEN on all 54
 
-The decision above is enforced by nothing in this repository today. `ci.yml` runs
-`lint · typecheck · build · test`; `vitest.config.mts` includes `tests/**/*.test.ts(x)` and no spec
-there reads `design/**` for contrast. The nearest, `tests/aaMatrix.test.ts`, rules on `--el-*` pairs
-read off RENDERED React components via `tests/support/paintedInks.ts` — which resolves Tailwind
-classes and cannot see a `.mock.html` stylesheet at all.
+**⚠️ REWRITTEN 2026-08-30 (MOTIR-4001). This section used to read _"this repository has NONE"_ and
+end with an authoring obligation held by this file. The lane has landed; the finding that made it a
+card rather than a copy is kept, because it is the reason the lane looks the way it does.**
+
+`pnpm test:design` — `vitest.design.config.mts` → `tests/design/inkContrast.test.ts`, run by
+`ci.yml`'s **`design-guards`** job, which is a `needs` gate on `deploy`. It loads each
+`design/marketing/*.mock.html` in headless chromium, walks every element carrying its own text node
+**and every `::before` / `::after`**, reads the resolved `color` against the effective background
+(compositing ancestor fills and `opacity`), and rules at that site's OWN size and weight. It is total
+by construction — it starts from the elements, so a raw hex is measured exactly like a token.
+
+**It runs on EVERY branch prefix, because `ci.yml` has no path filtering at all** — every job here
+runs on every pull request. That is the difference from motir-core, whose `changes` job skips the app
+lanes on a `design/*` diff and therefore needs an always-on lane to carry its design guards. If path
+filtering is ever added here, `design-guards` must be exempt from it.
+
+**The evidence is a FIXTURE, not this tree.** The 54 sites are swept, so a spec that only scanned
+`design/marketing/**` would be green on the day it shipped and green if it abstained — and abstaining
+is exactly what the obvious lane does. `tests/design/fixtures/board-chrome-pre-sweep.mock.html` is a
+reduction of both mocks as they stood at `248e17a^`, and the spec asserts the lane goes RED on all
+six of its sites by name, including the `::after` one.
 
 **And the obvious lane does not work, which is the finding rather than the excuse.** Copying
 motir-core's `inkContrastMockScan.ts` reports **zero** of the 54: its `ownSurface` resolves a
@@ -186,13 +204,29 @@ clean bill of health**, which is worse than no guard.
 class cascade for `color`, then drops the `font:` SHORTHAND (`.rule` reads back `16px`/`normal`, so
 every large-text call is wrong) and `background: var(--el-page-bg)` (`.frame` reads back transparent,
 so the surface walk resolves the sheet where the asset paints white). Both failures under-report
-silently.
+silently. That is why the lane costs a browser — `playwright` (chromium headless shell), the same
+devDependency the `.png` re-export needs (**MOTIR-4003**, which consumes this pin).
 
-So the lane is a browser this repository does not depend on, and it is **MOTIR-4001**, with the
-`.png` re-export the same dependency pays for as **MOTIR-4003**. Until MOTIR-4001 lands, the rule
-above is an authoring obligation held by this file: **an annotation on the sheet takes
-`--el-text-secondary`, and a mark that carries state carries it in weight, a line or a shape — never
-in hue alone.**
+#### The two sites the lane measures below 4.5:1 and does NOT fail on
+
+Both are dispositioned **in the spec**, matched on file + selector + text + the measured ratio, so an
+allowance cannot widen by accident: change the ink, the size or the markup and the entry stops
+matching, which fails the lane rather than quietly covering something new.
+
+| site                                                                                     | ratio | why it is not a 1.4.3 failure                                                                                                                                                                                                        |
+| ---------------------------------------------------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `design-showcase.mock.html` `span.i` — the `☾` glyph on `--el-page-bg` in the dark panel | 3.85  | A decorative glyph beside its own text label, so the accessible name is the word; it clears 1.4.11's 3:1 for non-text. The same disposition recorded above.                                                                          |
+| `landing.mock.html` `button.btn.primary` — `Starting…`, `disabled` + `aria-busy`         | 2.64  | An INACTIVE user-interface component, which 1.4.3 exempts by name under _Incidental_. The DECLARED pair clears AA at **6.57:1** (`#ffffff` on `#5645d4`); the 2.64 is what `.btn[disabled] { opacity: 0.72 }` composites it down to. |
+
+**⚠️ The second one is a site the sweep never saw, and that is a property of the SCAN rather than of
+the asset.** MOTIR-3985 measured declared pairs and did not model `opacity`, so it read that button
+at 6.57 and it was never in the 54. It is recorded here because the alternative — a lane that reports
+a number nobody has explained — is how a disposition becomes an unexplained red that the next author
+silences.
+
+**The authoring rule the lane now enforces, restated so it can be read without running anything:** an
+annotation on the sheet takes `--el-text-secondary`, and a mark that carries state carries it in
+weight, a line or a shape — never in hue alone.
 
 ---
 

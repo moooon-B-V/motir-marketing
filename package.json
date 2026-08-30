@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:design": "vitest run --config vitest.design.config.mts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "brand:icons": "node scripts/brand/generate-brand-icons.ts"
@@ -42,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "jsdom": "^30.0.1",
+    "playwright": "^1.62.1",
     "prettier": "^3.8.3",
     "sharp": "0.34.5",
     "typescript": "^5",

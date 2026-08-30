@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <title>FIXTURE — design/marketing board chrome, PRE-MOTIR-3985</title>
+    <!--
+      MOTIR-4001 — THE FIXTURE THE GUARD IS ASSERTED AGAINST.
+
+      ⚠️ THIS FILE IS DELIBERATELY INACCESSIBLE AND MUST STAY THAT WAY. It is a
+      reduction of `design/marketing/*.mock.html` as they stood at
+      `248e17a^` — BEFORE MOTIR-3985 swept the 54 sites — and every rule below
+      is copied from that commit rather than invented. It is not a design asset:
+      it lives under `tests/`, nothing renders it, and no `.png` is exported
+      from it.
+
+      It exists because a guard whose only evidence is a green tree on a tree
+      that already passes cannot be distinguished from a guard that abstains —
+      which is the exact defect this card was filed about, one level up. The
+      swept assets pass; this is the thing that proves the lane can go red, and
+      that it goes red on the population it was installed for.
+
+      Six sites, and each one is a different arm of the scan:
+
+        .rule           #787671 (a RAW HEX duplicating --el-text-muted)  4.09
+                        declared through a `font:` SHORTHAND, which is what
+                        jsdom silently mis-reads as 16px/normal
+        .panel-cap .note  var(--el-text-muted)                           4.09
+        .measure b      #1aae39 — the worst pair in either asset         2.65
+        .measure s      #e03131, with the <s> line switched OFF          4.07
+        .fold::after    #e03131 GENERATED CONTENT on the sheet           4.07
+                        — unreachable by document.querySelectorAll('*')
+        .frame .fold::after  #e03131 generated content on #ffffff        4.51
+                        — the live geometry, which CLEARS by 0.01 and so
+                        proves the pseudo arm discriminates rather than
+                        merely firing
+    -->
+    <style>
+      :root {
+        --el-page-bg: #ffffff;
+        --el-text: #1a1a1a;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+        --font-sans:
+          ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      }
+
+      body {
+        margin: 0;
+        /* The doc-annotation SHEET — a raw scaffold colour the assets own
+           outright, and the reason motir-core's token-name surface walk
+           resolves `null` at every site below. */
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+      }
+
+      .rule {
+        font: 600 10px var(--font-mono);
+        color: #787671;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin: 0 0 7px;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-muted);
+        max-width: 84ch;
+      }
+      .measure {
+        font: 500 11px var(--font-mono);
+        color: var(--el-text-muted);
+        margin-top: 8px;
+      }
+      .measure b {
+        color: #1aae39;
+      }
+      .measure s {
+        color: #e03131;
+        text-decoration: none;
+      }
+      .frame {
+        background: var(--el-page-bg);
+        padding: 16px;
+      }
+      .fold {
+        position: relative;
+        min-height: 40px;
+      }
+      .fold::after {
+        content: 'FOLD — 900px';
+        position: absolute;
+        left: 0;
+        top: 20px;
+        border-top: 2px dashed #e03131;
+        color: #e03131;
+        font: 700 10px var(--font-mono);
+        letter-spacing: 0.08em;
+        padding-top: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="rule">viewport 1440 · data-theme="light"</p>
+
+    <div class="panel-cap">
+      <span class="note"
+        >The board's own caption ink, on the sheet it is painted on.</span
+      >
+    </div>
+
+    <p class="measure">field width <b>612px</b> <s>584px</s></p>
+
+    <!-- Generated content ON THE SHEET: 4.07, and it fails. -->
+    <div class="fold"></div>
+
+    <!-- The live geometry — the same raw hex over the white frame: 4.51, and
+         it clears 1.4.3 by 0.01. -->
+    <div class="frame">
+      <div class="fold"></div>
+    </div>
+  </body>
+</html>

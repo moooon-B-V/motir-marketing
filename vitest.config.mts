@@ -26,6 +26,15 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
+    /*
+     * ⚠️ `tests/design/**` BELONGS TO THE OTHER LANE (MOTIR-4001), and the
+     * exclusion is load-bearing rather than tidy. Those specs drive a real
+     * headless chromium — jsdom cannot measure a `.mock.html`, which is the
+     * whole finding that card records — and the `Test` job installs no
+     * browser, so a spec left in here would FAIL rather than run twice.
+     * `vitest.design.config.mts` includes exactly what this excludes.
+     */
+    exclude: ['node_modules/**', 'tests/design/**'],
     env: {
       NEXT_PUBLIC_MOTIR_APP_ORIGIN: 'https://app.test.motir.co',
     },

@@ -10,8 +10,17 @@
 #
 # MOTIR-1152 grew the first one: `test` (vitest, `vitest.config.mts`), added
 # BELOW and to `deploy`'s `needs` in the same change, exactly as that sentence
-# asks. There is still no `coverage`, `e2e` or `e2e-at-scale` job here and
-# `needs` still names none.
+# asks. MOTIR-4001 grew the second, `design-guards`, the same way.
+# There is still no `coverage`, `e2e` or `e2e-at-scale` job here and `needs`
+# still names none.
+#
+# ⚠️ THERE IS NO PATH FILTERING IN THIS FILE, and `design-guards` depends on
+# that. Unlike motir-core's `ci.yml` — which has a `changes` job that skips the
+# app lanes on a `design/*` diff, and therefore needs a separate always-on lane
+# to carry its design-asset guards — every job here runs on every pull request,
+# whatever the branch prefix or the diff. So `design-guards` is already reached
+# by the only kind of change that can break it. If path filtering is ever added
+# to this file, `design-guards` must be exempt from it.
 name: CI
 
 on:
@@ -104,10 +113,40 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
 
+  # ── The design-asset guard lane (MOTIR-4001) ──────────────────────────────
+  #
+  # `design/marketing/design-notes.md` § "A design board's CHROME owes AA"
+  # (MOTIR-3985, adopting motir-core's MOTIR-3054) was enforced by nothing: the
+  # `test` job above runs on jsdom, and jsdom cannot measure a `.mock.html` —
+  # it drops the `font:` shorthand and does not apply `background: var(--el-*)`,
+  # so every reading falls on the side that UNDER-reports. This lane drives a
+  # real headless chromium over the assets instead.
+  #
+  # It is a `needs` gate on `deploy` from the moment it exists, per the header.
+  #
+  # The browser is the whole cost of the job, and it is the same devDependency
+  # MOTIR-4003's `.png` re-export uses. `--with-deps` installs chromium's shared
+  # libraries; `--only-shell` takes the headless shell rather than the full
+  # browser, which is all `chromium.launch()` needs here.
+  design-guards:
+    name: Design guards
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps --only-shell chromium
+      - run: pnpm test:design
+
   deploy:
     name: Deploy to Fly
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, build, test]
+    needs: [lint, typecheck, build, test, design-guards]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # A release must NOT be cancelled mid-flight by a newer push — the
     # workflow-level `cancel-in-progress` above is right for a test run and
