@@ -33,9 +33,27 @@
 
          This mock is STANDALONE by the same convention `landing.mock.html`
          uses: it RE-STATES the shipped values so a plain browser paints the
-         real palette with no Tailwind build. It re-defines no semantics. The
-         only raw values are the doc-annotation scaffold (sheet, captions, ref
-         chips, viewport rulers), which is not product UI.
+         real palette with no Tailwind build. It re-defines no semantics.
+
+         The only raw values are the non-semantic elevation shadows and
+         the doc-annotation scaffold's own FILLS — the `#f4f3f1` sheet, the ref
+         chips, the frame border, the fold rule.
+
+         ⚠️ THE SCAFFOLD'S INK IS NOT EXEMPT, AND THIS BLOCK USED TO SAY IT WAS
+         (MOTIR-3985, 2026-08-30). The sentence here read *"the doc-annotation
+         scaffold … is not product UI"*, and it was carrying more weight than a
+         note about raw values: it was read as an AA exemption for the board's
+         own captions, rules and measurement lines. **motir-core asked exactly
+         that question and answered NO EXEMPTION** — MOTIR-3054,
+         `docs/decisions/design-board-chrome-aa.md`, shipped with the guard over
+         both the utility-class and stylesheet layers. This repository ADOPTS
+         that answer; the reasoning and the 54 sites it swept are in
+         `design-notes.md` § *A design board's CHROME owes AA*.
+
+         So: the scaffold may own its FILLS, and its INK clears 1.4.3 on them.
+         `--el-text-secondary` is the annotation ink (6.13:1 on the sheet);
+         `--el-text-muted` is 4.09:1 there and belongs to nothing on this
+         board.
       ---------------------------------------------------------------------- */
       :root {
         /* ── page + text ─────────────────────────────────────────────── */
@@ -239,7 +257,7 @@
       }
       .panel-cap .note {
         font-size: 13px;
-        color: var(--el-text-muted);
+        color: var(--el-text-secondary);
         max-width: 84ch;
       }
       .frame {
@@ -251,7 +269,7 @@
       }
       .rule {
         font: 600 10px var(--font-mono);
-        color: #787671;
+        color: var(--el-text-secondary);
         letter-spacing: 0.06em;
         text-transform: uppercase;
         margin: 0 0 7px;
@@ -803,15 +821,26 @@
       }
       .measure {
         font: 500 11px var(--font-mono);
-        color: var(--el-text-muted);
+        color: var(--el-text-secondary);
         margin-top: 8px;
       }
+      /* ⚠️ THE TWO MARKS REST ON WEIGHT AND ON A LINE, NEVER ON HUE
+         (MOTIR-3985). They used to be a raw green (#1aae39, 2.65:1 on the
+         sheet) and a raw red (#e03131, 4.07:1) with `text-decoration: none`
+         switched ON — so the SUPERSEDED figure was marked by colour alone, in
+         a panel whose own caption reads "weight 600 carries it without colour
+         (1.4.1)". Both failed 1.4.3 as well; the green was the worst pair in
+         either asset.
+
+         `b` is the LIVE figure and is carried by its own weight. `s` is the
+         SUPERSEDED one and is carried by the strikethrough `<s>` already
+         means — restored here, which is the signal the old rule removed. */
       .measure b {
-        color: #1aae39;
+        color: var(--el-text);
       }
       .measure s {
-        color: #e03131;
-        text-decoration: none;
+        color: var(--el-text-secondary);
+        text-decoration: line-through;
       }
     </style>
   </head>
