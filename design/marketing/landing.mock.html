@@ -852,7 +852,17 @@
         border-top: 1px solid var(--el-border);
         padding-top: 16px;
         font-size: 12px;
-        color: var(--el-text-muted);
+        /* ⚠️ --el-text-secondary, NOT --el-text-muted (MOTIR-3984). `.foot` is
+           --el-surface-soft and no card intervenes, where the muted ink is
+           4.34:1 — under the 4.5:1 1.4.3 asks of 12px text, in the light
+           `motir` palette a first-time visitor is served. theme.css states the
+           figure at the token's declaration: "a muted caption belongs inside a
+           card, never on a panel" (MOTIR-2455). This moved WITH
+           app/_components/SiteFooter.tsx, in one pull request: until the
+           component changed, this mock was CORRECT about what shipped, and
+           correcting it first would have made the asset draw a page that did
+           not exist. */
+        color: var(--el-text-secondary);
       }
 
       /* ── mobile frame ─────────────────────────────────────────────── */

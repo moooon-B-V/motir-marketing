@@ -1,10 +1,15 @@
+import { createElement } from 'react'
+import { cleanup, render } from '@testing-library/react'
 import {
   PALETTE_IDS,
   STYLE_IDS,
   TYPE_IDS,
   type PaletteId,
 } from '@motir/design-system'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import Page from '@/app/page'
+import DesignPage from '@/app/design/page'
+import { distinctPairs, paintedPairs } from './support/paintedInks'
 import {
   contrastRatio,
   declaredAxisValues,
@@ -12,6 +17,29 @@ import {
   tokenContrast,
   type Axes,
 } from './support/themeTokens'
+
+/*
+ * ⚠️ TWO STUBS THE PAGES NEED, both for the same reason `tests/siteHeader.tsx`
+ * and `tests/designShowcase.test.tsx` need them: jsdom ships no `matchMedia`
+ * and no router. Neither stub touches a colour, so neither can move a number
+ * measured below — they exist only so the pages render at all.
+ */
+const pathname = vi.hoisted(() => ({ value: '/' }))
+vi.mock('next/navigation', () => ({ usePathname: () => pathname.value }))
+
+function stubMatchMedia() {
+  window.matchMedia = ((query: string) =>
+    ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    }) as unknown as MediaQueryList) as typeof window.matchMedia
+}
 
 /*
  * THE AA MATRIX — `/design`'s "AA holds for body text and controls, in light
@@ -149,69 +177,192 @@ describe('the axes that do not carry colour, proved rather than assumed', () => 
 })
 
 /*
- * The pairs `/design` composes. Each names the element it belongs to, because
+ * The pairs this SITE composes. Each names the element it belongs to, because
  * a pair with no element behind it is a number nobody can re-check.
  *
- * SCOPE: these are the pairs where THIS page picks the ink or the surface. The
+ * SCOPE: these are the pairs where THIS site picks the ink or the surface. The
  * inks a primitive resolves inside its own box (`Input`'s helper, `Pill`'s
  * status fills) belong to `@motir/design-system` and are gated by motir-core's
  * own `inkContrastLint`, which runs over the same registries.
+ *
+ * ⚠️ THE LIST NOW CARRIES A VERDICT, AND THE `below-AA` HALF IS THE POINT
+ * (MOTIR-3984). Until this card every entry meant "the site paints this, and it
+ * must clear AA", so the only way to record a pair the site MUST NOT paint was
+ * to leave it out — and a pair that is absent from the list is indistinguishable
+ * from one nobody thought of. That is exactly how the same defect arrived three
+ * times in three days (MOTIR-3874, MOTIR-3931, MOTIR-3984): the muted ink was
+ * carried against `--el-card`, the one surface the rail had just moved onto, and
+ * against no other, so the matrix was green about a pair the footer was not
+ * painting while the pair it WAS painting went unmeasured.
+ *
+ * So the three muted inks are stated against every surface this site has, and
+ * the ones that fail carry `below-AA` rather than being omitted. Two tests read
+ * that verdict and they pull in opposite directions: the `below-AA` rows are
+ * asserted to be genuinely BELOW AA (so a republish that lifts them turns this
+ * file red and the declaration is re-decided instead of quietly rotting into a
+ * tautology), and `the site paints nothing below AA` asserts that no rendered
+ * element paints one. Neither number is a promise about the theme —
+ * `--el-text-muted`'s values belong to motir-core and are deliberate
+ * (MOTIR-2455) — they are a promise about what this site puts on top of them.
  */
-const PAIRS: { ink: string; surface: string; element: string }[] = [
+type Verdict =
+  /** The site paints this, and it must clear AA on every palette × theme. */
+  | 'clears-AA'
+  /**
+   * Below AA in the light `motir` palette — the default a first-time visitor is
+   * served — so the site must not paint it. `theme.css` states the rule at the
+   * token's own declaration: "a muted caption belongs inside a card, never on a
+   * panel."
+   */
+  | 'below-AA'
+
+const PAIRS: {
+  ink: string
+  surface: string
+  element: string
+  verdict: Verdict
+}[] = [
   {
     ink: '--el-text',
     surface: '--el-page-bg',
     element: 'page headline + body',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-text-secondary',
     surface: '--el-page-bg',
     element: 'the subline and the closing line',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-text-secondary',
     surface: '--el-page-bg',
     element: 'an unselected axis chip (its own fill is --el-page-bg)',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-text',
     surface: '--el-card',
     element: 'an axis name in the rail',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-text-muted',
     surface: '--el-card',
     element: 'an axis help line and its AxisNote',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-text-eyebrow',
     surface: '--el-page-bg',
     element: 'a SectionLabel',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-accent-on-surface',
     surface: '--el-tint-lavender',
     element: 'the SELECTED axis chip',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-accent-on-surface',
     surface: '--el-surface-soft',
     element: 'the nav current-page item, desktop bar',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-accent-on-surface',
     surface: '--el-surface',
     element: 'the nav current-page item, md:hidden panel',
+    verdict: 'clears-AA',
   },
   {
     ink: '--el-text-secondary',
     surface: '--el-surface-soft',
-    element: 'the other nav items in the bar',
+    element: 'the other nav items in the bar, and the footer legal strip',
+    verdict: 'clears-AA',
+  },
+
+  /*
+   * ⚠️ THE MUTED FAMILY, BY SURFACE RATHER THAN BY INCIDENT (MOTIR-3984).
+   *
+   * `--el-text-muted`, `--el-text-eyebrow` and `--el-text-helper` are three
+   * names for ONE value — all three resolve to `var(--color-muted-foreground)`
+   * — so all three are stated rather than only the one that happened to be
+   * painted, and a later reader who reaches for `-eyebrow` or `-helper` meets
+   * the number too. The `--el-card` and `--el-page-bg` rows above and below are
+   * where the family DOES clear AA, and they are what makes the rule
+   * ("inside a card, never on a panel") readable as a pair of columns rather
+   * than as a sentence.
+   */
+  {
+    ink: '--el-text-muted',
+    surface: '--el-page-bg',
+    element: "Proof's mono kicker, on the page",
+    verdict: 'clears-AA',
+  },
+  {
+    ink: '--el-text-muted',
+    surface: '--el-surface',
+    element: 'a muted caption on a raised panel — the site paints none',
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-muted',
+    surface: '--el-surface-soft',
+    element:
+      "the band the footer and the pillars section sit on — SiteFooter's legal strip and Pillars' eyebrow painted this until MOTIR-3984",
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-muted',
+    surface: '--el-muted',
+    element: 'a muted caption on the segmented-control trough',
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-eyebrow',
+    surface: '--el-surface',
+    element: 'an overline on a raised panel',
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-eyebrow',
+    surface: '--el-surface-soft',
+    element: 'an overline on the band',
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-eyebrow',
+    surface: '--el-muted',
+    element: 'an overline on the trough',
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-helper',
+    surface: '--el-surface',
+    element: 'a form hint on a raised panel',
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-helper',
+    surface: '--el-surface-soft',
+    element: 'a form hint on the band',
+    verdict: 'below-AA',
+  },
+  {
+    ink: '--el-text-helper',
+    surface: '--el-muted',
+    element: 'a form hint on the trough',
+    verdict: 'below-AA',
   },
 ]
 
-describe('AA over every palette × theme, for every pair /design paints', () => {
-  it.each(PAIRS)('$ink on $surface — $element', ({ ink, surface }) => {
+const CLEARS = PAIRS.filter((p) => p.verdict === 'clears-AA')
+const BELOW = PAIRS.filter((p) => p.verdict === 'below-AA')
+
+describe('AA over every palette × theme, for every pair this site paints', () => {
+  it.each(CLEARS)('$ink on $surface — $element', ({ ink, surface }) => {
     const failures: string[] = []
     for (const theme of THEMES) {
       for (const palette of PALETTE_IDS) {
@@ -222,6 +373,21 @@ describe('AA over every palette × theme, for every pair /design paints', () => 
     expect(failures).toEqual([])
   })
 
+  /*
+   * ⚠️ THE DECLARATION IS ASSERTED, NOT ASSUMED. A `below-AA` row that quietly
+   * became AA-safe — a republished palette, a re-decided token — would leave
+   * this file forbidding something that is no longer a defect, and nothing
+   * would say so: the scan below would keep passing and the ban would harden
+   * into folklore. So each one has to still FAIL, in the cell the ban is about.
+   */
+  it.each(BELOW)(
+    '$ink on $surface is still below AA in the default palette — $element',
+    ({ ink, surface }) => {
+      const light = axesFor('light', 'motir')
+      expect(tokenContrast(ink, surface, light)).toBeLessThan(AA)
+    },
+  )
+
   it('reports the whole matrix, not a sample — 20 cells per pair, none missing', () => {
     const rows = PAIRS.flatMap(({ ink, surface }) =>
       THEMES.flatMap((theme) =>
@@ -231,12 +397,20 @@ describe('AA over every palette × theme, for every pair /design paints', () => 
       ),
     )
     expect(rows).toHaveLength(PAIRS.length * THEMES.length * PALETTE_IDS.length)
-    expect(rows.every((r) => r >= AA)).toBe(true)
+    expect(
+      CLEARS.flatMap(({ ink, surface }) =>
+        THEMES.flatMap((theme) =>
+          PALETTE_IDS.map((palette) =>
+            tokenContrast(ink, surface, axesFor(theme, palette)),
+          ),
+        ),
+      ).every((r) => r >= AA),
+    ).toBe(true)
     // Print it so a reviewer reads a table rather than a green tick.
     console.log(
       ['', 'AA matrix — minimum ratio per pair over 10 palettes × 2 themes']
         .concat(
-          PAIRS.map(({ ink, surface, element }) => {
+          PAIRS.map(({ ink, surface, element, verdict }) => {
             let min = Infinity
             let at = ''
             for (const theme of THEMES) {
@@ -248,10 +422,95 @@ describe('AA over every palette × theme, for every pair /design paints', () => 
                 }
               }
             }
-            return `  ${min.toFixed(2)}  ${at.padEnd(16)} ${ink} on ${surface} — ${element}`
+            const mark = verdict === 'clears-AA' ? 'paints ' : 'BANNED '
+            return `  ${mark} ${min.toFixed(2)}  ${at.padEnd(16)} ${ink} on ${surface} — ${element}`
           }),
         )
         .join('\n'),
     )
   })
+})
+
+/*
+ * ⚠️ AND THE HALF A PAIR LIST CANNOT DO — WHAT DOES THE SITE ACTUALLY PAINT?
+ * (MOTIR-3984)
+ *
+ * Everything above rules on pairs somebody WROTE DOWN, which is the mechanism
+ * that failed three times in three days: a list is authored by whoever already
+ * knows which pairs to write, so it certifies the question that prompted it,
+ * says nothing about the rest, and reads as a clean bill of health either way.
+ * `tests/aaMatrix.test.ts` carried `--el-text-muted` against `--el-card` — the
+ * surface MOTIR-1043 had just moved the axis rail onto — and against no other
+ * surface at all, while `SiteFooter`'s legal strip and `Pillars`' eyebrow both
+ * painted it on `--el-surface-soft` at 4.34:1, live on motir.co.
+ *
+ * So this describe starts from the ELEMENTS instead. It renders the site's two
+ * pages, reads every ink/surface pair they put on screen (`support/paintedInks`
+ * — its header carries the scope), and rules each one against the same matrix.
+ * A pair nobody thought of is measured exactly like one somebody did, which is
+ * the only property that stops a fourth occurrence.
+ *
+ * ⚠️ IT IS ALSO WHY THE MOCK COULD NOT HAVE CAUGHT THIS. An element scan over
+ * `design/marketing/landing.mock.html` finds the `div.legal` pair and NOT the
+ * pillars eyebrow, because the mock does not draw that element at all — an
+ * asset can only be measured for what it happens to depict, and the components
+ * are the thing a visitor actually reads.
+ */
+describe('what the site actually paints, read off the rendered pages', () => {
+  const pages = [
+    ['/', Page],
+    ['/design', DesignPage],
+  ] as const
+
+  beforeEach(() => {
+    pathname.value = '/'
+    stubMatchMedia()
+  })
+  afterEach(cleanup)
+
+  it.each(pages)('%s paints no pair that is below AA', (_route, Component) => {
+    const { container } = render(createElement(Component))
+    const painted = paintedPairs(container.firstElementChild as Element)
+    expect(painted.length).toBeGreaterThan(20)
+
+    const banned = new Set(BELOW.map((p) => `${p.ink} on ${p.surface}`))
+    const hits = painted
+      .filter((p) => banned.has(`${p.ink} on ${p.surface}`))
+      .map((p) => `${p.ink} on ${p.surface} — ${p.where} — "${p.text}"`)
+    expect(hits).toEqual([])
+  })
+
+  /*
+   * The stronger form, and the one that does not consult the list at all: every
+   * pair the page paints has to clear AA on all 10 palettes × 2 themes. A pair
+   * that is neither declared `clears-AA` nor declared `below-AA` is measured
+   * here on its own merits, so a new element painting a new pair is caught the
+   * first time it renders rather than the first time somebody widens a list.
+   */
+  it.each(pages)(
+    '%s — every rendered pair clears AA on all 20 cells',
+    (_route, Component) => {
+      const { container } = render(createElement(Component))
+      const failures: string[] = []
+      for (const pair of distinctPairs(
+        paintedPairs(container.firstElementChild as Element),
+      )) {
+        for (const theme of THEMES) {
+          for (const palette of PALETTE_IDS) {
+            const ratio = tokenContrast(
+              pair.ink,
+              pair.surface,
+              axesFor(theme, palette),
+            )
+            if (ratio < AA) {
+              failures.push(
+                `${pair.ink} on ${pair.surface} = ${ratio} (${theme}/${palette}) — ${pair.where} — "${pair.text}"`,
+              )
+            }
+          }
+        }
+      }
+      expect(failures).toEqual([])
+    },
+  )
 })

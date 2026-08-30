@@ -349,19 +349,19 @@ Measured from the literal token values in `packages/design-system/theme.css` (`m
 themes. Text takes WCAG 1.4.3's **4.5:1**; a focus indicator and a graphical object take 1.4.11's
 **3:1**.
 
-| element                                   | ink → surface                                    | light                | dark                  | bar              |
-| ----------------------------------------- | ------------------------------------------------ | -------------------- | --------------------- | ---------------- |
-| `<h1>`, pillar headings, import-row title | `--el-text` → page                               | 17.40:1              | 17.42:1               | ≥4.5 ✓           |
-| lede, hints, nav, footer body             | `--el-text-secondary` → page                     | 6.80:1               | 7.35:1                | ≥4.5 ✓           |
-| pillar body, nav on the bar               | `--el-text-secondary` → `--el-surface-soft`      | 6.51:1               | 6.94:1                | ≥4.5 ✓           |
-| eyebrow chip ink                          | `--el-text-strong` → `--el-tint-lavender`        | 9.54:1               | 11.71:1               | ≥4.5 ✓           |
-| icon-tile glyphs (sky / mint / lavender)  | `--el-text-strong` → the tint                    | 10.17 / 10.43 / 9.54 | 11.61 / 11.29 / 11.71 | ≥3 ✓             |
-| primary Button label                      | `--el-accent-text` → `--el-accent`               | 6.57:1               | 4.99:1                | ≥4.5 ✓           |
-| brand glyph                               | `--el-accent-on-surface` → `--el-surface-soft`   | 6.29:1               | **5.76:1**            | ≥3 ✓ (graphical) |
-| door-3 text link                          | `--el-link` → page                               | 4.94:1               | 7.59:1                | ≥4.5 ✓           |
-| idea field label, counter                 | `--el-text-muted` → `--el-page-bg`               | 4.54:1               | **7.35:1** [^muted]   | ≥4.5 ✓           |
-| error banner ink                          | `--el-danger-on-surface` → `--el-danger-surface` | **5.77:1**           | **4.75:1**            | ≥4.5 ✓           |
-| focus ring                                | `--el-accent-on-surface` → page                  | 6.57:1               | **6.11:1**            | ≥3 ✓             |
+| element                                                                  | ink → surface                                    | light                | dark                  | bar              |
+| ------------------------------------------------------------------------ | ------------------------------------------------ | -------------------- | --------------------- | ---------------- |
+| `<h1>`, pillar headings, import-row title                                | `--el-text` → page                               | 17.40:1              | 17.42:1               | ≥4.5 ✓           |
+| lede, hints, nav, footer body                                            | `--el-text-secondary` → page                     | 6.80:1               | 7.35:1                | ≥4.5 ✓           |
+| pillar body, nav on the bar, pillars eyebrow, footer legal strip [^band] | `--el-text-secondary` → `--el-surface-soft`      | 6.51:1               | 6.94:1                | ≥4.5 ✓           |
+| eyebrow chip ink                                                         | `--el-text-strong` → `--el-tint-lavender`        | 9.54:1               | 11.71:1               | ≥4.5 ✓           |
+| icon-tile glyphs (sky / mint / lavender)                                 | `--el-text-strong` → the tint                    | 10.17 / 10.43 / 9.54 | 11.61 / 11.29 / 11.71 | ≥3 ✓             |
+| primary Button label                                                     | `--el-accent-text` → `--el-accent`               | 6.57:1               | 4.99:1                | ≥4.5 ✓           |
+| brand glyph                                                              | `--el-accent-on-surface` → `--el-surface-soft`   | 6.29:1               | **5.76:1**            | ≥3 ✓ (graphical) |
+| door-3 text link                                                         | `--el-link` → page                               | 4.94:1               | 7.59:1                | ≥4.5 ✓           |
+| idea field label, counter                                                | `--el-text-muted` → `--el-page-bg`               | 4.54:1               | **7.35:1** [^muted]   | ≥4.5 ✓           |
+| error banner ink                                                         | `--el-danger-on-surface` → `--el-danger-surface` | **5.77:1**           | **4.75:1**            | ≥4.5 ✓           |
+| focus ring                                                               | `--el-accent-on-surface` → page                  | 6.57:1               | **6.11:1**            | ≥3 ✓             |
 
 [^muted]:
     **CORRECTED 2026-08-29 (MOTIR-3874), and it is not a version move — the row's two cells were
@@ -373,6 +373,69 @@ themes. Text takes WCAG 1.4.3's **4.5:1**; a focus indicator and a graphical obj
     table against the installed package rather than only the rows it expected to have moved. **The
     4.17 is worth carrying forward**: `--el-text-muted` on a raised surface is the class motir-core
     swept and guarded in MOTIR-2477, and nothing in this repository guards it.
+
+[^band]:
+    **The legal strip and the pillars eyebrow JOINED this row on 2026-08-30 (MOTIR-3984); both were
+    `--el-text-muted` on the same band and both shipped.** See the section directly below.
+
+### ⚠️ The MUTED ink on the BAND — the pair this page SHIPPED and no list measured (MOTIR-3984, 2026-08-30)
+
+**The same pair as the showcase half's section of the same name, one surface over, and in RUNTIME CODE
+rather than in an asset** — so unlike MOTIR-3874 and MOTIR-3931 this one was live on motir.co, on every
+route the site has, rather than a picture a future card would have built from.
+
+`--el-text-muted` at 11–12px on `--el-surface-soft` is **4.34:1** in the light `motir` palette. 1.4.3
+asks 4.5:1 of text that size, and `motir` is the palette a first-time visitor is served. `theme.css`
+states the figure at the token's own declaration and adds the rule in its own words — _"a muted caption
+belongs inside a card, never on a panel"_ (MOTIR-2455). **Two elements painted it:**
+
+| element                             | file                                 | its band                      | ratio    |
+| ----------------------------------- | ------------------------------------ | ----------------------------- | -------- |
+| the footer's legal strip, 12px      | `app/_components/SiteFooter.tsx`     | the footer's own `.foot` band | **4.34** |
+| the pillars section's eyebrow, 11px | `app/_components/Pillars.tsx`        | `app/page.tsx`'s band section | **4.34** |
+| _(the mock's own `div.legal`, ×2)_  | `design/marketing/landing.mock.html` | `footer.foot`                 | **4.34** |
+
+**Both moved to `--el-text-secondary`** — 6.51:1 on that band, the ink the rest of the footer and the
+pillar bodies already use — rather than onto a card surface, which is what the showcase half did and is
+right there because the rail's rows are a card-shaped thing. A legal strip and a section eyebrow are not.
+The `.ord` line inside each pillar KEPT `--el-text-muted`: it sits in a `Card` on `--el-page-bg` at
+4.54:1, and leaving it is what makes the rule legible as two columns rather than as a sentence.
+
+**The mock and the component moved in ONE pull request, and the order matters.** Until the component
+changed, `landing.mock.html` was CORRECT about what shipped — so correcting the asset first would have
+made it draw a page that did not exist, which is the exact defect MOTIR-3931 was filed about, inverted.
+`landing.png` is re-exported with them, at the same 1320 × `deviceScaleFactor: 2` viewport as before
+(2640 × 14762 both times — the geometry is a control on the re-export).
+
+#### ⚠️ THE CARD SAID ONE ELEMENT AND THE SITE PAINTED TWO — and the reason is the third occurrence of one shape
+
+MOTIR-3984 was filed naming **the footer alone** (_"One element is on the wrong ink"_), and both sites
+predate it by two days — `git log --diff-filter=A` dates them both to `b3c2836` (2026-08-28,
+MOTIR-1152), so the enumeration was **wrong when it was written** rather than drift. It was taken by
+scanning the MOCK and reading the footer, and the mock **does not draw the pillars eyebrow at all**, so
+that element could not appear in the count however carefully the scan was run.
+
+**That is the same failure this section is about, one level up.** A pair list is written by whoever
+already knows which pairs to write; an asset scan can only measure what the asset happens to depict; and
+this a11y table — which had a row for the muted ink on `--el-page-bg` and none for it on the band —
+certified the question that prompted it and stayed silent about the rest. Three instruments, three
+different populations, all of them green.
+
+**So the guard moved onto the ELEMENTS of the shipped pages.** `tests/aaMatrix.test.ts` now renders `/`
+and `/design`, reads every ink/surface pair they put on screen (`tests/support/paintedInks.ts`), and
+rules each against the same 10-palette × 2-theme matrix — so a pair nobody thought of is measured
+exactly like one somebody did. Its `PAIRS` list also gained `--el-text-muted` / `--el-text-eyebrow` /
+`--el-text-helper` against `--el-surface-soft`, `--el-surface` and `--el-muted`, carrying a `below-AA`
+verdict: the three are aliases of one value, and a pair the site must NOT paint is now stated rather
+than expressed by being absent from a list, where it was indistinguishable from one nobody considered.
+Those rows are themselves asserted to still fail, so a republish that lifts them turns the file red
+instead of leaving a ban that has quietly become folklore.
+
+**The element scan, run over this asset after the change** (headless chromium, every text-bearing
+element ruled at its own size and weight, the harness of _How this asset was measured_): **0 findings in
+the product layer**, down from 2. The 19 that remain are the doc-annotation scaffold — the panel
+captions, the `viewport …` rules, the measurement lines, at 4.09:1 — which are MOTIR-3985's, together
+with the 35 in the showcase mock.
 
 ### ⚠️ The measured constraint this design routed around — RETIRED 2026-08-29 (MOTIR-3874)
 
@@ -453,12 +516,13 @@ item to mark.
 
 ## Open findings this design surfaced (filed, not deferred)
 
-| finding                                                                                                                                                                                                                                                  | card                                                        |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                           | **MOTIR-3743** (pre-existing; this card is `relates_to` it) |
-| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                  | **MOTIR-3746** → **MOTIR-3846**                             |
-| ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version** | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**            |
-| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository — **but a lane is no longer how a result is published; see below**                                   | **MOTIR-3750**                                              |
+| finding                                                                                                                                                                                                                                                                                                                                                                                                         | card                                                                                         |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                                                                                                                                                                                  | **MOTIR-3743** (pre-existing; this card is `relates_to` it)                                  |
+| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                                                                                                                                                                         | **MOTIR-3746** → **MOTIR-3846**                                                              |
+| ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version**                                                                                                                                                        | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**                                             |
+| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository — **but a lane is no longer how a result is published; see below**                                                                                                                                                                                          | **MOTIR-3750**                                                                               |
+| **This asset does not draw the pillars EYEBROW `app/_components/Pillars.tsx` ships** (`div.band-head` has `h2` + `p` only, in both boards) — so the element scan of the mock is structurally unable to see anything that element carries, and it did not: MOTIR-3984 was filed naming ONE muted-ink site and the site painted TWO. Not an AA defect in itself; the eyebrow is `--el-text-secondary` and clears. | **MOTIR-4000** (filed by MOTIR-3984, `blocked_by` MOTIR-3985 — both re-export `landing.png`) |
 
 **⚠️ AND THE MISSING LANE NO LONGER STOPS A DESIGN RESULT REACHING THE CARD (MOTIR-3874).** MOTIR-3780
 retired the branch-derived publisher in every repository: the AGENT publishes, by naming its own card
