@@ -38,14 +38,23 @@ allowBuilds:
 #
 # ⚠️ THERE ARE TWO ENTRIES TODAY, AND THE PARAGRAPH ABOVE SAYS A SECOND ONE IS A
 # SIGNAL TO WAIT A DAY. Read why this one did not (MOTIR-3872, 2026-08-29), and
-# then hold the rule: `@motir/design-system@0.1.1` is the FIRST publish carrying
-# the two accent-ink AA fixes (MOTIR-3745, MOTIR-3774), so until this repository
-# pins it, motir.co serves five cells that fail AA — the pin bump IS the fix and
-# it cannot wait out a 24h cutoff. Both entries name ONE exact version of ONE
+# then hold the rule: the `@motir/design-system` entry names the FIRST publish
+# carrying a fix motir.co cannot serve without — the pin bump IS the fix and it
+# cannot wait out a 24h cutoff. Both entries name ONE exact version of ONE
 # package we publish ourselves, which is the condition the rule is actually
 # protecting; neither is a third-party package, and the count is a symptom of
 # two of our own packages shipping on the same day rather than of the exemption
 # widening. **The signal still stands for the NEXT one.**
+#
+# ⚠️ RE-POINTED 0.1.1 → 0.1.2 by MOTIR-3996 (2026-08-30), NOT APPENDED TO — the
+# same correction the `@motir/brand` paragraph above records. `pnpm install`
+# APPENDS the new version and leaves the old line standing, so the file grows a
+# third entry on its own and the fourth reads as a list. The 0.1.1 line matched
+# nothing the moment the pin moved (`grep -c 'design-system@0.1.1' pnpm-lock.yaml`
+# → 0), so it was deleted in the same commit. **0.1.2 carries the scoped-palette
+# fix (MOTIR-3933): until this repository pins it, `motir.co/design` renders ten
+# identical palette tiles.** Published 2026-08-30T20:34:31Z, twelve minutes before
+# this install — squarely inside the cutoff, which is why the line is here.
 #
 # ⚠️ AND BOTH ARE OWED A DELETION, WHICH IS WHY THE CONDITION IS WRITTEN AS A
 # COMMAND: once each version is more than a day old, run
@@ -54,4 +63,4 @@ allowBuilds:
 # what gets appended to.
 minimumReleaseAgeExclude:
   - '@motir/brand@0.2.0'
-  - '@motir/design-system@0.1.1'
+  - '@motir/design-system@0.1.2'
