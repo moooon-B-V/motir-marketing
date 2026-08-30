@@ -768,6 +768,144 @@ inherits that trap along with the values it copies.**
 > whoever writes MOTIR-1043's AA matrix should assert the harness against a known pair before
 > trusting a red cell.
 
+### ⚠️ The MUTED inks — the pair this asset DREW and never measured (MOTIR-3931, 2026-08-30)
+
+**The rule, in `theme.css`'s own words at the token's declaration:**
+
+> _"⚠️ AA-SAFE ONLY ON THE WHITE PAGE/CARD, and by 0.04 (4.54:1). On `--el-surface` it is 4.17, on
+> `--el-muted` 4.12, on `--el-surface-soft` 4.34 — all under AA. **A muted caption belongs inside a
+> card, never on a panel.** (MOTIR-2455; light theme is the binding one — every ink clears AA on
+> dark.)"_
+
+**And this asset drew exactly the arrangement that rule forbids** — the axis `help` lines and the
+rail's `lead` at 12px in `--el-text-muted`, directly on the `--el-surface-soft` band. 12px is not
+WCAG large text, so 1.4.3 asks 4.5:1 and the pair returns **4.34:1**.
+
+**Why the sweep above missed it, which is the part worth keeping.** That harness has a control that
+reproduces MOTIR-3745's and MOTIR-3774's numbers to the digit, and it returned 0/10 on everything it
+measured. Its `PAIRS` list was five entries — four `--el-accent-on-surface` and one
+`--el-danger-on-surface` — because the question that prompted it was MOTIR-3872's accent-ink
+question. **The pair the asset paints on its own rail was never in the list**, and a sweep that
+returns 0/10 on the pairs it measures reads as a clean bill of health for the surface. This is the
+second time in two days, after MOTIR-3874: an asset correct about the pairs it measured and wrong
+about a pair it drew, because the measured set was chosen by the question rather than by the
+elements on the page.
+
+**So `PAIRS` gains the three muted inks against every surface this asset paints them on** — and,
+because the three are aliases of one value (`--el-text-muted`, `--el-text-eyebrow` and
+`--el-text-helper` all resolve to `var(--color-muted-foreground)`), all three are stated rather than
+one, so a later reader who reaches for `-eyebrow` or `-helper` meets the number too:
+
+```js
+// Appended to the PAIRS list of the harness above; PALETTES and the rest unchanged.
+const PAIRS = [
+  // …the five accent / danger entries above…
+  ['--el-text-muted', '--el-page-bg', 'muted caption on the page'],
+  ['--el-text-muted', '--el-card', 'muted caption inside a Card — the rail'],
+  ['--el-text-muted', '--el-surface', 'muted caption on a raised panel'],
+  [
+    '--el-text-muted',
+    '--el-surface-soft',
+    'muted caption on the rail BAND / vignette / footer',
+  ],
+  [
+    '--el-text-muted',
+    '--el-muted',
+    'muted caption on the segmented-control trough',
+  ],
+  ['--el-text-eyebrow', '--el-page-bg', 'overline on the page'],
+  ['--el-text-eyebrow', '--el-card', 'overline inside a Card'],
+  ['--el-text-eyebrow', '--el-surface', 'overline on a raised panel'],
+  ['--el-text-eyebrow', '--el-surface-soft', 'overline on the rail BAND'],
+  ['--el-text-eyebrow', '--el-muted', 'overline on the trough'],
+  ['--el-text-helper', '--el-page-bg', 'form hint on the page'],
+  ['--el-text-helper', '--el-card', 'form hint inside a Card'],
+  ['--el-text-helper', '--el-surface', 'form hint on a raised panel'],
+  ['--el-text-helper', '--el-surface-soft', 'form hint on the rail BAND'],
+  ['--el-text-helper', '--el-muted', 'form hint on the trough'],
+]
+```
+
+**What it returns, on the pinned `@motir/design-system@0.1.1`, over all ten palettes in both
+themes.** All three inks return identical figures, because they are one value:
+
+| ink (all three)                       | `--el-page-bg` | `--el-card` | `--el-surface` | `--el-surface-soft` | `--el-muted` |
+| ------------------------------------- | -------------- | ----------- | -------------- | ------------------- | ------------ |
+| **light, `motir`** (the binding cell) | 4.54 ✓         | 4.54 ✓      | **4.17 ✗**     | **4.34 ✗**          | **4.12 ✗**   |
+| **light, the ten-palette sweep**      | 0/10           | 0/10        | **1/10**       | **1/10**            | **1/10**     |
+| **dark, `motir`**                     | 7.35 ✓         | 7.35 ✓      | 6.67 ✓         | 6.94 ✓              | 6.67 ✓       |
+| **dark, the ten-palette sweep**       | 0/10           | 0/10        | 0/10           | 0/10                | 0/10         |
+
+**The failing cell is `motir` alone, light only — 1/10, not 10/10.** The other nine palettes lift the
+muted ink far enough to clear AA on every surface. That is worth stating precisely, because `motir`
+is the DEFAULT: the one palette that fails is the one a first-time visitor is served.
+
+**The control:** `--el-text-muted` on `--el-card` returns **4.54**, which is `theme.css`'s own quoted
+figure to the digit, and `--el-surface` / `--el-surface-soft` / `--el-muted` return **4.17 / 4.34 /
+4.12**, which are the three numbers in that same sentence. The harness is trustworthy to the extent
+those four reproduce, and they do.
+
+#### The scan a PAIRS list cannot do — walk the RENDERED asset, not a list of pairs
+
+A pair list still has to be written by somebody who already knows which pairs to write, which is the
+exact failure this section is about. **So the pairs above were not trusted to be complete.** The
+mock was loaded in headless chromium and EVERY element carrying its own text node was read for its
+resolved `color` and its effective background — the nearest ancestor with a non-transparent fill —
+and ruled against 1.4.3 at that element's own size and weight. It answers _"what does this asset
+paint?"_ rather than _"what did I think to ask about?"_
+
+| what it found, light                                       | sites  | ratio     | disposition                                  |
+| ---------------------------------------------------------- | ------ | --------- | -------------------------------------------- |
+| `.rail-head .lead`, 12px/600, muted on `--el-surface-soft` | 5      | **4.34**  | FIXED — the rows moved into a `Card`         |
+| `.axis-hd .help`, 12px/400, muted on `--el-surface-soft`   | 6      | **4.34**  | FIXED — same                                 |
+| `.vig .mini`, 11px, muted on `--el-surface-soft`           | 6      | **4.34**  | FIXED — the component paints neither (below) |
+| `.foot`, 12.5px, muted on `--el-surface-soft`              | 1      | **4.34**  | FIXED — `SiteFooter` ships secondary (below) |
+| the board's own ANNOTATION chrome on the `#f4f3f1` sheet   | **35** | 2.65–4.09 | NOT this card — filed, see below             |
+
+| what it found, dark                                              | sites | ratio | disposition                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------------- | ----- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.seg button[aria-checked] .i` — the `☾` glyph on `--el-page-bg` | 1     | 3.85  | NOT a 1.4.3 failure: a decorative glyph beside its own text label, so the accessible name is the word. It clears 1.4.11's 3:1 for non-text. Recorded because a scan that reports it and says nothing invites the next reader to re-derive the answer |
+
+**The product layer is now 0 findings in both themes.** The 35 remaining are the doc-annotation
+scaffold — the panel captions, the `viewport …` rules, the measurement lines — which this mock's own
+token block calls out as _"not product UI"_.
+
+**⚠️ That claim is now contradicted by a decision made in motir-core, and the contradiction is
+FILED rather than argued here.** MOTIR-3054 asked exactly this question of motir-core's design
+tree — _"does a design board's own chrome owe AA?"_ — and answered **yes**, shipping the guard over
+both the utility-class and stylesheet layers (motir-core PR #2133, _"a design board's chrome owes
+AA"_). `motir-marketing` has no equivalent lane and its assets assert the opposite in prose. Two
+repositories holding opposite answers to one question is a defect with a life of its own, so it is a
+card, not this paragraph.
+
+#### What was CHANGED, and why each is the asset matching what ships rather than a taste call
+
+1. **The axis rows moved into a `Card`.** `.rail` keeps the `--el-surface-soft` band — that band is
+   the layout and it is what ships — and `.rail-inner` now carries `--el-card` + `--el-border` +
+   `--radius-card`. `--el-card` resolves to the same `#ffffff` as `--el-page-bg` (measured, and now
+   stated in the mock's token block, which had no `--el-card` at all), so all three muted inks return
+   to **4.54:1** with the band untouched. `app/_components/DesignShowcase.tsx` ships precisely this —
+   a `bg-(--el-surface-soft)` section wrapping a `Card` — and its own header block explains the
+   arrangement as a measurement. **The asset had been drawing the thing the build had to work
+   around**; it now draws the build. The four narrow state panels gained the same `.rail-inner`
+   wrapper the two full boards already had, so the rail is one structure everywhere in the asset.
+2. **`.vig` moved to `--el-surface` and `.mini` to `--el-text-secondary`.** Not a preference: the
+   package's `StyleVignette` (`dist/components/theme/StyleVignette.js`) is `bg-(--el-surface)`, and
+   **every string inside it is `--el-text` or `--el-text-secondary` — it paints `--el-text-muted`
+   nowhere.** The mock had invented both halves of a failing pair the component does not draw.
+3. **`.foot` moved to `--el-text-secondary`.** `app/_components/SiteFooter.tsx` ships
+   `--el-text-secondary` for its body text on that same `--el-surface-soft` band; the mock painted the
+   whole footer muted.
+
+**The fold was re-measured, because the `Card` costs height.** Padding + border add **26px** to every
+rail instance. The table in _The measured fold_ below is the re-taken one; both viewports still clear
+their criterion, with the headroom stated so a later change can see how much is left.
+
+**What this asset still does NOT claim.** `--el-text-muted`'s values belong to motir-core and are
+deliberate (MOTIR-2455 chose them and wrote the constraint). Nothing here asks for a republish, and
+whether `AxisField` should REFUSE to render a muted caption outside a card — i.e. whether the package
+owes a guard rather than every consumer owing a `Card` — is motir-core's question, filed there.
+
 ---
 
 ## Designed against shipped reality
@@ -870,10 +1008,19 @@ cannot do.
 
 ## The axis rail
 
-**Layout — a full-width band under the bar, on `--el-surface-soft`, four fields stacked.** It is
-composed from the package's own `AxisField` (`border-b border-(--el-border-soft) py-4`), one per
-axis, each holding an `AxisRadioGroup` of chips; the theme control and Reset sit on the rail's own
-header row, right-aligned.
+**Layout — a full-width band under the bar, on `--el-surface-soft`, holding a `Card` in which four
+fields are stacked.** It is composed from the package's own `AxisField`
+(`border-b border-(--el-border-soft) py-4`), one per axis, each holding an `AxisRadioGroup` of chips;
+the theme control and Reset sit on the rail's own header row, right-aligned, inside the same `Card`.
+
+**⚠️ THE `Card` IS A MEASUREMENT, NOT A CONTAINER SOMEBODY LIKED (MOTIR-3931).** `AxisField` renders
+its `help` line and `AxisNote` at `text-xs text-(--el-text-muted)`, and that ink on the
+`--el-surface-soft` band is **4.34:1** — under the 4.5:1 that 1.4.3 asks of 12px text, in the light
+theme of the DEFAULT `motir` palette. `--el-card` resolves to the same `#ffffff` as `--el-page-bg`,
+so the rows return to **4.54:1** while the band the whole layout is built on stays exactly where it
+is. The full measurement, and the scan that found three more sites the same pair was drawn on, is
+§ _The MUTED inks_ above. The band is not decoration: it is the region that visibly restyles, which
+is the page's entire argument.
 
 **Why a full-width band and not a sidebar:** measured, not preferred. The Style axis is **11** chips
 of real words (`Swiss / Minimal-Flat`, `Hand-Drawn / Indie`) and Palette is **10** with a swatch
@@ -896,13 +1043,27 @@ scrolling row the axis is **31px** and all four fit. Measured in isolation at a 
 Both taken by rendering the frame at the true viewport and reading `getBoundingClientRect()`
 offsets from the frame's top edge.
 
-| viewport       | bar    | axis rail    | page lede | first composed section | fold |
-| -------------- | ------ | ------------ | --------- | ---------------------- | ---- |
-| **1440 × 900** | 0 → 57 | 57 → **378** | 406 → 521 | 547 → **820**          | 900  |
-| **390 × 844**  | 0 → 53 | 53 → **407** | 425 → 483 | 509 → **575**          | 844  |
+**⚠️ RE-MEASURED 2026-08-30 (MOTIR-3931) — the `Card` costs 26px per rail.** Padding (12 + 12) plus
+its 1px borders. Both viewports still clear the criterion; the numbers below are the re-taken ones,
+with the superseded pair beside them so the cost is legible rather than merely absorbed.
+**The `was` column is this pass's own run against `origin/main`, not the figures the previous table
+printed** — those read from a 1px-higher origin, so every number here sits 1px lower than its
+predecessor for a reason that has nothing to do with the change. Comparing a re-measurement against
+someone else's origin is how a 1px method difference gets reported as a regression, so both columns
+come from one script.
+
+| viewport       | bar    | axis rail              | page lede | first composed section  | fold | headroom          |
+| -------------- | ------ | ---------------------- | --------- | ----------------------- | ---- | ----------------- |
+| **1440 × 900** | 1 → 58 | 58 → **405** (was 379) | 433 → 548 | 574 → **847** (was 821) | 900  | **53** (was 79)   |
+| **390 × 844**  | 1 → 54 | 54 → **434** (was 408) | 452 → 510 | 536 → **602** (was 576) | 844  | **242** (was 268) |
 
 **Above the fold in both: the whole rail AND a whole composed section**, which is the criterion.
-At 1440 there is 80px of headroom; at 390, 269px.
+
+**⚠️ 53px is the number to watch.** At 1440 the headroom is now under one line of body text, so the
+next element added to the rail — a fifth axis, a second header row, a banner above the bar — takes
+the first composed section below the fold and falsifies the criterion. It is stated here rather than
+left to be re-derived, because the re-derivation is a browser run and the temptation is to assume the
+margin that used to be there.
 
 ---
 

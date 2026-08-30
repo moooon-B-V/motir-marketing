@@ -40,6 +40,7 @@
       :root {
         /* ── page + text ─────────────────────────────────────────────── */
         --el-page-bg: #ffffff;
+        --el-card: #ffffff;
         --el-surface: #f6f5f4;
         --el-surface-soft: #fafaf9;
         --el-muted: #f3f4f6;
@@ -99,6 +100,7 @@
        */
       .t-dark {
         --el-page-bg: #0f0f0f;
+        --el-card: #0f0f0f;
         --el-surface: #1a1a1a;
         --el-surface-soft: #161616;
         --el-muted: #1a1a1a;
@@ -397,9 +399,26 @@
         border-bottom: 1px solid var(--el-border);
         padding: 4px 24px 12px;
       }
+      /*
+       * ⚠️ THE AXIS STACK SITS IN A `Card`, AND THE REASON IS A MEASUREMENT
+       * (MOTIR-3931). `.rail` keeps the `--el-surface-soft` band — that is the
+       * layout, and it is what ships — but the rows themselves are drawn on
+       * `--el-card`, because `--el-text-muted` at 12px on `--el-surface-soft`
+       * is 4.34:1, under the 4.5:1 that 1.4.3 asks of text this size.
+       * `--el-card` resolves to the same `#ffffff` as `--el-page-bg`, so the
+       * three muted inks return to 4.54:1 without moving the band.
+       * `app/_components/DesignShowcase.tsx` ships exactly this — a
+       * `bg-(--el-surface-soft)` section wrapping a `Card` — so the asset now
+       * draws the page rather than the arrangement the page had to work
+       * around. See design-notes § "How this asset was measured".
+       */
       .rail-inner {
         max-width: 1180px;
         margin: 0 auto;
+        background: var(--el-card);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        padding: 12px 16px;
       }
       .rail-head {
         display: flex;
@@ -684,10 +703,17 @@
         text-overflow: ellipsis;
       }
       /* the StyleVignette slot */
+      /*
+       * `--el-surface` and `--el-text-secondary` are the package's OWN
+       * (`dist/components/theme/StyleVignette.js`: `bg-(--el-surface)`, and
+       * every string inside it at `--el-text` or `--el-text-secondary`). The
+       * mock drew soft + muted, which is 4.34:1 — a pair the component does
+       * not paint (MOTIR-3931).
+       */
       .vig {
         border: 1px solid var(--el-border);
         border-radius: var(--radius-card);
-        background: var(--el-surface-soft);
+        background: var(--el-surface);
         padding: 14px;
         box-shadow: var(--shadow-subtle);
       }
@@ -731,16 +757,20 @@
       }
       .mini {
         font-size: 11px;
-        color: var(--el-text-muted);
+        color: var(--el-text-secondary);
         border: 1px solid var(--el-border);
         border-radius: var(--radius-badge);
         padding: 1px 7px;
       }
+      /*
+       * `app/_components/SiteFooter.tsx` ships `--el-text-secondary` on this
+       * band; the mock drew `--el-text-muted`, which is 4.34:1 (MOTIR-3931).
+       */
       .foot {
         border-top: 1px solid var(--el-border);
         background: var(--el-surface-soft);
         padding: 18px 24px;
-        color: var(--el-text-muted);
+        color: var(--el-text-secondary);
         font-size: 12.5px;
       }
       /* narrow-viewport rail: ONE scrolling row per axis (see design-notes) */
@@ -1407,68 +1437,75 @@
                 </div>
               </div>
               <div class="rail" style="padding: 4px 16px 10px">
-                <div class="rail-head">
-                  <span class="lead">Change how this looks</span>
-                </div>
-                <div class="axis">
-                  <div class="axis-hd">
-                    <span class="nm">Style</span><span class="help">11</span>
+                <div class="rail-inner">
+                  <div class="rail-head">
+                    <span class="lead">Change how this looks</span>
                   </div>
-                  <div
-                    class="chips scroll"
-                    role="radiogroup"
-                    aria-label="Style"
-                  >
-                    <button class="chip sel">
-                      Warm Editorial <span class="tick">✓</span>
-                    </button>
-                    <button class="chip">Soft / Playful</button>
-                    <button class="chip">Swiss</button>
-                    <button class="chip">Neo-Brutalism</button>
+                  <div class="axis">
+                    <div class="axis-hd">
+                      <span class="nm">Style</span><span class="help">11</span>
+                    </div>
+                    <div
+                      class="chips scroll"
+                      role="radiogroup"
+                      aria-label="Style"
+                    >
+                      <button class="chip sel">
+                        Warm Editorial <span class="tick">✓</span>
+                      </button>
+                      <button class="chip">Soft / Playful</button>
+                      <button class="chip">Swiss</button>
+                      <button class="chip">Neo-Brutalism</button>
+                    </div>
                   </div>
-                </div>
-                <div class="axis">
-                  <div class="axis-hd">
-                    <span class="nm">Palette</span><span class="help">10</span>
+                  <div class="axis">
+                    <div class="axis-hd">
+                      <span class="nm">Palette</span
+                      ><span class="help">10</span>
+                    </div>
+                    <div
+                      class="chips scroll"
+                      role="radiogroup"
+                      aria-label="Palette"
+                    >
+                      <button class="chip sel">
+                        <span class="dot" style="background: #5645d4"></span>
+                        Motir
+                        <span class="tick">✓</span>
+                      </button>
+                      <button class="chip">
+                        <span class="dot" style="background: #3650c2"></span>
+                        Cobalt
+                      </button>
+                      <button class="chip">
+                        <span class="dot" style="background: #1a1d21"></span>
+                        Graphite
+                      </button>
+                    </div>
                   </div>
-                  <div
-                    class="chips scroll"
-                    role="radiogroup"
-                    aria-label="Palette"
-                  >
-                    <button class="chip sel">
-                      <span class="dot" style="background: #5645d4"></span>
-                      Motir
-                      <span class="tick">✓</span>
-                    </button>
-                    <button class="chip">
-                      <span class="dot" style="background: #3650c2"></span>
-                      Cobalt
-                    </button>
-                    <button class="chip">
-                      <span class="dot" style="background: #1a1d21"></span>
-                      Graphite
-                    </button>
+                  <div class="axis">
+                    <div class="axis-hd">
+                      <span class="nm">Type</span><span class="help">6</span>
+                    </div>
+                    <div
+                      class="chips scroll"
+                      role="radiogroup"
+                      aria-label="Type"
+                    >
+                      <button class="chip ty sel">
+                        Motir <span class="tick">✓</span>
+                      </button>
+                      <button class="chip">Motir Sans</button>
+                      <button class="chip ty-m">Motir Mono</button>
+                    </div>
                   </div>
-                </div>
-                <div class="axis">
-                  <div class="axis-hd">
-                    <span class="nm">Type</span><span class="help">6</span>
-                  </div>
-                  <div class="chips scroll" role="radiogroup" aria-label="Type">
-                    <button class="chip ty sel">
-                      Motir <span class="tick">✓</span>
-                    </button>
-                    <button class="chip">Motir Sans</button>
-                    <button class="chip ty-m">Motir Mono</button>
-                  </div>
-                </div>
-                <div class="axis">
-                  <div class="axis-hd"><span class="nm">Theme</span></div>
-                  <div class="seg" role="radiogroup" aria-label="Theme">
-                    <button aria-checked="false">☀</button>
-                    <button aria-checked="false">☾</button>
-                    <button aria-checked="true">🖵 System</button>
+                  <div class="axis">
+                    <div class="axis-hd"><span class="nm">Theme</span></div>
+                    <div class="seg" role="radiogroup" aria-label="Theme">
+                      <button aria-checked="false">☀</button>
+                      <button aria-checked="false">☾</button>
+                      <button aria-checked="true">🖵 System</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1576,16 +1613,18 @@
             <p class="rule">a · arrival — every axis at its default</p>
             <div class="frame">
               <div class="rail" style="padding: 10px 14px">
-                <div class="rail-head">
-                  <span class="lead">Change how this site looks</span>
-                </div>
-                <div class="axis">
-                  <div class="axis-hd"><span class="nm">Style</span></div>
-                  <div class="chips">
-                    <button class="chip sel">
-                      Warm Editorial <span class="tick">✓</span>
-                    </button>
-                    <button class="chip">Soft / Playful</button>
+                <div class="rail-inner">
+                  <div class="rail-head">
+                    <span class="lead">Change how this site looks</span>
+                  </div>
+                  <div class="axis">
+                    <div class="axis-hd"><span class="nm">Style</span></div>
+                    <div class="chips">
+                      <button class="chip sel">
+                        Warm Editorial <span class="tick">✓</span>
+                      </button>
+                      <button class="chip">Soft / Playful</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1598,22 +1637,24 @@
             </p>
             <div class="frame">
               <div class="rail" style="padding: 10px 14px">
-                <div class="rail-head">
-                  <span class="lead">Change how this site looks</span>
-                </div>
-                <div class="axis">
-                  <div class="axis-hd"><span class="nm">Style</span></div>
-                  <div class="chips">
-                    <button class="chip">Warm Editorial</button>
-                    <button
-                      class="chip sel"
-                      style="
-                        outline: 2px solid var(--focus-ring-color);
-                        outline-offset: 2px;
-                      "
-                    >
-                      Neo-Brutalism <span class="tick">✓</span>
-                    </button>
+                <div class="rail-inner">
+                  <div class="rail-head">
+                    <span class="lead">Change how this site looks</span>
+                  </div>
+                  <div class="axis">
+                    <div class="axis-hd"><span class="nm">Style</span></div>
+                    <div class="chips">
+                      <button class="chip">Warm Editorial</button>
+                      <button
+                        class="chip sel"
+                        style="
+                          outline: 2px solid var(--focus-ring-color);
+                          outline-offset: 2px;
+                        "
+                      >
+                        Neo-Brutalism <span class="tick">✓</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1627,17 +1668,19 @@
             <p class="rule">c · off default — Reset appears</p>
             <div class="frame">
               <div class="rail" style="padding: 10px 14px">
-                <div class="rail-head">
-                  <span class="lead">Change how this site looks</span>
-                  <button class="reset">↺ Reset to default</button>
-                </div>
-                <div class="axis">
-                  <div class="axis-hd"><span class="nm">Style</span></div>
-                  <div class="chips">
-                    <button class="chip">Warm Editorial</button>
-                    <button class="chip sel">
-                      Neo-Brutalism <span class="tick">✓</span>
-                    </button>
+                <div class="rail-inner">
+                  <div class="rail-head">
+                    <span class="lead">Change how this site looks</span>
+                    <button class="reset">↺ Reset to default</button>
+                  </div>
+                  <div class="axis">
+                    <div class="axis-hd"><span class="nm">Style</span></div>
+                    <div class="chips">
+                      <button class="chip">Warm Editorial</button>
+                      <button class="chip sel">
+                        Neo-Brutalism <span class="tick">✓</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
