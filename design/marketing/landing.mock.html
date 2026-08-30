@@ -673,6 +673,22 @@
         margin: 0 auto 30px;
         text-align: center;
       }
+      /* The eyebrow `Pillars.tsx` opens the band head with. 11px/600 mono,
+         uppercase, 0.06em, `--el-text-secondary` — the shipped element's own
+         values, read off the rendered component rather than off its classes
+         (MOTIR-4000). It is `--el-text-secondary` and NOT `--el-text-muted`
+         for the reason the component's own comment gives: this sits directly
+         on the `--el-surface-soft` band, where the muted ink is 4.34:1.
+         Its own class, NOT `.eyebrow` — that one is the HERO's lavender
+         chip above, and a shared name would paint this one as a chip. */
+      .band-head .band-eyebrow {
+        display: block;
+        font: 600 11px/1.5 var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--el-text-secondary);
+        margin: 0 0 8px;
+      }
       .band-head h2 {
         font: 700 30px/1.2 var(--font-serif);
         letter-spacing: -0.015em;
@@ -1377,6 +1393,7 @@
               </div>
               <section class="band">
                 <div class="band-head">
+                  <span class="band-eyebrow">A vibe project</span>
                   <h2>One loop, three pieces</h2>
                   <p>
                     Motir is not a planner bolted onto a project-management
@@ -1827,6 +1844,7 @@
               </div>
               <section class="band">
                 <div class="band-head">
+                  <span class="band-eyebrow">A vibe project</span>
                   <h2>One loop, three pieces</h2>
                 </div>
                 <div class="pillars">
