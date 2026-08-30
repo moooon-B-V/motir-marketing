@@ -100,7 +100,18 @@ export function SiteFooter() {
         </div>
       ))}
 
-      <div className="col-span-full border-t border-(--el-border) pt-4 text-[12px] text-(--el-text-muted)">
+      {/*
+       * ⚠️ `--el-text-secondary`, NOT `--el-text-muted` (MOTIR-3984). This strip
+       * sits on the footer's own `--el-surface-soft` band with no `Card` between
+       * it and that fill, and the muted ink on that band is **4.34:1** in the
+       * light `motir` palette — under the 4.5:1 WCAG 1.4.3 asks of 12px text,
+       * and `motir` is the palette a first-time visitor is served. `theme.css`
+       * states the figure at the token's own declaration and adds the rule in
+       * its own words: "a muted caption belongs inside a card, never on a panel"
+       * (MOTIR-2455). Secondary on the same band is what the rest of this footer
+       * already uses, and it is what `design/marketing/` draws.
+       */}
+      <div className="col-span-full border-t border-(--el-border) pt-4 text-[12px] text-(--el-text-secondary)">
         {/*
          * ⚠️ The year is computed on the SERVER, at render. This page is
          * statically rendered, so it is the BUILD's year rather than the

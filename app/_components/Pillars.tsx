@@ -37,7 +37,18 @@ export function Pillars() {
   return (
     <>
       <div className="mx-auto mb-8 max-w-[720px] text-center">
-        <span className="mb-2 block font-(family-name:--font-mono) text-[11px] font-semibold tracking-[0.06em] text-(--el-text-muted) uppercase">
+        {/*
+         * ⚠️ `--el-text-secondary`, NOT `--el-text-muted` (MOTIR-3984), and the
+         * `.ord` line inside each pillar below is the CONTRAST that makes the
+         * rule legible: this eyebrow sits directly on the band `app/page.tsx`
+         * paints `--el-surface-soft`, where the muted ink is **4.34:1** —
+         * under the 4.5:1 WCAG 1.4.3 asks of 11px text — while `.ord` sits
+         * inside a `Card` on `--el-page-bg`, where the same ink is 4.54:1 and
+         * stays. `theme.css` states both figures at the token's declaration:
+         * "a muted caption belongs inside a card, never on a panel"
+         * (MOTIR-2455).
+         */}
+        <span className="mb-2 block font-(family-name:--font-mono) text-[11px] font-semibold tracking-[0.06em] text-(--el-text-secondary) uppercase">
           {copy.landing.pillars.eyebrow}
         </span>
         <h2 className="mb-2 font-(family-name:--font-serif) text-[26px] leading-[1.2] font-bold tracking-[-0.015em] text-(--el-text) sm:text-[30px]">
