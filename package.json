@@ -19,7 +19,8 @@
     "test:design": "vitest run --config vitest.design.config.mts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "brand:icons": "node scripts/brand/generate-brand-icons.ts"
+    "brand:icons": "node scripts/brand/generate-brand-icons.ts",
+    "design:render": "node scripts/design/render-design-mock.ts"
   },
   "dependencies": {
     "@motir/brand": "0.2.0",
