@@ -15,7 +15,9 @@ UI of its own. Those live downstream in 7.15 / 7.17 / 7.3 and are owned by their
 **Asset files (three):** `design-notes.md` (this file, the AREA's note) · `landing.mock.html` (the
 source of truth — standalone, re-stating the shipped `--el-*` values so it paints without a Tailwind
 build, exactly as `motir-core/design/onboarding-entrance/*.mock.html` does) · `landing.png`
-(full-page Playwright chromium export, light theme, `deviceScaleFactor: 2`).
+(full-page Playwright chromium export, light theme, `deviceScaleFactor: 2`, re-exported with
+**`pnpm design:render design/marketing/landing.mock.html`** — the section _"Re-exporting a `.png`"_
+below).
 
 > **⚠️ The note is `design-notes.md`, NOT `landing.design-notes.md` — and this is a mechanism, not a
 > style preference.** MOTIR-1143's acceptance criterion asked for three files "sharing a basename";
@@ -227,6 +229,56 @@ silences.
 **The authoring rule the lane now enforces, restated so it can be read without running anything:** an
 annotation on the sheet takes `--el-text-secondary`, and a mark that carries state carries it in
 weight, a line or a shape — never in hue alone.
+
+---
+
+## ⚠️ Re-exporting a `.png` — `pnpm design:render` (MOTIR-4003)
+
+> **⚠️ THIS SECTION IS AREA-WIDE**, like the one above it. It governs BOTH assets in
+> `design/marketing/` and every asset added here afterwards.
+
+**Change a `.mock.html`, re-export its `.png`** — the export is the third file of the asset set and a
+mock whose export lags is an incomplete asset. The command is one line, from the repository root:
+
+```
+pnpm design:render design/marketing/<surface>.mock.html    # writes the .png
+pnpm design:render --verify design/marketing/*.mock.html   # reports, writes nothing
+```
+
+**Run it AFTER `pnpm format`** on the mock: prettier reformats the markup, so a PNG rendered from the
+pre-format source is not an export of what lands.
+
+**Both _asset files_ lines used to say only what the export WAS** — _"full-page Playwright chromium export,
+`deviceScaleFactor: 2`"_ — and until MOTIR-4001 added the `playwright` devDependency there was no
+browser in this repository at all, so every design card here reached down an absolute path into a
+SIBLING repository's `node_modules/.pnpm` for motir-core's chromium and re-derived the viewport by
+reading the committed PNG's width and halving it. `scripts/design/render-design-mock.ts` is that
+process, committed: it takes the viewport from the committed export rather than from a remembered
+number, and it pins the light theme, the full-page capture and `deviceScaleFactor: 2` so they are not
+re-typed from this sentence.
+
+**What it adds beyond convenience is a BASELINE, and that is the reason it is a script rather than a
+paragraph.** Before writing anything it renders the mock **as it stands at `HEAD`** and compares that
+to the committed `.png`, which separates a pixel change YOU made from a pixel change the ENVIRONMENT
+made — indistinguishable in a 2.3 MB binary diff:
+
+| verdict | what it means for the diff you are about to show a reviewer                                                     |
+| ------- | --------------------------------------------------------------------------------------------------------------- |
+| `EXACT` | the baseline is byte-identical, so the new PNG differs by exactly your edit                                     |
+| `DIMS`  | same dimensions, different bytes — a renderer-build difference, nothing reflowed                                |
+| `DRIFT` | different height: the committed export predates an environment change, and the height delta belongs to that gap |
+
+**Measured on `origin/main` at `be86ebb`, 2026-08-30** (`pnpm design:render --verify` on an unmodified
+tree): `design-showcase.mock.html` is **`EXACT`** at `1440@2x`, `2880×7916`; `landing.mock.html` is
+**`DIMS`** at `1320@2x`, `2640×14860`. Both are the verdicts MOTIR-4003 recorded, re-derived here
+against the merged tree rather than the branch they were first taken on.
+
+**`deviceScaleFactor` is PINNED at 2, not searched** — the convention both _asset files_
+lines state. An asset
+committed at another scale has an ODD export width, which a 2x render cannot produce; the tool reports
+`FAIL` for it and `tests/renderDesignMock.test.ts` names it before that happens. **A NEW asset has no
+baseline to recover the viewport from**, so it is the one case where the width is stated:
+`pnpm design:render --width 1320 design/marketing/<new>.mock.html`.
 
 ---
 
@@ -979,7 +1031,9 @@ the argument it makes is _"the design system Motir gives you is the one Motir we
 **Asset files (three):** this section of `design-notes.md` (the AREA's note) ·
 `design-showcase.mock.html` (the source of truth — standalone, re-stating the shipped `--el-*`
 values so it paints without a Tailwind build, exactly as `landing.mock.html` does) ·
-`design-showcase.png` (full-page Playwright chromium export, `deviceScaleFactor: 2`).
+`design-showcase.png` (full-page Playwright chromium export, `deviceScaleFactor: 2`, re-exported
+with **`pnpm design:render design/marketing/design-showcase.mock.html`** — the area-wide section
+_"Re-exporting a `.png`"_ above).
 
 > **⚠️ The note is a SECTION of `design-notes.md`, not `design-showcase.design-notes.md`** — the
 > convention this area already states above, ONE `design-notes.md` per AREA with the mock and the
