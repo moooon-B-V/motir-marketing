@@ -391,17 +391,20 @@ parameter is the contract, and the card that reads it is scheduled work.
 
 ### OUTBOUND (what this page can send you to — the point of the card)
 
-| affordance                                | goes to                                                 | owner                                                              |
-| ----------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------ |
-| Door 1 — **Start planning**               | pre-auth draft POST → `app.motir.co/sign-in?draft=<id>` | MOTIR-1458 (receiver, `done`) · MOTIR-1462 (carried panel, `done`) |
-| Door 2 — **Import**                       | `app.motir.co/sign-in?intent=import`                    | 7.15 / MOTIR-930 (wizard design) · 7.17 (Jira / Linear / Plane)    |
-| Door 3 — **Start free** (nav + hero line) | `app.motir.co/sign-up?intent=tracker`                   | MOTIR-655 (8.2 team first-run) · MOTIR-3639 (the intent hand-off)  |
-| Nav — **Sign in**                         | `app.motir.co/sign-in`                                  | shipped                                                            |
-| Nav — **Explore**                         | `app.motir.co/explore`                                  | Story 6.13 (the project square), shipped                           |
-| Nav — **Docs**                            | `app.motir.co/docs`                                     | Story 11.4, shipped                                                |
-| Open-core block — **Read the source**     | `github.com/moooon-B-V/motir-core`                      | —                                                                  |
-| Footer — Privacy · Terms · All legal      | `app.motir.co/legal/*`                                  | MOTIR-1134, shipped                                                |
-| Directory badges                          | outbound to Product Hunt / G2 / GitHub / AlternativeTo  | **MOTIR-1156** (8.3.9) fills the slots; this asset draws them      |
+| affordance                                                       | goes to                                                  | owner                                                              |
+| ---------------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------ |
+| Door 1 — **Start planning**                                      | pre-auth draft POST → `app.motir.co/sign-in?draft=<id>`  | MOTIR-1458 (receiver, `done`) · MOTIR-1462 (carried panel, `done`) |
+| Door 2 — **Import**                                              | `app.motir.co/sign-in?intent=import`                     | 7.15 / MOTIR-930 (wizard design) · 7.17 (Jira / Linear / Plane)    |
+| Door 3 — **Start free** (nav + hero line)                        | `app.motir.co/sign-up?intent=tracker`                    | MOTIR-655 (8.2 team first-run) · MOTIR-3639 (the intent hand-off)  |
+| Nav — **Sign in**                                                | `app.motir.co/sign-in`                                   | shipped                                                            |
+| Nav — **Explore**                                                | `app.motir.co/explore`                                   | Story 6.13 (the project square), shipped                           |
+| Nav — **Docs**                                                   | `app.motir.co/docs`                                      | Story 11.4, shipped                                                |
+| Nav — **Design**                                                 | `motir.co/design` — the ONE internal destination         | MOTIR-1043 (the public design showcase), shipped 2026-08-29        |
+| Open-core block — **Motir on GitHub**                            | `github.com/moooon-B-V/motir-core`                       | —                                                                  |
+| Footer — Start free · Sign in                                    | the bar's own two doors, repeated at the foot            | as the bar                                                         |
+| Footer — Explore projects · Docs · GitHub                        | `app.motir.co/explore` · `/docs` · the source repository | as the bar, plus the repository                                    |
+| Footer — Privacy Policy · Terms of Service · All legal documents | `app.motir.co/legal/*`                                   | MOTIR-1134, shipped                                                |
+| Directory badges                                                 | outbound to Product Hunt / G2 / GitHub / AlternativeTo   | **MOTIR-1156** (8.3.9) fills the slots; this asset draws them      |
 
 ### ⚠️ What this page explicitly does NOT draw
 
@@ -412,9 +415,15 @@ orchestration MOTIR-931) and by 7.17 for Jira, Linear and Plane. Door 1 draws an
 discovery chat — the conversation is 7.3's surface and begins after auth. Re-drawing any of it here
 would duplicate a design that already exists and would drift from it the day it changes.
 
-**And no pricing page, no product page, no blog.** The footer names them as plain labels, exactly as
-`ExploreFooter` already does for the pages that do not resolve — never as dead links a crawler would
-follow into a 404.
+**And no pricing page, no product page, no blog.** ⚠️ **CORRECTED 2026-08-30 (MOTIR-4028) — this
+paragraph used to say the footer _"names them as plain labels, exactly as `ExploreFooter` already does
+for the pages that do not resolve"_, and the page shipped the opposite rule.**
+`app/_components/SiteFooter.tsx` states it in its own header: _"EVERY ITEM HERE RESOLVES, AND THE ONES
+THAT DO NOT ARE ABSENT RATHER THAN DRAWN AS LABELS"_ — it applies to the footer the rule this asset
+already applied one section up, where `Product` and `Pricing` are dropped from the nav because they
+"render as dead text there". So there is no pricing, product or blog row at all, in the page or in this
+asset; when those pages land they arrive with their own strings and their own links. Never as dead links
+a crawler would follow into a 404, and now not as dead labels either.
 
 ---
 
@@ -424,7 +433,11 @@ follow into a 404.
 
 - **Top bar.** The 26 px horizontal brand lockup at the extreme left (glyph
   `--el-accent-on-surface`, wordmark `--el-text`, the §3 proportions: `0.72 ×` and `0.33 ×` the
-  glyph box). Nav — `Explore`, `Docs` — as `--el-text-secondary`. Right cluster: `Sign in` as a
+  glyph box). Nav — `Explore`, `Docs`, `Design` — as `--el-text-secondary` at 13.5 px / 400.
+  **`Design` is the ONE internal destination in this bar** (`motir.co/design`, MOTIR-1043); every
+  other item leaves the origin, which is why the page makes it a `next/link` and the rest plain
+  anchors. Its current-page treatment is not drawn here — motir.co's root is never that page — and
+  lives in `design-showcase.mock.html`. Right cluster: `Sign in` as a
   ghost `Button`, `Start free` as a primary `Button` with `ArrowRight`. `--el-surface-soft` fill on
   an `--el-border` hairline, matching `ExploreTopBar`.
 - **Hero, centred, 720 px column.** The _Build with AI_ eyebrow chip on `--el-tint-lavender`; a
@@ -447,18 +460,32 @@ follow into a 404.
   statement, and a link to the source. It is not a fourth pillar and is not drawn as one.
 - **Social proof / directory badges**, a quiet centred band: a mono caption and four dashed **slots**.
   The slots are drawn; what goes in them is MOTIR-1156's.
-- **Footer**, four columns on `--el-surface-soft`, mirroring `ExploreFooter`: brand + tagline ·
-  Product · Explore · Company (with the three legal rows), then a legal strip naming **moooon B.V.**
-  and the GPL-3.0 split.
+- **Footer**, four columns on `--el-surface-soft`, mirroring `ExploreFooter`: a brand column of the
+  22 px lockup and **two** paragraphs — the platform tagline, then the open-source line — followed by
+  **PRODUCT** (Start free · Sign in) · **RESOURCES** (Explore projects · Docs · GitHub) · **LEGAL**
+  (Privacy Policy · Terms of Service · All legal documents), then a legal strip reading
+  _"© 2026 moooon B.V. · Motir is a product of moooon B.V."_ Eight links, every one of which resolves.
+  (Until 2026-08-30 this asset drew `PRODUCT · EXPLORE · COMPANY`, twelve links of which four
+  resolved, and a one-line brand block — MOTIR-4028.)
 
 ### Panel 2 — the landing, mobile (390)
 
-Everything reflows to one column. The nav collapses behind the menu button and **the two things that
-survive into the bar are the brand and `Start free`** — door 3's nav half is the last thing to go,
-not the first, because it is the only door in the bar. The doors keep their order and their
-weighting: the idea box is still the fold, the import row still sits under the `OR`, the tertiary
-line still reads as a line. The pillars stack under the same three-part band head — the eyebrow
-survives the reflow, as it does on the page — and the badge band drops to three slots.
+Everything reflows to one column — the footer included, which is what the page does below the `sm`
+breakpoint (`grid gap-8 … sm:grid-cols-2`), so the brand block and all three columns stack. **All
+three nav links — `Explore`, `Docs`, `Design` — collapse behind the menu button, together with
+`Sign in`; the two things that survive into the bar are the brand and `Start free`** — door 3's nav
+half is the last thing to go, not the first, because it is the only door in the bar. The open panel
+is deliberately not drawn: it is those same four items in a stack, and this board is about the BAR.
+The doors keep their order and their weighting: the idea box is still the fold, the import row still
+sits under the `OR`, the tertiary line still reads as a line. The pillars stack under the same
+three-part band head — the eyebrow survives the reflow, as it does on the page — the open-core row
+follows them, and the badge band draws its four slots.
+
+**⚠️ This board used to ABBREVIATE, and an abbreviation is indistinguishable from a claim
+(MOTIR-4028).** It drew two-thirds of a footer, three badge slots, no band lede, no open-core row and
+its own shortened pillar bodies — none of which the page does at 390. A reader cannot tell a board
+that omits an element from a page that does not have one, which is the same defect as the missing nav
+entry one line up, so the mobile board now draws everything the desktop board draws.
 
 ### Panel 3 — door 1's four states
 
@@ -467,7 +494,7 @@ survives the reflow, as it does on the page — and the badge band drops to thre
 | **empty (rest)**  | The textarea holds focus on load; the visible focus ring is a 2 px `--el-accent-on-surface` outline at 2 px offset. **Submit is ENABLED on an empty idea** — the box is a head-start, not a gate, exactly as the `/onboarding` entrance decided. The counter is present but `visibility: hidden`, so revealing it later never reflows the footer row. |
 | **typing**        | The counter appears on the first keystroke, reading `<n> / 2000`.                                                                                                                                                                                                                                                                                     |
 | **submitting**    | The button LABEL changes to _Starting…_ beside a spinning `LoaderCircle`, the control takes `aria-busy`, and the textarea is disabled so a second submit cannot double-POST the draft.                                                                                                                                                                |
-| **submit-failed** | A `role="alert"` banner between the textarea and the footer: an `--el-danger` hairline over `--el-danger-surface` with `--el-danger-on-surface` ink and a `CircleAlert` glyph. **The typed idea is never cleared** — the banner says so. Two exits: _Try again_, and _Continue without it_ → `app.motir.co/sign-up`.                                  |
+| **submit-failed** | A `role="alert"` banner between the textarea and the footer: an `--el-danger` hairline over `--el-danger-surface` with `--el-danger-on-surface` ink and a `CircleAlert` glyph. **The typed idea is never cleared** — the banner says so. Two exits: _Try again_, and _Continue to Motir_ → `app.motir.co/sign-up`.                                    |
 
 **Why the 2000-character counter is not decoration.** `motir-core/lib/onboarding/pendingIdea.ts`
 sets `MAX_PENDING_IDEA_LENGTH = 2000` and `normalizePendingIdea()` **truncates** rather than rejects.
@@ -616,6 +643,63 @@ arithmetic a reading rather than a story — re-rendering the UNMODIFIED mock fr
 `60687ca3…` re-rendered): MOTIR-4003's `DIMS`, a renderer-build difference with no reflow. So the height
 in this diff is the element, and nothing else is.
 
+#### ⚠️ AND THE SAME QUESTION ASKED OF THE WHOLE PAGE RETURNED TWENTY — swept 2026-08-30 (MOTIR-4028)
+
+The eyebrow was found by asking _"is this ONE element in the asset?"_. **The instrument that answers
+it for the whole page is a two-directional STRICT text diff** — the production build and the mock
+board both loaded in headless chromium, every VISIBLE element carrying its own text node collected
+with its resolved size / weight / family / transform / tracking / ink, the two sets compared on
+EXACT normalised text:
+
+```
+$ node treeDiff2.mjs http://127.0.0.1:3428/ design/marketing/landing.mock.html "section.panel:nth-of-type(1)" 1280
+```
+
+| ref                                        | shipped | mock board | in the SHIPPED page, absent from the board |
+| ------------------------------------------ | ------- | ---------- | ------------------------------------------ |
+| `origin/main` `be86ebb`, before            | 61      | 68         | **20**                                     |
+| this diff, after                           | 61      | 65         | **0**                                      |
+| `origin/main` `be86ebb`, 390 board, before | 57      | 53         | 21                                         |
+| this diff, 390 board, after                | 57      | 63         | **0**                                      |
+
+The twenty were **1** element the asset never gained (the `Design` nav entry), **8** footer
+divergences (a different column SET, 12 links against 8, a one-line brand block against two
+paragraphs) and **11** strings the site had re-written since the asset was drawn. Every one is
+resolved by moving the ASSET to the page: the shipped copy, footer and nav are the specification,
+and no runtime file is touched.
+
+**What survives on the mock side is the doc-annotation chrome and nothing else** — four elements per
+board, the same four: the panel NUMBER, the panel CAPTION, the panel NOTE and the `viewport …` rule.
+They are the board's own scaffolding and have no counterpart in a page.
+
+**Exact equality is load-bearing, and this is the sentence to keep.** A first pass matched loosely
+(`a.includes(b) || b.includes(a)`) and reported **4**; the same data under exact equality reports 21.
+`Docs` matched `Documentation`, `Explore projects` matched `Explore`, `All legal documents` matched
+`All legal`. **A matcher that matches MORE than the claim under-reports** — here by a factor of five.
+
+**And a board that ABBREVIATES is making a claim it does not know it is making.** The 390 board drew
+two-thirds of a footer, three badge slots, no band lede and no open-core row, plus its own shortened
+pillar bodies. None of those is a re-written string, so a diff of the desktop board never sees them
+and a reader cannot tell an omission from a page that does not have the element. That is the same
+defect as the missing nav entry, in the direction nothing measures, so the 390 board now draws
+everything the page draws at 390 — including the ONE-column footer the page reflows to there.
+
+**The export, and why its height is attributable.** Re-rendered at the same 1320 × `deviceScaleFactor: 2`
+viewport, light, full page:
+
+| render                                                       | dimensions         | `sha256` (12)  |
+| ------------------------------------------------------------ | ------------------ | -------------- |
+| the committed `landing.png` (MOTIR-4000's)                   | `2640 × 14860`     | `026e19bb198f` |
+| re-render of the UNMODIFIED `origin/main` mock (the control) | `2640 × 14860`     | `5486d9fae077` |
+| this diff                                                    | **`2640 × 16628`** | `5d2f18c1988a` |
+
+The control reproduces the committed DIMENSIONS and not the committed BYTES — MOTIR-4003's `DIMS`
+verdict, a renderer-build difference with no reflow — so the height in this diff is the content and
+nothing else. **The renderer changed because the repository now HAS one:** MOTIR-4001 added
+`playwright` as a devDependency here, whose chromium is **151.0.7922.34**, where every earlier design
+card in this area borrowed `motir-core`'s at **148.0.7778.0**. MOTIR-4000 predicted this control would
+report `EXACT` after its own re-export; it reports `DIMS`, and the browser version is why.
+
 #### ⚠️ THE CARD SAID ONE ELEMENT AND THE SITE PAINTED TWO — and the reason is the third occurrence of one shape
 
 MOTIR-3984 was filed naming **the footer alone** (_"One element is on the wrong ink"_), and both sites
@@ -762,14 +846,14 @@ item to mark.
 
 ## Open findings this design surfaced (filed, not deferred)
 
-| finding                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | card                                                                                           |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                                                                                                                                                                                                                                                                              | **MOTIR-3743** (pre-existing; this card is `relates_to` it)                                    |
-| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                                                                                                                                                                                                                                                                     | **MOTIR-3746** → **MOTIR-3846**                                                                |
-| ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version**                                                                                                                                                                                                                                                    | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**                                               |
-| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository — **but a lane is no longer how a result is published; see below**                                                                                                                                                                                                                                                                                      | **MOTIR-3750**                                                                                 |
-| ~~**This asset does not draw the pillars EYEBROW `app/_components/Pillars.tsx` ships** (`div.band-head` has `h2` + `p` only, in both boards) — so the element scan of the mock is structurally unable to see anything that element carries~~ — **CLOSED 2026-08-30: both boards draw it; the scan's population went 242 → 244 and its findings stayed 0**                                                                                                                                                   | **MOTIR-4000** (filed by MOTIR-3984, `blocked_by` MOTIR-3985 — both re-exported `landing.png`) |
-| **And the same question asked of the WHOLE page returns twenty more** — the `Design` nav entry (`/design`, shipped 2026-08-29), a footer whose column set (`PRODUCT · RESOURCES · LEGAL` against the asset's `PRODUCT · EXPLORE · COMPANY`), link count (8 against 12) and brand block all differ, and eleven strings the copy has since re-written. Measured, not asserted: a strict two-directional text diff of the production build against this board, EXACT equality (a substring matcher reports 4). | **MOTIR-4028** (filed by MOTIR-4000, `blocked_by` it — both re-export `landing.png`)           |
+| finding                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | card                                                                                           |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | **MOTIR-3743** (pre-existing; this card is `relates_to` it)                                    |
+| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | **MOTIR-3746** → **MOTIR-3846**                                                                |
+| ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**                                               |
+| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository — **but a lane is no longer how a result is published; see below**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | **MOTIR-3750**                                                                                 |
+| ~~**This asset does not draw the pillars EYEBROW `app/_components/Pillars.tsx` ships** (`div.band-head` has `h2` + `p` only, in both boards) — so the element scan of the mock is structurally unable to see anything that element carries~~ — **CLOSED 2026-08-30: both boards draw it; the scan's population went 242 → 244 and its findings stayed 0**                                                                                                                                                                                                                                                                                                                                                                                  | **MOTIR-4000** (filed by MOTIR-3984, `blocked_by` MOTIR-3985 — both re-exported `landing.png`) |
+| ~~**And the same question asked of the WHOLE page returns twenty more** — the `Design` nav entry (`/design`, shipped 2026-08-29), a footer whose column set (`PRODUCT · RESOURCES · LEGAL` against the asset's `PRODUCT · EXPLORE · COMPANY`), link count (8 against 12) and brand block all differ, and eleven strings the copy has since re-written~~ — **CLOSED 2026-08-30: re-measured at `origin/main` `be86ebb` as exactly **20**, the same members; the shipped-side list of BOTH boards is now empty and the scan's population went 244 → 252 with its findings unchanged.** Measured, not asserted: a strict two-directional text diff of the production build against the board, EXACT equality (a substring matcher reports 4). | **MOTIR-4028** (filed by MOTIR-4000, `blocked_by` it — both re-export `landing.png`)           |
 
 **⚠️ AND THE MISSING LANE NO LONGER STOPS A DESIGN RESULT REACHING THE CARD (MOTIR-3874).** MOTIR-3780
 retired the branch-derived publisher in every repository: the AGENT publishes, by naming its own card
@@ -823,6 +907,15 @@ linked.
 9. **Copy comes from MOTIR-1144**, not from this mock.
 
 ## Notes for MOTIR-1144 (the copy)
+
+> **⚠️ THE DIRECTION REVERSED ON 2026-08-30 (MOTIR-4028), and this section is now a SHAPE brief, not a
+> source of strings.** `messages/en.json` exists and has shipped; the words on the page are its words.
+> **So every string this asset renders that the page also renders is now the SHIPPED string, taken from
+> the catalogue or the rendered page and never re-written here** — a mock is product COPY, not a sketch,
+> and a reader who transcribes a re-written line into a catalogue has shipped it. The bullets below say
+> what each slot has to DO (how long, what register, what it must name); they no longer say what it says.
+> The instrument that keeps the two in step is the strict text diff above (§ _AND THE SAME QUESTION ASKED
+> OF THE WHOLE PAGE_) — it goes non-zero the moment either side moves.
 
 The layout fixes the shape of what the words have to do, and it is worth having in hand:
 

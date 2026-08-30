@@ -879,6 +879,12 @@
         line-height: 1.6;
         color: var(--el-text-secondary);
       }
+      /* The brand column is TWO paragraphs, at the shipped rhythm: the
+         tagline at `mt-2.5` (10px) under the lockup and the open-source line at
+         `mt-2` (8px) under it (app/_components/SiteFooter.tsx). */
+      .foot .tag + .tag {
+        margin-top: 8px;
+      }
       .foot .legal {
         grid-column: 1 / -1;
         border-top: 1px solid var(--el-border);
@@ -933,12 +939,15 @@
       .mobile .opencore {
         flex-direction: column;
       }
+      /* ONE column, which is what the page does here: SiteFooter is
+         `grid gap-8 … sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]`, and 390
+         is below the `sm` breakpoint, so the brand block and all three columns
+         stack. The two-up this used to draw needed a `grid-column: 1 / -1` on
+         the brand column to hold together; at one track there is nothing left
+         for that rule to do. */
       .mobile .foot {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         padding: 28px 16px;
-      }
-      .mobile .foot .brandcol {
-        grid-column: 1 / -1;
       }
 
       /* ── state close-ups ──────────────────────────────────────────── */
@@ -1186,6 +1195,7 @@
               <nav class="nav" aria-label="Main">
                 <a href="https://app.motir.co/explore">Explore</a>
                 <a href="https://app.motir.co/docs">Docs</a>
+                <a href="https://motir.co/design">Design</a>
               </nav>
               <div class="bar-cta">
                 <a class="btn ghost sm" href="https://app.motir.co/sign-in"
@@ -1235,11 +1245,11 @@
                   </svg>
                   Build with AI</span
                 >
-                <h1>Bring an idea, or bring your project.</h1>
+                <h1>What do you want to build?</h1>
                 <p class="lede">
-                  Motir plans it with you, tracks it on a real board, and hands
-                  it to agents that do the work — the AI planning,
-                  project-management and agent orchestration platform.
+                  The AI planning, project-management and agent orchestration
+                  platform. Describe what you want to build — Motir drafts the
+                  plan with you, then agents take over the work.
                 </p>
 
                 <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
@@ -1394,11 +1404,12 @@
               <section class="band">
                 <div class="band-head">
                   <span class="band-eyebrow">A vibe project</span>
-                  <h2>One loop, three pieces</h2>
+                  <h2>You've heard of vibe coding. This is a vibe project.</h2>
                   <p>
-                    Motir is not a planner bolted onto a project-management
-                    tool. Planning feeds the board, and the board feeds the
-                    agents that do the work.
+                    You bring the idea. Motir carries it from a sentence to a
+                    shipped project — the planning, the tracking, and the work
+                    itself. And not only the code: design, decisions, content
+                    and tests are work items too.
                   </p>
                 </div>
                 <div class="pillars">
@@ -1423,9 +1434,10 @@
                     <span class="ord">01</span>
                     <h3>AI planning</h3>
                     <p>
-                      Describe an idea in your own words. Motir asks the
-                      follow-up questions, then drafts an epic → story → task
-                      tree you read and edit before a line is written.
+                      Describe what you want in your own words. Motir asks
+                      follow-up questions, then drafts a plan you read before
+                      anything is built — epics, stories and work items, with
+                      the dependencies between them.
                     </p>
                   </article>
                   <article class="pillar">
@@ -1447,10 +1459,10 @@
                     <span class="ord">02</span>
                     <h3>Project management</h3>
                     <p>
-                      Real project management underneath: boards, sprints, a
-                      backlog, estimates, dependencies and blocked-by views,
-                      comments, search and reports. Usable on its own, with no
-                      AI at all.
+                      A complete project-management tool underneath it all:
+                      boards, sprints, a backlog, roadmaps, dependencies,
+                      comments and reports. It stands on its own, whether or not
+                      you ever use the AI.
                     </p>
                   </article>
                   <article class="pillar">
@@ -1474,10 +1486,9 @@
                     <span class="ord">03</span>
                     <h3>Agent orchestration</h3>
                     <p>
-                      Hand a card to an agent and it takes over the work —
-                      design, decisions, content, tests, code — and reports back
-                      on the board. Bring your own agent, or use a Motir-hosted
-                      one.
+                      Approve the plan and agents take over the work, one work
+                      item at a time, each arriving as a pull request you
+                      review. Use Motir's agents, or your own.
                     </p>
                   </article>
                 </div>
@@ -1501,14 +1512,14 @@
                     </svg>
                   </span>
                   <div>
-                    <h3>Open core — Motir is yours, GPL-3.0</h3>
+                    <h3>Open core</h3>
                     <p>
-                      The whole project-management layer is open source and
-                      self-hostable: work items, boards, sprints, collaboration,
-                      search, reporting and admin. The AI planning and agent
-                      layers are the commercial part.
+                      The project-management core is open source under the GPL —
+                      the whole tool, not a cut-down edition. Run it yourself,
+                      read every line of it, or let us host it. AI planning and
+                      agent orchestration are the commercial layers on top.
                       <a href="https://github.com/moooon-B-V/motir-core"
-                        >Read the source →</a
+                        >Motir on GitHub →</a
                       >
                     </p>
                   </div>
@@ -1551,47 +1562,57 @@
                 </a>
                 <p class="tag">
                   The AI planning, project-management and agent orchestration
-                  platform. Open core, built in the open.
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
                 </p>
               </div>
               <div>
                 <h2>Product</h2>
                 <ul>
-                  <li>Overview</li>
-                  <li>AI planning</li>
-                  <li>Boards &amp; sprints</li>
-                  <li><a href="https://app.motir.co/docs">Documentation</a></li>
-                  <li>Pricing</li>
-                </ul>
-              </div>
-              <div>
-                <h2>Explore</h2>
-                <ul>
                   <li>
-                    <a href="https://app.motir.co/explore">Public projects</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/moooon-B-V/motir-core"
-                      >Open source</a
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
                     >
                   </li>
-                  <li>Blog</li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
                 </ul>
               </div>
               <div>
-                <h2>Company</h2>
+                <h2>Resources</h2>
                 <ul>
-                  <li>About</li>
-                  <li>Contact</li>
                   <li>
-                    <a href="https://app.motir.co/legal/privacy">Privacy</a>
+                    <a href="https://app.motir.co/explore">Explore projects</a>
                   </li>
-                  <li><a href="https://app.motir.co/legal/terms">Terms</a></li>
-                  <li><a href="https://app.motir.co/legal">All legal</a></li>
+                  <li><a href="https://app.motir.co/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/legal/privacy"
+                      >Privacy Policy</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://app.motir.co/legal/terms"
+                      >Terms of Service</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://app.motir.co/legal">All legal documents</a>
+                  </li>
                 </ul>
               </div>
               <div class="legal">
-                © 2026 moooon B.V. · Motir is open core — motir-core is GPL-3.0.
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
               </div>
             </footer>
           </div>
@@ -1606,11 +1627,15 @@
           <span class="n">2</span>
           <h2>The landing — mobile</h2>
           <span class="note"
-            >390 px. The nav links collapse behind the menu; the two things that
-            survive into the bar are the brand and
-            <strong>Start free</strong> (door 3's nav half). The doors keep
-            their order and their weighting — the idea box never becomes one of
-            three cards.</span
+            >390 px. All THREE nav links — Explore, Docs and Design — collapse
+            behind the menu button, together with <strong>Sign in</strong>; the
+            two things that survive into the bar are the brand and
+            <strong>Start free</strong> (door 3's nav half), because door 3 is
+            the only door up here and a visitor who wants the project-management
+            tool has no other route in from the public web. The open panel is
+            not drawn: it is the same four items in a stack, and the bar is what
+            this board is about. The doors keep their order and their weighting
+            — the idea box never becomes one of three cards.</span
           >
         </div>
         <p class="rule">viewport 390 · signed-out · motir.co</p>
@@ -1686,11 +1711,11 @@
                   </svg>
                   Build with AI</span
                 >
-                <h1>Bring an idea, or bring your project.</h1>
+                <h1>What do you want to build?</h1>
                 <p class="lede">
-                  Motir plans it with you, tracks it on a real board, and hands
-                  it to agents that do the work — the AI planning,
-                  project-management and agent orchestration platform.
+                  The AI planning, project-management and agent orchestration
+                  platform. Describe what you want to build — Motir drafts the
+                  plan with you, then agents take over the work.
                 </p>
 
                 <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
@@ -1845,7 +1870,13 @@
               <section class="band">
                 <div class="band-head">
                   <span class="band-eyebrow">A vibe project</span>
-                  <h2>One loop, three pieces</h2>
+                  <h2>You've heard of vibe coding. This is a vibe project.</h2>
+                  <p>
+                    You bring the idea. Motir carries it from a sentence to a
+                    shipped project — the planning, the tracking, and the work
+                    itself. And not only the code: design, decisions, content
+                    and tests are work items too.
+                  </p>
                 </div>
                 <div class="pillars">
                   <article class="pillar">
@@ -1869,8 +1900,10 @@
                     <span class="ord">01</span>
                     <h3>AI planning</h3>
                     <p>
-                      Describe an idea. Motir asks the follow-up questions, then
-                      drafts a tree you read and edit before a line is written.
+                      Describe what you want in your own words. Motir asks
+                      follow-up questions, then drafts a plan you read before
+                      anything is built — epics, stories and work items, with
+                      the dependencies between them.
                     </p>
                   </article>
                   <article class="pillar">
@@ -1892,8 +1925,10 @@
                     <span class="ord">02</span>
                     <h3>Project management</h3>
                     <p>
-                      Boards, sprints, a backlog, dependencies and reports.
-                      Usable on its own, with no AI at all.
+                      A complete project-management tool underneath it all:
+                      boards, sprints, a backlog, roadmaps, dependencies,
+                      comments and reports. It stands on its own, whether or not
+                      you ever use the AI.
                     </p>
                   </article>
                   <article class="pillar">
@@ -1917,10 +1952,41 @@
                     <span class="ord">03</span>
                     <h3>Agent orchestration</h3>
                     <p>
-                      Hand a card to an agent and it takes over the work, then
-                      reports back on the board.
+                      Approve the plan and agents take over the work, one work
+                      item at a time, each arriving as a pull request you
+                      review. Use Motir's agents, or your own.
                     </p>
                   </article>
+                </div>
+                <!-- open-core framing -->
+                <div class="opencore">
+                  <span class="icn" aria-hidden="true"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="18" r="3" />
+                      <circle cx="6" cy="6" r="3" />
+                      <circle cx="18" cy="6" r="3" />
+                      <path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9" />
+                      <path d="M12 12v3" /></svg
+                  ></span>
+                  <div>
+                    <h3>Open core</h3>
+                    <p>
+                      The project-management core is open source under the GPL —
+                      the whole tool, not a cut-down edition. Run it yourself,
+                      read every line of it, or let us host it. AI planning and
+                      agent orchestration are the commercial layers on top.
+                      <a href="https://github.com/moooon-B-V/motir-core"
+                        >Motir on GitHub →</a
+                      >
+                    </p>
+                  </div>
                 </div>
               </section>
               <section class="proof">
@@ -1928,7 +1994,8 @@
                 <div class="badges">
                   <span class="badge-slot">Product Hunt</span>
                   <span class="badge-slot">G2</span>
-                  <span class="badge-slot">GitHub</span>
+                  <span class="badge-slot">GitHub</span
+                  ><span class="badge-slot">AlternativeTo</span>
                 </div>
               </section>
             </main>
@@ -1957,27 +2024,55 @@
                   The AI planning, project-management and agent orchestration
                   platform.
                 </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
               </div>
               <div>
                 <h2>Product</h2>
                 <ul>
-                  <li>Overview</li>
-                  <li>AI planning</li>
-                  <li><a href="https://app.motir.co/docs">Documentation</a></li>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
                 </ul>
               </div>
               <div>
-                <h2>Company</h2>
+                <h2>Resources</h2>
                 <ul>
-                  <li>About</li>
                   <li>
-                    <a href="https://app.motir.co/legal/privacy">Privacy</a>
+                    <a href="https://app.motir.co/explore">Explore projects</a>
                   </li>
-                  <li><a href="https://app.motir.co/legal">All legal</a></li>
+                  <li><a href="https://app.motir.co/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/legal/privacy"
+                      >Privacy Policy</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://app.motir.co/legal/terms"
+                      >Terms of Service</a
+                    >
+                  </li>
+                  <li>
+                    <a href="https://app.motir.co/legal">All legal documents</a>
+                  </li>
                 </ul>
               </div>
               <div class="legal">
-                © 2026 moooon B.V. · motir-core is GPL-3.0.
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
               </div>
             </footer>
           </div>
@@ -2140,14 +2235,14 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
                   </svg>
                 </span>
                 <span>
-                  <strong>We couldn't hand your idea over.</strong> Your text is
-                  still here — nothing was lost.
-                  <span class="retry">
-                    <a href="#">Try again</a>
-                    <a href="https://app.motir.co/sign-up"
-                      >Continue without it</a
-                    >
-                  </span>
+                  <strong>We couldn't save your idea just now.</strong> Nothing
+                  you typed has been lost. Try again, or continue to Motir and
+                  bring your idea with you.<span class="retry"
+                    ><a href="#">Try again</a
+                    ><a href="https://app.motir.co/sign-up"
+                      >Continue to Motir</a
+                    ></span
+                  >
                 </span>
               </div>
               <div class="idea-foot">
@@ -2228,6 +2323,7 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
               <nav class="nav" aria-label="Main">
                 <a href="https://app.motir.co/explore">Explore</a>
                 <a href="https://app.motir.co/docs">Docs</a>
+                <a href="https://motir.co/design">Design</a>
               </nav>
               <div class="bar-cta">
                 <a class="btn ghost sm" href="https://app.motir.co/sign-in"
@@ -2274,11 +2370,11 @@ A time-off and leave app for a 20-person startup. Employees request days off, a 
                   </svg>
                   Build with AI</span
                 >
-                <h1>Bring an idea, or bring your project.</h1>
+                <h1>What do you want to build?</h1>
                 <p class="lede">
-                  Motir plans it with you, tracks it on a real board, and hands
-                  it to agents that do the work — the AI planning,
-                  project-management and agent orchestration platform.
+                  The AI planning, project-management and agent orchestration
+                  platform. Describe what you want to build — Motir drafts the
+                  plan with you, then agents take over the work.
                 </p>
 
                 <!-- THE FORK — two CO-EQUAL doors. Same card treatment, same accent border, same
