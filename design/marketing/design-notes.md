@@ -403,9 +403,12 @@ follow into a 404.
   source rows. They stretch to equal height. One hint line, centred, sits under both.
 - **Door 3's second half** — one centred line: _"Just want project management? **Start free** — boards,
   sprints and a backlog, with no AI in the way."_ `Start free` is an `--el-link` text link.
-- **The three pillars**, on an `--el-surface-soft` band: a 3-column grid of `Card`s, each with a
-  tinted 40 px icon tile (lavender / sky / mint), an ordinal, an `<h3>` and two lines of body. The
-  three are named exactly: **AI planning · project management · agent orchestration.**
+- **The three pillars**, on an `--el-surface-soft` band. The band opens on a centred head of three
+  parts — a mono **eyebrow** (11 px / 600, uppercase, 0.06em, `--el-text-secondary`), a serif `<h2>`
+  and a lede — then a 3-column grid of `Card`s, each with a tinted 40 px icon tile (lavender / sky /
+  mint), an ordinal, an `<h3>` and two lines of body. The three are named exactly: **AI planning ·
+  project management · agent orchestration.** (The eyebrow is MOTIR-4000's; the asset drew the `<h2>`
+  and the lede alone until 2026-08-30, while the page had shipped all three since `b3c2836`.)
 - **Open-core framing**, a full-width row under the pillars: a peach `GitFork` tile, the GPL-3.0
   statement, and a link to the source. It is not a fourth pillar and is not drawn as one.
 - **Social proof / directory badges**, a quiet centred band: a mono caption and four dashed **slots**.
@@ -420,7 +423,8 @@ Everything reflows to one column. The nav collapses behind the menu button and *
 survive into the bar are the brand and `Start free`** — door 3's nav half is the last thing to go,
 not the first, because it is the only door in the bar. The doors keep their order and their
 weighting: the idea box is still the fold, the import row still sits under the `OR`, the tertiary
-line still reads as a line. The pillars stack; the badge band drops to three slots.
+line still reads as a line. The pillars stack under the same three-part band head — the eyebrow
+survives the reflow, as it does on the page — and the badge band drops to three slots.
 
 ### Panel 3 — door 1's four states
 
@@ -570,7 +574,13 @@ The `.ord` line inside each pillar KEPT `--el-text-muted`: it sits in a `Card` o
 changed, `landing.mock.html` was CORRECT about what shipped — so correcting the asset first would have
 made it draw a page that did not exist, which is the exact defect MOTIR-3931 was filed about, inverted.
 `landing.png` is re-exported with them, at the same 1320 × `deviceScaleFactor: 2` viewport as before
-(2640 × 14762 both times — the geometry is a control on the re-export).
+(2640 × 14762 both times — the geometry is a control on the re-export). **It is `2640 × 14860` as of
+MOTIR-4000**: the eyebrow costs a 16.5 px line box plus an 8 px margin, so **24.5 CSS px per board** and
+`2 × 24.5 × 2 = 98` device px in a two-board export. The control still holds and is what makes that
+arithmetic a reading rather than a story — re-rendering the UNMODIFIED mock from `origin/main` returns
+`2640 × 14762`, the committed dimensions, with different bytes (`sha256` `5aeaf19d…` committed against
+`60687ca3…` re-rendered): MOTIR-4003's `DIMS`, a renderer-build difference with no reflow. So the height
+in this diff is the element, and nothing else is.
 
 #### ⚠️ THE CARD SAID ONE ELEMENT AND THE SITE PAINTED TWO — and the reason is the third occurrence of one shape
 
@@ -601,6 +611,43 @@ element ruled at its own size and weight, the harness of _How this asset was mea
 the product layer**, down from 2. The 19 that remain are the doc-annotation scaffold — the panel
 captions, the `viewport …` rules, the measurement lines, at 4.09:1 — which are MOTIR-3985's, together
 with the 35 in the showcase mock.
+
+> **⚠️ THOSE 19 ARE GONE — MOTIR-3985 swept them the same day, and the sentence above is kept as the
+> record of what the count WAS.** The scan over this asset on `origin/main` at `c470db2` returns **0
+> findings, light and dark**; the same harness against the pre-sweep mock (`git show
+3035904:design/marketing/landing.mock.html`) returns **19**, all light, all at 4.09:1. That second
+> run is the control: a scan that reports zero is only worth the reading if it can still be made to
+> report something.
+
+#### ⚠️ AND THE ASSET WAS MEASURED GREEN FOR AN ELEMENT IT DID NOT DRAW — repaired 2026-08-30 (MOTIR-4000)
+
+The paragraph above is the third occurrence of one shape and it names the instrument correctly. **What
+it could not say is that its own instrument had the same hole**: `div.band-head` drew `<h2>` and `<p>`
+only, in both boards, so the eyebrow `app/_components/Pillars.tsx` opens the band with was not in the
+asset, was therefore not in the population the element scan walks, and could not appear in any count
+however carefully the scan was run. **The scan reported 0 and the number was correct**; the SET it was
+correct about was not the set the sentence was about.
+
+**MOTIR-4000 draws it, in both boards** — `.band-head .band-eyebrow`, 11px/600 mono, uppercase, 0.06em,
+`--el-text-secondary`, the string `A vibe project` from `messages/en.json`. Every value is read off the
+RENDERED component (production build, `getComputedStyle`), not off its Tailwind classes: `11px` /
+`600` / `JetBrains Mono` / `uppercase` / `0.66px` / `rgb(93, 91, 84)` / `16.5px` line box / `8px`
+bottom margin, and the mock reads back the same nine values in both boards. It is `--el-text-secondary`
+and not `--el-text-muted` for the reason the component's own comment gives, and it clears at **6.51:1**
+on the band.
+
+**The number that shows the repair is the POPULATION, not the findings.** Findings went `0 → 0` — the
+eyebrow was never an AA defect. The scanned population went **242 → 244**: two elements the instrument
+could not previously see, which is the entire content of the fix.
+
+**And the same question, asked once of the whole page, returns twenty more.** A two-directional strict
+text diff of the SHIPPED landing (production build, 1280) against this board reports **21** elements the
+site paints and the asset does not — the eyebrow, and twenty others: the `Design` nav entry `/design`
+gained on 2026-08-29, a footer whose column set and link set are both different, and eleven strings the
+copy has since re-written. Those twenty are **MOTIR-4028**, not this card. Two notes on the measurement,
+because both are the difference between a number and a guess: it was run with EXACT text equality, and
+the same data under a substring matcher reports **4**; and the count is dated — a later run that answers
+anything but 20 should date the difference rather than absorb it.
 
 ### ⚠️ The measured constraint this design routed around — RETIRED 2026-08-29 (MOTIR-3874)
 
@@ -681,13 +728,14 @@ item to mark.
 
 ## Open findings this design surfaced (filed, not deferred)
 
-| finding                                                                                                                                                                                                                                                                                                                                                                                                         | card                                                                                         |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                                                                                                                                                                                  | **MOTIR-3743** (pre-existing; this card is `relates_to` it)                                  |
-| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                                                                                                                                                                         | **MOTIR-3746** → **MOTIR-3846**                                                              |
-| ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version**                                                                                                                                                        | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**                                             |
-| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository — **but a lane is no longer how a result is published; see below**                                                                                                                                                                                          | **MOTIR-3750**                                                                               |
-| **This asset does not draw the pillars EYEBROW `app/_components/Pillars.tsx` ships** (`div.band-head` has `h2` + `p` only, in both boards) — so the element scan of the mock is structurally unable to see anything that element carries, and it did not: MOTIR-3984 was filed naming ONE muted-ink site and the site painted TWO. Not an AA defect in itself; the eyebrow is `--el-text-secondary` and clears. | **MOTIR-4000** (filed by MOTIR-3984, `blocked_by` MOTIR-3985 — both re-export `landing.png`) |
+| finding                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | card                                                                                           |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| ~~`motir-marketing` is provisioned but **not connected to Motir**, so `targetRepo` is refused and a merge in this repository moves no card~~ — **CLOSED: 3743 `done`; pins and `link_pull_request` both work here, see below**                                                                                                                                                                                                                                                                              | **MOTIR-3743** (pre-existing; this card is `relates_to` it)                                    |
+| ~~`?intent=import` has **no reader and no owning card**~~ — **CORRECTED 2026-08-28: it has an owner, MOTIR-3846**, carved from this finding; the twin's is MOTIR-3639. Still NOT READ on `origin/main` until 3846 ships                                                                                                                                                                                                                                                                                     | **MOTIR-3746** → **MOTIR-3846**                                                                |
+| ~~`--el-accent-on-surface` is **4.41:1 on `--el-surface-soft` in dark** (`ExploreTopBar`'s current-page nav item), and the ink lint has no accent arm~~ — **CLOSED: 3745 `done`, published as 0.1.1 by 3872, pinned here; 5.76:1 on the pinned version**                                                                                                                                                                                                                                                    | **MOTIR-3745** → **MOTIR-3872** → **MOTIR-3874**                                               |
+| This repository runs **no design-result publish lane**, and a `<name>.design-notes.md` basename is invisible to the classifier in either repository — **but a lane is no longer how a result is published; see below**                                                                                                                                                                                                                                                                                      | **MOTIR-3750**                                                                                 |
+| ~~**This asset does not draw the pillars EYEBROW `app/_components/Pillars.tsx` ships** (`div.band-head` has `h2` + `p` only, in both boards) — so the element scan of the mock is structurally unable to see anything that element carries~~ — **CLOSED 2026-08-30: both boards draw it; the scan's population went 242 → 244 and its findings stayed 0**                                                                                                                                                   | **MOTIR-4000** (filed by MOTIR-3984, `blocked_by` MOTIR-3985 — both re-exported `landing.png`) |
+| **And the same question asked of the WHOLE page returns twenty more** — the `Design` nav entry (`/design`, shipped 2026-08-29), a footer whose column set (`PRODUCT · RESOURCES · LEGAL` against the asset's `PRODUCT · EXPLORE · COMPANY`), link count (8 against 12) and brand block all differ, and eleven strings the copy has since re-written. Measured, not asserted: a strict two-directional text diff of the production build against this board, EXACT equality (a substring matcher reports 4). | **MOTIR-4028** (filed by MOTIR-4000, `blocked_by` it — both re-export `landing.png`)           |
 
 **⚠️ AND THE MISSING LANE NO LONGER STOPS A DESIGN RESULT REACHING THE CARD (MOTIR-3874).** MOTIR-3780
 retired the branch-derived publisher in every repository: the AGENT publishes, by naming its own card
