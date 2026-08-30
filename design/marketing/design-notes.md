@@ -31,6 +31,171 @@ build, exactly as `motir-core/design/onboarding-entrance/*.mock.html` does) · `
 
 ---
 
+## ⚠️ A design board's CHROME owes AA — DECIDED for `motir-marketing` 2026-08-30 (MOTIR-3985)
+
+> **⚠️ THIS SECTION IS AREA-WIDE.** It governs BOTH assets in `design/marketing/` and every asset
+> added here afterwards, which is why it sits above the per-surface documents rather than inside
+> either of them. The rest of this file is `landing.*` and then `design-showcase.*`; this is the rule
+> both are held to.
+
+**A design board's own annotation chrome — the panel captions, the `viewport …` rules, the
+measurement lines, the marks a re-measurement uses to strike a superseded figure — owes WCAG 1.4.3
+exactly as the product surface it presents does. There is no doc-annotation exemption in this
+repository, and none is to be introduced.**
+
+### What both mocks used to claim, and why it was not a small thing
+
+Each asset's token block carried a sentence about which raw values it owns, ending _"…the
+doc-annotation scaffold (sheet, captions, ref chips, viewport rulers), which is **not product
+UI**."_ It was written to explain the raw HEXES and it was read as an AA exemption for the INK — and
+a header comment is where the next author of an asset here would have found it, believed it, and
+inherited it.
+
+**motir-core asked exactly this question and answered the other way.** MOTIR-3054 —
+_"the design tree's OTHER 277 failing ink/surface pairs: decide whether a mock's board CHROME owes
+AA, then sweep or codify"_ — decided **no exemption**, swept all 277 sites across 51 assets, and
+shipped the guard over both the utility-class and the stylesheet layer (motir-core PR #2133;
+`docs/decisions/design-board-chrome-aa.md`; `tests/theme/inkContrastMockScan.ts` run by
+`vitest.design.config.ts`).
+
+**This repository ADOPTS that answer.** Two repositories in one project holding opposite answers to
+one accessibility question is the defect; the sites are only how it became visible. The three
+arguments carry over unchanged and are worth restating here rather than cited, because the next
+reader of THIS file is the one who needs them:
+
+1. **The board is read by a person.** Yue accepts Stories from these `.png` exports (Principle #18),
+   so the annotation layer is the surface the product's own review happens on. _"Not product UI"_ is
+   true, and it is not a reason to make something harder to read.
+2. **A structural exemption costs more than compliance and fails silently.** Marking the annotation
+   layer (`data-mock-chrome` or similar) is an edit to every annotation plus a standing authoring
+   obligation, and a marker is INHERITED — the moment a product element sits under a marked wrapper,
+   or an author copies a marked panel as a starting point, the guard goes quiet on the product
+   surface. Swapping the ink is one token per rule.
+3. **motir-core's decision is spent for any future decline on these grounds.** A later boundary here
+   may be declined for SIZE or for a measured property of a population — not on the grounds that a
+   board's chrome sits outside the product's contract. That question is answered.
+
+### The population, and how it was measured
+
+**54 sites, all light-theme; the dark arm was 0.** Every element carrying its own text node was
+loaded in headless chromium and read for its resolved `color` against its effective background — the
+nearest ancestor with a non-transparent fill, composited — then ruled against 1.4.3 at that element's
+OWN size and weight (large text = ≥24px, or ≥18.66px at weight ≥700). It answers _"what does this
+asset paint?"_ rather than _"what did I think to ask about?"_, which is the property a `PAIRS` list
+cannot have.
+
+| file                        | selector                        | ink → surface            | ratio    | sites  |
+| --------------------------- | ------------------------------- | ------------------------ | -------- | ------ |
+| `design-showcase.mock.html` | `p.rule` (10px/600)             | `#787671` → `#f4f3f1`    | 4.09     | 12     |
+| `design-showcase.mock.html` | `span.note` 6 + `code` 5 (13px) | `--el-text-muted` → same | 4.09     | 11     |
+| `design-showcase.mock.html` | `p.measure` 5 + `code` 1 (11px) | same                     | 4.09     | 6      |
+| `design-showcase.mock.html` | `strong` (13px/700)             | same                     | 4.09     | 3      |
+| `design-showcase.mock.html` | `b` (11px/700)                  | `#1aae39` → same         | **2.65** | 2      |
+| `design-showcase.mock.html` | `s` (11px/500)                  | `#e03131` → same         | 4.07     | 1      |
+| `landing.mock.html`         | `code` 8 + `span.note` 5 (13px) | `--el-text-muted` → same | 4.09     | 13     |
+| `landing.mock.html`         | `p.rule` (10px/600)             | same                     | 4.09     | 3      |
+| `landing.mock.html`         | `strong` (13px/700)             | same                     | 4.09     | 3      |
+|                             |                                 |                          |          | **54** |
+
+`#f4f3f1` is the mocks' doc-annotation SHEET (`body { background: … }`) — a raw scaffold colour, not
+an `--el-*` surface — so nothing in the token layer could have been adjusted to fix this. `#787671`
+is `--el-text-muted`'s resolved light value, reached in `.rule` as a raw hex and everywhere else
+through the token; every `code` / `strong` / `b` / `s` entry INHERITS its ink from the `.rule` /
+`.note` / `.measure` rule above it, which is why five rules fix fifty-four sites.
+
+**Re-measured after the sweep: `54 → 0`.** The scan reports one remaining entry in the whole area and
+it is not one of these — the `☾` glyph at 3.85 on `--el-page-bg` in the dark panel, already
+dispositioned below as a decorative glyph beside its own text label (its accessible name is the word,
+and it clears 1.4.11's 3:1 for non-text). **The measurement is what closed this, not the edit**: a
+sweep verified by reading the diff would have missed that `code` and `strong` inherit rather than
+declare.
+
+### What changed — five rules
+
+`--el-text-secondary` (`#5d5b54`) is the annotation ink, at **6.13:1** on the sheet. It is the same
+ink motir-core's sweep moved to, for the same reason: it clears AA on every surface either asset has,
+so it is right wherever an annotation lands. `.doc-head p` already used it, so the assets were
+already half-consistent with the answer they denied.
+
+| rule                                 | was                                               | is                         |
+| ------------------------------------ | ------------------------------------------------- | -------------------------- |
+| `design-showcase` `.panel-cap .note` | `var(--el-text-muted)`                            | `var(--el-text-secondary)` |
+| `design-showcase` `.rule`            | `#787671` (a raw hex duplicating the muted token) | `var(--el-text-secondary)` |
+| `design-showcase` `.measure`         | `var(--el-text-muted)`                            | `var(--el-text-secondary)` |
+| `landing` `.panel-cap .note`         | `var(--el-text-muted)`                            | `var(--el-text-secondary)` |
+| `landing` `.rule`                    | `var(--el-text-muted)`                            | `var(--el-text-secondary)` |
+
+### ⚠️ The `b` and `s` marks, dispositioned BY NAME — they were a 1.4.1 failure as well as a 1.4.3 one
+
+`.measure b` and `.measure s` are the two entries a caption-only sweep leaves behind, and they are
+the two the card asked to name. They mark a measurement's CURRENT figure and its SUPERSEDED one:
+
+```css
+/* before */
+.measure b {
+  color: #1aae39;
+} /* 2.65:1 on the sheet */
+.measure s {
+  color: #e03131;
+  text-decoration: none;
+} /* 4.07:1, and the LINE switched OFF */
+```
+
+**The green was the worst pair in either asset at 2.65:1, and the red is the more interesting
+defect.** `<s>` means struck-through, and the rule explicitly REMOVED the line — so a superseded
+figure was marked by hue alone. That is 1.4.1 (use of colour), independent of the ratio, on a mark
+whose whole job is to say _"this number is no longer true"_; and it sat inside a panel whose own
+caption reads _"weight 600 carries it without colour (1.4.1)"_.
+
+**Both marks now rest on something other than hue, which is why neither took a darker green or red.**
+Inventing `#157f2b` would have cleared 1.4.3 and left 1.4.1 exactly where it was — and a mark that
+carries meaning is not scaffold decoration, so it may not be a raw hue at all (the
+never-invent-a-colour rule: a palette token flips with `data-palette`, an invented hex does not).
+
+| mark                        | now                                                                              | why it reads                                         |
+| --------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `b` — the LIVE figure       | `var(--el-text)`, 15.69:1                                                        | `<b>` is bold; the weight is the signal              |
+| `s` — the SUPERSEDED figure | `var(--el-text-secondary)`, 6.13:1, `text-decoration: line-through` **restored** | the line is the signal — the one `<s>` already meant |
+
+### The `.fold::after` rule — measured, and it CLEARS
+
+`design-showcase.mock.html` draws its fold line as generated content: `.fold::after`, _"FOLD —
+900px"_, 10px/700, `#e03131`, over the white `.frame`. **`document.querySelectorAll('*')` cannot
+reach a pseudo-element**, so the element scan above never measured it — a blind spot that reads as a
+verdict if nobody says so. A separate `getComputedStyle(el, '::after')` probe returns **4.51:1 on
+`#ffffff`**, clearing 1.4.3 by 0.01, and it is paired with a 2px dashed border rather than resting on
+hue. It is left as it stands. **That it clears by 0.01, on a raw hex nothing measures, belongs to the
+lane** — MOTIR-4001's acceptance criteria carry it.
+
+### ⚠️ The lane — this repository has NONE, and a PORT of motir-core's guard would be GREEN on all 54
+
+The decision above is enforced by nothing in this repository today. `ci.yml` runs
+`lint · typecheck · build · test`; `vitest.config.mts` includes `tests/**/*.test.ts(x)` and no spec
+there reads `design/**` for contrast. The nearest, `tests/aaMatrix.test.ts`, rules on `--el-*` pairs
+read off RENDERED React components via `tests/support/paintedInks.ts` — which resolves Tailwind
+classes and cannot see a `.mock.html` stylesheet at all.
+
+**And the obvious lane does not work, which is the finding rather than the excuse.** Copying
+motir-core's `inkContrastMockScan.ts` reports **zero** of the 54: its `ownSurface` resolves a
+background only from a `var(--el-*)`, then rules it against a list of `--el-*` NAMES, so a raw
+`#f4f3f1` sheet resolves to `null` and every element abstains. Two of the sites were not a `--el-*`
+INK either. **A guard whose blind spot is exactly the population it was installed for reads as a
+clean bill of health**, which is worse than no guard.
+
+**jsdom is not the cheap substitute either, and it was probed rather than assumed**: it applies the
+class cascade for `color`, then drops the `font:` SHORTHAND (`.rule` reads back `16px`/`normal`, so
+every large-text call is wrong) and `background: var(--el-page-bg)` (`.frame` reads back transparent,
+so the surface walk resolves the sheet where the asset paints white). Both failures under-report
+silently.
+
+So the lane is a browser this repository does not depend on, and it is **MOTIR-4001**, with the
+`.png` re-export the same dependency pays for as **MOTIR-4003**. Until MOTIR-4001 lands, the rule
+above is an authoring obligation held by this file: **an annotation on the sheet takes
+`--el-text-secondary`, and a mark that carries state carries it in weight, a line or a shape — never
+in hue alone.**
+
+---
+
 ## Designed against shipped reality
 
 Nothing on this page ships yet — `motir-marketing`'s `app/page.tsx` is a deliberate one-paragraph
@@ -930,17 +1095,20 @@ paint?"_ rather than _"what did I think to ask about?"_
 | ---------------------------------------------------------------- | ----- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `.seg button[aria-checked] .i` — the `☾` glyph on `--el-page-bg` | 1     | 3.85  | NOT a 1.4.3 failure: a decorative glyph beside its own text label, so the accessible name is the word. It clears 1.4.11's 3:1 for non-text. Recorded because a scan that reports it and says nothing invites the next reader to re-derive the answer |
 
-**The product layer is now 0 findings in both themes.** The 35 remaining are the doc-annotation
+**The product layer is now 0 findings in both themes.** The 35 remaining were the doc-annotation
 scaffold — the panel captions, the `viewport …` rules, the measurement lines — which this mock's own
-token block calls out as _"not product UI"_.
+token block then called out as _"not product UI"_.
 
-**⚠️ That claim is now contradicted by a decision made in motir-core, and the contradiction is
-FILED rather than argued here.** MOTIR-3054 asked exactly this question of motir-core's design
+**⚠️ THAT CLAIM WAS CONTRADICTED BY motir-core AND THE CONTRADICTION IS NOW RESOLVED — those 35 are
+FIXED (MOTIR-3985, 2026-08-30).** MOTIR-3054 asked exactly this question of motir-core's design
 tree — _"does a design board's own chrome owe AA?"_ — and answered **yes**, shipping the guard over
 both the utility-class and stylesheet layers (motir-core PR #2133, _"a design board's chrome owes
-AA"_). `motir-marketing` has no equivalent lane and its assets assert the opposite in prose. Two
-repositories holding opposite answers to one question is a defect with a life of its own, so it is a
-card, not this paragraph.
+AA"_). This repository ADOPTED that answer and swept its own board: **the 35 here plus 19 in
+`landing.mock.html`, 54 sites, `54 → 0` on this same scan.** The decision, the argument, the full
+population and the `b`/`s` disposition are the AREA-WIDE section at the top of this file, § _A design
+board's CHROME owes AA_. The mock's token block no longer asserts an exemption; the lane that would
+enforce it is MOTIR-4001, and why a PORT of motir-core's guard would not have caught any of this is
+stated there.
 
 #### What was CHANGED, and why each is the asset matching what ships rather than a taste call
 

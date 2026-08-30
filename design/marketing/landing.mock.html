@@ -29,8 +29,24 @@
          (MOTIR-1456, both `done`). NOTHING here is an invented hue: every
          product colour is an `--el-*` token or a `color-mix()` over two of
          them. The only raw values are the non-semantic elevation shadows and
-         the doc-annotation scaffold (sheet, panel captions, ref chips, the
-         viewport rulers), which are not product UI.
+         the doc-annotation scaffold's own FILLS — the `#f4f3f1` sheet, the ref
+         chips, the frame border, the fold rule.
+
+         ⚠️ THE SCAFFOLD'S INK IS NOT EXEMPT, AND THIS BLOCK USED TO SAY IT WAS
+         (MOTIR-3985, 2026-08-30). The sentence here read *"the doc-annotation
+         scaffold … is not product UI"*, and it was carrying more weight than a
+         note about raw values: it was read as an AA exemption for the board's
+         own captions, rules and measurement lines. **motir-core asked exactly
+         that question and answered NO EXEMPTION** — MOTIR-3054,
+         `docs/decisions/design-board-chrome-aa.md`, shipped with the guard over
+         both the utility-class and stylesheet layers. This repository ADOPTS
+         that answer; the reasoning and the 54 sites it swept are in
+         `design-notes.md` § *A design board's CHROME owes AA*.
+
+         So: the scaffold may own its FILLS, and its INK clears 1.4.3 on them.
+         `--el-text-secondary` is the annotation ink (6.13:1 on the sheet);
+         `--el-text-muted` is 4.09:1 there and belongs to nothing on this
+         board.
       ---------------------------------------------------------------------- */
       :root {
         /* ── page + text ─────────────────────────────────────────────── */
@@ -234,7 +250,7 @@
       }
       .panel-cap .note {
         font-size: 13px;
-        color: var(--el-text-muted);
+        color: var(--el-text-secondary);
         max-width: 78ch;
       }
       .frame {
@@ -246,7 +262,7 @@
       }
       .rule {
         font: 600 10px var(--font-mono);
-        color: var(--el-text-muted);
+        color: var(--el-text-secondary);
         letter-spacing: 0.06em;
         text-transform: uppercase;
         margin: 0 0 7px;
