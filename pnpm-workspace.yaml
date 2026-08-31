@@ -63,4 +63,4 @@ allowBuilds:
 # what gets appended to.
 minimumReleaseAgeExclude:
   - '@motir/brand@0.2.0'
-  - '@motir/design-system@0.1.2'
+  - '@motir/design-system@0.1.3'
