@@ -48,11 +48,28 @@ describe('sitemap', () => {
   const entries = sitemap()
 
   it('lists every page the site serves, absolutely', () => {
-    // `/design` joined the root in MOTIR-1043 — the same change that added the
-    // route, which is what `app/sitemap.ts`'s own comment asked for.
+    // `/design` joined the root in MOTIR-1043; `/legal` and the seven documents
+    // joined in MOTIR-4009, read from the same directory the routes glob.
     expect(entries.map((entry) => entry.url)).toEqual([
       'https://motir.co/',
       'https://motir.co/design',
+      'https://motir.co/explore',
+      'https://motir.co/docs',
+      'https://motir.co/docs/api',
+      'https://motir.co/docs/api/getting-started',
+      'https://motir.co/docs/api/stability',
+      'https://motir.co/docs/mcp',
+      'https://motir.co/docs/mcp/tools',
+      'https://motir.co/docs/cli',
+      'https://motir.co/docs/sandbox',
+      'https://motir.co/legal',
+      'https://motir.co/legal/terms',
+      'https://motir.co/legal/privacy',
+      'https://motir.co/legal/cookies',
+      'https://motir.co/legal/acceptable-use',
+      'https://motir.co/legal/dpa',
+      'https://motir.co/legal/subprocessors',
+      'https://motir.co/legal/model-providers',
     ])
   })
 
@@ -102,14 +119,14 @@ describe('the root JSON-LD graph', () => {
     expect(site.publisher).toEqual({ '@id': ORGANIZATION_ID })
   })
 
-  it('points the SearchAction at the shipped /explore search', () => {
+  it('points the SearchAction at the square on THIS host', () => {
     const action = site.potentialAction as Record<string, unknown>
     const target = action.target as Record<string, unknown>
     expect(action['@type']).toBe('SearchAction')
-    // Built from the ONE configured motir-core origin, never a literal — the
-    // vitest env pins a non-production value precisely so this can say so.
+    // The square moved onto motir.co (MOTIR-4045), so the SearchAction targets
+    // THIS host's search, not the app origin it used to point at.
     expect(target.urlTemplate).toBe(
-      'https://app.test.motir.co/explore?q={search_term_string}',
+      'https://motir.co/explore?q={search_term_string}',
     )
     expect(action['query-input']).toBe('required name=search_term_string')
   })

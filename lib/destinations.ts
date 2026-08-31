@@ -55,11 +55,36 @@ export const FREE_DOOR = `${APP_ORIGIN}/sign-up?intent=tracker`
 export const SIGN_UP = `${APP_ORIGIN}/sign-up`
 
 export const SIGN_IN = `${APP_ORIGIN}/sign-in`
-export const EXPLORE = `${APP_ORIGIN}/explore`
-export const DOCS = `${APP_ORIGIN}/docs`
-export const LEGAL_PRIVACY = `${APP_ORIGIN}/legal/privacy`
-export const LEGAL_TERMS = `${APP_ORIGIN}/legal/terms`
-export const LEGAL_INDEX = `${APP_ORIGIN}/legal`
+
+/**
+ * Explore is now SAME-ORIGIN (MOTIR-4045): `motir.co` serves `/explore` itself,
+ * so this stops being built from `APP_ORIGIN` and becomes a root-relative path
+ * on THIS site. `SiteHeader` / `SiteFooter` render it with a plain `<a href>`,
+ * so a relative href is exactly right. (The header's nav item and the
+ * WebSite JSON-LD's SearchAction read this constant.)
+ */
+export const EXPLORE = '/explore'
+
+/**
+ * Docs is now SAME-ORIGIN (MOTIR-4046): `motir.co` serves `/docs` itself, so
+ * this stops being built from `APP_ORIGIN`. The footer link and the nav item
+ * render it with a plain `<a href>` / `next/link`.
+ */
+export const DOCS = '/docs'
+
+/**
+ * The legal documents are now SAME-ORIGIN (MOTIR-4009): `motir.co` serves
+ * `/legal`, `/legal/[slug]` itself, so these stop being built from
+ * `APP_ORIGIN` and become root-relative paths on THIS site. `SiteFooter`
+ * renders all three with a plain `<a href>`, so a relative href is exactly
+ * right — no `next/link`, no cross-origin hand-off, no `aria-current` question.
+ *
+ * ⚠️ Explore and Docs above remain cross-origin until their own cards land
+ * (the chrome is not yet one host for them); only the legal set has moved.
+ */
+export const LEGAL_PRIVACY = '/legal/privacy'
+export const LEGAL_TERMS = '/legal/terms'
+export const LEGAL_INDEX = '/legal'
 
 /** The one destination that is NOT motir-core, and so not built from the origin. */
 export const SOURCE_REPO = 'https://github.com/moooon-B-V/motir-core'

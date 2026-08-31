@@ -34,16 +34,21 @@ describe('the Design nav entry', () => {
     expect(link).toHaveAttribute('href', '/design')
   })
 
-  it('is a next/link — the one internal destination in the bar other than the root', () => {
+  it('Explore and Docs are now next/links — the bar is fully same-origin', () => {
     render(<SiteHeader />)
-    // `next/link` renders an `<a>`, but the tell that it is one is that the
-    // href is site-RELATIVE: every other bar destination is a different origin,
-    // where prefetching and client routing mean nothing.
-    for (const label of [copy.nav.explore, copy.nav.docs]) {
-      expect(
-        within(bar()).getByRole('link', { name: label }).getAttribute('href'),
-      ).toMatch(/^https?:\/\//)
-    }
+    // Explore and Docs moved onto motir.co (MOTIR-4045 / MOTIR-4046), so both
+    // are site-relative (a `next/link`); nothing in the bar is cross-origin
+    // except the app doors (Sign in / Start free).
+    expect(
+      within(bar())
+        .getByRole('link', { name: copy.nav.explore })
+        .getAttribute('href'),
+    ).toBe('/explore')
+    expect(
+      within(bar())
+        .getByRole('link', { name: copy.nav.docs })
+        .getAttribute('href'),
+    ).toBe('/docs')
     expect(
       within(bar()).getByRole('link', { name: copy.nav.design }),
     ).toHaveAttribute('href', '/design')
@@ -97,10 +102,31 @@ describe('the Design nav entry', () => {
 })
 
 describe('app/sitemap.ts', () => {
-  it('gains the /design line in the same change that adds the route', () => {
+  it('gains the /legal, /explore and /docs lines in the same changes that add the routes', () => {
     expect(sitemap().map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       siteUrl('/design'),
+      siteUrl('/explore'),
+      siteUrl('/docs'),
+      ...[
+        '/docs/api',
+        '/docs/api/getting-started',
+        '/docs/api/stability',
+        '/docs/mcp',
+        '/docs/mcp/tools',
+        '/docs/cli',
+        '/docs/sandbox',
+      ].map(siteUrl),
+      siteUrl('/legal'),
+      ...[
+        'terms',
+        'privacy',
+        'cookies',
+        'acceptable-use',
+        'dpa',
+        'subprocessors',
+        'model-providers',
+      ].map((slug) => siteUrl(`/legal/${slug}`)),
     ])
   })
 })

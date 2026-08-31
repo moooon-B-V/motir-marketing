@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
+import { legalDocumentSlugs } from '@/lib/legal/documents'
 
 /*
  * motir.co's sitemap (MOTIR-1154 · 8.3.7), served at `/sitemap.xml`.
@@ -38,5 +39,47 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      // The square (MOTIR-4045). Its per-topic landing pages are dynamic (read
+      // from the public API) and are reached through the square's own crawlable
+      // `/explore/topic/<slug>` links, so they are not enumerated here.
+      url: siteUrl('/explore'),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      // The docs surfaces (MOTIR-4046). The API reference is dynamic (fetches
+      // the served OpenAPI document) but is still a stable, crawlable URL.
+      url: siteUrl('/docs'),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    ...[
+      '/docs/api',
+      '/docs/api/getting-started',
+      '/docs/api/stability',
+      '/docs/mcp',
+      '/docs/mcp/tools',
+      '/docs/cli',
+      '/docs/sandbox',
+    ].map((path) => ({
+      url: siteUrl(path),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    })),
+    {
+      url: siteUrl('/legal'),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    // A legal document ships by EXISTING in `content/legal/`, so the sitemap
+    // reads the same directory the routes do rather than carrying a second list
+    // that could drift from it. `legalDocumentSlugs()` is the glob the routes
+    // use, so a document added later reaches the sitemap without an edit here.
+    ...legalDocumentSlugs().map((slug) => ({
+      url: siteUrl(`/legal/${slug}`),
+      changeFrequency: 'monthly' as const,
+      priority: 0.4,
+    })),
   ]
 }

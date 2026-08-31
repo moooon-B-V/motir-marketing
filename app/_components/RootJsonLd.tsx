@@ -1,4 +1,3 @@
-import { EXPLORE } from '@/lib/destinations'
 import { copy } from '@/lib/copy'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 
@@ -85,18 +84,17 @@ export function buildRootJsonLd(): Record<string, unknown> {
         description: copy.meta.description,
         inLanguage: 'en',
         publisher: { '@id': ORGANIZATION_ID },
-        // ⚠️ THE TARGET IS A REAL, SHIPPED SEARCH, AND IT IS ON THE OTHER
-        // ORIGIN. `/explore` is motir-core's public project square and `?q=` is
-        // its free-text search — a genuine URL param the page parses
-        // (`lib/projectSquare/exploreParams.ts`), not a convention invented
-        // here. Declaring an action a visitor cannot actually perform is the
+        // ⚠️ THE TARGET IS A REAL, SHIPPED SEARCH, AND IT NOW LIVES ON THIS
+        // ORIGIN (MOTIR-4045). `/explore` moved from motir-core onto motir.co,
+        // and `?q=` is its free-text search — a genuine URL param the page
+        // parses. Declaring an action a visitor cannot actually perform is the
         // failure mode this property has; pointing it at the surface that
         // performs it, on the origin that hosts it, is not.
         potentialAction: {
           '@type': 'SearchAction',
           target: {
             '@type': 'EntryPoint',
-            urlTemplate: `${EXPLORE}?q={search_term_string}`,
+            urlTemplate: `${siteUrl('/explore')}?q={search_term_string}`,
           },
           'query-input': 'required name=search_term_string',
         },
