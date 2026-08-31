@@ -34,16 +34,20 @@ describe('the Design nav entry', () => {
     expect(link).toHaveAttribute('href', '/design')
   })
 
-  it('is a next/link — the one internal destination in the bar other than the root', () => {
+  it('Explore is now a next/link — Docs is still the one cross-origin destination', () => {
     render(<SiteHeader />)
-    // `next/link` renders an `<a>`, but the tell that it is one is that the
-    // href is site-RELATIVE: every other bar destination is a different origin,
-    // where prefetching and client routing mean nothing.
-    for (const label of [copy.nav.explore, copy.nav.docs]) {
-      expect(
-        within(bar()).getByRole('link', { name: label }).getAttribute('href'),
-      ).toMatch(/^https?:\/\//)
-    }
+    // Explore moved onto motir.co (MOTIR-4045), so it is site-relative (a
+    // `next/link`); Docs is the one bar destination still on another origin.
+    expect(
+      within(bar())
+        .getByRole('link', { name: copy.nav.explore })
+        .getAttribute('href'),
+    ).toBe('/explore')
+    expect(
+      within(bar())
+        .getByRole('link', { name: copy.nav.docs })
+        .getAttribute('href'),
+    ).toMatch(/^https?:\/\//)
     expect(
       within(bar()).getByRole('link', { name: copy.nav.design }),
     ).toHaveAttribute('href', '/design')
@@ -101,6 +105,7 @@ describe('app/sitemap.ts', () => {
     expect(sitemap().map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       siteUrl('/design'),
+      siteUrl('/explore'),
       siteUrl('/legal'),
       ...[
         'terms',

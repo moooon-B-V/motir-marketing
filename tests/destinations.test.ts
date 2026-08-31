@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  EXPLORE,
   FREE_DOOR,
   IDEA_DRAFT_ENDPOINT,
   IMPORT_DOOR,
@@ -69,5 +70,12 @@ describe('the three doors are built from the ONE configured origin', () => {
     expect(LEGAL_INDEX).toBe('/legal')
     expect(LEGAL_PRIVACY.startsWith(ORIGIN)).toBe(false)
     expect(LEGAL_INDEX.startsWith(ORIGIN)).toBe(false)
+  })
+
+  it('Explore is same-origin — the square now lives on motir.co', () => {
+    // MOTIR-4045 — `/explore` moved onto motir.co, so EXPLORE stopped being
+    // `${APP_ORIGIN}/explore`. Docs remains cross-origin until its own card.
+    expect(EXPLORE).toBe('/explore')
+    expect(EXPLORE.startsWith(ORIGIN)).toBe(false)
   })
 })

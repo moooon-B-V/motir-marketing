@@ -44,12 +44,23 @@ import { DOCS, EXPLORE, FREE_DOOR, SIGN_IN } from '@/lib/destinations'
  * `internal: true` is what makes an item a `next/link` with a current-page
  * treatment. Every other destination in this bar is a different ORIGIN, where
  * neither prefetching, client routing nor `aria-current` means anything.
+ *
+ * Explore is now same-origin (MOTIR-4045): `/explore` lives on this host, so it
+ * is a `next/link` and marks itself current on the square AND its topic landing
+ * pages. Docs remains cross-origin until its own card lands.
  */
 const navItems = [
-  { href: EXPLORE, label: copy.nav.explore, internal: false },
+  { href: EXPLORE, label: copy.nav.explore, internal: true },
   { href: DOCS, label: copy.nav.docs, internal: false },
   { href: '/design', label: copy.nav.design, internal: true },
 ] as const
+
+/** Whether an internal item is the page being read. Explore also covers its
+ * topic landing pages, so it matches the `/explore/` prefix too. */
+const isCurrent = (href: string, pathname: string) =>
+  href === '/explore'
+    ? pathname === '/explore' || pathname.startsWith('/explore/')
+    : pathname === href
 
 const NAV_ITEM = 'text-[13.5px]'
 const NAV_REST = 'text-(--el-text-secondary) hover:text-(--el-text)'
@@ -87,10 +98,12 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                aria-current={pathname === item.href ? 'page' : undefined}
+                aria-current={
+                  isCurrent(item.href, pathname) ? 'page' : undefined
+                }
                 className={cn(
                   NAV_ITEM,
-                  pathname === item.href ? NAV_CURRENT : NAV_REST,
+                  isCurrent(item.href, pathname) ? NAV_CURRENT : NAV_REST,
                 )}
               >
                 {item.label}
@@ -171,10 +184,12 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                aria-current={pathname === item.href ? 'page' : undefined}
+                aria-current={
+                  isCurrent(item.href, pathname) ? 'page' : undefined
+                }
                 className={cn(
                   NAV_ITEM,
-                  pathname === item.href ? NAV_CURRENT : NAV_REST,
+                  isCurrent(item.href, pathname) ? NAV_CURRENT : NAV_REST,
                 )}
               >
                 {item.label}

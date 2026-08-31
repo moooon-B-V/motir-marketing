@@ -55,7 +55,15 @@ export const FREE_DOOR = `${APP_ORIGIN}/sign-up?intent=tracker`
 export const SIGN_UP = `${APP_ORIGIN}/sign-up`
 
 export const SIGN_IN = `${APP_ORIGIN}/sign-in`
-export const EXPLORE = `${APP_ORIGIN}/explore`
+
+/**
+ * Explore is now SAME-ORIGIN (MOTIR-4045): `motir.co` serves `/explore` itself,
+ * so this stops being built from `APP_ORIGIN` and becomes a root-relative path
+ * on THIS site. `SiteHeader` / `SiteFooter` render it with a plain `<a href>`,
+ * so a relative href is exactly right. (The header's nav item and the
+ * WebSite JSON-LD's SearchAction read this constant.)
+ */
+export const EXPLORE = '/explore'
 export const DOCS = `${APP_ORIGIN}/docs`
 
 /**

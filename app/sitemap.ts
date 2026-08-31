@@ -40,6 +40,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      // The square (MOTIR-4045). Its per-topic landing pages are dynamic (read
+      // from the public API) and are reached through the square's own crawlable
+      // `/explore/topic/<slug>` links, so they are not enumerated here.
+      url: siteUrl('/explore'),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
       url: siteUrl('/legal'),
       changeFrequency: 'monthly',
       priority: 0.6,
