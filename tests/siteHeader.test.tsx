@@ -34,10 +34,11 @@ describe('the Design nav entry', () => {
     expect(link).toHaveAttribute('href', '/design')
   })
 
-  it('Explore is now a next/link — Docs is still the one cross-origin destination', () => {
+  it('Explore and Docs are now next/links — the bar is fully same-origin', () => {
     render(<SiteHeader />)
-    // Explore moved onto motir.co (MOTIR-4045), so it is site-relative (a
-    // `next/link`); Docs is the one bar destination still on another origin.
+    // Explore and Docs moved onto motir.co (MOTIR-4045 / MOTIR-4046), so both
+    // are site-relative (a `next/link`); nothing in the bar is cross-origin
+    // except the app doors (Sign in / Start free).
     expect(
       within(bar())
         .getByRole('link', { name: copy.nav.explore })
@@ -47,7 +48,7 @@ describe('the Design nav entry', () => {
       within(bar())
         .getByRole('link', { name: copy.nav.docs })
         .getAttribute('href'),
-    ).toMatch(/^https?:\/\//)
+    ).toBe('/docs')
     expect(
       within(bar()).getByRole('link', { name: copy.nav.design }),
     ).toHaveAttribute('href', '/design')
@@ -101,11 +102,21 @@ describe('the Design nav entry', () => {
 })
 
 describe('app/sitemap.ts', () => {
-  it('gains the /legal line and the seven documents in the same change that adds the routes', () => {
+  it('gains the /legal, /explore and /docs lines in the same changes that add the routes', () => {
     expect(sitemap().map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       siteUrl('/design'),
       siteUrl('/explore'),
+      siteUrl('/docs'),
+      ...[
+        '/docs/api',
+        '/docs/api/getting-started',
+        '/docs/api/stability',
+        '/docs/mcp',
+        '/docs/mcp/tools',
+        '/docs/cli',
+        '/docs/sandbox',
+      ].map(siteUrl),
       siteUrl('/legal'),
       ...[
         'terms',

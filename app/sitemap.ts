@@ -48,6 +48,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      // The docs surfaces (MOTIR-4046). The API reference is dynamic (fetches
+      // the served OpenAPI document) but is still a stable, crawlable URL.
+      url: siteUrl('/docs'),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    ...[
+      '/docs/api',
+      '/docs/api/getting-started',
+      '/docs/api/stability',
+      '/docs/mcp',
+      '/docs/mcp/tools',
+      '/docs/cli',
+      '/docs/sandbox',
+    ].map((path) => ({
+      url: siteUrl(path),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    })),
+    {
       url: siteUrl('/legal'),
       changeFrequency: 'monthly',
       priority: 0.6,

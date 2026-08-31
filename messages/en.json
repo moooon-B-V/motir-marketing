@@ -199,5 +199,18 @@
     "statActivityNone": "No activity yet",
     "errorTitle": "Couldn't load the project square",
     "errorBody": "The directory is temporarily unreachable. Please try again in a moment."
+  },
+  "docs": {
+    "metaTitle": "Docs · Motir",
+    "metaDescription": "Documentation for the Motir API and MCP server — the public read contract, the server that agents call, and the CLI.",
+    "indexTitle": "Documentation",
+    "indexIntro": "Everything you need to build against Motir: the public read API, the MCP server agents call, and the CLI.",
+    "api": "API reference",
+    "apiGettingStarted": "Getting started",
+    "apiStability": "Stability & deprecation",
+    "mcp": "MCP server",
+    "mcpTools": "MCP tools",
+    "cli": "CLI",
+    "sandbox": "Sandbox"
   }
 }

@@ -64,7 +64,13 @@ export const SIGN_IN = `${APP_ORIGIN}/sign-in`
  * WebSite JSON-LD's SearchAction read this constant.)
  */
 export const EXPLORE = '/explore'
-export const DOCS = `${APP_ORIGIN}/docs`
+
+/**
+ * Docs is now SAME-ORIGIN (MOTIR-4046): `motir.co` serves `/docs` itself, so
+ * this stops being built from `APP_ORIGIN`. The footer link and the nav item
+ * render it with a plain `<a href>` / `next/link`.
+ */
+export const DOCS = '/docs'
 
 /**
  * The legal documents are now SAME-ORIGIN (MOTIR-4009): `motir.co` serves

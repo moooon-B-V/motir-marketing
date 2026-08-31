@@ -45,21 +45,21 @@ import { DOCS, EXPLORE, FREE_DOOR, SIGN_IN } from '@/lib/destinations'
  * treatment. Every other destination in this bar is a different ORIGIN, where
  * neither prefetching, client routing nor `aria-current` means anything.
  *
- * Explore is now same-origin (MOTIR-4045): `/explore` lives on this host, so it
- * is a `next/link` and marks itself current on the square AND its topic landing
- * pages. Docs remains cross-origin until its own card lands.
+ * Explore and Docs are now same-origin (MOTIR-4045 / MOTIR-4046): both live on
+ * this host, so each is a `next/link` that marks itself current on its surface
+ * and its sub-pages. Only the root and `/design` remain alongside them.
  */
 const navItems = [
   { href: EXPLORE, label: copy.nav.explore, internal: true },
-  { href: DOCS, label: copy.nav.docs, internal: false },
+  { href: DOCS, label: copy.nav.docs, internal: true },
   { href: '/design', label: copy.nav.design, internal: true },
 ] as const
 
-/** Whether an internal item is the page being read. Explore also covers its
- * topic landing pages, so it matches the `/explore/` prefix too. */
+/** Whether an internal item is the page being read. Explore and Docs each cover
+ * their sub-pages, so they match the `/explore/` / `/docs/` prefix too. */
 const isCurrent = (href: string, pathname: string) =>
-  href === '/explore'
-    ? pathname === '/explore' || pathname.startsWith('/explore/')
+  href === '/explore' || href === '/docs'
+    ? pathname === href || pathname.startsWith(`${href}/`)
     : pathname === href
 
 const NAV_ITEM = 'text-[13.5px]'
