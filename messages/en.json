@@ -131,5 +131,17 @@
     "legalIndex": "All legal documents",
     "entity": "Motir is a product of moooon B.V.",
     "copyright": "© {year} moooon B.V."
+  },
+  "legal": {
+    "metaTitle": "Legal",
+    "metaDescription": "The terms, policies and disclosures for the hosted Motir service, operated by moooon B.V.",
+    "metaDocDescription": "{title} — version {version}. Published by moooon B.V. for the hosted Motir service.",
+    "breadcrumbAria": "Legal documents",
+    "allDocuments": "← All legal documents",
+    "versionAndEffective": "Version {version} · in effect from {date}",
+    "versionNotYetEffective": "Version {version} · not yet in effect",
+    "indexTitle": "Legal",
+    "indexIntro": "Everything moooon B.V. publishes about the hosted Motir service — what you agree to, what we do with your data, and who else it reaches. If you run Motir yourself, you are your own controller and these describe our service, not yours.",
+    "indexContact": "Questions about any of these: legal@motir.co"
   }
 }

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
+import { legalDocumentSlugs } from '@/lib/legal/documents'
 
 /*
  * motir.co's sitemap (MOTIR-1154 · 8.3.7), served at `/sitemap.xml`.
@@ -38,5 +39,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: siteUrl('/legal'),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    // A legal document ships by EXISTING in `content/legal/`, so the sitemap
+    // reads the same directory the routes do rather than carrying a second list
+    // that could drift from it. `legalDocumentSlugs()` is the glob the routes
+    // use, so a document added later reaches the sitemap without an edit here.
+    ...legalDocumentSlugs().map((slug) => ({
+      url: siteUrl(`/legal/${slug}`),
+      changeFrequency: 'monthly' as const,
+      priority: 0.4,
+    })),
   ]
 }

@@ -3,6 +3,9 @@ import {
   FREE_DOOR,
   IDEA_DRAFT_ENDPOINT,
   IMPORT_DOOR,
+  LEGAL_INDEX,
+  LEGAL_PRIVACY,
+  LEGAL_TERMS,
   SIGN_IN,
   SIGN_UP,
   SOURCE_REPO,
@@ -55,5 +58,16 @@ describe('the three doors are built from the ONE configured origin', () => {
   it('the ONE destination that is not motir-core is not built from the origin', () => {
     expect(SOURCE_REPO).toBe('https://github.com/moooon-B-V/motir-core')
     expect(SOURCE_REPO.startsWith(ORIGIN)).toBe(false)
+  })
+
+  it('the legal documents are same-origin, not built from the app origin', () => {
+    // MOTIR-4009 — the legal set moved onto motir.co, so these stopped being
+    // `${APP_ORIGIN}/legal/*` and became root-relative paths on THIS site. A
+    // relative href is what `SiteFooter` renders them through.
+    expect(LEGAL_PRIVACY).toBe('/legal/privacy')
+    expect(LEGAL_TERMS).toBe('/legal/terms')
+    expect(LEGAL_INDEX).toBe('/legal')
+    expect(LEGAL_PRIVACY.startsWith(ORIGIN)).toBe(false)
+    expect(LEGAL_INDEX.startsWith(ORIGIN)).toBe(false)
   })
 })

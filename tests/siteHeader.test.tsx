@@ -97,10 +97,20 @@ describe('the Design nav entry', () => {
 })
 
 describe('app/sitemap.ts', () => {
-  it('gains the /design line in the same change that adds the route', () => {
+  it('gains the /legal line and the seven documents in the same change that adds the routes', () => {
     expect(sitemap().map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       siteUrl('/design'),
+      siteUrl('/legal'),
+      ...[
+        'terms',
+        'privacy',
+        'cookies',
+        'acceptable-use',
+        'dpa',
+        'subprocessors',
+        'model-providers',
+      ].map((slug) => siteUrl(`/legal/${slug}`)),
     ])
   })
 })

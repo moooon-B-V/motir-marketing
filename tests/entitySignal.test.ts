@@ -48,11 +48,19 @@ describe('sitemap', () => {
   const entries = sitemap()
 
   it('lists every page the site serves, absolutely', () => {
-    // `/design` joined the root in MOTIR-1043 — the same change that added the
-    // route, which is what `app/sitemap.ts`'s own comment asked for.
+    // `/design` joined the root in MOTIR-1043; `/legal` and the seven documents
+    // joined in MOTIR-4009, read from the same directory the routes glob.
     expect(entries.map((entry) => entry.url)).toEqual([
       'https://motir.co/',
       'https://motir.co/design',
+      'https://motir.co/legal',
+      'https://motir.co/legal/terms',
+      'https://motir.co/legal/privacy',
+      'https://motir.co/legal/cookies',
+      'https://motir.co/legal/acceptable-use',
+      'https://motir.co/legal/dpa',
+      'https://motir.co/legal/subprocessors',
+      'https://motir.co/legal/model-providers',
     ])
   })
 
