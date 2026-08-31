@@ -29,9 +29,11 @@ const FIXTURE = resolve(
   ROOT,
   'tests/design/fixtures/board-chrome-pre-sweep.mock.html',
 )
-const ASSETS = ['design-showcase.mock.html', 'landing.mock.html'].map((file) =>
-  resolve(ROOT, 'design', 'marketing', file),
-)
+const ASSETS = [
+  resolve(ROOT, 'design', 'marketing', 'design-showcase.mock.html'),
+  resolve(ROOT, 'design', 'marketing', 'landing.mock.html'),
+  resolve(ROOT, 'design', 'legal', 'legal.mock.html'),
+]
 
 /*
  * Sites measured below 1.4.3 and ruled NOT a failure, each with its reason.

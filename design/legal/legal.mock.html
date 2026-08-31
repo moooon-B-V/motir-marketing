@@ -1,0 +1,1719 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/legal — the index and the document page, inside the public chrome
+      · MOTIR-4005
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of `--el-*` (light + dark,
+         `warm-editorial`, `motir` palette), copied from `@motir/design-system`.
+         Standalone, as every asset in `design/marketing/` is. Re-defines no
+         semantics. Nothing here is an invented hue; the only raw values are the
+         doc-annotation scaffold's own fills and the non-semantic shadows.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-highlight: #ff64c8;
+        --el-link: #0070d2;
+        --el-link-pressed: #005bab;
+        --el-danger: #e03131;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #fde0ec;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        --radius-card: 12px;
+        --radius-btn: 8px;
+        --radius-input: 8px;
+        --radius-control: 6px;
+        --radius-badge: 9999px;
+        --radius-kbd: 4px;
+        --spacing-card-padding: 24px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 10px;
+        --spacing-control-y: 6px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-control: 36px;
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-card: 0 4px 12px rgba(15, 15, 15, 0.08);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --font-sans-source: 'Inter';
+        --font-serif-source: 'Source Serif 4';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-link-pressed: #79b8ff;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #3a1f2a;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 38px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        max-width: 78ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        background: var(--el-page-bg);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE CHROME — COMPOSED from motir-core/design/public-site/ (MOTIR-3880),
+         not redrawn. The header and footer here are that asset's markup, class
+         for class. This asset draws ONLY what sits BETWEEN them.
+      ═══════════════════════════════════════════════════════════════ */
+      .site {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 12px var(--spacing-card-padding);
+      }
+      .brand-lockup {
+        --brand-size: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: calc(var(--brand-size) * 0.33);
+        text-decoration: none;
+        flex: none;
+      }
+      .brand-glyph {
+        color: var(--el-accent-on-surface);
+        flex: none;
+        display: block;
+      }
+      .brand-word {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: calc(var(--brand-size) * 0.72);
+        line-height: 1;
+        color: var(--el-text);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .nav a:hover {
+        color: var(--el-text);
+      }
+      .nav a.current {
+        font-weight: 600;
+        color: var(--el-accent-on-surface);
+      }
+      .nav .ph {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        cursor: default;
+      }
+      .nav .ph .soon {
+        font: 600 9px/1 var(--font-mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-strong);
+        background: var(--el-tint-lavender);
+        border-radius: var(--radius-kbd);
+        padding: 2px 4px;
+      }
+      .bar-cta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font: 600 14px/1 var(--font-sans);
+        border-radius: var(--radius-btn);
+        padding: 0 18px;
+        height: var(--height-btn-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn.sm {
+        height: var(--height-btn-sm);
+        font-size: 13px;
+        padding: 0 12px;
+      }
+      .btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn.sm svg {
+        width: 14px;
+        height: 14px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text);
+      }
+      .btn.ghost:hover {
+        background: var(--el-muted);
+      }
+      .foot {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 40px var(--spacing-card-padding);
+      }
+      .foot h2 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .foot ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .foot li,
+      .foot li a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .foot li a:hover {
+        color: var(--el-link);
+      }
+      .foot .tag {
+        margin: 10px 0 0;
+        max-width: 30rem;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .foot .tag + .tag {
+        margin-top: 8px;
+      }
+      .foot .legal {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--el-border);
+        padding-top: 16px;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE ROOM — what this card draws. Both surfaces mirror
+         motir-core `app/(public)/legal/` at `max-w-[46rem]` (736px).
+      ═══════════════════════════════════════════════════════════════ */
+      .room {
+        flex: 1;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 46rem;
+        padding: 40px var(--spacing-card-padding);
+      }
+      .room h1 {
+        font-family: var(--font-serif);
+        font-size: 30px;
+        line-height: 1.2;
+        font-weight: 700;
+        margin: 0;
+        color: var(--el-text);
+        letter-spacing: -0.01em;
+      }
+      .intro {
+        margin: 8px 0 0;
+        max-width: 34rem;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+
+      /* the index */
+      .index {
+        margin-top: 32px;
+        list-style: none;
+        padding: 0;
+        border-top: 1px solid var(--el-border);
+        border-bottom: 1px solid var(--el-border);
+      }
+      .index li {
+        border-bottom: 1px solid var(--el-border);
+      }
+      .index li:last-child {
+        border-bottom: 0;
+      }
+      .index a {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 16px 0;
+        text-decoration: none;
+      }
+      .index a:hover {
+        background: var(--el-surface-soft);
+      }
+      .index .t {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .index .v {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .contact {
+        margin: 32px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* the document page */
+      .crumb {
+        margin: 0 0 24px;
+      }
+      .crumb a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .crumb a:hover {
+        color: var(--el-link);
+      }
+      .doc-head {
+        border-bottom: 1px solid var(--el-border);
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      .doc-head .vline {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .doc-body {
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--el-text);
+      }
+      .doc-body h2 {
+        font-family: var(--font-serif);
+        font-size: 20px;
+        font-weight: 700;
+        margin: 32px 0 12px;
+        color: var(--el-text-strong);
+        letter-spacing: -0.01em;
+      }
+      .doc-body h3 {
+        font-size: 15px;
+        font-weight: 600;
+        margin: 20px 0 8px;
+        color: var(--el-text-strong);
+      }
+      .doc-body p {
+        margin: 0 0 14px;
+      }
+      .doc-body ul {
+        margin: 0 0 14px;
+        padding-left: 22px;
+      }
+      .doc-body li {
+        margin: 6px 0;
+      }
+      .doc-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 0 20px;
+        font-size: 13px;
+      }
+      .doc-body th,
+      .doc-body td {
+        text-align: left;
+        padding: 8px 10px;
+        border: 1px solid var(--el-border);
+        vertical-align: top;
+      }
+      .doc-body th {
+        font-weight: 600;
+        color: var(--el-text-strong);
+        background: var(--el-surface-soft);
+      }
+      .doc-body strong {
+        color: var(--el-text-strong);
+      }
+
+      /* the not-found state */
+      .nf {
+        text-align: center;
+        padding: 48px 0;
+      }
+      .nf .code {
+        font: 700 15px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .nf .msg {
+        margin-top: 8px;
+        font-size: 14px;
+        color: var(--el-text-secondary);
+      }
+      .nf .back {
+        display: inline-block;
+        margin-top: 20px;
+        font-size: 14px;
+        color: var(--el-link);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <header class="doc-head">
+        <h1>motir.co/legal — the index and the document page</h1>
+        <p>
+          The reading surface for the seven published legal documents, drawn
+          INSIDE the chrome that <code>design/public-site/</code> (MOTIR-3880)
+          already specifies. This asset composes that chrome and draws only the
+          room between the header and the footer.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-4005</span>
+          <span class="ref">design/legal/</span>
+          <span class="ref muted"
+            >composes motir-core/design/public-site/ (MOTIR-3880)</span
+          >
+          <span class="ref muted">mirrors app/(public)/legal/ behaviour</span>
+        </div>
+      </header>
+
+      <!-- ==========================================================
+           PANEL 1 — /legal, the index (desktop 1280).
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">1</span>
+          <h2>/legal — the index, desktop (1280)</h2>
+          <span class="note"
+            >Seven rows in PREFERRED_ORDER, the two-armed version line, and the
+            contact line. No nav item is current.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room">
+              <h1>Legal</h1>
+              <p class="intro">
+                Everything moooon B.V. publishes about the hosted Motir service
+                — what you agree to, what we do with your data, and who else it
+                reaches. If you run Motir yourself, you are your own controller
+                and these describe our service, not yours.
+              </p>
+              <ul class="index">
+                <li>
+                  <a href="/legal/terms"
+                    ><span class="t">Terms of Service</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/privacy"
+                    ><span class="t">Privacy Policy</span
+                    ><span class="v">Version 1.1.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/cookies"
+                    ><span class="t">Cookie Policy</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/acceptable-use"
+                    ><span class="t">Acceptable Use Policy</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/dpa"
+                    ><span class="t">Data Processing Agreement</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/subprocessors"
+                    ><span class="t">Subprocessors</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/model-providers"
+                    ><span class="t">Model providers</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+              </ul>
+              <p class="contact">
+                Questions about any of these: legal@motir.co
+              </p>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 2 — /legal/terms, the document page (desktop).
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">2</span>
+          <h2>/legal/terms — the document page, desktop</h2>
+          <span class="note"
+            >The breadcrumb, the h1, the two-armed version line, a rule, then
+            the real Markdown body at `max-w-[46rem]`. Real Terms of Service
+            prose, not lorem.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room">
+              <nav class="crumb" aria-label="Legal documents">
+                <a href="/legal">← All legal documents</a>
+              </nav>
+              <header class="doc-head">
+                <h1>Terms of Service</h1>
+                <p class="vline">Version 1.0.0 · not yet in effect</p>
+              </header>
+              <div class="doc-body">
+                <h2>1. Who you are contracting with</h2>
+                <p>
+                  <strong>moooon B.V.</strong>, Menkemaborg 65, 8226 TB
+                  Lelystad, Netherlands, registered with the Dutch Chamber of
+                  Commerce under KvK 97763144 ("we", "us"). You are the
+                  individual or organisation that creates an account ("you").
+                </p>
+                <p>
+                  By creating an account or using the service you agree to these
+                  terms. If you are agreeing on behalf of an organisation, you
+                  confirm you are authorised to bind it.
+                </p>
+                <h2>2. Your account</h2>
+                <p>
+                  You must be at least 16 and provide accurate details.
+                  <strong
+                    >You are responsible for what happens under your
+                    account</strong
+                  >, including keeping your credentials secure — we offer
+                  two-factor authentication and recommend enabling it.
+                </p>
+                <p>
+                  A workspace has an owner and members with roles. The owner
+                  controls who has access and what they can do.
+                  <strong
+                    >If you join a workspace someone else owns, they control
+                    that workspace's data</strong
+                  >, including whether your access continues.
+                </p>
+                <h2>3. What the service is, and the open-core split</h2>
+                <p>
+                  Motir has three layers: AI planning, a project-management
+                  core, and AI-assisted execution.
+                </p>
+                <ul>
+                  <li>
+                    <strong
+                      >The project-management core is open source (GPL-3.0) and
+                      self-hostable.</strong
+                    >
+                    You are never required to pay us to use it.
+                  </li>
+                  <li>
+                    <strong
+                      >The AI features are a paid, metered cloud
+                      capability</strong
+                    >
+                    provided by us. They consume credits, and using them is
+                    entirely optional.
+                  </li>
+                </ul>
+                <p>
+                  <strong>We may change, add or remove features.</strong> For a
+                  change that materially reduces functionality you are paying
+                  for, we will give reasonable notice and you may terminate and
+                  receive a pro-rata refund of prepaid fees.
+                </p>
+                <h2>4. Fees, if you subscribe</h2>
+                <p>
+                  Subscriptions are billed in advance. Prices are stated in the
+                  product before you subscribe, and you can cancel at any time;
+                  the subscription runs to the end of the paid period.
+                </p>
+              </div>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 3 — the two arms of the effective-date line.
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">3</span>
+          <h2>The effective-date line — both arms</h2>
+          <span class="note"
+            >`TBD` maps to `null`, so the `not yet in effect` arm is the CURRENT
+            state today; the `in effect from …` arm is what a published date
+            renders. The literal "TBD" must never reach the page.</span
+          >
+        </div>
+        <div class="row" style="display: flex; gap: 20px; flex-wrap: wrap">
+          <div
+            class="mini"
+            style="
+              flex: 1 1 300px;
+              border: 1px solid var(--el-border);
+              border-radius: 12px;
+              overflow: hidden;
+            "
+          >
+            <div
+              style="
+                padding: 10px 14px;
+                border-bottom: 1px solid var(--el-border-soft);
+                background: var(--el-surface-soft);
+                font: 600 11px var(--font-mono);
+                color: var(--el-text-secondary);
+              "
+            >
+              arm A — the CURRENT state
+            </div>
+            <div style="padding: 18px 14px; background: var(--el-page-bg)">
+              <div
+                style="font: 700 18px var(--font-serif); color: var(--el-text)"
+              >
+                Terms of Service
+              </div>
+              <div
+                style="
+                  margin-top: 6px;
+                  font-size: 13px;
+                  color: var(--el-text-secondary);
+                "
+              >
+                Version 1.0.0 · not yet in effect
+              </div>
+            </div>
+          </div>
+          <div
+            class="mini"
+            style="
+              flex: 1 1 300px;
+              border: 1px solid var(--el-border);
+              border-radius: 12px;
+              overflow: hidden;
+            "
+          >
+            <div
+              style="
+                padding: 10px 14px;
+                border-bottom: 1px solid var(--el-border-soft);
+                background: var(--el-surface-soft);
+                font: 600 11px var(--font-mono);
+                color: var(--el-text-secondary);
+              "
+            >
+              arm B — a published date
+            </div>
+            <div style="padding: 18px 14px; background: var(--el-page-bg)">
+              <div
+                style="font: 700 18px var(--font-serif); color: var(--el-text)"
+              >
+                Terms of Service
+              </div>
+              <div
+                style="
+                  margin-top: 6px;
+                  font-size: 13px;
+                  color: var(--el-text-secondary);
+                "
+              >
+                Version 1.1.0 · in effect from 1 September 2026
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 4 — the unknown slug (404).
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">4</span>
+          <h2>An unknown slug — 404, inside the chrome</h2>
+          <span class="note"
+            >`notFound()` renders a real 404; nothing above this route draws a
+            `loading.tsx`, so the status survives. The room shows the not-found
+            body with the way back to the index.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+            <main class="room">
+              <div class="nf">
+                <div class="code">404 — document not found</div>
+                <div class="msg">
+                  There is no legal document at this address.
+                </div>
+                <a class="back" href="/legal">← All legal documents</a>
+              </div>
+            </main>
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 5 — the long-form body treatment (headings, lists, table).
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">5</span>
+          <h2>The long-form body treatment</h2>
+          <span class="note"
+            >Serif h2 at 20px, sans body at 15px/1.7, nested lists, a table from
+            the subprocessors disclosure. No in-page navigation — decided,
+            below.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" style="min-height: 0">
+            <main class="room">
+              <div class="doc-body">
+                <h2>Subprocessors</h2>
+                <p>
+                  The entities below process data on our behalf to operate the
+                  hosted service. We keep this list current as the set changes.
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Pass</th>
+                      <th>What it read</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Repository read</strong></td>
+                      <td>
+                        The dependency manifests and outbound HTTP clients of
+                        the three repositories, at each repository's main branch
+                      </td>
+                      <td><strong>2026-08-27</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Platform read</strong></td>
+                      <td>
+                        The Fly applications' secret names and running
+                        environment, read from inside a machine
+                      </td>
+                      <td><strong>2026-08-27</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Vendor read</strong></td>
+                      <td>
+                        Each vendor's own published terms, for the transfer
+                        basis
+                      </td>
+                      <td><strong>2026-08-27</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h3>Nested list treatment</h3>
+                <ul>
+                  <li>One top-level point.</li>
+                  <li>
+                    Another, with structure:
+                    <ul>
+                      <li>A sub-point.</li>
+                      <li>A second sub-point.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </main>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 6 — narrow (390).
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">6</span>
+          <h2>Narrow (390 × 844) — the index and a document</h2>
+          <span class="note"
+            >The chrome collapses (menu button) and the room reflows to the full
+            390 width; the fold is stated in the notes.</span
+          >
+        </div>
+        <div class="frame" style="max-width: 390px">
+          <div class="site">
+            <header class="topbar" style="padding: 10px 14px">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <div class="bar-cta">
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free</a
+                >
+                <a class="btn ghost sm" href="#menu" aria-label="Menu">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 6h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 18h16" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+            <main class="room" style="padding: 28px 16px">
+              <h1>Legal</h1>
+              <p class="intro">
+                Everything moooon B.V. publishes about the hosted Motir service.
+              </p>
+              <ul class="index">
+                <li>
+                  <a href="/legal/terms"
+                    ><span class="t">Terms of Service</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/privacy"
+                    ><span class="t">Privacy Policy</span
+                    ><span class="v">Version 1.1.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/cookies"
+                    ><span class="t">Cookie Policy</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/subprocessors"
+                    ><span class="t">Subprocessors</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+              </ul>
+            </main>
+            <footer
+              class="foot"
+              style="grid-template-columns: 1fr 1fr; padding: 24px 16px"
+            >
+              <div style="grid-column: 1 / -1">
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal" style="grid-column: 1 / -1">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 7 — the access path, drawn in the parent surfaces.
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">7</span>
+          <h2>The access path — drawn where it lives</h2>
+          <span class="note"
+            >1 · /legal is reached from the FOOTER, not the nav · 2 · a document
+            from the index row · 3 · the index from the document's breadcrumb.
+            All three directions are drawn.</span
+          >
+        </div>
+        <div class="row" style="display: flex; gap: 20px; flex-wrap: wrap">
+          <div
+            style="
+              flex: 1 1 300px;
+              border: 1px solid var(--el-border);
+              border-radius: 12px;
+              overflow: hidden;
+            "
+          >
+            <div
+              style="
+                padding: 10px 14px;
+                border-bottom: 1px solid var(--el-border-soft);
+                background: var(--el-surface-soft);
+                font: 600 11px var(--font-mono);
+                color: var(--el-text-secondary);
+              "
+            >
+              1 · footer door
+            </div>
+            <div style="background: var(--el-surface-soft); padding: 14px">
+              <h2
+                style="
+                  margin: 0 0 8px;
+                  font-size: 12px;
+                  font-weight: 600;
+                  letter-spacing: 0.04em;
+                  text-transform: uppercase;
+                  color: var(--el-text-secondary);
+                "
+              >
+                Legal
+              </h2>
+              <ul
+                style="
+                  list-style: none;
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 6px;
+                "
+              >
+                <li>
+                  <a
+                    href="/legal/privacy"
+                    style="
+                      font-size: 13px;
+                      color: var(--el-text-secondary);
+                      text-decoration: none;
+                    "
+                    >Privacy Policy</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/legal/terms"
+                    style="
+                      font-size: 13px;
+                      color: var(--el-text-secondary);
+                      text-decoration: none;
+                    "
+                    >Terms of Service</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/legal"
+                    style="
+                      font-size: 13px;
+                      color: var(--el-text-secondary);
+                      text-decoration: none;
+                    "
+                    >All legal documents</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            style="
+              flex: 1 1 300px;
+              border: 1px solid var(--el-border);
+              border-radius: 12px;
+              overflow: hidden;
+            "
+          >
+            <div
+              style="
+                padding: 10px 14px;
+                border-bottom: 1px solid var(--el-border-soft);
+                background: var(--el-surface-soft);
+                font: 600 11px var(--font-mono);
+                color: var(--el-text-secondary);
+              "
+            >
+              2 · index row → document
+            </div>
+            <div style="background: var(--el-page-bg); padding: 14px">
+              <a
+                href="/legal/terms"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 4px;
+                  padding: 14px 0;
+                  text-decoration: none;
+                "
+              >
+                <span
+                  style="
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: var(--el-text);
+                  "
+                  >Terms of Service</span
+                >
+                <span style="font-size: 13px; color: var(--el-text-secondary)"
+                  >Version 1.0.0 · not yet in effect</span
+                >
+              </a>
+            </div>
+          </div>
+          <div
+            style="
+              flex: 1 1 300px;
+              border: 1px solid var(--el-border);
+              border-radius: 12px;
+              overflow: hidden;
+            "
+          >
+            <div
+              style="
+                padding: 10px 14px;
+                border-bottom: 1px solid var(--el-border-soft);
+                background: var(--el-surface-soft);
+                font: 600 11px var(--font-mono);
+                color: var(--el-text-secondary);
+              "
+            >
+              3 · breadcrumb → index
+            </div>
+            <div style="background: var(--el-page-bg); padding: 14px">
+              <a
+                href="/legal"
+                style="
+                  font-size: 13px;
+                  color: var(--el-text-secondary);
+                  text-decoration: none;
+                "
+                >← All legal documents</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PANEL 8 — dark theme.
+      ========================================================== -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">8</span>
+          <h2>Dark theme — the same surfaces under `data-theme="dark"`</h2>
+          <span class="note"
+            >The chrome re-skins through the same layer; the room's inks clear
+            AA on the dark page.</span
+          >
+        </div>
+        <div class="frame dark" style="background: var(--el-page-bg)">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+            <main class="room">
+              <h1>Legal</h1>
+              <p class="intro">
+                Everything moooon B.V. publishes about the hosted Motir service.
+              </p>
+              <ul class="index">
+                <li>
+                  <a href="/legal/terms"
+                    ><span class="t">Terms of Service</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/privacy"
+                    ><span class="t">Privacy Policy</span
+                    ><span class="v">Version 1.1.0 · not yet in effect</span></a
+                  >
+                </li>
+                <li>
+                  <a href="/legal/cookies"
+                    ><span class="t">Cookie Policy</span
+                    ><span class="v">Version 1.0.0 · not yet in effect</span></a
+                  >
+                </li>
+              </ul>
+            </main>
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
