@@ -46,12 +46,11 @@ export async function generateMetadata({
 /**
  * ONE FEATURE REQUEST (MOTIR-4117) — body, public thread, vote count.
  *
- * ⚠️ RENDERED, NOT ACTIONABLE, and that is this card's stated boundary. The
- * upvote and the comment composer are MOTIR-4119's; this card renders the
- * surfaces they attach to. Both are HAND-OFFS under `public-surface-hosts.md`
- * AMENDMENT 4 rows 4 and 5 — so what will appear here is a LINK to
- * `app.motir.co`, not a button that posts, and the placeholders below say where
- * each one goes rather than pretending to be disabled controls.
+ * ⚠️ THE UPVOTE AND THE COMMENT ARE HAND-OFFS, added by MOTIR-4119
+ * (`public-surface-hosts.md` AMENDMENT 4 rows 4 and 5). Each is a LINK to
+ * `app.motir.co/act` carrying this page as its return, never a button that
+ * posts: `sameSite: 'lax'` means a cross-origin write from here carries no
+ * credential, so there is nothing to post to.
  *
  * ⚠️ `voted` IS ALWAYS FALSE HERE, and the count is rendered without a voted
  * state on purpose. `actorUserId` is structurally null for every read this host
@@ -163,11 +162,20 @@ export default async function PublicRequestPage({
 
             {/* The composer's PLACE, per this card's boundary. MOTIR-4119 turns
                 the sentence into the hand-off link AMENDMENT 4 row 5 specifies. */}
+            {/* Row 5 — the COMMENT hand-off (MOTIR-4119). */}
             <div className="mt-5 rounded-(--radius-card) border border-dashed border-(--el-border-strong) bg-(--el-surface-soft) p-4">
               <p className="text-[13px] text-(--el-text-secondary)">
                 Adding to this discussion signs you in on{' '}
                 <strong className="text-(--el-text)">app.motir.co</strong> and
                 brings you back to this request.
+              </p>
+              <p className="mt-2.5">
+                <Link
+                  href={actHref('comment', identifier, returnPath)}
+                  className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) border border-(--el-border-strong) bg-(--el-page-bg) px-3 text-[13px] font-medium text-(--el-text) hover:bg-(--el-surface)"
+                >
+                  Add a comment&nbsp;<span aria-hidden>↗</span>
+                </Link>
               </p>
             </div>
           </div>
@@ -180,8 +188,19 @@ export default async function PublicRequestPage({
               <p className="text-[14px] text-(--el-text)">
                 {request.data.voteCount.toLocaleString('en')} upvotes
               </p>
-              {/* The vote control's PLACE — a link, when MOTIR-4119 adds it. */}
-              <p className="mt-2 text-[12px]">
+              {/* Row 4 — the UPVOTE hand-off (MOTIR-4119). */}
+              <p className="mt-2">
+                <Link
+                  href={actHref('upvote', identifier, returnPath)}
+                  className="inline-flex items-center gap-1.5 rounded-(--radius-badge) border border-(--el-border-strong) bg-(--el-page-bg) px-2.5 py-1 text-[12px] text-(--el-text-secondary) hover:border-(--el-accent) hover:text-(--el-text)"
+                >
+                  <span aria-hidden className="text-[10px]">
+                    ▲
+                  </span>
+                  Upvote&nbsp;<span aria-hidden>↗</span>
+                </Link>
+              </p>
+              <p className="mt-1.5 text-[12px]">
                 Upvoting happens on app.motir.co and returns you here.
               </p>
             </div>

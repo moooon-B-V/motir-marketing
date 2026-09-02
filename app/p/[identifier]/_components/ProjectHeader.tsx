@@ -4,6 +4,7 @@ import {
   projectTabHref,
   type PublicProjectOverviewDto,
 } from '@/lib/publicProject'
+import { ActRail } from './ActRail'
 
 /**
  * The project HERO and the TAB BAR (MOTIR-4115) — panel 1 of
@@ -27,6 +28,10 @@ export function ProjectHeader({
   /** The tab segment that is current — `''` for the Overview. */
   current: string
 }) {
+  // The act rail returns the visitor to the tab they were on, not to the
+  // project root — a hand-off that dropped you somewhere else would be a worse
+  // round trip than no round trip.
+  const returnPath = projectTabHref(project.identifier, current)
   const { identifier, name, workspaceName, publicTagline, publicTags, stats } =
     project
 
@@ -68,6 +73,8 @@ export function ProjectHeader({
           <Stat n={stats.shipped} k="shipped" />
         </dl>
       </div>
+
+      <ActRail identifier={identifier} returnPath={returnPath} />
 
       {/* ⚠️ SCROLLS, never wraps. Six short labels; a wrapped row would push the
           content down by a line on every project whose window is narrow, which

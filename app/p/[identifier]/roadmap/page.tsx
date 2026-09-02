@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
   ROADMAP_BUCKETS,
+  actHref,
   loadRoadmap,
   loadRoadmapColumn,
   pagedTabHref,
@@ -26,12 +27,11 @@ export async function generateMetadata({
  * The ROADMAP tab (MOTIR-4116) — four demand-ordered buckets, each paging
  * independently.
  *
- * ⚠️ NO VOTE CONTROL SHIPS HERE, and the surface it will attach to is rendered.
- * The card draws the boundary in terms: this card renders and pages, and the
- * vote is MOTIR-4119's even though it appears on this tab. So each card shows
- * its COUNT — which is public and anonymous — and no control that writes.
- * `public-surface-hosts.md` AMENDMENT 4 row 4 makes the vote a HAND-OFF, which
- * is a link to app.motir.co that this card does not add.
+ * ⚠️ THE VOTE IS A HAND-OFF, added by MOTIR-4119 (AMENDMENT 4 row 4). It is a
+ * LINK to `app.motir.co/act`, not a button that posts: `sameSite: 'lax'` means a
+ * cross-origin write from this host carries no credential, so there is nothing
+ * to post to. The COUNT renders anonymously and never shows a voted state,
+ * because `actorUserId` is structurally null here (row 8).
  *
  * ⚠️ ONE COLUMN'S FAILURE MUST NOT BLANK THE PAGE. The card asks for that in
  * terms. Paging a column is a navigation carrying `?bucket=&cursor=`, and when
@@ -143,14 +143,31 @@ export default async function RoadmapTab({
                       >
                         {card.title}
                       </Link>
-                      {/* The COUNT only. The vote control is MOTIR-4119's. */}
-                      <span className="mt-2 inline-flex items-center gap-1.5 rounded-(--radius-badge) border border-(--el-border) px-2 py-0.5 text-[12px] text-(--el-text-secondary)">
+                      {/* Row 4 — the VOTE, a hand-off (MOTIR-4119). A LINK,
+                          because `sameSite: 'lax'` means a cross-origin write
+                          from here carries no credential at all. It never reads
+                          "voted": `actorUserId` is structurally null on this
+                          host, so the page cannot know (row 8). */}
+                      <Link
+                        href={actHref(
+                          'vote',
+                          identifier,
+                          `/p/${encodeURIComponent(identifier)}/roadmap`,
+                        )}
+                        className="mt-2 inline-flex items-center gap-1.5 rounded-(--radius-badge) border border-(--el-border-strong) bg-(--el-page-bg) px-2 py-0.5 text-[12px] text-(--el-text-secondary) hover:border-(--el-accent) hover:text-(--el-text)"
+                      >
                         <span aria-hidden className="text-[10px]">
                           ▲
                         </span>
                         {card.voteCount}
-                        <span className="sr-only"> upvotes</span>
-                      </span>
+                        <span className="sr-only">
+                          {' '}
+                          upvotes — vote on app.motir.co
+                        </span>
+                        <span aria-hidden className="text-[10px] opacity-80">
+                          ↗
+                        </span>
+                      </Link>
                     </div>
                   ))
                 )}
