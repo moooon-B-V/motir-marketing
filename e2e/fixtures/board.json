@@ -1,0 +1,80 @@
+{
+  "boardId": "board_1",
+  "name": "Delivery",
+  "cap": 200,
+  "truncated": true,
+  "columns": [
+    {
+      "id": "c1",
+      "name": "To do",
+      "statusKeys": ["todo"],
+      "totalCount": 42,
+      "cards": [
+        {
+          "id": "wi_1",
+          "identifier": "MOTIR-1",
+          "key": 1,
+          "title": "A public work item 1",
+          "kind": "subtask",
+          "status": "To Do",
+          "statusCategory": "todo",
+          "priority": "medium"
+        },
+        {
+          "id": "wi_2",
+          "identifier": "MOTIR-2",
+          "key": 2,
+          "title": "A private epic",
+          "kind": "epic",
+          "status": "To Do",
+          "statusCategory": "todo",
+          "priority": "medium",
+          "childrenHidden": true
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "name": "In progress",
+      "statusKeys": ["in_progress"],
+      "totalCount": 6,
+      "cards": [
+        {
+          "id": "wi_3",
+          "identifier": "MOTIR-3",
+          "key": 3,
+          "title": "A public work item 3",
+          "kind": "subtask",
+          "status": "In Progress",
+          "statusCategory": "in_progress",
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "name": "In review",
+      "statusKeys": ["in_review"],
+      "totalCount": 3,
+      "cards": []
+    },
+    {
+      "id": "c4",
+      "name": "Done",
+      "statusKeys": ["done"],
+      "totalCount": 311,
+      "cards": [
+        {
+          "id": "wi_4",
+          "identifier": "MOTIR-4",
+          "key": 4,
+          "title": "A public work item 4",
+          "kind": "subtask",
+          "status": "Done",
+          "statusCategory": "done",
+          "priority": "medium"
+        }
+      ]
+    }
+  ]
+}

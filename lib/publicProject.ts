@@ -83,6 +83,112 @@ export interface PublicProjectOverviewDto {
   viewerCanManage: boolean
 }
 
+/* ── the tab shapes (MOTIR-4116) ──────────────────────────────────────────── */
+
+/** One public-safe work item — the same stripped projection every list uses. */
+export interface PublicWorkItemDto {
+  id: string
+  identifier: string
+  key: number
+  title: string
+  kind: string
+  status: string
+  statusCategory: 'todo' | 'in_progress' | 'done'
+  priority: string
+  /**
+   * Present and TRUE only on a private epic seen by a non-member. Its
+   * descendants are excluded server-side, not hidden here — this is the display
+   * signal, and the reason a row can say so honestly.
+   */
+  childrenHidden?: boolean
+}
+
+export interface PublicWorkItemPageDto {
+  items: PublicWorkItemDto[]
+  nextCursor: string | null
+}
+
+export interface PublicBoardColumnDto {
+  id: string
+  name: string
+  statusKeys: string[]
+  cards: PublicWorkItemDto[]
+  totalCount: number
+}
+
+export interface PublicBoardDto {
+  boardId: string
+  name: string
+  columns: PublicBoardColumnDto[]
+  /** The board-level load cap: this read is BOUNDED, not paged. */
+  cap: number
+  truncated: boolean
+}
+
+export interface PublicTreeRowDto extends PublicWorkItemDto {
+  parentId: string | null
+  hasChildren: boolean
+}
+
+export interface PublicTreeLevelDto {
+  rows: PublicTreeRowDto[]
+  hasMore: boolean
+  /** The level's FULL sibling count, independent of paging. */
+  total: number
+}
+
+export type PublicRoadmapBucket =
+  'submitted' | 'planned' | 'in_progress' | 'done'
+
+export const ROADMAP_BUCKETS: readonly {
+  key: PublicRoadmapBucket
+  label: string
+}[] = [
+  { key: 'submitted', label: 'Submitted' },
+  { key: 'planned', label: 'Planned' },
+  { key: 'in_progress', label: 'In progress' },
+  { key: 'done', label: 'Done' },
+] as const
+
+export interface PublicRoadmapCardDto {
+  id: string
+  identifier: string
+  key: number
+  title: string
+  kind: string
+  voteCount: number
+  /** Always false on this host — see `viewerCanManage`'s note. */
+  voted: boolean
+}
+
+export interface PublicRoadmapColumnDto {
+  key: PublicRoadmapBucket
+  totalCount: number
+  cards: PublicRoadmapCardDto[]
+  nextCursor: string | null
+}
+
+export interface PublicRoadmapDto {
+  columns: PublicRoadmapColumnDto[]
+}
+
+export interface PublicChangelogEntryDto {
+  identifier: string
+  key: number
+  title: string
+  kind: string
+  status: string
+  priority: string
+  /** ISO 8601 — the most recent transition into a done-category status. */
+  shippedAt: string
+  epic: { identifier: string; title: string } | null
+}
+
+export interface PublicChangelogPageDto {
+  entries: PublicChangelogEntryDto[]
+  nextCursor: string | null
+}
+
 /* ── the read ─────────────────────────────────────────────────────────────── */
 
 /** The public API origin — `app.motir.co`, from `lib/appOrigin.ts`. */
@@ -178,4 +284,101 @@ export function deriveDescription(md: string | null, fallback: string): string {
   return text.length > DESCRIPTION_MAX
     ? `${text.slice(0, DESCRIPTION_MAX - 1).trimEnd()}…`
     : text
+}
+
+/* ── the five tab reads (MOTIR-4116) ──────────────────────────────────────── */
+//
+// Each takes the project key and whatever paging coordinate its endpoint uses,
+// and returns the same three-outcome `PublicRead`. The `not-found` arm belongs
+// to the PROJECT — a tab is never 404 in its own right, because the shell has
+// already resolved the project by the time a tab renders.
+
+const seg = (identifier: string) => `/p/${encodeURIComponent(identifier)}`
+
+/** The BOARD — bounded by the API's own cap, not paged. */
+export function loadBoard(
+  identifier: string,
+): Promise<PublicRead<PublicBoardDto>> {
+  return readPublic<PublicBoardDto>(`${seg(identifier)}/board`)
+}
+
+/** The ITEMS list — cursor-paged; `cursor` omitted is the first page. */
+export function loadItems(
+  identifier: string,
+  cursor?: string,
+): Promise<PublicRead<PublicWorkItemPageDto>> {
+  const qs = cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
+  return readPublic<PublicWorkItemPageDto>(`${seg(identifier)}/items${qs}`)
+}
+
+/**
+ * ONE LEVEL of the tree — the roots, or one parent's direct children.
+ *
+ * OFFSET-paged, not cursor-paged, and that is the endpoint's contract rather
+ * than a choice here: a level is a stable sibling set, so the loaded count is
+ * the next offset.
+ */
+export function loadTreeLevel(
+  identifier: string,
+  opts: { parentId?: string; offset?: number } = {},
+): Promise<PublicRead<PublicTreeLevelDto>> {
+  const params = new URLSearchParams()
+  if (opts.parentId) params.set('parentId', opts.parentId)
+  if (opts.offset) params.set('offset', String(opts.offset))
+  const qs = params.toString()
+  return readPublic<PublicTreeLevelDto>(
+    `${seg(identifier)}/tree${qs ? `?${qs}` : ''}`,
+  )
+}
+
+/** The whole ROADMAP — four columns, each with its first page. */
+export function loadRoadmap(
+  identifier: string,
+): Promise<PublicRead<PublicRoadmapDto>> {
+  return readPublic<PublicRoadmapDto>(`${seg(identifier)}/roadmap`)
+}
+
+/**
+ * ONE roadmap column's next page.
+ *
+ * ⚠️ BOTH parameters or NEITHER. The endpoint serves the whole tab when neither
+ * is present and refuses a half-specified request — a bucket with no cursor is
+ * `MISSING_ROADMAP_CURSOR`, not "start from the top". That refusal is
+ * deliberate (a pager that silently restarted would be far harder to notice),
+ * so this function requires both and cannot produce the ambiguous call.
+ */
+export function loadRoadmapColumn(
+  identifier: string,
+  bucket: PublicRoadmapBucket,
+  cursor: string,
+): Promise<PublicRead<PublicRoadmapColumnDto>> {
+  const qs = `?bucket=${encodeURIComponent(bucket)}&cursor=${encodeURIComponent(cursor)}`
+  return readPublic<PublicRoadmapColumnDto>(`${seg(identifier)}/roadmap${qs}`)
+}
+
+/** The CHANGELOG — cursor-paged. */
+export function loadChangelog(
+  identifier: string,
+  cursor?: string,
+): Promise<PublicRead<PublicChangelogPageDto>> {
+  const qs = cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
+  return readPublic<PublicChangelogPageDto>(`${seg(identifier)}/changelog${qs}`)
+}
+
+/**
+ * The href a no-JS pager points at: this tab's own path, carrying the cursor.
+ *
+ * ⚠️ PAGING IS A REAL URL, following `app/explore/_components/Gallery.tsx`. A
+ * "Load more" that only works with JavaScript is a page a crawler cannot walk
+ * and a reader cannot link to — and this whole surface exists to be crawled.
+ */
+export function pagedTabHref(
+  identifier: string,
+  segment: string,
+  params: Record<string, string | undefined>,
+): string {
+  const search = new URLSearchParams()
+  for (const [k, v] of Object.entries(params)) if (v) search.set(k, v)
+  const qs = search.toString()
+  return `${projectTabHref(identifier, segment)}${qs ? `?${qs}` : ''}`
 }

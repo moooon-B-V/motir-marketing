@@ -1,0 +1,77 @@
+{
+  "columns": [
+    {
+      "key": "submitted",
+      "totalCount": 61,
+      "cards": [
+        {
+          "id": "wi_51",
+          "identifier": "MOTIR-51",
+          "key": 51,
+          "title": "A feature request 51",
+          "kind": "task",
+          "voteCount": 84,
+          "voted": false
+        },
+        {
+          "id": "wi_52",
+          "identifier": "MOTIR-52",
+          "key": 52,
+          "title": "A feature request 52",
+          "kind": "task",
+          "voteCount": 37,
+          "voted": false
+        }
+      ],
+      "nextCursor": "rm_52"
+    },
+    {
+      "key": "planned",
+      "totalCount": 37,
+      "cards": [
+        {
+          "id": "wi_53",
+          "identifier": "MOTIR-53",
+          "key": 53,
+          "title": "A feature request 53",
+          "kind": "task",
+          "voteCount": 122,
+          "voted": false
+        }
+      ],
+      "nextCursor": null
+    },
+    {
+      "key": "in_progress",
+      "totalCount": 6,
+      "cards": [
+        {
+          "id": "wi_54",
+          "identifier": "MOTIR-54",
+          "key": 54,
+          "title": "A feature request 54",
+          "kind": "task",
+          "voteCount": 96,
+          "voted": false
+        }
+      ],
+      "nextCursor": null
+    },
+    {
+      "key": "done",
+      "totalCount": 311,
+      "cards": [
+        {
+          "id": "wi_55",
+          "identifier": "MOTIR-55",
+          "key": 55,
+          "title": "A feature request 55",
+          "kind": "task",
+          "voteCount": 58,
+          "voted": false
+        }
+      ],
+      "nextCursor": null
+    }
+  ]
+}

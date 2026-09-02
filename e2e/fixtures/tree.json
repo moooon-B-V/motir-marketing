@@ -1,0 +1,30 @@
+{
+  "total": 12,
+  "hasMore": true,
+  "rows": [
+    {
+      "id": "wi_1",
+      "identifier": "MOTIR-1",
+      "key": 1,
+      "title": "An epic with children",
+      "kind": "epic",
+      "status": "To Do",
+      "statusCategory": "todo",
+      "priority": "medium",
+      "parentId": null,
+      "hasChildren": true
+    },
+    {
+      "id": "wi_3",
+      "identifier": "MOTIR-3",
+      "key": 3,
+      "title": "A public work item 3",
+      "kind": "subtask",
+      "status": "In Progress",
+      "statusCategory": "in_progress",
+      "priority": "medium",
+      "parentId": null,
+      "hasChildren": false
+    }
+  ]
+}

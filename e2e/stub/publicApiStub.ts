@@ -64,7 +64,28 @@ const ROUTES: Record<string, string> = {
   '/api/public/explore': 'explore.json',
   '/api/public/categories': 'categories.json',
   '/api/public/p/MOTIR': 'project.json',
+  '/api/public/p/MOTIR/board': 'board.json',
+  '/api/public/p/MOTIR/items': 'items.json',
+  '/api/public/p/MOTIR/tree': 'tree.json',
+  '/api/public/p/MOTIR/roadmap': 'roadmap.json',
+  '/api/public/p/MOTIR/changelog': 'changelog.json',
 }
+
+/**
+ * Paths whose answer depends on a QUERY parameter — the second page of a list,
+ * one expanded tree level, one paged roadmap column.
+ *
+ * ⚠️ THIS IS WHAT MAKES A PAGING SPEC MEAN ANYTHING. A stub that answered the
+ * same fixture whatever the cursor would let a broken pager pass: the second
+ * page would look exactly like the first, and "Load more" returning the same
+ * rows is precisely the bug. Each entry is `[pathname, param, value, fixture]`
+ * and is matched BEFORE the table above.
+ */
+const PARAMETERISED: Array<[string, string, string, string]> = [
+  ['/api/public/p/MOTIR/items', 'cursor', 'wi_4', 'items-page2.json'],
+  ['/api/public/p/MOTIR/tree', 'parentId', 'wi_1', 'tree-child.json'],
+  ['/api/public/p/MOTIR/roadmap', 'bucket', 'submitted', 'roadmap-column.json'],
+]
 
 function fixture(name: string): string {
   return readFileSync(join(FIXTURE_DIR, name), 'utf8')
@@ -72,7 +93,31 @@ function fixture(name: string): string {
 
 function handle(req: IncomingMessage, res: ServerResponse): void {
   const url = new URL(req.url ?? '/', 'http://stub.invalid')
-  const file = ROUTES[url.pathname]
+
+  const parameterised = PARAMETERISED.find(
+    ([path, param, value]) =>
+      url.pathname === path && url.searchParams.get(param) === value,
+  )
+
+  // ⚠️ THE ROADMAP HAS TWO ARMS AND THE STUB HAS TO KEEP THEM APART. Falling
+  // through to the whole-tab fixture for a request that carried `bucket` would
+  // answer a `PublicRoadmap` where the caller asked for a `PublicRoadmapColumn`
+  // — two different shapes on one path, 200, and the page renders undefined.
+  // The real endpoint refuses instead: an unknown bucket is
+  // `INVALID_ROADMAP_BUCKET` and a malformed cursor is `INVALID_ROADMAP_CURSOR`,
+  // both 400. A stub that is more permissive than the thing it stands in for
+  // lets a spec pass on a path production would refuse.
+  if (
+    parameterised === undefined &&
+    url.pathname.endsWith('/roadmap') &&
+    (url.searchParams.has('bucket') || url.searchParams.has('cursor'))
+  ) {
+    res.writeHead(400, { 'content-type': 'application/json' })
+    res.end(JSON.stringify({ code: 'INVALID_ROADMAP_CURSOR' }))
+    return
+  }
+
+  const file = parameterised?.[3] ?? ROUTES[url.pathname]
 
   if (file === undefined) {
     // ⚠️ 404 WITH A `code`, which is the shape `motir-core` answers with — and
