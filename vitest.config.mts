@@ -33,8 +33,19 @@ export default defineConfig({
      * whole finding that card records — and the `Test` job installs no
      * browser, so a spec left in here would FAIL rather than run twice.
      * `vitest.design.config.mts` includes exactly what this excludes.
+     *
+     * ⚠️ `tests/seam/**` IS EXCLUDED FOR THE OPPOSITE REASON, and this one is
+     * a CONTRACT rather than a capability (MOTIR-4139). That lane fetches the
+     * egress manifest from the live motir-core deployment. It would RUN here
+     * perfectly well — and that is the problem: `ci.yml` runs this job on every
+     * pull request, so an app.motir.co restart would turn unrelated pull
+     * requests red, which is precisely the cross-repository CI coupling
+     * `public-surface-hosts.md` AMENDMENT 2 §E's split exists to avoid.
+     * `vitest.seam.config.mts` includes exactly what this excludes, and
+     * AMENDMENT 3 §B fixes where it may be triggered from: the deploy and a
+     * schedule, never `pull_request`. Do not fold it back in.
      */
-    exclude: ['node_modules/**', 'tests/design/**'],
+    exclude: ['node_modules/**', 'tests/design/**', 'tests/seam/**'],
     env: {
       NEXT_PUBLIC_MOTIR_APP_ORIGIN: 'https://app.test.motir.co',
     },
