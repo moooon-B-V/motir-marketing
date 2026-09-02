@@ -38,6 +38,74 @@ export default defineConfig({
     env: {
       NEXT_PUBLIC_MOTIR_APP_ORIGIN: 'https://app.test.motir.co',
     },
+    /*
+     * COVERAGE (MOTIR-4121) — this repository's first floor.
+     *
+     * ⚠️ IT RUNS INSIDE `pnpm test`, NOT AS A SECOND JOB, and that is the card's
+     * own requirement ("the suite runs in the existing `test` job with no new CI
+     * job"). `ci.yml`'s header says not to declare a gate before its job exists;
+     * this adds a floor without adding a job, so the `test` gate that already
+     * exists is the one that enforces it.
+     *
+     * ⚠️ `include` IS AN OPT-IN LIST, DELIBERATELY, and it is the same shape
+     * motir-core uses. A repository-wide default would put every landing-page
+     * component under a floor nobody measured, and the honest way to introduce
+     * coverage to a repository that has never had it is one measured surface at
+     * a time. What is listed here is what MOTIR-3877 added — MEASURED FIRST,
+     * then pinned at the floor, per motir-core's own rule for that list.
+     *
+     * ⚠️ AND A FILE NOT IN THE LIST IS NOT MEASURED, which is exactly the defect
+     * MOTIR-4120 found on the other side of this story: the sibling entry there
+     * was a literal path, so five new route files inherited no floor at all and
+     * the gate was green because it was measuring nothing. Adding a `/p/*` file
+     * without adding it here reproduces that, so the list is checked by a test.
+     */
+    coverage: {
+      enabled: true,
+      provider: 'v8',
+      reporter: ['text-summary'],
+      include: ['lib/publicProject.ts', 'app/p/**/*.tsx'],
+      /*
+       * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
+       * of paths with one blanket justification is how a gate stops measuring
+       * things nobody decided to stop measuring.
+       *
+       *  • `changelog.xml/route.ts` — a pass-through whose whole behaviour is a
+       *    status mapping against a real upstream. Covered end to end in the
+       *    browser lane, which has one; a jsdom test would assert a mock.
+       *  • `opengraph-image.tsx` — renders a raster through satori, which jsdom
+       *    cannot execute at all. The browser lane FETCHES the image and checks
+       *    its bytes, which is the only assertion that means anything.
+       *  • `**\/page.tsx` and `tabPage.tsx` — async Server Components. Covering
+       *    one means awaiting it, and what it does is compose a read with a
+       *    render: both halves are already covered — the read in
+       *    `lib/publicProject.ts` at 100%, the render in the component tests —
+       *    and the composition is what the browser lane walks. MOTIR-4121 says
+       *    in terms not to duplicate the E2E. This is the same gap motir-core's
+       *    own config records for its `page.tsx` files, for the same reason.
+       *  • `layout.tsx` — nine lines of chrome composition with no branch.
+       */
+      exclude: [
+        'app/p/**/changelog.xml/route.ts',
+        'app/p/**/opengraph-image.tsx',
+        'app/p/**/page.tsx',
+        'app/p/**/layout.tsx',
+        'app/p/**/_components/tabPage.tsx',
+      ],
+      /*
+       * MEASURED FIRST, then pinned at the floor — motir-core's rule for its own
+       * list, followed here. On this branch: `lib/publicProject.ts` 100 across;
+       * `ActRail` / `ProjectHeader` / `Rows` / `States` / `JsonLd` 100 lines.
+       */
+      thresholds: {
+        'lib/publicProject.ts': { lines: 90, functions: 90, branches: 90 },
+        'app/p/**/_components/*.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 75,
+        },
+      },
+    },
   },
   resolve: {
     alias: {
