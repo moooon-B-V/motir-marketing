@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { copy } from '@/lib/copy'
-import { SiteFooter } from '@/app/_components/SiteFooter'
-import { SiteHeader } from '@/app/_components/SiteHeader'
+import { SiteShell } from '@/app/_components/SiteShell'
 
 /**
  * The docs shell (MOTIR-4046). Composes the same chrome every motir.co surface
@@ -20,14 +19,8 @@ export default function DocsLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex min-h-dvh flex-col bg-(--el-page-bg) text-(--el-text)">
-      <SiteHeader />
-      <div className="flex flex-1 flex-col">
-        <div className="mx-auto w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
-          {children}
-        </div>
-      </div>
-      <SiteFooter />
-    </div>
+    <SiteShell contentClassName="mx-auto w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
+      {children}
+    </SiteShell>
   )
 }

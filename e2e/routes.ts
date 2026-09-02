@@ -1,0 +1,74 @@
+/**
+ * EVERY ROUTE THIS SITE SERVES, AND ONE CONCRETE URL FOR EACH (MOTIR-4169).
+ *
+ * ── ⚠️ THIS FILE IS A LIST, AND THAT IS SAFE ONLY BECAUSE A TEST ENUMERATES ─
+ *
+ * MOTIR-4169 asks for the landmark assertion to ENUMERATE the routes rather
+ * than list them, "so a page added later cannot ship without one" — and a
+ * browser cannot enumerate a route tree: a dynamic segment has no URL until
+ * somebody supplies a parameter the stub can answer, so a spec that walked
+ * `app/**` would have to invent `/explore/topic/undefined`.
+ *
+ * The enumeration therefore lives one lane over, in
+ * `tests/mainLandmark.test.ts`, and it enumerates `app/**​/page.tsx` from disk
+ * and asserts that the pattern set below is EXACTLY that set — no missing
+ * entry, no stale one. So a thirteenth page turns the `test` job red until it
+ * appears here, and appearing here is what puts it in the browser lane's walk.
+ * The list is the E2E lane's parameter table; the enumeration is the guard.
+ *
+ * ── THE URLS THE STUB CAN ANSWER ──────────────────────────────────────────
+ *
+ * Every `/p/*` URL uses `MOTIR`, the identifier `e2e/stub/publicApiStub.ts`
+ * has fixtures for, and the two detail pages use the keys its `ROUTES` table
+ * names. A URL this stub has no fixture for answers `STUB_NO_FIXTURE` and the
+ * page renders its own not-found — which would pass a landmark assertion while
+ * proving nothing about the route, so the pairing matters.
+ */
+
+export type SiteRoute = {
+  /** The Next route pattern, as `tests/mainLandmark.test.ts` derives it. */
+  readonly pattern: string
+  /** A URL the browser lane can actually open against the stub. */
+  readonly url: string
+}
+
+export const SITE_ROUTES: readonly SiteRoute[] = [
+  { pattern: '/', url: '/' },
+  { pattern: '/design', url: '/design' },
+
+  { pattern: '/explore', url: '/explore' },
+  {
+    pattern: '/explore/topic/[slug]',
+    // `developer-tools` is the first slug in `e2e/fixtures/categories.json`.
+    url: '/explore/topic/developer-tools',
+  },
+
+  { pattern: '/docs', url: '/docs' },
+  { pattern: '/docs/api', url: '/docs/api' },
+  { pattern: '/docs/api/getting-started', url: '/docs/api/getting-started' },
+  { pattern: '/docs/api/stability', url: '/docs/api/stability' },
+  { pattern: '/docs/cli', url: '/docs/cli' },
+  { pattern: '/docs/mcp', url: '/docs/mcp' },
+  { pattern: '/docs/mcp/tools', url: '/docs/mcp/tools' },
+  { pattern: '/docs/sandbox', url: '/docs/sandbox' },
+
+  { pattern: '/legal', url: '/legal' },
+  // `terms` is one of the seven files in `content/legal/`.
+  { pattern: '/legal/[slug]', url: '/legal/terms' },
+
+  { pattern: '/p/[identifier]', url: '/p/MOTIR' },
+  { pattern: '/p/[identifier]/board', url: '/p/MOTIR/board' },
+  { pattern: '/p/[identifier]/changelog', url: '/p/MOTIR/changelog' },
+  { pattern: '/p/[identifier]/items', url: '/p/MOTIR/items' },
+  {
+    pattern: '/p/[identifier]/items/[key]',
+    url: '/p/MOTIR/items/MOTIR-4115',
+  },
+  {
+    pattern: '/p/[identifier]/requests/[requestKey]',
+    url: '/p/MOTIR/requests/MOTIR-4051',
+  },
+  { pattern: '/p/[identifier]/requests/new', url: '/p/MOTIR/requests/new' },
+  { pattern: '/p/[identifier]/roadmap', url: '/p/MOTIR/roadmap' },
+  { pattern: '/p/[identifier]/tree', url: '/p/MOTIR/tree' },
+]

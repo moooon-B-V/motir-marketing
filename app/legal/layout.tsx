@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { copy } from '@/lib/copy'
-import { SiteFooter } from '@/app/_components/SiteFooter'
-import { SiteHeader } from '@/app/_components/SiteHeader'
+import { SiteShell } from '@/app/_components/SiteShell'
 
 /**
  * The legal-document shell (MOTIR-4009).
@@ -46,10 +45,12 @@ export default function LegalLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex min-h-dvh flex-col bg-(--el-page-bg) text-(--el-text)">
-      <SiteHeader />
-      <div className="flex flex-1 flex-col">{children}</div>
-      <SiteFooter />
-    </div>
+    /* ⚠️ THE WIDTH BOX MOVED HERE FROM THE TWO PAGES (MOTIR-4169). Both of
+       them used to open with `<main className="mx-auto … max-w-[46rem] …">`;
+       the landmark now belongs to the chrome, so the box it carried travels
+       with it. Identical values, one place. */
+    <SiteShell contentClassName="mx-auto w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
+      {children}
+    </SiteShell>
   )
 }
