@@ -101,6 +101,10 @@ export default defineConfig({
       // is false and the lane always starts its own.
       reuseExistingServer: !process.env['CI'],
       timeout: 30_000,
+      // The port is PASSED rather than left to the stub's own default, so
+      // `e2e/stub/origin.ts` is the single authority even though the stub —
+      // launched as native ESM by `--experimental-strip-types` — cannot import
+      // it. `standingRules.test.ts` pins the stub's fallback to this constant.
       env: { MOTIR_PUBLIC_API_STUB_PORT: String(STUB_PORT) },
     },
     {

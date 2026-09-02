@@ -200,4 +200,20 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
         'ci.yml sets NEXT_PUBLIC_MOTIR_APP_ORIGIN to PRODUCTION at workflow level',
     ).toEqual([])
   })
+  it("the stub's hand-run port default still equals the lane's port", () => {
+    // The stub cannot import `origin.ts` — it is launched by
+    // `node --experimental-strip-types`, which is native ESM and would need an
+    // explicit `./origin.ts` specifier. So its literal is a hand-run default and
+    // this is what stops the two drifting apart in silence: a lane pointed at
+    // 4319 while the stub listened on something else would fail as a connection
+    // error, which reads like a broken machine rather than a wrong constant.
+    const stub = read('e2e/stub/publicApiStub.ts')
+    const origin = read('e2e/stub/origin.ts')
+
+    const declared = /export const STUB_PORT = (\d+)/.exec(origin)?.[1]
+    const fallback = /MOTIR_PUBLIC_API_STUB_PORT'\] \?\? (\d+)/.exec(stub)?.[1]
+
+    expect(declared).toBeDefined()
+    expect(fallback).toBe(declared)
+  })
 })

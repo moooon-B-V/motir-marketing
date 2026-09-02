@@ -5,7 +5,6 @@ import {
 } from 'node:http'
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { STUB_PORT } from './origin'
 import { fileURLToPath } from 'node:url'
 
 /**
@@ -163,7 +162,20 @@ export function fixtureFiles(): string[] {
   return readdirSync(FIXTURE_DIR).filter((name) => name.endsWith('.json'))
 }
 
-const port = Number(process.env['MOTIR_PUBLIC_API_STUB_PORT'] ?? STUB_PORT)
+/*
+ * ⚠️ THE LITERAL BELOW IS A HAND-RUN DEFAULT, NOT THE AUTHORITY.
+ *
+ * `e2e/stub/origin.ts` owns the port; `playwright.config.ts` passes it in as
+ * `MOTIR_PUBLIC_API_STUB_PORT`, so under the lane this fallback is never
+ * reached. It cannot simply IMPORT the constant: this file is launched by
+ * `node --experimental-strip-types`, which is native ESM and needs an explicit
+ * `./origin.ts` specifier — legal only with `allowImportingTsExtensions`, which
+ * is not worth turning on repository-wide for one line.
+ *
+ * `standingRules.test.ts` asserts this literal still equals `STUB_PORT`, so the
+ * two cannot drift apart in silence.
+ */
+const port = Number(process.env['MOTIR_PUBLIC_API_STUB_PORT'] ?? 4319)
 
 createServer(handle).listen(port, '127.0.0.1', () => {
   // Playwright's `webServer` waits on this URL, so the line is also the
