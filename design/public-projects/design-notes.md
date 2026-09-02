@@ -23,17 +23,17 @@ source of truth — standalone, re-stating the shipped `--el-*` values) · `publ
 Nine screens. Each row names the route and the endpoint that feeds it — every one of those endpoints
 is in `motir-core`'s published public contract, and four of them are MOTIR-3877's own work.
 
-| #   | screen                                                  | route                                   | endpoint that feeds it                                                                                                       | panel |
-| --- | ------------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
-| 1   | **Overview** — hero, act rail, tab bar, authored README | `/p/<identifier>`                       | `GET /api/public/p/{identifier}` (`getPublicProject`, MOTIR-3945)                                                            | 1     |
-| 2   | **Board**                                               | `/p/<identifier>/board`                 | `GET …/board` (`getPublicProjectBoard`, **MOTIR-4109 — new**)                                                                | 2     |
-| 3   | **Items**                                               | `/p/<identifier>/items`                 | `GET …/items` (`listPublicProjectWorkItems`)                                                                                 | 3     |
-| 4   | **Tree**                                                | `/p/<identifier>/tree`                  | `GET …/tree` (`getPublicProjectTreeLevel`)                                                                                   | 4     |
-| 5   | **Roadmap**                                             | `/p/<identifier>/roadmap`               | `GET …/roadmap` — **both arms**: no parameters for the tab, `bucket`+`cursor` for a column page (**MOTIR-4109 extended it**) | 5     |
-| 6   | **Changelog**                                           | `/p/<identifier>/changelog`             | `GET …/changelog`, and `…/changelog.xml` for the feed (**MOTIR-4111 — new**)                                                 | 6     |
-| 7   | **Work-item detail**                                    | `/p/<identifier>/items/<key>`           | `GET …/items/{key}` (`getPublicProjectWorkItem`, **MOTIR-4110 — new**)                                                       | 7     |
-| 8   | **Feature-request detail**                              | `/p/<identifier>/requests/<requestKey>` | `GET …/requests/{requestKey}` (`getPublicProjectRequest`, **MOTIR-4110 — new**)                                              | 8     |
-| 9   | **Request intake**                                      | the submit form + its duplicate step    | `GET …/requests/duplicates` for the pre-check; the SUBMIT is a hand-off (below)                                              | 9     |
+| #   | screen                                                  | route                                                           | endpoint that feeds it                                                                                                       | panel |
+| --- | ------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
+| 1   | **Overview** — hero, act rail, tab bar, authored README | `/p/<identifier>`                                               | `GET /api/public/p/{identifier}` (`getPublicProject`, MOTIR-3945)                                                            | 1     |
+| 2   | **Board**                                               | `/p/<identifier>/board`                                         | `GET …/board` (`getPublicProjectBoard`, **MOTIR-4109 — new**)                                                                | 2     |
+| 3   | **Items**                                               | `/p/<identifier>/items`                                         | `GET …/items` (`listPublicProjectWorkItems`)                                                                                 | 3     |
+| 4   | **Tree**                                                | `/p/<identifier>/tree`                                          | `GET …/tree` (`getPublicProjectTreeLevel`)                                                                                   | 4     |
+| 5   | **Roadmap**                                             | `/p/<identifier>/roadmap`                                       | `GET …/roadmap` — **both arms**: no parameters for the tab, `bucket`+`cursor` for a column page (**MOTIR-4109 extended it**) | 5     |
+| 6   | **Changelog**                                           | `/p/<identifier>/changelog`                                     | `GET …/changelog`, and `…/changelog.xml` for the feed (**MOTIR-4111 — new**)                                                 | 6     |
+| 7   | **Work-item detail**                                    | `/p/<identifier>/items/<key>`                                   | `GET …/items/{key}` (`getPublicProjectWorkItem`, **MOTIR-4110 — new**)                                                       | 7     |
+| 8   | **Feature-request detail**                              | `/p/<identifier>/requests/<requestKey>`                         | `GET …/requests/{requestKey}` (`getPublicProjectRequest`, **MOTIR-4110 — new**)                                              | 8     |
+| 9   | **Request intake**                                      | ⚠️ **a HAND-OFF, not a form** — corrected 2026-09-02, see below | none on this host; the whole intake, duplicate step included, is on `app.motir.co`                                           | 9     |
 
 **The identifier `<key>` takes is the FULL work-item identifier** — `MOTIR-42`, not the bare number.
 The segment is called `key` because that is the address the public URL has always used, and the
@@ -110,9 +110,31 @@ request intake was **already anonymous**. It is not, and never has been:
 comment says _"a LOGGED-OUT caller is rejected 401 (sign-in-to-act)"_; the duplicate pre-check
 carries the same gate. Re-measured in AMENDMENT 4 §A and filed as **MOTIR-4166**.
 
-So panel 9 draws the form as far as a visitor gets **without** an account — the title field, the real
-duplicate-suggestion step, the body — and the submit is the hand-off. Drawing an anonymous submit
-would have produced a screen that 401s every visitor who used it.
+~~So panel 9 draws the form as far as a visitor gets **without** an account — the title field, the
+real duplicate-suggestion step, the body — and the submit is the hand-off.~~
+
+**⚠️ CORRECTED 2026-09-02, WHILE MOTIR-4117 WAS BUILT TO THIS ASSET — THE PANEL WAS HALF RIGHT AND
+THE HALF IT GOT WRONG IS THE ONE IT DREW.** The submit is a hand-off, and so is everything before it:
+`GET /api/public/projects/{projectId}/requests/duplicates` carries **the same
+`requireCompliantSession()` gate as the submit** and 401s a logged-out caller. A visitor on this host
+cannot run the duplicate check either.
+
+So a partial form is not a reduced version of the right screen — it is a worse one. A visitor would
+type a title, get no candidates (401), type a body, press submit, be sent to sign in, and lose the
+draft. **Canny, the mirror row 6 follows, identifies the visitor FIRST for exactly this reason.**
+
+**What ships instead, and what panel 9 should be read as specifying:** `/p/<id>/requests/new` is a
+DOORWAY — it says what is about to happen, that requests are public, and that similar requests will
+be offered for upvoting on the other side, then hands off with the return trip carried. No field a
+visitor can fill in on this host. The route exists rather than being deleted because `/explore`, the
+roadmap and the request detail all need somewhere to point, and a doorway that explains is better
+than a bare cross-origin link nobody can preview.
+
+**Why the asset said otherwise:** AMENDMENT 4 §A corrected _"submit a feature request … already
+anonymous"_ and this note repeated the correction accurately for the SUBMIT — then drew the
+duplicate step as though only the submit were gated. One endpoint was re-measured and its sibling was
+not. Filed under the same planning bug, **MOTIR-4166**, whose takeaway is exactly this shape: a
+re-measurement inherits the corrected claim's scope unless it restates the predicate.
 
 ## The ERROR state is the one that earns its panel
 

@@ -1,0 +1,35 @@
+{
+  "id": "wi_1",
+  "identifier": "MOTIR-4115",
+  "key": 4115,
+  "title": "motir.co serves /p/[identifier]",
+  "kind": "subtask",
+  "status": "in_progress",
+  "statusLabel": "In Progress",
+  "statusCategory": "in_progress",
+  "priority": "high",
+  "descriptionMd": "## What ships\n\nThe project shell and its first screen.",
+  "parent": {
+    "identifier": "MOTIR-3877",
+    "key": 3877,
+    "title": "Public project pages move to motir.co",
+    "kind": "story"
+  },
+  "childrenHidden": false,
+  "childCount": 2,
+  "childrenHasMore": true,
+  "children": [
+    {
+      "id": "wi_9",
+      "identifier": "MOTIR-9",
+      "key": 9,
+      "title": "A child item",
+      "kind": "subtask",
+      "status": "todo",
+      "statusCategory": "todo",
+      "priority": "low",
+      "parentId": "wi_1",
+      "hasChildren": false
+    }
+  ]
+}

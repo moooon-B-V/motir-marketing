@@ -69,6 +69,8 @@ const ROUTES: Record<string, string> = {
   '/api/public/p/MOTIR/tree': 'tree.json',
   '/api/public/p/MOTIR/roadmap': 'roadmap.json',
   '/api/public/p/MOTIR/changelog': 'changelog.json',
+  '/api/public/p/MOTIR/items/MOTIR-4115': 'item-detail.json',
+  '/api/public/p/MOTIR/requests/MOTIR-4051': 'request-detail.json',
 }
 
 /**

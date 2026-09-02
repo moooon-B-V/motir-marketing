@@ -1,4 +1,5 @@
 import { APP_ORIGIN } from '@/lib/appOrigin'
+import { SITE_ORIGIN as SITE_ORIGIN_FOR_RETURN } from '@/lib/siteOrigin'
 
 /**
  * The `/p/*` data layer for `motir-marketing` (MOTIR-4115).
@@ -381,4 +382,113 @@ export function pagedTabHref(
   for (const [k, v] of Object.entries(params)) if (v) search.set(k, v)
   const qs = search.toString()
   return `${projectTabHref(identifier, segment)}${qs ? `?${qs}` : ''}`
+}
+
+/* ── the two DETAIL reads (MOTIR-4117) ────────────────────────────────────── */
+
+export interface PublicWorkItemDetailParentDto {
+  identifier: string
+  key: number
+  title: string
+  kind: string
+}
+
+export interface PublicWorkItemDetailDto extends PublicWorkItemDto {
+  statusLabel: string
+  descriptionMd: string | null
+  parent: PublicWorkItemDetailParentDto | null
+  /** True only on a private epic seen by a non-member; the display signal. */
+  childrenHidden: boolean
+  childCount: number
+  /** The FIRST page of public-safe direct children, not the whole set. */
+  children: PublicTreeRowDto[]
+  childrenHasMore: boolean
+}
+
+export interface PublicRequestCommentDto {
+  id: string
+  workItemId: string
+  parentCommentId: string | null
+  author: { id: string; name: string; image: string | null }
+  bodyMd: string
+  editedAt: string | null
+  createdAt: string
+  /** Always empty here — public-request comments carry no mention scoping. */
+  mentionedUserIds: string[]
+}
+
+export interface PublicRequestDetailDto {
+  id: string
+  identifier: string
+  key: number
+  title: string
+  kind: string
+  status: string
+  statusLabel: string
+  statusCategory: 'todo' | 'in_progress' | 'done'
+  descriptionMd: string | null
+  openedByName: string
+  createdAt: string
+  voteCount: number
+  /** Always false on this host — `actorUserId` is structurally null here. */
+  voted: boolean
+  comments: PublicRequestCommentDto[]
+}
+
+/**
+ * ONE work item, as the public surface shows it.
+ *
+ * ⚠️ THE SECOND ARGUMENT IS THE FULL IDENTIFIER (`ACME-42`), not the bare
+ * number. The URL segment is called `key` because that is the address the public
+ * page has always used, and the `key` FIELD in the response is the number — two
+ * different things with one name. The endpoint takes the identifier and this
+ * passes the segment through verbatim; rebuilding `${identifier}-${key}` works
+ * on every fixture anyone would write and breaks on a project key with a dash.
+ */
+export function loadWorkItem(
+  identifier: string,
+  key: string,
+): Promise<PublicRead<PublicWorkItemDetailDto>> {
+  return readPublic<PublicWorkItemDetailDto>(
+    `${seg(identifier)}/items/${encodeURIComponent(key)}`,
+  )
+}
+
+/** ONE feature request, with its public thread and its vote count. */
+export function loadRequest(
+  identifier: string,
+  requestKey: string,
+): Promise<PublicRead<PublicRequestDetailDto>> {
+  return readPublic<PublicRequestDetailDto>(
+    `${seg(identifier)}/requests/${encodeURIComponent(requestKey)}`,
+  )
+}
+
+/* ── the ACT hand-off (AMENDMENT 4 §D) ────────────────────────────────────── */
+
+/** The intents `app.motir.co/act` accepts. */
+export type ActIntent = 'follow' | 'vote' | 'upvote' | 'comment' | 'request'
+
+/**
+ * The absolute URL of a hand-off to the application.
+ *
+ * ⚠️ A LINK, NEVER A `fetch`, and that is mechanical rather than stylistic:
+ * `lib/auth/index.ts` sets the session cookie `sameSite: 'lax'`, so a
+ * cross-origin request from this host carries no credential at all. There is
+ * nothing to call. `public-surface-hosts.md` AMENDMENT 4 §B carries it.
+ *
+ * `returnPath` is a path on THIS site; the application validates the resulting
+ * absolute URL against its configured public origin before redirecting to it.
+ */
+export function actHref(
+  intent: ActIntent,
+  identifier: string,
+  returnPath: string,
+): string {
+  const params = new URLSearchParams({
+    intent,
+    subject: identifier,
+    return: `${SITE_ORIGIN_FOR_RETURN}${returnPath}`,
+  })
+  return `${APP_ORIGIN}/act?${params.toString()}`
 }
