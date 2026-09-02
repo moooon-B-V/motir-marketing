@@ -1,5 +1,4 @@
-import { SiteFooter } from '@/app/_components/SiteFooter'
-import { SiteHeader } from '@/app/_components/SiteHeader'
+import { SiteShell } from '@/app/_components/SiteShell'
 
 /**
  * The `/p/*` shell (MOTIR-4115), built to `design/public-projects/`.
@@ -39,12 +38,8 @@ export default function PublicProjectLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-dvh flex-col bg-(--el-page-bg)">
-      <SiteHeader />
-      <main className="mx-auto w-full max-w-[72rem] flex-1 px-6 py-10">
-        {children}
-      </main>
-      <SiteFooter />
-    </div>
+    <SiteShell contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10">
+      {children}
+    </SiteShell>
   )
 }

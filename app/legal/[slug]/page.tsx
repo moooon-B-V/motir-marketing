@@ -53,7 +53,9 @@ export default async function LegalDocumentPage({
   if (!doc) notFound()
 
   return (
-    <main className="mx-auto w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
+    /* The width box and the `main` landmark this page used to open with both
+       live in `app/legal/layout.tsx`'s `SiteShell` now (MOTIR-4169). */
+    <>
       <nav aria-label={copy.legal.breadcrumbAria} className="mb-6">
         <Link
           href="/legal"
@@ -89,6 +91,6 @@ export default async function LegalDocumentPage({
       </header>
 
       <MarkdownBody value={doc.body} />
-    </main>
+    </>
   )
 }

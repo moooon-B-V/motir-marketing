@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import { copy } from '@/lib/copy'
 import { siteUrl } from '@/lib/siteOrigin'
 import { DesignShowcase } from '../_components/DesignShowcase'
-import { SiteFooter } from '../_components/SiteFooter'
-import { SiteHeader } from '../_components/SiteHeader'
+import { SiteShell } from '../_components/SiteShell'
 
 /*
  * motir.co/design — the public design showcase (MOTIR-1043 · 8.3.16).
@@ -40,12 +39,8 @@ export const metadata: Metadata = {
 
 export default function DesignPage() {
   return (
-    <div className="bg-(--el-page-bg) text-(--el-text)">
-      <SiteHeader />
-      <main>
-        <DesignShowcase />
-      </main>
-      <SiteFooter />
-    </div>
+    <SiteShell>
+      <DesignShowcase />
+    </SiteShell>
   )
 }

@@ -17,7 +17,9 @@ export default function LegalIndexPage() {
   const documents = listLegalDocuments()
 
   return (
-    <main className="mx-auto w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
+    /* The width box and the `main` landmark this page used to open with both
+       live in `app/legal/layout.tsx`'s `SiteShell` now (MOTIR-4169). */
+    <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.legal.indexTitle}
       </h1>
@@ -56,6 +58,6 @@ export default function LegalIndexPage() {
       <p className="mt-8 text-[13px] text-(--el-text-secondary)">
         {copy.legal.indexContact}
       </p>
-    </main>
+    </>
   )
 }
