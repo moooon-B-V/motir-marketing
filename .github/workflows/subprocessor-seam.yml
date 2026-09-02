@@ -1,0 +1,80 @@
+# The LIVE subprocessor seam, as a SCHEDULED check (MOTIR-4139).
+#
+# ── Why this exists ALONGSIDE the deploy gate, not instead of it ────────────
+#
+# `ci.yml`'s `subprocessor-seam` job fires when THIS repository releases, and it
+# answers one question: *are we about to publish a page that disagrees with the
+# manifest motir-core serves?*
+#
+# It is structurally blind to the other half. `motir-core` can add a dependency,
+# update its egress manifest, turn its own guard green and deploy — all without
+# this repository building anything at all. From that moment the published page
+# is wrong and the deploy gate will not run again until somebody happens to land
+# an unrelated change here. That is exactly the window
+# `public-surface-hosts.md` AMENDMENT 2 §E writes down as a cost:
+#
+#   "A new vendor turns motir-core's guard red on the pull request that adds it.
+#    Updating the manifest turns it green — and the published page is still
+#    wrong until motir-marketing's own CI runs and somebody edits the page."
+#
+# So the two lanes cover DISJOINT sides of that window and neither is sufficient
+# alone. The deploy gate bounds what we publish; this bounds how long a
+# divergence introduced by the other repository can stand unnoticed. AMENDMENT 3
+# §B records the pair and why a single lane was rejected.
+#
+# ── ⚠️ WHAT THIS DOES NOT DO, AND WHY IT IS SAID HERE ───────────────────────
+#
+# It does not close the window — it BOUNDS it, to roughly a day. Closing it
+# would mean motir-core's release blocking on this repository's CI, which is the
+# coupling the whole split exists to avoid, and §E already refused it. Nobody
+# should read a green run here as "the page has been correct since the last
+# one"; it means it was correct when this ran.
+#
+# It also does not open an issue. A failed scheduled run notifies the repository
+# owner through GitHub's own mechanism, and an auto-filed issue needs `issues:
+# write`, a dedup key and a close path — three moving parts guarding a check
+# that fires once a day against a two-repository disagreement a person has to
+# resolve by hand anyway. If the notification proves insufficient in practice,
+# THAT is the trigger to build one, and it is a card rather than a quiet
+# addition here.
+name: Subprocessor seam
+
+on:
+  schedule:
+    # Daily, at an unremarkable time — the window this bounds is measured in
+    # days, so a tighter cadence buys nothing and a looser one is a legal
+    # document being wrong for longer than anybody would defend in writing.
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: subprocessor-seam
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+  # The production origin, deliberately — this lane exists to check the
+  # PUBLISHED pages against the manifest the PRODUCTION deployment serves.
+  # `lib/appOrigin.ts` throws with the variable's name when it is unset.
+  NEXT_PUBLIC_MOTIR_APP_ORIGIN: 'https://app.motir.co'
+
+jobs:
+  seam:
+    name: Subprocessor seam (live)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Red on divergence AND red on an unreachable manifest — the two are
+      # rendered distinctly (they send a reader to different repositories) but
+      # neither is silent. `lib/legal/liveSeam.ts`'s `renderVerdict` is where
+      # that decision lives, and `tests/legal/liveSeam.test.ts` asserts it.
+      - run: pnpm test:seam

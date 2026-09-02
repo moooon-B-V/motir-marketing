@@ -25,8 +25,23 @@ import {
  * whatever `motir-core` is serving right now, because this lane has no network
  * and a test that reached production would couple this repository's CI to that
  * deployment's uptime — which is exactly the coupling §E's split exists to
- * avoid. That half is a separate obligation and is filed; nothing here should be
- * read as covering it.
+ * avoid.
+ *
+ * ⚠️ THAT HALF IS NOW COVERED, AND IT IS COVERED SOMEWHERE ELSE (MOTIR-4139).
+ * `tests/seam/subprocessorSeamLive.test.ts` fetches the manifest motir-core is
+ * SERVING and compares it against these same real pages — no fixture on either
+ * side. It runs in its own lane (`pnpm test:seam`, `vitest.seam.config.mts`),
+ * which this lane EXCLUDES, and which is triggered by the DEPLOY job and a
+ * SCHEDULE rather than by `pull_request` — so the coupling above is still
+ * avoided rather than accepted. `public-surface-hosts.md` AMENDMENT 3 records
+ * the mechanism, the rejected alternatives, and what an UNREACHABLE manifest
+ * does (it fails; it is never skipped).
+ *
+ * So the division of labour is: THIS file is why a green live run means
+ * anything — it is what proves the parse and the comparison are not vacuous —
+ * and the seam lane is what proves the two sides actually agree. Neither
+ * replaces the other, and a green run HERE is still not evidence that the
+ * published pages are accurate.
  */
 
 const LEGAL_DIR = join(process.cwd(), 'content', 'legal')

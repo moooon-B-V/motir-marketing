@@ -17,6 +17,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:design": "vitest run --config vitest.design.config.mts",
+    "test:seam": "vitest run --config vitest.seam.config.mts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "brand:icons": "node scripts/brand/generate-brand-icons.ts",
