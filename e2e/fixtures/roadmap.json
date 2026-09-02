@@ -6,9 +6,9 @@
       "cards": [
         {
           "id": "wi_51",
-          "identifier": "MOTIR-51",
-          "key": 51,
-          "title": "A feature request 51",
+          "identifier": "MOTIR-4051",
+          "key": 4051,
+          "title": "Gantt view for the roadmap",
           "kind": "task",
           "voteCount": 84,
           "voted": false
