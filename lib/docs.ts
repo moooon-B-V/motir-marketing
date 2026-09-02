@@ -1,17 +1,28 @@
 import { APP_ORIGIN } from '@/lib/appOrigin'
 
 /**
- * The `/docs` data layer (MOTIR-4046).
+ * The `/docs` data layer (MOTIR-4046, corrected by MOTIR-4180).
  *
  * The API reference is GENERATED from `motir-core`'s own registry, and it is
  * PUBLISHED as a served, versioned OpenAPI 3.1 document at
  * `/api/openapi/v1.json` — assembled from compile-time declarations, never a
  * hand-maintained file. This repository consumes that published artifact rather
  * than copying a spec that would drift: the reference page fetches it fresh, so
- * it is always exactly what motir-core serves. The guide / policy / MCP / CLI /
- * sandbox prose is committed (it is authored documentation, not a registry),
- * and a drift guard test re-fetches the live spec to prove the consumed artifact
- * is still the published one.
+ * it is always exactly what motir-core serves, and `tests/docs/docs.test.ts`
+ * asserts the URL it fetches is the published one and that no spec is committed.
+ *
+ * ⚠️ THAT COVERS ONE OF THE TWO REGISTRIES `/docs` SPEAKS FOR, AND ONLY ONE.
+ * The MCP TOOL registry has no published artifact to consume — motir-core serves
+ * no catalogue endpoint, and `/api/mcp` rejects an anonymous caller — so this
+ * module reads nothing for it and the guard cannot compare anything against it.
+ * The answer is that there is nothing to compare: the pages under `/docs/mcp`
+ * name no tools and point the reader at the live `tools/list`, and the guard
+ * asserts that ABSENCE instead. Do not read the paragraph above as covering
+ * both; a copy of the tool registry here would be unguarded by construction.
+ *
+ * The guide / policy / MCP / CLI / sandbox pages are committed PROSE — authored
+ * documentation rather than a registry, which is why they are allowed to live
+ * here at all.
  */
 
 /** The OpenAPI 3.1 document motir-core serves at `/api/openapi/v1.json`. */
