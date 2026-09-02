@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { BRAND_ACCENT_HEX, waveBandSvg } from '@motir/brand'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
@@ -45,7 +45,16 @@ describe('robots', () => {
 })
 
 describe('sitemap', () => {
-  const entries = sitemap()
+  // ⚠️ AWAITED, AND THE PROJECT ENTRIES ARE ABSENT HERE BY CONSTRUCTION.
+  // MOTIR-4118 made this route dynamic: it enumerates public projects from
+  // motir-core's index. There is no API in this environment, so
+  // `loadAllPublicProjects` returns nothing and the sitemap falls back to its
+  // static entries — which is the FAILED-INDEX arm, asserted below as its own
+  // case rather than left as an accident of the harness.
+  let entries: Awaited<ReturnType<typeof sitemap>>
+  beforeAll(async () => {
+    entries = await sitemap()
+  })
 
   it('lists every page the site serves, absolutely', () => {
     // `/design` joined the root in MOTIR-1043; `/legal` and the seven documents
@@ -79,6 +88,17 @@ describe('sitemap', () => {
     for (const entry of entries) {
       expect(entry.url.startsWith('https://motir.co/')).toBe(true)
     }
+  })
+
+  it('still returns the static entries, and a list, when the index read FAILS', () => {
+    // MOTIR-4118's own requirement, and the reason it matters: a crawler
+    // re-reads a short sitemap, and backs off one that errors — taking the
+    // site's crawl budget with it. The project pages are reachable from
+    // `/explore`, which is in this list, so a failed index is a delay and not a
+    // hole.
+    expect(Array.isArray(entries)).toBe(true)
+    expect(entries.length).toBeGreaterThan(0)
+    expect(entries.some((entry) => entry.url.includes('/p/'))).toBe(false)
   })
 })
 

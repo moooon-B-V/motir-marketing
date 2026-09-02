@@ -492,3 +492,53 @@ export function actHref(
   })
   return `${APP_ORIGIN}/act?${params.toString()}`
 }
+
+/* ── the crawl index (MOTIR-4118) ─────────────────────────────────────────── */
+
+export interface PublicProjectIndexEntryDto {
+  identifier: string
+  /** ISO 8601 — the sitemap's `<lastmod>`. */
+  updatedAt: string
+}
+
+export interface PublicProjectIndexPageDto {
+  projects: PublicProjectIndexEntryDto[]
+  nextCursor: string | null
+}
+
+/** How many index pages the sitemap will walk before it stops. */
+const INDEX_PAGE_LIMIT = 20
+
+/**
+ * EVERY public project, for the sitemap — walking the index endpoint's pages.
+ *
+ * ⚠️ IT IS BOUNDED, AND THE BOUND IS DELIBERATE. The endpoint pages because the
+ * set's size is the customer count, and a sitemap generator that followed the
+ * cursor for ever would turn one slow response into an unbounded request loop on
+ * every crawl. Twenty pages is far past today's set; if it is ever reached, the
+ * sitemap is short rather than hanging, and a short sitemap is recoverable.
+ *
+ * ⚠️ AND IT NEVER THROWS. A failed read returns what it has — the sitemap's
+ * caller emits its static entries alongside. A sitemap that briefly loses its
+ * project pages is recoverable; one that 500s is not, and search engines back
+ * off a sitemap that errors.
+ */
+export async function loadAllPublicProjects(): Promise<{
+  projects: PublicProjectIndexEntryDto[]
+  complete: boolean
+}> {
+  const projects: PublicProjectIndexEntryDto[] = []
+  let cursor: string | undefined
+
+  for (let page = 0; page < INDEX_PAGE_LIMIT; page += 1) {
+    const qs = cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
+    const read = await readPublic<PublicProjectIndexPageDto>(`/projects${qs}`)
+    if (read.status !== 'ok') return { projects, complete: false }
+
+    projects.push(...read.data.projects)
+    if (!read.data.nextCursor) return { projects, complete: true }
+    cursor = read.data.nextCursor
+  }
+
+  return { projects, complete: false }
+}

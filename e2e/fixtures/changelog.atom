@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Motir &amp; friends — changelog</title>
+  <id>tag:motir.co,2026:project/MOTIR/changelog</id>
+  <link rel="alternate" href="https://motir.co/p/MOTIR/changelog" />
+  <link rel="self" href="https://motir.co/p/MOTIR/changelog.xml" />
+  <updated>2026-09-02T00:00:00.000Z</updated>
+  <entry>
+    <title>Public project pages on motir.co</title>
+    <id>tag:motir.co,2026:work-item/MOTIR-4</id>
+    <link rel="alternate" href="https://motir.co/p/MOTIR/items/MOTIR-4" />
+    <updated>2026-09-02T00:00:00.000Z</updated>
+  </entry>
+</feed>

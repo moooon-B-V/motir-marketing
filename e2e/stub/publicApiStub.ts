@@ -71,6 +71,20 @@ const ROUTES: Record<string, string> = {
   '/api/public/p/MOTIR/changelog': 'changelog.json',
   '/api/public/p/MOTIR/items/MOTIR-4115': 'item-detail.json',
   '/api/public/p/MOTIR/requests/MOTIR-4051': 'request-detail.json',
+  '/api/public/projects': 'projects-index.json',
+}
+
+/**
+ * Paths whose answer is NOT JSON. The changelog feed is the surface's only
+ * non-JSON response, and a stub that served it as `application/json` would let
+ * a content-type assertion pass on a route that had silently stopped
+ * forwarding XML.
+ */
+const NON_JSON: Record<string, [string, string]> = {
+  '/api/public/p/MOTIR/changelog.xml': [
+    'changelog.atom',
+    'application/atom+xml; charset=utf-8',
+  ],
 }
 
 /**
@@ -116,6 +130,14 @@ function handle(req: IncomingMessage, res: ServerResponse): void {
   ) {
     res.writeHead(400, { 'content-type': 'application/json' })
     res.end(JSON.stringify({ code: 'INVALID_ROADMAP_CURSOR' }))
+    return
+  }
+
+  const nonJson = NON_JSON[url.pathname]
+  if (nonJson) {
+    const [fixtureName, contentType] = nonJson
+    res.writeHead(200, { 'content-type': contentType })
+    res.end(fixture(fixtureName))
     return
   }
 
