@@ -63,6 +63,7 @@ const FIXTURE_DIR = join(
 const ROUTES: Record<string, string> = {
   '/api/public/explore': 'explore.json',
   '/api/public/categories': 'categories.json',
+  '/api/public/p/MOTIR': 'project.json',
 }
 
 function fixture(name: string): string {

@@ -91,6 +91,13 @@ export default defineConfig({
     {
       command: 'node --experimental-strip-types e2e/stub/publicApiStub.ts',
       url: `${STUB_ORIGIN}/api/public/categories`,
+      // ⚠️ LOCALLY THIS REUSES ANY SERVER ALREADY ON THE PORT, INCLUDING ONE YOU
+      // STARTED BY HAND. A stub left running from an earlier session keeps its
+      // OLD route table, so a spec for a route added since fails with a 404 that
+      // looks exactly like a bug in the page — and the page is fine. It cost one
+      // confusing red while MOTIR-4115 was being built. If a `/p/*` spec 404s,
+      // check `pgrep -af publicApiStub` before reading the route. In CI the flag
+      // is false and the lane always starts its own.
       reuseExistingServer: !process.env['CI'],
       timeout: 30_000,
       env: { MOTIR_PUBLIC_API_STUB_PORT: String(STUB_PORT) },
