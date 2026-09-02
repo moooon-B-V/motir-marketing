@@ -163,7 +163,7 @@ You have the right to **access** your data, to **correct** it, to **erase** it, 
 **receive it in a portable form**, to **restrict** or **object to** processing, and to
 **withdraw consent** where we rely on it.
 
-**The product provides these directly.** [In your account settings](/settings/account/data) you
+**The product provides these directly.** [In your account settings]({{DATA_PRIVACY_PANE}}) you
 can export your personal data and request deletion of your account, without asking anyone. That is
 deliberate: a right you have to write a letter to exercise is a weaker right.
 

@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { DATA_PRIVACY_PANE } from '../destinations'
 
 /**
  * The legal-document loader — a PORT of motir-core's `lib/legal/documents.ts`
@@ -123,6 +124,76 @@ export function parseLegalDocument(
   }
 }
 
+/**
+ * ── ⚠️ A DOCUMENT NAMES A CROSS-ORIGIN DOOR BY TOKEN, NEVER BY URL (MOTIR-4147) ──
+ *
+ * A published document is a static file, so it cannot import
+ * `lib/destinations.ts` the way the footer does — and the two ways of writing
+ * the link into the file itself are both wrong:
+ *
+ * - a BARE PATH (`/settings/account/data`) is what shipped, and it is a 404.
+ *   It was written while these documents lived on `app.motir.co`, where it
+ *   resolved; the port to `motir.co` (MOTIR-4009) carried them byte for byte,
+ *   which is exactly what that card asked for, and this link was the one line
+ *   that needed editing precisely BECAUSE the host changed under it.
+ * - a HARDCODED ORIGIN (`https://app.motir.co/...`) is the failure
+ *   `lib/appOrigin.ts` exists to prevent: it works perfectly in production and
+ *   silently points a preview build's readers at production data.
+ *
+ * So the document names a DESTINATION and this module resolves it, which is
+ * the same "one configured origin, many doors" shape `lib/destinations.ts`
+ * already gives every other cross-origin link on this site.
+ */
+
+/** The `{{TOKEN}}` form a document writes a cross-origin destination as. */
+const DESTINATION_TOKEN = /\{\{([A-Z0-9_]+)\}\}/g
+
+/**
+ * Every destination a legal document may name. Adding one is adding a line
+ * here; naming one that is not here is a BUILD failure rather than a link a
+ * reader discovers (below).
+ */
+export const DOCUMENT_DESTINATIONS: Readonly<Record<string, string>> = {
+  DATA_PRIVACY_PANE,
+}
+
+/** Thrown when a document names a destination this module cannot resolve. */
+export class UnknownLegalDestinationError extends Error {
+  override readonly name = 'UnknownLegalDestinationError'
+
+  constructor(token: string, known: string[]) {
+    super(
+      `A legal document names the destination {{${token}}}, which is not one ` +
+        `of ${known.join(', ')}. Add it to DOCUMENT_DESTINATIONS in ` +
+        `lib/legal/documents.ts, or fix the token.`,
+    )
+  }
+}
+
+/**
+ * Resolve every `{{TOKEN}}` in a document body. Pure and exported — the
+ * substitution table is a parameter so a test can drive it with a known origin
+ * rather than the ambient one.
+ *
+ * ⚠️ AN UNKNOWN TOKEN THROWS. `/legal/[slug]` is statically generated
+ * (`generateStaticParams`), so the throw lands in `next build` with the token's
+ * name in it — the same trade `lib/appOrigin.ts` makes, and for the same
+ * reason: leaving `{{DATA_PRIVACY_PAIN}}` in the rendered prose of a published
+ * legal document is worse than failing the build that produced it.
+ */
+export function expandDestinations(
+  body: string,
+  destinations: Readonly<Record<string, string>> = DOCUMENT_DESTINATIONS,
+): string {
+  return body.replace(DESTINATION_TOKEN, (_match, token: string) => {
+    const value = destinations[token]
+    if (value === undefined) {
+      throw new UnknownLegalDestinationError(token, Object.keys(destinations))
+    }
+    return value
+  })
+}
+
 /** Every published legal document, in `PREFERRED_ORDER` then by slug. */
 export function listLegalDocuments(): LegalDocument[] {
   const slugs = readdirSync(LEGAL_DIR)
@@ -130,12 +201,16 @@ export function listLegalDocuments(): LegalDocument[] {
     .map((name) => name.slice(0, -3))
 
   return slugs
-    .map((slug) =>
-      parseLegalDocument(
+    .map((slug) => {
+      const doc = parseLegalDocument(
         slug,
         readFileSync(join(LEGAL_DIR, `${slug}.md`), 'utf8'),
-      ),
-    )
+      )
+      // The ONE place the documents are read is the one place their
+      // destinations are resolved, so every consumer — the route, the index,
+      // and the reachability guard — sees the body a reader sees.
+      return { ...doc, body: expandDestinations(doc.body) }
+    })
     .sort(byPreferredOrder)
 }
 

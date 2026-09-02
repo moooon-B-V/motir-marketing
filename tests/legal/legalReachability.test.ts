@@ -149,3 +149,158 @@ describe('front-matter parity — the convention the materiality rule rides on',
     }
   })
 })
+
+/**
+ * ── ⚠️ NO LEGAL LINK IS A PATH THIS HOST DOES NOT SERVE (MOTIR-4147) ────────
+ *
+ * The Privacy Policy's §7 linked to `/settings/account/data` — the account
+ * pane where a reader exercises their GDPR Art. 15/17 rights. That path was
+ * correct while these documents lived on `app.motir.co` and is a 404 here, so
+ * the one sentence in the policy that tells a reader HOW to exercise a right
+ * pointed at nothing.
+ *
+ * ⚠️ THE FIXED LINK IS NOT THE DELIVERABLE — THIS GUARD IS. One link says
+ * nothing about the next document, and the class is easy to re-enter: every
+ * one of these files was written for a host that served the whole product,
+ * so a bare path READS correct to whoever writes the next one.
+ *
+ * The population is the SHIPPED body — `listLegalDocuments()` after
+ * `expandDestinations`, which is the text a reader's browser receives — not
+ * the raw file. That matters in both directions: a `{{TOKEN}}` is judged by
+ * what it RESOLVES to, and an unresolved one cannot hide behind "it is only a
+ * placeholder".
+ *
+ * The servable shapes, and there are exactly four:
+ *
+ *   - `/legal/<slug>` where the slug is a document ON DISK — this host serves
+ *     it, and the slug is checked rather than the shape, so a link to a
+ *     document that does not exist is as red as a link to another host's path.
+ *   - an absolute `https?://` URL — it names its own host, whichever that is.
+ *   - `mailto:` — already in the set (`content/legal/dpa.md`), and it leaves
+ *     the browser rather than this origin.
+ *   - `#anchor` — in-page, resolved against whatever URL is showing it.
+ *
+ * Anything else is a link this site cannot serve.
+ */
+
+/** Every link target in a Markdown body — inline links AND reference definitions. */
+function linkTargets(body: string): string[] {
+  const targets: string[] = []
+  // `](target)`, tolerating `<…>` and a trailing "title".
+  for (const m of body.matchAll(/\]\(\s*<?([^)\s>]+)>?[^)]*\)/g)) {
+    targets.push(m[1])
+  }
+  // `[id]: target` at the start of a line — nothing uses these today, and the
+  // guard is worthless the day somebody does if it cannot see them.
+  for (const m of body.matchAll(/^\[[^\]]+\]:\s*<?([^\s>]+)>?/gm)) {
+    targets.push(m[1])
+  }
+  return targets
+}
+
+/** Can THIS host serve this href? The predicate both halves of the guard use. */
+function isServableLink(href: string, slugs: readonly string[]): boolean {
+  if (href.startsWith('#')) return true
+  if (/^https?:\/\//.test(href)) return true
+  if (href.startsWith('mailto:')) return true
+  // A fragment on a legal path is still that path.
+  const path = href.split('#')[0]
+  const legal = /^\/legal\/([a-z0-9-]+)$/.exec(path)
+  return legal !== null && slugs.includes(legal[1])
+}
+
+/** Every unservable link in a body, as `slug → href` for a readable failure. */
+function unservableLinks(
+  slug: string,
+  body: string,
+  slugs: readonly string[],
+): string[] {
+  return linkTargets(body)
+    .filter((href) => !isServableLink(href, slugs))
+    .map((href) => `${slug}: ${href}`)
+}
+
+describe('every link in the legal set is one this host can serve', () => {
+  const slugs = slugsOnDisk()
+  const documents = listLegalDocuments()
+
+  it('is not vacuous — the extractor finds the links that are actually there', () => {
+    // A regex that matches nothing passes every assertion below. Twenty-one
+    // links ship today (sixteen `/legal/*`, four absolute, one `mailto:`);
+    // `>=` makes a new link growth rather than a red suite, and any number
+    // near zero means the extractor stopped working.
+    const found = documents.flatMap((doc) => linkTargets(doc.body))
+    expect(found.length).toBeGreaterThanOrEqual(20)
+  })
+
+  it('no document links to a path this host does not serve', () => {
+    const offenders = documents.flatMap((doc) =>
+      unservableLinks(doc.slug, doc.body, slugs),
+    )
+    expect(offenders).toEqual([])
+  })
+
+  it('FAILS when the old link is put back — the guard is shown, not asserted', () => {
+    // ⚠️ THE COUNTERFACTUAL IS THE TEST. A totality guard over a directory that
+    // no longer contains a violation passes for two different reasons and
+    // cannot tell them apart. So the defect is REINTRODUCED into the real
+    // privacy body, verbatim as it shipped, and the guard is required to name
+    // it — driven through the same `unservableLinks` the assertion above uses,
+    // never a second copy of the predicate.
+    const privacy = documents.find((doc) => doc.slug === 'privacy')!
+    const regressed = privacy.body.replace(
+      /\[In your account settings\]\([^)]*\)/,
+      '[In your account settings](/settings/account/data)',
+    )
+    expect(regressed, 'the §7 link was not found to regress').not.toBe(
+      privacy.body,
+    )
+    expect(unservableLinks('privacy', regressed, slugs)).toEqual([
+      'privacy: /settings/account/data',
+    ])
+  })
+
+  it('accepts the four servable shapes and nothing else', () => {
+    expect(isServableLink('/legal/privacy', slugs)).toBe(true)
+    expect(isServableLink('/legal/privacy#7-your-rights', slugs)).toBe(true)
+    expect(
+      isServableLink('https://app.motir.co/settings/account/data', slugs),
+    ).toBe(true)
+    expect(isServableLink('mailto:legal@motir.co', slugs)).toBe(true)
+    expect(isServableLink('#7-your-rights', slugs)).toBe(true)
+
+    // A legal path naming no document is a 404 exactly as a foreign path is —
+    // the slug is checked, not the shape.
+    expect(isServableLink('/legal/no-such-document', slugs)).toBe(false)
+    expect(isServableLink('/settings/account/data', slugs)).toBe(false)
+    expect(isServableLink('/sign-in', slugs)).toBe(false)
+    expect(isServableLink('/', slugs)).toBe(false)
+    expect(isServableLink('privacy.md', slugs)).toBe(false)
+  })
+
+  it('no unresolved destination token survives into a shipped body', () => {
+    // `expandDestinations` throws on an UNKNOWN token, so this covers the
+    // other half: a token that is never expanded because nothing ran, and a
+    // near-miss like `{{ DATA_PRIVACY_PANE }}` the substitution regex does not
+    // match. Either one reaches a reader as literal braces in a legal document.
+    for (const doc of documents) {
+      expect(doc.body, `${doc.slug} carries an unresolved token`).not.toMatch(
+        /\{\{.*?\}\}/,
+      )
+    }
+  })
+})
+
+describe("the Privacy Policy's §7 data-rights link (MOTIR-4147)", () => {
+  it('is the account pane on the APP origin, BUILT from the configured origin', () => {
+    // ⚠️ THE TEST ENVIRONMENT'S ORIGIN IS NOT PRODUCTION (`vitest.config.mts`
+    // sets `https://app.test.motir.co`), which is the whole point: a hardcoded
+    // `https://app.motir.co` in the document would pass an assertion written
+    // against production and fail this one.
+    const privacy = listLegalDocuments().find((doc) => doc.slug === 'privacy')!
+    expect(privacy.body).toContain(
+      '[In your account settings](https://app.test.motir.co/settings/account/data)',
+    )
+    expect(privacy.body).not.toContain('](/settings/account/data)')
+  })
+})
