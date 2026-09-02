@@ -8,3 +8,11 @@ build/
 !.env.example
 next-env.d.ts
 *.tsbuildinfo
+
+# The browser lane's outputs (MOTIR-4112). The report and the recordings are CI
+# ARTIFACTS — `ci.yml`'s `e2e` job uploads them — not files to commit: a video
+# is megabytes and is regenerated on every run.
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/

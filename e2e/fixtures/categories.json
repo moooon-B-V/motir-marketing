@@ -1,0 +1,10 @@
+{
+  "categories": [
+    {
+      "slug": "developer-tools",
+      "label": "Developer tools",
+      "projectCount": 2
+    },
+    { "slug": "design", "label": "Design", "projectCount": 1 }
+  ]
+}

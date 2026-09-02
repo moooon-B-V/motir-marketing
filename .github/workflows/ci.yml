@@ -10,9 +10,23 @@
 #
 # MOTIR-1152 grew the first one: `test` (vitest, `vitest.config.mts`), added
 # BELOW and to `deploy`'s `needs` in the same change, exactly as that sentence
-# asks. MOTIR-4001 grew the second, `design-guards`, the same way.
-# There is still no `coverage`, `e2e` or `e2e-at-scale` job here and `needs`
-# still names none.
+# asks. MOTIR-4001 grew the second, `design-guards`, the same way. MOTIR-4112
+# grew the third, `e2e` — the browser lane — again in the same change.
+# There is still no `coverage` or `e2e-at-scale` job here and `needs` names
+# neither.
+#
+# ⚠️ AND THERE IS NO ACCEPTANCE-VIDEO WORKFLOW, WHICH IS A DECISION RATHER THAN
+# A GAP. MOTIR-4112 asked for one mirroring motir-core's; both that workflow and
+# its `upload-acceptance-video` composite were DELETED from motir-core on
+# 2026-09-02 (MOTIR-4096), whose amendment to `docs/decisions/acceptance-video.md`
+# reads "CI NO LONGER UPLOADS THE RECORDING. THE AGENT PUBLISHES IT, over the
+# Motir MCP surface" — retiring the uploader, the `id-token: write` grant and the
+# `MOTIR_UPLOAD_TOKEN` secret, because "a credential with no consumer is one
+# nobody thinks about when deciding whether to rotate it". Mirroring it here
+# would re-introduce that credential in a second repository the day after it was
+# removed from the first. The `e2e` job RECORDS instead — `video: 'on'`, uploaded
+# as an ordinary run artifact — and the agent publishes the clip onto the card.
+# `playwright.config.ts` carries the full reasoning.
 #
 # ⚠️ THERE IS NO PATH FILTERING IN THIS FILE, and `design-guards` depends on
 # that. Unlike motir-core's `ci.yml` — which has a `changes` job that skips the
@@ -143,10 +157,60 @@ jobs:
       - run: pnpm exec playwright install --with-deps --only-shell chromium
       - run: pnpm test:design
 
+  # ── The BROWSER lane (MOTIR-4112) ─────────────────────────────────────────
+  #
+  # This repository's first, and a `needs` gate on `deploy` from the moment it
+  # exists, per the header: a red browser run must not reach motir.co.
+  #
+  # ⚠️ IT BUILDS THE APP, and that is not incidental. The site reads the public
+  # API from SERVER components, so the stub cannot be a `page.route()`
+  # interception — it is a real HTTP server, and pointing the app at it means
+  # setting `NEXT_PUBLIC_MOTIR_APP_ORIGIN`, which Next inlines at BUILD time.
+  # `playwright.config.ts`'s `webServer` therefore runs `pnpm build` itself, and
+  # this job's cost and timeout follow from that. It is a separate job rather
+  # than a step inside `test` for the same reason: `test` is seconds, this is
+  # minutes, and folding them would make every unit failure wait for a build.
+  #
+  # ⚠️ NO `motir-core` IS AVAILABLE HERE, which is the whole reason the stub
+  # exists. The CONTRACT those fixtures are shaped from is guarded in the
+  # PRODUCING repository (`public-surface-hosts.md` §3): a contract test living
+  # only in the consumer reports the break after it has shipped.
+  #
+  # `--only-shell` takes the headless shell, as `design-guards` above does.
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps --only-shell chromium
+      - run: pnpm test:e2e
+      # The RECORDING, kept whether the run passed or failed. On a green
+      # acceptance run this artifact is where the clip is read from and
+      # published onto the card — see the header, and `playwright.config.ts`.
+      - name: Upload the Playwright report (recording included)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          # ⚠️ NOT a dot-prefixed path, and the default `include-hidden-files`
+          # is false — an upload that matched nothing would still be GREEN.
+          if-no-files-found: warn
+
   deploy:
     name: Deploy to Fly
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, build, test, design-guards]
+    needs: [lint, typecheck, build, test, design-guards, e2e]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # A release must NOT be cancelled mid-flight by a newer push — the
     # workflow-level `cancel-in-progress` above is right for a test run and

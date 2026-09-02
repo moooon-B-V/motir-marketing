@@ -1,0 +1,19 @@
+{
+  "items": [
+    {
+      "identifier": "MOTIR",
+      "name": "Motir",
+      "org": { "name": "moooon B.V.", "slug": "moooon" },
+      "description": "AI planning, project management and agent orchestration.",
+      "stats": { "upvotes": 42, "lastActivityAt": "2026-08-30T00:00:00.000Z" }
+    },
+    {
+      "identifier": "ACME",
+      "name": "Acme",
+      "org": { "name": "Acme Inc", "slug": "acme" },
+      "description": null,
+      "stats": { "upvotes": 3, "lastActivityAt": "2026-08-29T00:00:00.000Z" }
+    }
+  ],
+  "nextCursor": null
+}
