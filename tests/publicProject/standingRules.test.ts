@@ -161,4 +161,43 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
       expect(matched, `nothing matches the exclusion ${pattern}`).toBe(true)
     }
   })
+  it('no e2e spec reconstructs an origin from the environment', () => {
+    /*
+     * ⚠️ THIS RULE COST A RED CI RUN, and the red run was the lucky outcome.
+     *
+     * `ci.yml` sets `NEXT_PUBLIC_MOTIR_APP_ORIGIN` at WORKFLOW level, to
+     * production, because `build` and `deploy` need it there. A spec that read
+     * it with a local fallback therefore addressed the STUB locally and
+     * `https://app.motir.co` in CI — this lane made real calls to production on
+     * a pull request, which is exactly the cross-repository coupling
+     * `public-surface-hosts.md` AMENDMENT 2 §E splits its jobs to avoid.
+     *
+     * It failed loudly only because the two answer different error codes. A
+     * spec whose assertion happened to hold against the live API would have
+     * gone green and told nobody. So the rule is not "assert the right code" —
+     * it is that a spec may not derive an address from the environment at all.
+     * `e2e/stub/origin.ts` is the one place these live.
+     */
+    // ⚠️ COMMENTS ARE STRIPPED FIRST, and that is not a convenience. The two
+    // files that explain this trap have to QUOTE the expression to explain it,
+    // and a guard that forbade naming the thing it forbids would have exactly
+    // one repair available: deleting the explanation. So the rule is asked of
+    // the code.
+    const code = (f: string): string =>
+      read(f)
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/\/\/[^\n]*/g, '')
+
+    const offenders = tracked('e2e')
+      .filter((f) => !f.endsWith('e2e/stub/origin.ts'))
+      .filter((f) =>
+        /process\.env\[?['"`]NEXT_PUBLIC_MOTIR_APP_ORIGIN/.test(code(f)),
+      )
+
+    expect(
+      offenders,
+      'import STUB_ORIGIN / SITE_ORIGIN from e2e/stub/origin.ts instead — ' +
+        'ci.yml sets NEXT_PUBLIC_MOTIR_APP_ORIGIN to PRODUCTION at workflow level',
+    ).toEqual([])
+  })
 })

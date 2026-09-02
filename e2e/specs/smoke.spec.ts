@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { STUB_ORIGIN } from '../stub/origin'
 
 // THE LANE'S SUBJECT (MOTIR-4112).
 //
@@ -55,10 +56,12 @@ test('a page the stub has NO fixture for fails loudly rather than looking empty'
   // was never taught a route can be told apart from one rendering an empty
   // state because the product does. Checked at the stub rather than through a
   // page, because the point is the stub's behaviour.
-  const stubOrigin = new URL(
-    process.env['NEXT_PUBLIC_MOTIR_APP_ORIGIN'] ?? 'http://127.0.0.1:4319',
-  ).origin
-  const res = await page.request.get(`${stubOrigin}/api/public/p/NOPE`)
+  //
+  // ⚠️ THE ORIGIN IS IMPORTED, NEVER READ FROM THE ENVIRONMENT. This line used
+  // to be `process.env['NEXT_PUBLIC_MOTIR_APP_ORIGIN'] ?? <the stub>`, which
+  // resolved to the stub locally and to PRODUCTION in CI — `ci.yml` sets that
+  // variable at workflow level. See `e2e/stub/origin.ts`.
+  const res = await page.request.get(`${STUB_ORIGIN}/api/public/p/NOPE`)
 
   expect(res.status()).toBe(404)
   expect(await res.json()).toMatchObject({ code: 'STUB_NO_FIXTURE' })

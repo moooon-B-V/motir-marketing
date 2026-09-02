@@ -5,6 +5,7 @@ import {
 } from 'node:http'
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
+import { STUB_PORT } from './origin'
 import { fileURLToPath } from 'node:url'
 
 /**
@@ -162,7 +163,7 @@ export function fixtureFiles(): string[] {
   return readdirSync(FIXTURE_DIR).filter((name) => name.endsWith('.json'))
 }
 
-const port = Number(process.env['MOTIR_PUBLIC_API_STUB_PORT'] ?? 4319)
+const port = Number(process.env['MOTIR_PUBLIC_API_STUB_PORT'] ?? STUB_PORT)
 
 createServer(handle).listen(port, '127.0.0.1', () => {
   // Playwright's `webServer` waits on this URL, so the line is also the

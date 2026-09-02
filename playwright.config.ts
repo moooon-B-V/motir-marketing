@@ -1,4 +1,10 @@
 import { defineConfig, devices } from '@playwright/test'
+import {
+  SITE_ORIGIN,
+  SITE_PORT,
+  STUB_ORIGIN,
+  STUB_PORT,
+} from './e2e/stub/origin'
 
 /**
  * THE BROWSER LANE (MOTIR-4112) — this repository's first.
@@ -50,14 +56,9 @@ import { defineConfig, devices } from '@playwright/test'
  * therefore discharged by there being nothing to provision — not deferred.
  */
 
-/** The stub's port. One literal, read by the stub and by the app's origin. */
-const STUB_PORT = 4319
-
-/** The site's own port under test — not 3000, so a `pnpm dev` can stay running. */
-const SITE_PORT = 4318
-
-const SITE_ORIGIN = `http://127.0.0.1:${SITE_PORT}`
-const STUB_ORIGIN = `http://127.0.0.1:${STUB_PORT}`
+// The four constants live in `e2e/stub/origin.ts` so a SPEC can import the stub's
+// address instead of reconstructing it from the environment — see the warning
+// there; reconstructing it is how this lane briefly reached production.
 
 export default defineConfig({
   testDir: './e2e/specs',
