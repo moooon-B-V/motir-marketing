@@ -1,0 +1,15 @@
+{
+  "bucket": "submitted",
+  "cards": [
+    {
+      "id": "wi_56",
+      "identifier": "MOTIR-56",
+      "key": 56,
+      "title": "A feature request 56",
+      "kind": "task",
+      "voteCount": 12,
+      "voted": false
+    }
+  ],
+  "nextCursor": null
+}

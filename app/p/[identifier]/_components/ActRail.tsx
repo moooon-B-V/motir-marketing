@@ -1,0 +1,62 @@
+import Link from 'next/link'
+import { actHref } from '@/lib/publicProject'
+import { SubscribeForm } from './SubscribeForm'
+
+/**
+ * The ACT RAIL (MOTIR-4119) — `public-surface-hosts.md` AMENDMENT 4 §D, rows 2,
+ * 3 and 6, on the surface they belong to.
+ *
+ * ⚠️ EVERY ACT THAT NEEDS IDENTITY IS A LINK, NOT A BUTTON, and that is
+ * mechanical rather than stylistic. `lib/auth/index.ts` sets the session cookie
+ * `sameSite: 'lax'`, so a `fetch` from this origin carries no credential at all
+ * — there is nothing to call. Making one work would need `sameSite: 'none'`,
+ * which is a widening §4 rejects. AMENDMENT 4 §B is the reasoning; this rail is
+ * where it becomes pixels.
+ *
+ * The `↗` affix is the chrome's own mark for a door that leaves this host, so a
+ * visitor can tell before clicking which controls stay and which travel.
+ *
+ * ⚠️ AND `Follow` NEVER READS `Following`. `actorUserId` is structurally null for
+ * every read this host makes (row 8), so the page cannot know whether you already
+ * follow. Drawing a followed state would be a picture of a page this
+ * architecture cannot serve. The state exists, and it is visible in the
+ * application.
+ */
+export function ActRail({
+  identifier,
+  returnPath,
+}: {
+  identifier: string
+  returnPath: string
+}) {
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-2">
+      {/* Row 2 — FOLLOW, a hand-off. */}
+      <Link
+        href={actHref('follow', identifier, returnPath)}
+        className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) bg-(--el-accent) px-3 text-[13px] font-medium text-(--el-accent-text) hover:bg-(--el-accent-pressed)"
+      >
+        Follow&nbsp;<span aria-hidden>↗</span>
+        <span className="sr-only"> — continues on app.motir.co</span>
+      </Link>
+
+      {/* Row 3 — SUBSCRIBE, the one write that stays on this host. */}
+      <SubscribeForm identifier={identifier} />
+
+      {/* Row 6 — REQUEST A FEATURE, a hand-off through the doorway page. */}
+      <Link
+        href={`/p/${encodeURIComponent(identifier)}/requests/new`}
+        className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-3 text-[13px] font-medium text-(--el-text) hover:bg-(--el-surface-soft)"
+      >
+        Request a feature
+      </Link>
+
+      <Link
+        href={`/p/${encodeURIComponent(identifier)}/changelog.xml`}
+        className="inline-flex h-(--height-btn-sm) items-center px-2 text-[13px] text-(--el-text-secondary) hover:text-(--el-link)"
+      >
+        Atom feed
+      </Link>
+    </div>
+  )
+}

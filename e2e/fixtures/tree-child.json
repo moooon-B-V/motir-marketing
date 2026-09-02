@@ -1,0 +1,18 @@
+{
+  "total": 2,
+  "hasMore": false,
+  "rows": [
+    {
+      "id": "wi_9",
+      "identifier": "MOTIR-9",
+      "key": 9,
+      "title": "A child item",
+      "kind": "subtask",
+      "status": "To Do",
+      "statusCategory": "todo",
+      "priority": "medium",
+      "parentId": "wi_1",
+      "hasChildren": false
+    }
+  ]
+}

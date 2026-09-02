@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
+import { PROJECT_TABS, loadAllPublicProjects } from '@/lib/publicProject'
 
 /*
  * motir.co's sitemap (MOTIR-1154 · 8.3.7), served at `/sitemap.xml`.
@@ -21,14 +22,49 @@ import { legalDocumentSlugs } from '@/lib/legal/documents'
  * MOTIR-1043 is that change and `/design` is that route. The rule is unchanged
  * and still binds the third page.
  *
- * STATIC, unlike motir-core's. That one is `force-dynamic` because it reads a
- * database the image build cannot reach (MOTIR-2490); this one reads a
+ * ⚠️ NO LONGER STATIC — MOTIR-4118, and the note it replaces said the opposite.
+ * It read: "STATIC, unlike motir-core's. That one is `force-dynamic` because it
+ * reads a database the image build cannot reach (MOTIR-2490); this one reads a
  * build-time constant, so prerendering it is correct and costs nothing at
- * request time. `SITE_ORIGIN` is a `NEXT_PUBLIC_*` value baked in by
- * `next build`, which is why the prerendered URL is the real one.
+ * request time." That was true while every entry was a constant. This file now
+ * also enumerates PUBLIC PROJECTS from motir-core's public index, which is a
+ * network read — so it is `force-dynamic`, for the same reason motir-core's is
+ * and not a different one. `SITE_ORIGIN` is still a `NEXT_PUBLIC_*` value baked
+ * in by `next build`, so the URLs are the real ones either way.
+ *
+ * ⚠️ A FAILED INDEX READ EMITS THE STATIC ENTRIES AND A 200. `loadAllPublicProjects`
+ * never throws and returns what it has. A sitemap that briefly loses its project
+ * pages is recoverable — a crawler re-reads it — while one that 500s is not:
+ * search engines back off a sitemap that errors, and the whole site's crawl
+ * budget goes with it. The project pages are also reachable from `/explore`,
+ * which is itself in this list, so a short sitemap is a delay rather than a hole.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = 'force-dynamic'
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // The projects, and their tab paths — every crawlable URL this surface has.
+  // `/p/<id>/requests/new` is deliberately absent: it is a `noindex` doorway
+  // (MOTIR-4117), and a sitemap that listed it would be asking a crawler to
+  // index a page the page itself refuses.
+  const { projects } = await loadAllPublicProjects()
+  const projectEntries: MetadataRoute.Sitemap = projects.flatMap((project) => {
+    const lastModified = new Date(project.updatedAt)
+    return PROJECT_TABS.map((tab) => ({
+      url: siteUrl(
+        tab.segment
+          ? `/p/${encodeURIComponent(project.identifier)}/${tab.segment}`
+          : `/p/${encodeURIComponent(project.identifier)}`,
+      ),
+      lastModified,
+      changeFrequency: 'daily' as const,
+      // The project's own page outranks its tabs — it is the one a shared link
+      // and /explore's cards point at.
+      priority: tab.segment ? 0.5 : 0.8,
+    }))
+  })
+
   return [
+    ...projectEntries,
     {
       url: siteUrl('/'),
       changeFrequency: 'weekly',

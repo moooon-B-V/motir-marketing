@@ -102,8 +102,11 @@ describe('the Design nav entry', () => {
 })
 
 describe('app/sitemap.ts', () => {
-  it('gains the /legal, /explore and /docs lines in the same changes that add the routes', () => {
-    expect(sitemap().map((entry) => entry.url)).toEqual([
+  it('gains the /legal, /explore and /docs lines in the same changes that add the routes', async () => {
+    // Awaited since MOTIR-4118 made the route dynamic. No API in this
+    // environment, so the project entries are absent and the static list is
+    // what remains — see `tests/entitySignal.test.ts` for that arm's own case.
+    expect((await sitemap()).map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       siteUrl('/design'),
       siteUrl('/explore'),

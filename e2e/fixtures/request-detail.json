@@ -1,0 +1,31 @@
+{
+  "id": "wi_51",
+  "identifier": "MOTIR-4051",
+  "key": 4051,
+  "title": "Gantt view for the roadmap",
+  "kind": "task",
+  "status": "open",
+  "statusLabel": "Submitted",
+  "statusCategory": "todo",
+  "descriptionMd": "The roadmap tells me what is planned but not when.",
+  "openedByName": "Dana Okoye",
+  "createdAt": "2026-08-14T00:00:00.000Z",
+  "voteCount": 84,
+  "voted": false,
+  "comments": [
+    {
+      "id": "c_1",
+      "workItemId": "wi_51",
+      "parentCommentId": null,
+      "author": {
+        "id": "u_1",
+        "name": "Sam Kelly",
+        "image": null
+      },
+      "bodyMd": "Same here \u2014 even a quarter granularity would be enough.",
+      "editedAt": null,
+      "createdAt": "2026-08-16T00:00:00.000Z",
+      "mentionedUserIds": []
+    }
+  ]
+}
