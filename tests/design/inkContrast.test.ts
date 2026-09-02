@@ -33,6 +33,12 @@ const ASSETS = [
   resolve(ROOT, 'design', 'marketing', 'design-showcase.mock.html'),
   resolve(ROOT, 'design', 'marketing', 'landing.mock.html'),
   resolve(ROOT, 'design', 'legal', 'legal.mock.html'),
+  // MOTIR-4113 — the /p/* room. ⚠️ ADDING IT HERE IS PART OF SHIPPING IT: this
+  // list is literal, so an asset that is not in it is not measured, and the
+  // lane would be green on the day the asset landed and green if the asset were
+  // wrong. That is the same "a gate that passes because it is measuring
+  // nothing" shape this file's own header describes.
+  resolve(ROOT, 'design', 'public-projects', 'public-projects.mock.html'),
 ]
 
 /*
