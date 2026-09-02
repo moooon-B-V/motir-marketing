@@ -86,5 +86,25 @@ export const LEGAL_PRIVACY = '/legal/privacy'
 export const LEGAL_TERMS = '/legal/terms'
 export const LEGAL_INDEX = '/legal'
 
+/**
+ * The account pane the Privacy Policy's §7 sends a reader to in order to
+ * EXERCISE their GDPR Art. 15/17 rights — export their data and delete their
+ * account (motir-core MOTIR-1136).
+ *
+ * ⚠️ IT IS A DOOR OUT OF THIS HOST, and that is the whole of MOTIR-4147. The
+ * policy carried `/settings/account/data` as a bare path, written while the
+ * document lived on `app.motir.co`; on `motir.co` that path is a 404, so the
+ * one sentence in the policy that tells a reader how to exercise a right
+ * pointed at nothing. It is built from `APP_ORIGIN` for the same reason every
+ * door above is: a hardcoded `https://app.motir.co` works in production and
+ * silently sends a preview build's readers at production data.
+ *
+ * The PATH is motir-core's `DATA_PRIVACY_PANE_PATH`
+ * (`lib/users/dataSubjectRequests.ts`), which that repository keeps as one
+ * value so the pane and the email that points at it cannot disagree. This is
+ * the third reader of it and the only one on this side of the origin.
+ */
+export const DATA_PRIVACY_PANE = `${APP_ORIGIN}/settings/account/data`
+
 /** The one destination that is NOT motir-core, and so not built from the origin. */
 export const SOURCE_REPO = 'https://github.com/moooon-B-V/motir-core'

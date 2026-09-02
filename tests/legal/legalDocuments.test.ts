@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  DOCUMENT_DESTINATIONS,
+  UnknownLegalDestinationError,
   byPreferredOrder,
+  expandDestinations,
   getLegalDocument,
   legalDocumentSlugs,
   listLegalDocuments,
@@ -198,5 +201,63 @@ describe('the published legal set', () => {
   it('refuses a path-traversal slug rather than reading the file', () => {
     expect(getLegalDocument('../../package')).toBeNull()
     expect(getLegalDocument('../../../etc/passwd')).toBeNull()
+  })
+})
+
+/**
+ * ── The destination token (MOTIR-4147) ──────────────────────────────────────
+ *
+ * A published document is a static file and cannot import
+ * `lib/destinations.ts`, so it names a destination and the loader resolves it.
+ * The table is a parameter, which is what makes these branches reachable from
+ * a string with no environment to stub — the same reason `parseLegalDocument`
+ * is pure.
+ */
+describe('expandDestinations', () => {
+  const table = {
+    DATA_PRIVACY_PANE: 'https://app.example/settings/account/data',
+  }
+
+  it('resolves a token to the destination', () => {
+    expect(
+      expandDestinations('[settings]({{DATA_PRIVACY_PANE}}) you', table),
+    ).toBe('[settings](https://app.example/settings/account/data) you')
+  })
+
+  it('resolves EVERY occurrence, not just the first', () => {
+    expect(
+      expandDestinations(
+        '{{DATA_PRIVACY_PANE}} and {{DATA_PRIVACY_PANE}}',
+        table,
+      ),
+    ).toBe(
+      'https://app.example/settings/account/data and https://app.example/settings/account/data',
+    )
+  })
+
+  it('leaves a body with no token exactly as it was', () => {
+    const body = '# Privacy\n\nA policy with [a link](/legal/terms) in it.\n'
+    expect(expandDestinations(body, table)).toBe(body)
+  })
+
+  it('THROWS on a token it cannot resolve, naming it and the known set', () => {
+    // ⚠️ The alternative is publishing literal braces in a legal document. The
+    // document route is statically generated, so this throw lands in
+    // `next build` — the one moment the typo is cheap.
+    expect(() => expandDestinations('{{DATA_PRIVACY_PAIN}}', table)).toThrow(
+      UnknownLegalDestinationError,
+    )
+    expect(() => expandDestinations('{{DATA_PRIVACY_PAIN}}', table)).toThrow(
+      /DATA_PRIVACY_PAIN.*DATA_PRIVACY_PANE/s,
+    )
+  })
+
+  it('the shipped table names the account pane on the configured origin', () => {
+    // Built from `APP_ORIGIN`, which the test environment sets to a
+    // NON-production value — so a hardcoded literal in `lib/destinations.ts`
+    // fails here rather than in a preview deployment.
+    expect(DOCUMENT_DESTINATIONS.DATA_PRIVACY_PANE).toBe(
+      'https://app.test.motir.co/settings/account/data',
+    )
   })
 })
