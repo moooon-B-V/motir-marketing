@@ -9,7 +9,7 @@ with an account menu and a sign-in modal that work because the page and the sess
 `motir-core/design/public-site/` (MOTIR-3880) draws `motir.co`'s chrome and names `/explore`,
 `/docs` and `/legal` among its nav states. **A chrome asset naming a surface is a DOOR, not the
 room** — the reasoning `design/legal/design-notes.md` records for `/legal`. This asset is the room,
-on the new host, with the affordances `public-surface-hosts.md` **AMENDMENT 3** decided.
+on the new host, with the affordances `public-surface-hosts.md` **AMENDMENT 4** decided.
 
 **Asset files (three):** this `design-notes.md` (the AREA's note) · `public-projects.mock.html` (the
 source of truth — standalone, re-stating the shipped `--el-*` values) · `public-projects.png`
@@ -53,13 +53,13 @@ containing a dash.
 | **10**  | **EMPTY** — a public project with no public work items                                            |
 | **11**  | **LOADING** — skeleton rows in the shape of the list                                              |
 | **12**  | **ERROR** — the public API is unreachable                                                         |
-| **13**  | the affordance table: AMENDMENT 3 §D row by row, and where each is drawn                          |
+| **13**  | the affordance table: AMENDMENT 4 §D row by row, and where each is drawn                          |
 | **14**  | the HAND-OFF as three moments — the control, the destination, the return                          |
 | **15**  | the ACCESS PATH — the doors in, and the one that deliberately is not one                          |
 | **16**  | narrow (390 × 844)                                                                                |
 | **17**  | dark theme                                                                                        |
 
-## The act affordances — AMENDMENT 3 §D, per row
+## The act affordances — AMENDMENT 4 §D, per row
 
 The amendment settles what happens to every session-aware affordance once the page is cross-origin
 from the session. **Nothing here is invented and nothing is softened**; panel 13 is the table, with
@@ -89,7 +89,7 @@ the panel each row is drawn in. The three mechanisms:
 binding one. `lib/auth/index.ts` sets **`sameSite: 'lax'`**, so a `fetch` from `motir.co` with
 `credentials: 'include'` sends no cookie at all. **The hand-off is not a preference — a direct
 credentialed call does not work**, and making it work would mean `sameSite: 'none'`, a second
-widening. AMENDMENT 3 §B carries this.
+widening. AMENDMENT 4 §B carries this.
 
 ### ⚠️ Row 8 is drawn honestly, and panel 14 is where that is visible
 
@@ -108,7 +108,7 @@ MOTIR-4113's own card, MOTIR-3877's body, and MOTIR-4108's affordance table all 
 request intake was **already anonymous**. It is not, and never has been:
 `POST /api/public/projects/{projectId}/requests` calls `requireCompliantSession()` and its own
 comment says _"a LOGGED-OUT caller is rejected 401 (sign-in-to-act)"_; the duplicate pre-check
-carries the same gate. Re-measured in AMENDMENT 3 §A and filed as **MOTIR-4166**.
+carries the same gate. Re-measured in AMENDMENT 4 §A and filed as **MOTIR-4166**.
 
 So panel 9 draws the form as far as a visitor gets **without** an account — the title field, the real
 duplicate-suggestion step, the body — and the submit is the hand-off. Drawing an anonymous submit
@@ -183,7 +183,7 @@ hosts answer 404 today.
 ## Context refs
 
 - `motir-core/docs/decisions/public-surface-hosts.md` — §2 (the host), §4 (the cookie), §8 (the
-  costs), and **AMENDMENT 3** (the affordance table this asset draws)
+  costs), and **AMENDMENT 4** (the affordance table this asset draws)
 - `motir-core/design/public-projects/` · `design/public-site/` — prior art, READ while drawing; not
   deliverables of this card
 - `motir-marketing/design/legal/design-notes.md` — the precedent: a room inside this chrome
