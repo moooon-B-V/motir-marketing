@@ -213,5 +213,12 @@
     "mcpTools": "MCP tools",
     "cli": "CLI",
     "sandbox": "Sandbox"
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "That page isn’t here",
+    "lede": "The address may be mistyped — or the page it pointed to is no longer public.",
+    "exploreDoor": "Explore projects",
+    "homeDoor": "Go to the homepage"
   }
 }

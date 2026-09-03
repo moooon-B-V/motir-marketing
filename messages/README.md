@@ -45,6 +45,7 @@ shape is what lets copy be swept across both in one pass.
 | `landing.openCore`     | the open-core line                                                              |
 | `designShowcase`       | `/design` — the public design showcase's heading, axis rail and closing line    |
 | `footer`               | the footer and its legal microcopy                                              |
+| `notFound`             | the 404 room — its eyebrow, heading, one sentence and two doors                 |
 
 > **⚠️ `landing.doors` GAINED KEYS AND `free` CHANGED SHAPE — `MOTIR-1152`, on
 > the record.** This card renders the layout `MOTIR-1143` draws, and that asset
