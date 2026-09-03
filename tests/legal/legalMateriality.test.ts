@@ -165,7 +165,15 @@ const EXCLUDED_DOCUMENTS: ReadonlyArray<readonly [string, string]> = [
 const REVIEWED_BASELINE: Record<string, string> = {
   terms: '1.0.0',
   privacy: '1.1.0',
-  'acceptable-use': '1.0.0',
+  // MOTIR-4212 — 1.0.0 → 1.1.0 for the *Addresses you connect* section. MINOR
+  // because it is MATERIAL: it places a NEW REPRESENTATION on the customer
+  // (that they control the domain they point at us, and are authorised to have
+  // certificates obtained for it). A new obligation is exactly what §14 promises
+  // not to enact by silence, so this revision is re-consent-triggering.
+  //
+  // Clearing this tripwire IS the record that the diff was read, which is what
+  // the guard's header says it exists for.
+  'acceptable-use': '1.1.0',
 }
 
 describe('the published legal set supports the materiality convention', () => {

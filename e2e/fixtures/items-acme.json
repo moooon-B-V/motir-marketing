@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "id": "wi_1",
+      "identifier": "MOTIR-1",
+      "key": 1,
+      "title": "A public work item 1",
+      "kind": "subtask",
+      "status": "To Do",
+      "statusCategory": "todo",
+      "priority": "medium"
+    },
+    {
+      "id": "wi_3",
+      "identifier": "MOTIR-3",
+      "key": 3,
+      "title": "A public work item 3",
+      "kind": "subtask",
+      "status": "In Progress",
+      "statusCategory": "in_progress",
+      "priority": "medium"
+    },
+    {
+      "id": "wi_4",
+      "identifier": "MOTIR-4",
+      "key": 4,
+      "title": "A public work item 4",
+      "kind": "subtask",
+      "status": "Done",
+      "statusCategory": "done",
+      "priority": "medium"
+    }
+  ],
+  "nextCursor": "wi_4"
+}

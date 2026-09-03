@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { APP_ORIGIN } from '@/lib/appOrigin'
@@ -92,6 +92,47 @@ describe('ORIGINS DO NOT CROSS', () => {
   })
 })
 
+describe('ONE CANONICAL PER PAGE — MOTIR-4222', () => {
+  it("no /p/* file builds an absolute URL from siteUrl('/p/…')", () => {
+    // ⚠️ THE CARD'S OWN GREP, MECHANISED. Every canonical, `og:url` and JSON-LD
+    // `@id` on this surface must come from the project's PRIMARY address
+    // (`publicUrlFor`), not from this site's origin — a `siteUrl('/p/…')` left
+    // behind is a page telling a crawler that `motir.co` is canonical for a
+    // project whose canonical moved, which is the duplication *make primary*
+    // exists to prevent.
+    //
+    // COMMENTS ARE STRIPPED FIRST, the rule this file already applies to the
+    // e2e-origin guard: the files that explain the change have to QUOTE the old
+    // expression to explain it, and a guard that forbade naming the thing it
+    // forbids would have exactly one repair available — deleting the
+    // explanation.
+    const code = (f: string): string =>
+      read(f)
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/\/\/[^\n]*/g, '')
+
+    const offenders = tracked('app/p').filter((f) =>
+      /siteUrl\(\s*[`'"]\/p\//.test(code(f)),
+    )
+    expect(
+      offenders,
+      'build it from the project’s primary with publicUrlFor() instead',
+    ).toEqual([])
+  })
+
+  it('and the sitemap and robots read the REQUEST’s host', () => {
+    // Both are served at every address the renderer answers for, and a sitemap
+    // may only list URLs on its own host. Asserted at the source because the
+    // behavioural half needs a request scope — `tests/host/crawlSurface.test.ts`
+    // supplies one and asks all three.
+    for (const file of ['app/sitemap.ts', 'app/robots.ts']) {
+      expect(read(file), `${file} answers as motir.co on every host`).toContain(
+        'requestPublicHost',
+      )
+    }
+  })
+})
+
 describe('THE ERROR STATE IS REACHABLE — every /p/* screen has one', () => {
   it('every page that reads renders the error state rather than throwing', () => {
     // A screen that let the read throw would 500 the whole route on an outage,
@@ -130,9 +171,48 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
     // measured — this asserts the globs still SAY that, since narrowing them is
     // the change that would silently un-measure the surface.
     const config = read('vitest.config.mts')
-    expect(config).toContain(
-      "include: ['lib/publicProject.ts', 'app/p/**/*.tsx']",
+    const coverage = config.slice(config.indexOf('coverage: {'))
+    const include = coverage.slice(
+      coverage.indexOf('include: ['),
+      coverage.indexOf(']', coverage.indexOf('include: [')),
     )
+    // ⚠️ THE TWO GLOBS ARE THE LOAD-BEARING ENTRIES — narrowing either is the
+    // change that silently un-measures a surface. The rest of the list is
+    // literal paths, and each is asserted to EXIST below rather than merely to
+    // be named, so a file that moves cannot leave a dead entry behind.
+    for (const entry of ['lib/publicProject.ts', 'app/p/**/*.tsx']) {
+      expect(include, `the coverage include lost ${entry}`).toContain(entry)
+    }
+
+    const literals = [...include.matchAll(/'([^'*]+\.tsx?)'/g)].map(
+      (m) => m[1]!,
+    )
+    expect(literals.length).toBeGreaterThan(1)
+    for (const file of literals) {
+      expect(
+        existsSync(join(ROOT, file)),
+        `${file} is in the coverage include but does not exist`,
+      ).toBe(true)
+    }
+  })
+
+  it('every host-router file is measured — MOTIR-4220', () => {
+    // The router is the one file on this surface a visitor cannot reach any
+    // other way: it runs before every page and after none, so nothing else's
+    // coverage covers it. Naming it here is what keeps that true.
+    const coverage = read('vitest.config.mts').slice(
+      read('vitest.config.mts').indexOf('coverage: {'),
+    )
+    for (const file of [
+      'proxy.ts',
+      'lib/publicHost.ts',
+      'lib/hostResolution.ts',
+      'lib/tenantDomain.ts',
+    ]) {
+      expect(coverage, `${file} is not in the coverage include`).toContain(
+        `'${file}'`,
+      )
+    }
   })
 
   it('every exclusion in that config is a path that exists', () => {

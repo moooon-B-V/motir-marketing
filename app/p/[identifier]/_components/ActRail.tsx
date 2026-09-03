@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { actHref } from '@/lib/publicProject'
+import { publicPathFor, type PublicHost } from '@/lib/publicHost'
 import { SubscribeForm } from './SubscribeForm'
 
 /**
@@ -25,9 +26,12 @@ import { SubscribeForm } from './SubscribeForm'
 export function ActRail({
   identifier,
   returnPath,
+  host,
 }: {
   identifier: string
+  /** ⚠️ A path on the SITE, on every host — `actHref`'s note says why. */
   returnPath: string
+  host: PublicHost
 }) {
   return (
     <div className="mt-5 flex flex-wrap items-center gap-2">
@@ -45,14 +49,14 @@ export function ActRail({
 
       {/* Row 6 — REQUEST A FEATURE, a hand-off through the doorway page. */}
       <Link
-        href={`/p/${encodeURIComponent(identifier)}/requests/new`}
+        href={publicPathFor(host, identifier, 'requests/new')}
         className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-3 text-[13px] font-medium text-(--el-text) hover:bg-(--el-surface-soft)"
       >
         Request a feature
       </Link>
 
       <Link
-        href={`/p/${encodeURIComponent(identifier)}/changelog.xml`}
+        href={publicPathFor(host, identifier, 'changelog.xml')}
         className="inline-flex h-(--height-btn-sm) items-center px-2 text-[13px] text-(--el-text-secondary) hover:text-(--el-link)"
       >
         Atom feed

@@ -29,6 +29,22 @@ primary_region = "iad"               # beside motir-core and motir-ai.
   [build.args]
     NEXT_PUBLIC_MOTIR_APP_ORIGIN = "https://app.motir.co"
 
+    # The base domain a workspace's public subdomain lives under (MOTIR-4220 ·
+    # ADR `public-tenant-addresses.md` §2). Same build-arg reasoning as the
+    # origin above, and the same non-secret: it is the public suffix every
+    # tenant address is spelled with. `lib/tenantDomain.ts` FAILS THE BUILD when
+    # it is absent from a production build, because a silent fallback would make
+    # the real base domain look like an unknown tenant host and 404 it.
+    #
+    # ⚠️ IT IS `motir.site`, NOT A SUBDOMAIN OF `motir.co`, and that is the
+    # ADR's §2 decision rather than a convenience: a customer's project served
+    # from `*.motir.co` would share a registrable domain with the application,
+    # so one tenant's cookie scope, one tenant's HSTS preload and one tenant's
+    # abuse report would reach `motir.co` itself. A separate registrable domain
+    # is the boundary. The apex and the wildcard are certificated on THIS app
+    # (`fly certs list -a motir-marketing`, MOTIR-4208).
+    NEXT_PUBLIC_MOTIR_TENANT_DOMAIN = "motir.site"
+
 # No [deploy] release_command: this app has no database and nothing to migrate.
 # No [processes]: one web process, so Fly runs the image's CMD and routes HTTP to
 # every machine — which is what `http_service` below then means.

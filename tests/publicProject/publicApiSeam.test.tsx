@@ -12,6 +12,7 @@ import {
   loadTreeLevel,
   loadWorkItem,
 } from '@/lib/publicProject'
+import { SITE_HOST } from '@/lib/publicHost'
 import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
 import { WorkItemRow } from '@/app/p/[identifier]/_components/Rows'
 
@@ -80,7 +81,7 @@ describe('a recorded response reaches the props a component renders', () => {
     const card = read.data.columns[0]?.cards[0]
     expect(card, 'the recorded board has no cards').toBeDefined()
 
-    render(<WorkItemRow identifier="MOTIR" item={card!} />)
+    render(<WorkItemRow identifier="MOTIR" item={card!} host={SITE_HOST} />)
     expect(screen.getByRole('link', { name: card!.title })).toHaveAttribute(
       'href',
       `/p/MOTIR/items/${card!.identifier}`,
@@ -100,7 +101,7 @@ describe('a recorded response reaches the props a component renders', () => {
       .find((c) => c.childrenHidden)
     expect(hidden, 'the recorded board has no private epic').toBeDefined()
 
-    render(<WorkItemRow identifier="MOTIR" item={hidden!} />)
+    render(<WorkItemRow identifier="MOTIR" item={hidden!} host={SITE_HOST} />)
     expect(screen.getByText('Children are not public.')).toBeVisible()
   })
 })

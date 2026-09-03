@@ -8,6 +8,7 @@ import {
   projectTabHref,
   readPublic,
 } from '@/lib/publicProject'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /*
  * The `/p/*` data layer (MOTIR-4115).
@@ -122,12 +123,30 @@ describe('the tab set', () => {
   })
 
   it('builds the Overview href without a trailing segment', () => {
-    expect(projectTabHref('ACME', '')).toBe('/p/ACME')
-    expect(projectTabHref('ACME', 'board')).toBe('/p/ACME/board')
+    expect(projectTabHref(SITE_HOST, 'ACME', '')).toBe('/p/ACME')
+    expect(projectTabHref(SITE_HOST, 'ACME', 'board')).toBe('/p/ACME/board')
   })
 
   it('encodes the identifier in a tab href too', () => {
-    expect(projectTabHref('a b', 'items')).toBe('/p/a%20b/items')
+    expect(projectTabHref(SITE_HOST, 'a b', 'items')).toBe('/p/a%20b/items')
+  })
+
+  it('takes the shape of the host it is given (MOTIR-4220)', () => {
+    // The same tab, three addresses. `lib/publicHost.ts` owns the mapping and
+    // `tests/host/publicHost.test.ts` covers it exhaustively; this asserts that
+    // the tab helper DELEGATES rather than keeping its own copy of the rule.
+    const workspace = {
+      kind: 'workspace',
+      host: 'acme.motir.site',
+      origin: 'https://acme.motir.site',
+    } as const
+    const project = {
+      kind: 'project',
+      host: 'roadmap.acme.com',
+      origin: 'https://roadmap.acme.com',
+    } as const
+    expect(projectTabHref(workspace, 'ACME', 'board')).toBe('/ACME/board')
+    expect(projectTabHref(project, 'ACME', 'board')).toBe('/board')
   })
 })
 

@@ -2,6 +2,12 @@ import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
 import { PROJECT_TABS, loadAllPublicProjects } from '@/lib/publicProject'
+import {
+  currentHost,
+  currentOrigin,
+  publicPathFor,
+  requestPublicHost,
+} from '@/lib/publicHost'
 
 /*
  * motir.co's sitemap (MOTIR-1154 · 8.3.7), served at `/sitemap.xml`.
@@ -32,6 +38,23 @@ import { PROJECT_TABS, loadAllPublicProjects } from '@/lib/publicProject'
  * and not a different one. `SITE_ORIGIN` is still a `NEXT_PUBLIC_*` value baked
  * in by `next build`, so the URLs are the real ones either way.
  *
+ * ⚠️ IT IS PER-HOST NOW (MOTIR-4222), AND THE RULE HAS ONE SENTENCE:
+ * **a sitemap may only list URLs on its own host.** So this file lists exactly
+ * the projects whose CANONICAL is the host being asked — `primaryHost` on the
+ * index row is the field that says so — at the paths that host serves them at.
+ * Three consequences, each of them the point rather than a side effect:
+ *
+ *   • a project whose primary moves to a customer domain DISAPPEARS from
+ *     `motir.co/sitemap.xml` and appears in that domain's own;
+ *   • a workspace subdomain's sitemap lists only that workspace's projects, at
+ *     `/<identifier>` rather than `/p/<identifier>`;
+ *   • a customer domain's lists ONE project's tabs, at the host's root.
+ *
+ * The STATIC entries — the landing, /explore, /docs, /legal — belong to
+ * `motir.co` alone and are emitted only there. A tenant host is a project's
+ * address, not a copy of the marketing site, and listing this site's pages in a
+ * customer's sitemap would ask a crawler to attribute them to that host.
+ *
  * ⚠️ A FAILED INDEX READ EMITS THE STATIC ENTRIES AND A 200. `loadAllPublicProjects`
  * never throws and returns what it has. A sitemap that briefly loses its project
  * pages is recoverable — a crawler re-reads it — while one that 500s is not:
@@ -42,26 +65,36 @@ import { PROJECT_TABS, loadAllPublicProjects } from '@/lib/publicProject'
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // The projects, and their tab paths — every crawlable URL this surface has.
+  const host = await requestPublicHost()
+  const origin = currentOrigin(host)
+  const thisHost = currentHost(host)
+
+  // The projects, and their tab paths — every crawlable URL THIS HOST has.
   // `/p/<id>/requests/new` is deliberately absent: it is a `noindex` doorway
   // (MOTIR-4117), and a sitemap that listed it would be asking a crawler to
   // index a page the page itself refuses.
   const { projects } = await loadAllPublicProjects()
-  const projectEntries: MetadataRoute.Sitemap = projects.flatMap((project) => {
-    const lastModified = new Date(project.updatedAt)
-    return PROJECT_TABS.map((tab) => ({
-      url: siteUrl(
-        tab.segment
-          ? `/p/${encodeURIComponent(project.identifier)}/${tab.segment}`
-          : `/p/${encodeURIComponent(project.identifier)}`,
-      ),
-      lastModified,
-      changeFrequency: 'daily' as const,
-      // The project's own page outranks its tabs — it is the one a shared link
-      // and /explore's cards point at.
-      priority: tab.segment ? 0.5 : 0.8,
-    }))
-  })
+  const projectEntries: MetadataRoute.Sitemap = projects
+    .filter((project) => project.primaryHost === thisHost)
+    .flatMap((project) => {
+      const lastModified = new Date(project.updatedAt)
+      return PROJECT_TABS.map((tab) => ({
+        // ⚠️ ONE EXPRESSION FOR ALL THREE HOST KINDS. `publicPathFor` is the
+        // same helper every rendered link goes through, so a sitemap entry and
+        // the page's own navigation cannot spell the address differently —
+        // which is the way a sitemap normally goes stale.
+        url: `${origin}${publicPathFor(host, project.identifier, tab.segment)}`,
+        lastModified,
+        changeFrequency: 'daily' as const,
+        // The project's own page outranks its tabs — it is the one a shared link
+        // and /explore's cards point at.
+        priority: tab.segment ? 0.5 : 0.8,
+      }))
+    })
+
+  // A tenant host's sitemap ENDS here: the static entries below are this
+  // marketing site's own pages.
+  if (host.kind !== 'site') return projectEntries
 
   return [
     ...projectEntries,
@@ -98,6 +131,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       '/docs/mcp/tools',
       '/docs/cli',
       '/docs/sandbox',
+      '/docs/public-address',
     ].map((path) => ({
       url: siteUrl(path),
       changeFrequency: 'monthly' as const,

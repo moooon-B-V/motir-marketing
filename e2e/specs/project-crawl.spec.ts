@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { TENANT_ORIGIN } from '../stub/origin'
 
 /*
  * The CRAWL SURFACE (MOTIR-4118) — everything on /p/* that a machine consumes.
@@ -46,7 +47,7 @@ test('the feed 404s for a project that is not public — and NOT for an outage',
   expect(res.status()).toBe(404)
 })
 
-test('the sitemap lists every public project and its tabs', async ({
+test('the sitemap lists every project whose CANONICAL is this host, and its tabs', async ({
   request,
 }) => {
   const xml = await (await request.get('/sitemap.xml')).text()
@@ -54,10 +55,44 @@ test('the sitemap lists every public project and its tabs', async ({
   expect(xml).toContain('https://motir.co/p/MOTIR</loc>')
   expect(xml).toContain('https://motir.co/p/MOTIR/board</loc>')
   expect(xml).toContain('https://motir.co/p/MOTIR/changelog</loc>')
-  expect(xml).toContain('https://motir.co/p/ACME</loc>')
   // The static entries survive alongside them.
   expect(xml).toContain('https://motir.co/explore</loc>')
   expect(xml).toContain('https://motir.co/legal</loc>')
+})
+
+test('and OMITS one whose canonical has moved to a tenant host', async ({
+  request,
+}) => {
+  // ⚠️ THIS ASSERTION USED TO BE ITS OPPOSITE, and the change is the card
+  // (MOTIR-4222). `ACME`'s primary is `acme.localhost` in the stub's index, and
+  // a sitemap may only list URLs on its OWN host — so the project disappears
+  // from here and appears in that host's sitemap, which the test below walks.
+  // Listing it in both is the duplication *make primary* exists to prevent;
+  // listing it in neither loses it.
+  const xml = await (await request.get('/sitemap.xml')).text()
+
+  expect(xml).not.toContain('/p/ACME')
+})
+
+test('the tenant host’s sitemap lists ITS project, at its own paths', async ({
+  request,
+}) => {
+  const xml = await (await request.get(`${TENANT_ORIGIN}/sitemap.xml`)).text()
+
+  expect(xml).toContain(`${TENANT_ORIGIN}/ACME</loc>`)
+  expect(xml).toContain(`${TENANT_ORIGIN}/ACME/board</loc>`)
+  // Not `/p/ACME`, and none of the marketing site's own pages: a tenant host is
+  // a project's address, not a copy of motir.co.
+  expect(xml).not.toContain('/p/ACME')
+  expect(xml).not.toContain('/explore')
+  expect(xml).not.toContain('MOTIR')
+})
+
+test('and its robots.txt names ITS OWN sitemap', async ({ request }) => {
+  const txt = await (await request.get(`${TENANT_ORIGIN}/robots.txt`)).text()
+
+  expect(txt).toContain(`${TENANT_ORIGIN}/sitemap.xml`)
+  expect(txt).not.toContain('motir.co/sitemap.xml')
 })
 
 test('the sitemap does NOT list the noindex hand-off doorway', async ({

@@ -9,6 +9,7 @@ import {
   loadTreeLevel,
   pagedTabHref,
 } from '@/lib/publicProject'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /*
  * The five tab reads (MOTIR-4116) — what each one ASKS FOR.
@@ -100,7 +101,7 @@ describe('the roadmap buckets', () => {
 
 describe('pagedTabHref — the no-JS pager’s target', () => {
   it('is a real URL on this site, carrying the coordinate', () => {
-    expect(pagedTabHref('ACME', 'items', { cursor: 'wi_9' })).toBe(
+    expect(pagedTabHref(SITE_HOST, 'ACME', 'items', { cursor: 'wi_9' })).toBe(
       '/p/ACME/items?cursor=wi_9',
     )
   })
@@ -109,16 +110,19 @@ describe('pagedTabHref — the no-JS pager’s target', () => {
     // `?parentId=&offset=3` would be an EMPTY parentId, which the endpoint reads
     // as the root level — so the pager would silently jump back to the top.
     expect(
-      pagedTabHref('ACME', 'tree', { parentId: undefined, offset: '3' }),
+      pagedTabHref(SITE_HOST, 'ACME', 'tree', {
+        parentId: undefined,
+        offset: '3',
+      }),
     ).toBe('/p/ACME/tree?offset=3')
   })
 
   it('has no query string at all when nothing is carried', () => {
-    expect(pagedTabHref('ACME', 'tree', {})).toBe('/p/ACME/tree')
+    expect(pagedTabHref(SITE_HOST, 'ACME', 'tree', {})).toBe('/p/ACME/tree')
   })
 
   it('encodes the identifier and the values', () => {
-    expect(pagedTabHref('A B', 'items', { cursor: 'a b' })).toBe(
+    expect(pagedTabHref(SITE_HOST, 'A B', 'items', { cursor: 'a b' })).toBe(
       '/p/A%20B/items?cursor=a+b',
     )
   })

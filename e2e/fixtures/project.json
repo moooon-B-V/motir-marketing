@@ -14,5 +14,9 @@
     "inProgress": 6
   },
   "links": {},
-  "viewerCanManage": false
+  "viewerCanManage": false,
+  "addresses": {
+    "primary": "https://motir.co/p/MOTIR",
+    "alternates": []
+  }
 }

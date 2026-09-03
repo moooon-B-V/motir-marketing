@@ -1,8 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { siteUrl } from '@/lib/siteOrigin'
 import { actHref, loadProject } from '@/lib/publicProject'
+import {
+  publicPathFor,
+  publicUrlFor,
+  redirectIfNotPrimary,
+  requestPublicHost,
+  SITE_HOST,
+} from '@/lib/publicHost'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
 
@@ -16,7 +22,7 @@ export async function generateMetadata({
   const { identifier } = await params
   const read = await loadProject(identifier)
   if (read.status !== 'ok') return {}
-  const url = siteUrl(`/p/${encodeURIComponent(identifier)}/requests/new`)
+  const url = publicUrlFor(read.data, 'requests/new')
   return {
     title: `Request a feature · ${read.data.name}`,
     description: `Ask the ${read.data.name} team for something. Requests are public.`,
@@ -58,22 +64,35 @@ export default async function RequestIntakePage({
   params: Promise<{ identifier: string }>
 }) {
   const { identifier } = await params
+  const host = await requestPublicHost()
   const read = await loadProject(identifier)
 
   if (read.status === 'not-found') notFound()
-  if (read.status === 'failed') return <ErrorState what="this project" />
+  if (read.status === 'failed')
+    return <ErrorState what="this project" host={host} />
 
   const project = read.data
-  const returnPath = `/p/${encodeURIComponent(identifier)}/roadmap`
+  await redirectIfNotPrimary(project, host, 'requests/new')
+
+  // ⚠️ TWO PATHS TO THE SAME TAB, AND THEY ARE NOT INTERCHANGEABLE — one
+  // variable used to serve both, which was correct only while `motir.co` was
+  // the sole host.
+  //
+  //   • the BACK LINK stays on this host, so it is host-relative;
+  //   • the HAND-OFF's return is prefixed with `SITE_ORIGIN` by `actHref`, so
+  //     it must be the SITE path or the round trip lands on a URL that does not
+  //     exist (`motir.co/roadmap`). `actHref`'s note carries the reasoning.
+  const roadmapHref = publicPathFor(host, identifier, 'roadmap')
+  const returnPath = publicPathFor(SITE_HOST, identifier, 'roadmap')
 
   return (
     <>
-      <ProjectHeader project={project} current="roadmap" />
+      <ProjectHeader project={project} current="roadmap" host={host} />
 
       <div className="mt-6 max-w-[38rem]">
         <p className="mb-5 text-[13px]">
           <Link
-            href={returnPath}
+            href={roadmapHref}
             className="text-(--el-text-secondary) hover:text-(--el-link)"
           >
             ← {project.name} · Roadmap

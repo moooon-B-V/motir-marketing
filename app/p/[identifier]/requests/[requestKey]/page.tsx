@@ -1,13 +1,19 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { siteUrl } from '@/lib/siteOrigin'
 import {
   actHref,
   deriveDescription,
   loadProject,
   loadRequest,
 } from '@/lib/publicProject'
+import {
+  publicPathFor,
+  publicUrlFor,
+  redirectIfNotPrimary,
+  requestPublicHost,
+  SITE_HOST,
+} from '@/lib/publicHost'
 import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
@@ -28,12 +34,18 @@ export async function generateMetadata({
   params: Promise<{ identifier: string; requestKey: string }>
 }): Promise<Metadata> {
   const { identifier, requestKey } = await params
-  const read = await loadRequest(identifier, requestKey)
-  if (read.status !== 'ok') return {}
+  // The canonical is the PROJECT's primary address — see the same note on the
+  // work-item detail page.
+  const [project, read] = await Promise.all([
+    loadProject(identifier),
+    loadRequest(identifier, requestKey),
+  ])
+  if (read.status !== 'ok' || project.status !== 'ok') return {}
 
   const request = read.data
-  const url = siteUrl(
-    `/p/${encodeURIComponent(identifier)}/requests/${encodeURIComponent(request.identifier)}`,
+  const url = publicUrlFor(
+    project.data,
+    `requests/${encodeURIComponent(request.identifier)}`,
   )
   return {
     title: `${request.title} · ${identifier}`,
@@ -64,6 +76,7 @@ export default async function PublicRequestPage({
   params: Promise<{ identifier: string; requestKey: string }>
 }) {
   const { identifier, requestKey } = await params
+  const host = await requestPublicHost()
   const [project, request] = await Promise.all([
     loadProject(identifier),
     loadRequest(identifier, requestKey),
@@ -71,25 +84,43 @@ export default async function PublicRequestPage({
 
   if (project.status === 'not-found' || request.status === 'not-found')
     notFound()
-  if (project.status === 'failed') return <ErrorState what="this project" />
+  if (project.status === 'failed')
+    return <ErrorState what="this project" host={host} />
 
+  await redirectIfNotPrimary(
+    project.data,
+    host,
+    `requests/${encodeURIComponent(requestKey)}`,
+  )
+
+  // ⚠️ `SITE_HOST`, on every host: the hand-off prefixes this with
+  // `SITE_ORIGIN`, so a host-relative return is a URL that does not exist.
+  // `actHref`'s note carries the reasoning and the consequence.
   const returnPath =
     request.status === 'ok'
-      ? `/p/${encodeURIComponent(identifier)}/requests/${encodeURIComponent(request.data.identifier)}`
-      : `/p/${encodeURIComponent(identifier)}/roadmap`
+      ? publicPathFor(
+          SITE_HOST,
+          identifier,
+          `requests/${encodeURIComponent(request.data.identifier)}`,
+        )
+      : publicPathFor(SITE_HOST, identifier, 'roadmap')
 
   return (
     <>
-      <ProjectHeader project={project.data} current="roadmap" />
+      <ProjectHeader project={project.data} current="roadmap" host={host} />
 
       {request.status === 'failed' ? (
-        <ErrorState what="this feature request" identifier={identifier} />
+        <ErrorState
+          what="this feature request"
+          identifier={identifier}
+          host={host}
+        />
       ) : (
         <article className="mt-6 grid gap-7 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div>
             <p className="mb-5 text-[13px]">
               <Link
-                href={`/p/${encodeURIComponent(identifier)}/roadmap`}
+                href={publicPathFor(host, identifier, 'roadmap')}
                 className="text-(--el-text-secondary) hover:text-(--el-link)"
               >
                 ← {project.data.name} · Roadmap

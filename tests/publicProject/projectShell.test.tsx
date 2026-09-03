@@ -29,6 +29,7 @@ const project: PublicProjectOverviewDto = {
   },
   links: {},
   viewerCanManage: false,
+  addresses: { primary: 'https://motir.co/p/MOTIR', alternates: [] },
 }
 
 describe('the hero', () => {

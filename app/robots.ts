@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { siteUrl } from '@/lib/siteOrigin'
+import { currentOrigin, requestPublicHost } from '@/lib/publicHost'
 
 /*
  * motir.co's `robots.txt` (MOTIR-1154 · 8.3.7).
@@ -20,11 +20,24 @@ import { siteUrl } from '@/lib/siteOrigin'
  * surface to hold back. `sitemap` points at the sibling route, absolutely — the
  * spec requires an absolute URL there, which is the reason `SITE_ORIGIN` exists
  * as a module rather than as a literal in two files.
+ *
+ * ⚠️ DYNAMIC NOW, AND PER-HOST (MOTIR-4222). This file is served at every
+ * address the renderer answers for, and each one must name ITS OWN sitemap and
+ * ITS OWN host: a customer domain whose `robots.txt` pointed at
+ * `motir.co/sitemap.xml` would be handing a crawler a document listing URLs on
+ * a host it did not ask about — which is the one thing the sitemap protocol
+ * refuses outright, and the reason `app/sitemap.ts` filters by `primaryHost`.
+ *
+ * `force-dynamic` for the same reason the sitemap is: the answer depends on the
+ * request's host, which a prerender does not have.
  */
-export default function robots(): MetadataRoute.Robots {
+export const dynamic = 'force-dynamic'
+
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const origin = currentOrigin(await requestPublicHost())
   return {
     rules: { userAgent: '*', allow: '/' },
-    sitemap: siteUrl('/sitemap.xml'),
-    host: siteUrl('/'),
+    sitemap: `${origin}/sitemap.xml`,
+    host: `${origin}/`,
   }
 }

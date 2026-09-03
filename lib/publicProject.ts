@@ -1,5 +1,10 @@
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { SITE_ORIGIN as SITE_ORIGIN_FOR_RETURN } from '@/lib/siteOrigin'
+import {
+  publicPathFor,
+  publicPathWithQuery,
+  type PublicHost,
+} from '@/lib/publicHost'
 
 /**
  * The `/p/*` data layer for `motir-marketing` (MOTIR-4115).
@@ -82,6 +87,23 @@ export interface PublicProjectOverviewDto {
    * cannot reach. Kept in the shape because the contract carries it.
    */
   viewerCanManage: boolean
+  /**
+   * Every address this project answers at, and which ONE is canonical
+   * (MOTIR-4217 · ADR §7).
+   *
+   * ⚠️ `primary` IS AN ABSOLUTE URL AND IS NEVER EMPTY. A project that has
+   * claimed nothing still has `motir.co/p/<identifier>`, so this needs no
+   * fallback branch — and the fallback is precisely where a "canonical" would
+   * otherwise be invented at render time, differently on each page that
+   * invented it. `alternates` is every OTHER live address; each 301s here.
+   */
+  addresses: PublicProjectAddressesDto
+}
+
+/** A project's addresses — `motir-core`'s `lib/dto/publicAddresses.ts`. */
+export interface PublicProjectAddressesDto {
+  primary: string
+  alternates: string[]
 }
 
 /* ── the tab shapes (MOTIR-4116) ──────────────────────────────────────────── */
@@ -258,10 +280,21 @@ export const PROJECT_TABS: readonly ProjectTab[] = [
   { segment: 'changelog', label: 'Changelog' },
 ] as const
 
-/** The site-relative path of one tab. */
-export function projectTabHref(identifier: string, segment: string): string {
-  const base = `/p/${encodeURIComponent(identifier)}`
-  return segment ? `${base}/${segment}` : base
+/**
+ * The path of one tab ON THE HOST THIS REQUEST ARRIVED ON (MOTIR-4220).
+ *
+ * ⚠️ IT TAKES THE HOST, and every caller passes the one the router resolved.
+ * The same tab is `/p/ACME/board` on `motir.co`, `/ACME/board` on a workspace
+ * subdomain and `/board` on a customer domain — `lib/publicHost.ts` owns that
+ * mapping, and this delegates rather than restating it, so there is one place
+ * that knows what a link looks like.
+ */
+export function projectTabHref(
+  host: PublicHost,
+  identifier: string,
+  segment: string,
+): string {
+  return publicPathFor(host, identifier, segment)
 }
 
 /**
@@ -374,14 +407,12 @@ export function loadChangelog(
  * and a reader cannot link to — and this whole surface exists to be crawled.
  */
 export function pagedTabHref(
+  host: PublicHost,
   identifier: string,
   segment: string,
   params: Record<string, string | undefined>,
 ): string {
-  const search = new URLSearchParams()
-  for (const [k, v] of Object.entries(params)) if (v) search.set(k, v)
-  const qs = search.toString()
-  return `${projectTabHref(identifier, segment)}${qs ? `?${qs}` : ''}`
+  return publicPathWithQuery(host, identifier, segment, params)
 }
 
 /* ── the two DETAIL reads (MOTIR-4117) ────────────────────────────────────── */
@@ -477,8 +508,23 @@ export type ActIntent = 'follow' | 'vote' | 'upvote' | 'comment' | 'request'
  * cross-origin request from this host carries no credential at all. There is
  * nothing to call. `public-surface-hosts.md` AMENDMENT 4 §B carries it.
  *
- * `returnPath` is a path on THIS site; the application validates the resulting
- * absolute URL against its configured public origin before redirecting to it.
+ * `returnPath` is a path on THIS SITE — `/p/<identifier>/<tab>` — and it stays
+ * that shape on every host, which is why `ProjectHeader` builds it from
+ * {@link SITE_HOST} rather than from the host the visitor is on. Two reasons,
+ * and the first one alone settles it:
+ *
+ *   1. A host-relative path prefixed with `SITE_ORIGIN` is a URL that does not
+ *      exist. On a customer domain the board is `/board`, and
+ *      `motir.co/board` is a 404 — the hand-off would return every visitor on a
+ *      customer domain to a dead page.
+ *   2. `motir.co/p/<identifier>/<tab>` is a valid address for the project on
+ *      every host, and MOTIR-4222 carries it on to the project's PRIMARY
+ *      address with a 301. So the visitor lands on the canonical address rather
+ *      than on whichever alternate they happened to start from, which is what
+ *      ADR §7's one-primary rule wants of a round trip anyway.
+ *
+ * The application validates the resulting absolute URL against its configured
+ * public addresses before redirecting to it (MOTIR-4218).
  */
 export function actHref(
   intent: ActIntent,
@@ -499,6 +545,17 @@ export interface PublicProjectIndexEntryDto {
   identifier: string
   /** ISO 8601 — the sitemap's `<lastmod>`. */
   updatedAt: string
+  /**
+   * The HOST this project's canonical lives on (MOTIR-4217).
+   *
+   * ⚠️ A SITEMAP MAY ONLY LIST URLs ON ITS OWN HOST, which is what this field
+   * is for: `motir.co/sitemap.xml` lists the projects whose primary is
+   * `motir.co` and NO others, and a project whose canonical has moved appears
+   * in its own host's sitemap instead. Without it the index would have to
+   * either duplicate every relocated project across two sitemaps or drop it
+   * from both.
+   */
+  primaryHost: string
 }
 
 export interface PublicProjectIndexPageDto {

@@ -32,6 +32,8 @@
  * proving nothing about the route, so the pairing matters.
  */
 
+import { TENANT_ORIGIN } from './stub/origin'
+
 export type SiteRoute = {
   /** The Next route pattern, as `tests/mainLandmark.test.ts` derives it. */
   readonly pattern: string
@@ -58,10 +60,23 @@ export const SITE_ROUTES: readonly SiteRoute[] = [
   { pattern: '/docs/mcp', url: '/docs/mcp' },
   { pattern: '/docs/mcp/tools', url: '/docs/mcp/tools' },
   { pattern: '/docs/sandbox', url: '/docs/sandbox' },
+  { pattern: '/docs/public-address', url: '/docs/public-address' },
 
   { pattern: '/legal', url: '/legal' },
   // `terms` is one of the seven files in `content/legal/`.
   { pattern: '/legal/[slug]', url: '/legal/terms' },
+
+  // ⚠️ THE ONLY ROW WHOSE URL IS ABSOLUTE, AND IT HAS TO BE (MOTIR-4220).
+  // `/w` renders a WORKSPACE's project list, so it exists only on a workspace
+  // host — on `motir.co` it 404s by design, which would fail the lane's
+  // status assertion. The URL below is the ROOT of the lane's tenant host,
+  // which the router rewrites to `/w`: the row therefore walks the route AND
+  // the rewrite that is the only way a visitor reaches it.
+  { pattern: '/w', url: `${TENANT_ORIGIN}/` },
+
+  // Where the router sends a request whose contract read failed. Reachable on
+  // any host — it renders one static state and reads nothing.
+  { pattern: '/host-unavailable', url: '/host-unavailable' },
 
   { pattern: '/p/[identifier]', url: '/p/MOTIR' },
   { pattern: '/p/[identifier]/board', url: '/p/MOTIR/board' },

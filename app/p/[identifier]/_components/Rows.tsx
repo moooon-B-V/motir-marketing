@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { PublicWorkItemDto } from '@/lib/publicProject'
+import { publicPathFor, type PublicHost } from '@/lib/publicHost'
 
 /**
  * The shared list primitives the tabs compose from (MOTIR-4116) — one status
@@ -41,9 +42,11 @@ export function StatusPill({
 export function WorkItemRow({
   identifier,
   item,
+  host,
 }: {
   identifier: string
   item: PublicWorkItemDto
+  host: PublicHost
 }) {
   return (
     <li className="flex items-baseline gap-3 border-b border-(--el-border) py-3">
@@ -52,7 +55,11 @@ export function WorkItemRow({
       </span>
       <span className="min-w-0 flex-1 text-[14px] text-(--el-text)">
         <Link
-          href={`/p/${encodeURIComponent(identifier)}/items/${encodeURIComponent(item.identifier)}`}
+          href={publicPathFor(
+            host,
+            identifier,
+            `items/${encodeURIComponent(item.identifier)}`,
+          )}
           className="hover:text-(--el-link) hover:underline hover:underline-offset-2"
         >
           {item.title}

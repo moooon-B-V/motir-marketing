@@ -72,7 +72,45 @@ const ROUTES: Record<string, string> = {
   '/api/public/p/MOTIR/items/MOTIR-4115': 'item-detail.json',
   '/api/public/p/MOTIR/requests/MOTIR-4051': 'request-detail.json',
   '/api/public/projects': 'projects-index.json',
+  // The HOST CONTRACT (MOTIR-4220). `acme.localhost` is the lane's tenant host
+  // — `e2e/stub/origin.ts` explains why no `/etc/hosts` edit is needed — and it
+  // publishes `MOTIR`, the identifier every other fixture here is keyed by, so
+  // a tenant-host walk exercises the SAME pages the `motir.co` specs walk.
+  '/api/public/hosts/acme.localhost': 'host-workspace.json',
+  // ⚠️ A SECOND PROJECT, WHOSE PRIMARY IS THE TENANT HOST (MOTIR-4222). It has
+  // to be a different project from `MOTIR`: the primary is a property of the
+  // PROJECT, so one fixture cannot be canonical on two hosts — and a tenant-host
+  // spec walking a project whose primary is `motir.co` does not merely fail, it
+  // sends the browser to PRODUCTION, which is the cross-repository coupling
+  // `e2e/stub/origin.ts` exists to prevent. `MOTIR` stays canonical on the site
+  // and `ACME` on `acme.localhost`, so both halves of the lane are self-hosted.
+  '/api/public/p/ACME': 'project-acme.json',
+  '/api/public/p/ACME/board': 'board-acme.json',
+  '/api/public/p/ACME/items': 'items-acme.json',
+  // The ADDRESS MATRIX the acceptance walk needs (MOTIR-4226). Five labels
+  // under `.localhost`, so all five reach the same server with a different
+  // `Host` header — which is the only thing the router reads. What each one IS
+  // is decided here, so the whole matrix is one fixture table rather than five
+  // deployments.
+  '/api/public/hosts/roadmap.localhost': 'host-project.json',
+  '/api/public/hosts/old.localhost': 'host-alias.json',
+  '/api/public/hosts/empty.localhost': 'host-workspace-empty.json',
+  '/api/public/p/ROAD': 'project-road.json',
+  '/api/public/p/ROAD/board': 'board-road.json',
 }
+
+/**
+ * Paths that answer 500 — the OUTAGE arm.
+ *
+ * ⚠️ A STUB THAT COULD ONLY SUCCEED OR 404 CANNOT TEST THE MOST IMPORTANT
+ * DISTINCTION ON THIS SURFACE. `broken.localhost` exists so the browser lane can
+ * walk the case where the contract is unreachable — which must render the ERROR
+ * state, never a 404, because a crawler acts on a 404 and would drop every
+ * customer's domain the moment `app.motir.co` restarted.
+ */
+const FAILING: ReadonlySet<string> = new Set([
+  '/api/public/hosts/broken.localhost',
+])
 
 /**
  * Paths whose answer is NOT JSON. The changelog feed is the surface's only
@@ -99,6 +137,7 @@ const NON_JSON: Record<string, [string, string]> = {
  */
 const PARAMETERISED: Array<[string, string, string, string]> = [
   ['/api/public/p/MOTIR/items', 'cursor', 'wi_4', 'items-page2.json'],
+  ['/api/public/p/ACME/items', 'cursor', 'wi_4', 'items-acme-page2.json'],
   ['/api/public/p/MOTIR/tree', 'parentId', 'wi_1', 'tree-child.json'],
   ['/api/public/p/MOTIR/roadmap', 'bucket', 'submitted', 'roadmap-column.json'],
 ]
@@ -130,6 +169,12 @@ function handle(req: IncomingMessage, res: ServerResponse): void {
   ) {
     res.writeHead(400, { 'content-type': 'application/json' })
     res.end(JSON.stringify({ code: 'INVALID_ROADMAP_CURSOR' }))
+    return
+  }
+
+  if (FAILING.has(url.pathname)) {
+    res.writeHead(500, { 'content-type': 'application/json' })
+    res.end(JSON.stringify({ code: 'STUB_FORCED_FAILURE' }))
     return
   }
 

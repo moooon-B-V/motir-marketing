@@ -1,0 +1,107 @@
+import { expect, test } from '@playwright/test'
+import { SITE_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
+
+/*
+ * THE TENANT HOST, IN A REAL BROWSER (MOTIR-4220's fifth criterion).
+ *
+ * ⚠️ WHAT THIS SPEC IS FOR, said plainly: it proves the HARNESS is reachable.
+ * The card asks for "a spec that walks `acme.localhost:<port>`… proving the
+ * tenant-host harness is reachable", and that is a real deliverable rather than
+ * a token one — `e2e/specs/acceptance-public-project.spec.ts` and MOTIR-4226's
+ * work both need a tenant host to walk, and until one request has actually
+ * arrived on `acme.localhost` with the router in the loop, nobody knows whether
+ * the lane CAN address a second host at all. The routing logic itself is
+ * covered exhaustively in `tests/host/`, over a stubbed contract; this is the
+ * half those cannot do — the `Host` header a real browser sends, the rewrite
+ * Next actually performs, and the status code on the wire.
+ *
+ * Every wait is on an authoritative signal, per the lane's discipline.
+ */
+
+test('a workspace host serves the workspace’s project list at its root', async ({
+  page,
+}) => {
+  const response = await page.goto(`${TENANT_ORIGIN}/`)
+
+  expect(
+    response?.status(),
+    'the tenant host did not serve a document — is the router matching?',
+  ).toBe(200)
+
+  // The URL BAR IS UNCHANGED. A rewrite, not a redirect: the visitor stays on
+  // the address they typed, which is the whole point of the address.
+  expect(new URL(page.url()).host).toBe(new URL(TENANT_ORIGIN).host)
+
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Public projects' }),
+  ).toBeVisible()
+  // ⚠️ SCOPED TO THE LANDMARK. The footer's copyright names the same company,
+  // so an unscoped match resolves to two elements — and the one that matters is
+  // the workspace name the CONTRACT supplied, not the chrome's.
+  await expect(
+    page.getByRole('main').getByText('moooon B.V.', { exact: true }),
+  ).toBeVisible()
+
+  // The card links HOST-RELATIVE — `/ACME`, not `/p/ACME`. Scoped to the
+  // landmark for the same reason as above: the chrome's brand link is also
+  // named "Motir", and it points at the site root on every host.
+  await expect(
+    page.getByRole('main').getByRole('link', { name: /Acme Roadmap/ }),
+  ).toHaveAttribute('href', '/ACME')
+})
+
+test('a project renders at the workspace host, with host-relative links', async ({
+  page,
+}) => {
+  // ⚠️ `ACME`, NOT `MOTIR`, AND THE CHOICE IS LOAD-BEARING. The primary address
+  // is a property of the PROJECT (MOTIR-4222), so a project whose primary is
+  // `motir.co` answers a tenant-host request with a permanent redirect — and
+  // the browser follows it to PRODUCTION. `e2e/stub/publicApiStub.ts` gives
+  // `ACME` a primary on this host for exactly that reason; it cost one red run
+  // that passed its status assertion against the live site.
+  const response = await page.goto(`${TENANT_ORIGIN}/ACME/board`)
+  expect(response?.status()).toBe(200)
+
+  // The SAME page `/p/[identifier]/board` renders — no route is duplicated.
+  await expect(page.getByRole('navigation', { name: 'Project' })).toBeVisible()
+
+  const overview = page
+    .getByRole('navigation', { name: 'Project' })
+    .getByRole('link', { name: 'Overview' })
+  await expect(overview).toHaveAttribute('href', '/ACME')
+
+  // And nothing on the page points back at the /p/ shape.
+  const paths = await page
+    .locator('a[href^="/p/"]')
+    .evaluateAll((links) => links.map((l) => l.getAttribute('href')))
+  expect(paths, 'a /p/ link survived on a tenant host').toEqual([])
+})
+
+test('an unknown project on that host is a real 404, not a soft one', async ({
+  page,
+}) => {
+  const response = await page.goto(`${TENANT_ORIGIN}/NOPE`)
+
+  // ⚠️ THE STATUS, not just the DOM. A 404 page served with a 200 is what a
+  // `loading.tsx` above a route that decides existence produces, and a crawler
+  // reads the status rather than the words — `app/not-found.tsx` carries the
+  // rule this asserts.
+  expect(response?.status()).toBe(404)
+  await expect(
+    page.getByRole('heading', { level: 1, name: /isn’t here/ }),
+  ).toBeVisible()
+})
+
+test('the site’s own host is untouched', async ({ page }) => {
+  // The other half of the criterion: the router must change nothing for
+  // `motir.co`. If it did, every spec in this lane would already be failing —
+  // so this asserts the ONE thing they do not: that `/p/*` still answers at the
+  // shape it shipped with, on the site host, while the tenant host answers too.
+  const response = await page.goto(`${SITE_ORIGIN}/p/MOTIR/board`)
+  expect(response?.status()).toBe(200)
+
+  const overview = page
+    .getByRole('navigation', { name: 'Project' })
+    .getByRole('link', { name: 'Overview' })
+  await expect(overview).toHaveAttribute('href', '/p/MOTIR')
+})

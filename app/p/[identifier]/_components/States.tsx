@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { publicPathFor, SITE_HOST, type PublicHost } from '@/lib/publicHost'
 
 /**
  * The three states every `/p/*` screen can be in (MOTIR-4115) — panels 10, 11
@@ -38,10 +39,21 @@ export function EmptyState({
 export function ErrorState({
   what,
   identifier,
+  host = SITE_HOST,
 }: {
   /** What could not be loaded, in the visitor's terms — "this project's board". */
   what: string
   identifier?: string
+  /**
+   * The address this request arrived on, for the feed link below.
+   *
+   * ⚠️ DEFAULTED, and it is the only host prop on this surface that is. The
+   * two callers that pass no `identifier` render no link at all, so there is
+   * nothing for the host to shape — and one of them is
+   * `app/host-unavailable/page.tsx`, which is reached precisely when the router
+   * could NOT resolve the host. Requiring a value there would mean inventing one.
+   */
+  host?: PublicHost
 }) {
   return (
     <div
@@ -64,7 +76,7 @@ export function ErrorState({
       {identifier ? (
         <p className="mt-3.5 text-[13px]">
           <Link
-            href={`/p/${encodeURIComponent(identifier)}/changelog.xml`}
+            href={publicPathFor(host, identifier, 'changelog.xml')}
             className="text-(--el-link) underline underline-offset-2"
           >
             Changelog feed

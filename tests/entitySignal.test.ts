@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import { beforeAll, describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { BRAND_ACCENT_HEX, waveBandSvg } from '@motir/brand'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
@@ -11,6 +11,12 @@ import {
   WEBSITE_ID,
 } from '@/app/_components/RootJsonLd'
 import { copy } from '@/lib/copy'
+
+// `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
+// and `next/headers` throws outside a request scope. Empty headers read as
+// the SITE's own host, which is what every case in this file is about; the
+// per-host arms live in `tests/host/crawlSurface.test.ts`.
+vi.mock('next/headers', () => ({ headers: async () => new Headers() }))
 
 /*
  * The entity signal (MOTIR-1154 · 8.3.7).
@@ -26,7 +32,15 @@ import { copy } from '@/lib/copy'
  */
 
 describe('robots', () => {
-  const result = robots()
+  // ⚠️ AWAITED NOW. MOTIR-4222 made this route per-host — it is served at every
+  // address the renderer answers for, and each must name ITS OWN sitemap. With
+  // no router headers in this harness it answers as `motir.co`, which is what
+  // the three assertions below are about; the per-host arms are covered in
+  // `tests/host/crawlSurface.test.ts`.
+  let result: Awaited<ReturnType<typeof robots>>
+  beforeAll(async () => {
+    result = await robots()
+  })
 
   it('ALLOWS crawl — this file existing is not the deliverable, the flip is', () => {
     // MOTIR-1455 shipped it as `disallow: /` on purpose and named this card as
@@ -71,6 +85,8 @@ describe('sitemap', () => {
       'https://motir.co/docs/mcp/tools',
       'https://motir.co/docs/cli',
       'https://motir.co/docs/sandbox',
+      // MOTIR-4227 — the customer-facing address guide.
+      'https://motir.co/docs/public-address',
       'https://motir.co/legal',
       'https://motir.co/legal/terms',
       'https://motir.co/legal/privacy',

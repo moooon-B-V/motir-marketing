@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { loadTreeLevel, pagedTabHref } from '@/lib/publicProject'
+import { publicPathFor } from '@/lib/publicHost'
 import { renderTabPage, tabMetadata } from '../_components/tabPage'
 import { EmptyState, ErrorState } from '../_components/States'
 import { MoreLink, StatusPill } from '../_components/Rows'
@@ -57,7 +58,7 @@ export default async function TreeTab({
   return renderTabPage({
     identifier,
     current: 'tree',
-    body: async () => {
+    body: async (_project, host) => {
       const read = await loadTreeLevel(identifier, {
         ...(parentId ? { parentId } : {}),
         ...(offset ? { offset } : {}),
@@ -82,7 +83,7 @@ export default async function TreeTab({
           {parentId ? (
             <p className="mt-5 text-[13px]">
               <Link
-                href={pagedTabHref(identifier, 'tree', {})}
+                href={pagedTabHref(host, identifier, 'tree', {})}
                 className="text-(--el-text-secondary) hover:text-(--el-link)"
               >
                 ← Back to the top level
@@ -105,7 +106,7 @@ export default async function TreeTab({
                 <span className="min-w-0 flex-1 text-[14px] text-(--el-text)">
                   {row.hasChildren ? (
                     <Link
-                      href={pagedTabHref(identifier, 'tree', {
+                      href={pagedTabHref(host, identifier, 'tree', {
                         parentId: row.id,
                       })}
                       className="hover:text-(--el-link) hover:underline hover:underline-offset-2"
@@ -114,7 +115,11 @@ export default async function TreeTab({
                     </Link>
                   ) : (
                     <Link
-                      href={`/p/${encodeURIComponent(identifier)}/items/${encodeURIComponent(row.identifier)}`}
+                      href={publicPathFor(
+                        host,
+                        identifier,
+                        `items/${encodeURIComponent(row.identifier)}`,
+                      )}
                       className="hover:text-(--el-link) hover:underline hover:underline-offset-2"
                     >
                       {row.title}
@@ -137,7 +142,7 @@ export default async function TreeTab({
 
           {level.hasMore ? (
             <MoreLink
-              href={pagedTabHref(identifier, 'tree', {
+              href={pagedTabHref(host, identifier, 'tree', {
                 parentId,
                 offset: String(offset + level.rows.length),
               })}

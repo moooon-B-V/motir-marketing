@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { loadBoard } from '@/lib/publicProject'
+import { publicPathFor } from '@/lib/publicHost'
 import { renderTabPage, tabMetadata } from '../_components/tabPage'
 import { EmptyState, ErrorState } from '../_components/States'
 
@@ -34,7 +35,7 @@ export default async function BoardTab({
   return renderTabPage({
     identifier,
     current: 'board',
-    body: async () => {
+    body: async (_project, host) => {
       const read = await loadBoard(identifier)
       if (read.status !== 'ok') {
         return (
@@ -71,7 +72,11 @@ export default async function BoardTab({
                 {column.cards.map((card) => (
                   <Link
                     key={card.id}
-                    href={`/p/${encodeURIComponent(identifier)}/items/${encodeURIComponent(card.identifier)}`}
+                    href={publicPathFor(
+                      host,
+                      identifier,
+                      `items/${encodeURIComponent(card.identifier)}`,
+                    )}
                     className="mb-2 block rounded-(--radius-control) border border-(--el-border) bg-(--el-page-bg) p-2.5 shadow-(--shadow-subtle) hover:border-(--el-border-strong)"
                   >
                     <span className="font-(family-name:--font-mono) text-[11px] font-medium text-(--el-text-secondary)">

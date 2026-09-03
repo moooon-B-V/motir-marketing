@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { loadChangelog, pagedTabHref } from '@/lib/publicProject'
+import { publicPathFor } from '@/lib/publicHost'
 import { renderTabPage, tabMetadata } from '../_components/tabPage'
 import { EmptyState, ErrorState } from '../_components/States'
 import { MoreLink } from '../_components/Rows'
@@ -44,7 +45,7 @@ export default async function ChangelogTab({
   return renderTabPage({
     identifier,
     current: 'changelog',
-    body: async () => {
+    body: async (_project, host) => {
       const read = await loadChangelog(identifier, cursor)
       if (read.status !== 'ok') {
         return (
@@ -78,7 +79,11 @@ export default async function ChangelogTab({
                 </time>
                 <span className="min-w-0 flex-1">
                   <Link
-                    href={`/p/${encodeURIComponent(identifier)}/items/${encodeURIComponent(entry.identifier)}`}
+                    href={publicPathFor(
+                      host,
+                      identifier,
+                      `items/${encodeURIComponent(entry.identifier)}`,
+                    )}
                     className="text-[14px] font-medium text-(--el-text) hover:text-(--el-link)"
                   >
                     {entry.title}
@@ -95,7 +100,7 @@ export default async function ChangelogTab({
 
           {page.nextCursor ? (
             <MoreLink
-              href={pagedTabHref(identifier, 'changelog', {
+              href={pagedTabHref(host, identifier, 'changelog', {
                 cursor: page.nextCursor,
               })}
               label="Older"
@@ -104,7 +109,7 @@ export default async function ChangelogTab({
 
           <p className="mt-5 text-[13px]">
             <Link
-              href={`/p/${encodeURIComponent(identifier)}/changelog.xml`}
+              href={publicPathFor(host, identifier, 'changelog.xml')}
               className="text-(--el-link) underline underline-offset-2"
             >
               Subscribe by Atom

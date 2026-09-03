@@ -36,7 +36,7 @@ export default async function ItemsTab({
   return renderTabPage({
     identifier,
     current: 'items',
-    body: async () => {
+    body: async (_project, host) => {
       const read = await loadItems(identifier, cursor)
       if (read.status !== 'ok') {
         return (
@@ -61,12 +61,17 @@ export default async function ItemsTab({
         <>
           <ul className="mt-5 border-t border-(--el-border)">
             {page.items.map((item) => (
-              <WorkItemRow key={item.id} identifier={identifier} item={item} />
+              <WorkItemRow
+                key={item.id}
+                identifier={identifier}
+                item={item}
+                host={host}
+              />
             ))}
           </ul>
           {page.nextCursor ? (
             <MoreLink
-              href={pagedTabHref(identifier, 'items', {
+              href={pagedTabHref(host, identifier, 'items', {
                 cursor: page.nextCursor,
               })}
               label="Load more"
