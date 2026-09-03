@@ -75,7 +75,17 @@ export default defineConfig({
       enabled: true,
       provider: 'v8',
       reporter: ['text-summary'],
-      include: ['lib/publicProject.ts', 'app/p/**/*.tsx'],
+      include: [
+        'lib/publicProject.ts',
+        'app/p/**/*.tsx',
+        // MOTIR-4220. Added WITH the files rather than after them, which is the
+        // rule the entry above earned: a file outside this list is not
+        // measured, and a gate that measures nothing is green.
+        'lib/publicHost.ts',
+        'lib/hostResolution.ts',
+        'lib/tenantDomain.ts',
+        'proxy.ts',
+      ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
        * of paths with one blanket justification is how a gate stops measuring
@@ -110,6 +120,13 @@ export default defineConfig({
        */
       thresholds: {
         'lib/publicProject.ts': { lines: 90, functions: 90, branches: 90 },
+        // MEASURED FIRST, then pinned at the floor — the same rule the entries
+        // beside it follow. On this branch: `publicHost` and `tenantDomain` 100
+        // lines, `hostResolution` and `proxy` 100 lines.
+        'lib/publicHost.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/hostResolution.ts': { lines: 90, functions: 90, branches: 85 },
+        'lib/tenantDomain.ts': { lines: 90, functions: 90, branches: 85 },
+        'proxy.ts': { lines: 90, functions: 90, branches: 85 },
         'app/p/**/_components/*.tsx': {
           lines: 90,
           functions: 90,

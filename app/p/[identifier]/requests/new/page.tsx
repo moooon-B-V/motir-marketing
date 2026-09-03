@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { siteUrl } from '@/lib/siteOrigin'
 import { actHref, loadProject } from '@/lib/publicProject'
+import { publicPathFor, requestPublicHost, SITE_HOST } from '@/lib/publicHost'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
 
@@ -58,22 +59,34 @@ export default async function RequestIntakePage({
   params: Promise<{ identifier: string }>
 }) {
   const { identifier } = await params
+  const host = await requestPublicHost()
   const read = await loadProject(identifier)
 
   if (read.status === 'not-found') notFound()
-  if (read.status === 'failed') return <ErrorState what="this project" />
+  if (read.status === 'failed')
+    return <ErrorState what="this project" host={host} />
 
   const project = read.data
-  const returnPath = `/p/${encodeURIComponent(identifier)}/roadmap`
+
+  // ⚠️ TWO PATHS TO THE SAME TAB, AND THEY ARE NOT INTERCHANGEABLE — one
+  // variable used to serve both, which was correct only while `motir.co` was
+  // the sole host.
+  //
+  //   • the BACK LINK stays on this host, so it is host-relative;
+  //   • the HAND-OFF's return is prefixed with `SITE_ORIGIN` by `actHref`, so
+  //     it must be the SITE path or the round trip lands on a URL that does not
+  //     exist (`motir.co/roadmap`). `actHref`'s note carries the reasoning.
+  const roadmapHref = publicPathFor(host, identifier, 'roadmap')
+  const returnPath = publicPathFor(SITE_HOST, identifier, 'roadmap')
 
   return (
     <>
-      <ProjectHeader project={project} current="roadmap" />
+      <ProjectHeader project={project} current="roadmap" host={host} />
 
       <div className="mt-6 max-w-[38rem]">
         <p className="mb-5 text-[13px]">
           <Link
-            href={returnPath}
+            href={roadmapHref}
             className="text-(--el-text-secondary) hover:text-(--el-link)"
           >
             ← {project.name} · Roadmap

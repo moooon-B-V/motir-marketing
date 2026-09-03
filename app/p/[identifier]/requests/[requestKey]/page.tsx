@@ -8,6 +8,7 @@ import {
   loadProject,
   loadRequest,
 } from '@/lib/publicProject'
+import { publicPathFor, requestPublicHost, SITE_HOST } from '@/lib/publicHost'
 import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
@@ -64,6 +65,7 @@ export default async function PublicRequestPage({
   params: Promise<{ identifier: string; requestKey: string }>
 }) {
   const { identifier, requestKey } = await params
+  const host = await requestPublicHost()
   const [project, request] = await Promise.all([
     loadProject(identifier),
     loadRequest(identifier, requestKey),
@@ -71,25 +73,37 @@ export default async function PublicRequestPage({
 
   if (project.status === 'not-found' || request.status === 'not-found')
     notFound()
-  if (project.status === 'failed') return <ErrorState what="this project" />
+  if (project.status === 'failed')
+    return <ErrorState what="this project" host={host} />
 
+  // ⚠️ `SITE_HOST`, on every host: the hand-off prefixes this with
+  // `SITE_ORIGIN`, so a host-relative return is a URL that does not exist.
+  // `actHref`'s note carries the reasoning and the consequence.
   const returnPath =
     request.status === 'ok'
-      ? `/p/${encodeURIComponent(identifier)}/requests/${encodeURIComponent(request.data.identifier)}`
-      : `/p/${encodeURIComponent(identifier)}/roadmap`
+      ? publicPathFor(
+          SITE_HOST,
+          identifier,
+          `requests/${encodeURIComponent(request.data.identifier)}`,
+        )
+      : publicPathFor(SITE_HOST, identifier, 'roadmap')
 
   return (
     <>
-      <ProjectHeader project={project.data} current="roadmap" />
+      <ProjectHeader project={project.data} current="roadmap" host={host} />
 
       {request.status === 'failed' ? (
-        <ErrorState what="this feature request" identifier={identifier} />
+        <ErrorState
+          what="this feature request"
+          identifier={identifier}
+          host={host}
+        />
       ) : (
         <article className="mt-6 grid gap-7 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div>
             <p className="mb-5 text-[13px]">
               <Link
-                href={`/p/${encodeURIComponent(identifier)}/roadmap`}
+                href={publicPathFor(host, identifier, 'roadmap')}
                 className="text-(--el-text-secondary) hover:text-(--el-link)"
               >
                 ← {project.data.name} · Roadmap

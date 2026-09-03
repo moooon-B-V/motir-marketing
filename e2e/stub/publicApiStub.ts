@@ -72,6 +72,11 @@ const ROUTES: Record<string, string> = {
   '/api/public/p/MOTIR/items/MOTIR-4115': 'item-detail.json',
   '/api/public/p/MOTIR/requests/MOTIR-4051': 'request-detail.json',
   '/api/public/projects': 'projects-index.json',
+  // The HOST CONTRACT (MOTIR-4220). `acme.localhost` is the lane's tenant host
+  // — `e2e/stub/origin.ts` explains why no `/etc/hosts` edit is needed — and it
+  // publishes `MOTIR`, the identifier every other fixture here is keyed by, so
+  // a tenant-host walk exercises the SAME pages the `motir.co` specs walk.
+  '/api/public/hosts/acme.localhost': 'host-workspace.json',
 }
 
 /**

@@ -4,6 +4,7 @@ import {
   projectTabHref,
   type PublicProjectOverviewDto,
 } from '@/lib/publicProject'
+import { SITE_HOST, type PublicHost } from '@/lib/publicHost'
 import { ActRail } from './ActRail'
 
 /**
@@ -23,15 +24,27 @@ import { ActRail } from './ActRail'
 export function ProjectHeader({
   project,
   current,
+  host = SITE_HOST,
 }: {
   project: PublicProjectOverviewDto
   /** The tab segment that is current — `''` for the Overview. */
   current: string
+  /**
+   * The address this request arrived on (MOTIR-4220). Defaulted to the site,
+   * which is what an unrouted request already is — so the shipped behaviour is
+   * the default rather than a case.
+   */
+  host?: PublicHost
 }) {
   // The act rail returns the visitor to the tab they were on, not to the
   // project root — a hand-off that dropped you somewhere else would be a worse
   // round trip than no round trip.
-  const returnPath = projectTabHref(project.identifier, current)
+  //
+  // ⚠️ BUILT FROM `SITE_HOST`, NOT FROM `host`, ON EVERY HOST. The hand-off
+  // prefixes this with `SITE_ORIGIN`, so a host-relative path would become
+  // `motir.co/board` — a URL that does not exist. `actHref`'s note carries the
+  // reasoning and the consequence.
+  const returnPath = projectTabHref(SITE_HOST, project.identifier, current)
   const { identifier, name, workspaceName, publicTagline, publicTags, stats } =
     project
 
@@ -74,7 +87,7 @@ export function ProjectHeader({
         </dl>
       </div>
 
-      <ActRail identifier={identifier} returnPath={returnPath} />
+      <ActRail identifier={identifier} returnPath={returnPath} host={host} />
 
       {/* ⚠️ SCROLLS, never wraps. Six short labels; a wrapped row would push the
           content down by a line on every project whose window is narrow, which
@@ -88,7 +101,7 @@ export function ProjectHeader({
           return (
             <Link
               key={tab.segment || 'overview'}
-              href={projectTabHref(identifier, tab.segment)}
+              href={projectTabHref(host, identifier, tab.segment)}
               aria-current={isCurrent ? 'page' : undefined}
               className={
                 isCurrent

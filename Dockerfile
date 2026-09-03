@@ -38,6 +38,14 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ARG NEXT_PUBLIC_MOTIR_APP_ORIGIN
 ENV NEXT_PUBLIC_MOTIR_APP_ORIGIN=${NEXT_PUBLIC_MOTIR_APP_ORIGIN}
 
+# The tenant namespace's base domain (MOTIR-4220). Same reasoning as the origin
+# above — inlined by `next build`, so it has to arrive as a build ARG — and
+# `lib/tenantDomain.ts` fails the build when it is missing here, which is the
+# only moment the mistake is cheap. Its value travels in `fly.toml`'s
+# `[build.args]`.
+ARG NEXT_PUBLIC_MOTIR_TENANT_DOMAIN
+ENV NEXT_PUBLIC_MOTIR_TENANT_DOMAIN=${NEXT_PUBLIC_MOTIR_TENANT_DOMAIN}
+
 RUN pnpm next build
 
 # ── runner ──────────────────────────────────────────────────────────────────

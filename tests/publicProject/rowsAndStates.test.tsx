@@ -11,6 +11,7 @@ import {
   LoadingRows,
 } from '@/app/p/[identifier]/_components/States'
 import type { PublicWorkItemDto } from '@/lib/publicProject'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /*
  * The shared list primitives and the three states (MOTIR-4121).
@@ -33,7 +34,7 @@ const item: PublicWorkItemDto = {
 
 describe('WorkItemRow', () => {
   it('links to the item’s public detail page', () => {
-    render(<WorkItemRow identifier="ACME" item={item} />)
+    render(<WorkItemRow identifier="ACME" item={item} host={SITE_HOST} />)
 
     expect(screen.getByRole('link', { name: 'A work item' })).toHaveAttribute(
       'href',
@@ -49,6 +50,7 @@ describe('WorkItemRow', () => {
       <WorkItemRow
         identifier="ACME"
         item={{ ...item, kind: 'epic', childrenHidden: true }}
+        host={SITE_HOST}
       />,
     )
 
@@ -56,7 +58,7 @@ describe('WorkItemRow', () => {
   })
 
   it('omits the marker on an ordinary row', () => {
-    render(<WorkItemRow identifier="ACME" item={item} />)
+    render(<WorkItemRow identifier="ACME" item={item} host={SITE_HOST} />)
     expect(screen.queryByText('Children are not public.')).toBeNull()
   })
 
@@ -65,6 +67,7 @@ describe('WorkItemRow', () => {
       <WorkItemRow
         identifier="OPEN CORE"
         item={{ ...item, identifier: 'A B' }}
+        host={SITE_HOST}
       />,
     )
     expect(screen.getByRole('link', { name: 'A work item' })).toHaveAttribute(

@@ -8,6 +8,7 @@ import {
   pagedTabHref,
   type PublicRoadmapColumnDto,
 } from '@/lib/publicProject'
+import { publicPathFor, SITE_HOST } from '@/lib/publicHost'
 import { renderTabPage, tabMetadata } from '../_components/tabPage'
 import { EmptyState, ErrorState } from '../_components/States'
 import { MoreLink } from '../_components/Rows'
@@ -58,7 +59,7 @@ export default async function RoadmapTab({
   return renderTabPage({
     identifier,
     current: 'roadmap',
-    body: async () => {
+    body: async (_project, host) => {
       const read = await loadRoadmap(identifier)
       if (read.status !== 'ok') {
         return (
@@ -138,7 +139,11 @@ export default async function RoadmapTab({
                         {card.identifier}
                       </span>
                       <Link
-                        href={`/p/${encodeURIComponent(identifier)}/requests/${encodeURIComponent(card.identifier)}`}
+                        href={publicPathFor(
+                          host,
+                          identifier,
+                          `requests/${encodeURIComponent(card.identifier)}`,
+                        )}
                         className="mt-0.5 block text-[13px] leading-snug text-(--el-text) hover:text-(--el-link)"
                       >
                         {card.title}
@@ -152,7 +157,11 @@ export default async function RoadmapTab({
                         href={actHref(
                           'vote',
                           identifier,
-                          `/p/${encodeURIComponent(identifier)}/roadmap`,
+                          // ⚠️ `SITE_HOST`, on every host — the hand-off
+                          // prefixes this with `SITE_ORIGIN`, so a
+                          // host-relative return is a URL that does not exist.
+                          // `actHref`'s note carries the reasoning.
+                          publicPathFor(SITE_HOST, identifier, 'roadmap'),
                         )}
                         className="mt-2 inline-flex items-center gap-1.5 rounded-(--radius-badge) border border-(--el-border-strong) bg-(--el-page-bg) px-2 py-0.5 text-[12px] text-(--el-text-secondary) hover:border-(--el-accent) hover:text-(--el-text)"
                       >
@@ -174,7 +183,7 @@ export default async function RoadmapTab({
 
                 {nextCursor && !failedHere ? (
                   <MoreLink
-                    href={pagedTabHref(identifier, 'roadmap', {
+                    href={pagedTabHref(host, identifier, 'roadmap', {
                       bucket: key,
                       cursor: nextCursor,
                     })}

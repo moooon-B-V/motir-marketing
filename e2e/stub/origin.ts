@@ -30,3 +30,26 @@ export const SITE_PORT = 4318
 
 export const STUB_ORIGIN = `http://127.0.0.1:${STUB_PORT}`
 export const SITE_ORIGIN = `http://127.0.0.1:${SITE_PORT}`
+
+/**
+ * THE LANE'S TENANT HOST (MOTIR-4220).
+ *
+ * ⚠️ NO `/etc/hosts` EDIT, AND NONE IS NEEDED. Every label under `.localhost`
+ * resolves to loopback in Chromium (and in Node's resolver), so `acme.localhost`
+ * reaches the same standalone server `SITE_ORIGIN` does — while arriving with a
+ * DIFFERENT `Host` header, which is the only thing the router reads. That is
+ * what makes a tenant host testable in a lane that has no DNS of its own.
+ *
+ * `playwright.config.ts` sets `NEXT_PUBLIC_MOTIR_TENANT_DOMAIN=localhost` for
+ * the build, so this really is a subdomain of the configured base domain rather
+ * than an arbitrary host that happens to route — and the base domain itself,
+ * `localhost`, is one of the addresses the router steps aside for, so the site's
+ * own specs are untouched.
+ *
+ * The stub answers `/api/public/hosts/acme.localhost` from
+ * `e2e/fixtures/host-workspace.json`, which publishes the `MOTIR` project every
+ * other fixture is keyed by.
+ */
+export const TENANT_HOST = 'acme.localhost'
+
+export const TENANT_ORIGIN = `http://${TENANT_HOST}:${SITE_PORT}`

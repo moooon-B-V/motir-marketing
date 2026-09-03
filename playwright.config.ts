@@ -135,6 +135,13 @@ export default defineConfig({
       timeout: 300_000,
       env: {
         NEXT_PUBLIC_MOTIR_APP_ORIGIN: STUB_ORIGIN,
+        // ⚠️ SET EXPLICITLY RATHER THAN INHERITED (MOTIR-4220). `ci.yml` sets
+        // this at WORKFLOW level, to the production base domain, because
+        // `build` and `deploy` need it there — and a lane that inherited it
+        // would be testing a different namespace from the one its tenant host
+        // (`acme.localhost`) belongs to. Same rule, same reason, as the origin
+        // above; `e2e/stub/origin.ts` carries the full note.
+        NEXT_PUBLIC_MOTIR_TENANT_DOMAIN: 'localhost',
         NEXT_TELEMETRY_DISABLED: '1',
         // The standalone server reads its own port and host; `next start`'s
         // `--port` flag does not reach it.

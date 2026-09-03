@@ -7,6 +7,7 @@ import {
   loadProject,
   loadWorkItem,
 } from '@/lib/publicProject'
+import { publicPathFor, requestPublicHost } from '@/lib/publicHost'
 import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
@@ -52,26 +53,29 @@ export default async function PublicWorkItemPage({
   params: Promise<{ identifier: string; key: string }>
 }) {
   const { identifier, key } = await params
+  // Read once, at the top of the route — `lib/publicHost.ts` carries why.
+  const host = await requestPublicHost()
   const [project, item] = await Promise.all([
     loadProject(identifier),
     loadWorkItem(identifier, key),
   ])
 
   if (project.status === 'not-found' || item.status === 'not-found') notFound()
-  if (project.status === 'failed') return <ErrorState what="this project" />
+  if (project.status === 'failed')
+    return <ErrorState what="this project" host={host} />
 
   return (
     <>
-      <ProjectHeader project={project.data} current="items" />
+      <ProjectHeader project={project.data} current="items" host={host} />
 
       {item.status === 'failed' ? (
-        <ErrorState what="this work item" identifier={identifier} />
+        <ErrorState what="this work item" identifier={identifier} host={host} />
       ) : (
         <article className="mt-6 grid gap-7 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div>
             <p className="mb-5 text-[13px]">
               <Link
-                href={`/p/${encodeURIComponent(identifier)}/items`}
+                href={publicPathFor(host, identifier, 'items')}
                 className="text-(--el-text-secondary) hover:text-(--el-link)"
               >
                 ← {project.data.name} · Work items
@@ -106,7 +110,11 @@ export default async function PublicWorkItemPage({
             <Side title="Parent">
               {item.data.parent ? (
                 <Link
-                  href={`/p/${encodeURIComponent(identifier)}/items/${encodeURIComponent(item.data.parent.identifier)}`}
+                  href={publicPathFor(
+                    host,
+                    identifier,
+                    `items/${encodeURIComponent(item.data.parent.identifier)}`,
+                  )}
                   className="text-(--el-link) hover:underline"
                 >
                   {item.data.parent.identifier} · {item.data.parent.title}
@@ -127,7 +135,11 @@ export default async function PublicWorkItemPage({
                     {item.data.children.map((child) => (
                       <li key={child.id} className="py-1">
                         <Link
-                          href={`/p/${encodeURIComponent(identifier)}/items/${encodeURIComponent(child.identifier)}`}
+                          href={publicPathFor(
+                            host,
+                            identifier,
+                            `items/${encodeURIComponent(child.identifier)}`,
+                          )}
                           className="hover:text-(--el-link)"
                         >
                           {child.identifier} · {child.title}
@@ -141,7 +153,7 @@ export default async function PublicWorkItemPage({
                   {item.data.childrenHasMore ? (
                     <p className="mt-1.5">
                       <Link
-                        href={`/p/${encodeURIComponent(identifier)}/tree?parentId=${encodeURIComponent(item.data.id)}`}
+                        href={`${publicPathFor(host, identifier, 'tree')}?parentId=${encodeURIComponent(item.data.id)}`}
                         className="text-(--el-link) hover:underline"
                       >
                         All {item.data.childCount} in the tree

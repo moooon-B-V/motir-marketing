@@ -60,6 +60,17 @@ env:
   # changing the origin means changing both.
   NEXT_PUBLIC_MOTIR_APP_ORIGIN: 'https://app.motir.co'
 
+  # The tenant namespace's base domain (MOTIR-4220), for the `Build` check —
+  # `lib/tenantDomain.ts` fails a PRODUCTION build without it, and `next build`
+  # is a production build. Same two-sites-one-meaning warning as above: the
+  # RELEASE takes its value from `fly.toml`'s `[build.args]`, not from here.
+  #
+  # ⚠️ THE BROWSER LANE DOES NOT INHERIT THIS. `playwright.config.ts` sets it to
+  # `localhost` explicitly, because the lane's tenant host is `acme.localhost`
+  # and a lane pointed at the production namespace would be testing a base
+  # domain none of its hosts belong to.
+  NEXT_PUBLIC_MOTIR_TENANT_DOMAIN: 'motir.site'
+
 jobs:
   lint:
     name: Lint
