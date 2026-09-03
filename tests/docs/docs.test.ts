@@ -1,7 +1,15 @@
 // @vitest-environment node
 import { readFileSync, existsSync } from 'node:fs'
-import { describe, expect, it } from 'vitest'
-import { listOperations, type OpenApiDocument } from '@/lib/docs'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  McpToolCatalogueShapeError,
+  countCatalogueTools,
+  fetchMcpToolCatalogue,
+  listOperations,
+  parseMcpToolCatalogue,
+  type McpToolCatalogue,
+  type OpenApiDocument,
+} from '@/lib/docs'
 
 /*
  * The /docs drift guard (MOTIR-4046, widened by MOTIR-4180).
@@ -17,14 +25,23 @@ import { listOperations, type OpenApiDocument } from '@/lib/docs'
  * motir-core's registry that breaks the parse fails here rather than silently
  * rendering an empty reference.
  *
- * The MCP TOOL registry has no published artifact to consume: motir-core serves
- * no catalogue endpoint, and `/api/mcp` rejects an anonymous caller, so nothing
- * in this repository can read the live list to check a copy against. MOTIR-4046
- * shipped a copy anyway — 24 of 55 tools in five invented groups, with no reader
- * and no checker — which is the outcome its own acceptance criterion had already
- * called unacceptable. MOTIR-4180's answer is that the copy does not exist: the
- * pages under /docs/mcp name NO tools, and the guard below asserts the absence.
- * An absence is the one property this repository CAN check on its own.
+ * The MCP TOOL registry is now consumed the same way (MOTIR-4194 / MOTIR-4195).
+ * motir-core publishes the catalogue at `/api/docs/mcp-tools.json` — anonymous,
+ * derived from the permission registry that gates the tools — and this repository
+ * fetches it at request time. MOTIR-4046 had shipped a hand COPY instead: 24 of
+ * 55 tools in five invented groups, with no reader and no checker, which is the
+ * outcome its own acceptance criterion had already called unacceptable. MOTIR-4180
+ * removed it, and the guard below asserts the ABSENCE of any copy.
+ *
+ * ⚠️ THAT GUARD IS UNCHANGED AND STILL THE POINT. Rendering the catalogue did not
+ * weaken it: the names arrive over the wire and are never written into the page
+ * source, so the same detector still finds nothing. If it ever goes red, a copy
+ * has come back — and the fix is the implementation, never the guard.
+ *
+ * Both readers are guarded on the same two axes: the URL they fetch is the
+ * published one (never a committed file), and the parse each page renders through
+ * is pinned against a fixture, so a shape change in motir-core's registry fails
+ * here rather than silently rendering an empty page.
  */
 
 const fixture: OpenApiDocument = {
@@ -90,6 +107,247 @@ describe('the reference consumes the published spec, never a copied one', () => 
 
   it('commits no copied spec artifact under content/docs/', () => {
     expect(existsSync('content/docs')).toBe(false)
+  })
+})
+
+/*
+ * ── The MCP tool catalogue (MOTIR-4195) ────────────────────────────────────
+ *
+ * The fixture is motir-core's document SHAPE, with two invented groups and three
+ * invented tool names. It is not a copy of the registry and cannot become one:
+ * nothing asserts the real catalogue's contents, which this repository has no way
+ * to know. What it pins is the PARSE — so a rename, a dropped array or a changed
+ * nesting over there fails this suite rather than rendering a page that looks
+ * finished and is short.
+ */
+const catalogueFixture = {
+  endpoint: '/api/mcp',
+  toolCount: 3,
+  groups: [
+    {
+      permission: 'thing:browse',
+      label: 'Browse things',
+      gates: 'Read things and their detail.',
+      grantedByDefault: true,
+      tools: [
+        {
+          name: 'alphaTool',
+          permission: 'thing:browse',
+          summary: 'Read one thing.',
+        },
+        {
+          name: 'betaTool',
+          permission: 'thing:browse',
+          summary: 'List the things.',
+        },
+      ],
+    },
+    {
+      permission: 'thing:edit',
+      label: 'Edit things',
+      gates: 'Create and change things.',
+      grantedByDefault: false,
+      tools: [
+        {
+          name: 'gammaTool',
+          permission: 'thing:edit',
+          summary: 'Change one thing.',
+        },
+      ],
+    },
+  ],
+}
+
+const catalogueWithout = (mutate: (doc: Record<string, unknown>) => void) => {
+  const doc = JSON.parse(JSON.stringify(catalogueFixture)) as Record<
+    string,
+    unknown
+  >
+  mutate(doc)
+  return doc
+}
+
+describe('parseMcpToolCatalogue', () => {
+  it('reads the document motir-core serves, groups and tools in its order', () => {
+    const parsed = parseMcpToolCatalogue(catalogueFixture)
+
+    expect(parsed.endpoint).toBe('/api/mcp')
+    expect(parsed.groups.map((g) => g.label)).toEqual([
+      'Browse things',
+      'Edit things',
+    ])
+    expect(parsed.groups[0]!.grantedByDefault).toBe(true)
+    expect(parsed.groups[1]!.grantedByDefault).toBe(false)
+    expect(parsed.groups.flatMap((g) => g.tools.map((t) => t.name))).toEqual([
+      'alphaTool',
+      'betaTool',
+      'gammaTool',
+    ])
+    expect(parsed.groups[0]!.tools[0]!.summary).toBe('Read one thing.')
+  })
+
+  it('tolerates fields it does not know — the producer may add them', () => {
+    // The published document is UNVERSIONED and explicitly licensed to grow new
+    // fields. A parse that rejected one would turn this page red on a change
+    // motir-core is entitled to make without notice.
+    const grown = catalogueWithout((doc) => {
+      doc.generatedAt = '2026-09-03'
+      ;(doc.groups as Record<string, unknown>[])[0]!.icon = 'eye'
+    })
+
+    expect(parseMcpToolCatalogue(grown).groups[0]!.label).toBe('Browse things')
+  })
+
+  for (const [what, mutate] of [
+    ['the document is not an object', () => undefined],
+    ['`groups` is missing', (doc) => delete doc.groups],
+    [
+      '`groups` is renamed',
+      (doc) => {
+        doc.toolGroups = doc.groups
+        delete doc.groups
+      },
+    ],
+    [
+      '`groups` is empty',
+      (doc) => {
+        doc.groups = []
+      },
+    ],
+    ['`toolCount` is missing', (doc) => delete doc.toolCount],
+    ['`endpoint` is missing', (doc) => delete doc.endpoint],
+    [
+      'a group has lost its `tools` array',
+      (doc) => {
+        delete (doc.groups as Record<string, unknown>[])[0]!.tools
+      },
+    ],
+    [
+      'a group has lost its `label`',
+      (doc) => {
+        delete (doc.groups as Record<string, unknown>[])[1]!.label
+      },
+    ],
+    [
+      'a group has lost `grantedByDefault`',
+      (doc) => {
+        delete (doc.groups as Record<string, unknown>[])[0]!.grantedByDefault
+      },
+    ],
+    [
+      'a tool has lost its `name`',
+      (doc) => {
+        delete (
+          (doc.groups as Record<string, unknown>[])[0]!.tools as Record<
+            string,
+            unknown
+          >[]
+        )[1]!.name
+      },
+    ],
+    [
+      'a tool has lost its `summary`',
+      (doc) => {
+        delete (
+          (doc.groups as Record<string, unknown>[])[1]!.tools as Record<
+            string,
+            unknown
+          >[]
+        )[0]!.summary
+      },
+    ],
+  ] as [string, (doc: Record<string, unknown>) => void][]) {
+    it(`throws, rather than rendering a short page, when ${what}`, () => {
+      const doc =
+        what === 'the document is not an object'
+          ? 'not a document'
+          : catalogueWithout(mutate)
+
+      expect(() => parseMcpToolCatalogue(doc)).toThrow(
+        McpToolCatalogueShapeError,
+      )
+    })
+  }
+})
+
+describe('countCatalogueTools', () => {
+  it('counts the rows the page is about to render, not the served scalar', () => {
+    // The producer computes `toolCount` the same way and the two agree. Counting
+    // here is what makes it impossible for the number a reader sees to disagree
+    // with the list beneath it.
+    const parsed = parseMcpToolCatalogue(
+      catalogueWithout((doc) => {
+        doc.toolCount = 99
+      }),
+    ) as McpToolCatalogue
+
+    expect(countCatalogueTools(parsed)).toBe(3)
+  })
+})
+
+describe('the catalogue is consumed, never copied', () => {
+  const fetchMock = vi.fn()
+
+  beforeEach(() => {
+    vi.stubGlobal('fetch', fetchMock)
+  })
+  afterEach(() => {
+    fetchMock.mockReset()
+    vi.unstubAllGlobals()
+  })
+
+  it('fetches the published catalogue path on the app origin', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => catalogueFixture,
+    })
+
+    await expect(fetchMcpToolCatalogue()).resolves.toMatchObject({
+      endpoint: '/api/mcp',
+    })
+    expect(String(fetchMock.mock.calls[0]![0])).toBe(
+      'https://app.test.motir.co/api/docs/mcp-tools.json',
+    )
+  })
+
+  it('THROWS when the artifact is unreachable — there is no fallback list', async () => {
+    // The one thing this page must never do. A committed default rendered here
+    // would be stale exactly when it is displayed and unreachable by every guard,
+    // because a guard runs on the path where the fetch works.
+    fetchMock.mockResolvedValue({
+      ok: false,
+      status: 503,
+      json: async () => ({}),
+    })
+
+    await expect(fetchMcpToolCatalogue()).rejects.toThrow(
+      'mcp tool catalogue 503',
+    )
+  })
+
+  it('THROWS when the artifact is served but is not the shape it renders', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ endpoint: '/api/mcp', toolCount: 0, groups: [] }),
+    })
+
+    await expect(fetchMcpToolCatalogue()).rejects.toThrow(
+      McpToolCatalogueShapeError,
+    )
+  })
+
+  it('commits no catalogue artifact under content/docs/', () => {
+    // The same assertion the spec limb makes, for the second registry: neither
+    // published document may arrive as a file in this repository.
+    expect(existsSync('content/docs')).toBe(false)
+  })
+
+  it('reads the published catalogue path out of the ONE configured origin', () => {
+    const source = readFileSync('lib/docs.ts', 'utf8')
+    expect(source).toContain('/api/docs/mcp-tools.json')
+    expect(source).toContain('APP_ORIGIN')
   })
 })
 
