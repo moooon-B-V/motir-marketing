@@ -16,6 +16,13 @@
  * appears here, and appearing here is what puts it in the browser lane's walk.
  * The list is the E2E lane's parameter table; the enumeration is the guard.
  *
+ * ⚠️ SO THE 404 IS NOT IN THIS TABLE, AND MUST NOT BE ADDED TO IT
+ * (MOTIR-4193). `app/not-found.tsx` is not a `page.tsx` and serves no route
+ * pattern, so a row for it would fail the very assertion above — the pattern
+ * set here must be EXACTLY the enumerated one. The 404 has its own entry in
+ * the lane instead: `e2e/specs/not-found.spec.ts`, which walks the four
+ * arrivals that reach it and asserts the STATUS as well as the landmark count.
+ *
  * ── THE URLS THE STUB CAN ANSWER ──────────────────────────────────────────
  *
  * Every `/p/*` URL uses `MOTIR`, the identifier `e2e/stub/publicApiStub.ts`
