@@ -85,6 +85,8 @@ describe('sitemap', () => {
       'https://motir.co/docs/mcp/tools',
       'https://motir.co/docs/cli',
       'https://motir.co/docs/sandbox',
+      // MOTIR-4227 — the customer-facing address guide.
+      'https://motir.co/docs/public-address',
       'https://motir.co/legal',
       'https://motir.co/legal/terms',
       'https://motir.co/legal/privacy',

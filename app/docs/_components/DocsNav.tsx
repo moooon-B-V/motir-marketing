@@ -34,6 +34,14 @@ const GROUPS: { heading: string; items: { href: string; label: string }[] }[] =
         { href: '/docs/sandbox', label: copy.docs.sandbox },
       ],
     },
+    {
+      // MOTIR-4227 — the only guide written for a CUSTOMER at their registrar
+      // rather than for someone integrating with Motir, which is why it takes a
+      // heading of its own instead of joining a group whose siblings are all
+      // developer surfaces.
+      heading: copy.docs.publicAddress,
+      items: [{ href: '/docs/public-address', label: copy.docs.publicAddress }],
+    },
   ]
 
 export function DocsNav({ current }: { current?: string }) {

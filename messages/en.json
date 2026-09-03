@@ -212,7 +212,8 @@
     "mcp": "MCP server",
     "mcpTools": "MCP tools",
     "cli": "CLI",
-    "sandbox": "Sandbox"
+    "sandbox": "Sandbox",
+    "publicAddress": "Public address"
   },
   "notFound": {
     "eyebrow": "404",

@@ -131,6 +131,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       '/docs/mcp/tools',
       '/docs/cli',
       '/docs/sandbox',
+      '/docs/public-address',
     ].map((path) => ({
       url: siteUrl(path),
       changeFrequency: 'monthly' as const,

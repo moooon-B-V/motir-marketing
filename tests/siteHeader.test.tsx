@@ -125,6 +125,8 @@ describe('app/sitemap.ts', () => {
         '/docs/mcp/tools',
         '/docs/cli',
         '/docs/sandbox',
+        // MOTIR-4227 — the customer-facing address guide.
+        '/docs/public-address',
       ].map(siteUrl),
       siteUrl('/legal'),
       ...[
