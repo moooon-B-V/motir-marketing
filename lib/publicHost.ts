@@ -200,7 +200,30 @@ export async function requestPublicHost(): Promise<PublicHost> {
  */
 export interface AddressedProject {
   readonly identifier: string
-  readonly addresses: { readonly primary: string }
+  /**
+   * ⚠️ OPTIONAL IN THE TYPE, AND THAT IS A DEPLOY-ORDER FACT RATHER THAN
+   * PESSIMISM. `addresses` arrives from `motir-core`, which deploys on its own
+   * clock: `public-surface-hosts.md` AMENDMENT 2 §E splits the two repositories'
+   * CI precisely because they are separate deployments. So for the length of one
+   * rolling deploy this renderer talks to a motir-core that does not send the
+   * field yet — and a `project.addresses.primary` on `undefined` is a TypeError
+   * inside `generateMetadata`, which 500s the page rather than degrading it.
+   *
+   * Absent means TODAY'S BEHAVIOUR: `motir.co/p/<identifier>` is the canonical
+   * and nothing redirects. That is the safe direction in both senses — a page
+   * that renders with the pre-story canonical is correct until the field
+   * arrives, whereas a missing-field redirect would send visitors somewhere
+   * chosen by a bug.
+   */
+  readonly addresses?: { readonly primary: string }
+}
+
+/** The primary, or the pre-story canonical when the field has not arrived. */
+function primaryOf(project: AddressedProject): string {
+  return (
+    project.addresses?.primary ??
+    `${SITE_ORIGIN}/p/${encodeURIComponent(project.identifier)}`
+  )
 }
 
 /** The host this request is on — `SITE_ORIGIN`'s when the router stepped aside. */
@@ -236,7 +259,7 @@ export function publicUrlFor(
   path = '',
   search = '',
 ): string {
-  const base = project.addresses.primary.replace(/\/$/, '')
+  const base = primaryOf(project).replace(/\/$/, '')
   return `${base}${path ? `/${path}` : ''}${search}`
 }
 
@@ -255,7 +278,7 @@ export function isOnPrimaryHost(
   host: PublicHost,
 ): boolean {
   return (
-    normaliseHost(new URL(project.addresses.primary).host) ===
+    normaliseHost(new URL(primaryOf(project)).host) ===
     normaliseHost(currentHost(host))
   )
 }
