@@ -1047,15 +1047,33 @@
 
       <!-- ==========================================================
            PANEL 4 — the unknown slug (404).
+
+           ⚠️ SUPERSEDED 2026-09-03 by MOTIR-4245 / MOTIR-4193 — the correction
+           is MOTIR-4247. This panel is KEPT, not deleted: a design asset is a
+           record of the moment it was drawn, and this is what MOTIR-4005 drew.
+           It is NOT a spec. An unknown legal slug is served by the SITE-WIDE
+           room `app/not-found.tsx`, because Next resolves `notFound()` to the
+           nearest `not-found.tsx` above the route and this repository has
+           exactly one. DO NOT build this body and DO NOT add
+           `app/legal/not-found.tsx`. See design-notes.md § "The 404".
       ========================================================== -->
       <section class="panel">
         <div class="panel-cap">
           <span class="n">4</span>
           <h2>An unknown slug — 404, inside the chrome</h2>
+          <span class="ref muted">SUPERSEDED by MOTIR-4245 · MOTIR-4247</span>
           <span class="note"
-            >`notFound()` renders a real 404; nothing above this route draws a
-            `loading.tsx`, so the status survives. The room shows the not-found
-            body with the way back to the index.</span
+            ><strong>SUPERSEDED — a RECORD, not a spec.</strong> This body was
+            never built and is not to be built. An unknown legal slug is served
+            by the SITE-WIDE not-found room (`app/not-found.tsx`, shipped by
+            MOTIR-4193, drawn by MOTIR-4245 in motir-core/design/public-site/) —
+            Next resolves `notFound()` to the nearest `not-found.tsx` above the
+            route, and this repository has exactly one.
+            <strong>Do not add `app/legal/not-found.tsx`.</strong> The `← All
+            legal documents` way back moved into the chrome: the footer's Legal
+            column is on the 404 page itself. The `loading.tsx` half below still
+            stands — nothing above this route draws one, so the 404 status
+            survives for a crawler. See design-notes.md § "The 404".</span
           >
         </div>
         <div class="frame">

@@ -33,7 +33,11 @@ read on `origin/main` — not its layout, which is an app-host chrome this asset
   → real Terms of Service prose (not lorem).
 - **Panel 3 — the effective-date line, both arms.** `not yet in effect` (the CURRENT state) and
   `in effect from …` (a published date).
-- **Panel 4 — an unknown slug.** A real 404, inside the chrome, with the way back to the index.
+- **Panel 4 — an unknown slug. ⚠️ SUPERSEDED (MOTIR-4247) — a RECORD, not a spec.** A real 404,
+  inside the chrome, with the way back to the index. **It was never built and is not to be built:**
+  an unknown legal slug is served by the SITE-WIDE room `app/not-found.tsx` (shipped by MOTIR-4193,
+  drawn by MOTIR-4245). See § _The 404_ below — the panel stays as the record of what MOTIR-4005
+  drew, and its own caption in `legal.mock.html` says so.
 - **Panel 5 — the long-form body treatment.** Serif `h2`, sans body, nested lists, the
   subprocessors table.
 - **Panel 6 — narrow (390 × 844).** The chrome collapses; the room reflows full-width.
@@ -51,13 +55,47 @@ two arms, and the copy keys are `versionAndEffective` / `versionNotYetEffective`
   It is drawn first because it is in force until the service opens — not an edge case.
 - **`Version {version} · in effect from {date}`** — the arm a published date renders.
 
-## The 404
+## The 404 — ⚠️ SUPERSEDED: an unknown slug is served by the SITE-WIDE not-found room
 
-An unknown slug is a genuine `notFound()`. Nothing above the `[slug]` route draws a `loading.tsx`
-(`motir-core/CLAUDE.md`'s boundary rule — a boundary above an existence-deciding route flushes a
-200 and destroys the 404), so the status survives for a crawler. The room shows a
-`404 — document not found` body with the `← All legal documents` way back. This asset states that
-rule so the render card does not add a boundary here.
+> **⚠️ AMENDED 2026-09-03 (MOTIR-4247).** What this section used to specify — a `/legal`-scoped
+> not-found body, drawn as panel 4 — **was never built, and is not to be built.** motir.co has since
+> decided its 404 once, for the whole host. What follows records what an unknown legal slug ACTUALLY
+> renders. Panel 4 stays in `legal.mock.html` as the point-in-time record of what MOTIR-4005 drew.
+
+An unknown slug is a genuine `notFound()`, and **Next resolves `notFound()` to the NEAREST
+`not-found.tsx` ABOVE the route.** This repository has exactly one — `app/not-found.tsx`, shipped by
+**MOTIR-4193** to the room **MOTIR-4245** draws in
+`motir-core/design/public-site/design-notes.md` § _the NOT-FOUND room_ — and there is no
+`app/legal/not-found.tsx`. So an unknown legal slug already lands in the **site-wide** room, which
+serves all four `notFound()` arrivals on this host (an unknown `/legal/<slug>`, an unlisted
+`/explore/topic/<slug>`, a `/p/<identifier>` that is not public, a mistyped URL) with **one room and
+two doors** — _Explore projects_ (primary) and _Go to the homepage_ (ghost).
+
+**⚠️ DO NOT ADD `app/legal/not-found.tsx`.** A per-segment file is the only thing that would
+re-introduce a second, `/legal`-scoped 404 — and it is exactly the move panel 4 would otherwise
+recommend to a reader who opens this area and builds to what it draws. The same decision is already
+recorded in its other two homes, and **this paragraph is the third — the only one a `/legal` design
+pass reads**:
+
+- **The shipped code.** `app/not-found.tsx`'s header comment: _"… do not add a per-segment
+  `app/legal/not-found.tsx` — `motir-marketing/design/legal/`'s panel-4 `/legal`-scoped room is
+  SUPERSEDED by this one (the correction to that asset is MOTIR-4247)."_
+- **The other repository's asset.** `motir-core/design/public-site/design-notes.md`
+  § _This SUPERSEDES the `/legal`-specific 404 room_: _"do not build panel 4's room, and do not add
+  `motir-marketing/app/legal/not-found.tsx`."_
+
+**The way back is not lost — it MOVED into the chrome.** The one thing panel 4's body has that the
+site-wide room does not is the `← All legal documents` link. The site-wide room answers that arrival
+through the **footer's Legal column** — _Privacy Policy_ · _Terms of Service_ · _All legal
+documents_ — which is on the 404 page itself, because the room wears this same chrome. That is the
+site-wide asset's own argument for two doors rather than five: the room names the likeliest intent
+and lets the chrome carry every other one.
+
+**The `loading.tsx` rule STANDS, and it now protects the site-wide room's status.** Nothing above the
+`[slug]` route draws a `loading.tsx` (`motir-core/CLAUDE.md`'s boundary rule — a boundary above an
+existence-deciding route flushes a 200 and destroys the 404), so the status survives for a crawler.
+`app/legal/layout.tsx` draws none, and none is to be added — that half of this section is unchanged
+by the supersession, because it is about the STATUS rather than about the room.
 
 ## The long-form body treatment — decided
 
@@ -98,15 +136,15 @@ its own `type: design` change.
 - The room composes `@motir/design-system`'s `--el-*` element tokens and element-semantic shape
   tokens; no Tier-0 `--color-*`, no raw `rounded-*` / `p-*`.
 
-| drawn element                      | primitive / token                                                                            |
-| ---------------------------------- | -------------------------------------------------------------------------------------------- |
-| the index rows                     | `<Link>` + `--el-text` / `--el-text-secondary` on `--el-page-bg`, `divide-y` → `--el-border` |
-| the breadcrumb                     | `--el-text-secondary`, hover `--el-link`                                                     |
-| the `h1`                           | `--font-serif` · `--el-text`                                                                 |
-| the version line                   | `--el-text-secondary`                                                                        |
-| the body headings / lists / tables | `--el-text` · `--el-text-strong` · `--el-border` · `--el-surface-soft`                       |
-| the not-found body                 | `--el-text-secondary` · `--el-link`                                                          |
-| the chrome                         | `BrandMark` · `--el-accent-on-surface` · `--el-accent` / `--el-accent-text` (CTA)            |
+| drawn element                                                                                             | primitive / token                                                                            |
+| --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| the index rows                                                                                            | `<Link>` + `--el-text` / `--el-text-secondary` on `--el-page-bg`, `divide-y` → `--el-border` |
+| the breadcrumb                                                                                            | `--el-text-secondary`, hover `--el-link`                                                     |
+| the `h1`                                                                                                  | `--font-serif` · `--el-text`                                                                 |
+| the version line                                                                                          | `--el-text-secondary`                                                                        |
+| the body headings / lists / tables                                                                        | `--el-text` · `--el-text-strong` · `--el-border` · `--el-surface-soft`                       |
+| the not-found body — **⚠️ SUPERSEDED (MOTIR-4247)**, panel 4's only; nothing renders it — see § _The 404_ | `--el-text-secondary` · `--el-link`                                                          |
+| the chrome                                                                                                | `BrandMark` · `--el-accent-on-surface` · `--el-accent` / `--el-accent-text` (CTA)            |
 
 ## AA contrast
 
@@ -164,9 +202,14 @@ crossing into MOTIR-3909 where a key there is affected:
 
 - **MOTIR-3880** — **TAKES nothing.** The chrome is COMPOSED, not redrawn; the asset cites
   `motir-core/design/public-site/` as a reference it reads. No amendment owed.
-- **MOTIR-4009** — **GIVES it** the index, the document page, both date-line arms, the 404, and the
-  long-form treatment (including the "no in-page navigation" decision). The render card is already
-  `blocked_by` this one, so the edge carries the ordering; no amendment owed.
+- **MOTIR-4009** — **GIVES it** the index, the document page, both date-line arms, ~~the 404,~~ and
+  the long-form treatment (including the "no in-page navigation" decision). The render card is
+  already `blocked_by` this one, so the edge carries the ordering; no amendment owed.
+  **⚠️ AMENDED 2026-09-03 (MOTIR-4247): the 404 is STRUCK from this hand-over.** MOTIR-4009 shipped
+  `/legal` without panel 4's room — correctly, as it turns out: the 404 belongs to the site-wide
+  room (`app/not-found.tsx`, MOTIR-4193, drawn by MOTIR-4245), not to `/legal`. Nothing is owed to
+  4009, which is `done`; the strike is here so a reader of this list does not go looking for a
+  hand-over that must never be honoured. See § _The 404_.
 - **MOTIR-3932** (this story) — **TAKES nothing.** The repo set is `motir-marketing` alone and
   remains so; the `motir-core` path named in the card's criterion 7 is evidence this card reads, not
   a deliverable (the card already says so).
