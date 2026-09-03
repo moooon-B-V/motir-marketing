@@ -87,6 +87,23 @@ export interface PublicProjectOverviewDto {
    * cannot reach. Kept in the shape because the contract carries it.
    */
   viewerCanManage: boolean
+  /**
+   * Every address this project answers at, and which ONE is canonical
+   * (MOTIR-4217 · ADR §7).
+   *
+   * ⚠️ `primary` IS AN ABSOLUTE URL AND IS NEVER EMPTY. A project that has
+   * claimed nothing still has `motir.co/p/<identifier>`, so this needs no
+   * fallback branch — and the fallback is precisely where a "canonical" would
+   * otherwise be invented at render time, differently on each page that
+   * invented it. `alternates` is every OTHER live address; each 301s here.
+   */
+  addresses: PublicProjectAddressesDto
+}
+
+/** A project's addresses — `motir-core`'s `lib/dto/publicAddresses.ts`. */
+export interface PublicProjectAddressesDto {
+  primary: string
+  alternates: string[]
 }
 
 /* ── the tab shapes (MOTIR-4116) ──────────────────────────────────────────── */
@@ -528,6 +545,17 @@ export interface PublicProjectIndexEntryDto {
   identifier: string
   /** ISO 8601 — the sitemap's `<lastmod>`. */
   updatedAt: string
+  /**
+   * The HOST this project's canonical lives on (MOTIR-4217).
+   *
+   * ⚠️ A SITEMAP MAY ONLY LIST URLs ON ITS OWN HOST, which is what this field
+   * is for: `motir.co/sitemap.xml` lists the projects whose primary is
+   * `motir.co` and NO others, and a project whose canonical has moved appears
+   * in its own host's sitemap instead. Without it the index would have to
+   * either duplicate every relocated project across two sitemaps or drop it
+   * from both.
+   */
+  primaryHost: string
 }
 
 export interface PublicProjectIndexPageDto {

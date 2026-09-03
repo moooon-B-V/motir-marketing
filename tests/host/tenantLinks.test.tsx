@@ -37,6 +37,7 @@ const project: PublicProjectOverviewDto = {
   },
   links: {},
   viewerCanManage: false,
+  addresses: { primary: 'https://motir.co/p/PROD', alternates: [] },
 }
 
 const item = {
@@ -50,8 +51,16 @@ const item = {
   priority: 'medium',
 }
 
-const WORKSPACE: PublicHost = { kind: 'workspace', host: 'acme.motir.site' }
-const CUSTOM: PublicHost = { kind: 'project', host: 'roadmap.acme.com' }
+const WORKSPACE: PublicHost = {
+  kind: 'workspace',
+  host: 'acme.motir.site',
+  origin: 'https://acme.motir.site',
+}
+const CUSTOM: PublicHost = {
+  kind: 'project',
+  host: 'roadmap.acme.com',
+  origin: 'https://roadmap.acme.com',
+}
 
 /** Every href a rendered tree emits, in document order. */
 function hrefs(container: HTMLElement): string[] {

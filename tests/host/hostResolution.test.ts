@@ -239,9 +239,23 @@ describe('routeForHost — a workspace subdomain', () => {
 
   it('lets a site asset through — the chrome’s logo is at the ROOT', () => {
     expect(routeForHost(WORKSPACE, '/motir-mark.svg')).toEqual({
-      action: 'pass',
+      action: 'forward',
     })
-    expect(routeForHost(WORKSPACE, '/favicon.ico')).toEqual({ action: 'pass' })
+    expect(routeForHost(WORKSPACE, '/favicon.ico')).toEqual({
+      action: 'forward',
+    })
+  })
+
+  it('and the CRAWL SURFACE takes that arm too, with the host attached', () => {
+    // ⚠️ `forward`, NOT `pass`, and the difference is a whole card. Both are
+    // "serve this path unchanged", but `/sitemap.xml` and `/robots.txt` are
+    // site-asset-SHAPED and must still know which host asked: a sitemap may only
+    // list URLs on its own (MOTIR-4222). Forwarding nothing made both answer as
+    // `motir.co` on every tenant host.
+    expect(routeForHost(WORKSPACE, '/sitemap.xml')).toEqual({
+      action: 'forward',
+    })
+    expect(routeForHost(CUSTOM, '/robots.txt')).toEqual({ action: 'forward' })
   })
 
   it('and the ATOM FEED is not mistaken for one', () => {
@@ -273,7 +287,9 @@ describe('routeForHost — a customer domain', () => {
   })
 
   it('lets a site asset through here too', () => {
-    expect(routeForHost(CUSTOM, '/motir-mark.svg')).toEqual({ action: 'pass' })
+    expect(routeForHost(CUSTOM, '/motir-mark.svg')).toEqual({
+      action: 'forward',
+    })
   })
 })
 
@@ -330,10 +346,10 @@ describe('routeForHost is IDEMPOTENT — Next re-enters on its own rewrite', () 
   it('passes its own two landing pads through untouched', () => {
     // Anything else here is a redirect loop.
     expect(routeForHost(WORKSPACE, '/_host-unknown')).toEqual({
-      action: 'pass',
+      action: 'forward',
     })
     expect(routeForHost(CUSTOM, '/host-unavailable')).toEqual({
-      action: 'pass',
+      action: 'forward',
     })
   })
 })

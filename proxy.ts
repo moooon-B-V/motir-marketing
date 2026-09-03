@@ -4,6 +4,7 @@ import { TENANT_DOMAIN } from '@/lib/tenantDomain'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
   PUBLIC_HOST_HEADER,
+  PUBLIC_ORIGIN_HEADER,
   normaliseHost,
 } from '@/lib/publicHost'
 import {
@@ -82,7 +83,24 @@ function isSiteHost(host: string): boolean {
   )
 }
 
-/** Forward the request with the two host headers SET (never merged). */
+/**
+ * The visitor's own origin — scheme, host AND port, all three from what the
+ * proxy in front of us said rather than from the socket. See
+ * `PublicHost.origin` for why the port and the scheme are carried rather than
+ * assumed.
+ */
+function forwardedOrigin(request: NextRequest): string {
+  const proto =
+    request.headers.get('x-forwarded-proto')?.split(',')[0]?.trim() ||
+    request.nextUrl.protocol.replace(':', '')
+  const authority =
+    request.headers.get('x-forwarded-host') ??
+    request.headers.get('host') ??
+    request.nextUrl.host
+  return `${proto}://${authority.trim().toLowerCase()}`
+}
+
+/** Forward the request with the three host headers SET (never merged). */
 function forwardWithHost(
   request: NextRequest,
   kind: 'workspace' | 'project',
@@ -95,6 +113,7 @@ function forwardWithHost(
   const headers = new Headers(request.headers)
   headers.set(PUBLIC_ADDRESS_KIND_HEADER, kind)
   headers.set(PUBLIC_HOST_HEADER, host)
+  headers.set(PUBLIC_ORIGIN_HEADER, forwardedOrigin(request))
 
   if (!rewriteTo) return NextResponse.next({ request: { headers } })
 
@@ -145,8 +164,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       destination.port = ''
       return NextResponse.redirect(destination, 301)
     }
-    case 'pass':
-      return NextResponse.next()
     case 'forward':
       // The router's own rewrite, coming back around. The headers are SET again
       // rather than assumed to have survived, so the page reads them whichever

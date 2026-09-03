@@ -1,13 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { siteUrl } from '@/lib/siteOrigin'
 import {
   deriveDescription,
   loadProject,
   loadWorkItem,
 } from '@/lib/publicProject'
-import { publicPathFor, requestPublicHost } from '@/lib/publicHost'
+import {
+  publicPathFor,
+  publicUrlFor,
+  redirectIfNotPrimary,
+  requestPublicHost,
+} from '@/lib/publicHost'
 import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
@@ -21,12 +25,20 @@ export async function generateMetadata({
   params: Promise<{ identifier: string; key: string }>
 }): Promise<Metadata> {
   const { identifier, key } = await params
-  const read = await loadWorkItem(identifier, key)
-  if (read.status !== 'ok') return {}
+  // ⚠️ THE PROJECT IS READ HERE TOO, because the canonical is a property of the
+  // PROJECT (its primary address) and this route's own read returns an item.
+  // Next memoises identical `fetch`es within one render, so the page's own
+  // `loadProject` below is the same request rather than a second one.
+  const [project, read] = await Promise.all([
+    loadProject(identifier),
+    loadWorkItem(identifier, key),
+  ])
+  if (read.status !== 'ok' || project.status !== 'ok') return {}
 
   const item = read.data
-  const url = siteUrl(
-    `/p/${encodeURIComponent(identifier)}/items/${encodeURIComponent(item.identifier)}`,
+  const url = publicUrlFor(
+    project.data,
+    `items/${encodeURIComponent(item.identifier)}`,
   )
   return {
     title: `${item.identifier} · ${item.title}`,
@@ -63,6 +75,12 @@ export default async function PublicWorkItemPage({
   if (project.status === 'not-found' || item.status === 'not-found') notFound()
   if (project.status === 'failed')
     return <ErrorState what="this project" host={host} />
+
+  await redirectIfNotPrimary(
+    project.data,
+    host,
+    `items/${encodeURIComponent(key)}`,
+  )
 
   return (
     <>

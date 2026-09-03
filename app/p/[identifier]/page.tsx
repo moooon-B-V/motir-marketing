@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { siteUrl } from '@/lib/siteOrigin'
 import { deriveDescription, loadProject } from '@/lib/publicProject'
-import { requestPublicHost } from '@/lib/publicHost'
+import {
+  publicUrlFor,
+  redirectIfNotPrimary,
+  requestPublicHost,
+} from '@/lib/publicHost'
 import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
 import { ProjectHeader } from './_components/ProjectHeader'
 import { EmptyState, ErrorState } from './_components/States'
@@ -38,7 +41,7 @@ export async function generateMetadata({
   if (read.status !== 'ok') return {}
 
   const project = read.data
-  const url = siteUrl(`/p/${encodeURIComponent(project.identifier)}`)
+  const url = publicUrlFor(project)
   const description = deriveDescription(
     project.publicTagline ?? project.publicOverviewMd,
     FALLBACK_DESCRIPTION,
@@ -84,6 +87,7 @@ export default async function PublicProjectOverviewPage({
   }
 
   const project = read.data
+  await redirectIfNotPrimary(project, host)
 
   return (
     <>

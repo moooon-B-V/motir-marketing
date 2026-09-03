@@ -1,7 +1,7 @@
 {
-  "id": "proj_motir",
-  "name": "Motir",
-  "identifier": "MOTIR",
+  "id": "proj_acme",
+  "name": "Acme Roadmap",
+  "identifier": "ACME",
   "workspaceName": "moooon B.V.",
   "publicOverviewMd": "## What Motir is\n\nDescribe what you want to build in chat, and Motir drafts the issue tree.\n\n## How it is built\n\n- Open core: the whole project-management tool is GPL-3.0.\n- Agents do design, decisions and content \u2014 not only code.",
   "publicTagline": "The AI planning, project-management and agent-orchestration platform.",
@@ -16,7 +16,7 @@
   "links": {},
   "viewerCanManage": false,
   "addresses": {
-    "primary": "https://motir.co/p/MOTIR",
-    "alternates": []
+    "primary": "http://acme.localhost:4318/ACME",
+    "alternates": ["http://127.0.0.1:4318/p/ACME"]
   }
 }

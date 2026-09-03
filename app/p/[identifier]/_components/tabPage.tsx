@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { siteUrl } from '@/lib/siteOrigin'
 import { loadProject, type PublicProjectOverviewDto } from '@/lib/publicProject'
-import { requestPublicHost, type PublicHost } from '@/lib/publicHost'
+import {
+  publicUrlFor,
+  redirectIfNotPrimary,
+  requestPublicHost,
+  type PublicHost,
+} from '@/lib/publicHost'
 import { ProjectHeader } from './ProjectHeader'
 import { ErrorState } from './States'
 
@@ -46,6 +50,13 @@ export async function renderTabPage({
     return <ErrorState what="this project" host={host} />
 
   const project = read.data
+
+  // ⚠️ ONE CALL, IN THE SHELL, SO EVERY TAB INHERITS IT (MOTIR-4222). A project
+  // now answers at several addresses and exactly one of them is canonical; a
+  // request on any other lands here and is carried to it. Placed AFTER the read
+  // because the primary is a property of the project — and after the 404 arm,
+  // because a project that does not exist has no address to be redirected to.
+  await redirectIfNotPrimary(project, host, current)
   return (
     <>
       <ProjectHeader project={project} current={current} host={host} />
@@ -54,7 +65,10 @@ export async function renderTabPage({
   )
 }
 
-/** Each tab's canonical: its OWN path on SITE_ORIGIN, with no paging cursor. */
+/**
+ * Each tab's canonical: its OWN path on the project's PRIMARY address, with no
+ * paging cursor (MOTIR-4222; it named `SITE_ORIGIN` before).
+ */
 export async function tabMetadata({
   identifier,
   segment,
@@ -70,7 +84,10 @@ export async function tabMetadata({
   // ⚠️ THE CURSOR IS DROPPED. Deep pages of one list are the same document to a
   // crawler, so they consolidate onto page one — the rule `/explore` already
   // follows for its own cursor.
-  const url = siteUrl(`/p/${encodeURIComponent(project.identifier)}/${segment}`)
+  // ⚠️ `metadataBase` stays `SITE_ORIGIN` and is not consulted here: an
+  // ABSOLUTE canonical overrides it, which is the only way one document served
+  // at three hosts can name one address.
+  const url = publicUrlFor(project, segment)
   return {
     title: `${label} · ${project.name}`,
     description: `${label} for ${project.name} — public on Motir.`,

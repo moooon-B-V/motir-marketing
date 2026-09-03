@@ -85,6 +85,9 @@ export default defineConfig({
         'lib/hostResolution.ts',
         'lib/tenantDomain.ts',
         'proxy.ts',
+        // MOTIR-4222 — the per-host crawl surface.
+        'app/sitemap.ts',
+        'app/robots.ts',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -127,6 +130,8 @@ export default defineConfig({
         'lib/hostResolution.ts': { lines: 90, functions: 90, branches: 85 },
         'lib/tenantDomain.ts': { lines: 90, functions: 90, branches: 85 },
         'proxy.ts': { lines: 90, functions: 90, branches: 85 },
+        'app/sitemap.ts': { lines: 90, functions: 90, branches: 85 },
+        'app/robots.ts': { lines: 90, functions: 90, branches: 85 },
         'app/p/**/_components/*.tsx': {
           lines: 90,
           functions: 90,

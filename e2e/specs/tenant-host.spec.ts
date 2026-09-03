@@ -42,27 +42,33 @@ test('a workspace host serves the workspace’s project list at its root', async
     page.getByRole('main').getByText('moooon B.V.', { exact: true }),
   ).toBeVisible()
 
-  // The card links HOST-RELATIVE — `/MOTIR`, not `/p/MOTIR`. Scoped to the
+  // The card links HOST-RELATIVE — `/ACME`, not `/p/ACME`. Scoped to the
   // landmark for the same reason as above: the chrome's brand link is also
   // named "Motir", and it points at the site root on every host.
   await expect(
-    page.getByRole('main').getByRole('link', { name: /Motir/ }),
-  ).toHaveAttribute('href', '/MOTIR')
+    page.getByRole('main').getByRole('link', { name: /Acme Roadmap/ }),
+  ).toHaveAttribute('href', '/ACME')
 })
 
 test('a project renders at the workspace host, with host-relative links', async ({
   page,
 }) => {
-  const response = await page.goto(`${TENANT_ORIGIN}/MOTIR/board`)
+  // ⚠️ `ACME`, NOT `MOTIR`, AND THE CHOICE IS LOAD-BEARING. The primary address
+  // is a property of the PROJECT (MOTIR-4222), so a project whose primary is
+  // `motir.co` answers a tenant-host request with a permanent redirect — and
+  // the browser follows it to PRODUCTION. `e2e/stub/publicApiStub.ts` gives
+  // `ACME` a primary on this host for exactly that reason; it cost one red run
+  // that passed its status assertion against the live site.
+  const response = await page.goto(`${TENANT_ORIGIN}/ACME/board`)
   expect(response?.status()).toBe(200)
 
-  // The SAME page `motir.co/p/MOTIR/board` renders — no route is duplicated.
+  // The SAME page `/p/[identifier]/board` renders — no route is duplicated.
   await expect(page.getByRole('navigation', { name: 'Project' })).toBeVisible()
 
   const overview = page
     .getByRole('navigation', { name: 'Project' })
     .getByRole('link', { name: 'Overview' })
-  await expect(overview).toHaveAttribute('href', '/MOTIR')
+  await expect(overview).toHaveAttribute('href', '/ACME')
 
   // And nothing on the page points back at the /p/ shape.
   const paths = await page

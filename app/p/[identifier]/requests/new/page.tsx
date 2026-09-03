@@ -1,9 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { siteUrl } from '@/lib/siteOrigin'
 import { actHref, loadProject } from '@/lib/publicProject'
-import { publicPathFor, requestPublicHost, SITE_HOST } from '@/lib/publicHost'
+import {
+  publicPathFor,
+  publicUrlFor,
+  redirectIfNotPrimary,
+  requestPublicHost,
+  SITE_HOST,
+} from '@/lib/publicHost'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
 
@@ -17,7 +22,7 @@ export async function generateMetadata({
   const { identifier } = await params
   const read = await loadProject(identifier)
   if (read.status !== 'ok') return {}
-  const url = siteUrl(`/p/${encodeURIComponent(identifier)}/requests/new`)
+  const url = publicUrlFor(read.data, 'requests/new')
   return {
     title: `Request a feature · ${read.data.name}`,
     description: `Ask the ${read.data.name} team for something. Requests are public.`,
@@ -67,6 +72,7 @@ export default async function RequestIntakePage({
     return <ErrorState what="this project" host={host} />
 
   const project = read.data
+  await redirectIfNotPrimary(project, host, 'requests/new')
 
   // ⚠️ TWO PATHS TO THE SAME TAB, AND THEY ARE NOT INTERCHANGEABLE — one
   // variable used to serve both, which was correct only while `motir.co` was

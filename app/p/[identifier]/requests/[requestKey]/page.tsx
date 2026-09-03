@@ -1,14 +1,19 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { siteUrl } from '@/lib/siteOrigin'
 import {
   actHref,
   deriveDescription,
   loadProject,
   loadRequest,
 } from '@/lib/publicProject'
-import { publicPathFor, requestPublicHost, SITE_HOST } from '@/lib/publicHost'
+import {
+  publicPathFor,
+  publicUrlFor,
+  redirectIfNotPrimary,
+  requestPublicHost,
+  SITE_HOST,
+} from '@/lib/publicHost'
 import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
@@ -29,12 +34,18 @@ export async function generateMetadata({
   params: Promise<{ identifier: string; requestKey: string }>
 }): Promise<Metadata> {
   const { identifier, requestKey } = await params
-  const read = await loadRequest(identifier, requestKey)
-  if (read.status !== 'ok') return {}
+  // The canonical is the PROJECT's primary address — see the same note on the
+  // work-item detail page.
+  const [project, read] = await Promise.all([
+    loadProject(identifier),
+    loadRequest(identifier, requestKey),
+  ])
+  if (read.status !== 'ok' || project.status !== 'ok') return {}
 
   const request = read.data
-  const url = siteUrl(
-    `/p/${encodeURIComponent(identifier)}/requests/${encodeURIComponent(request.identifier)}`,
+  const url = publicUrlFor(
+    project.data,
+    `requests/${encodeURIComponent(request.identifier)}`,
   )
   return {
     title: `${request.title} · ${identifier}`,
@@ -75,6 +86,12 @@ export default async function PublicRequestPage({
     notFound()
   if (project.status === 'failed')
     return <ErrorState what="this project" host={host} />
+
+  await redirectIfNotPrimary(
+    project.data,
+    host,
+    `requests/${encodeURIComponent(requestKey)}`,
+  )
 
   // ⚠️ `SITE_HOST`, on every host: the hand-off prefixes this with
   // `SITE_ORIGIN`, so a host-relative return is a URL that does not exist.

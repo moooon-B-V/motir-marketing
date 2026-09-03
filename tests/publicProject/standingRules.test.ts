@@ -92,6 +92,47 @@ describe('ORIGINS DO NOT CROSS', () => {
   })
 })
 
+describe('ONE CANONICAL PER PAGE — MOTIR-4222', () => {
+  it("no /p/* file builds an absolute URL from siteUrl('/p/…')", () => {
+    // ⚠️ THE CARD'S OWN GREP, MECHANISED. Every canonical, `og:url` and JSON-LD
+    // `@id` on this surface must come from the project's PRIMARY address
+    // (`publicUrlFor`), not from this site's origin — a `siteUrl('/p/…')` left
+    // behind is a page telling a crawler that `motir.co` is canonical for a
+    // project whose canonical moved, which is the duplication *make primary*
+    // exists to prevent.
+    //
+    // COMMENTS ARE STRIPPED FIRST, the rule this file already applies to the
+    // e2e-origin guard: the files that explain the change have to QUOTE the old
+    // expression to explain it, and a guard that forbade naming the thing it
+    // forbids would have exactly one repair available — deleting the
+    // explanation.
+    const code = (f: string): string =>
+      read(f)
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/\/\/[^\n]*/g, '')
+
+    const offenders = tracked('app/p').filter((f) =>
+      /siteUrl\(\s*[`'"]\/p\//.test(code(f)),
+    )
+    expect(
+      offenders,
+      'build it from the project’s primary with publicUrlFor() instead',
+    ).toEqual([])
+  })
+
+  it('and the sitemap and robots read the REQUEST’s host', () => {
+    // Both are served at every address the renderer answers for, and a sitemap
+    // may only list URLs on its own host. Asserted at the source because the
+    // behavioural half needs a request scope — `tests/host/crawlSurface.test.ts`
+    // supplies one and asks all three.
+    for (const file of ['app/sitemap.ts', 'app/robots.ts']) {
+      expect(read(file), `${file} answers as motir.co on every host`).toContain(
+        'requestPublicHost',
+      )
+    }
+  })
+})
+
 describe('THE ERROR STATE IS REACHABLE — every /p/* screen has one', () => {
   it('every page that reads renders the error state rather than throwing', () => {
     // A screen that let the read throw would 500 the whole route on an outage,

@@ -194,9 +194,15 @@ export const ROUTER_PATHS = {
 
 /** What the router does with one request. */
 export type HostRoute =
-  /** Serve the path as-is — a site asset, or the site's own host. */
-  | { action: 'pass' }
-  /** Serve the path as-is, but with the host headers set on the request. */
+  /**
+   * Serve the path as-is, with the host headers set on the forwarded request.
+   *
+   * ⚠️ THE HEADERS TRAVEL EVEN WHEN THE PATH DOES NOT, and that was not true
+   * when this shipped (MOTIR-4220). `/sitemap.xml` and `/robots.txt` are
+   * site-asset-shaped paths, so they took this arm — and MOTIR-4222 makes both
+   * of them read the host, because a sitemap may only list URLs on its own.
+   * Forwarding nothing meant they answered as `motir.co` on every tenant host.
+   */
   | { action: 'forward' }
   /** Rewrite onto the shipped `/p/*` tree, with the visitor's URL unchanged. */
   | { action: 'rewrite'; path: string }
@@ -266,7 +272,7 @@ function alreadyRouted(
     pathname === ROUTER_PATHS.notFound ||
     pathname === ROUTER_PATHS.unavailable
   ) {
-    return { action: 'pass' }
+    return { action: 'forward' }
   }
   if (pathname === ROUTER_PATHS.workspaceRoot) {
     return resolution.kind === 'workspace'
@@ -298,7 +304,7 @@ export function routeForHost(
   if (routed) return routed
 
   if (resolution.kind === 'project') {
-    if (isSiteAssetPath(pathname)) return { action: 'pass' }
+    if (isSiteAssetPath(pathname)) return { action: 'forward' }
     // ONE project at the root (ADR Q3): the whole path hangs below `/p/<id>`.
     return {
       action: 'rewrite',
@@ -316,7 +322,7 @@ export function routeForHost(
     // ⚠️ THE ASSET CHECK IS SECOND, NOT FIRST, so a project could never be
     // shadowed by it. Only once the segment is known NOT to be a project does a
     // dot in it mean "a file on the site".
-    if (isSiteAssetPath(pathname)) return { action: 'pass' }
+    if (isSiteAssetPath(pathname)) return { action: 'forward' }
     return { action: 'not-found' }
   }
 

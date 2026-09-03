@@ -6,6 +6,12 @@ import { copy } from '@/lib/copy'
 import sitemap from '@/app/sitemap'
 import { siteUrl } from '@/lib/siteOrigin'
 
+// `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
+// and `next/headers` throws outside a request scope. Empty headers read as
+// the SITE's own host, which is what every case in this file is about; the
+// per-host arms live in `tests/host/crawlSurface.test.ts`.
+vi.mock('next/headers', () => ({ headers: async () => new Headers() }))
+
 /*
  * The nav entrance for `/design` (MOTIR-1043) — the site's FIRST internal
  * second route, and therefore the first nav item that can ever be current.

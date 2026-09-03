@@ -1,13 +1,19 @@
 // @vitest-environment node
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
   getLegalDocument,
   legalDocumentSlugs,
   listLegalDocuments,
 } from '@/lib/legal/documents'
 import sitemap from '@/app/sitemap'
+
+// `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
+// and `next/headers` throws outside a request scope. Empty headers read as
+// the SITE's own host, which is what every case in this file is about; the
+// per-host arms live in `tests/host/crawlSurface.test.ts`.
+vi.mock('next/headers', () => ({ headers: async () => new Headers() }))
 
 /**
  * REACHABILITY AND FRONT-MATTER PARITY (Story MOTIR-3909 · MOTIR-4011).

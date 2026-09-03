@@ -130,6 +130,27 @@ describe('a workspace subdomain', () => {
     expect(rewriteOf(res)).toBe('/p/PROD/board')
     expect(forwarded(res, 'x-motir-address-kind')).toBe('workspace')
     expect(forwarded(res, 'x-motir-public-host')).toBe('acme.motir.site')
+    // Scheme AND port, from what the proxy in front of us said — the crawl
+    // surface builds absolute URLs from it (MOTIR-4222).
+    expect(forwarded(res, 'x-motir-public-origin')).toBe(
+      'https://acme.motir.site',
+    )
+  })
+
+  it('carries the FORWARDED scheme and port, not the socket’s', async () => {
+    // Fly terminates TLS, so the request reaching the machine is http on an
+    // internal port. A robots.txt built from that would advertise an address
+    // no visitor can reach.
+    resolveHost.mockResolvedValue(WORKSPACE)
+    const res = await proxy(
+      request('http://internal.fly.dev:8080/PROD', {
+        'x-forwarded-host': 'acme.motir.site',
+        'x-forwarded-proto': 'https',
+      }),
+    )
+    expect(forwarded(res, 'x-motir-public-origin')).toBe(
+      'https://acme.motir.site',
+    )
   })
 
   it('serves the workspace’s project list at the root', async () => {

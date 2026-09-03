@@ -77,6 +77,15 @@ const ROUTES: Record<string, string> = {
   // publishes `MOTIR`, the identifier every other fixture here is keyed by, so
   // a tenant-host walk exercises the SAME pages the `motir.co` specs walk.
   '/api/public/hosts/acme.localhost': 'host-workspace.json',
+  // ⚠️ A SECOND PROJECT, WHOSE PRIMARY IS THE TENANT HOST (MOTIR-4222). It has
+  // to be a different project from `MOTIR`: the primary is a property of the
+  // PROJECT, so one fixture cannot be canonical on two hosts — and a tenant-host
+  // spec walking a project whose primary is `motir.co` does not merely fail, it
+  // sends the browser to PRODUCTION, which is the cross-repository coupling
+  // `e2e/stub/origin.ts` exists to prevent. `MOTIR` stays canonical on the site
+  // and `ACME` on `acme.localhost`, so both halves of the lane are self-hosted.
+  '/api/public/p/ACME': 'project-acme.json',
+  '/api/public/p/ACME/board': 'board-acme.json',
 }
 
 /**

@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
   PUBLIC_HOST_HEADER,
+  PUBLIC_ORIGIN_HEADER,
   SITE_HOST,
   normaliseHost,
   publicPathFor,
@@ -19,8 +20,16 @@ import {
  * catches a component that stopped going through it.
  */
 
-const WORKSPACE: PublicHost = { kind: 'workspace', host: 'acme.motir.site' }
-const CUSTOM: PublicHost = { kind: 'project', host: 'roadmap.acme.com' }
+const WORKSPACE: PublicHost = {
+  kind: 'workspace',
+  host: 'acme.motir.site',
+  origin: 'https://acme.motir.site',
+}
+const CUSTOM: PublicHost = {
+  kind: 'project',
+  host: 'roadmap.acme.com',
+  origin: 'https://roadmap.acme.com',
+}
 
 describe('normaliseHost', () => {
   it('lowercases and drops the port', () => {
@@ -101,15 +110,34 @@ describe('publicPathWithQuery — the no-JS pager, per host', () => {
 describe('readPublicHost — what a page believes about its address', () => {
   const headers = (entries: Record<string, string>) => new Headers(entries)
 
-  it('reads the router’s two headers', () => {
+  it('reads the router’s three headers', () => {
     expect(
       readPublicHost(
         headers({
           [PUBLIC_ADDRESS_KIND_HEADER]: 'workspace',
           [PUBLIC_HOST_HEADER]: 'ACME.motir.site:443',
+          [PUBLIC_ORIGIN_HEADER]: 'https://acme.motir.site',
         }),
       ),
-    ).toEqual({ kind: 'workspace', host: 'acme.motir.site' })
+    ).toEqual({
+      kind: 'workspace',
+      host: 'acme.motir.site',
+      origin: 'https://acme.motir.site',
+    })
+  })
+
+  it('treats an origin that is not a bare origin as absent', () => {
+    // It ends up in a robots.txt and a sitemap; a malformed value there is
+    // worse than the https fallback it would have replaced.
+    expect(
+      readPublicHost(
+        headers({
+          [PUBLIC_ADDRESS_KIND_HEADER]: 'project',
+          [PUBLIC_HOST_HEADER]: 'roadmap.acme.com',
+          [PUBLIC_ORIGIN_HEADER]: 'https://evil.example/path',
+        }),
+      ).origin,
+    ).toBeNull()
   })
 
   it('is the SITE when the router did not run — the normal case on motir.co', () => {
@@ -147,6 +175,7 @@ describe('requestPublicHost — the one ambient read on the surface', () => {
       await expect(requestPublicHost()).resolves.toEqual({
         kind: 'project',
         host: 'roadmap.acme.com',
+        origin: null,
       })
     } finally {
       vi.doUnmock('next/headers')
