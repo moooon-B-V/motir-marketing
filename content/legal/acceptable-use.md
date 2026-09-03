@@ -1,6 +1,6 @@
 ---
 title: Acceptable Use Policy
-version: 1.0.0
+version: 1.1.0
 effectiveDate: TBD
 status: approved
 ---
@@ -189,6 +189,53 @@ counted with any linked or partner enterprises — and Article 19(2) then allows
 months before Articles 20 to 28 attach. **When that happens the obligations that arrive
 are transparency reporting, trusted-flagger priority, the misuse-suspension policy, and
 the protection-of-minors measures**, and this page changes with them.
+
+## Addresses you connect
+
+A public project can be reached at an address you choose — a subdomain of Motir's public
+namespace that your workspace claims, or a domain you own and point at us. This section
+governs both. It does not change what you may publish: the content rules above apply
+identically whichever address a page is served at.
+
+### What you are telling us when you connect a domain
+
+**That the domain is yours to point.** You represent that you control it, and that you are
+authorised to direct it to this service and to have TLS certificates obtained for it on
+your behalf. We ask you to prove control with a DNS record before we request a
+certificate, and that check is a floor rather than a substitute for the representation.
+
+**That you will keep it pointed, or let it go.** A domain you stop controlling is a domain
+you must disconnect. We may retire an address that stops resolving to the service.
+
+### Naming
+
+**An address may not be used to impersonate.** A subdomain label or a connected domain must
+not suggest an association with a person or organisation you do not represent, infringe a
+trade mark, or otherwise mislead a reader about who is publishing.
+
+**Some labels are reserved.** Motir keeps a set of subdomain labels for its own hosts and
+for names a reader could mistake for one, and refuses them. We may also refuse or reclaim a
+label on a substantiated complaint from someone with a better claim to it.
+
+**A retired subdomain is not released.** If you rename your workspace's subdomain, the old
+address keeps redirecting to the new one and does not become available to anyone else —
+including you. That is deliberate: links you have already published must not one day lead
+somewhere you did not choose.
+
+### What we do
+
+**We obtain and renew a TLS certificate** for each address, through our hosting provider.
+This adds no company to the ones already listed as [subprocessors](/legal/subprocessors) —
+it is the provider that already serves these pages.
+
+**We serve your public project content there**, under the same rules, the same moderation
+and the same notice-and-action mechanism described above. **Motir's own marks and chrome
+remain on the page** at every address; connecting a domain does not make the page
+unbranded.
+
+**We may suspend an address** that breaches this policy, on the same proportionate basis as
+anything else here — and a suspended address does not remove your content, which stays
+reachable at your project's Motir address.
 
 ## What we may do
 
