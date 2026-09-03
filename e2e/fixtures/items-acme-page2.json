@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "id": "wi_5",
+      "identifier": "MOTIR-5",
+      "key": 5,
+      "title": "A public work item 5",
+      "kind": "subtask",
+      "status": "Done",
+      "statusCategory": "done",
+      "priority": "medium"
+    }
+  ],
+  "nextCursor": null
+}

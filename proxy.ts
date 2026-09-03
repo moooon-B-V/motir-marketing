@@ -160,8 +160,12 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       // 301 with the PATH AND QUERY preserved: a link somebody published to a
       // deep page must land on that page, not on the new root.
       const destination = new URL(request.nextUrl)
-      destination.host = route.host
-      destination.port = ''
+      // ⚠️ `hostname`, NOT `host`, AND THE PORT IS KEPT. The contract answers a
+      // bare hostname, and the live subdomain is served by THIS deployment — so
+      // the port and scheme the visitor already reached us on are the ones that
+      // work. Clearing the port sends a browser to :80 and breaks every
+      // non-production run of this redirect, including the browser lane's.
+      destination.hostname = route.host
       return NextResponse.redirect(destination, 301)
     }
     case 'forward':
