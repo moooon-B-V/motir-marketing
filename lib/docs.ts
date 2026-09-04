@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 
 /**
@@ -132,12 +133,23 @@ export interface ApiOperation {
 
 const SPEC_URL = `${APP_ORIGIN}/api/openapi/v1.json`
 
-/** Fetch the published spec. Throws when the artifact is unreachable. */
-export async function fetchOpenApiSpec(): Promise<OpenApiDocument> {
+/**
+ * Fetch the published spec. Throws when the artifact is unreachable.
+ *
+ * ⚠️ MEMOIZED PER RENDER (MOTIR-4396), and that is not an optimisation to trim.
+ * Since the rail moved into `app/docs/api/layout.tsx`, TWO server components
+ * read this document on one request — the layout, to build the operation tier,
+ * and the page, to render the operations themselves. Without `cache` that is
+ * two 720 KB fetches per page view. `cache` makes the second call return the
+ * first's promise, so the layout and the page cannot disagree about the
+ * document either: they are looking at the same bytes, which is what lets the
+ * rail's anchors be guaranteed to match the page's section ids.
+ */
+export const fetchOpenApiSpec = cache(async (): Promise<OpenApiDocument> => {
   const res = await fetch(SPEC_URL, { next: { revalidate: 0 } })
   if (!res.ok) throw new Error(`openapi spec ${res.status}`)
   return (await res.json()) as OpenApiDocument
-}
+})
 
 // ── `$ref` resolution ───────────────────────────────────────────────────────
 //
@@ -779,6 +791,91 @@ export function groupCliCommands(
       groups.push(current)
     }
     current.commands.push(command)
+  }
+  return groups
+}
+
+// ── The rail's view of the operation list (MOTIR-4396) ──────────────────────
+//
+// The navigation and the reference must agree about two things: the ANCHOR each
+// operation has, and the GROUP it sits under. Both are derived here so the rail
+// and the page cannot drift — a rail whose links 404 into the page is worse
+// than no rail, and it is the failure a second copy of either rule produces.
+
+/**
+ * The in-page anchor for one operation.
+ *
+ * The `operationId` when the document declares one (every Motir operation
+ * does), and a slug of method + path when it does not — so an operation is
+ * still reachable from a document that omits the field.
+ */
+export function operationAnchorId(operation: ApiOperation): string {
+  return (
+    operation.operationId ??
+    `${operation.method}-${operation.path}`
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+  )
+}
+
+/**
+ * The RESOURCE an operation belongs to, derived from its path.
+ *
+ * `/api/v1/projects/{projectKey}/work-items` → `Projects`;
+ * `/api/v1/work-items/{key}` → `Work items`; `/api/public/explore` → `Explore`.
+ *
+ * ⚠️ DERIVED, never authored. The old surface carried nine hand-written section
+ * labels, which is a second home for a fact the paths already state — a new
+ * resource would have arrived ungrouped, or grouped by whoever remembered. The
+ * rule instead: drop `api`, drop the version or audience segment, and take the
+ * first segment that is not a `{parameter}`.
+ */
+export function operationGroup(path: string): string {
+  const segments = path.split('/').filter(Boolean)
+  const rest = segments[0] === 'api' ? segments.slice(1) : segments
+  const withoutVersion = /^(v\d+|public|internal)$/.test(rest[0] ?? '')
+    ? rest.slice(1)
+    : rest
+  const head = withoutVersion.find((segment) => !segment.startsWith('{'))
+  if (!head) return 'Other'
+  const words = head.replace(/-/g, ' ')
+  return words.charAt(0).toUpperCase() + words.slice(1)
+}
+
+/** One row of the rail's operation tier. */
+export interface RailOperation {
+  id: string
+  method: string
+  path: string
+  group: string
+}
+
+/**
+ * The operation tier, grouped, in the reference's OWN order.
+ *
+ * Groups appear in first-appearance order and their members keep the order
+ * `listOperations` sorted them into, so the rail reads top to bottom exactly as
+ * the page does. A rail sorted differently from the page it navigates makes a
+ * reader who scrolls lose their place.
+ */
+export function railOperations(
+  operations: readonly ApiOperation[],
+): { group: string; operations: RailOperation[] }[] {
+  const groups: { group: string; operations: RailOperation[] }[] = []
+  for (const operation of operations) {
+    const group = operationGroup(operation.path)
+    let bucket = groups.find((candidate) => candidate.group === group)
+    if (!bucket) {
+      bucket = { group, operations: [] }
+      groups.push(bucket)
+    }
+    bucket.operations.push({
+      id: operationAnchorId(operation),
+      method: operation.method,
+      path: operation.path,
+      group,
+    })
   }
   return groups
 }

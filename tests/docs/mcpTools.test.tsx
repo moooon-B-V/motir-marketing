@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import McpToolsPage from '@/app/docs/mcp/tools/page'
+import McpToolsPage from '@/app/docs/(guides)/mcp/tools/page'
 import { parseMcpToolCatalogue } from '@/lib/docs'
 
 /*

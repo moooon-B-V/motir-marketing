@@ -395,7 +395,10 @@ describe('the MCP pages name no tools, because nothing here could check them', (
     expect(toolNameLiterals(shipped)).toEqual([])
   })
 
-  for (const page of ['app/docs/mcp/tools/page.tsx', 'app/docs/mcp/page.tsx']) {
+  for (const page of [
+    'app/docs/(guides)/mcp/tools/page.tsx',
+    'app/docs/(guides)/mcp/page.tsx',
+  ]) {
     it(`names no tool in ${page}`, () => {
       expect(toolNameLiterals(readFileSync(page, 'utf8'))).toEqual([])
     })

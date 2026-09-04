@@ -2,11 +2,11 @@ import {
   exampleRequest,
   fetchOpenApiSpec,
   listOperations,
+  operationAnchorId,
   type ApiOperation,
 } from '@/lib/docs'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { copy } from '@/lib/copy'
-import { DocsNav } from '../_components/DocsNav'
 import {
   CodeBlock,
   MethodPill,
@@ -47,13 +47,16 @@ import {
  * reference: a reader who has read one operation must be able to SKIM the next,
  * which only works if the next one is laid out identically.
  *
- * ⚠️ THE 49-OPERATION PAGE IS LONG, AND THE NAVIGATION IS A SIBLING CARD'S
- * (MOTIR-4396, built to MOTIR-4393's design asset). This page deliberately does
- * not build a rail, an index or a filter, and it does not compress the
- * reference to avoid needing one — the length is the honest size of the
- * surface, and hiding it would make the navigation card look unnecessary.
- * Anchors are here (each operation carries a stable `id`), so the nav has
- * something to point at when it lands.
+ * ⚠️ THE 49-OPERATION PAGE IS LONG, AND THE NAVIGATION IS THE RAIL beside it —
+ * `app/docs/api/layout.tsx`, MOTIR-4396, built to MOTIR-4393's design asset.
+ * This page still builds no nav of its own and does not compress the reference
+ * to avoid needing one: the length is the honest size of the surface.
+ *
+ * What it owes the rail is the ANCHOR, and it owes it through the SAME function
+ * the rail links with — `operationAnchorId` in `lib/docs.ts`. A second copy of
+ * that rule here is how a rail full of links that 404 into the page gets built,
+ * which is worse than no rail at all. The layout and this page also read ONE
+ * memoized spec fetch, so they cannot disagree about which operations exist.
  *
  * ⚠️ NO FALLBACK, DELIBERATELY — the contract `lib/docs.ts`'s header states. A
  * committed default rendered when the fetch fails is stale exactly when it is
@@ -61,19 +64,8 @@ import {
  */
 export const dynamic = 'force-dynamic'
 
-/** A stable in-page anchor for one operation, for the sibling nav card to use. */
-function operationId(operation: ApiOperation): string {
-  return (
-    operation.operationId ??
-    `${operation.method}-${operation.path}`
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')
-  )
-}
-
 function Operation({ operation }: { operation: ApiOperation }) {
-  const id = operationId(operation)
+  const id = operationAnchorId(operation)
   return (
     <section
       id={id}
@@ -206,7 +198,6 @@ export default async function ApiReferencePage() {
   } catch {
     return (
       <>
-        <DocsNav current="/docs/api" />
         <h1 className="font-(family-name:--font-serif) text-[30px] font-bold text-(--el-text)">
           {copy.docs.api}
         </h1>
@@ -222,7 +213,6 @@ export default async function ApiReferencePage() {
 
   return (
     <>
-      <DocsNav current="/docs/api" />
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.api}
       </h1>

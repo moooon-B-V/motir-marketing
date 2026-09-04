@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { copy } from '@/lib/copy'
-import { DocsNav } from '../_components/DocsNav'
-import { CodeBlock } from '../_components/DocSchema'
+import { CodeBlock } from '../../_components/DocSchema'
 
 /*
  * The sandbox guide (MOTIR-4046, WRITTEN by MOTIR-4392) — committed prose, per
@@ -43,7 +42,6 @@ import { CodeBlock } from '../_components/DocSchema'
 export default function SandboxPage() {
   return (
     <>
-      <DocsNav current="/docs/sandbox" />
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.sandbox}
       </h1>

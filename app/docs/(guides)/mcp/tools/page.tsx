@@ -7,8 +7,7 @@ import {
   type McpToolEntry,
 } from '@/lib/docs'
 import { copy } from '@/lib/copy'
-import { DocsNav } from '../../_components/DocsNav'
-import { SchemaTable } from '../../_components/DocSchema'
+import { SchemaTable } from '../../../_components/DocSchema'
 
 /*
  * The MCP tool catalogue (MOTIR-4046 · MOTIR-4180 · MOTIR-4195, WIDENED by
@@ -92,7 +91,6 @@ export default async function McpToolsPage() {
   } catch {
     return (
       <>
-        <DocsNav current="/docs/mcp/tools" />
         <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
           {copy.docs.mcpTools}
         </h1>
@@ -113,7 +111,6 @@ export default async function McpToolsPage() {
 
   return (
     <>
-      <DocsNav current="/docs/mcp/tools" />
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.mcpTools}
       </h1>

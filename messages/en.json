@@ -221,7 +221,9 @@
     "sectionResponses": "Responses",
     "sectionResponseSchema": "Response schema",
     "thStatus": "Status",
-    "thCondition": "Condition"
+    "thCondition": "Condition",
+    "filterOperations": "Filter operations",
+    "filterEmpty": "No operation matches that filter."
   },
   "notFound": {
     "eyebrow": "404",

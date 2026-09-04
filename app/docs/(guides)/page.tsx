@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { copy } from '@/lib/copy'
-import { DocsNav } from './_components/DocsNav'
 
 /*
  * The docs index (MOTIR-4046) — the landing page for the eight surfaces,
@@ -63,7 +62,6 @@ export default function DocsIndexPage() {
 
   return (
     <>
-      <DocsNav />
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.indexTitle}
       </h1>

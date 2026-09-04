@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import CliPage from '@/app/docs/cli/page'
+import CliPage from '@/app/docs/(guides)/cli/page'
 import { groupCliCommands, parseCliCommands } from '@/lib/docs'
 
 /*
@@ -148,7 +148,7 @@ describe('the page keeps NO copy of what the catalogue carries', () => {
   it('contains no hard-coded server URL of its own', () => {
     // The card's own criterion, and it is a NEGATIVE for a reason: a positive
     // assertion that the URL appears on the page would pass on a typed one.
-    const source = readFileSync('app/docs/cli/page.tsx', 'utf8')
+    const source = readFileSync('app/docs/(guides)/cli/page.tsx', 'utf8')
     expect(source).not.toContain('https://app.motir.co')
   })
 
@@ -167,7 +167,7 @@ describe('the page keeps NO copy of what the catalogue carries', () => {
      * flags to the page instead of letting the catalogue carry them — which is
      * the drift the card is actually about.
      */
-    const source = readFileSync('app/docs/cli/page.tsx', 'utf8')
+    const source = readFileSync('app/docs/(guides)/cli/page.tsx', 'utf8')
 
     // A CSS custom property is not a CLI flag. They are the only other thing in
     // this file spelled with two leading dashes.

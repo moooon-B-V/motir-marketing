@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import SandboxPage from '@/app/docs/sandbox/page'
+import SandboxPage from '@/app/docs/(guides)/sandbox/page'
 
 /*
  * The sandbox guide's shape (MOTIR-4392).
