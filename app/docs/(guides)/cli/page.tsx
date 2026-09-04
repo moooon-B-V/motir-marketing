@@ -48,8 +48,35 @@ import { CodeBlock } from '../../_components/DocSchema'
  * page renders the unreachable state, which is the honest answer and not a
  * regression: the alternative is a committed list, which is the thing being
  * removed. motir-core merges first.
+ *
+ * ── ⚠️ *Where Motir keeps things* IS BACK (MOTIR-4429) ──────────────────────
+ * The deleted page carried a `files` section naming the credential store and
+ * the project link with the path of each; the restore dropped it, and
+ * MOTIR-4397's parity ledger measured that. It is AUTHORED prose, deliberately:
+ * the published catalogue carries commands, flags and the default server, and
+ * no file path at all — so there is nothing to derive it from, and `lib/docs.ts`'s
+ * own carve-out is what allows it. Read from `motir-core`
+ * `packages/cli/src/help.ts`'s FILES topic on `origin/main`, which is the same
+ * text `motir help files` prints.
+ *
+ * ⚠️ AND THE CARD SAID *THREE* WHERE THE DELETED PAGE NAMED *TWO* — the card is
+ * right and its history is not. The deleted `files` section listed the
+ * credential store and the project link; the session exclude list is a THIRD
+ * file the CLI grew afterwards, and `motir help files` names all three today.
+ * So this restores the shipped set rather than the deleted one, which is the
+ * only version that is true. Recorded because a later reader diffing this
+ * against `95a2d4468^` will find one row that was never there.
  */
 export const dynamic = 'force-dynamic'
+
+export const metadata = {
+  title: copy.docs.metaTitleCli,
+  description: copy.docs.metaDescriptionCli,
+}
+
+/** motir-core's own CLI reference — the authority beyond this page. */
+const CLI_REFERENCE_URL =
+  'https://github.com/moooon-B-V/motir-core/blob/main/docs/cli.md'
 
 function Intro() {
   return (
@@ -201,6 +228,87 @@ export default async function CliPage() {
       ))}
 
       <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
+        Where Motir keeps things
+      </h2>
+      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        Three files, and only one of them holds a secret — it is not the one
+        that lives in your repository. Every path below can be relocated;{' '}
+        <code className="rounded-(--radius-kbd) bg-(--el-muted) px-1.5 py-0.5 font-(family-name:--font-mono) text-[13px]">
+          motir help files
+        </code>{' '}
+        prints them from the binary you actually installed, with the variable
+        that moves each one.
+      </p>
+      <dl className="mt-3 max-w-[68ch] space-y-4 text-[14px] leading-relaxed text-(--el-text-secondary)">
+        <div>
+          <dt className="font-(family-name:--font-mono) text-[13px] break-all text-(--el-text)">
+            ~/.config/motir/config.json{' '}
+            <span className="font-(family-name:--font-sans) text-[12px] font-semibold text-(--el-text-strong)">
+              — secret, never commit
+            </span>
+          </dt>
+          <dd className="m-0 mt-1">
+            The credential store: the only file a personal access token is ever
+            written to,{' '}
+            <code className="font-(family-name:--font-mono) text-[13px]">
+              chmod 600
+            </code>{' '}
+            inside a{' '}
+            <code className="font-(family-name:--font-mono) text-[13px]">
+              0700
+            </code>{' '}
+            directory, keyed by server URL so one machine can hold tokens for
+            several Motir servers. It also holds the agent command you
+            configured. Relocate it with{' '}
+            <code className="font-(family-name:--font-mono) text-[13px]">
+              MOTIR_CONFIG_HOME
+            </code>{' '}
+            or{' '}
+            <code className="font-(family-name:--font-mono) text-[13px]">
+              XDG_CONFIG_HOME
+            </code>
+            .
+          </dd>
+        </div>
+        <div>
+          <dt className="font-(family-name:--font-mono) text-[13px] break-all text-(--el-text)">
+            .motir.json{' '}
+            <span className="font-(family-name:--font-sans) text-[12px] font-semibold text-(--el-text-strong)">
+              — no secret, safe to commit
+            </span>
+          </dt>
+          <dd className="m-0 mt-1">
+            The project link at your workspace root: the server, workspace and
+            project this folder is bound to, plus an optional repository
+            override map. It carries no credential, so it belongs in version
+            control. Every command resolves it by walking UPWARD from the
+            current directory, so any command works from inside any checkout
+            under the root.
+          </dd>
+        </div>
+        <div>
+          <dt className="font-(family-name:--font-mono) text-[13px] break-all text-(--el-text)">
+            ~/.local/state/motir/session-excludes.json{' '}
+            <span className="font-(family-name:--font-sans) text-[12px] font-semibold text-(--el-text-strong)">
+              — no secret
+            </span>
+          </dt>
+          <dd className="m-0 mt-1">
+            The session exclude list: the work items whose dispatch FAILED, so
+            the next run moves past them instead of re-picking the same failure.
+            State rather than a credential, which is why it does not sit beside
+            the token — the sandbox mounts the config directory read-only, and a
+            run must never die because it could not write this file. If it is
+            unwritable Motir warns once and continues. Relocate it with{' '}
+            <code className="font-(family-name:--font-mono) text-[13px]">
+              MOTIR_STATE_HOME
+            </code>
+            .
+          </dd>
+        </div>
+      </dl>
+
+      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
         Where a run executes
       </h2>
       <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
@@ -221,7 +329,24 @@ export default async function CliPage() {
         >
           {copy.docs.mcp}
         </Link>
-        .
+        , and driving the same work loop over HTTP is the{' '}
+        <Link
+          href="/docs/api"
+          className="text-(--el-accent-on-surface) underline underline-offset-2"
+        >
+          {copy.docs.api}
+        </Link>
+        . The full command reference — the three run shapes, session branches,
+        the failure policy and troubleshooting — is{' '}
+        <a
+          href={CLI_REFERENCE_URL}
+          rel="noreferrer noopener"
+          target="_blank"
+          className="text-(--el-accent-on-surface) underline underline-offset-2"
+        >
+          docs/cli.md
+        </a>{' '}
+        in motir-core.
       </p>
     </>
   )

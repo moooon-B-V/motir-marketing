@@ -64,6 +64,11 @@ import {
  */
 export const dynamic = 'force-dynamic'
 
+export const metadata = {
+  title: copy.docs.metaTitleReference,
+  description: copy.docs.metaDescriptionReference,
+}
+
 function Operation({ operation }: { operation: ApiOperation }) {
   const id = operationAnchorId(operation)
   return (
@@ -218,7 +223,19 @@ export default async function ApiReferencePage() {
       </h1>
       <p className="mt-2 text-[13px] text-(--el-text-secondary)">
         {spec.info.title} · version {spec.info.version} · {operations.length}{' '}
-        operations
+        operations ·{' '}
+        {/* ⚠️ THE DOCUMENT ITSELF, RESTORED (MOTIR-4429). The deleted
+            motir-core page linked the spec path beside this line; the move
+            dropped it, so a reader who wanted to point a code generator at the
+            contract had to guess its URL. It is built from the ONE configured
+            origin, like every other door out of this repository. */}
+        <a
+          className="text-(--el-accent-on-surface) underline underline-offset-2"
+          href={`${APP_ORIGIN}/api/openapi/v1.json`}
+          rel="noreferrer noopener"
+        >
+          /api/openapi/v1.json
+        </a>
       </p>
       <p className="mt-4 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
         {copy.docs.apiIntro}

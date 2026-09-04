@@ -34,6 +34,11 @@ import { copy } from '@/lib/copy'
  * send a customer looking for a state their screen does not have.
  */
 
+export const metadata = {
+  title: copy.docs.metaTitlePublicAddress,
+  description: copy.docs.metaDescriptionPublicAddress,
+}
+
 const STATUSES: { label: string; meaning: string; action: string }[] = [
   {
     label: 'Not verified',

@@ -207,17 +207,47 @@ test.describe('the docs rail below the breakpoint', () => {
  */
 
 /**
- * The one `/docs` route whose whole page is shorter than a 1440×900 viewport.
+ * The `/docs` route whose whole page fits inside {@link SHORT_VIEWPORT}.
  *
- * ⚠️ IT IS SHORT BECAUSE ITS CONTENT IS THIN, WHICH IS A PROPERTY OF THE PAGE
- * AND NOT OF THE SHELL — `MOTIR-4429` restores this page's client-wiring guide,
- * and on the day that lands this route stops being the instance. The premise
- * assertion below is what makes that a RED test rather than a silent pass:
- * a route that no longer satisfies "the page does not scroll" fails here and
- * says so, and the fix is to point this constant at whichever route is then
- * the short one — never to delete the case.
+ * ⚠️ RE-POINTED BY MOTIR-4429, EXACTLY AS THE NOTE BELOW ANTICIPATED — and the
+ * viewport moved with it, which the note did not anticipate and which is the
+ * part worth reading.
+ *
+ * ~~The one `/docs` route whose whole page is shorter than a 1440×900 viewport.
+ * It is SHORT because its content is thin, which is a property of the page and
+ * not of the shell — `MOTIR-4429` restores this page's client-wiring guide, and
+ * on the day that lands this route stops being the instance. The premise
+ * assertion below is what makes that a RED test rather than a silent pass: a
+ * route that no longer satisfies "the page does not scroll" fails here and says
+ * so, and the fix is to point this constant at whichever route is then the
+ * short one — never to delete the case.~~
+ *
+ * That day is this one. `/docs/mcp` went from 359px of grid to a full wiring
+ * guide, and the premise assertion did what it was written to do. **What the
+ * note assumed was that some other route would be short at 900, and after
+ * MOTIR-4429 none is** — measured at 1440×900 on that branch: `/docs` 1248,
+ * `/docs/api/stability` 1849, `/docs/public-address` 3255, and every other
+ * route further away.
+ *
+ * So the case is kept by moving the OTHER term. "Shorter than the viewport" is
+ * a relation between a page and a window, and the window is a test parameter
+ * while the page is the product — {@link SHORT_VIEWPORT} is tall enough that
+ * the shortest route is genuinely short in it, and the premise below still
+ * asserts that rather than assuming it. Deleting the case was never an option:
+ * it is the only thing standing between the shipped layout and MOTIR-4465's
+ * defect, a rail that stops 224px above the footer on a page the viewport does
+ * not fill.
  */
-const SHORT_ROUTE = '/docs/mcp'
+const SHORT_ROUTE = '/docs'
+
+/**
+ * The window {@link SHORT_ROUTE} is short IN. Deliberately taller than
+ * {@link WIDE}: after MOTIR-4429 no documentation route fits in 900px, and a
+ * case about a page that does not fill its window needs a window the page does
+ * not fill. The width is `WIDE`'s, because the breakpoint behaviour under test
+ * is the same one.
+ */
+const SHORT_VIEWPORT = { width: WIDE.width, height: 1800 }
 
 /**
  * The rail against the chrome around it: the landmark it should fill, and the
@@ -254,7 +284,7 @@ async function measureAgainstChrome(page: import('@playwright/test').Page) {
 }
 
 test.describe('the docs rail on a page shorter than the viewport', () => {
-  test.use({ viewport: WIDE })
+  test.use({ viewport: SHORT_VIEWPORT })
 
   test("the rail's surface reaches the footer", async ({ page }) => {
     const response = await page.goto(SHORT_ROUTE)
@@ -276,7 +306,7 @@ test.describe('the docs rail on a page shorter than the viewport', () => {
      */
     expect(
       documentHeight,
-      `${SHORT_ROUTE} now scrolls, so it is no longer the short-page case this test exists for — point SHORT_ROUTE at a route that is`,
+      `${SHORT_ROUTE} scrolls at ${SHORT_VIEWPORT.height}px, so it is no longer the short-page case this test exists for — point SHORT_ROUTE at a route that is short in this window, or raise SHORT_VIEWPORT until the shortest route is. Never delete the case: it is the only guard on MOTIR-4465.`,
     ).toBeLessThanOrEqual(viewportHeight + 1)
 
     // The defect: the painted surface is the height of its CONTENT, so it ends

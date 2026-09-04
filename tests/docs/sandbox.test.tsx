@@ -35,12 +35,20 @@ describe('the sandbox guide is instructions, not a definition', () => {
   })
 
   it('documents the five things a reader needs: start, environment, grant, output, failures', () => {
+    // ⚠️ WIDENED BY MOTIR-4429 — three sections the deleted motir-core page
+    // carried and this one had lost. The list is EXACT rather than a subset
+    // check, deliberately: it is what makes a section quietly disappearing a
+    // red test rather than a shorter page nobody measures, which is the family
+    // of defect MOTIR-4375 → MOTIR-4429 is entirely made of.
     const { container } = render(<SandboxPage />)
     const headings = [...container.querySelectorAll('h2')].map(
       (heading) => heading.textContent ?? '',
     )
     expect(headings).toEqual([
+      'What it confines — and what it does not',
+      'Before you start',
       'Start one',
+      'Or start it from VS Code instead',
       'Inside: link, check, run',
       'What the environment gives you',
       'What the token may do — and what it refuses',
@@ -48,6 +56,92 @@ describe('the sandbox guide is instructions, not a definition', () => {
       'When it does not work',
       'What this page does not cover',
     ])
+  })
+
+  /*
+   * ── The three restored sections (MOTIR-4429) ──────────────────────────────
+   *
+   * Each case asserts the FACT the section exists to carry, not the heading —
+   * a heading is already pinned above, and a section that kept its title while
+   * losing its content is the exact shape MOTIR-4397's ledger found.
+   */
+
+  it('says the NETWORK is open, so the confinement claim is not read as total', () => {
+    // The page's opening paragraph says an agent "reaches your work tree and
+    // not the rest of your machine". The deleted page qualified that: egress
+    // is NOT confined. A confinement claim with its exception deleted is a
+    // different and false claim, which is why this is a correction as much as
+    // a restore — `Network` and `unprivileged` each appeared ZERO times.
+    const { container } = render(<SandboxPage />)
+    const text = container.textContent ?? ''
+    expect(text).toMatch(/Network\s*—\s*OPEN, by design/)
+    expect(text).toContain(
+      'confines the filesystem blast radius and not egress',
+    )
+    expect(text).toContain('uid 1000')
+  })
+
+  it('states the prerequisites, INCLUDING the arm64 fact', () => {
+    const { container } = render(<SandboxPage />)
+    const text = container.textContent ?? ''
+    expect(text).toContain('Docker, running')
+    expect(text).toContain('linux/arm64')
+    expect(text).toContain('nothing is emulated')
+    // The folder you mount CONTAINS your checkouts — drawn as a tree, because
+    // the sentence alone is what the page had been reduced to.
+    const panes = [...container.querySelectorAll('pre')].map(
+      (pane) => pane.textContent ?? '',
+    )
+    expect(panes.join('\n')).toContain('start the container from HERE')
+  })
+
+  it('documents the VS Code path, with the heredoc quoted', () => {
+    const { container } = render(<SandboxPage />)
+    const text = container.textContent ?? ''
+    expect(text).toContain('Dev Containers')
+    const panes = [...container.querySelectorAll('pre')].map(
+      (pane) => pane.textContent ?? '',
+    )
+    const code = panes.join('\n')
+    expect(code).toContain('.devcontainer/devcontainer.json')
+
+    // ⚠️ THE DELIMITER IS QUOTED, and that is the assertion worth having.
+    // Unquoted, the shell expands the two substitutions to empty strings on
+    // the way into the file and the reader gets a container that mounts
+    // nothing and finds no credential — a silent failure strictly worse than
+    // being stuck. Review cannot be relied on to notice a missing quote.
+    expect(code).toContain("<<'JSON'")
+    expect(code).toContain('${localWorkspaceFolder}')
+    expect(code).toContain('${localEnv:HOME}')
+  })
+
+  it('builds BOTH devcontainer blocks from one object, so they cannot disagree', () => {
+    // The listing and the heredoc show the same config under two captions. Two
+    // typed copies is a `mounts` entry corrected in one of them and published
+    // wrong in the other.
+    const { container } = render(<SandboxPage />)
+    const panes = [...container.querySelectorAll('pre')].map(
+      (pane) => pane.textContent ?? '',
+    )
+    const withMount = panes.filter((pane) => pane.includes('"workspaceMount"'))
+    expect(withMount.length).toBe(2)
+
+    const heredoc = withMount.find((pane) => pane.includes("<<'JSON'"))
+    const listing = withMount.find((pane) => !pane.includes("<<'JSON'"))
+    expect(heredoc).toBeDefined()
+    expect(listing).toBeDefined()
+    // The heredoc CONTAINS the listing verbatim — which is only true if one is
+    // interpolated into the other rather than typed twice.
+    expect(heredoc).toContain(listing!)
+  })
+
+  it('no longer records the VS Code path as undocumented', () => {
+    // The closing paragraph said the editor integrations "are not documented
+    // here yet" — a deleted section recorded as a decision. It was neither.
+    const { container } = render(<SandboxPage />)
+    expect(container.textContent).not.toMatch(
+      /editor integrations, are not documented/,
+    )
   })
 
   it('lists the grant the SHIPPED constant carries, not the card’s four', () => {

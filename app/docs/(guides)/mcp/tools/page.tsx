@@ -56,6 +56,11 @@ import { SchemaTable } from '../../../_components/DocSchema'
  */
 export const dynamic = 'force-dynamic'
 
+export const metadata = {
+  title: copy.docs.metaTitleMcpTools,
+  description: copy.docs.metaDescriptionMcpTools,
+}
+
 /** How deep the argument tables render — stated, as the producer states what it emits. */
 function ToolArguments({ tool }: { tool: McpToolEntry }) {
   if (!tool.inputSchema) {
