@@ -83,21 +83,21 @@ the page links into it. **The content column keeps its 46rem measure** — long-
 constrained by the reading measure, not by the container, so widening it to fill the space the rail
 left over would make every page harder to read in order to use the space.
 
-| Element             | Primitive         | Colour                                                     | Shape                                                         |
-| ------------------- | ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
-| Rail                | `Sidebar` grammar | `--el-sidebar-bg`, right border `--el-border`              | spans the row; `.rail-inner` sticks inside it                 |
-| Find box            | `Input`           | bg `--el-page-bg`, border `--el-border-strong`             | `--radius-input`, `--height-input`, `--spacing-input-x`       |
-| `/` hint            | `<kbd>` chip      | border `--el-border`, text `--el-text-secondary`           | `--radius-kbd`, `--spacing-kbd-x/y`                           |
-| Group heading       | `SectionLabel`    | `--el-text-secondary`                                      | —                                                             |
-| Rail row            | sidebar row       | `--el-text-secondary`; hover `--el-muted`                  | `--radius-control`, `--height-control`, `--spacing-control-x` |
-| Rail row, active    | sidebar row       | bg `--el-muted`, text `--el-text`, 600                     | `--shadow-subtle`                                             |
-| Verb chip (rail)    | `Pill`            | tint background, `--el-text-strong` ink                    | `--radius-badge`                                              |
-| Verb chip (heading) | `Pill`            | tint background, `--el-text-strong` ink, `min-width: 52px` | `--radius-badge`, `--spacing-chip-x/y`                        |
-| Status chip         | `Pill`            | tint background, `--el-text-strong` ink, `min-width: 42px` | `--radius-badge`, `--spacing-chip-x/y`                        |
-| Scope chip          | `Pill`            | `--el-tint-lavender`, `--el-text-strong` ink               | `--radius-badge`, `--spacing-chip-x/y`                        |
-| Spec table          | plain `<table>`   | header `--el-text-secondary`, cells `--el-text-secondary`  | rules `--el-border` / `--el-border-soft`                      |
-| Code pane           | `CodeBlock`       | caption on `--el-surface`, body on `--el-page-bg`          | `--radius-card`                                               |
-| Unreachable card    | `Card`            | `--el-surface`, border `--el-border`                       | `--radius-card`                                               |
+| Element             | Primitive         | Colour                                                     | Shape                                                                   |
+| ------------------- | ----------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Rail                | `Sidebar` grammar | `--el-sidebar-bg`, right border `--el-border`              | spans the row, which fills the landmark; `.rail-inner` sticks inside it |
+| Find box            | `Input`           | bg `--el-page-bg`, border `--el-border-strong`             | `--radius-input`, `--height-input`, `--spacing-input-x`                 |
+| `/` hint            | `<kbd>` chip      | border `--el-border`, text `--el-text-secondary`           | `--radius-kbd`, `--spacing-kbd-x/y`                                     |
+| Group heading       | `SectionLabel`    | `--el-text-secondary`                                      | —                                                                       |
+| Rail row            | sidebar row       | `--el-text-secondary`; hover `--el-muted`                  | `--radius-control`, `--height-control`, `--spacing-control-x`           |
+| Rail row, active    | sidebar row       | bg `--el-muted`, text `--el-text`, 600                     | `--shadow-subtle`                                                       |
+| Verb chip (rail)    | `Pill`            | tint background, `--el-text-strong` ink                    | `--radius-badge`                                                        |
+| Verb chip (heading) | `Pill`            | tint background, `--el-text-strong` ink, `min-width: 52px` | `--radius-badge`, `--spacing-chip-x/y`                                  |
+| Status chip         | `Pill`            | tint background, `--el-text-strong` ink, `min-width: 42px` | `--radius-badge`, `--spacing-chip-x/y`                                  |
+| Scope chip          | `Pill`            | `--el-tint-lavender`, `--el-text-strong` ink               | `--radius-badge`, `--spacing-chip-x/y`                                  |
+| Spec table          | plain `<table>`   | header `--el-text-secondary`, cells `--el-text-secondary`  | rules `--el-border` / `--el-border-soft`                                |
+| Code pane           | `CodeBlock`       | caption on `--el-surface`, body on `--el-page-bg`          | `--radius-card`                                                         |
+| Unreachable card    | `Card`            | `--el-surface`, border `--el-border`                       | `--radius-card`                                                         |
 
 **⚠️ THE RAIL SPANS THE ROW, AND ITS STICKY REGION IS A CHILD OF IT — two elements, not one
 (MOTIR-4432).** The surface (`--el-sidebar-bg` + the right border) is painted by the rail itself,
@@ -111,6 +111,32 @@ stopped where the last nav row ended: 648px above the bottom of the reading colu
 alone trades the defect for the opposite one, a rail that scrolls away. **So the grid states
 `align-items: stretch`, and the sticky lives one level down.** The panels below draw the corrected
 shape; the shipped components mirror it element for element (`DocsShell.tsx` · `DocsRail.tsx`).
+
+**⚠️ AND THE ROW FILLS THE LANDMARK — THE THIRD ELEMENT, ADDED BECAUSE TWO WAS NOT ENOUGH
+(MOTIR-4465).** A rail as tall as its row says nothing about how tall the ROW is, and the row was
+sized by its own content: on a page shorter than the viewport (`/docs/mcp` — 359px of grid in a
+900px window) the tint and the right border stopped **224px above the footer**, with the page
+background under them. The same sidebar-drawn-as-a-floating-box reading MOTIR-4432 removed, reached
+by the other axis. So the rule is a chain of three, and each link is a different element:
+
+| what                                        | which element | how                                                |
+| ------------------------------------------- | ------------- | -------------------------------------------------- |
+| the row fills the landmark                  | the docs grid | `md:grow`, inside a `md:flex md:flex-col` `<main>` |
+| the surface fills the row                   | the `<nav>`   | the grid's default `align-items: stretch`          |
+| the sticky region is a child of the surface | `.rail-inner` | `position: sticky`, its own `max-height`           |
+
+**The chain is gated at `md`, and that is part of the rule rather than an implementation detail.**
+Below the breakpoint the rail is a band ABOVE the content (panel 7), and a grid stretched to the
+viewport there distributes its leftover space across the auto rows and inflates that band. Panel 3
+is where this is drawn: a SHORT prose page, whose rail reaches the bottom of the frame although its
+content does not.
+
+**Why the panels carry `min-height` on `.site` and never on `.docs`.** `.site` is the viewport
+stand-in — the landmark column between the bar and the footer — so a height there is a statement
+about the WINDOW, which is what a page's shortness is relative to. A height on `.docs` states that
+the row is tall, which is the very thing the asset is supposed to be depicting as a CONSEQUENCE. An
+asset that props the row up directly draws a full-height rail on every panel and is silent about the
+case where the rail has to earn it; that silence is what let MOTIR-4465 through a faithful build.
 
 **Content-column typography.** `h1` is `--font-serif` at 30px (the shipped `/docs` value, unchanged);
 an operation summary is 16px semibold; a section eyebrow is 11px uppercase `--el-text-secondary`.
