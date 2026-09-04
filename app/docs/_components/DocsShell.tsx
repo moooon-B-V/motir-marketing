@@ -13,6 +13,11 @@ import type { RailOperation } from '@/lib/docs'
  * `/docs/api` or below" is a fact about where a file lives rather than a
  * condition somebody has to keep true.
  *
+ * ⚠️ THE RAIL SPANS THE ROW; ITS STICKY REGION IS A CHILD OF IT. The grid is
+ * left at its default `align-items: stretch`, so the rail's surface is as tall
+ * as the reading column beside it — see the block comment on the element, and
+ * `design/docs/design-notes.md` § "The one structural change".
+ *
  * ⚠️ THE CONTENT COLUMN KEEPS ITS 46rem MEASURE. The rail takes space beside it
  * rather than out of it: long-form prose is constrained by the reading measure,
  * not by the container, so widening the column to fill what the rail left over
@@ -33,8 +38,20 @@ export function DocsShell({
        the single track took its width from the 46rem reading column and the
        rail stretched to 736px inside a 390px viewport, scrolling the whole page
        sideways. `minmax(0,1fr)` is what stops a grid child from setting the
-       track's width. Caught by rendering at 390px, not by any test. */
-    <div className="grid grid-cols-[minmax(0,1fr)] items-start md:grid-cols-[264px_minmax(0,1fr)]">
+       track's width. Caught by rendering at 390px, not by any test.
+
+       ⚠️ AND THERE IS NO `items-start` HERE — DO NOT PUT ONE BACK (MOTIR-4432).
+       It was here to make the rail's `position: sticky` engage, and it did:
+       `align-items: start` shrinks a grid item to its own content, and a sticky
+       element only sticks while it is shorter than what scrolls past it. But
+       the rail is also the element that PAINTS the surface, so shrinking it
+       ended `--el-sidebar-bg` and the right border 648px above the bottom of
+       the reading column on `/docs`, and 85500px above it on `/docs/api` — a
+       sidebar drawn as a floating box. The two jobs are now separated: this
+       row STRETCHES the rail, and the sticky region lives in a wrapper INSIDE
+       it (`DocsRail.tsx`). Deleting that wrapper and restoring `items-start`
+       trades the defect back. */
+    <div className="grid grid-cols-[minmax(0,1fr)] md:grid-cols-[264px_minmax(0,1fr)]">
       <DocsRail operations={operations} />
       <div className="w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
         {children}

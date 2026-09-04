@@ -411,17 +411,27 @@
       .docs {
         display: grid;
         grid-template-columns: 264px minmax(0, 1fr);
-        align-items: start;
+        /* ⚠️ STRETCH, and it is stated rather than left to the default so that
+           nobody re-adds `align-items: start` (MOTIR-4432). `start` shrinks the
+           rail to its own rows, and the rail is the element that PAINTS the
+           surface — so the tint and the right border stopped partway down the
+           page and the sidebar read as a floating box. The rail spans the row;
+           the sticky region is `.rail-inner`, inside it. */
+        align-items: stretch;
         min-height: 620px;
       }
       .rail {
-        position: sticky;
-        top: 0;
-        align-self: start;
-        max-height: 100%;
-        overflow: auto;
+        /* The SURFACE, and nothing else. No sticky, no max-height, no padding:
+           those belong to `.rail-inner` below, because a full-height element
+           cannot stick and a shrunk one cannot span. */
         border-right: 1px solid var(--el-border);
         background: var(--el-sidebar-bg);
+      }
+      .rail-inner {
+        position: sticky;
+        top: 0;
+        max-height: 100vh;
+        overflow: auto;
         padding: 20px 14px 28px;
       }
       .rail .find {
@@ -765,9 +775,12 @@
         min-height: 0;
       }
       .narrow .rail {
-        position: static;
         border-right: 0;
         border-bottom: 1px solid var(--el-border);
+      }
+      .narrow .rail-inner {
+        position: static;
+        max-height: none;
         padding: 14px;
       }
       .narrow .rail .ops-group,
@@ -910,112 +923,129 @@
 
             <div class="docs">
               <nav class="rail" aria-label="Documentation">
-                <div class="find">
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    aria-hidden="true"
-                    style="color: var(--el-text-secondary); flex: none"
-                  >
-                    <circle cx="11" cy="11" r="7" />
-                    <path d="m20 20-3.5-3.5" />
-                  </svg>
-                  <input placeholder="Filter operations" aria-label="Filter" />
-                  <kbd>/</kbd>
+                <div class="rail-inner">
+                  <div class="find">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                      style="color: var(--el-text-secondary); flex: none"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m20 20-3.5-3.5" />
+                    </svg>
+                    <input
+                      placeholder="Filter operations"
+                      aria-label="Filter"
+                    />
+                    <kbd>/</kbd>
+                  </div>
+                  <p class="count">49 operations</p>
+
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs">Overview</a></li>
+                    <li>
+                      <a class="current" href="/docs/api">API reference</a>
+                    </li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Public address</a></li>
+                  </ul>
+
+                  <p class="group">API reference</p>
+                  <ul>
+                    <li>
+                      <a href="/docs/api/getting-started">Getting started</a>
+                    </li>
+                    <li>
+                      <a href="/docs/api/stability"
+                        >Stability &amp; deprecation</a
+                      >
+                    </li>
+                  </ul>
+
+                  <p class="group ops-group">Work items</p>
+                  <ul class="ops-list">
+                    <li>
+                      <a href="#listWorkItems"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a class="current" href="#createWorkItem"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-mint)"
+                          >POST</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a href="#getWorkItem"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items/{key}</span></a
+                      >
+                    </li>
+                    <li>
+                      <a href="#updateWorkItem"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-peach)"
+                          >PATCH</span
+                        ><span class="op">/work-items/{key}</span></a
+                      >
+                    </li>
+                  </ul>
+
+                  <p class="group ops-group">Projects</p>
+                  <ul class="ops-list">
+                    <li>
+                      <a href="#listProjects"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/projects</span></a
+                      >
+                    </li>
+                    <li>
+                      <a href="#getProject"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/projects/{projectKey}</span></a
+                      >
+                    </li>
+                  </ul>
+
+                  <p class="group ops-group">Sprints</p>
+                  <ul class="ops-list">
+                    <li>
+                      <a href="#listSprints"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/sprints</span></a
+                      >
+                    </li>
+                  </ul>
                 </div>
-                <p class="count">49 operations</p>
-
-                <p class="group">Documentation</p>
-                <ul>
-                  <li><a href="/docs">Overview</a></li>
-                  <li><a class="current" href="/docs/api">API reference</a></li>
-                  <li><a href="/docs/mcp">MCP server</a></li>
-                  <li><a href="/docs/cli">CLI</a></li>
-                  <li><a href="/docs/sandbox">Sandbox</a></li>
-                  <li><a href="/docs/public-address">Public address</a></li>
-                </ul>
-
-                <p class="group">API reference</p>
-                <ul>
-                  <li>
-                    <a href="/docs/api/getting-started">Getting started</a>
-                  </li>
-                  <li>
-                    <a href="/docs/api/stability"
-                      >Stability &amp; deprecation</a
-                    >
-                  </li>
-                </ul>
-
-                <p class="group ops-group">Work items</p>
-                <ul class="ops-list">
-                  <li>
-                    <a href="#listWorkItems"
-                      ><span class="verb" style="background: var(--el-tint-sky)"
-                        >GET</span
-                      ><span class="op">/work-items</span></a
-                    >
-                  </li>
-                  <li>
-                    <a class="current" href="#createWorkItem"
-                      ><span
-                        class="verb"
-                        style="background: var(--el-tint-mint)"
-                        >POST</span
-                      ><span class="op">/work-items</span></a
-                    >
-                  </li>
-                  <li>
-                    <a href="#getWorkItem"
-                      ><span class="verb" style="background: var(--el-tint-sky)"
-                        >GET</span
-                      ><span class="op">/work-items/{key}</span></a
-                    >
-                  </li>
-                  <li>
-                    <a href="#updateWorkItem"
-                      ><span
-                        class="verb"
-                        style="background: var(--el-tint-peach)"
-                        >PATCH</span
-                      ><span class="op">/work-items/{key}</span></a
-                    >
-                  </li>
-                </ul>
-
-                <p class="group ops-group">Projects</p>
-                <ul class="ops-list">
-                  <li>
-                    <a href="#listProjects"
-                      ><span class="verb" style="background: var(--el-tint-sky)"
-                        >GET</span
-                      ><span class="op">/projects</span></a
-                    >
-                  </li>
-                  <li>
-                    <a href="#getProject"
-                      ><span class="verb" style="background: var(--el-tint-sky)"
-                        >GET</span
-                      ><span class="op">/projects/{projectKey}</span></a
-                    >
-                  </li>
-                </ul>
-
-                <p class="group ops-group">Sprints</p>
-                <ul class="ops-list">
-                  <li>
-                    <a href="#listSprints"
-                      ><span class="verb" style="background: var(--el-tint-sky)"
-                        >GET</span
-                      ><span class="op">/sprints</span></a
-                    >
-                  </li>
-                </ul>
               </nav>
 
               <main class="room">
@@ -1338,15 +1368,17 @@ curl -X POST 'https://app.motir.co/api/v1/projects/{projectKey}/work-items' \
           <div class="site">
             <div class="docs" style="min-height: 380px">
               <nav class="rail" aria-label="Documentation">
-                <p class="group">Documentation</p>
-                <ul>
-                  <li><a href="/docs">Overview</a></li>
-                  <li><a href="/docs/api">API reference</a></li>
-                  <li><a href="/docs/mcp">MCP server</a></li>
-                  <li><a href="/docs/cli">CLI</a></li>
-                  <li><a class="current" href="/docs/sandbox">Sandbox</a></li>
-                  <li><a href="/docs/public-address">Public address</a></li>
-                </ul>
+                <div class="rail-inner">
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs">Overview</a></li>
+                    <li><a href="/docs/api">API reference</a></li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a class="current" href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Public address</a></li>
+                  </ul>
+                </div>
               </nav>
               <main class="room">
                 <h1>Sandbox</h1>
@@ -1407,55 +1439,57 @@ docker run -it --name motir-sandbox \
                     border: 1px solid var(--el-border);
                   "
                 >
-                  <div class="find">
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="14"
-                      height="14"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      aria-hidden="true"
-                      style="color: var(--el-text-secondary); flex: none"
-                    >
-                      <circle cx="11" cy="11" r="7" />
-                      <path d="m20 20-3.5-3.5" />
-                    </svg>
-                    <input value="work-item" aria-label="Filter" />
-                    <kbd>/</kbd>
+                  <div class="rail-inner">
+                    <div class="find">
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="14"
+                        height="14"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        aria-hidden="true"
+                        style="color: var(--el-text-secondary); flex: none"
+                      >
+                        <circle cx="11" cy="11" r="7" />
+                        <path d="m20 20-3.5-3.5" />
+                      </svg>
+                      <input value="work-item" aria-label="Filter" />
+                      <kbd>/</kbd>
+                    </div>
+                    <p class="count">6 of 49 operations</p>
+                    <p class="group ops-group">Work items</p>
+                    <ul class="ops-list">
+                      <li>
+                        <a href="#a"
+                          ><span
+                            class="verb"
+                            style="background: var(--el-tint-sky)"
+                            >GET</span
+                          ><span class="op">/work-items</span></a
+                        >
+                      </li>
+                      <li>
+                        <a class="current" href="#b"
+                          ><span
+                            class="verb"
+                            style="background: var(--el-tint-mint)"
+                            >POST</span
+                          ><span class="op">/work-items</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#c"
+                          ><span
+                            class="verb"
+                            style="background: var(--el-tint-sky)"
+                            >GET</span
+                          ><span class="op">/work-items/{key}</span></a
+                        >
+                      </li>
+                    </ul>
                   </div>
-                  <p class="count">6 of 49 operations</p>
-                  <p class="group ops-group">Work items</p>
-                  <ul class="ops-list">
-                    <li>
-                      <a href="#a"
-                        ><span
-                          class="verb"
-                          style="background: var(--el-tint-sky)"
-                          >GET</span
-                        ><span class="op">/work-items</span></a
-                      >
-                    </li>
-                    <li>
-                      <a class="current" href="#b"
-                        ><span
-                          class="verb"
-                          style="background: var(--el-tint-mint)"
-                          >POST</span
-                        ><span class="op">/work-items</span></a
-                      >
-                    </li>
-                    <li>
-                      <a href="#c"
-                        ><span
-                          class="verb"
-                          style="background: var(--el-tint-sky)"
-                          >GET</span
-                        ><span class="op">/work-items/{key}</span></a
-                      >
-                    </li>
-                  </ul>
                 </nav>
               </div>
               <div>
@@ -1545,15 +1579,17 @@ docker run -it --name motir-sandbox \
           <div class="site">
             <div class="docs" style="min-height: 340px">
               <nav class="rail" aria-label="Documentation">
-                <p class="group">Documentation</p>
-                <ul>
-                  <li><a class="current" href="/docs">Overview</a></li>
-                  <li><a href="/docs/api">API reference</a></li>
-                  <li><a href="/docs/mcp">MCP server</a></li>
-                  <li><a href="/docs/cli">CLI</a></li>
-                  <li><a href="/docs/sandbox">Sandbox</a></li>
-                  <li><a href="/docs/public-address">Public address</a></li>
-                </ul>
+                <div class="rail-inner">
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a class="current" href="/docs">Overview</a></li>
+                    <li><a href="/docs/api">API reference</a></li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Public address</a></li>
+                  </ul>
+                </div>
               </nav>
               <main class="room">
                 <h1>Documentation</h1>
@@ -1609,16 +1645,20 @@ docker run -it --name motir-sandbox \
           <div class="site">
             <div class="docs" style="min-height: 300px">
               <nav class="rail" aria-label="Documentation">
-                <p class="group">Documentation</p>
-                <ul>
-                  <li><a href="/docs">Overview</a></li>
-                  <li><a class="current" href="/docs/api">API reference</a></li>
-                  <li><a href="/docs/mcp">MCP server</a></li>
-                  <li><a href="/docs/cli">CLI</a></li>
-                </ul>
-                <p class="count" style="margin-top: 14px">
-                  The operation list is unavailable.
-                </p>
+                <div class="rail-inner">
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs">Overview</a></li>
+                    <li>
+                      <a class="current" href="/docs/api">API reference</a>
+                    </li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                  </ul>
+                  <p class="count" style="margin-top: 14px">
+                    The operation list is unavailable.
+                  </p>
+                </div>
               </nav>
               <main class="room">
                 <h1>API reference</h1>
@@ -1680,25 +1720,30 @@ docker run -it --name motir-sandbox \
             </header>
             <div class="docs">
               <nav class="rail" aria-label="Documentation">
-                <div class="find">
-                  <input placeholder="Filter operations" aria-label="Filter" />
-                  <kbd>/</kbd>
+                <div class="rail-inner">
+                  <div class="find">
+                    <input
+                      placeholder="Filter operations"
+                      aria-label="Filter"
+                    />
+                    <kbd>/</kbd>
+                  </div>
+                  <button class="disclosure" aria-expanded="false">
+                    <span>API reference · 49 operations</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
                 </div>
-                <button class="disclosure" aria-expanded="false">
-                  <span>API reference · 49 operations</span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="16"
-                    height="16"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    aria-hidden="true"
-                  >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </button>
               </nav>
               <main class="room">
                 <h1>API reference</h1>
@@ -1739,36 +1784,45 @@ docker run -it --name motir-sandbox \
           <div class="site">
             <div class="docs" style="min-height: 320px">
               <nav class="rail" aria-label="Documentation">
-                <div class="find">
-                  <input placeholder="Filter operations" aria-label="Filter" />
-                  <kbd>/</kbd>
+                <div class="rail-inner">
+                  <div class="find">
+                    <input
+                      placeholder="Filter operations"
+                      aria-label="Filter"
+                    />
+                    <kbd>/</kbd>
+                  </div>
+                  <p class="count">49 operations</p>
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs">Overview</a></li>
+                    <li>
+                      <a class="current" href="/docs/api">API reference</a>
+                    </li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                  </ul>
+                  <p class="group ops-group">Work items</p>
+                  <ul class="ops-list">
+                    <li>
+                      <a href="#a"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a class="current" href="#b"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-mint)"
+                          >POST</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                  </ul>
                 </div>
-                <p class="count">49 operations</p>
-                <p class="group">Documentation</p>
-                <ul>
-                  <li><a href="/docs">Overview</a></li>
-                  <li><a class="current" href="/docs/api">API reference</a></li>
-                  <li><a href="/docs/cli">CLI</a></li>
-                </ul>
-                <p class="group ops-group">Work items</p>
-                <ul class="ops-list">
-                  <li>
-                    <a href="#a"
-                      ><span class="verb" style="background: var(--el-tint-sky)"
-                        >GET</span
-                      ><span class="op">/work-items</span></a
-                    >
-                  </li>
-                  <li>
-                    <a class="current" href="#b"
-                      ><span
-                        class="verb"
-                        style="background: var(--el-tint-mint)"
-                        >POST</span
-                      ><span class="op">/work-items</span></a
-                    >
-                  </li>
-                </ul>
               </nav>
               <main class="room">
                 <div class="op-head">
