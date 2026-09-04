@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { copy } from '@/lib/copy'
-import { DocsNav } from '../_components/DocsNav'
 
 /*
  * The PUBLIC ADDRESS guide (Story MOTIR-3878 · MOTIR-4227, corrected by
@@ -83,7 +82,6 @@ const STATUSES: { label: string; meaning: string; action: string }[] = [
 export default function PublicAddressDocsPage() {
   return (
     <>
-      <DocsNav current="/docs/public-address" />
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.publicAddress}
       </h1>

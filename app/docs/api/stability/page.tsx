@@ -1,5 +1,4 @@
 import { copy } from '@/lib/copy'
-import { DocsNav } from '../../_components/DocsNav'
 
 /*
  * The stability & deprecation policy (MOTIR-4046) — committed prose, matching
@@ -9,7 +8,6 @@ import { DocsNav } from '../../_components/DocsNav'
 export default function StabilityPage() {
   return (
     <>
-      <DocsNav current="/docs/api/stability" />
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.apiStability}
       </h1>
