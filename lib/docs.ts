@@ -437,6 +437,24 @@ export interface McpToolEntry {
   name: string
   permission: string
   summary: string
+  /**
+   * The tool's ARGUMENTS — the draft-07 JSON Schema `tools/list` serves for it,
+   * as motir-core publishes it (MOTIR-4389 / MOTIR-4394).
+   *
+   * ⚠️ OPTIONAL, AND DELIBERATELY SO. It is a field the producer ADDED, and the
+   * two repositories deploy independently: a consumer that required it would go
+   * red on every request between this page shipping and motir-core's deploy
+   * landing — turning a documentation improvement into an outage on the merge
+   * ORDER, which nobody controls. The parse tolerates its absence and the page
+   * SAYS the arguments are not published rather than implying a tool takes
+   * none. That is the boundary-contract rule: the consumer is written so either
+   * merge order is safe.
+   *
+   * `undefined` and `{ properties: {} }` are DIFFERENT answers and the page
+   * renders them differently — "not published by this Motir version" versus
+   * "takes no arguments".
+   */
+  inputSchema?: OpenApiSchema
 }
 
 /** One group — a permission, and the tools it gates. */
@@ -546,6 +564,13 @@ export function parseMcpToolCatalogue(value: unknown): McpToolCatalogue {
           name: requireString(entry, 'name', at),
           permission: requireString(entry, 'permission', at),
           summary: requireString(entry, 'summary', at),
+          // Read when present, absent when not — never invented. A value that
+          // is present but not an object is treated as absent rather than as a
+          // parse failure: this field is outside the shape contract (see
+          // `McpToolEntry.inputSchema`), so it may not redden the page.
+          ...(isRecord(entry.inputSchema)
+            ? { inputSchema: entry.inputSchema as OpenApiSchema }
+            : {}),
         }
       }),
     }
