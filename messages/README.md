@@ -191,6 +191,20 @@ is the key SHAPE the build reads and **the unshipped-claim guard**: the closing
 line's `designShowcase` decision 4 is a rule with a reason, and a rule with a
 reason is exactly what a later editor restores in good faith. It is asserted.
 
+**⚠️ AND THE CATALOGUE IS NOT THE ONLY SURFACE ANY MORE — the sweeps above are
+scoped to this file and cannot see a page (MOTIR-4508).** `lib/docs.ts`'s
+carve-out makes the `/docs` guide pages AUTHORED documentation, so they render
+sentences no catalogue holds — and `/docs/sandbox` shipped "holding a coding
+agent" past a green test named for exactly that phrase. The second half of the
+rule therefore lives in **`tests/docs/terminology.test.tsx`**, which runs the
+same three predicates over what every `/docs` page RENDERS, found by walking
+`app/docs` rather than by naming the routes. Note what it is NOT: a second
+`grep`. That sentence was line-wrapped by JSX across `a coding` / `agent`, so
+`grep -rn "coding agent" app/` returned nothing on the unfixed tree. **A string
+typed into a page is guarded by the render check; a string in this catalogue is
+guarded by `tests/copy.test.ts`. Neither file covers the other's surface, and
+prose written anywhere else is covered by neither.**
+
 ## Deliberately not here
 
 - **Social proof / directory badges** — fed by 8.3.9, which owns both the listings and
