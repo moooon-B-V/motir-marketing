@@ -58,7 +58,10 @@ export default async function WorkspaceRootPage() {
   if (read.status === 'not-found') notFound()
   if (read.status === 'failed') {
     return (
-      <SiteShell contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10">
+      <SiteShell
+        host={host}
+        contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10"
+      >
         <ErrorState what="this workspace’s projects" />
       </SiteShell>
     )
@@ -71,7 +74,10 @@ export default async function WorkspaceRootPage() {
   const { workspace, projects } = read.data
 
   return (
-    <SiteShell contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10">
+    <SiteShell
+      host={host}
+      contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10"
+    >
       <header>
         <p className="flex items-center gap-1.5 text-[13px] text-(--el-text-secondary)">
           <Building2 className="h-3.5 w-3.5 flex-none" aria-hidden />

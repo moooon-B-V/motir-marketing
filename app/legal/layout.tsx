@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { copy } from '@/lib/copy'
 import { SiteShell } from '@/app/_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /**
  * The legal-document shell (MOTIR-4009).
@@ -49,7 +50,10 @@ export default function LegalLayout({
        them used to open with `<main className="mx-auto … max-w-[46rem] …">`;
        the landmark now belongs to the chrome, so the box it carried travels
        with it. Identical values, one place. */
-    <SiteShell contentClassName="mx-auto w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
+    <SiteShell
+      host={SITE_HOST}
+      contentClassName="mx-auto w-full max-w-[46rem] px-(--spacing-card-padding) py-10"
+    >
       {children}
     </SiteShell>
   )

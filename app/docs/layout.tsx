@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { copy } from '@/lib/copy'
 import { SiteShell } from '@/app/_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /**
  * The docs shell (MOTIR-4046, narrowed by MOTIR-4396). Composes the same chrome
@@ -29,5 +30,5 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function DocsLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <SiteShell>{children}</SiteShell>
+  return <SiteShell host={SITE_HOST}>{children}</SiteShell>
 }

@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SiteHeader } from '@/app/_components/SiteHeader'
+import { SITE_HOST } from '@/lib/publicHost'
 import { copy } from '@/lib/copy'
 import sitemap from '@/app/sitemap'
 import { siteUrl } from '@/lib/siteOrigin'
@@ -35,13 +36,13 @@ function bar() {
 
 describe('the Design nav entry', () => {
   it('ships in the desktop bar, beside Explore and Docs', () => {
-    render(<SiteHeader />)
+    render(<SiteHeader host={SITE_HOST} />)
     const link = within(bar()).getByRole('link', { name: copy.nav.design })
     expect(link).toHaveAttribute('href', '/design')
   })
 
   it('Explore and Docs are now next/links — the bar is fully same-origin', () => {
-    render(<SiteHeader />)
+    render(<SiteHeader host={SITE_HOST} />)
     // Explore and Docs moved onto motir.co (MOTIR-4045 / MOTIR-4046), so both
     // are site-relative (a `next/link`); nothing in the bar is cross-origin
     // except the app doors (Sign in / Start free).
@@ -61,14 +62,14 @@ describe('the Design nav entry', () => {
   })
 
   it('exposes the current page to assistive technology on /design, and only there', () => {
-    render(<SiteHeader />)
+    render(<SiteHeader host={SITE_HOST} />)
     expect(
       within(bar()).getByRole('link', { name: copy.nav.design }),
     ).not.toHaveAttribute('aria-current')
 
     pathname.value = '/design'
     screen.getByRole('banner')
-    render(<SiteHeader />)
+    render(<SiteHeader host={SITE_HOST} />)
     const onPage = screen
       .getAllByRole('link', { name: copy.nav.design })
       .filter((el) => el.getAttribute('aria-current') === 'page')
@@ -86,7 +87,7 @@ describe('the Design nav entry', () => {
      * asserted beside the ink rather than left to the eye.
      */
     pathname.value = '/design'
-    render(<SiteHeader />)
+    render(<SiteHeader host={SITE_HOST} />)
     const link = screen.getAllByRole('link', { name: copy.nav.design })[0]
     expect(link.className).toContain('text-(--el-accent-on-surface)')
     expect(link.className).toContain('font-semibold')
@@ -95,7 +96,7 @@ describe('the Design nav entry', () => {
   it('draws the treatment in the md:hidden panel TOO, not only on desktop', async () => {
     pathname.value = '/design'
     const user = userEvent.setup()
-    render(<SiteHeader />)
+    render(<SiteHeader host={SITE_HOST} />)
     await user.click(screen.getByRole('button', { name: copy.nav.menu }))
     const panel = document.getElementById('site-menu')
     expect(panel).not.toBeNull()

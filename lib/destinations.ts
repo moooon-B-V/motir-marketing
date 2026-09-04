@@ -87,6 +87,48 @@ export const LEGAL_TERMS = '/legal/terms'
 export const LEGAL_INDEX = '/legal'
 
 /**
+ * The site's own root — what the brand lockup in the bar and the footer links,
+ * and the 404 room's second door.
+ *
+ * It is a CONSTANT rather than a `"/"` literal because it is a SITE link like
+ * every other one below, and on a tenant host it has to be spelled absolutely
+ * (MOTIR-4372). `SiteHeader` and `SiteFooter` both already said so in prose —
+ * *"the ONE internal link on the page — motir.co's own root"* — while emitting a
+ * href that resolves to the TENANT's root on two host kinds out of three.
+ */
+export const SITE_ROOT = '/'
+
+/**
+ * The design specimen (MOTIR-1043) — the site's first internal second route,
+ * and until MOTIR-4372 the one nav destination spelled as a literal inside
+ * `SiteHeader` rather than named here.
+ */
+export const DESIGN = '/design'
+
+/**
+ * EVERY same-origin path this site's shared chrome can emit.
+ *
+ * ⚠️ IT IS A SET SO THAT A GUARD CAN QUANTIFY OVER IT. The defect MOTIR-4372
+ * records was not that one link was wrong — all seven were, identically, on
+ * every host kind but one — so a test that names three of them proves nothing
+ * about the fourth. `tests/host/chromeLinks.test.tsx` renders the chrome on each
+ * host kind and asserts over THIS list, so a site link added later is covered by
+ * the guard the moment it is added here.
+ *
+ * `SOURCE_REPO` and every `APP_ORIGIN` door are absent on purpose: they are
+ * already absolute, on a host that is not this one.
+ */
+export const SITE_PATHS = [
+  SITE_ROOT,
+  EXPLORE,
+  DOCS,
+  DESIGN,
+  LEGAL_INDEX,
+  LEGAL_TERMS,
+  LEGAL_PRIVACY,
+] as const
+
+/**
  * The account pane the Privacy Policy's §7 sends a reader to in order to
  * EXERCISE their GDPR Art. 15/17 rights — export their data and delete their
  * account (motir-core MOTIR-1136).

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { SiteShell } from '@/app/_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 import { ErrorState } from '@/app/p/[identifier]/_components/States'
 
 /**
@@ -33,9 +34,27 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+/*
+ * ⚠️ `SITE_HOST` HERE IS WHAT THIS PAGE CAN KNOW, NOT WHERE IT IS
+ * (MOTIR-4372 · MOTIR-4430). Every other surface wearing this chrome is
+ * reached through `proxy.ts`'s `forwardWithHost`, which sets the three host
+ * headers; this landing pad is reached through `rewriteTo`, which sets NONE — so
+ * `requestPublicHost()` here would answer `SITE_HOST` anyway, and asking would
+ * only make the route dynamic to learn nothing.
+ *
+ * The consequence is a live defect and it is FILED rather than described:
+ * MOTIR-4430. On a tenant host this page still emits `/explore`, `/docs`,
+ * `/design` and the legal paths as root-relative links, which 404 there. Fixing
+ * it is a change to the ROUTER — and on the branches where the router holds no
+ * resolution at all, a decision about what a `PublicAddressKind` should be for
+ * a host that is neither this site nor a resolved tenant. That card owns it.
+ */
 export default function HostUnavailablePage() {
   return (
-    <SiteShell contentClassName="mx-auto flex w-full max-w-[46rem] flex-col justify-center px-(--spacing-card-padding) py-16">
+    <SiteShell
+      host={SITE_HOST}
+      contentClassName="mx-auto flex w-full max-w-[46rem] flex-col justify-center px-(--spacing-card-padding) py-16"
+    >
       <ErrorState what="this address" />
     </SiteShell>
   )

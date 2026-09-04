@@ -7,7 +7,15 @@ import { ArrowRight, Menu } from 'lucide-react'
 import { BrandMark } from '@motir/brand'
 import { buttonVariants, cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
-import { DOCS, EXPLORE, FREE_DOOR, SIGN_IN } from '@/lib/destinations'
+import {
+  DESIGN,
+  DOCS,
+  EXPLORE,
+  FREE_DOOR,
+  SIGN_IN,
+  SITE_ROOT,
+} from '@/lib/destinations'
+import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
 
 /*
  * The top bar — the `ExploreTopBar` pattern (`--el-surface-soft` fill, an
@@ -41,44 +49,102 @@ import { DOCS, EXPLORE, FREE_DOOR, SIGN_IN } from '@/lib/destinations'
  */
 
 /*
- * `internal: true` is what makes an item a `next/link` with a current-page
- * treatment. Every other destination in this bar is a different ORIGIN, where
- * neither prefetching, client routing nor `aria-current` means anything.
+ * The bar's three nav destinations, as the SITE PATHS they are — the href each
+ * one actually gets is `siteLinkFor(host, path)`, because this same chrome is
+ * worn by every tenant host and these three pages exist on `motir.co` alone.
  *
- * Explore and Docs are now same-origin (MOTIR-4045 / MOTIR-4046): both live on
- * this host, so each is a `next/link` that marks itself current on its surface
- * and its sub-pages. Only the root and `/design` remain alongside them.
+ * Explore and Docs are same-origin (MOTIR-4045 / MOTIR-4046) and `/design` has
+ * been since it shipped (MOTIR-1043), so on the SITE all three are `next/link`s
+ * that mark themselves current on their surface and its sub-pages.
+ *
+ * ⚠️ AND OFF THE SITE ALL THREE STOP BEING `next/link`s (MOTIR-4372) — the rule
+ * this file already applied to the app doors, now applied to the site's own
+ * pages on the hosts where they are a different ORIGIN. It is not a tidiness
+ * point: a same-origin `next/link` is RSC-PREFETCHED on render, so before this
+ * card every load of every tenant page fetched `/explore`, `/docs` and `/design`
+ * and took three 404s before the visitor touched anything. Neither prefetching,
+ * client routing nor `aria-current` means anything across origins.
  */
 const navItems = [
-  { href: EXPLORE, label: copy.nav.explore, internal: true },
-  { href: DOCS, label: copy.nav.docs, internal: true },
-  { href: '/design', label: copy.nav.design, internal: true },
+  { path: EXPLORE, label: copy.nav.explore },
+  { path: DOCS, label: copy.nav.docs },
+  { path: DESIGN, label: copy.nav.design },
 ] as const
 
-/** Whether an internal item is the page being read. Explore and Docs each cover
- * their sub-pages, so they match the `/explore/` / `/docs/` prefix too. */
-const isCurrent = (href: string, pathname: string) =>
-  href === '/explore' || href === '/docs'
-    ? pathname === href || pathname.startsWith(`${href}/`)
-    : pathname === href
+/**
+ * Whether an item is the page being read. Explore and Docs each cover their
+ * sub-pages, so they match the `/explore/` / `/docs/` prefix too.
+ *
+ * ⚠️ ASKED OF THE SITE PATH AND ONLY ON THE SITE. Off it the item is a link to
+ * another origin and can never be the current page — and the guard is not
+ * merely redundant there: a workspace whose project identifier is `explore`
+ * serves that project at `acme.motir.site/explore`, where a pathname test alone
+ * would light the nav item up on a page that is not the Explore surface.
+ */
+const isCurrent = (host: PublicHost, path: string, pathname: string) =>
+  host.kind !== 'site'
+    ? false
+    : path === EXPLORE || path === DOCS
+      ? pathname === path || pathname.startsWith(`${path}/`)
+      : pathname === path
+
+/**
+ * One chrome link, rendered as what it IS on this host: a `next/link` when the
+ * destination is same-origin, a plain `<a>` when it is not.
+ *
+ * ⚠️ IT EXISTS BECAUSE THE ANSWER IS PER-HOST AND THE MARKUP IS NOT. Before
+ * MOTIR-4372 `internal` was a per-item CONSTANT — three items hard-coded `true`
+ * — which is correct on `motir.co` and wrong on every tenant host, where the
+ * same three destinations are a different origin. Making it a prop is what lets
+ * one component answer for both, and putting it HERE is what stops the bar and
+ * the `md:hidden` panel from drifting: they are two branches rendering the same
+ * items, which is exactly how a treatment ends up existing on desktop only.
+ */
+function ChromeLink({
+  href,
+  internal,
+  children,
+  ...rest
+}: Readonly<
+  {
+    href: string
+    internal: boolean
+    children: React.ReactNode
+  } & React.AnchorHTMLAttributes<HTMLAnchorElement>
+>) {
+  return internal ? (
+    <Link href={href} {...rest}>
+      {children}
+    </Link>
+  ) : (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  )
+}
 
 const NAV_ITEM = 'text-[13.5px]'
 const NAV_REST = 'text-(--el-text-secondary) hover:text-(--el-text)'
 const NAV_CURRENT = 'font-semibold text-(--el-accent-on-surface)'
 
-export function SiteHeader() {
+export function SiteHeader({ host }: { host: PublicHost }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  const onSite = host.kind === 'site'
 
   return (
     <header className="border-b border-(--el-border) bg-(--el-surface-soft)">
       <div className="flex items-center justify-between gap-4 px-4 py-2.5 sm:px-(--spacing-card-padding) sm:py-3">
-        {/* The ONE internal link on the page — motir.co's own root. Every
-            other destination is a different ORIGIN and stays a plain `<a>`:
-            `next/link` prefetches and client-routes, neither of which means
-            anything across origins. */}
-        <Link
-          href="/"
+        {/* motir.co's own root — internal ON THE SITE, and an absolute link
+            HOME from a tenant host, where `/` is that workspace's or that
+            project's root rather than ours (MOTIR-4372). This comment used to
+            call it "the ONE internal link on the page", which was true of the
+            host it was written on and of no other. Every destination that is a
+            different ORIGIN stays a plain `<a>`: `next/link` prefetches and
+            client-routes, neither of which means anything across origins. */}
+        <ChromeLink
+          href={siteLinkFor(host, SITE_ROOT)}
+          internal={onSite}
           aria-label={copy.nav.brandAriaLabel}
           className="flex flex-none items-center"
         >
@@ -87,37 +153,26 @@ export function SiteHeader() {
               aria-hidden inside BrandMark: a lockup is decoration plus visible
               text, never both an image and a label. */}
           <BrandMark size={26} label="Motir" />
-        </Link>
+        </ChromeLink>
 
         <nav
           aria-label={copy.nav.ariaLabel}
           className="hidden items-center gap-5 md:flex"
         >
-          {navItems.map((item) =>
-            item.internal ? (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={
-                  isCurrent(item.href, pathname) ? 'page' : undefined
-                }
-                className={cn(
-                  NAV_ITEM,
-                  isCurrent(item.href, pathname) ? NAV_CURRENT : NAV_REST,
-                )}
+          {navItems.map((item) => {
+            const current = isCurrent(host, item.path, pathname)
+            return (
+              <ChromeLink
+                key={item.path}
+                href={siteLinkFor(host, item.path)}
+                internal={onSite}
+                aria-current={current ? 'page' : undefined}
+                className={cn(NAV_ITEM, current ? NAV_CURRENT : NAV_REST)}
               >
                 {item.label}
-              </Link>
-            ) : (
-              <a
-                key={item.href}
-                href={item.href}
-                className={cn(NAV_ITEM, NAV_REST)}
-              >
-                {item.label}
-              </a>
-            ),
-          )}
+              </ChromeLink>
+            )
+          })}
         </nav>
 
         <div className="flex flex-none items-center gap-2">
@@ -177,33 +232,29 @@ export function SiteHeader() {
               open panel (panel 4) rather than describing it, for that
               reason. */}
           {[
-            ...navItems,
-            { href: SIGN_IN, label: copy.nav.signIn, internal: false },
-          ].map((item) =>
-            item.internal ? (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={
-                  isCurrent(item.href, pathname) ? 'page' : undefined
-                }
-                className={cn(
-                  NAV_ITEM,
-                  isCurrent(item.href, pathname) ? NAV_CURRENT : NAV_REST,
-                )}
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <a
-                key={item.href}
-                href={item.href}
-                className={cn(NAV_ITEM, NAV_REST)}
-              >
-                {item.label}
-              </a>
-            ),
-          )}
+            ...navItems.map((item) => ({
+              href: siteLinkFor(host, item.path),
+              label: item.label,
+              internal: onSite,
+              current: isCurrent(host, item.path, pathname),
+            })),
+            {
+              href: SIGN_IN,
+              label: copy.nav.signIn,
+              internal: false,
+              current: false,
+            },
+          ].map((item) => (
+            <ChromeLink
+              key={item.href}
+              href={item.href}
+              internal={item.internal}
+              aria-current={item.current ? 'page' : undefined}
+              className={cn(NAV_ITEM, item.current ? NAV_CURRENT : NAV_REST)}
+            >
+              {item.label}
+            </ChromeLink>
+          ))}
         </nav>
       ) : null}
     </header>
