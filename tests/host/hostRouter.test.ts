@@ -305,6 +305,53 @@ describe('a retired subdomain', () => {
     expect(location.pathname).toBe('/PROD/items')
     expect(location.search).toBe('?cursor=w9')
   })
+
+  it('takes the scheme and port from the VISITOR, in both environments', async () => {
+    // ⚠️ ONE TABLE, ONE FUNCTION, TWO ENVIRONMENTS (MOTIR-4447), and that is
+    // the point rather than a style choice: the two rows are the two readings
+    // of "the port the visitor reached us on", and the defect was that they
+    // disagree while `request.nextUrl` answers only one of them. Split into two
+    // tests, either could be made green by breaking the other — which is
+    // exactly what shipped, because the browser lane covers only the second row
+    // and covers it BECAUSE the app really is on that port there.
+    //
+    // Live counterfactual, 2026-09-04, before this fix:
+    //   curl -sI https://tak.motir.site/MOTIR
+    //   → 301, location: https://hey.motir.site:8080/MOTIR   (chain dead, 1 hop)
+    const cases: {
+      what: string
+      url: string
+      headers: Record<string, string>
+      expected: string
+    }[] = [
+      {
+        what: 'behind a proxy that terminates TLS (Fly: 443 in, 8080 on)',
+        // What the machine actually receives: the internal address, on the
+        // internal port, over http — with the visitor's own address forwarded.
+        url: 'http://motir-marketing.internal:8080/PROD/items?cursor=w9',
+        headers: {
+          'x-forwarded-host': 'old.motir.site',
+          'x-forwarded-proto': 'https',
+        },
+        expected: 'https://acme.localhost/PROD/items?cursor=w9',
+      },
+      {
+        what: 'a local run or the browser lane, where nothing is forwarded',
+        // `e2e/stub/origin.ts`'s ALIAS_ORIGIN shape: the app really IS on 4318,
+        // so the port must survive or the browser is sent to :80.
+        url: 'http://old.localhost:4318/PROD/items?cursor=w9',
+        headers: {},
+        expected: 'http://acme.localhost:4318/PROD/items?cursor=w9',
+      },
+    ]
+
+    for (const { what, url, headers, expected } of cases) {
+      resolveHost.mockResolvedValue(ALIAS)
+      const res = await proxy(request(url, headers))
+      expect(res.status, what).toBe(301)
+      expect(res.headers.get('location'), what).toBe(expected)
+    }
+  })
 })
 
 describe('the two failures stay apart', () => {

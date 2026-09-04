@@ -184,3 +184,129 @@ test.describe('the docs rail below the breakpoint', () => {
     expect(scrolled.inner.top).toBeLessThan(inner.top)
   })
 })
+
+/*
+ * ══════════════════════════════════════════════════════════════════════════
+ * THE SHORT PAGE (MOTIR-4465) — the case the block above is STRUCTURALLY
+ * unable to reach, and it is not an oversight to widen it into: it is a
+ * SECOND defect that the first one's instrument could not see.
+ *
+ * `MOTIR-4432` measured the rail against the READING COLUMN, and both tests
+ * above are that measurement. On `/docs/mcp` the rail equals its column
+ * exactly — 359px against 359px — so the card recorded the defect as
+ * "invisible there" and the premise assertion in the first test
+ * (`column.height - inner.height > 200`) excludes the route by construction.
+ * What neither measurement asks is whether the rail reaches the FOOTER, and
+ * on a page shorter than the viewport it does not: the docs grid takes its
+ * height from its content while the `main` landmark around it stretches, so
+ * the tint ends 224px above the footer and the sidebar reads as a stub.
+ *
+ * Hence a different pair of boxes — the rail and the FOOTER — and a premise
+ * that pins the case rather than excluding it: the page must not scroll.
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+
+/**
+ * The one `/docs` route whose whole page is shorter than a 1440×900 viewport.
+ *
+ * ⚠️ IT IS SHORT BECAUSE ITS CONTENT IS THIN, WHICH IS A PROPERTY OF THE PAGE
+ * AND NOT OF THE SHELL — `MOTIR-4429` restores this page's client-wiring guide,
+ * and on the day that lands this route stops being the instance. The premise
+ * assertion below is what makes that a RED test rather than a silent pass:
+ * a route that no longer satisfies "the page does not scroll" fails here and
+ * says so, and the fix is to point this constant at whichever route is then
+ * the short one — never to delete the case.
+ */
+const SHORT_ROUTE = '/docs/mcp'
+
+/**
+ * The rail against the chrome around it: the landmark it should fill, and the
+ * footer that should meet it.
+ */
+async function measureAgainstChrome(page: import('@playwright/test').Page) {
+  return page.evaluate(() => {
+    const rail = document.querySelector<HTMLElement>(
+      'nav[aria-label="Documentation"]',
+    )
+    if (!rail) throw new Error('no rail: nav[aria-label="Documentation"]')
+
+    const main = document.getElementById('main')
+    if (!main) throw new Error('no main landmark: #main')
+    if (!main.contains(rail))
+      throw new Error('the rail is not inside the landmark')
+
+    const footer = document.querySelector('footer')
+    if (!footer)
+      throw new Error('no footer: the page did not render the chrome')
+
+    const box = (el: Element) => {
+      const r = el.getBoundingClientRect()
+      return { top: r.top, height: r.height, width: r.width, bottom: r.bottom }
+    }
+    return {
+      rail: box(rail),
+      main: box(main),
+      footer: box(footer),
+      documentHeight: document.documentElement.scrollHeight,
+      viewportHeight: window.innerHeight,
+    }
+  })
+}
+
+test.describe('the docs rail on a page shorter than the viewport', () => {
+  test.use({ viewport: WIDE })
+
+  test("the rail's surface reaches the footer", async ({ page }) => {
+    const response = await page.goto(SHORT_ROUTE)
+    expect(response?.status(), `${SHORT_ROUTE} did not serve a document`).toBe(
+      200,
+    )
+    await expect(
+      page.getByRole('navigation', { name: 'Documentation' }),
+    ).toBeVisible()
+
+    const { rail, main, footer, documentHeight, viewportHeight } =
+      await measureAgainstChrome(page)
+
+    /*
+     * ⚠️ THE PREMISE IS ASSERTED FIRST, and here it is the whole point of the
+     * case rather than a guard on a vacuous one: this test is about a page the
+     * viewport does not fill. If `${SHORT_ROUTE}` grows past the fold, the
+     * assertion below stops being about anything and this line says so.
+     */
+    expect(
+      documentHeight,
+      `${SHORT_ROUTE} now scrolls, so it is no longer the short-page case this test exists for — point SHORT_ROUTE at a route that is`,
+    ).toBeLessThanOrEqual(viewportHeight + 1)
+
+    // The defect: the painted surface is the height of its CONTENT, so it ends
+    // above the footer with the page background showing under it — 224px of it
+    // on `/docs/mcp` before this was fixed.
+    expect(
+      footer.top - rail.bottom,
+      'the rail stops above the footer: the docs row does not fill the landmark',
+    ).toBeLessThanOrEqual(1)
+
+    // Stated as the mechanism as well as the symptom, so a fix that reaches the
+    // footer by growing the FOOTER (or by padding the rail) does not pass.
+    expect(Math.abs(rail.height - main.height)).toBeLessThanOrEqual(1)
+  })
+})
+
+test.describe('the short page below the breakpoint', () => {
+  test.use({ viewport: NARROW })
+
+  test('nothing full-height leaks below the breakpoint', async ({ page }) => {
+    await page.goto(SHORT_ROUTE)
+    await expect(
+      page.getByRole('navigation', { name: 'Documentation' }),
+    ).toBeVisible()
+
+    const { rail, column } = await measure(page)
+
+    // The rail is still a band ABOVE the content, not a column filling the
+    // viewport: whatever makes it full-height at `md` is gated on `md`.
+    expect(rail.bottom).toBeLessThanOrEqual(column.top + 1)
+    expect(Math.abs(rail.width - column.width)).toBeLessThanOrEqual(1)
+  })
+})
