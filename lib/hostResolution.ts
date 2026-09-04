@@ -186,7 +186,25 @@ export async function resolveHost(rawHost: string): Promise<HostRead> {
 export const ROUTER_PATHS = {
   /** A workspace subdomain's root: that workspace's public-project list. */
   workspaceRoot: '/w',
-  /** No route matches it, so Next renders `app/not-found.tsx` with a 404. */
+  /**
+   * No route matches it, so Next renders `app/not-found.tsx` with a 404.
+   *
+   * ⚠️ IT STAYS UNMATCHED, AND MOTIR-4430 BUILT THE ALTERNATIVE AND MEASURED IT
+   * BACK OUT. Turning this into a real segment is the obvious way to hand the
+   * 404 room the request's host — a `page.tsx` that calls `notFound()` beside a
+   * `not-found.tsx` that reads the headers — and on `next@16.2.6` it does not
+   * work: a NESTED `not-found.tsx` renders only while it is SYNCHRONOUS. Made
+   * `async`, or given an async child, it silently produces an empty document
+   * (measured in `next dev`: `/host-unknown` answered 404 with no chrome, no
+   * room and no error in the log). `NextResponse.rewrite(dest, { status: 404 })`
+   * was measured too and is IGNORED — the rewritten page answers 200, which is
+   * the soft-404 this whole surface exists to avoid.
+   *
+   * So the room does not ask which host it is on. It spells every `motir.co`
+   * path ABSOLUTELY on every host, which is correct on all of them and needs no
+   * request read at all — `app/not-found.tsx` carries the full reasoning and
+   * what the alternatives cost.
+   */
   notFound: '/_host-unknown',
   /** A real route rendering the ERROR state — never a 404. */
   unavailable: '/host-unavailable',

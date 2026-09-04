@@ -144,6 +144,29 @@ describe('readPublicHost — what a page believes about its address', () => {
     expect(readPublicHost(headers({}))).toEqual(SITE_HOST)
   })
 
+  it('reads `unresolved` as a real kind, carrying the host (MOTIR-4430)', () => {
+    /*
+     * The fourth shape: a host that is neither this site nor a tenant the
+     * contract resolved. It arrives with a host and an origin like any tenant
+     * kind — the router reads both off the request rather than off the
+     * contract — and the whole point is that it is NOT `SITE_HOST`, because
+     * `siteLinkFor` branches on the kind.
+     */
+    expect(
+      readPublicHost(
+        headers({
+          [PUBLIC_ADDRESS_KIND_HEADER]: 'unresolved',
+          [PUBLIC_HOST_HEADER]: 'Roadmap.Acme.com:443',
+          [PUBLIC_ORIGIN_HEADER]: 'https://roadmap.acme.com',
+        }),
+      ),
+    ).toEqual({
+      kind: 'unresolved',
+      host: 'roadmap.acme.com',
+      origin: 'https://roadmap.acme.com',
+    })
+  })
+
   it('refuses a kind it does not know rather than trusting the string', () => {
     // The headers are forgeable: the router OVERWRITES them on every request it
     // handles, but a request it never handled arrives with whatever was sent.

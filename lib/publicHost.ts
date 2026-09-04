@@ -45,8 +45,36 @@ import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
  * `site` is `motir.co` itself. `workspace` and `project` mirror the two tenant
  * cases of `motir-core`'s `PublicHostResolutionDto` — an `alias` never reaches
  * a page, because the router answers it with a 301.
+ *
+ * ── ⚠️ `unresolved` IS THE FOURTH SHAPE, AND IT IS NOT A TENANT (MOTIR-4430) ─
+ *
+ * A request can arrive on a host that is neither this site nor an address the
+ * contract could resolve. There are exactly three of them and `proxy.ts` names
+ * each one:
+ *
+ *   • the tenant BASE DOMAIN itself (`motir.site`), which has no row by
+ *     construction and is answered without a hop;
+ *   • a host the contract says it does NOT know (`read.status === 'not-found'`);
+ *   • a host the contract did not ANSWER for (`read.status === 'failed'`) — the
+ *     outage, which is precisely a real customer's domain while `app.motir.co`
+ *     restarts.
+ *
+ * Before this kind existed those three rendered the 404 room and
+ * `/host-unavailable` as {@link SITE_HOST}, so the shared chrome spelled
+ * `/explore`, `/docs`, `/design` and the legal paths ROOT-RELATIVE — against a
+ * host that serves none of them. The one thing all three know for certain is
+ * the thing that decides every link: **this is not `motir.co`**. So `unresolved`
+ * reads as "not the site" wherever a link is spelled ({@link siteLinkFor}) and
+ * as nothing else — it is never a project address, and no page under `app/p/**`
+ * is ever reached with it, because the router rewrites all three to one of its
+ * own two landing pads.
+ *
+ * It carries `host` and `origin` like a tenant kind, because the router knows
+ * both from the request itself — they are read off the forwarded headers rather
+ * than from the contract, so an unresolvable host has them exactly as a resolved
+ * one does.
  */
-export type PublicAddressKind = 'site' | 'workspace' | 'project'
+export type PublicAddressKind = 'site' | 'workspace' | 'project' | 'unresolved'
 
 /** The request's address, as the router resolved it. */
 export interface PublicHost {
@@ -72,6 +100,36 @@ export interface PublicHost {
 export const SITE_HOST: PublicHost = { kind: 'site', host: null, origin: null }
 
 /**
+ * FOR A DOCUMENT THAT CANNOT ASK WHICH HOST IT IS ON (MOTIR-4430).
+ *
+ * There is exactly one such surface and it is the 404 room. `app/not-found.tsx`
+ * is the GLOBAL not-found boundary, so it sits in every route's tree — and a
+ * `headers()` read there makes the entire application dynamic. Measured on a
+ * clean `pnpm build`: `/`, `/design`, `/docs`, `/docs/mcp`,
+ * `/docs/public-address`, `/docs/sandbox`, `/legal` and `/_not-found` all moved
+ * `○ (Static)` → `ƒ (Dynamic)`, and `/legal/[slug]` lost its seven SSG paths.
+ * `export const dynamic = 'force-dynamic'` does not scope it; that was measured
+ * too. Every alternative that would have let the room ask was measured and
+ * failed — see `app/not-found.tsx`.
+ *
+ * So the room takes THIS, and the answer it gets is right on every host: the
+ * `kind` is not `site`, so {@link siteLinkFor} spells every `motir.co` path
+ * ABSOLUTELY, which resolves to the same page on `motir.co` and to the only
+ * working one everywhere else. `host` and `origin` are null because nothing
+ * knows them — and nothing on that page reads them.
+ *
+ * ⚠️ IT IS NOT A DEFAULT AND IT IS NOT `SITE_HOST`'s SIBLING. A page that CAN
+ * read the request must read it: `app/host-unavailable/page.tsx` is its own
+ * route and does, and every `/p/**` surface has since MOTIR-4372. This constant
+ * exists for the one document whose asking is charged to every other page.
+ */
+export const UNKNOWN_HOST: PublicHost = {
+  kind: 'unresolved',
+  host: null,
+  origin: null,
+}
+
+/**
  * The two request headers the router sets, read back by
  * {@link requestPublicHost}.
  *
@@ -91,6 +149,7 @@ const KINDS: ReadonlySet<string> = new Set<PublicAddressKind>([
   'site',
   'workspace',
   'project',
+  'unresolved',
 ])
 
 /**
@@ -136,6 +195,10 @@ export function publicPathFor(
       // absent from the path. `''` is the root itself, not the empty string.
       return rest || '/'
     default:
+      // `site`, and `unresolved` with it. An `unresolved` host reaches only the
+      // router's own two landing pads (MOTIR-4430), neither of which renders a
+      // project path, so this arm is the site's shape and nothing is claimed
+      // about a host that has no projects to address.
       return `/p/${encodeURIComponent(identifier)}${rest}`
   }
 }
@@ -177,6 +240,13 @@ export function publicPathWithQuery(
  * redirect hop, no `next/link` lost — so this function is a no-op on the host
  * where the links were already right, and every change it makes is on a host
  * where the old answer was a 404.
+ *
+ * ⚠️ AND THE TEST IS `=== 'site'`, NOT A LIST OF TENANT KINDS (MOTIR-4430).
+ * That is what makes the fourth kind free: `unresolved` — the base domain, an
+ * unknown host, a host the contract could not answer for — is not the site, so
+ * it takes the absolute arm, which is the only arm that can work. A predicate
+ * written as `kind === 'workspace' || kind === 'project'` would have answered
+ * "relative" for a shape that did not exist when it was written.
  *
  * `path` is root-relative and starts with a slash: `'/'`, `'/explore'`,
  * `'/legal/terms'`.

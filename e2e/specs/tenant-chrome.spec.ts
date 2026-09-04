@@ -1,5 +1,11 @@
 import { expect, test, type Page } from '@playwright/test'
-import { CUSTOM_ORIGIN, SITE_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
+import {
+  BROKEN_ORIGIN,
+  CUSTOM_ORIGIN,
+  SITE_ORIGIN,
+  SITE_PORT,
+  TENANT_ORIGIN,
+} from '../stub/origin'
 
 /*
  * THE CHROME ON A TENANT HOST (MOTIR-4372) — the half no jsdom test can reach.
@@ -187,4 +193,164 @@ test('the SITE keeps the relative chrome it has always had', async ({
   }
   expect(hrefs.filter((h) => h.startsWith('https://motir.co'))).toEqual([])
   expect(failures, failures.join('\n')).toEqual([])
+})
+
+/*
+ * ⚠️ THE ROUTER'S OWN TWO LANDING PADS (MOTIR-4430) — the surfaces MOTIR-4372
+ * could not reach.
+ *
+ * That card made the chrome ask which host it is on, and every surface that
+ * could answer did. These two could not: `proxy.ts` reached them through a
+ * `rewriteTo` helper that forwarded no headers at all, so the page was told it
+ * was on `motir.co` and was right to believe it. The reproduction on the live
+ * deployment was `hey.motir.site/explore` — a 404 room offering six doors, all
+ * six of them 404s where the visitor was standing.
+ *
+ * ⚠️ AND THE ROOM'S OWN DOORS ARE THE HALF THE TESTS ABOVE CANNOT SEE.
+ * `Explore projects` and `Go to the homepage` live inside `<main>`, not in the
+ * chrome, and they were the two links a lost visitor is most likely to click —
+ * so `hrefsOf` is read over the WHOLE document here rather than over the bar
+ * and the footer alone.
+ *
+ * ⚠️ THE TWO SURFACES ANSWER FOR DIFFERENT REASONS, and the assertions cannot
+ * tell them apart — which is the point. `/host-unavailable` is an ordinary
+ * route and READS the request, so it knows it is on an `unresolved` host. The
+ * 404 room may not read anything: `app/not-found.tsx` is the GLOBAL not-found
+ * boundary, so a `headers()` read there makes the entire site dynamic
+ * (measured). It links absolutely on every host instead. Both end up emitting
+ * the same thing, and this spec asks for the emission rather than the mechanism.
+ *
+ * The base-domain branch (`host === TENANT_DOMAIN`) has no instance in this
+ * lane, and that is a property of the lane rather than a gap: the configured
+ * base domain here is `localhost`, which the router steps aside for as a LOCAL
+ * host before it ever reaches that branch. `tests/host/hostRouter.test.ts`
+ * covers it against the production value, with the base domain stubbed for
+ * exactly that reason.
+ */
+const STRANGER_ORIGIN = `http://stranger.localhost:${SITE_PORT}`
+
+for (const [label, url, status] of [
+  // A RESOLVED workspace host serving a path that is not one of its projects —
+  // the branch the card's reproduction takes, and the one where the router
+  // already held the answer and simply did not pass it on.
+  ['the 404 room on a resolved tenant host', `${TENANT_ORIGIN}/explore`, 404],
+  // A host the contract does not know: `unresolved`, and still not this site.
+  ['the 404 room on an unresolved host', `${STRANGER_ORIGIN}/`, 404],
+  // The OUTAGE. ⚠️ NEVER a 404, and the case that decided the fourth kind: it
+  // renders precisely when a real customer's domain is up and `app.motir.co` is
+  // restarting.
+  ['the host-unavailable page', `${BROKEN_ORIGIN}/`, 200],
+] as const) {
+  test(`${label} — every site path is absolute, none root-relative`, async ({
+    page,
+  }) => {
+    const response = await page.goto(url)
+    expect(response?.status(), `${url} did not answer ${status}`).toBe(status)
+
+    const hrefs = await hrefsOf(page)
+    // A guard on the guard: a page that rendered no chrome at all would satisfy
+    // everything below vacuously.
+    expect(hrefs.length).toBeGreaterThan(10)
+
+    for (const href of hrefs) {
+      if (href.startsWith('#')) continue
+      if (!href.startsWith('/')) {
+        expect(() => new URL(href)).not.toThrow()
+        continue
+      }
+      /*
+       * ⚠️ ASSERTED OVER EVERY ROOT-RELATIVE HREF, not against the list of six.
+       * These pages are served on hosts that have no `motir.co` pages at all —
+       * unlike a tenant PROJECT page, where a root-relative href is that
+       * project's own path — so ANY of them is wrong here whatever it spells,
+       * including one added after this spec was written. The only ones allowed
+       * are the document's own assets, which this host does serve.
+       */
+      expect(
+        href.startsWith('/_next/') ||
+          href.startsWith('/favicon') ||
+          href.startsWith('/icon') ||
+          href.startsWith('/apple-icon'),
+        `${href} is served by motir.co alone and 404s on ${new URL(url).host}`,
+      ).toBe(true)
+    }
+  })
+}
+
+test('the 404 room on a tenant host makes NO request off that host', async ({
+  page,
+}) => {
+  /*
+   * The prefetch half, on the room rather than on the chrome. Before this card
+   * the room's `Explore projects` door was a same-origin `next/link` to
+   * `/explore`, so Next RSC-PREFETCHED it ON RENDER — a 404 fetched on every
+   * arrival at a 404, on the one page a lost visitor lands on. Making the href
+   * absolute is only half of the fix; the element has to stop being a
+   * `next/link`, which is `ChromeLink`'s whole job, and a request log is the
+   * only place the difference is observable.
+   *
+   * It is also what keeps this lane hermetic now that the room's doors name
+   * `https://motir.co`: a page that prefetched one would fetch PRODUCTION from
+   * CI, and this is what says it does not.
+   */
+  const hosts = recordHosts(page)
+
+  const url = `${TENANT_ORIGIN}/explore`
+  const response = await page.goto(url)
+  expect(response?.status()).toBe(404)
+  await page.waitForLoadState('load')
+  await page.waitForTimeout(1500)
+
+  expect(hosts, hosts.join(', ')).toEqual([new URL(url).host])
+})
+
+test('the SITE’s own 404 room pays the ONE cost this fix has', async ({
+  page,
+}) => {
+  /*
+   * ⚠️ THIS IS THE REGRESSION MOTIR-4430 ACCEPTED, ASSERTED RATHER THAN LEFT TO
+   * BE DISCOVERED — and it is the half of that card's fifth criterion that
+   * could not be kept.
+   *
+   * The criterion asked for two things about `motir.co`'s own 404 room: the
+   * same `○ (Static)` in the route table, and the relative hrefs it has always
+   * had. They turned out to be incompatible. Reading the request in
+   * `app/not-found.tsx` — the only way to tell `motir.co` from a tenant host
+   * there — is what costs the `○`, and it costs it for the WHOLE SITE, because
+   * that file is the global not-found boundary. So the room links absolutely on
+   * every host, and this page keeps its prerender.
+   *
+   * What that costs, exactly: leaving the room on `motir.co` is a document load
+   * rather than a client transition. The destination is unchanged. Nothing else
+   * on the site moved — `e2e/specs/landmark.spec.ts` still walks every route,
+   * and the test above this one still asserts the site's PROJECT chrome is
+   * relative.
+   */
+  const failures = recordFailures(page)
+
+  await loadAndSettle(page, `${SITE_ORIGIN}/no-such-page`)
+  const hrefs = await hrefsOf(page)
+
+  // Absolute, and every one of them on ONE origin — the site's own.
+  const absolute = hrefs.filter((h) => h.startsWith('https://motir.co'))
+  expect(absolute.length).toBeGreaterThan(5)
+  for (const path of ['/', ...MARKETING_PATHS]) {
+    expect(hrefs, `${path} is no longer reachable from the room`).toContain(
+      `https://motir.co${path === '/' ? '/' : path}`,
+    )
+  }
+
+  /*
+   * ⚠️ AND NOTHING FETCHED ONE. The doors are plain `<a>`s, so an absolute href
+   * pointing at production costs a click and never a prefetch — which is what
+   * keeps this spec from reaching the live site.
+   *
+   * The DOCUMENT is excluded because it is supposed to be a 404: that is the
+   * page under test. Everything else at 400 or above is a real failure, and a
+   * prefetched `https://motir.co/explore` from CI would land in this list.
+   */
+  const unexpected = failures.filter(
+    (f) => !f.endsWith(`${SITE_ORIGIN}/no-such-page`),
+  )
+  expect(unexpected, unexpected.join('\n')).toEqual([])
 })
