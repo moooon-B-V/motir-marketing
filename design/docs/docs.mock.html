@@ -1,0 +1,1806 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/docs — the reading surface, its rail, and an operation drawn open
+      · MOTIR-4393
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of `--el-*` (light + dark,
+         `warm-editorial`, `motir` palette), copied from `@motir/design-system`.
+         Standalone, as every asset in this repository is. Re-defines no
+         semantics. Nothing here is an invented hue; the only raw values are the
+         doc-annotation scaffold's own fills and the non-semantic shadows.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-sidebar-bg: #fafaf9;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-highlight: #ff64c8;
+        --el-link: #0070d2;
+        --el-link-pressed: #005bab;
+        --el-danger: #e03131;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #fde0ec;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        --radius-card: 12px;
+        --radius-btn: 8px;
+        --radius-input: 8px;
+        --radius-control: 6px;
+        --radius-badge: 9999px;
+        --radius-kbd: 4px;
+        --spacing-card-padding: 24px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 10px;
+        --spacing-control-y: 6px;
+        --spacing-input-x: 12px;
+        --spacing-input-y: 8px;
+        --spacing-kbd-x: 5px;
+        --spacing-kbd-y: 2px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-control: 36px;
+        --height-input: 36px;
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-card: 0 4px 12px rgba(15, 15, 15, 0.08);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --font-sans-source: 'Inter';
+        --font-serif-source: 'Source Serif 4';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-sidebar-bg: #161616;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-link-pressed: #79b8ff;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #3a1f2a;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 38px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        max-width: 78ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        background: var(--el-page-bg);
+      }
+      .frame.narrow {
+        max-width: 400px;
+      }
+      /* A callout in the annotation layer. `--el-text-strong` on a tint is the
+         AA recipe every coloured surface in this tree follows. */
+      .callout {
+        margin: 12px 0 0;
+        border-radius: var(--radius-card);
+        background: var(--el-tint-sky);
+        color: var(--el-text-strong);
+        padding: 12px 14px;
+        font-size: 13.5px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .callout.warn {
+        background: var(--el-tint-peach);
+      }
+      .callout b {
+        font-weight: 700;
+      }
+      .marker {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--el-accent);
+        color: #fff;
+        font: 700 11px/1 var(--font-mono);
+        vertical-align: middle;
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE CHROME — COMPOSED from this repository's shipped `SiteShell`
+         (`app/_components/SiteShell.tsx`, itself composed from
+         motir-core/design/public-site/, MOTIR-3880), not redrawn. The header
+         and footer below are that component's markup, class for class. This
+         asset draws ONLY what sits BETWEEN them.
+      ═══════════════════════════════════════════════════════════════ */
+      .site {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 12px var(--spacing-card-padding);
+      }
+      .brand-lockup {
+        --brand-size: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: calc(var(--brand-size) * 0.33);
+        text-decoration: none;
+        flex: none;
+      }
+      .brand-glyph {
+        color: var(--el-accent-on-surface);
+        flex: none;
+        display: block;
+      }
+      .brand-word {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: calc(var(--brand-size) * 0.72);
+        line-height: 1;
+        color: var(--el-text);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .nav a.current {
+        font-weight: 600;
+        color: var(--el-accent-on-surface);
+      }
+      .nav .ph {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        cursor: default;
+      }
+      .nav .ph .soon {
+        font: 600 9px/1 var(--font-mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-strong);
+        background: var(--el-tint-lavender);
+        border-radius: var(--radius-kbd);
+        padding: 2px 4px;
+      }
+      .bar-cta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font: 600 14px/1 var(--font-sans);
+        border-radius: var(--radius-btn);
+        padding: 0 18px;
+        height: var(--height-btn-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn.sm {
+        height: var(--height-btn-sm);
+        font-size: 13px;
+        padding: 0 12px;
+      }
+      .btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn.sm svg {
+        width: 14px;
+        height: 14px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text);
+      }
+      .foot {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 40px var(--spacing-card-padding);
+      }
+      .foot h2 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .foot ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .foot li,
+      .foot li a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .foot .tag {
+        margin: 10px 0 0;
+        max-width: 30rem;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE DOCS SHELL — what this asset OWNS.
+
+         The one structural change: `app/docs/layout.tsx` centres a single
+         46rem column, and this puts a RAIL beside it. The rail is the answer
+         to the navigation question; everything else about the chrome is
+         unchanged.
+      ═══════════════════════════════════════════════════════════════ */
+      .docs {
+        display: grid;
+        grid-template-columns: 264px minmax(0, 1fr);
+        align-items: start;
+        min-height: 620px;
+      }
+      .rail {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        max-height: 100%;
+        overflow: auto;
+        border-right: 1px solid var(--el-border);
+        background: var(--el-sidebar-bg);
+        padding: 20px 14px 28px;
+      }
+      .rail .find {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: var(--height-input);
+        border: 1px solid var(--el-border-strong);
+        background: var(--el-page-bg);
+        border-radius: var(--radius-input);
+        padding: 0 var(--spacing-input-x);
+      }
+      .rail .find input {
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font: 400 13px var(--font-sans);
+        color: var(--el-text);
+        width: 100%;
+      }
+      .rail .find input::placeholder {
+        color: var(--el-text-secondary);
+      }
+      .rail .find kbd {
+        font: 600 10px var(--font-mono);
+        color: var(--el-text-secondary);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-kbd);
+        padding: var(--spacing-kbd-y) var(--spacing-kbd-x);
+      }
+      .rail .count {
+        margin: 8px 2px 14px;
+        font-size: 11.5px;
+        color: var(--el-text-secondary);
+      }
+      .rail .group {
+        margin: 0 0 6px;
+        padding: 0 8px;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .rail .group + .group {
+        margin-top: 18px;
+      }
+      .rail ul {
+        list-style: none;
+        margin: 0 0 4px;
+        padding: 0;
+      }
+      .rail li a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: var(--height-control);
+        padding: 0 var(--spacing-control-x);
+        border-radius: var(--radius-control);
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .rail li a:hover {
+        background: var(--el-muted);
+        color: var(--el-text-secondary);
+      }
+      .rail li a.current {
+        background: var(--el-muted);
+        color: var(--el-text);
+        font-weight: 600;
+        box-shadow: var(--shadow-subtle);
+      }
+      .rail li a .verb {
+        flex: none;
+        min-width: 40px;
+        text-align: center;
+        font: 700 9.5px/1 var(--font-mono);
+        letter-spacing: 0.02em;
+        color: var(--el-text-strong);
+        border-radius: var(--radius-badge);
+        padding: 3px 0;
+      }
+      .rail li a .op {
+        font: 400 12px var(--font-mono);
+        color: var(--el-text-secondary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .rail li a.current .op {
+        color: var(--el-text);
+      }
+
+      .room {
+        padding: 40px var(--spacing-card-padding) 56px;
+        max-width: 46rem;
+      }
+      .room h1 {
+        font: 700 30px/1.2 var(--font-serif);
+        letter-spacing: -0.01em;
+        margin: 0;
+        color: var(--el-text);
+      }
+      .room .meta {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .room .intro {
+        margin: 16px 0 0;
+        max-width: 68ch;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--el-text-secondary);
+      }
+      .room h2.area {
+        margin: 34px 0 0;
+        font: 600 20px var(--font-serif);
+        color: var(--el-text);
+      }
+
+      /* ── one operation ────────────────────────────────────────────── */
+      .op-sec {
+        border-bottom: 1px solid var(--el-border-soft);
+        padding: 26px 0 30px;
+      }
+      .op-sec:last-child {
+        border-bottom: 0;
+      }
+      .op-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .verb {
+        display: inline-flex;
+        justify-content: center;
+        min-width: 52px;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        font: 700 10.5px/1.5 var(--font-mono);
+        letter-spacing: 0.02em;
+        color: var(--el-text-strong);
+      }
+      .verb.get {
+        background: var(--el-tint-sky);
+      }
+      .verb.post {
+        background: var(--el-tint-mint);
+      }
+      .verb.patch {
+        background: var(--el-tint-peach);
+      }
+      .verb.delete {
+        background: var(--el-tint-rose);
+      }
+      .scope {
+        display: inline-flex;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        background: var(--el-tint-lavender);
+        color: var(--el-text-strong);
+        font: 400 11px var(--font-mono);
+      }
+      .op-path {
+        font: 600 15px var(--font-mono);
+        color: var(--el-text);
+        word-break: break-all;
+      }
+      .op-sec h3.sum {
+        margin: 0 0 4px;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .op-sec p.desc {
+        margin: 0 0 18px;
+        max-width: 68ch;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .eyebrow {
+        margin: 20px 0 6px;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      table.spec {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+      table.spec th {
+        border-bottom: 1px solid var(--el-border);
+        padding: 6px 10px;
+        text-align: left;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      table.spec td {
+        border-bottom: 1px solid var(--el-border-soft);
+        padding: 8px 10px;
+        vertical-align: top;
+        color: var(--el-text-secondary);
+        line-height: 1.5;
+      }
+      table.spec td .name {
+        font: 400 12.5px var(--font-mono);
+        color: var(--el-text);
+      }
+      table.spec td .req {
+        font: 400 11.5px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      table.spec td .ty {
+        font: 400 11.5px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .status {
+        display: inline-flex;
+        justify-content: center;
+        min-width: 42px;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        font: 700 11px/1.5 var(--font-mono);
+        color: var(--el-text-strong);
+      }
+      .status.ok {
+        background: var(--el-tint-mint);
+      }
+      .status.warn {
+        background: var(--el-tint-peach);
+      }
+      .status.err {
+        background: var(--el-tint-rose);
+      }
+      .pane {
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      .pane .cap {
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface);
+        padding: 6px 12px;
+        font: 400 11px var(--font-mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .pane pre {
+        margin: 0;
+        overflow-x: auto;
+        background: var(--el-page-bg);
+        padding: 10px 12px;
+        font: 400 12.5px/1.6 var(--font-mono);
+        color: var(--el-text);
+      }
+
+      /* ── the collapsed catalogue row (the list state) ─────────────── */
+      .op-row {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        border-bottom: 1px solid var(--el-border-soft);
+        padding: 12px 0;
+      }
+      .op-row .op-path {
+        font-size: 13px;
+        font-weight: 400;
+      }
+      .op-row p {
+        margin: 2px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the index page's section list ───────────────────────────── */
+      ul.index {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+        border-top: 1px solid var(--el-border);
+      }
+      ul.index li {
+        border-bottom: 1px solid var(--el-border);
+        padding: 12px 0;
+      }
+      ul.index .t {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      ul.index .v {
+        display: block;
+        margin-top: 2px;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the unreachable state ───────────────────────────────────── */
+      .unreachable {
+        margin-top: 18px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-surface);
+        padding: 18px 20px;
+        max-width: 68ch;
+      }
+      .unreachable h3 {
+        margin: 0 0 6px;
+        font-size: 15px;
+        color: var(--el-text);
+      }
+      .unreachable p {
+        margin: 0;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      code.inline {
+        border-radius: var(--radius-kbd);
+        background: var(--el-muted);
+        padding: 1px 5px;
+        font: 400 12.5px var(--font-mono);
+        color: var(--el-text);
+      }
+
+      /* ── narrow ──────────────────────────────────────────────────── */
+      .narrow .docs {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+      }
+      .narrow .rail {
+        position: static;
+        border-right: 0;
+        border-bottom: 1px solid var(--el-border);
+        padding: 14px;
+      }
+      .narrow .rail .ops-group,
+      .narrow .rail .ops-list {
+        display: none;
+      }
+      .narrow .rail .disclosure {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: var(--height-control);
+        margin-top: 10px;
+        padding: 0 var(--spacing-control-x);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-control);
+        background: var(--el-page-bg);
+        font: 600 13px var(--font-sans);
+        color: var(--el-text);
+      }
+      .narrow .topbar .nav,
+      .narrow .topbar .bar-cta .btn.ghost {
+        display: none;
+      }
+      .narrow .room {
+        padding: 22px 16px 32px;
+      }
+      .narrow .room h1 {
+        font-size: 24px;
+      }
+      .narrow .foot {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .disclosure {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <div class="doc-head">
+        <h1>
+          motir.co/docs — the reading surface, its rail, and an operation drawn
+          open
+        </h1>
+        <p>
+          Nine pages on <b>motir.co</b>, one of them a forty-nine-operation API
+          reference. This asset draws the surface as it must exist inside
+          <code class="inline">SiteShell</code> — the chrome every page on this
+          host already wears — and answers the one question the move left open:
+          <b
+            >how a reader reaches an operation without scrolling past the other
+            forty-eight.</b
+          >
+          Panels 1–3 are the states the sibling renderer builds; panel 4 is the
+          navigation ANSWER and its access path; panels 5–8 are the states a
+          surface is not finished without.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-4393 · design</span>
+          <span class="ref">MOTIR-4375 · the bug</span>
+          <span class="ref muted">MOTIR-4391 · the renderer it draws</span>
+          <span class="ref muted">MOTIR-4396 · the nav it specifies</span>
+          <span class="ref muted">repository: motir-marketing</span>
+        </div>
+        <div class="callout warn">
+          <b>Drawn against the surface as it SHIPS, not from a mental model.</b>
+          <code class="inline">motir.co/docs</code>,
+          <code class="inline">/docs/api</code>,
+          <code class="inline">/docs/cli</code> and
+          <code class="inline">/docs/mcp/tools</code> were rendered in headless
+          chromium at 1280×900 on 2026-09-04 before anything here was drawn —
+          all four <code class="inline">200</code>, and the measurements that
+          matter are in <code class="inline">design-notes.md</code> § “What
+          ships today”. The chrome below is
+          <code class="inline">SiteShell</code>’s own markup, class for class;
+          this asset draws only what sits between its header and its footer.
+        </div>
+      </div>
+
+      <!-- ══════════════════════ PANEL 1 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">1</span>
+          <h2>The API reference, at rest — the rail and the catalogue</h2>
+          <span class="note"
+            >1280 × 900, light. The rail is the change; the content column keeps
+            its 46rem measure.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a class="current" href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <div class="docs">
+              <nav class="rail" aria-label="Documentation">
+                <div class="find">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                    style="color: var(--el-text-secondary); flex: none"
+                  >
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" />
+                  </svg>
+                  <input placeholder="Filter operations" aria-label="Filter" />
+                  <kbd>/</kbd>
+                </div>
+                <p class="count">49 operations</p>
+
+                <p class="group">Documentation</p>
+                <ul>
+                  <li><a href="/docs">Overview</a></li>
+                  <li><a class="current" href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/mcp">MCP server</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                  <li><a href="/docs/sandbox">Sandbox</a></li>
+                  <li><a href="/docs/public-address">Public address</a></li>
+                </ul>
+
+                <p class="group">API reference</p>
+                <ul>
+                  <li>
+                    <a href="/docs/api/getting-started">Getting started</a>
+                  </li>
+                  <li>
+                    <a href="/docs/api/stability"
+                      >Stability &amp; deprecation</a
+                    >
+                  </li>
+                </ul>
+
+                <p class="group ops-group">Work items</p>
+                <ul class="ops-list">
+                  <li>
+                    <a href="#listWorkItems"
+                      ><span class="verb" style="background: var(--el-tint-sky)"
+                        >GET</span
+                      ><span class="op">/work-items</span></a
+                    >
+                  </li>
+                  <li>
+                    <a class="current" href="#createWorkItem"
+                      ><span
+                        class="verb"
+                        style="background: var(--el-tint-mint)"
+                        >POST</span
+                      ><span class="op">/work-items</span></a
+                    >
+                  </li>
+                  <li>
+                    <a href="#getWorkItem"
+                      ><span class="verb" style="background: var(--el-tint-sky)"
+                        >GET</span
+                      ><span class="op">/work-items/{key}</span></a
+                    >
+                  </li>
+                  <li>
+                    <a href="#updateWorkItem"
+                      ><span
+                        class="verb"
+                        style="background: var(--el-tint-peach)"
+                        >PATCH</span
+                      ><span class="op">/work-items/{key}</span></a
+                    >
+                  </li>
+                </ul>
+
+                <p class="group ops-group">Projects</p>
+                <ul class="ops-list">
+                  <li>
+                    <a href="#listProjects"
+                      ><span class="verb" style="background: var(--el-tint-sky)"
+                        >GET</span
+                      ><span class="op">/projects</span></a
+                    >
+                  </li>
+                  <li>
+                    <a href="#getProject"
+                      ><span class="verb" style="background: var(--el-tint-sky)"
+                        >GET</span
+                      ><span class="op">/projects/{projectKey}</span></a
+                    >
+                  </li>
+                </ul>
+
+                <p class="group ops-group">Sprints</p>
+                <ul class="ops-list">
+                  <li>
+                    <a href="#listSprints"
+                      ><span class="verb" style="background: var(--el-tint-sky)"
+                        >GET</span
+                      ><span class="op">/sprints</span></a
+                    >
+                  </li>
+                </ul>
+              </nav>
+
+              <main class="room">
+                <h1>API reference</h1>
+                <p class="meta">Motir API · version 1.24.0 · 49 operations</p>
+                <p class="intro">
+                  Every operation the API serves, generated from the OpenAPI
+                  document Motir publishes and fetched when this page is
+                  requested — so it is exactly what the server ships right now.
+                  Each one lists its parameters, the body it accepts, a request
+                  you can copy, and every status it can answer with.
+                </p>
+
+                <div style="margin-top: 18px">
+                  <div class="op-row">
+                    <span class="verb post">POST</span>
+                    <div>
+                      <span class="op-path"
+                        >/api/v1/projects/{projectKey}/work-items</span
+                      >
+                      <p>Create a work item</p>
+                    </div>
+                  </div>
+                  <div class="op-row">
+                    <span class="verb get">GET</span>
+                    <div>
+                      <span class="op-path">/api/v1/work-items/{key}</span>
+                      <p>Read a work item</p>
+                    </div>
+                  </div>
+                  <div class="op-row">
+                    <span class="verb patch">PATCH</span>
+                    <div>
+                      <span class="op-path">/api/v1/work-items/{key}</span>
+                      <p>Update a work item</p>
+                    </div>
+                  </div>
+                  <div class="op-row">
+                    <span class="verb delete">DEL</span>
+                    <div>
+                      <span class="op-path">/api/v1/work-items/{key}</span>
+                      <p>Archive a work item</p>
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li><a href="https://app.motir.co/sign-up">Start free</a></li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Developers</h2>
+                <ul>
+                  <li><a href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/mcp">MCP server</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/terms">Terms</a></li>
+                  <li><a href="/legal/privacy">Privacy</a></li>
+                </ul>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 2 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">2</span>
+          <h2>One operation, EXPANDED — the state the renderer builds to</h2>
+          <span class="note"
+            >The content column only. Section order is FIXED: scope → request →
+            body → example → responses → response schema.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" style="padding: 28px var(--spacing-card-padding)">
+            <main class="room" style="padding: 0">
+              <section class="op-sec" id="createWorkItem">
+                <div class="op-head">
+                  <span class="verb post">POST</span>
+                  <span class="op-path"
+                    >/api/v1/projects/{projectKey}/work-items</span
+                  >
+                  <span class="scope">work_item:edit</span>
+                </div>
+                <h3 class="sum">Create a work item</h3>
+                <p class="desc">
+                  Create a work item in a project. The parent, if given, is
+                  named by its key and must be a kind-legal parent in the same
+                  project.
+                </p>
+
+                <p class="eyebrow">Request</p>
+                <table class="spec">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>In</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span class="name">projectKey</span><br /><span
+                          class="req"
+                          >string · required</span
+                        >
+                      </td>
+                      <td><span class="ty">path</span></td>
+                      <td>
+                        The project’s key — the prefix of its work items’ keys,
+                        e.g. MOTIR.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p class="eyebrow">Request body</p>
+                <table class="spec">
+                  <thead>
+                    <tr>
+                      <th>Property</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span class="name">kind</span><br /><span class="req"
+                          >required</span
+                        >
+                      </td>
+                      <td>
+                        <span class="ty"
+                          >string<br />epic · story · task · subtask · bug</span
+                        >
+                      </td>
+                      <td>The work item kind.</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="name">title</span><br /><span class="req"
+                          >required</span
+                        >
+                      </td>
+                      <td><span class="ty">string</span></td>
+                      <td>The work item title, one line.</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="name">parentKey</span><br /><span
+                          class="req"
+                          >optional</span
+                        >
+                      </td>
+                      <td><span class="ty">string | null</span></td>
+                      <td>A kind-legal parent in the same project.</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="name">storyPoints</span><br /><span
+                          class="req"
+                          >optional</span
+                        >
+                      </td>
+                      <td><span class="ty">number | null</span></td>
+                      <td>The agile sizing number.</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="name">targetRepos</span><br /><span
+                          class="req"
+                          >optional</span
+                        >
+                      </td>
+                      <td><span class="ty">string[]</span></td>
+                      <td>Every repository this item ships in, ordered.</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p class="eyebrow">Example</p>
+                <div class="pane">
+                  <p class="cap">curl</p>
+                  <pre>
+curl -X POST 'https://app.motir.co/api/v1/projects/{projectKey}/work-items' \
+  -H 'Authorization: Bearer $MOTIR_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{"kind":"epic","title":"&lt;title&gt;"}'</pre>
+                </div>
+
+                <p class="eyebrow">Responses</p>
+                <table class="spec">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Condition</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="status ok">201</span></td>
+                      <td>The created work item.</td>
+                    </tr>
+                    <tr>
+                      <td><span class="status warn">403</span></td>
+                      <td>
+                        The token may not edit work items in this project.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><span class="status warn">422</span></td>
+                      <td>The body did not validate.</td>
+                    </tr>
+                    <tr>
+                      <td><span class="status err">500</span></td>
+                      <td>An unexpected error.</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p class="eyebrow">Response schema</p>
+                <table class="spec">
+                  <thead>
+                    <tr>
+                      <th>Property</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span class="name">key</span><br /><span class="req"
+                          >required</span
+                        >
+                      </td>
+                      <td><span class="ty">string</span></td>
+                      <td>The identifier, e.g. MOTIR-42.</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="name">status</span><br /><span class="req"
+                          >required</span
+                        >
+                      </td>
+                      <td><span class="ty">string</span></td>
+                      <td>The workflow status key.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </main>
+          </div>
+        </div>
+        <div class="callout">
+          <b>Why the order is a SPEC and not a layout preference.</b> A reader
+          who has read one operation must be able to SKIM the next, which only
+          works if the next is laid out identically. The order, the verb chip’s
+          hue-in-the-background recipe and the three-tint status rule are kept
+          from
+          <code class="inline">motir-core/design/api-docs/design-notes.md</code
+          >, the asset the deleted renderer was drawn to. What is NOT kept is
+          that asset’s shell — see § “What was kept, and what was deliberately
+          not”.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 3 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">3</span>
+          <h2>A prose page — /docs/sandbox</h2>
+          <span class="note"
+            >Same rail, no operation group: the third tier renders only under
+            <code class="inline">/docs/api</code>.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <div class="docs" style="min-height: 380px">
+              <nav class="rail" aria-label="Documentation">
+                <p class="group">Documentation</p>
+                <ul>
+                  <li><a href="/docs">Overview</a></li>
+                  <li><a href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/mcp">MCP server</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                  <li><a class="current" href="/docs/sandbox">Sandbox</a></li>
+                  <li><a href="/docs/public-address">Public address</a></li>
+                </ul>
+              </nav>
+              <main class="room">
+                <h1>Sandbox</h1>
+                <p class="intro">
+                  A sandbox is a container you start on your own machine,
+                  holding a coding agent, the Motir CLI and your checkouts — and
+                  nothing else.
+                </p>
+                <h2 class="area">Start one</h2>
+                <div class="pane" style="margin-top: 12px">
+                  <p class="cap">run</p>
+                  <pre>
+docker run -it --name motir-sandbox \
+  -v "$PWD:/workspace" \
+  -v "$HOME/.claude:/home/node/.claude:ro" \
+  ghcr.io/moooon-b-v/motir-sandbox:claude</pre>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>No find box on a prose page.</b> The control filters OPERATIONS,
+          and a filter over an empty set is a control describing nothing. What
+          decides it is the ROUTE PREFIX, not the page — tiers two and three
+          render if and only if the route is
+          <code class="inline">/docs/api</code> or below, so a page added
+          anywhere else cannot acquire the operation list by accident.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 4 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">4</span>
+          <h2>The navigation ANSWER, and the access path</h2>
+          <span class="note"
+            >What the sibling build card implements. Drawn, not described.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" style="padding: 24px var(--spacing-card-padding)">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 300px minmax(0, 1fr);
+                gap: 28px;
+                align-items: start;
+              "
+            >
+              <div>
+                <nav
+                  class="rail"
+                  aria-label="Documentation"
+                  style="
+                    border-right: 1px solid var(--el-border);
+                    border-radius: var(--radius-card);
+                    border: 1px solid var(--el-border);
+                  "
+                >
+                  <div class="find">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                      style="color: var(--el-text-secondary); flex: none"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m20 20-3.5-3.5" />
+                    </svg>
+                    <input value="work-item" aria-label="Filter" />
+                    <kbd>/</kbd>
+                  </div>
+                  <p class="count">6 of 49 operations</p>
+                  <p class="group ops-group">Work items</p>
+                  <ul class="ops-list">
+                    <li>
+                      <a href="#a"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a class="current" href="#b"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-mint)"
+                          >POST</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a href="#c"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items/{key}</span></a
+                      >
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+              <div>
+                <p class="eyebrow" style="margin-top: 0">
+                  <span class="marker">1</span> The filter narrows IN PLACE
+                </p>
+                <p
+                  style="
+                    margin: 0 0 14px;
+                    font-size: 13.5px;
+                    line-height: 1.6;
+                    color: var(--el-text-secondary);
+                    max-width: 60ch;
+                  "
+                >
+                  Typing filters the operation rows and KEEPS the group
+                  headings, so a reader never loses where they are. The count
+                  line reports the narrowed set against the whole — a filter
+                  that hides its own selectivity is how a reader concludes an
+                  operation does not exist.
+                </p>
+                <p class="eyebrow">
+                  <span class="marker">2</span> Two interactions to any
+                  operation
+                </p>
+                <p
+                  style="
+                    margin: 0 0 14px;
+                    font-size: 13.5px;
+                    line-height: 1.6;
+                    color: var(--el-text-secondary);
+                    max-width: 60ch;
+                  "
+                >
+                  Filter, then click the row — or click a row directly from the
+                  resting rail. Scrolling is not one of them. The row carries
+                  the verb chip AND the path because the same path appears under
+                  four verbs, and a list of paths alone is ambiguous exactly
+                  where the reader is looking hardest.
+                </p>
+                <p class="eyebrow">
+                  <span class="marker">3</span> The ACCESS PATH — the door in
+                </p>
+                <p
+                  style="
+                    margin: 0 0 0;
+                    font-size: 13.5px;
+                    line-height: 1.6;
+                    color: var(--el-text-secondary);
+                    max-width: 60ch;
+                  "
+                >
+                  A reader arrives from the top bar’s
+                  <b style="color: var(--el-text)">Docs</b> item (panel 1,
+                  marked current), lands on the overview, and every page from
+                  there carries the rail — so the reference is one click from
+                  any documentation page and two from anywhere on the site. The
+                  rail row for the page you are on carries
+                  <code class="inline">aria-current="page"</code> and the active
+                  treatment; that is the “you are here”, and it is the same
+                  signal at every tier.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="callout warn">
+          <b>The rail is the answer, and the alternatives were weighed.</b> An
+          in-page index would put a fiftieth block of links at the top of the
+          page a reader is trying to get out of, and it disappears the moment
+          they scroll. A filter with no rail leaves nothing to read when the box
+          is empty, which is the resting state. The rail is both — a persistent
+          table of contents that a filter narrows — and it is what the surface
+          had before the move, so it also restores something rather than
+          inventing it.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 5 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">5</span>
+          <h2>The docs index</h2>
+          <span class="note">Where the top bar’s Docs item lands.</span>
+        </div>
+        <div class="frame">
+          <div class="site">
+            <div class="docs" style="min-height: 340px">
+              <nav class="rail" aria-label="Documentation">
+                <p class="group">Documentation</p>
+                <ul>
+                  <li><a class="current" href="/docs">Overview</a></li>
+                  <li><a href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/mcp">MCP server</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                  <li><a href="/docs/sandbox">Sandbox</a></li>
+                  <li><a href="/docs/public-address">Public address</a></li>
+                </ul>
+              </nav>
+              <main class="room">
+                <h1>Documentation</h1>
+                <p class="intro">
+                  Everything you need to build against Motir: the public read
+                  API, the MCP server agents call, and the CLI.
+                </p>
+                <ul class="index">
+                  <li>
+                    <span class="t">API reference</span>
+                    <span class="v"
+                      >49 operations, generated from the served OpenAPI
+                      document.</span
+                    >
+                  </li>
+                  <li>
+                    <span class="t">MCP server</span>
+                    <span class="v"
+                      >55 tools, each with the arguments it takes.</span
+                    >
+                  </li>
+                  <li>
+                    <span class="t">CLI</span>
+                    <span class="v"
+                      >Install, authenticate, and every command with its
+                      options.</span
+                    >
+                  </li>
+                  <li>
+                    <span class="t">Sandbox</span>
+                    <span class="v"
+                      >The container a run executes inside, and what its token
+                      refuses.</span
+                    >
+                  </li>
+                </ul>
+              </main>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 6 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">6</span>
+          <h2>UNREACHABLE — a real state, not an edge case</h2>
+          <span class="note"
+            >The no-fallback contract makes this the honest failure.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <div class="docs" style="min-height: 300px">
+              <nav class="rail" aria-label="Documentation">
+                <p class="group">Documentation</p>
+                <ul>
+                  <li><a href="/docs">Overview</a></li>
+                  <li><a class="current" href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/mcp">MCP server</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                </ul>
+                <p class="count" style="margin-top: 14px">
+                  The operation list is unavailable.
+                </p>
+              </nav>
+              <main class="room">
+                <h1>API reference</h1>
+                <div class="unreachable">
+                  <h3>The API reference is temporarily unreachable.</h3>
+                  <p>
+                    This page renders the OpenAPI document Motir publishes and
+                    keeps no copy of it, so there is nothing to show you in the
+                    meantime. Read
+                    <code class="inline">app.motir.co/api/openapi/v1.json</code>
+                    directly, or try again in a moment.
+                  </p>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>The rail survives; only the operation tier does not.</b> The page
+          links are this repository’s own and are always renderable, so a reader
+          who meets this state can still leave for the CLI or sandbox pages.
+          Blanking the whole rail would strand them on the one page that failed.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 7 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">7</span>
+          <h2>Narrow — 390 × 844</h2>
+          <span class="note"
+            >The rail collapses to a disclosure above the content; it never
+            overlays what it navigates.</span
+          >
+        </div>
+        <div class="frame narrow">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <div class="bar-cta">
+                <a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Start free</a
+                >
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Documentation">
+                <div class="find">
+                  <input placeholder="Filter operations" aria-label="Filter" />
+                  <kbd>/</kbd>
+                </div>
+                <button class="disclosure" aria-expanded="false">
+                  <span>API reference · 49 operations</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+              </nav>
+              <main class="room">
+                <h1>API reference</h1>
+                <p class="meta">Motir API · version 1.24.0</p>
+                <div style="margin-top: 14px">
+                  <div class="op-row">
+                    <span class="verb post">POST</span>
+                    <div>
+                      <span class="op-path">/api/v1/…/work-items</span>
+                      <p>Create a work item</p>
+                    </div>
+                  </div>
+                  <div class="op-row">
+                    <span class="verb get">GET</span>
+                    <div>
+                      <span class="op-path">/api/v1/work-items/{key}</span>
+                      <p>Read a work item</p>
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 8 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">8</span>
+          <h2>Dark</h2>
+          <span class="note"
+            >Same structure; every colour is the palette’s dark value, none
+            invented.</span
+          >
+        </div>
+        <div class="frame dark">
+          <div class="site">
+            <div class="docs" style="min-height: 320px">
+              <nav class="rail" aria-label="Documentation">
+                <div class="find">
+                  <input placeholder="Filter operations" aria-label="Filter" />
+                  <kbd>/</kbd>
+                </div>
+                <p class="count">49 operations</p>
+                <p class="group">Documentation</p>
+                <ul>
+                  <li><a href="/docs">Overview</a></li>
+                  <li><a class="current" href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                </ul>
+                <p class="group ops-group">Work items</p>
+                <ul class="ops-list">
+                  <li>
+                    <a href="#a"
+                      ><span class="verb" style="background: var(--el-tint-sky)"
+                        >GET</span
+                      ><span class="op">/work-items</span></a
+                    >
+                  </li>
+                  <li>
+                    <a class="current" href="#b"
+                      ><span
+                        class="verb"
+                        style="background: var(--el-tint-mint)"
+                        >POST</span
+                      ><span class="op">/work-items</span></a
+                    >
+                  </li>
+                </ul>
+              </nav>
+              <main class="room">
+                <div class="op-head">
+                  <span class="verb post">POST</span>
+                  <span class="op-path">/api/v1/…/work-items</span>
+                  <span class="scope">work_item:edit</span>
+                </div>
+                <h3 class="sum">Create a work item</h3>
+                <p class="eyebrow">Responses</p>
+                <table class="spec">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Condition</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="status ok">201</span></td>
+                      <td>The created work item.</td>
+                    </tr>
+                    <tr>
+                      <td><span class="status warn">422</span></td>
+                      <td>The body did not validate.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </main>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
