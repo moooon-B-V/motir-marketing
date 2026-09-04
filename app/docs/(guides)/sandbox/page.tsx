@@ -69,6 +69,17 @@ import { CodeBlock } from '../../_components/DocSchema'
  * ⚠️ AND ONE OBJECT, TWO BLOCKS. The listing and the heredoc are built from
  * `DEVCONTAINER_JSON`, so a `mounts` entry corrected in one cannot publish a
  * different config under the other caption.
+ *
+ * ⚠️ THE OPENING SENTENCE SAID "a coding agent" (MOTIR-4508). Motir's agents do
+ * design, decision, content, test and code work — the sandbox runs an agent, not
+ * specifically a coding one, and the narrower word sells a narrower product on
+ * the page a developer reads immediately before deciding whether to run it. It
+ * now reads "your own agent", which is how the next sentence already writes it.
+ * `tests/copy.test.ts` bans the phrase and could not see this one: it walks the
+ * copy CATALOGUE, and this is JSX prose. `tests/docs/terminology.test.tsx` is
+ * the surface-correct guard — it runs the same three predicates over what every
+ * `/docs` page RENDERS, which is also the only kind that can see a phrase JSX
+ * has line-wrapped, as this one was.
  */
 
 /**
@@ -113,7 +124,7 @@ export default function SandboxPage() {
         {copy.docs.sandbox}
       </h1>
       <p className="mt-4 max-w-[68ch] text-[15px] leading-relaxed text-(--el-text)">
-        A sandbox is a container you start on your own machine, holding a coding
+        A sandbox is a container you start on your own machine, holding your own
         agent, the Motir CLI and your checkouts — and nothing else. You bring
         your own agent credential, mounted read-only; the loop runs inside, so a
         misbehaving agent reaches your work tree and not the rest of your
