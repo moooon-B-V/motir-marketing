@@ -598,3 +598,187 @@ export function countCatalogueTools(catalogue: McpToolCatalogue): number {
     0,
   )
 }
+
+// ── The CLI command catalogue (MOTIR-4390 / MOTIR-4395) ─────────────────────
+//
+// `GET /api/docs/cli-commands.json` on the app origin — motir-core's
+// `lib/apiDocs/cli.ts`, served by `app/api/docs/cli-commands.json/route.ts`.
+// Consumed exactly as the two documents above are: fetched fresh at request
+// time, parsed through a function a fixture pins, nothing committed.
+//
+// ⚠️ WHY IT IS A SERVED DOCUMENT AND NOT AN `@motir/cli` IMPORT. `@motir/cli`
+// publishes `exports: { "./package.json": … }` and nothing else, so
+// `COMMAND_CATALOG` is bundled in `dist/index.js` and importable by no reader —
+// which is the precondition that turned "generate the page from the published
+// catalogue" into two cards. MOTIR-4390 weighed the alternative (a package
+// export, so the page could not drift from the binary a reader installed) and
+// rejected it: this repository would pin a version in its OWN lockfile, so the
+// page would describe whatever it last bumped to while a reader gets `latest`
+// — agreement with A published version, never THE one they installed — and a
+// lockfile-pinned copy is exactly the shape MOTIR-4180 removed from here.
+//
+// So the document describes the CLI at motir-core's `main`, and SAYS SO: it
+// carries `packageVersion`, and the page shows it. The gap is visible rather
+// than implied, which is the most either mechanism could honestly offer.
+
+/** One published flag. */
+export interface CliCommandOption {
+  flags: string
+  description: string
+}
+
+/** One published command — every field READ from the CLI's own record. */
+export interface CliCommand {
+  path: string
+  signature: string
+  /** `motir <path> <signature>` — what a reader actually types. */
+  invocation: string
+  description: string
+  helpGroup: string | null
+  options: CliCommandOption[]
+}
+
+/** The published document. */
+export interface CliCommandsDocument {
+  packageName: string
+  packageVersion: string
+  installCommand: string
+  nodeRequirement: string
+  defaultServer: string
+  commandCount: number
+  commands: CliCommand[]
+}
+
+const CLI_COMMANDS_URL = `${APP_ORIGIN}/api/docs/cli-commands.json`
+
+/** Thrown when the served document is not the shape this page renders. */
+export class CliCommandsShapeError extends Error {
+  override readonly name = 'CliCommandsShapeError'
+
+  constructor(what: string) {
+    super(
+      `the published CLI command catalogue at ${CLI_COMMANDS_URL} ${what}. ` +
+        `This page renders that document and keeps no copy of it, so a shape ` +
+        `it cannot read is an error rather than an empty list.`,
+    )
+  }
+}
+
+/**
+ * Parse the served document into what the page renders.
+ *
+ * ⚠️ IT THROWS RATHER THAN DEGRADING, on the same axes the tool catalogue's
+ * parse does and for the same reason: a parse that read a renamed `commands`
+ * key as absent would render a page that looks finished and has no commands on
+ * it, and nothing downstream could tell that from a CLI that had lost them.
+ *
+ * An EMPTY `commands` is an error too. The catalogue is total over the CLI's
+ * own record by construction over there, so zero commands is not a smaller
+ * answer — it is the failure this page exists to make impossible to render
+ * quietly.
+ */
+export function parseCliCommands(value: unknown): CliCommandsDocument {
+  if (!isRecord(value)) {
+    throw new CliCommandsShapeError('is not a JSON object')
+  }
+  for (const key of [
+    'packageName',
+    'packageVersion',
+    'installCommand',
+    'nodeRequirement',
+    'defaultServer',
+  ]) {
+    if (typeof value[key] !== 'string' || value[key] === '') {
+      throw new CliCommandsShapeError(`is missing the document.${key}`)
+    }
+  }
+  if (!Array.isArray(value.commands)) {
+    throw new CliCommandsShapeError('is missing the document.commands')
+  }
+  if (value.commands.length === 0) {
+    throw new CliCommandsShapeError('carries no commands')
+  }
+
+  const commands = value.commands.map((raw, index) => {
+    const where = `commands[${index}]`
+    if (!isRecord(raw)) {
+      throw new CliCommandsShapeError(`has a ${where} that is not an object`)
+    }
+    if (!Array.isArray(raw.options)) {
+      throw new CliCommandsShapeError(`is missing ${where}.options`)
+    }
+    return {
+      path: requireString(raw, 'path', where),
+      // A command with no positional arguments has an EMPTY signature, which is
+      // a legitimate value and not a missing one — so it is read directly
+      // rather than through `requireString`, which rejects the empty string.
+      signature: typeof raw.signature === 'string' ? raw.signature : '',
+      invocation: requireString(raw, 'invocation', where),
+      description: requireString(raw, 'description', where),
+      helpGroup: typeof raw.helpGroup === 'string' ? raw.helpGroup : null,
+      options: raw.options.map((entry, position) => {
+        const at = `${where}.options[${position}]`
+        if (!isRecord(entry)) {
+          throw new CliCommandsShapeError(`has a ${at} that is not an object`)
+        }
+        return {
+          flags: requireString(entry, 'flags', at),
+          description: requireString(entry, 'description', at),
+        }
+      }),
+    }
+  })
+
+  return {
+    packageName: value.packageName as string,
+    packageVersion: value.packageVersion as string,
+    installCommand: value.installCommand as string,
+    nodeRequirement: value.nodeRequirement as string,
+    defaultServer: value.defaultServer as string,
+    // Counted from the rows this page is about to render, never the served
+    // `commandCount` — the producer computes that the same way and the two
+    // agree; counting here is what makes it impossible for a number a reader
+    // sees to disagree with the list beneath it.
+    commandCount: commands.length,
+    commands,
+  }
+}
+
+/** Fetch the published catalogue. Throws when the artifact is unreachable. */
+export async function fetchCliCommands(): Promise<CliCommandsDocument> {
+  const res = await fetch(CLI_COMMANDS_URL, { next: { revalidate: 0 } })
+  if (!res.ok) throw new Error(`cli command catalogue ${res.status}`)
+  return parseCliCommands(await res.json())
+}
+
+/**
+ * The commands, grouped by their help group in FIRST-APPEARANCE order.
+ *
+ * Catalogue order is REGISTRATION order, which is the order `motir help`
+ * renders — re-sorting here would be a second opinion about the CLI's own list.
+ * A subcommand carries no group of its own (commander groups none), so it joins
+ * the group of the command it hangs under; a reader looks for it there.
+ */
+export function groupCliCommands(
+  document: CliCommandsDocument,
+): { heading: string; commands: CliCommand[] }[] {
+  const groups: { heading: string; commands: CliCommand[] }[] = []
+  let current: { heading: string; commands: CliCommand[] } | null = null
+
+  for (const command of document.commands) {
+    if (command.helpGroup) {
+      const existing = groups.find((g) => g.heading === command.helpGroup)
+      current = existing ?? { heading: command.helpGroup, commands: [] }
+      if (!existing) groups.push(current)
+    }
+    // A subcommand before any grouped command would have nowhere to go; the
+    // catalogue never emits one, and if it ever did it lands in its own group
+    // rather than being dropped.
+    if (!current) {
+      current = { heading: command.helpGroup ?? 'Commands', commands: [] }
+      groups.push(current)
+    }
+    current.commands.push(command)
+  }
+  return groups
+}
