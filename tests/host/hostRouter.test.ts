@@ -121,6 +121,73 @@ describe('the base domain itself', () => {
   })
 })
 
+/*
+ * ⚠️ THE THREE BRANCHES THAT HOLD NO RESOLUTION (MOTIR-4430).
+ *
+ * They are asserted TOGETHER because the thing they share is the whole content
+ * of the fourth `PublicAddressKind`: none of them can say WHICH tenant this is,
+ * and all three know the one fact every link depends on — the visitor is not on
+ * `motir.co`. Before this card each took a `rewriteTo` helper that forwarded
+ * nothing, so the two landing pads were the only surfaces in the app told they
+ * were on the site when they were not.
+ *
+ * ⚠️ AND THE KIND IS ASSERTED, NOT ONLY THE HOST. A test that checked
+ * `x-motir-public-host` alone would pass on a router that forwarded the host
+ * under `site`, which is exactly the answer the chrome must not be given:
+ * `siteLinkFor` branches on the KIND.
+ */
+describe('a host with NO resolution is `unresolved`, not silent', () => {
+  const UNRESOLVED = [
+    [
+      'the base domain itself',
+      'https://motir.site/',
+      'motir.site',
+      '/_host-unknown',
+      null,
+    ],
+    [
+      'a host the contract does not know',
+      'https://nope.example/',
+      'nope.example',
+      '/_host-unknown',
+      { status: 'not-found' } as HostRead,
+    ],
+    [
+      'a host the contract did not answer for',
+      'https://roadmap.acme.com/board',
+      'roadmap.acme.com',
+      '/host-unavailable',
+      { status: 'failed' } as HostRead,
+    ],
+  ] as const
+
+  for (const [label, url, host, path, read] of UNRESOLVED) {
+    it(`${label} — forwards ${host} as \`unresolved\` onto ${path}`, async () => {
+      if (read) resolveHost.mockResolvedValue(read)
+      const res = await proxy(request(url))
+
+      expect(rewriteOf(res)).toBe(path)
+      expect(forwarded(res, 'x-motir-address-kind')).toBe('unresolved')
+      expect(forwarded(res, 'x-motir-public-host')).toBe(host)
+      expect(forwarded(res, 'x-motir-public-origin')).toBe(`https://${host}`)
+    })
+  }
+
+  it('OVERWRITES a client-supplied kind here too', async () => {
+    // The same rule the resolved branches keep: a caller cannot talk the 404
+    // room into spelling another host's links by sending its own header.
+    resolveHost.mockResolvedValue({ status: 'not-found' })
+    const res = await proxy(
+      request('https://nope.example/', {
+        'x-motir-address-kind': 'site',
+        'x-motir-public-host': 'evil.example',
+      }),
+    )
+    expect(forwarded(res, 'x-motir-address-kind')).toBe('unresolved')
+    expect(forwarded(res, 'x-motir-public-host')).toBe('nope.example')
+  })
+})
+
 describe('a workspace subdomain', () => {
   beforeEach(() => resolveHost.mockResolvedValue(WORKSPACE))
 
@@ -173,6 +240,25 @@ describe('a workspace subdomain', () => {
   it('404s a path that is not one of this workspace’s projects', async () => {
     const res = await proxy(request('https://acme.motir.site/OTHER'))
     expect(rewriteOf(res)).toBe('/_host-unknown')
+  })
+
+  it('CARRIES the host into the 404 room, because it HOLDS the resolution', async () => {
+    /*
+     * MOTIR-4430, and the branch its reproduction takes:
+     * `hey.motir.site/explore` is a workspace address serving a path that is
+     * not one of its projects. The host is known and only the PATH is not, so
+     * the room is told the real kind rather than `unresolved` — and it is told
+     * anything at all, which is the defect. Until this card the branch went
+     * through a header-less `rewriteTo`, so the room rendered `motir.co`'s
+     * chrome and offered a lost visitor six doors that 404 where they stand.
+     */
+    const res = await proxy(request('https://acme.motir.site/OTHER'))
+
+    expect(forwarded(res, 'x-motir-address-kind')).toBe('workspace')
+    expect(forwarded(res, 'x-motir-public-host')).toBe('acme.motir.site')
+    expect(forwarded(res, 'x-motir-public-origin')).toBe(
+      'https://acme.motir.site',
+    )
   })
 })
 

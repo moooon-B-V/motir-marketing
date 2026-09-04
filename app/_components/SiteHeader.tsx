@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ArrowRight, Menu } from 'lucide-react'
 import { BrandMark } from '@motir/brand'
@@ -16,6 +15,7 @@ import {
   SITE_ROOT,
 } from '@/lib/destinations'
 import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
+import { ChromeLink } from './ChromeLink'
 
 /*
  * The top bar — the `ExploreTopBar` pattern (`--el-surface-soft` fill, an
@@ -87,41 +87,6 @@ const isCurrent = (host: PublicHost, path: string, pathname: string) =>
     : path === EXPLORE || path === DOCS
       ? pathname === path || pathname.startsWith(`${path}/`)
       : pathname === path
-
-/**
- * One chrome link, rendered as what it IS on this host: a `next/link` when the
- * destination is same-origin, a plain `<a>` when it is not.
- *
- * ⚠️ IT EXISTS BECAUSE THE ANSWER IS PER-HOST AND THE MARKUP IS NOT. Before
- * MOTIR-4372 `internal` was a per-item CONSTANT — three items hard-coded `true`
- * — which is correct on `motir.co` and wrong on every tenant host, where the
- * same three destinations are a different origin. Making it a prop is what lets
- * one component answer for both, and putting it HERE is what stops the bar and
- * the `md:hidden` panel from drifting: they are two branches rendering the same
- * items, which is exactly how a treatment ends up existing on desktop only.
- */
-function ChromeLink({
-  href,
-  internal,
-  children,
-  ...rest
-}: Readonly<
-  {
-    href: string
-    internal: boolean
-    children: React.ReactNode
-  } & React.AnchorHTMLAttributes<HTMLAnchorElement>
->) {
-  return internal ? (
-    <Link href={href} {...rest}>
-      {children}
-    </Link>
-  ) : (
-    <a href={href} {...rest}>
-      {children}
-    </a>
-  )
-}
 
 const NAV_ITEM = 'text-[13.5px]'
 const NAV_REST = 'text-(--el-text-secondary) hover:text-(--el-text)'

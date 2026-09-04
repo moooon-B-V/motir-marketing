@@ -6,6 +6,7 @@ import {
   PUBLIC_HOST_HEADER,
   PUBLIC_ORIGIN_HEADER,
   normaliseHost,
+  type PublicAddressKind,
 } from '@/lib/publicHost'
 import {
   ROUTER_PATHS,
@@ -119,10 +120,30 @@ function visitorOrigin(request: NextRequest): URL {
   }
 }
 
-/** Forward the request with the three host headers SET (never merged). */
+/**
+ * Forward the request with the three host headers SET (never merged).
+ *
+ * ⚠️ EVERY BRANCH GOES THROUGH HERE NOW (MOTIR-4430). It used to have a
+ * sibling, `rewriteTo(request, pathname)`, which set NOTHING — and the four
+ * branches that took it were the four that end at the router's own two landing
+ * pads, so `/host-unavailable` and the 404 room were the only surfaces in the
+ * app told they were on `motir.co` when they were not. The sibling is DELETED
+ * rather than narrowed: a helper that forwards a rewrite WITHOUT the host is a
+ * helper the next branch will reach for.
+ *
+ * ⚠️ AND ONE OF THE TWO STILL CANNOT USE WHAT IT IS SENT, which is worth saying
+ * here so the next reader does not conclude the headers are unused.
+ * `/host-unavailable` is an ordinary route and reads them. The 404 room is
+ * served by `app/not-found.tsx`, the GLOBAL not-found boundary, where a
+ * `headers()` read makes the ENTIRE SITE dynamic — measured, and that file
+ * carries the route tables. It links absolutely on every host instead. The
+ * headers are still SET on that branch because they are the truth about the
+ * request and because the day that boundary can read them, this router already
+ * says the right thing.
+ */
 function forwardWithHost(
   request: NextRequest,
-  kind: 'workspace' | 'project',
+  kind: Exclude<PublicAddressKind, 'site'>,
   host: string,
   rewriteTo?: string,
 ): NextResponse {
@@ -139,12 +160,6 @@ function forwardWithHost(
   const destination = new URL(request.nextUrl)
   destination.pathname = rewriteTo
   return NextResponse.rewrite(destination, { request: { headers } })
-}
-
-function rewriteTo(request: NextRequest, pathname: string): NextResponse {
-  const destination = new URL(request.nextUrl)
-  destination.pathname = pathname
-  return NextResponse.rewrite(destination)
 }
 
 /** The header value for a resolution — an alias never reaches a page. */
@@ -164,12 +179,31 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // Today's behaviour, untouched — and no network hop. See the note above.
   if (!host || isSiteHost(host)) return NextResponse.next()
 
+  // ⚠️ THE THREE BRANCHES WITH NO RESOLUTION, AND THEY ARE `unresolved` RATHER
+  // THAN SILENT (MOTIR-4430). None of them can say WHICH tenant this is — the
+  // base domain is not one, and the other two are the contract declining or not
+  // answering. But all three know the one thing a link depends on: the visitor
+  // is not on `motir.co`. So they forward the host under the fourth kind, and
+  // the two landing pads below spell every site path absolutely instead of
+  // offering a lost visitor six doors that 404 where they are standing.
+
   // The base domain itself is not a tenant address (`lib/tenantDomain.ts`).
-  if (host === TENANT_DOMAIN) return rewriteTo(request, NOT_FOUND_PATH)
+  if (host === TENANT_DOMAIN) {
+    return forwardWithHost(request, 'unresolved', host, NOT_FOUND_PATH)
+  }
 
   const read = await resolveHost(host)
-  if (read.status === 'failed') return rewriteTo(request, UNAVAILABLE_PATH)
-  if (read.status === 'not-found') return rewriteTo(request, NOT_FOUND_PATH)
+  if (read.status === 'failed') {
+    // The OUTAGE — and the one branch where the host is most likely to be a real
+    // customer's domain, because `/host-unavailable` renders exactly while
+    // `app.motir.co` is restarting. Site-relative chrome is at its most wrong
+    // here, which is why "SITE_HOST is fine on an unresolvable host" is not the
+    // disposition this card took.
+    return forwardWithHost(request, 'unresolved', host, UNAVAILABLE_PATH)
+  }
+  if (read.status === 'not-found') {
+    return forwardWithHost(request, 'unresolved', host, NOT_FOUND_PATH)
+  }
 
   const route = routeForHost(read.data, request.nextUrl.pathname)
 
@@ -216,7 +250,12 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       // pass produced the request it renders.
       return forwardWithHost(request, kindOf(read.data), host)
     case 'not-found':
-      return rewriteTo(request, NOT_FOUND_PATH)
+      // ⚠️ THE ONE 404 BRANCH THAT HOLDS A RESOLUTION, so it forwards the REAL
+      // kind rather than `unresolved` (MOTIR-4430). `hey.motir.site/explore` is
+      // a workspace address serving a path that is not one of its projects —
+      // the host is known, the path is not — and this is the branch the card's
+      // reproduction takes.
+      return forwardWithHost(request, kindOf(read.data), host, NOT_FOUND_PATH)
     case 'workspace-root':
       return forwardWithHost(request, 'workspace', host, WORKSPACE_ROOT_PATH)
     default:

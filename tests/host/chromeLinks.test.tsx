@@ -53,6 +53,21 @@ const CUSTOM: PublicHost = {
   host: 'roadmap.acme.com',
   origin: 'https://roadmap.acme.com',
 }
+/*
+ * THE FOURTH SHAPE (MOTIR-4430) — a host that is neither this site nor a tenant
+ * the contract resolved: the base domain itself, a host nobody has claimed, and
+ * a real customer's domain while `app.motir.co` is restarting. It is in the
+ * table below rather than in a describe of its own precisely because the chrome
+ * must not treat it as a fourth CASE: `siteLinkFor` asks whether the kind is
+ * `site`, so everything asserted for the two tenant kinds holds here unchanged,
+ * and a predicate written as `workspace || project` would have failed exactly
+ * these rows.
+ */
+const UNRESOLVED: PublicHost = {
+  kind: 'unresolved',
+  host: 'roadmap.acme.com',
+  origin: 'https://roadmap.acme.com',
+}
 
 /** Every href the chrome emits, in document order, with the menu panel OPEN. */
 async function chromeHrefs(host: PublicHost): Promise<string[]> {
@@ -86,6 +101,7 @@ describe('on the site, the chrome is EXACTLY what it has always been', () => {
 describe.each([
   ['a workspace subdomain', WORKSPACE],
   ['a customer domain', CUSTOM],
+  ['an UNRESOLVED host', UNRESOLVED],
 ])('on %s', (_label, host) => {
   it('emits every site path ABSOLUTELY, on the site origin', async () => {
     const hrefs = await chromeHrefs(host)
@@ -156,9 +172,11 @@ describe('siteLinkFor', () => {
   it('is a no-op on the site and absolute everywhere else', () => {
     for (const path of [SITE_ROOT, EXPLORE, DOCS, DESIGN, '/legal/terms']) {
       expect(siteLinkFor(SITE_HOST, path)).toBe(path)
-      expect(siteLinkFor(WORKSPACE, path)).toBe(
-        new URL(path, `${SITE_ORIGIN}/`).toString(),
-      )
+      for (const host of [WORKSPACE, CUSTOM, UNRESOLVED]) {
+        expect(siteLinkFor(host, path)).toBe(
+          new URL(path, `${SITE_ORIGIN}/`).toString(),
+        )
+      }
     }
   })
 

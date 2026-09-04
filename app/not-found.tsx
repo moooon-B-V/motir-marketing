@@ -1,9 +1,5 @@
-import Link from 'next/link'
-import { buttonVariants } from '@motir/design-system'
-import { copy } from '@/lib/copy'
-import { EXPLORE } from '@/lib/destinations'
-import { SiteShell } from './_components/SiteShell'
-import { SITE_HOST } from '@/lib/publicHost'
+import { NotFoundRoom } from './_components/NotFoundRoom'
+import { UNKNOWN_HOST } from '@/lib/publicHost'
 
 /**
  * THE 404 ROOM (MOTIR-4193), drawn by
@@ -75,59 +71,60 @@ import { SITE_HOST } from '@/lib/publicHost'
  * STATUS as well as the DOM, which is what would catch a later regression.
  */
 /*
- * ⚠️ `SITE_HOST` HERE IS WHAT THIS PAGE CAN KNOW, NOT WHERE IT IS
- * (MOTIR-4372 · MOTIR-4430). Every other surface wearing this chrome is
- * reached through `proxy.ts`'s `forwardWithHost`, which sets the three host
- * headers; the 404 room is reached through `rewriteTo`, which sets NONE — so
- * `requestPublicHost()` here would answer `SITE_HOST` anyway, and asking would
- * only make the route dynamic to learn nothing.
+ * ⚠️ THE ROOM LINKS ABSOLUTELY ON EVERY HOST, INCLUDING THIS ONE — AND THE FILE
+ * MUST STAY SYNCHRONOUS (MOTIR-4430).
  *
- * The consequence is a live defect and it is FILED rather than described:
- * MOTIR-4430. On a tenant host this page still emits `/explore`, `/docs`,
- * `/design` and the legal paths as root-relative links, which 404 there. Fixing
- * it is a change to the ROUTER — and on the branches where the router holds no
- * resolution at all, a decision about what a `PublicAddressKind` should be for
- * a host that is neither this site nor a resolved tenant. That card owns it.
+ * The comment this replaces said `SITE_HOST` was all the page could know,
+ * because `proxy.ts` reached it through a header-less `rewriteTo`. That helper
+ * is gone: the router now forwards the host on every branch, three of them
+ * under the new `unresolved` kind. So the page COULD ask. It does not, and
+ * every reason is a MEASUREMENT rather than a preference.
+ *
+ * ── ⚠️ WHY IT MAY NOT ASK ────────────────────────────────────────────────
+ *
+ * `await requestPublicHost()` in THIS file turns THE WHOLE SITE dynamic. This
+ * is the GLOBAL not-found boundary, so it sits in every route's tree. On a
+ * clean `pnpm build` of this branch the edit moved `/`, `/design`, `/docs`,
+ * `/docs/mcp`, `/docs/public-address`, `/docs/sandbox`, `/legal` and
+ * `/_not-found` from `○ (Static)` to `ƒ (Dynamic)`, and stripped
+ * `/legal/[slug]` of its seven SSG paths. `export const dynamic =
+ * 'force-dynamic'` does not scope it; that was measured too. The bill lands on
+ * the landing page of the host whose entire job is to be fast and crawlable, to
+ * answer a question that only matters on a page reached by mistyping a URL.
+ *
+ * ── ⚠️ AND WHY IT COULD NOT BE MOVED TO A ROUTE THAT MAY ─────────────────
+ *
+ * Both ways of giving `ROUTER_PATHS.notFound` a real, host-aware route were
+ * built and measured on `next@16.2.6`, and both failed:
+ *
+ *   • `app/host-unknown/page.tsx` calling `notFound()` beside a sibling
+ *     `not-found.tsx` — a NESTED `not-found.tsx` renders only while it is
+ *     SYNCHRONOUS. Made `async`, or given an async child, it silently produced
+ *     an empty document: 404, no chrome, no room, and nothing in the dev log.
+ *   • `NextResponse.rewrite(dest, { status: 404 })` from the proxy, so the room
+ *     could be an ordinary async page — the status is IGNORED and the page
+ *     answered 200. A soft 404 is the exact defect `e2e/specs/not-found.spec.ts`
+ *     and MOTIR-3491 exist to prevent.
+ *
+ * ── SO: {@link UNKNOWN_HOST}, AND IT IS RIGHT RATHER THAN MERELY CHEAP ────
+ *
+ * Its `kind` is not `site`, so `siteLinkFor` spells every `motir.co` path
+ * absolutely. On a tenant or unresolved host that is the ONLY spelling that
+ * works — the defect this card fixes. On `motir.co` itself
+ * `https://motir.co/explore` is the same page `/explore` was, so the room still
+ * leads exactly where it led.
+ *
+ * ⚠️ THE ONE THING IT COSTS, NAMED: on `motir.co` the room's links stop being
+ * `next/link`s, so leaving the room is a document load rather than a client
+ * transition. That is the trade — client routing on a 404 page, against the
+ * prerendering of the entire marketing site — and it is the half of MOTIR-4430's
+ * fifth criterion that could not be kept alongside its first. Both halves are
+ * quoted in that card and in this pull request, with the route tables.
+ *
+ * ⚠️ DO NOT MAKE THIS FILE `async`, and do not read `headers()`, `cookies()` or
+ * `draftMode()` from anything it renders. Nothing in the test suite catches it:
+ * `pnpm build`'s route table is the only signal, and only if somebody reads it.
  */
 export default function NotFound() {
-  return (
-    /* The box is the design's, verbatim. `max-w-[46rem]` is the shipped
-       `/legal` measure, reused rather than re-chosen. */
-    <SiteShell
-      host={SITE_HOST}
-      contentClassName="mx-auto flex w-full max-w-[46rem] flex-col justify-center px-(--spacing-card-padding) py-16"
-    >
-      <p className="font-(family-name:--font-mono) text-[12px] font-semibold tracking-[0.08em] text-(--el-text-secondary)">
-        {copy.notFound.eyebrow}
-      </p>
-
-      <h1 className="mt-2.5 font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
-        {copy.notFound.title}
-      </h1>
-
-      <p className="mt-3 max-w-[40rem] text-[15px] leading-[1.6] text-(--el-text-secondary)">
-        {copy.notFound.lede}
-      </p>
-
-      {/* The doors STACK below `sm` and sit on one line above it. Panel 3
-          measures them at 390 — where two `md` buttons do not fit — and panel
-          1 at 1440; a WRAPPED pair with no explicit order reads as two equal
-          choices, which is precisely what the ranking above is not. */}
-      <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-        <Link href={EXPLORE} className={buttonVariants({ size: 'md' })}>
-          {copy.notFound.exploreDoor}
-        </Link>
-        {/* Both destinations are same-origin, so both are `next/link` — the
-            site root as `SiteHeader` links it, and `EXPLORE` from
-            `lib/destinations.ts` (same-origin since MOTIR-4045). Neither is
-            built from `APP_ORIGIN`. */}
-        <Link
-          href="/"
-          className={buttonVariants({ variant: 'ghost', size: 'md' })}
-        >
-          {copy.notFound.homeDoor}
-        </Link>
-      </div>
-    </SiteShell>
-  )
+  return <NotFoundRoom host={UNKNOWN_HOST} />
 }

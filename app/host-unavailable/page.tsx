@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { SiteShell } from '@/app/_components/SiteShell'
-import { SITE_HOST } from '@/lib/publicHost'
+import { requestPublicHost } from '@/lib/publicHost'
 import { ErrorState } from '@/app/p/[identifier]/_components/States'
 
 /**
@@ -35,24 +35,40 @@ export const metadata: Metadata = {
 }
 
 /*
- * ⚠️ `SITE_HOST` HERE IS WHAT THIS PAGE CAN KNOW, NOT WHERE IT IS
- * (MOTIR-4372 · MOTIR-4430). Every other surface wearing this chrome is
- * reached through `proxy.ts`'s `forwardWithHost`, which sets the three host
- * headers; this landing pad is reached through `rewriteTo`, which sets NONE — so
- * `requestPublicHost()` here would answer `SITE_HOST` anyway, and asking would
- * only make the route dynamic to learn nothing.
+ * ⚠️ IT READS THE HOST, UNDER THE `unresolved` KIND (MOTIR-4430).
  *
- * The consequence is a live defect and it is FILED rather than described:
- * MOTIR-4430. On a tenant host this page still emits `/explore`, `/docs`,
- * `/design` and the legal paths as root-relative links, which 404 there. Fixing
- * it is a change to the ROUTER — and on the branches where the router holds no
- * resolution at all, a decision about what a `PublicAddressKind` should be for
- * a host that is neither this site nor a resolved tenant. That card owns it.
+ * This page used to pass `SITE_HOST` because it genuinely could not know
+ * better: the router reached it through a `rewriteTo` helper that forwarded no
+ * headers, so `requestPublicHost()` would have answered `SITE_HOST` anyway.
+ * That helper is deleted and the `failed` branch now forwards the host as
+ * `unresolved` — "not this site, and not a tenant we could resolve" — which is
+ * exactly enough for the chrome to spell every `motir.co` path absolutely.
+ *
+ * ⚠️ AND THIS IS THE BRANCH THAT DECIDED THE FOURTH KIND. The three
+ * no-resolution branches could defensibly have kept the site's own chrome:
+ * `motir.site` itself is arguably ours to speak for. This one is not. It
+ * renders precisely when a REAL CUSTOMER'S DOMAIN is up and `app.motir.co` is
+ * restarting, so the visitor is standing on `roadmap.acme.com` while we hand
+ * them six root-relative doors that host has never served. A fourth union
+ * member cost one line; the alternative cost the case the page exists for.
+ *
+ * ⚠️ AND UNLIKE THE 404 ROOM, THIS PAGE MAY ASK. It is an ordinary route, so
+ * the `headers()` read is charged to it alone: `pnpm build` moves
+ * `/host-unavailable` from `○ (Static)` to `ƒ (Dynamic)` and nothing else in
+ * the route table changes. `app/not-found.tsx` is the global not-found
+ * boundary and cannot — it carries the measurement. That asymmetry is why one
+ * of these two surfaces reads the request and the other takes `UNKNOWN_HOST`.
+ *
+ * The prerender is a real cost and a small one: this page is `noindex`, it
+ * renders only during an outage, and it is the one document whose whole job is
+ * to be honest about a request rather than fast.
  */
-export default function HostUnavailablePage() {
+export default async function HostUnavailablePage() {
+  const host = await requestPublicHost()
+
   return (
     <SiteShell
-      host={SITE_HOST}
+      host={host}
       contentClassName="mx-auto flex w-full max-w-[46rem] flex-col justify-center px-(--spacing-card-padding) py-16"
     >
       <ErrorState what="this address" />
