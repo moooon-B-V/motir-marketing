@@ -3,16 +3,28 @@ import { copy } from '@/lib/copy'
 import { DocsNav } from '../_components/DocsNav'
 
 /*
- * The PUBLIC ADDRESS guide (Story MOTIR-3878 · MOTIR-4227) — committed prose,
- * for the person editing DNS at their registrar rather than for an engineer.
+ * The PUBLIC ADDRESS guide (Story MOTIR-3878 · MOTIR-4227, corrected by
+ * MOTIR-4316) — committed prose, for the person editing DNS at their registrar
+ * rather than for an engineer.
  *
- * ⚠️ IT DOCUMENTS THE SHIPPED PRODUCT, AND ONE PARAGRAPH SAYS SO OUT LOUD. The
- * card requires every instruction be read off the built product; doing that
- * found that the settings pane shows the ownership TXT and NOT the record that
- * points a domain at us (MOTIR-4278). The pointing records are documented here
- * anyway — a customer at their registrar needs them, and they are public facts
- * about where motir.co is served from — with the discrepancy stated plainly
- * instead of a page that describes a screen nobody will see.
+ * ⚠️ THE PANE IS AUTHORITATIVE FOR EVERY VALUE, AND THIS PAGE CARRIES NONE.
+ * MOTIR-4227 documented the pointing records with LITERAL values and said so in
+ * a callout, because the settings pane then showed only the ownership TXT
+ * (MOTIR-4278) — a discrepancy stated plainly rather than a page describing a
+ * screen nobody would see. MOTIR-4278 shipped that half of the pane and
+ * MOTIR-4314 set the values on the deployment, so the pane now lists EVERY
+ * record a domain needs, with a copy button on each. The workaround is retired
+ * with the defect it worked around.
+ *
+ * ⚠️ AND THE LITERALS GO WITH IT, WHICH IS THE DURABLE HALF. The pane's values
+ * are read from configuration (`MOTIR_PUBLIC_ADDRESS_CNAME_TARGET` /
+ * `_A_RECORDS` / `_AAAA_RECORDS` in motir-core); a literal committed here is a
+ * snapshot of them, no test compares the two, and the two repositories move on
+ * different clocks — so the first platform change makes this page confidently
+ * wrong at the one step where being wrong points a customer's domain somewhere
+ * else. What stays is the record SHAPES, which are a property of DNS and of the
+ * hostname the customer typed, and which they can usefully read BEFORE they
+ * start. Do not put a value back.
  *
  * ⚠️ NO NUMERIC CAP, and no tier names beyond "paid". `billing-tiering.md` owns
  * those numbers; a docs page that restated one would be the copy that goes stale
@@ -125,14 +137,21 @@ export default function PublicAddressDocsPage() {
           <Mono>roadmap.acme.com/</Mono> is that project&rsquo;s overview and{' '}
           <Mono>roadmap.acme.com/board</Mono> its board.
         </p>
-        <p>You create two kinds of record at your registrar.</p>
+        <p>
+          You create two kinds of record at your registrar.{' '}
+          <strong>Add the domain first</strong>, in Project settings under{' '}
+          <em>Public address</em>: the pane then lists every record that domain
+          needs, with its exact value and a copy button on each. The shapes
+          below are what to expect — read them to check your registrar can
+          create them, and take the values from the pane.
+        </p>
 
         <H3>1 · Point the domain at us</H3>
         <p>
           For a <strong>subdomain</strong> such as <Mono>roadmap.acme.com</Mono>
           , one <Mono>CNAME</Mono>:
         </p>
-        <Records rows={[['CNAME', 'roadmap', 'motir-marketing.fly.dev']]} />
+        <Records rows={[['CNAME', 'roadmap', 'shown in the pane']]} />
         <p>
           For a <strong>root domain</strong> such as <Mono>acme.com</Mono>, an{' '}
           <Mono>A</Mono> and an <Mono>AAAA</Mono> instead — a root domain cannot
@@ -142,14 +161,18 @@ export default function PublicAddressDocsPage() {
         </p>
         <Records
           rows={[
-            ['A', '@', '66.241.125.217'],
-            ['AAAA', '@', '2a09:8280:1::17d:93fd:0'],
+            ['A', '@', 'shown in the pane'],
+            ['AAAA', '@', 'shown in the pane'],
           ]}
         />
+        <p>
+          Copy each value from the pane rather than from anywhere else. These
+          are the addresses Motir is served on, read from the platform we run
+          on, and they can change — the pane changes with them and a page like
+          this one does not.
+        </p>
         <p className="rounded-(--radius-card) bg-(--el-tint-yellow) px-4 py-3 text-[14px] text-(--el-text-strong)">
-          The settings pane shows you the ownership record below, and does not
-          yet show the pointing record above — use the values on this page for
-          that step. If your DNS provider offers a &ldquo;proxy&rdquo; or
+          If your DNS provider offers a &ldquo;proxy&rdquo; or
           &ldquo;cloud&rdquo; toggle on the record, turn it off: a proxy in
           front of the record hides your domain from the check and the
           certificate cannot be issued.
@@ -157,9 +180,8 @@ export default function PublicAddressDocsPage() {
 
         <H3>2 · Prove the domain is yours</H3>
         <p>
-          Add the domain in Project settings under <em>Public address</em>. The
-          pane then shows one <Mono>TXT</Mono> record with a token in it, of the
-          shape:
+          Alongside the pointing record, the pane lists one <Mono>TXT</Mono>{' '}
+          record with a token in it, of the shape:
         </p>
         <Records rows={[['TXT', '_motir-verify.roadmap', 'motir-verify=…']]} />
         <p>
