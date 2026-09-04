@@ -11,6 +11,7 @@ import {
   railOperations,
   type OpenApiDocument,
 } from '@/lib/docs'
+import { DOCS_INDEX, DOCS_ROUTES, DOCS_SURFACES } from '@/lib/docsSurfaces'
 
 /*
  * THE DOCS RAIL (MOTIR-4396) — the navigation that makes forty-nine operations
@@ -168,16 +169,11 @@ describe('the rail links resolve INTO the page — they share one anchor rule', 
 })
 
 describe('the three tiers, and what decides them', () => {
-  it('tier 1 is on every page — the six surfaces', async () => {
+  it('tier 1 is on every page — one row per surface, the index first', async () => {
     const { container } = await renderRail('/docs/cli', false)
-    for (const href of [
-      '/docs',
-      '/docs/api',
-      '/docs/mcp',
-      '/docs/cli',
-      '/docs/sandbox',
-      '/docs/public-address',
-    ]) {
+    // Derived from the list the rail reads (MOTIR-4507), not written out here:
+    // a surface added to that file must appear without an edit to this one.
+    for (const href of [DOCS_INDEX.href, ...DOCS_SURFACES.map((s) => s.href)]) {
       expect(
         [...container.querySelectorAll('a')].map((a) => a.getAttribute('href')),
         href,
@@ -210,11 +206,18 @@ describe('the three tiers, and what decides them', () => {
     ).not.toContain('/docs/api/getting-started')
   })
 
-  it('ALL NINE page links survive — the count the card protects', async () => {
+  it('EVERY page link survives — the coverage the card protects', async () => {
     // ⚠️ The MCP sub-area's tier 2 is a DEVIATION from the asset's panels and a
     // following of its RULE: the asset draws tier 2 only for the API reference,
     // and left literal `/docs/mcp/tools` would have dropped out of the
     // navigation entirely, taking nine links to eight. Recorded on MOTIR-4396.
+    //
+    // ⚠️ THE EXPECTATION IS DERIVED, NOT LISTED (MOTIR-4507). It was the nine
+    // routes written out by hand, which made a TENTH page a second edit to
+    // this file — the same defect this test is about, one level up. It now
+    // walks `lib/docsSurfaces.ts`, which is the list the rail itself reads, and
+    // `tests/docs/docsSurfaces.test.tsx` is what holds that list to the pages
+    // `app/docs` actually serves.
     const onApi = await renderRail('/docs/api')
     const onMcp = await renderRail('/docs/mcp/tools', false)
     const reachable = new Set(
@@ -225,17 +228,7 @@ describe('the three tiers, and what decides them', () => {
         .map((a) => a.getAttribute('href') ?? '')
         .filter((href) => href.startsWith('/docs') && !href.includes('#')),
     )
-    expect([...reachable].sort()).toEqual([
-      '/docs',
-      '/docs/api',
-      '/docs/api/getting-started',
-      '/docs/api/stability',
-      '/docs/cli',
-      '/docs/mcp',
-      '/docs/mcp/tools',
-      '/docs/public-address',
-      '/docs/sandbox',
-    ])
+    expect([...reachable].sort()).toEqual([...DOCS_ROUTES].sort())
   })
 })
 

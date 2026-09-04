@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { copy } from '@/lib/copy'
 import type { RailOperation } from '@/lib/docs'
+import { DOCS_INDEX, DOCS_SURFACES } from '@/lib/docsSurfaces'
 
 /*
  * THE DOCS RAIL (MOTIR-4396) — built to `design/docs/design-notes.md`
@@ -39,14 +40,19 @@ import type { RailOperation } from '@/lib/docs'
  * the API surface is written down in this repository.
  */
 
-/** The surfaces the area documents. Tier 1, on every page. */
+/**
+ * The surfaces the area documents. Tier 1, on every page.
+ *
+ * ⚠️ NOT DECLARED HERE ANY MORE (MOTIR-4507). This constant used to hold the
+ * list, and the index page held a second copy of the same fact — which is how
+ * `/docs/public-address` reached the rail and never reached the index. The list
+ * lives in `lib/docsSurfaces.ts`, a directive-free module both sides import;
+ * declaring it inside this client component is precisely what put it out of the
+ * server-rendered index's reach.
+ */
 const SURFACES: { href: string; label: string }[] = [
-  { href: '/docs', label: copy.docs.indexTitle },
-  { href: '/docs/api', label: copy.docs.api },
-  { href: '/docs/mcp', label: copy.docs.mcp },
-  { href: '/docs/cli', label: copy.docs.cli },
-  { href: '/docs/sandbox', label: copy.docs.sandbox },
-  { href: '/docs/public-address', label: copy.docs.publicAddress },
+  DOCS_INDEX,
+  ...DOCS_SURFACES,
 ]
 
 /**
@@ -57,29 +63,25 @@ const SURFACES: { href: string; label: string }[] = [
  * pages" and its panels draw only the `API reference` instance — so the MCP
  * sub-area, which has exactly one own page (`MCP tools`), is drawn nowhere. Left
  * literal, the asset would have dropped `/docs/mcp/tools` out of the navigation
- * entirely, taking the page count from nine to eight and breaking this card's
+ * entirely, taking the page count from nine to eight and breaking that card's
  * "the nine existing page links remain present and working". Following the RULE
  * rather than the panel keeps all nine. Recorded on MOTIR-4396.
+ *
+ * ⚠️ AND IT IS NOW DERIVED, NOT LISTED (MOTIR-4507): every surface that HAS own
+ * pages gets a tier-2 group, so the rule above is applied by construction
+ * rather than by an author remembering it for the next sub-area.
  */
 const SUB_PAGES: {
   prefix: string
   heading: string
   pages: { href: string; label: string }[]
-}[] = [
-  {
-    prefix: '/docs/api',
-    heading: copy.docs.api,
-    pages: [
-      { href: '/docs/api/getting-started', label: copy.docs.apiGettingStarted },
-      { href: '/docs/api/stability', label: copy.docs.apiStability },
-    ],
-  },
-  {
-    prefix: '/docs/mcp',
-    heading: copy.docs.mcp,
-    pages: [{ href: '/docs/mcp/tools', label: copy.docs.mcpTools }],
-  },
-]
+}[] = DOCS_SURFACES.filter((surface) => surface.pages.length > 0).map(
+  (surface) => ({
+    prefix: surface.href,
+    heading: surface.label,
+    pages: surface.pages,
+  }),
+)
 
 const METHOD_TINT: Record<string, string> = {
   GET: 'bg-(--el-tint-sky)',
