@@ -339,12 +339,41 @@ door draws its three real sources — **your codebase · Jira · Linear or Plane
 rows, which is the same information the old row compressed into a sentence, at the weight the
 decision asks for. That also enumerates the products, which the import-copy rule requires anyway.
 
-**⚠️ THE SEAM THIS OPENS, and it is not resolved here.** The shipped `/onboarding` entrance
+**⚠️ THE SEAM THIS OPENED — RESOLVED 2026-09-04 by MOTIR-4370.** The shipped `/onboarding` entrance
 (MOTIR-1461) is **idea-first with import demoted to a secondary row** — Yue's own call on 2026-07-01,
 after the research below. A visitor now meets a symmetric fork on motir.co and, one click later, a
 demoted import row inside the app. Visual continuity between the two properties is one of this
 card's stated constraints, so **either the entrance takes the same revision or the asymmetry needs a
-reason on the record**. Flagged for MOTIR-1461; this asset cannot decide another surface's design.
+reason on the record**. ~~Flagged for MOTIR-1461~~ — **carried to MOTIR-4370, which ruled on it**;
+this asset could not decide another surface's design, and did not. (The original pointer named a
+subtask whose story had already shipped, so nothing in the tree was holding the question open — which
+is the defect MOTIR-4370 was filed to record.)
+
+**THE RULING (2026-09-04, MOTIR-4370): the asymmetry STANDS.** This landing keeps its symmetric fork;
+the `/onboarding` entrance keeps its idea-first shape with import as a secondary row. Neither surface
+is changed to match the other, and the same ruling is written into
+`motir-core/design/onboarding-entrance/design-notes.md`.
+
+**Why THIS surface is right to be symmetric.** It is met by a visitor who has committed to nothing. A
+fork is the honest thing to show someone still deciding — and this page is also answering _what Motir
+is_, where the co-equal import door is the point of the answer: Motir is not only an idea-first
+builder. That is the reasoning already recorded below, and the ruling keeps it.
+
+**Why the ENTRANCE is right to be idea-first.** It is reached by a reader who has already chosen the
+idea path, by name, at the door — the in-app door is a button reading "Plan a new project with AI"
+(`motir-core/app/(authed)/_components/ProjectSwitcher.tsx` and
+`motir-core/app/(authed)/_components/ProjectsEmptyState.tsx`, via `startNewAiProjectAction`), and this
+landing's own idea door carries the typed idea across in the `motir_pending_idea` cookie, which makes
+the entrance render its carried-idea panel — a panel that drops the import row entirely. Re-offering a
+symmetric fork there re-asks a question the reader answered with the click. The 2026-07-01 width
+constraint also still holds and still differs between the two: the entrance's centred column is ~660px
+(~310px a side), while this page's fork sits in a 1080px container (~510px a side).
+
+**What the ruling does NOT settle.** Door 2 emits `?intent=import`, and nothing on the motir-core side
+reads it, so a visitor who picks the import door lands on the entrance's DEFAULT panel rather than its
+import branch. **That is a routing gap, not a design asymmetry**, and MOTIR-3846 owns it — the same
+owner the door table below already names. This ruling assumes it lands; if it is ever abandoned, the
+asymmetry is worth revisiting, because the import door would then contradict itself one screen later.
 
 ### The rung-1 evidence, kept — it argued for idea-first and was OVERRULED
 
