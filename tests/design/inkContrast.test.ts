@@ -39,6 +39,11 @@ const ASSETS = [
   // wrong. That is the same "a gate that passes because it is measuring
   // nothing" shape this file's own header describes.
   resolve(ROOT, 'design', 'public-projects', 'public-projects.mock.html'),
+  // MOTIR-4393 — the /docs reading surface. ⚠️ ADDED WITH THE ASSET, for the
+  // reason the entry above states: this list is literal, so an asset that is
+  // not in it is not measured, and the lane would be green on the day the asset
+  // landed and green if the asset were wrong.
+  resolve(ROOT, 'design', 'docs', 'docs.mock.html'),
 ]
 
 /*
