@@ -1,4 +1,4 @@
-import { SITE_ORIGIN } from '@/lib/siteOrigin'
+import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 
 /**
  * THE ONE PLACE THAT KNOWS WHAT A LINK LOOKS LIKE ON THIS HOST
@@ -151,6 +151,38 @@ export function publicPathWithQuery(
   for (const [k, v] of Object.entries(params)) if (v) search.set(k, v)
   const qs = search.toString()
   return `${publicPathFor(host, identifier, path)}${qs ? `?${qs}` : ''}`
+}
+
+/**
+ * A link to one of THIS SITE's OWN pages, spelled for the host it is rendered
+ * on (MOTIR-4372).
+ *
+ * `publicPathFor` above answers the mirror question — where does a PROJECT's
+ * page live on this host — and the two together are the whole of the per-host
+ * address model. A tenant host serves that workspace's projects and nothing
+ * else, so `/explore`, `/docs`, `/design` and `/legal` are 404 there: the same
+ * rule `app/sitemap.ts` states in its own header, that **a tenant host is a
+ * project's address, not a copy of the marketing site**.
+ *
+ * ⚠️ THE FAILURE IT REMOVES IS NOT ONLY A DEAD CLICK. These paths are rendered
+ * into the shared chrome, which every tenant page wears, and Next RSC-prefetches
+ * a same-origin `next/link` on render — so before MOTIR-4372 every tenant page
+ * load spent three 404s on `?_rsc=` fetches nobody had clicked. That is why a
+ * caller must also drop `next/link` for a plain `<a>` off the site: an absolute
+ * cross-origin href is what stops the prefetch, and the helper cannot do that
+ * half for it.
+ *
+ * ⚠️ AND THE SITE ARM RETURNS THE PATH UNCHANGED, DELIBERATELY. `motir.co`'s
+ * own chrome keeps exactly the hrefs it has always had — no absolute URLs, no
+ * redirect hop, no `next/link` lost — so this function is a no-op on the host
+ * where the links were already right, and every change it makes is on a host
+ * where the old answer was a 404.
+ *
+ * `path` is root-relative and starts with a slash: `'/'`, `'/explore'`,
+ * `'/legal/terms'`.
+ */
+export function siteLinkFor(host: PublicHost, path: string): string {
+  return host.kind === 'site' ? path : siteUrl(path)
 }
 
 /** Read the router's two headers off a `Headers`. Pure, so a test can call it. */

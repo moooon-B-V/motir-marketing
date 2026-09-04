@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { copy } from '@/lib/copy'
 import { SiteShell } from '@/app/_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /**
  * The project-square shell (MOTIR-4045). Composes the same chrome every
@@ -19,7 +20,10 @@ export default function ExploreLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <SiteShell contentClassName="mx-auto w-full max-w-[72rem] px-(--spacing-card-padding) py-10">
+    <SiteShell
+      host={SITE_HOST}
+      contentClassName="mx-auto w-full max-w-[72rem] px-(--spacing-card-padding) py-10"
+    >
       {children}
     </SiteShell>
   )

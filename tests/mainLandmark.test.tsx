@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { MAIN_LANDMARK_ID, SiteShell } from '@/app/_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 import { copy } from '@/lib/copy'
 import { SITE_ROUTES } from '@/e2e/routes'
 
@@ -120,7 +121,7 @@ describe('every route renders exactly one main landmark', () => {
 
 describe('the shell that owns the landmark', () => {
   it('renders ONE main landmark, and the skip link targets it', () => {
-    render(<SiteShell>content</SiteShell>)
+    render(<SiteShell host={SITE_HOST}>content</SiteShell>)
 
     const landmark = screen.getByRole('main')
     expect(landmark).toHaveAttribute('id', MAIN_LANDMARK_ID)
@@ -136,7 +137,7 @@ describe('the shell that owns the landmark', () => {
 
   it('puts the skip link FIRST in the tab order', async () => {
     const user = userEvent.setup()
-    render(<SiteShell>content</SiteShell>)
+    render(<SiteShell host={SITE_HOST}>content</SiteShell>)
 
     await user.tab()
 

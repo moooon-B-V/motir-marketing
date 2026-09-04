@@ -1,4 +1,5 @@
 import { SiteShell } from '@/app/_components/SiteShell'
+import { requestPublicHost } from '@/lib/publicHost'
 
 /**
  * The `/p/*` shell (MOTIR-4115), built to `design/public-projects/`.
@@ -32,13 +33,30 @@ import { SiteShell } from '@/app/_components/SiteShell'
  * already has (`_components/ProjectHeader`), which is also what lets a tab
  * render the hero and its own body from ONE read.
  */
-export default function PublicProjectLayout({
+export default async function PublicProjectLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  /*
+   * ⚠️ THE LAYOUT READS THE HOST TOO, and it is the whole of MOTIR-4372 on this
+   * surface. Every page below it already asks `requestPublicHost()` so that its
+   * own tab and detail links point at the address the visitor is on — but the
+   * CHROME above them was asking nobody, and emitted `/explore`, `/docs`,
+   * `/design` and three legal paths as root-relative links on every host. A
+   * tenant host serves that workspace's projects and nothing else, so all six
+   * were 404s, and Next RSC-prefetched three of them on every render.
+   *
+   * It costs nothing here: the `/p/**` tree is `force-dynamic` already
+   * (`page.tsx`), because a public project page shows a live board.
+   */
+  const host = await requestPublicHost()
+
   return (
-    <SiteShell contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10">
+    <SiteShell
+      host={host}
+      contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10"
+    >
       {children}
     </SiteShell>
   )

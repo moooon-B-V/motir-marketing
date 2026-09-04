@@ -9,8 +9,10 @@ import {
   LEGAL_PRIVACY,
   LEGAL_TERMS,
   SIGN_IN,
+  SITE_ROOT,
   SOURCE_REPO,
 } from '@/lib/destinations'
+import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
 
 /*
  * The footer — the `ExploreFooter` four-column shape: the brand column plus
@@ -29,6 +31,19 @@ import {
  * the mapping below spends all of them and invents none.
  */
 
+/*
+ * ⚠️ `site: true` MARKS A LINK TO ONE OF THIS SITE'S OWN PAGES, and it is the
+ * whole of MOTIR-4372 down here. Every one of these five was a root-relative
+ * path emitted identically on every host the chrome is worn on — and a tenant
+ * host serves that workspace's projects and nothing else, so `/explore`,
+ * `/docs` and all three legal paths were 404s in the footer of every customer's
+ * page. `siteLinkFor` spells them absolutely off the site and leaves them
+ * exactly as they are on it.
+ *
+ * The three that are NOT marked are already absolute and already on another
+ * host — the two `APP_ORIGIN` doors and the GitHub repository — so there is
+ * nothing per-host to decide about them.
+ */
 const columns = [
   {
     heading: copy.footer.productHeading,
@@ -40,38 +55,51 @@ const columns = [
   {
     heading: copy.footer.resourcesHeading,
     items: [
-      { href: EXPLORE, label: copy.footer.explore },
-      { href: DOCS, label: copy.footer.docs },
+      { href: EXPLORE, label: copy.footer.explore, site: true },
+      { href: DOCS, label: copy.footer.docs, site: true },
       { href: SOURCE_REPO, label: copy.footer.github },
     ],
   },
   {
     heading: copy.footer.legalHeading,
     items: [
-      { href: LEGAL_PRIVACY, label: copy.footer.privacy },
-      { href: LEGAL_TERMS, label: copy.footer.terms },
-      { href: LEGAL_INDEX, label: copy.footer.legalIndex },
+      { href: LEGAL_PRIVACY, label: copy.footer.privacy, site: true },
+      { href: LEGAL_TERMS, label: copy.footer.terms, site: true },
+      { href: LEGAL_INDEX, label: copy.footer.legalIndex, site: true },
     ],
   },
-]
+] as const
 
-export function SiteFooter() {
+export function SiteFooter({ host }: { host: PublicHost }) {
   return (
     <footer
       aria-label={copy.footer.ariaLabel}
       className="grid gap-8 border-t border-(--el-border) bg-(--el-surface-soft) px-4 py-10 sm:grid-cols-2 sm:px-(--spacing-card-padding) lg:grid-cols-[1.4fr_1fr_1fr_1fr]"
     >
       <div>
-        {/* The ONE internal link in the footer — motir.co's own root. Every
-            other destination below is a different ORIGIN and stays a plain
-            `<a>`. */}
-        <Link
-          href="/"
-          aria-label={copy.nav.brandAriaLabel}
-          className="inline-flex"
-        >
-          <BrandMark size={22} label="Motir" />
-        </Link>
+        {/* motir.co's own root — internal ON THE SITE, and an absolute link
+            home from a tenant host, where `/` is that workspace's or that
+            project's root rather than ours (MOTIR-4372). The old comment called
+            it "the ONE internal link in the footer", which was a statement about
+            the host it was written on. Every destination that is a different
+            ORIGIN is a plain `<a>`. */}
+        {host.kind === 'site' ? (
+          <Link
+            href={SITE_ROOT}
+            aria-label={copy.nav.brandAriaLabel}
+            className="inline-flex"
+          >
+            <BrandMark size={22} label="Motir" />
+          </Link>
+        ) : (
+          <a
+            href={siteLinkFor(host, SITE_ROOT)}
+            aria-label={copy.nav.brandAriaLabel}
+            className="inline-flex"
+          >
+            <BrandMark size={22} label="Motir" />
+          </a>
+        )}
         <p className="mt-2.5 max-w-[30rem] text-[13px] leading-relaxed text-(--el-text-secondary)">
           {copy.footer.tagline}
         </p>
@@ -89,7 +117,11 @@ export function SiteFooter() {
             {column.items.map((item) => (
               <li key={item.href}>
                 <a
-                  href={item.href}
+                  href={
+                    'site' in item && item.site
+                      ? siteLinkFor(host, item.href)
+                      : item.href
+                  }
                   className="text-[13px] text-(--el-text-secondary) hover:text-(--el-link) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
                 >
                   {item.label}

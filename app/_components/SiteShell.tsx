@@ -1,5 +1,6 @@
 import { cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
+import type { PublicHost } from '@/lib/publicHost'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
 
@@ -59,10 +60,34 @@ export const MAIN_LANDMARK_ID = 'main'
 
 export function SiteShell({
   children,
+  host,
   contentClassName,
   className,
 }: Readonly<{
   children: React.ReactNode
+  /**
+   * WHICH HOST THIS PAGE IS BEING SERVED ON — required, never defaulted
+   * (MOTIR-4372).
+   *
+   * The chrome carries links to `/explore`, `/docs`, `/design` and `/legal`,
+   * which exist on `motir.co` alone; the same chrome is worn by every tenant
+   * host, where all four are 404s. `SiteHeader` and `SiteFooter` therefore spell
+   * them through `siteLinkFor`, and this is where that value enters.
+   *
+   * ⚠️ NO DEFAULT, DELIBERATELY, and `lib/publicHost.ts`'s own header says why:
+   * *"a component whose output depends on a value it did not receive is a
+   * component whose test can pass while the page is wrong"*. A `= SITE_HOST`
+   * here would make the bug this card fixes reachable again by the exact route
+   * that produced it — a surface added later that never thought about the host —
+   * and it would fail silently, on somebody else's domain. Passing `SITE_HOST`
+   * explicitly is one import and makes the claim readable at the call site.
+   *
+   * ⚠️ AND IT IS A PROP RATHER THAN AN AMBIENT `requestPublicHost()` READ. This
+   * shell wraps `motir.co`'s statically rendered pages — the landing, `/legal`,
+   * `/docs` — and `headers()` inside it would make every one of them dynamic to
+   * answer a question only the `/p/**` tree and `/w` ever need asked.
+   */
+  host: PublicHost
   /**
    * The width / padding box the surface wants around its own content. It goes
    * ON the landmark rather than in a wrapper inside it, so the room a reader
@@ -95,7 +120,7 @@ export function SiteShell({
         {copy.nav.skipToContent}
       </a>
 
-      <SiteHeader />
+      <SiteHeader host={host} />
 
       {/* `tabIndex={-1}` is what makes the skip link WORK rather than merely
           move the URL fragment: without it the anchor scrolls the landmark
@@ -112,7 +137,7 @@ export function SiteShell({
         {children}
       </main>
 
-      <SiteFooter />
+      <SiteFooter host={host} />
     </div>
   )
 }

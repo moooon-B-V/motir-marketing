@@ -3,6 +3,7 @@ import { copy } from '@/lib/copy'
 import { siteUrl } from '@/lib/siteOrigin'
 import { DesignShowcase } from '../_components/DesignShowcase'
 import { SiteShell } from '../_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /*
  * motir.co/design — the public design showcase (MOTIR-1043 · 8.3.16).
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
 
 export default function DesignPage() {
   return (
-    <SiteShell>
+    <SiteShell host={SITE_HOST}>
       <DesignShowcase />
     </SiteShell>
   )

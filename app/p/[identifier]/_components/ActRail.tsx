@@ -55,12 +55,19 @@ export function ActRail({
         Request a feature
       </Link>
 
-      <Link
+      {/* ⚠️ A PLAIN `<a>`, NOT `next/link` (MOTIR-4372). `changelog.xml` is a
+          ROUTE HANDLER, not a page: there is no RSC payload to prefetch and no
+          client navigation to perform. Next prefetched it anyway, because the
+          href is same-origin — and the prefetch answered **404**, once per
+          render of every project page, on every host. It was invisible until a
+          spec counted responses instead of reading markup
+          (`e2e/specs/tenant-chrome.spec.ts`). */}
+      <a
         href={publicPathFor(host, identifier, 'changelog.xml')}
         className="inline-flex h-(--height-btn-sm) items-center px-2 text-[13px] text-(--el-text-secondary) hover:text-(--el-link)"
       >
         Atom feed
-      </Link>
+      </a>
     </div>
   )
 }

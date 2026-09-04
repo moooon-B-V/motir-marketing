@@ -8,6 +8,7 @@ import { OpenCore } from './_components/OpenCore'
 import { Pillars } from './_components/Pillars'
 import { Proof } from './_components/Proof'
 import { SiteShell } from './_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /*
  * motir.co — the public landing (MOTIR-1152 · 8.3.6).
@@ -30,7 +31,7 @@ import { SiteShell } from './_components/SiteShell'
  */
 export default function Page() {
   return (
-    <SiteShell>
+    <SiteShell host={SITE_HOST}>
       <div className="mx-auto max-w-[1080px] px-4 pt-12 pb-2 text-center sm:px-7 sm:pt-[72px]">
         <span className="mb-4 inline-flex items-center gap-1.5 rounded-(--radius-badge) bg-(--el-tint-lavender) px-(--spacing-chip-x) py-(--spacing-chip-y) text-[12px] font-semibold text-(--el-text-strong)">
           <Sparkles aria-hidden="true" className="size-3.5" />
