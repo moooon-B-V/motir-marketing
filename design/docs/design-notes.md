@@ -85,7 +85,7 @@ left over would make every page harder to read in order to use the space.
 
 | Element             | Primitive         | Colour                                                     | Shape                                                         |
 | ------------------- | ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
-| Rail                | `Sidebar` grammar | `--el-sidebar-bg`, right border `--el-border`              | —                                                             |
+| Rail                | `Sidebar` grammar | `--el-sidebar-bg`, right border `--el-border`              | spans the row; `.rail-inner` sticks inside it                 |
 | Find box            | `Input`           | bg `--el-page-bg`, border `--el-border-strong`             | `--radius-input`, `--height-input`, `--spacing-input-x`       |
 | `/` hint            | `<kbd>` chip      | border `--el-border`, text `--el-text-secondary`           | `--radius-kbd`, `--spacing-kbd-x/y`                           |
 | Group heading       | `SectionLabel`    | `--el-text-secondary`                                      | —                                                             |
@@ -98,6 +98,19 @@ left over would make every page harder to read in order to use the space.
 | Spec table          | plain `<table>`   | header `--el-text-secondary`, cells `--el-text-secondary`  | rules `--el-border` / `--el-border-soft`                      |
 | Code pane           | `CodeBlock`       | caption on `--el-surface`, body on `--el-page-bg`          | `--radius-card`                                               |
 | Unreachable card    | `Card`            | `--el-surface`, border `--el-border`                       | `--radius-card`                                               |
+
+**⚠️ THE RAIL SPANS THE ROW, AND ITS STICKY REGION IS A CHILD OF IT — two elements, not one
+(MOTIR-4432).** The surface (`--el-sidebar-bg` + the right border) is painted by the rail itself,
+which is a grid item at the row's full height; the scrolling, sticking region is `.rail-inner`
+inside it, carrying `position: sticky`, the max-height and the padding. **The two jobs cannot share
+one element, and this asset drew them sharing one until MOTIR-4432.** `align-items: start` on the
+grid is what makes `position: sticky` engage — a sticky element only sticks while it is shorter than
+what scrolls past it — and it also shrinks the element to its own rows, so the tint and the border
+stopped where the last nav row ended: 648px above the bottom of the reading column on `/docs`, and
+85500px above it on `/docs/api`. A sidebar drawn as a floating box. Deleting `align-items: start`
+alone trades the defect for the opposite one, a rail that scrolls away. **So the grid states
+`align-items: stretch`, and the sticky lives one level down.** The panels below draw the corrected
+shape; the shipped components mirror it element for element (`DocsShell.tsx` · `DocsRail.tsx`).
 
 **Content-column typography.** `h1` is `--font-serif` at 30px (the shipped `/docs` value, unchanged);
 an operation summary is 16px semibold; a section eyebrow is 11px uppercase `--el-text-secondary`.

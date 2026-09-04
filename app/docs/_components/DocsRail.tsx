@@ -168,113 +168,123 @@ export function DocsRail({
   return (
     <nav
       aria-label={copy.docs.indexTitle}
-      /* Sticky on the wide layout; static and above the content when narrow, so
-         it never overlays what it navigates (panel 7). */
-      className="border-b border-(--el-border) bg-(--el-sidebar-bg) px-3.5 py-4 md:sticky md:top-0 md:max-h-dvh md:overflow-y-auto md:border-r md:border-b-0 md:py-5"
+      /* ⚠️ THIS ELEMENT PAINTS THE SURFACE AND NOTHING ELSE — no `sticky`, no
+         `max-h`, no padding (MOTIR-4432). It is a grid item in a STRETCHED row
+         (`DocsShell.tsx`), so the tint and the right border run the full height
+         of the reading column beside it, which is what makes it read as a
+         sidebar rather than a box that failed to grow. The scrolling, sticking
+         region is the wrapper below. Putting either job back on the other
+         element re-opens one of the two defects: `position: sticky` on a
+         full-height item never engages, and shrinking this one to fit its rows
+         ends the tint mid-page. */
+      className="border-b border-(--el-border) bg-(--el-sidebar-bg) md:border-r md:border-b-0"
     >
-      {operations ? (
-        <>
-          <label className="sr-only" htmlFor="docs-operation-filter">
-            {copy.docs.filterOperations}
-          </label>
-          <div className="flex h-(--height-input) items-center gap-2 rounded-(--radius-input) border border-(--el-border-strong) bg-(--el-page-bg) px-(--spacing-input-x)">
-            <svg
-              viewBox="0 0 24 24"
-              width="14"
-              height="14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              aria-hidden="true"
-              className="shrink-0 text-(--el-text-secondary)"
-            >
-              <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-3.5-3.5" />
-            </svg>
-            <input
-              id="docs-operation-filter"
-              ref={filterRef}
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={copy.docs.filterOperations}
-              className="w-full border-0 bg-transparent text-[13px] text-(--el-text) outline-none placeholder:text-(--el-text-secondary)"
-            />
-            {/* Decorative: the affordance is the input, which is already
+      {/* Sticky on the wide layout; static and above the content when narrow, so
+          it never overlays what it navigates (panel 7). */}
+      <div className="px-3.5 py-4 md:sticky md:top-0 md:max-h-dvh md:overflow-y-auto md:py-5">
+        {operations ? (
+          <>
+            <label className="sr-only" htmlFor="docs-operation-filter">
+              {copy.docs.filterOperations}
+            </label>
+            <div className="flex h-(--height-input) items-center gap-2 rounded-(--radius-input) border border-(--el-border-strong) bg-(--el-page-bg) px-(--spacing-input-x)">
+              <svg
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                aria-hidden="true"
+                className="shrink-0 text-(--el-text-secondary)"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+              <input
+                id="docs-operation-filter"
+                ref={filterRef}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={copy.docs.filterOperations}
+                className="w-full border-0 bg-transparent text-[13px] text-(--el-text) outline-none placeholder:text-(--el-text-secondary)"
+              />
+              {/* Decorative: the affordance is the input, which is already
                 focusable and labelled. The hint is for a reader who knows the
                 shortcut convention. */}
-            <kbd
-              aria-hidden="true"
-              className="rounded-(--radius-kbd) border border-(--el-border) px-(--spacing-kbd-x) py-(--spacing-kbd-y) font-(family-name:--font-mono) text-[10px] text-(--el-text-secondary)"
-            >
-              /
-            </kbd>
-          </div>
-          {/* The count reports the NARROWED set against the whole — panel 4 ①.
+              <kbd
+                aria-hidden="true"
+                className="rounded-(--radius-kbd) border border-(--el-border) px-(--spacing-kbd-x) py-(--spacing-kbd-y) font-(family-name:--font-mono) text-[10px] text-(--el-text-secondary)"
+              >
+                /
+              </kbd>
+            </div>
+            {/* The count reports the NARROWED set against the whole — panel 4 ①.
               A filter that hides its own selectivity is how a reader concludes
               an operation does not exist. `aria-live` so the number reaches a
               screen reader as it changes, which is the only way the filter's
               effect is perceivable without sight. */}
-          <p
-            aria-live="polite"
-            className="mt-2 mb-3.5 px-0.5 text-[11.5px] text-(--el-text-secondary)"
-          >
-            {shownCount === total
-              ? `${total} operations`
-              : `${shownCount} of ${total} operations`}
-          </p>
-        </>
-      ) : null}
+            <p
+              aria-live="polite"
+              className="mt-2 mb-3.5 px-0.5 text-[11.5px] text-(--el-text-secondary)"
+            >
+              {shownCount === total
+                ? `${total} operations`
+                : `${shownCount} of ${total} operations`}
+            </p>
+          </>
+        ) : null}
 
-      <GroupHeading>{copy.docs.indexTitle}</GroupHeading>
-      <ul className="mb-1 list-none p-0">
-        {SURFACES.map((surface) => {
-          const current = pathname === surface.href
-          return (
-            <li key={surface.href}>
-              <Link
-                href={surface.href}
-                aria-current={current ? 'page' : undefined}
-                className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
-              >
-                {surface.label}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+        <GroupHeading>{copy.docs.indexTitle}</GroupHeading>
+        <ul className="mb-1 list-none p-0">
+          {SURFACES.map((surface) => {
+            const current = pathname === surface.href
+            return (
+              <li key={surface.href}>
+                <Link
+                  href={surface.href}
+                  aria-current={current ? 'page' : undefined}
+                  className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
+                >
+                  {surface.label}
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
 
-      {SUB_PAGES.filter(
-        (area) =>
-          pathname === area.prefix || pathname.startsWith(`${area.prefix}/`),
-      ).map((area) => (
-        <div key={area.prefix} className="mt-4.5">
-          <GroupHeading>{area.heading}</GroupHeading>
-          <ul className="mb-1 list-none p-0">
-            {area.pages.map((page) => {
-              const current = pathname === page.href
-              return (
-                <li key={page.href}>
-                  <Link
-                    href={page.href}
-                    aria-current={current ? 'page' : undefined}
-                    className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
-                  >
-                    {page.label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      ))}
+        {SUB_PAGES.filter(
+          (area) =>
+            pathname === area.prefix || pathname.startsWith(`${area.prefix}/`),
+        ).map((area) => (
+          <div key={area.prefix} className="mt-4.5">
+            <GroupHeading>{area.heading}</GroupHeading>
+            <ul className="mb-1 list-none p-0">
+              {area.pages.map((page) => {
+                const current = pathname === page.href
+                return (
+                  <li key={page.href}>
+                    <Link
+                      href={page.href}
+                      aria-current={current ? 'page' : undefined}
+                      className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
+                    >
+                      {page.label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
 
-      {/* Tier 3. Hidden below the docs breakpoint behind a disclosure, so the
+        {/* Tier 3. Hidden below the docs breakpoint behind a disclosure, so the
           narrow layout does not open with forty-nine rows before its content
           (panel 7). */}
-      {operations ? (
-        <div className="mt-4.5">
-          {/* ⚠️ NARROW COLLAPSES, WIDE DOES NOT — panel 7. A `<details open>`
+        {operations ? (
+          <div className="mt-4.5">
+            {/* ⚠️ NARROW COLLAPSES, WIDE DOES NOT — panel 7. A `<details open>`
               cannot be conditional on the viewport, so the disclosure is
               explicit: the button is `md:hidden`, and the list is hidden below
               the breakpoint until it is pressed and always shown above it. The
@@ -282,69 +292,70 @@ export function DocsRail({
               push the page a reader came to read off the screen — the asset's
               "it never overlays the content it navigates" has a sibling
               obligation not to bury it either. */}
-          <button
-            type="button"
-            aria-expanded={narrowOpen}
-            aria-controls="docs-operation-tier"
-            onClick={() => setNarrowOpen((open) => !open)}
-            className="mb-2 flex min-h-(--height-control) w-full cursor-pointer items-center justify-between rounded-(--radius-control) border border-(--el-border) bg-(--el-page-bg) px-(--spacing-control-x) text-[13px] font-semibold text-(--el-text) md:hidden"
-          >
-            <span>
-              {copy.docs.api} · {total} operations
-            </span>
-            <svg
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              aria-hidden="true"
-              className={narrowOpen ? 'rotate-180' : undefined}
+            <button
+              type="button"
+              aria-expanded={narrowOpen}
+              aria-controls="docs-operation-tier"
+              onClick={() => setNarrowOpen((open) => !open)}
+              className="mb-2 flex min-h-(--height-control) w-full cursor-pointer items-center justify-between rounded-(--radius-control) border border-(--el-border) bg-(--el-page-bg) px-(--spacing-control-x) text-[13px] font-semibold text-(--el-text) md:hidden"
             >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
-          </button>
-          <div
-            id="docs-operation-tier"
-            className={narrowOpen ? 'block' : 'hidden md:block'}
-          >
-            {shown.map((group) => (
-              <div key={group.group} className="mt-3.5 first:mt-0">
-                <GroupHeading>{group.group}</GroupHeading>
-                <ul className="mb-1 list-none p-0">
-                  {group.operations.map((operation) => (
-                    <li key={operation.id}>
-                      <Link
-                        href={`/docs/api#${operation.id}`}
-                        className={`${ROW} ${ROW_REST}`}
-                      >
-                        <span
-                          className={`shrink-0 rounded-(--radius-badge) px-1.5 py-0.5 text-center font-(family-name:--font-mono) text-[9.5px] leading-none font-bold tracking-wide text-(--el-text-strong) ${
-                            METHOD_TINT[operation.method] ?? 'bg-(--el-muted)'
-                          }`}
-                          style={{ minWidth: '40px' }}
+              <span>
+                {copy.docs.api} · {total} operations
+              </span>
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                aria-hidden="true"
+                className={narrowOpen ? 'rotate-180' : undefined}
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            <div
+              id="docs-operation-tier"
+              className={narrowOpen ? 'block' : 'hidden md:block'}
+            >
+              {shown.map((group) => (
+                <div key={group.group} className="mt-3.5 first:mt-0">
+                  <GroupHeading>{group.group}</GroupHeading>
+                  <ul className="mb-1 list-none p-0">
+                    {group.operations.map((operation) => (
+                      <li key={operation.id}>
+                        <Link
+                          href={`/docs/api#${operation.id}`}
+                          className={`${ROW} ${ROW_REST}`}
                         >
-                          {operation.method}
-                        </span>
-                        <span className="truncate font-(family-name:--font-mono) text-[12px]">
-                          {operation.path}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            {shownCount === 0 ? (
-              <p className="px-2 text-[12.5px] text-(--el-text-secondary)">
-                {copy.docs.filterEmpty}
-              </p>
-            ) : null}
+                          <span
+                            className={`shrink-0 rounded-(--radius-badge) px-1.5 py-0.5 text-center font-(family-name:--font-mono) text-[9.5px] leading-none font-bold tracking-wide text-(--el-text-strong) ${
+                              METHOD_TINT[operation.method] ?? 'bg-(--el-muted)'
+                            }`}
+                            style={{ minWidth: '40px' }}
+                          >
+                            {operation.method}
+                          </span>
+                          <span className="truncate font-(family-name:--font-mono) text-[12px]">
+                            {operation.path}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              {shownCount === 0 ? (
+                <p className="px-2 text-[12.5px] text-(--el-text-secondary)">
+                  {copy.docs.filterEmpty}
+                </p>
+              ) : null}
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </nav>
   )
 }
