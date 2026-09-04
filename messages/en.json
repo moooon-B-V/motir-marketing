@@ -213,7 +213,15 @@
     "mcpTools": "MCP tools",
     "cli": "CLI",
     "sandbox": "Sandbox",
-    "publicAddress": "Public address"
+    "publicAddress": "Public address",
+    "apiIntro": "Every operation the API serves, generated from the OpenAPI document Motir publishes and fetched when this page is requested — so it is exactly what the server ships right now. Each one lists its parameters, the body it accepts, a request you can copy, and every status it can answer with.",
+    "sectionRequest": "Request",
+    "sectionBody": "Request body",
+    "sectionExample": "Example",
+    "sectionResponses": "Responses",
+    "sectionResponseSchema": "Response schema",
+    "thStatus": "Status",
+    "thCondition": "Condition"
   },
   "notFound": {
     "eyebrow": "404",

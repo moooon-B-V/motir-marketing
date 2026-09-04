@@ -60,6 +60,10 @@ const fixture: OpenApiDocument = {
 
 describe('listOperations', () => {
   it('flattens the spec paths into a sorted operation list', () => {
+    // ⚠️ WIDENED BY MOTIR-4391 — the operation now carries its parameters, its
+    // request body and its responses, because the page renders them. The three
+    // heads below are unchanged; what is added is the detail the reference
+    // fetched and discarded for the whole life of this page.
     expect(listOperations(fixture)).toEqual([
       {
         method: 'GET',
@@ -67,6 +71,10 @@ describe('listOperations', () => {
         operationId: 'listDirectory',
         summary: 'List the square',
         description: undefined,
+        permission: undefined,
+        parameters: [],
+        requestBody: undefined,
+        responses: [],
       },
       {
         method: 'GET',
@@ -74,6 +82,10 @@ describe('listOperations', () => {
         operationId: 'getProject',
         summary: 'Read a project',
         description: undefined,
+        permission: undefined,
+        parameters: [],
+        requestBody: undefined,
+        responses: [],
       },
       {
         method: 'PATCH',
@@ -81,6 +93,10 @@ describe('listOperations', () => {
         operationId: 'updateProject',
         summary: 'Update a project',
         description: undefined,
+        permission: undefined,
+        parameters: [],
+        requestBody: undefined,
+        responses: [],
       },
     ])
   })

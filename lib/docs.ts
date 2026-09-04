@@ -33,18 +33,88 @@ import { APP_ORIGIN } from '@/lib/appOrigin'
  * here at all.
  */
 
+/**
+ * One JSON Schema node of the document. Deliberately open: the spec carries
+ * `anyOf`, `items`, `enum`, `format`, `minLength` and more, and a closed type
+ * here would be a second, narrower declaration of somebody else's schema.
+ * {@link schemaTypeLabel} and {@link describeSchema} read the parts a reader
+ * needs; the rest is carried, not interpreted.
+ */
+export interface OpenApiSchema {
+  type?: string
+  enum?: unknown[]
+  anyOf?: OpenApiSchema[]
+  oneOf?: OpenApiSchema[]
+  allOf?: OpenApiSchema[]
+  items?: OpenApiSchema
+  properties?: Record<string, OpenApiSchema>
+  required?: string[]
+  format?: string
+  description?: string
+  $ref?: string
+  [key: string]: unknown
+}
+
+/** One operation node, as the document declares it. */
+export interface OpenApiOperationNode {
+  summary?: string
+  description?: string
+  operationId?: string
+  'x-motir-permission'?: string
+  parameters?: {
+    name: string
+    in: string
+    required?: boolean
+    description?: string
+    schema?: OpenApiSchema
+  }[]
+  requestBody?: {
+    required?: boolean
+    description?: string
+    content?: Record<string, { schema?: OpenApiSchema }>
+  }
+  responses?: Record<
+    string,
+    {
+      description?: string
+      content?: Record<string, { schema?: OpenApiSchema }>
+    }
+  >
+}
+
 /** The OpenAPI 3.1 document motir-core serves at `/api/openapi/v1.json`. */
 export interface OpenApiDocument {
   openapi: string
   info: { title: string; version: string }
-  paths: Record<
+  paths: Record<string, Record<string, OpenApiOperationNode>>
+  components?: { schemas?: Record<string, OpenApiSchema> } & Record<
     string,
-    Record<
-      string,
-      { summary?: string; description?: string; operationId?: string }
-    >
+    unknown
   >
-  components?: Record<string, unknown>
+}
+
+/** One path or query parameter, as the reference renders it. */
+export interface ApiParameter {
+  name: string
+  location: string
+  required: boolean
+  description?: string
+  schema?: OpenApiSchema
+}
+
+/** An operation's request body — one media type, one schema. */
+export interface ApiRequestBody {
+  mediaType: string
+  required: boolean
+  description?: string
+  schema: OpenApiSchema
+}
+
+/** One documented response status. */
+export interface ApiResponse {
+  status: string
+  description?: string
+  schema?: OpenApiSchema
 }
 
 export interface ApiOperation {
@@ -53,6 +123,11 @@ export interface ApiOperation {
   operationId?: string
   summary?: string
   description?: string
+  /** `x-motir-permission` — the grant a token must carry to call it. */
+  permission?: string
+  parameters: ApiParameter[]
+  requestBody?: ApiRequestBody
+  responses: ApiResponse[]
 }
 
 const SPEC_URL = `${APP_ORIGIN}/api/openapi/v1.json`
@@ -64,27 +139,282 @@ export async function fetchOpenApiSpec(): Promise<OpenApiDocument> {
   return (await res.json()) as OpenApiDocument
 }
 
-/** Flatten the spec's paths into an ordered operation list. */
+// ── `$ref` resolution ───────────────────────────────────────────────────────
+//
+// A 720 KB OpenAPI 3.1 document is mostly `components`: 353 `$ref`s over 32
+// distinct component schemas on `v1.24.0`. A renderer that prints
+// `$ref: '#/components/schemas/WorkItemDetail'` has rendered NOTHING — it has
+// shown the reader the name of the answer.
+//
+// ⚠️ THE DEPTH HANDLED IS **UNBOUNDED**, not "one level", and the difference is
+// a guard rather than a claim. Today no component schema contains a `$ref` of
+// its own, so one level would in fact be total — and a renderer written to that
+// measurement breaks silently the first time motir-core factors a shared
+// sub-schema out. So the walk recurses, and carries a `seen` set: a component
+// that refers to itself (a tree node, a nested link group) resolves to its own
+// name rather than looping. `tests/docs/docs.test.ts` asserts BOTH — that no
+// `$ref` survives into a rendered page, and that a self-referential fixture
+// terminates.
+
+/** The component name a `#/components/schemas/X` pointer names, or null. */
+function refName(ref: string): string | null {
+  const match = /^#\/components\/schemas\/(.+)$/.exec(ref)
+  return match ? (match[1] ?? null) : null
+}
+
+/**
+ * Replace every `$ref` in a schema tree with the component it names.
+ *
+ * Structural rather than textual: only the VALUE of a `$ref` key is followed, so
+ * a description that happens to quote one is left alone.
+ */
+export function resolveSchemaRefs(
+  node: OpenApiSchema,
+  components: Record<string, OpenApiSchema>,
+  seen: readonly string[] = [],
+): OpenApiSchema {
+  if (typeof node.$ref === 'string') {
+    const name = refName(node.$ref)
+    // An unresolvable pointer, and a cycle, are both reported AS the component's
+    // name rather than followed. The reader is told what it is; the renderer
+    // does not hang.
+    if (!name || seen.includes(name)) {
+      return { type: name ?? node.$ref, description: node.description }
+    }
+    const target = components[name]
+    if (!target) return { type: name, description: node.description }
+    return {
+      ...resolveSchemaRefs(target, components, [...seen, name]),
+      title: name,
+    }
+  }
+
+  const out: OpenApiSchema = {}
+  for (const [key, value] of Object.entries(node)) {
+    if (key === 'properties' && value && typeof value === 'object') {
+      out.properties = Object.fromEntries(
+        Object.entries(value as Record<string, OpenApiSchema>).map(
+          ([property, schema]) => [
+            property,
+            resolveSchemaRefs(schema, components, seen),
+          ],
+        ),
+      )
+    } else if (
+      (key === 'anyOf' || key === 'oneOf' || key === 'allOf') &&
+      Array.isArray(value)
+    ) {
+      out[key] = (value as OpenApiSchema[]).map((arm) =>
+        resolveSchemaRefs(arm, components, seen),
+      )
+    } else if (key === 'items' && value && typeof value === 'object') {
+      out.items = resolveSchemaRefs(value as OpenApiSchema, components, seen)
+    } else {
+      out[key] = value
+    }
+  }
+  return out
+}
+
+/** The FIRST media type an operation declares — `application/json`, in practice. */
+function firstContent(
+  content: Record<string, { schema?: OpenApiSchema }> | undefined,
+): { mediaType: string; schema?: OpenApiSchema } | null {
+  const [entry] = Object.entries(content ?? {})
+  if (!entry) return null
+  return { mediaType: entry[0], schema: entry[1].schema }
+}
+
+/**
+ * Flatten the spec's paths into an ordered operation list — WITH the detail
+ * (MOTIR-4391).
+ *
+ * The operation carries its parameters, its request body and its responses,
+ * every `$ref` already resolved, so the page renders a value rather than
+ * re-walking the document. Before this card it carried `method`, `path` and
+ * `summary`, and the page rendered exactly those three fields out of a document
+ * that answers `what do I send?` on every one of its operations.
+ */
 export function listOperations(spec: OpenApiDocument): ApiOperation[] {
   const methods = ['get', 'post', 'patch', 'put', 'delete'] as const
+  const components = spec.components?.schemas ?? {}
+  const resolve = (schema: OpenApiSchema) =>
+    resolveSchemaRefs(schema, components)
   const out: ApiOperation[] = []
+
   for (const [path, byMethod] of Object.entries(spec.paths)) {
     for (const method of methods) {
       const op = byMethod[method]
-      if (op) {
-        out.push({
-          method: method.toUpperCase(),
-          path,
-          operationId: op.operationId,
-          summary: op.summary,
-          description: op.description,
-        })
-      }
+      if (!op) continue
+
+      const body = firstContent(op.requestBody?.content)
+      out.push({
+        method: method.toUpperCase(),
+        path,
+        operationId: op.operationId,
+        summary: op.summary,
+        description: op.description,
+        permission: op['x-motir-permission'],
+        parameters: (op.parameters ?? []).map((parameter) => ({
+          name: parameter.name,
+          location: parameter.in,
+          required: parameter.required === true,
+          description: parameter.description,
+          schema: parameter.schema ? resolve(parameter.schema) : undefined,
+        })),
+        requestBody:
+          body && body.schema
+            ? {
+                mediaType: body.mediaType,
+                required: op.requestBody?.required === true,
+                description: op.requestBody?.description,
+                schema: resolve(body.schema),
+              }
+            : undefined,
+        responses: Object.entries(op.responses ?? {})
+          .map(([status, response]) => {
+            const content = firstContent(response.content)
+            return {
+              status,
+              description: response.description,
+              schema:
+                content && content.schema ? resolve(content.schema) : undefined,
+            }
+          })
+          .sort((a, b) => a.status.localeCompare(b.status)),
+      })
     }
   }
   return out.sort(
     (a, b) => a.path.localeCompare(b.path) || a.method.localeCompare(b.method),
   )
+}
+
+// ── Reading a schema, for a reader ──────────────────────────────────────────
+
+/** One row of a rendered schema table. */
+export interface SchemaField {
+  name: string
+  type: string
+  required: boolean
+  description?: string
+  enumValues?: string[]
+}
+
+/** Is this arm the `{ "type": "null" }` half of a nullable `anyOf`? */
+function isNullArm(schema: OpenApiSchema): boolean {
+  return schema.type === 'null'
+}
+
+/**
+ * A human type for one schema node: `string`, `integer`, `string | null`,
+ * `string[]`, the component's own name, or the arms of a union.
+ *
+ * It reads the schema rather than guessing from the property name, which is why
+ * `storyPoints` says `number | null` and `targetRepos` says `string[]` — both
+ * facts a flattened `type` field would have lost.
+ */
+export function schemaTypeLabel(schema: OpenApiSchema | undefined): string {
+  if (!schema) return 'unknown'
+  const union = schema.anyOf ?? schema.oneOf
+  if (union && union.length > 0) {
+    const arms = union.map(schemaTypeLabel)
+    // The nullable case reads better as `string | null` than as a union of two,
+    // and it is the overwhelmingly common one in this document.
+    return [...new Set(arms)].join(' | ')
+  }
+  if (schema.allOf && schema.allOf.length > 0) {
+    return schema.allOf.map(schemaTypeLabel).join(' & ')
+  }
+  if (schema.type === 'array') {
+    return `${schemaTypeLabel(schema.items)}[]`
+  }
+  if (typeof schema.title === 'string' && schema.type === 'object') {
+    return schema.title
+  }
+  if (schema.type)
+    return schema.format ? `${schema.type} (${schema.format})` : schema.type
+  if (schema.properties) return 'object'
+  return 'unknown'
+}
+
+/** Enum members anywhere in a node — including inside a nullable union arm. */
+function enumMembers(schema: OpenApiSchema): string[] | undefined {
+  if (Array.isArray(schema.enum)) return schema.enum.map(String)
+  for (const arm of schema.anyOf ?? schema.oneOf ?? []) {
+    if (!isNullArm(arm) && Array.isArray(arm.enum)) return arm.enum.map(String)
+  }
+  return undefined
+}
+
+/**
+ * An object schema's properties, as rows a table can render: the name, the
+ * type, whether it is REQUIRED, its description and its enum members.
+ *
+ * An empty list means the schema is not an object with named properties — a
+ * bare array or a scalar — and the caller renders the type instead.
+ */
+export function describeSchema(
+  schema: OpenApiSchema | undefined,
+): SchemaField[] {
+  if (!schema) return []
+  const target = schema.properties
+    ? schema
+    : (schema.anyOf ?? schema.oneOf ?? []).find((arm) => arm.properties)
+  if (!target?.properties) return []
+  const required = new Set(target.required ?? [])
+  return Object.entries(target.properties).map(([name, property]) => ({
+    name,
+    type: schemaTypeLabel(property),
+    required: required.has(name),
+    description:
+      typeof property.description === 'string'
+        ? property.description
+        : undefined,
+    enumValues: enumMembers(property),
+  }))
+}
+
+/**
+ * A copyable request for one operation.
+ *
+ * Built from the operation itself: its method, its path with each path parameter
+ * left as its own `{name}` so a reader sees what to substitute, the bearer
+ * header every `/api/v1` call needs, and — where there is a body — a JSON object
+ * carrying exactly the REQUIRED properties, each with a placeholder of its own
+ * type. Optional fields are deliberately absent: an example that sends
+ * everything teaches a reader nothing about what the call needs.
+ */
+export function exampleRequest(
+  operation: ApiOperation,
+  origin: string,
+): string {
+  const lines = [`curl -X ${operation.method} '${origin}${operation.path}' \\`]
+  lines.push(`  -H 'Authorization: Bearer $MOTIR_TOKEN'`)
+
+  const fields = describeSchema(operation.requestBody?.schema).filter(
+    (field) => field.required,
+  )
+  if (operation.requestBody) {
+    lines[lines.length - 1] += ' \\'
+    lines.push(`  -H 'Content-Type: ${operation.requestBody.mediaType}' \\`)
+    const body = Object.fromEntries(
+      fields.map((field) => [field.name, placeholderFor(field)]),
+    )
+    lines.push(`  -d '${JSON.stringify(body)}'`)
+  }
+  return lines.join('\n')
+}
+
+/** A placeholder value of the field's own type, for the example body. */
+function placeholderFor(field: SchemaField): unknown {
+  if (field.enumValues && field.enumValues.length > 0)
+    return field.enumValues[0]
+  if (field.type.endsWith('[]')) return []
+  if (field.type.startsWith('number') || field.type.startsWith('integer'))
+    return 0
+  if (field.type.startsWith('boolean')) return true
+  return `<${field.name}>`
 }
 
 // ── The MCP tool catalogue (MOTIR-4195) ─────────────────────────────────────
