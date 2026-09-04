@@ -71,8 +71,23 @@ function hrefsOf(page: Page): Promise<string[]> {
     .evaluateAll((nodes) => nodes.map((n) => n.getAttribute('href')!))
 }
 
+/*
+ * ⚠️ THE IDENTIFIERS ARE THE FIXTURE'S, AND THEY ARE NOT `MOTIR`.
+ * `e2e/fixtures/host-workspace.json` publishes `ACME` and `ROAD`, and
+ * `host-project.json` puts `ROAD` at the customer domain's root — while every
+ * `/p/*` URL in `e2e/routes.ts` uses `MOTIR`, which is the SITE host's fixture.
+ * A tenant URL naming `MOTIR` is a 404, and it renders the 404 room inside this
+ * same chrome — so the assertions below still find a page, still find links,
+ * and fail on the room's own relative Explore door instead of on the defect.
+ * The `expect(status).toBe(200)` in each test is what keeps that mistake
+ * legible rather than mysterious.
+ *
+ * `ACME`'s primary IS the workspace subdomain and `ROAD`'s IS the customer
+ * domain (`acceptance-public-address.spec.ts` states why), so neither URL below
+ * takes `redirectIfNotPrimary`'s 308 to somewhere else.
+ */
 for (const [label, url] of [
-  ['a workspace subdomain', `${TENANT_ORIGIN}/MOTIR`],
+  ['a workspace subdomain', `${TENANT_ORIGIN}/ACME`],
   ['a customer domain', `${CUSTOM_ORIGIN}/`],
 ] as const) {
   test(`${label} — a project page takes ZERO responses at 400 or above`, async ({
@@ -118,7 +133,14 @@ for (const [label, url] of [
     // The card's second criterion, run against the SERVED document rather than
     // a rendered component — `curl … | grep -oE 'href="[^"]*"'`, with the grep
     // expressed as an assertion.
-    await page.goto(url)
+    const response = await page.goto(url)
+    // ⚠️ FIRST, and it is not ceremony: the 404 room wears this same chrome, so
+    // a URL the fixture cannot serve produces a page that passes the link count
+    // and fails on the room's own Explore door — a diagnosis pointing at the
+    // product for a mistake in this line.
+    expect(response?.status(), 'the tenant host did not serve a document').toBe(
+      200,
+    )
     const hrefs = await hrefsOf(page)
 
     // A guard on the guard: a page that rendered no chrome would satisfy every

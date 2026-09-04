@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { publicPathFor, SITE_HOST, type PublicHost } from '@/lib/publicHost'
 
 /**
@@ -75,12 +74,15 @@ export function ErrorState({
       </p>
       {identifier ? (
         <p className="mt-3.5 text-[13px]">
-          <Link
+          {/* A plain `<a>` — `changelog.xml` is a route handler, so a
+              `next/link` prefetches it and takes a 404 (MOTIR-4372, and see
+              `ActRail`). */}
+          <a
             href={publicPathFor(host, identifier, 'changelog.xml')}
             className="text-(--el-link) underline underline-offset-2"
           >
             Changelog feed
-          </Link>
+          </a>
         </p>
       ) : null}
     </div>
