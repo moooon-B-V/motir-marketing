@@ -144,6 +144,59 @@ describe('the CLI page is GENERATED from the catalogue it fetches', () => {
   })
 })
 
+describe('“Where Motir keeps things” is back (MOTIR-4429)', () => {
+  /*
+   * The deleted motir-core page carried a `files` section naming the
+   * credential store and the project link with the path of each; the restore
+   * dropped it, and MOTIR-4397's parity ledger measured that — the new page
+   * listed `motir help files` as a COMMAND and named no path at all.
+   *
+   * ⚠️ IT IS AUTHORED PROSE, and that is a decision rather than an oversight.
+   * The published catalogue carries commands, flags, the install line and the
+   * default server, and no file path — so there is nothing here to derive it
+   * from, and `lib/docs.ts`'s carve-out for authored guide content is what
+   * allows it. Read from motir-core `packages/cli/src/help.ts`'s FILES topic,
+   * which is what `motir help files` prints from the installed binary.
+   */
+  it('names all three paths, and which one holds the secret', async () => {
+    stubCliFetch(catalogue)
+    const { container } = render(await CliPage())
+    const text = container.textContent ?? ''
+
+    expect(text).toContain('Where Motir keeps things')
+    expect(text).toContain('~/.config/motir/config.json')
+    expect(text).toContain('.motir.json')
+    expect(text).toContain('~/.local/state/motir/session-excludes.json')
+
+    // The distinction the section exists for. A reader who takes only one
+    // thing from it must take this one.
+    expect(text).toMatch(/secret, never commit/)
+    expect(text).toMatch(/no secret, safe to commit/)
+  })
+
+  it('names the variable that relocates each relocatable one', async () => {
+    // A path with no way to move it is half an answer on a machine whose
+    // config directory is somewhere else.
+    stubCliFetch(catalogue)
+    const { container } = render(await CliPage())
+    const text = container.textContent ?? ''
+    expect(text).toContain('MOTIR_CONFIG_HOME')
+    expect(text).toContain('XDG_CONFIG_HOME')
+    expect(text).toContain('MOTIR_STATE_HOME')
+  })
+
+  it('does not add a command list — the guard above still holds', async () => {
+    // Stated here as well as above because this section is the most likely
+    // place for one to creep back in: it is prose about the CLI, beside a
+    // generated table, written by hand.
+    stubCliFetch(catalogue)
+    const { container } = render(await CliPage())
+    expect(container.querySelectorAll('section ul > li').length).toBe(
+      catalogue.commands.length,
+    )
+  })
+})
+
 describe('the page keeps NO copy of what the catalogue carries', () => {
   it('contains no hard-coded server URL of its own', () => {
     // The card's own criterion, and it is a NEGATIVE for a reason: a positive

@@ -37,7 +37,74 @@ import { CodeBlock } from '../../_components/DocSchema'
  * ── The boundary with `/docs/cli` ──────────────────────────────────────────
  * Commands are LINKED, never restated — one home per fact. This page owns the
  * environment a run executes inside; that page owns what you type.
+ *
+ * ── ⚠️ THREE SECTIONS RESTORED (MOTIR-4429) ────────────────────────────────
+ * MOTIR-4397's parity ledger found three things the deleted `motir-core` page
+ * at `95a2d4468^` (`lib/apiDocs/sandbox.ts`) carried and this one did not:
+ *
+ *  1. **What it confines — and what it does not.** The most important of the
+ *     three, and the one nobody measured: the page opened by saying an agent
+ *     "reaches your work tree and not the rest of your machine" while the
+ *     original said in terms that the NETWORK is open by design. A confinement
+ *     claim with its exception deleted is not a smaller claim, it is a
+ *     different and false one — so this is a correction as much as a restore.
+ *     `Network` and `unprivileged` both appeared ZERO times here.
+ *  2. **Before you start.** The Docker prerequisite, the `linux/arm64` fact
+ *     (Apple Silicon is native; nothing is emulated), the agent sign-in that
+ *     must exist on the host, and the folder tree showing that you mount the
+ *     directory CONTAINING your checkouts. The page had compressed the last of
+ *     these to one clause and dropped the rest.
+ *  3. **Or start it from VS Code instead.** `devcontainer` and `VS Code` both
+ *     appeared ZERO times, and the page's closing paragraph listed the editor
+ *     integrations as "not documented here yet" — a deletion recorded as a
+ *     decision. It was neither: the original documented them.
+ *
+ * ⚠️ THE HEREDOC DELIMITER IS QUOTED — `<<'JSON'` — and that is load-bearing.
+ * Unquoted, the shell expands `${localWorkspaceFolder}` and `${localEnv:HOME}`
+ * to empty strings on the way into the file, and the reader gets a container
+ * that mounts nothing and finds no credential: a silent failure strictly worse
+ * than being stuck. `tests/docs/sandbox.test.tsx` greps for the quoted form
+ * rather than trusting review, which is what the deleted module did too.
+ *
+ * ⚠️ AND ONE OBJECT, TWO BLOCKS. The listing and the heredoc are built from
+ * `DEVCONTAINER_JSON`, so a `mounts` entry corrected in one cannot publish a
+ * different config under the other caption.
  */
+
+/**
+ * The dev-container configuration the VS Code sub-step tells the reader to
+ * write — the ONE source both of that step's code blocks are built from.
+ *
+ * The `\${…}` escapes are template-literal escapes, not shell ones: what this
+ * constant HOLDS is the literal text `${localWorkspaceFolder}`, which is a Dev
+ * Containers substitution the editor resolves and nothing before it may.
+ */
+const DEVCONTAINER_JSON = `{
+  "name": "Motir sandbox (Claude Code)",
+  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=\${localWorkspaceFolder},target=/workspace,type=bind",
+  "mounts": [
+    "source=\${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
+  ],
+  "remoteUser": "node",
+  "overrideCommand": true
+}`
+
+/**
+ * The command that PRODUCES that file, because naming a filename is not an
+ * instruction a reader can carry out: macOS Finder and most GUI file pickers
+ * refuse a name beginning with `.`, and refuse it without saying why.
+ */
+const DEVCONTAINER_WRITE_COMMAND = `mkdir -p .devcontainer
+cat > .devcontainer/devcontainer.json <<'JSON'
+${DEVCONTAINER_JSON}
+JSON`
+
+export const metadata = {
+  title: copy.docs.metaTitleSandbox,
+  description: copy.docs.metaDescriptionSandbox,
+}
 
 export default function SandboxPage() {
   return (
@@ -52,6 +119,93 @@ export default function SandboxPage() {
         misbehaving agent reaches your work tree and not the rest of your
         machine.
       </p>
+
+      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
+        What it confines — and what it does not
+      </h2>
+      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        Worth reading before you rely on it, because one of these three is an
+        exception rather than a guarantee.
+      </p>
+      <dl className="mt-3 max-w-[68ch] space-y-3 text-[14px] leading-relaxed text-(--el-text-secondary)">
+        <div>
+          <dt className="font-semibold text-(--el-text)">
+            Filesystem — confined.
+          </dt>
+          <dd className="m-0">
+            The only host surfaces inside the container are a writable{' '}
+            <code className="font-(family-name:--font-mono)">/workspace</code>{' '}
+            and your agent’s own credential, mounted read-only. No Docker
+            socket, no other host bind.
+          </dd>
+        </div>
+        <div>
+          <dt className="font-semibold text-(--el-text)">
+            Network — OPEN, by design.
+          </dt>
+          <dd className="m-0">
+            Every agent needs its provider API and every dispatched work item
+            needs git remotes, so the image confines the filesystem blast radius
+            and not egress. If your threat model needs more, reach for Docker’s
+            own network controls — the container will not stop an agent talking
+            to the internet.
+          </dd>
+        </div>
+        <div>
+          <dt className="font-semibold text-(--el-text)">
+            Privileges — unprivileged.
+          </dt>
+          <dd className="m-0">
+            It runs as the{' '}
+            <code className="font-(family-name:--font-mono)">node</code> user
+            (uid 1000), so files written into the mount stay owned by you rather
+            than by root.
+          </dd>
+        </div>
+      </dl>
+
+      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
+        Before you start
+      </h2>
+      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        Two things, and neither is a Motir account detail — you sign in{' '}
+        <strong className="text-(--el-text)">inside</strong> the container
+        below, so there is nothing to mint or copy first. You do not need the
+        Motir CLI on this machine either; it ships in the image.
+      </p>
+      <ul className="mt-3 max-w-[68ch] list-disc space-y-2 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
+        <li>
+          <strong className="text-(--el-text)">Docker, running.</strong> Docker
+          Desktop or any engine. The images are built for{' '}
+          <code className="font-(family-name:--font-mono)">linux/amd64</code>{' '}
+          <strong className="text-(--el-text)">and</strong>{' '}
+          <code className="font-(family-name:--font-mono)">linux/arm64</code>,
+          so Apple Silicon is a first-class machine and nothing is emulated.
+          There is no build step — you pull.
+        </li>
+        <li>
+          <strong className="text-(--el-text)">
+            Your agent’s own sign-in, on this machine.
+          </strong>{' '}
+          Sign in to your agent once, here, before you start — or have its API
+          key in your environment. Its credential mount is read-only, so the
+          container can use a sign-in and can never perform one.
+        </li>
+      </ul>
+      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        A Motir project usually spans several repositories and the work loop
+        runs across all of them — so what you mount is the folder that{' '}
+        <strong className="text-(--el-text)">contains</strong> your checkouts,
+        not any one of them. Start the container from there:
+      </p>
+      <div className="mt-3">
+        <CodeBlock
+          caption="your machine"
+          code={`~/work/                 ← start the container from HERE
+├── motir-core/         ← a checkout
+└── motir-ai/           ← another`}
+        />
+      </div>
 
       <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
         Start one
@@ -101,6 +255,113 @@ export default function SandboxPage() {
         <code className="font-(family-name:--font-mono)">docker run</code> goes
         back to the registry — a profile tag MOVES, so pull again to pick up a
         newer CLI.
+      </p>
+
+      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
+        Or start it from VS Code instead
+      </h2>
+      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        The same confined image, as a dev container: VS Code opens{' '}
+        <code className="font-(family-name:--font-mono)">/workspace</code>{' '}
+        inside it with the same mounts, so your editor, terminal and agent all
+        run behind the same boundary. Three sub-steps, and they{' '}
+        <strong className="text-(--el-text)">replace</strong> the{' '}
+        <code className="font-(family-name:--font-mono)">docker run</code> above
+        rather than following it — everything after is the same either way.
+      </p>
+      <ol className="mt-3 max-w-[68ch] list-decimal space-y-3 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
+        <li>
+          <strong className="text-(--el-text)">
+            Install the Dev Containers extension.
+          </strong>{' '}
+          From the Extensions view, or from the command palette — ⇧⌘P on macOS,
+          Ctrl+Shift+P on Windows and Linux, F1 on all three — then{' '}
+          <em>Extensions: Install Extensions</em>. The palette is where two of
+          these three sub-steps happen, so it is worth pinning now. The
+          extension drives the same Docker engine the command above uses.
+        </li>
+        <li>
+          <strong className="text-(--el-text)">
+            Add{' '}
+            <code className="font-(family-name:--font-mono)">
+              .devcontainer/devcontainer.json
+            </code>
+          </strong>{' '}
+          to the folder you are mounting — the same one you would have started
+          from. It pins the published image and passes the mount your profile
+          needs. Write it from that folder in one command, because a GUI file
+          manager will not do it for you: macOS Finder and most file pickers
+          refuse a name beginning with a dot, and they refuse it without saying
+          why.
+        </li>
+        <li>
+          <strong className="text-(--el-text)">
+            Open the folder in the container.
+          </strong>{' '}
+          Command palette → <em>Dev Containers: Open Folder in Container…</em>,
+          and pick the folder you just wrote the file into. VS Code pulls the
+          image and attaches; its terminal is the same shell the{' '}
+          <code className="font-(family-name:--font-mono)">docker run</code>{' '}
+          above would have dropped you into. If that folder is{' '}
+          <em>already open</em> in VS Code,{' '}
+          <em>Dev Containers: Reopen in Container</em> does the same attach
+          without asking which folder.
+        </li>
+      </ol>
+      <div className="mt-3">
+        <CodeBlock
+          caption="your machine — in the folder you are mounting"
+          code={DEVCONTAINER_WRITE_COMMAND}
+        />
+      </div>
+      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        The quotes around{' '}
+        <code className="font-(family-name:--font-mono)">&lt;&lt;’JSON’</code>{' '}
+        are load-bearing: they are what stops your shell expanding{' '}
+        <code className="font-(family-name:--font-mono)">
+          ${'{'}localWorkspaceFolder{'}'}
+        </code>{' '}
+        and{' '}
+        <code className="font-(family-name:--font-mono)">
+          ${'{'}localEnv:HOME{'}'}
+        </code>{' '}
+        before they reach the file. Those are Dev Containers substitutions, and
+        the editor is what resolves them. That command writes exactly this — the
+        same file, if you would rather create it by hand:
+      </p>
+      <div className="mt-3">
+        <CodeBlock
+          caption=".devcontainer/devcontainer.json"
+          code={DEVCONTAINER_JSON}
+        />
+      </div>
+      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        Swap the <code className="font-(family-name:--font-mono)">:claude</code>{' '}
+        tag and the{' '}
+        <code className="font-(family-name:--font-mono)">mounts</code> entry
+        together for the profile you use — the same pairing the{' '}
+        <code className="font-(family-name:--font-mono)">docker run</code> line
+        needs. A dev container is not torn down when you close the window, so
+        the sign-in below persists here with no extra flag — and for exactly
+        that reason it also keeps the image it was first created from. Dev
+        Containers reuses a local image just as{' '}
+        <code className="font-(family-name:--font-mono)">docker run</code> does,
+        so the{' '}
+        <code className="font-(family-name:--font-mono)">docker pull</code>{' '}
+        above is still yours to run before you reopen, and an existing container
+        then needs <em>Dev Containers: Rebuild Container</em> to pick the new
+        image up.
+      </p>
+      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        <strong className="text-(--el-text)">
+          The devcontainer files inside the motir-core repository are not this
+          file.
+        </strong>{' '}
+        They carry a{' '}
+        <code className="font-(family-name:--font-mono)">build</code> block
+        pointing at that repository’s own Dockerfile, because they are its dev
+        containers and a checkout is what those are for. For your own workspace,
+        pin the image as above.
       </p>
 
       <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
@@ -160,7 +421,7 @@ motir run ACME-7            # one work item — or a story key, or 'sprint'`}
           <strong className="text-(--el-text)">
             Your agent credential, READ-ONLY.
           </strong>{' '}
-          The profile&apos;s credential directory is bind-mounted with{' '}
+          The profile’s credential directory is bind-mounted with{' '}
           <code className="font-(family-name:--font-mono)">:ro</code>. Nothing
           in the container can rewrite it, and nothing about it is sent to Motir
           — this is bring-your-own-key, so the agent bill is yours and the API
@@ -175,13 +436,13 @@ motir run ACME-7            # one work item — or a story key, or 'sprint'`}
         </li>
         <li>
           <strong className="text-(--el-text)">
-            Your agent&apos;s output stays local by default.
+            Your agent’s output stays local by default.
           </strong>{' '}
-          Only the run&apos;s lifecycle reaches Motir. Passing{' '}
+          Only the run’s lifecycle reaches Motir. Passing{' '}
           <code className="font-(family-name:--font-mono)">--report-log</code>{' '}
-          additionally sends the output&apos;s tail so a failed run shows it on
-          the run page; it is OFF unless you ask, and file contents, paths and
-          diffs are never sent either way.
+          additionally sends the output’s tail so a failed run shows it on the
+          run page; it is OFF unless you ask, and file contents, paths and diffs
+          are never sent either way.
         </li>
       </ul>
 
@@ -253,9 +514,9 @@ ai:plan             open a plan`}
         <li>
           <strong className="text-(--el-text)">A link on the work item.</strong>{' '}
           The run declares which item each pull request delivers, so merging it
-          moves the card. That link is what the item page&apos;s Development
-          panel shows, and it is what closes the item on merge — not the branch
-          name and not the title.
+          moves the card. That link is what the item page’s Development panel
+          shows, and it is what closes the item on merge — not the branch name
+          and not the title.
         </li>
         <li>
           <strong className="text-(--el-text)">Status, as it goes.</strong> The
@@ -265,7 +526,7 @@ ai:plan             open a plan`}
         </li>
         <li>
           <strong className="text-(--el-text)">The terminal.</strong> The
-          agent&apos;s own output stays in your terminal unless you passed{' '}
+          agent’s own output stays in your terminal unless you passed{' '}
           <code className="font-(family-name:--font-mono)">--report-log</code>.
         </li>
       </ul>
@@ -358,8 +619,8 @@ ai:plan             open a plan`}
         >
           {copy.docs.cli}
         </Link>
-        , which is generated from the CLI&apos;s own catalogue and cannot drift
-        from it. Wiring an agent to Motir directly, without the CLI, is{' '}
+        , which is generated from the CLI’s own catalogue and cannot drift from
+        it. Wiring an agent to Motir directly, without the CLI, is{' '}
         <Link
           href="/docs/mcp"
           className="text-(--el-accent-on-surface) underline underline-offset-2"
@@ -373,8 +634,10 @@ ai:plan             open a plan`}
         >
           {copy.docs.api}
         </Link>
-        . Running the sandbox anywhere other than your own machine, and the
-        editor integrations, are not documented here yet.
+        . Running the sandbox anywhere other than your own machine is not
+        documented here yet. (The VS Code path IS documented, above — that
+        clause used to say otherwise, and it was recording a deleted section as
+        a decision.)
       </p>
     </>
   )
