@@ -418,7 +418,18 @@
            page and the sidebar read as a floating box. The rail spans the row;
            the sticky region is `.rail-inner`, inside it. */
         align-items: stretch;
-        min-height: 620px;
+        /* ⚠️ AND THE ROW FILLS THE LANDMARK — `flex-grow`, never a `min-height`
+           of its own (MOTIR-4465). `.site` is the chrome's column and this is
+           the room between its bar and its footer, so a row sized by its own
+           CONTENT stops wherever the content stops: on a page shorter than the
+           viewport the tint ended above the footer and the sidebar read as a
+           stub, which is MOTIR-4432's defect again on the other axis. The
+           panels below therefore carry their height on `.site` — the viewport
+           stand-in — and never here. Shipped as `md:flex md:flex-col` on the
+           landmark plus `md:grow` on the grid (`app/docs/layout.tsx` ·
+           `DocsShell.tsx`), gated at `md` because below the breakpoint the rail
+           is a band above the content and a full-height one would be wrong. */
+        flex-grow: 1;
       }
       .rail {
         /* The SURFACE, and nothing else. No sticky, no max-height, no padding:
@@ -873,7 +884,7 @@
           >
         </div>
         <div class="frame">
-          <div class="site">
+          <div class="site" style="min-height: 620px">
             <header class="topbar">
               <a class="brand-lockup" href="/" aria-label="Motir">
                 <svg
@@ -1365,8 +1376,8 @@ curl -X POST 'https://app.motir.co/api/v1/projects/{projectKey}/work-items' \
           >
         </div>
         <div class="frame">
-          <div class="site">
-            <div class="docs" style="min-height: 380px">
+          <div class="site" style="min-height: 560px">
+            <div class="docs">
               <nav class="rail" aria-label="Documentation">
                 <div class="rail-inner">
                   <p class="group">Documentation</p>
@@ -1399,6 +1410,16 @@ docker run -it --name motir-sandbox \
               </main>
             </div>
           </div>
+        </div>
+        <div class="callout">
+          <b>A SHORT page — the rail still reaches the footer.</b> This page's
+          content ends well above the bottom of the frame and the rail does not:
+          the row fills the LANDMARK (<code class="inline">.site</code>, the
+          column between the bar and the footer), the surface fills the row, and
+          the sticky region sits inside the surface. Three elements, one each. A
+          panel that propped <code class="inline">.docs</code> up directly would
+          draw the same picture and specify none of it &mdash; which is how
+          MOTIR-4465 shipped through a faithful build of MOTIR-4432's asset.
         </div>
         <div class="callout">
           <b>No find box on a prose page.</b> The control filters OPERATIONS,
@@ -1576,8 +1597,8 @@ docker run -it --name motir-sandbox \
           <span class="note">Where the top bar’s Docs item lands.</span>
         </div>
         <div class="frame">
-          <div class="site">
-            <div class="docs" style="min-height: 340px">
+          <div class="site" style="min-height: 340px">
+            <div class="docs">
               <nav class="rail" aria-label="Documentation">
                 <div class="rail-inner">
                   <p class="group">Documentation</p>
@@ -1642,8 +1663,8 @@ docker run -it --name motir-sandbox \
           >
         </div>
         <div class="frame">
-          <div class="site">
-            <div class="docs" style="min-height: 300px">
+          <div class="site" style="min-height: 300px">
+            <div class="docs">
               <nav class="rail" aria-label="Documentation">
                 <div class="rail-inner">
                   <p class="group">Documentation</p>
@@ -1781,8 +1802,8 @@ docker run -it --name motir-sandbox \
           >
         </div>
         <div class="frame dark">
-          <div class="site">
-            <div class="docs" style="min-height: 320px">
+          <div class="site" style="min-height: 320px">
+            <div class="docs">
               <nav class="rail" aria-label="Documentation">
                 <div class="rail-inner">
                   <div class="find">

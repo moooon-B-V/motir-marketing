@@ -50,8 +50,19 @@ export function DocsShell({
        sidebar drawn as a floating box. The two jobs are now separated: this
        row STRETCHES the rail, and the sticky region lives in a wrapper INSIDE
        it (`DocsRail.tsx`). Deleting that wrapper and restoring `items-start`
-       trades the defect back. */
-    <div className="grid grid-cols-[minmax(0,1fr)] md:grid-cols-[264px_minmax(0,1fr)]">
+       trades the defect back.
+
+       ⚠️ AND `md:grow` IS WHAT MAKES THAT STRETCH REACH THE FOOTER (MOTIR-4465).
+       The row above stretches the rail to the ROW; this stretches the ROW to the
+       LANDMARK. Without it the grid is sized by its own content, and on a page
+       whose content is shorter than the viewport (`/docs/mcp`: 359px of grid in
+       a 900px window) the row — and therefore the painted surface — ended 224px
+       above the footer. `app/docs/layout.tsx` is the other half: it passes
+       `md:flex md:flex-col` so this element has a flex container to grow inside.
+       `grow` and not `flex-1`, deliberately: `flex-1` sets `flex-basis: 0`, and
+       a basis of zero on the `/docs/api` row (86400px of operations) asks the
+       layout to re-derive from nothing what the content already states. */
+    <div className="grid grid-cols-[minmax(0,1fr)] md:grid-cols-[264px_minmax(0,1fr)] md:grow">
       <DocsRail operations={operations} />
       <div className="w-full max-w-[46rem] px-(--spacing-card-padding) py-10">
         {children}
