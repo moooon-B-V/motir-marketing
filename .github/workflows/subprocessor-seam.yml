@@ -24,7 +24,11 @@
 #
 # ── ⚠️ WHAT THIS DOES NOT DO, AND WHY IT IS SAID HERE ───────────────────────
 #
-# It does not close the window — it BOUNDS it, to roughly a day. Closing it
+# It does not close the window — it BOUNDS it. The PERIOD is a day; the BOUND is
+# the period PLUS however late GitHub delivers the tick, and this org's daily
+# crons have arrived up to +12 h late, so the honest bound is nearer 36 HOURS
+# than "roughly a day" (MOTIR-4599, measured 2026-09-05: both elapsed ticks
+# delivered at +4 h 56 m and +4 h 59 m, consecutive gap 24 h 03 m). Closing it
 # would mean motir-core's release blocking on this repository's CI, which is the
 # coupling the whole split exists to avoid, and §E already refused it. Nobody
 # should read a green run here as "the page has been correct since the last
