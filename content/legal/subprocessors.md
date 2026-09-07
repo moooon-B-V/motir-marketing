@@ -299,10 +299,18 @@ recorded here rather than resolved silently:
   serve a reader worse than a candid one. Each is reopened if that vendor
   publishes a DPA, if a supervisory authority addresses business use of the API,
   or if a customer requires it closed.
-- **⚠️ Four retention and training answers are UNREAD**, and are marked _not
-  confirmed_ on the model-provider list rather than assumed favourable. Alibaba
-  Cloud, DeepSeek, Zhipu AI and Moonshot AI each need their published answer read
-  and recorded.
+- **✅ Four retention and training answers — CLOSED 2026-09-06.** Alibaba Cloud,
+  DeepSeek, Zhipu AI and Moonshot AI were marked _not confirmed_ on the
+  model-provider list rather than assumed favourable. All four have now been read
+  from each vendor's own published documents and recorded on
+  [the model-provider list](/legal/model-providers), which carries the document
+  and the date for each. **All four TRAINING cells are a stated fact and all four
+  RETENTION cells are an explicit "not stated"** — Alibaba Cloud states it will
+  never use customer data for model training, while DeepSeek, Zhipu AI and
+  Moonshot AI each state that they use API content to train or optimise models,
+  and **none of the four commits to a retention period**. "Not stated" is the vendor's silence reported as
+  silence; it is not a pass, and the model-provider list says so in as many words.
+  Reopened if any of the four publishes a period or changes its training position.
 - **⚠️ The six-provider set is a LAUNCH intention, and must be re-read before
   general availability.** Two channels were enabled when the gateway was last
   read. Listing a provider that never ships is the same error as omitting one
