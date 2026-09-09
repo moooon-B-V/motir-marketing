@@ -247,8 +247,9 @@ export default function SandboxPage() {
         />
         <CodeBlock
           caption="run"
-          code={`docker run -it --name motir-sandbox \\
+          code={`docker run -it --rm --pull=always \\
   -v "$PWD:/workspace" \\
+  -v motir-auth:/home/node/.config/motir \\
   -v "$HOME/.claude:/home/node/.claude:ro" \\
   ghcr.io/moooon-b-v/motir-sandbox:claude`}
         />
@@ -272,14 +273,28 @@ export default function SandboxPage() {
         you worse off than not pulling.
       </p>
       <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        Coming back to a container you already made is{' '}
+        That command is the same every time.{' '}
+        <code className="font-(family-name:--font-mono)">--pull=always</code>{' '}
+        fetches the current image on every start, so a profile tag that has
+        moved reaches you without your having to notice that it moved, and{' '}
+        <code className="font-(family-name:--font-mono)">--rm</code> means
+        nothing is kept that could go stale. There is no separate
+        coming-back-to-it path — which is exactly what used to leave people
+        running a <code className="font-(family-name:--font-mono)">motir</code>{' '}
+        months older than the page they were reading it from.
+      </p>
+      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        Your sign-in survives all of that. It is written to the{' '}
+        <code className="font-(family-name:--font-mono)">motir-auth</code>{' '}
+        volume, which lives outside the container, so you sign in once and every
+        later run picks it up — sign out for good with{' '}
         <code className="font-(family-name:--font-mono)">
-          docker start -ai motir-sandbox
+          docker volume rm motir-auth
         </code>
-        . Note that neither that nor{' '}
-        <code className="font-(family-name:--font-mono)">docker run</code> goes
-        back to the registry — a profile tag MOVES, so pull again to pick up a
-        newer CLI.
+        . Working offline? Drop{' '}
+        <code className="font-(family-name:--font-mono)">--pull=always</code>:
+        it reaches the registry on every start, so with no network the run fails
+        instead of falling back to the image you already have.
       </p>
 
       <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">

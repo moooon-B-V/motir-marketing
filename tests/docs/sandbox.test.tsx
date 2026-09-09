@@ -34,6 +34,48 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(text).toContain('motir doctor')
   })
 
+  it('publishes the DISPOSABLE recipe, and nothing that keeps a container', () => {
+    // ⚠️ TRANSCRIBED, NOT DERIVED (MOTIR-4976 · MOTIR-4972). The literal below is
+    // read off motir-core's `sandboxRunCommand` in `lib/apiDocs/sandbox.ts` and
+    // copied here, the same rule MOTIR-4961 recorded for this file: this page's
+    // claims are transcribed and cited, because a build-time import across the
+    // repository boundary is a seam nobody asked for.
+    //
+    // What it guards is the defect, not the spelling. `motir login` used to write
+    // into the container's writable layer, so this page told readers to name the
+    // container and come back to it with `docker start -ai` — and keeping the
+    // container is what pinned them to the image it was built from. A reader's
+    // six-week-old container ran a CLI with no `login` command while step 4 told
+    // them to run it.
+    const { container } = render(<SandboxPage />)
+    const code = [...container.querySelectorAll('pre')]
+      .map((pane) => pane.textContent ?? '')
+      .join('\n')
+
+    expect(code).toContain('docker run -it --rm --pull=always')
+    // The volume is what makes `--rm` safe: the sign-in lives outside the
+    // container, so throwing the container away no longer throws it away too.
+    expect(code).toContain('-v motir-auth:/home/node/.config/motir')
+    // The agent credential stays read-only — the container USES a sign-in and
+    // never performs one.
+    expect(code).toContain('-v "$HOME/.claude:/home/node/.claude:ro"')
+
+    // ⚠️ AND THE PROSE, NOT ONLY THE BLOCK. The page did not merely omit the
+    // disposable pattern — it argued against it, telling the reader to come back
+    // with `docker start -ai motir-sandbox`. A reader who trusts the surrounding
+    // explanation over the command would put the container back.
+    const text = container.textContent ?? ''
+    for (const stale of ['docker start', 'docker rm', '--name motir-sandbox']) {
+      expect(code, `code blocks must not carry ${stale}`).not.toContain(stale)
+      expect(text, `prose must not carry ${stale}`).not.toContain(stale)
+    }
+
+    // A reader meeting `--rm` needs to be told the sign-in survives, or the flag
+    // reads as "you will sign in every time" — the fear this recipe has to answer.
+    expect(text).toContain('motir-auth')
+    expect(text).toContain('sign-in survives')
+  })
+
   it('documents the five things a reader needs: start, environment, grant, output, failures', () => {
     // ⚠️ WIDENED BY MOTIR-4429 — three sections the deleted motir-core page
     // carried and this one had lost. The list is EXACT rather than a subset
