@@ -66,6 +66,19 @@ import { CodeBlock } from '../../_components/DocSchema'
  * than being stuck. `tests/docs/sandbox.test.tsx` greps for the quoted form
  * rather than trusting review, which is what the deleted module did too.
  *
+ * ⚠️ THE `postStartCommand` LINE IS TRANSCRIBED, NOT INVENTED (MOTIR-4961).
+ * `overrideCommand: true` makes Dev Containers replace the image's ENTRYPOINT
+ * as well as its CMD, so this route ran none of the container's own setup and
+ * an agent started here had no writable config directory to sign in to — the
+ * `docker run` recipe on this same page worked and this one could not, while
+ * the page offered them as equals (MOTIR-4956). The string is copied VERBATIM
+ * from the recipe motir-core ships, read at `lib/apiDocs/sandbox.ts`'s
+ * `SANDBOX_DEVCONTAINER_JSON`; it is deliberately not derived at build time,
+ * for the same reason every other claim on this page is transcribed rather than
+ * imported across a repository boundary. The `|| true` is part of the literal:
+ * it keeps an older pinned `:<profile>-<version>` image, which has no such
+ * command, starting rather than erroring.
+ *
  * ⚠️ AND ONE OBJECT, TWO BLOCKS. The listing and the heredoc are built from
  * `DEVCONTAINER_JSON`, so a `mounts` entry corrected in one cannot publish a
  * different config under the other caption.
@@ -99,7 +112,8 @@ const DEVCONTAINER_JSON = `{
     "source=\${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
   ],
   "remoteUser": "node",
-  "overrideCommand": true
+  "overrideCommand": true,
+  "postStartCommand": "motir-sandbox-agent-config || true"
 }`
 
 /**
@@ -346,6 +360,19 @@ export default function SandboxPage() {
           code={DEVCONTAINER_JSON}
         />
       </div>
+      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+        The{' '}
+        <code className="font-(family-name:--font-mono)">postStartCommand</code>{' '}
+        line is load-bearing, and it is what keeps this route equivalent to the{' '}
+        <code className="font-(family-name:--font-mono)">docker run</code> one
+        rather than a quieter version of it.{' '}
+        <code className="font-(family-name:--font-mono)">overrideCommand</code>{' '}
+        replaces the image’s entrypoint as well as its command — it has to,
+        because the image’s own command exits and a dev container needs one that
+        stays up — so the setup that would otherwise run when the container
+        starts is invoked here instead. That setup is what points your agent at
+        a config directory it can write to, which is where its sign-in lands.
+      </p>
       <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
         Swap the <code className="font-(family-name:--font-mono)">:claude</code>{' '}
         tag and the{' '}

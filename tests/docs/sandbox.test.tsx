@@ -133,6 +133,26 @@ describe('the sandbox guide is instructions, not a definition', () => {
     // The heredoc CONTAINS the listing verbatim — which is only true if one is
     // interpolated into the other rather than typed twice.
     expect(heredoc).toContain(listing!)
+
+    // ⚠️ AND BOTH SHOW THE `postStartCommand` (MOTIR-4961 / MOTIR-4956).
+    // `overrideCommand: true` makes Dev Containers replace the image's
+    // ENTRYPOINT as well as its CMD, so this route ran none of the container's
+    // own setup: the agent was pointed at a read-only directory it could
+    // neither read a credential from nor sign in to, while the page offered
+    // this recipe and the `docker run` one as equals. The line is what makes
+    // them equal again, so a copy of this page that has lost it publishes the
+    // broken recipe — named here rather than left to the interpolation test
+    // above, which would keep passing on two identically-wrong blocks.
+    for (const pane of withMount) {
+      expect(pane).toContain(
+        '"postStartCommand": "motir-sandbox-agent-config || true"',
+      )
+    }
+    // …and `overrideCommand` STAYS: the image's own command exits, so dropping
+    // it trades a container nobody can sign in to for one that will not stay up.
+    for (const pane of withMount) {
+      expect(pane).toContain('"overrideCommand": true')
+    }
   })
 
   it('no longer records the VS Code path as undocumented', () => {
