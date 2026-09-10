@@ -86,12 +86,22 @@ describe('the sandbox guide is instructions, not a definition', () => {
     const headings = [...container.querySelectorAll('h2')].map(
       (heading) => heading.textContent ?? '',
     )
+    // ⚠️ RE-POINTED BY MOTIR-4993, and the EXACTNESS is kept because that is
+    // the whole value of this assertion. Four `<h2>`s — `Before you start`,
+    // `Start one`, `Or start it from VS Code instead` and
+    // `Inside: link, check, run` — became ONE step sequence under `Set it up`,
+    // and `What it confines` moved BELOW it with the rest of the explanation.
+    //
+    // ⚠️ THE SECTIONS DID NOT DISAPPEAR, WHICH IS THE THING THIS GUARD IS FOR.
+    // Every FACT they carried is still asserted, by the cases below and by the
+    // step-structure suite: the arm64 line and the workspace tree are in the
+    // preconditions block, `Start one` and `Inside` are steps 1–5, and the VS
+    // Code route is 2a–2c. `Before you start` is still on the page as an
+    // eyebrow rather than an `<h2>` — a heading above a three-item list, in a
+    // page whose spine is now the numbered sequence.
     expect(headings).toEqual([
+      'Set it up',
       'What it confines — and what it does not',
-      'Before you start',
-      'Start one',
-      'Or start it from VS Code instead',
-      'Inside: link, check, run',
       'What the environment gives you',
       'What the token may do — and what it refuses',
       'What a run produces, and where to read it',

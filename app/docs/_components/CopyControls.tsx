@@ -76,9 +76,27 @@ export function copyButtonLabel(caption: string): string {
 export function CopyControls({
   caption,
   code,
+  /**
+   * The accessible name, when the CAPTION cannot supply a good one.
+   *
+   * ⚠️ THE DESIGN'S PATTERN IS `Copy the <caption> command`, and it holds only
+   * while captions are short nouns — `run`, `pull` — which is what its examples
+   * are. Built against the real page it broke twice: three steps share the
+   * caption `in the container`, so three buttons announced identically, which
+   * is the exact thing the pattern exists to prevent; and a caption that is a
+   * phrase produced "Copy the your machine — in the folder you are mounting
+   * command".
+   *
+   * A caption is a VISIBLE label that says where you are; an accessible name
+   * identifies a control. Usually one string can be both. This is the escape
+   * for when it cannot, rather than degrading the visible caption to suit the
+   * name.
+   */
+  copyLabel,
 }: {
   caption: string
   code: string
+  copyLabel?: string
 }) {
   const [state, setState] = useState<CopyState>('idle')
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -139,7 +157,7 @@ export function CopyControls({
         onBlur={() => {
           if (state === 'failed') move('idle')
         }}
-        aria-label={copyButtonLabel(caption)}
+        aria-label={copyLabel ?? copyButtonLabel(caption)}
         data-state={state}
         className={`inline-flex flex-none cursor-pointer items-center gap-1.5 rounded-(--radius-control) border px-2 py-0.5 text-[11px] font-semibold tracking-wide normal-case outline-offset-2 focus-visible:outline-2 focus-visible:outline-(--el-accent) ${
           state === 'copied'

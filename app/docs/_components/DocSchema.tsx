@@ -88,13 +88,39 @@ export function StatusPill({ status }: { status: string }) {
 export function CodeBlock({
   caption,
   code,
+  /**
+   * ⚠️ NOT EVERY PANE HOLDS A COMMAND, and a Copy button on one that does not
+   * is a promise the pane cannot keep. This page renders a folder-tree diagram
+   * (`~/work/ ← start the container from HERE`) and a permission table in the
+   * same component as its `docker run`; pasting either into a shell does
+   * nothing useful, and the accessible name would read "Copy the your machine
+   * command".
+   *
+   * The superseded `motir-core/design/agent-sandbox/` asset had already reached
+   * this rule and stated it as *"the copy affordance is on the filled-in block
+   * only — a copyable template is a command that fails in the terminal; that
+   * asymmetry is the design, not a detail."* `sandbox-steps.*` did not carry it
+   * forward, and the omission surfaced when the button was actually built. The
+   * default is `true` because most panes ARE commands.
+   */
+  copyable = true,
+  /** An explicit accessible name, when the caption cannot supply a good one. */
+  copyLabel,
 }: {
   caption: string
   code: string
+  copyable?: boolean
+  copyLabel?: string
 }) {
   return (
     <div className="mb-4 overflow-hidden rounded-(--radius-card) border border-(--el-border)">
-      <CopyControls caption={caption} code={code} />
+      {copyable ? (
+        <CopyControls caption={caption} code={code} copyLabel={copyLabel} />
+      ) : (
+        <p className="border-b border-(--el-border) bg-(--el-surface) px-3 py-1.5 font-(family-name:--font-mono) text-[11px] tracking-wide text-(--el-text-secondary) uppercase">
+          {caption}
+        </p>
+      )}
       {/* The pane scrolls in its own box: a curl line is wider than a phone,
           and wrapping a shell command makes it uncopyable. `tabIndex` is what
           makes an overflowing region reachable by keyboard — and the copy

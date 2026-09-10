@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { copy } from '@/lib/copy'
 import { CodeBlock } from '../../_components/DocSchema'
+import { SetupSteps } from './SetupSteps'
 
 /*
  * The sandbox guide (MOTIR-4046, WRITTEN by MOTIR-4392) — committed prose, per
@@ -95,37 +96,6 @@ import { CodeBlock } from '../../_components/DocSchema'
  * has line-wrapped, as this one was.
  */
 
-/**
- * The dev-container configuration the VS Code sub-step tells the reader to
- * write — the ONE source both of that step's code blocks are built from.
- *
- * The `\${…}` escapes are template-literal escapes, not shell ones: what this
- * constant HOLDS is the literal text `${localWorkspaceFolder}`, which is a Dev
- * Containers substitution the editor resolves and nothing before it may.
- */
-const DEVCONTAINER_JSON = `{
-  "name": "Motir sandbox (Claude Code)",
-  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
-  "workspaceFolder": "/workspace",
-  "workspaceMount": "source=\${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": [
-    "source=\${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
-  ],
-  "remoteUser": "node",
-  "overrideCommand": true,
-  "postStartCommand": "motir-sandbox-agent-config || true"
-}`
-
-/**
- * The command that PRODUCES that file, because naming a filename is not an
- * instruction a reader can carry out: macOS Finder and most GUI file pickers
- * refuse a name beginning with `.`, and refuse it without saying why.
- */
-const DEVCONTAINER_WRITE_COMMAND = `mkdir -p .devcontainer
-cat > .devcontainer/devcontainer.json <<'JSON'
-${DEVCONTAINER_JSON}
-JSON`
-
 export const metadata = {
   title: copy.docs.metaTitleSandbox,
   description: copy.docs.metaDescriptionSandbox,
@@ -143,6 +113,140 @@ export default function SandboxPage() {
         your own agent credential, mounted read-only; the loop runs inside, so a
         misbehaving agent reaches your work tree and not the rest of your
         machine.
+      </p>
+
+      {/* ⚠️ THE PAGE'S SPINE IS THE STEP SEQUENCE (MOTIR-4993).
+
+          It replaces four prose sections — the preconditions, `Start one`, the
+          VS Code route and `Inside: link, check, run` — which between them held
+          seven code panes with instructions in the paragraphs around each one.
+          A reader had to decide, sentence by sentence, which text was a thing
+          to do.
+
+          The explanation did not go away; it moved BELOW the sequence, under
+          `Why it looks like this`, and that includes the confinement list — a
+          reader mid-setup wants the procedure, and a reader deciding whether to
+          trust the thing is not in a hurry. */}
+      <p className="mt-9 text-[11px] font-semibold tracking-[0.06em] text-(--el-text-secondary) uppercase">
+        Before you start
+      </p>
+      <ul className="mt-2.5 max-w-[68ch] list-none p-0">
+        <li className="py-1.5 text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+          <strong className="text-(--el-text)">Docker, running.</strong> Built
+          for{' '}
+          <code className="font-(family-name:--font-mono)">linux/amd64</code>{' '}
+          <strong className="text-(--el-text)">and</strong>{' '}
+          <code className="font-(family-name:--font-mono)">linux/arm64</code>,
+          so Apple Silicon is a first-class machine and nothing is emulated.
+          There is no build step — you pull.
+        </li>
+        <li className="border-t border-(--el-border-soft) py-1.5 text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+          <strong className="text-(--el-text)">
+            Your agent’s own sign-in, on this machine.
+          </strong>{' '}
+          Its credential mount is read-only, so the container can use a sign-in
+          and can never perform one. (Antigravity is the exception — step 2 says
+          so when you pick it.)
+        </li>
+        <li className="border-t border-(--el-border-soft) py-1.5 text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+          <strong className="text-(--el-text)">
+            Your workspace root — the folder that CONTAINS your checkouts.
+          </strong>{' '}
+          A project usually spans several repositories and the loop runs across
+          all of them.
+        </li>
+      </ul>
+      <div className="mt-3">
+        {/* Not a command — a diagram. `copyable={false}` is the design's
+            filled-in-block-only asymmetry: a pane you cannot usefully paste
+            must not offer a button that says you can. */}
+        <CodeBlock
+          caption="your machine"
+          copyable={false}
+          code={`~/work/                 ← start the container from HERE
+├── motir-core/         ← a checkout
+└── motir-ai/           ← another`}
+        />
+      </div>
+
+      <SetupSteps />
+
+      <hr className="mt-8 border-0 border-t border-(--el-border)" />
+      <p className="mt-7 text-[11px] font-semibold tracking-[0.06em] text-(--el-text-secondary) uppercase">
+        Why it looks like this
+      </p>
+
+      <h3 className="mt-6 text-[15px] font-semibold text-(--el-text)">
+        What the profile picker changes
+      </h3>
+      <p className="mt-2 max-w-[68ch] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+        Picking an agent rewrites three things and nothing else: the image{' '}
+        <strong className="text-(--el-text)">tag</strong>, the credential{' '}
+        <code className="font-(family-name:--font-mono)">-v</code> line(s), and
+        the dev container’s{' '}
+        <code className="font-(family-name:--font-mono)">image</code>,{' '}
+        <code className="font-(family-name:--font-mono)">name</code> and{' '}
+        <code className="font-(family-name:--font-mono)">mounts</code>. It is a
+        control rather than a paragraph telling you to swap them yourself,
+        because every command here has a Copy button and a reader who copies is
+        a reader who did not read the swap instruction.
+      </p>
+      <p className="mt-3 max-w-[68ch] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+        Not every profile has one credential directory.{' '}
+        <code className="font-(family-name:--font-mono)">opencode</code> keeps
+        two and takes two{' '}
+        <code className="font-(family-name:--font-mono)">-v</code> lines;{' '}
+        <code className="font-(family-name:--font-mono)">antigravity</code>{' '}
+        keeps its token in the OS keyring and takes none, signing in inside the
+        container instead; and{' '}
+        <code className="font-(family-name:--font-mono)">aider</code> binds a
+        file and reads a model key from the environment. The steps say so when
+        you pick them.
+      </p>
+
+      <h3 className="mt-6 text-[15px] font-semibold text-(--el-text)">
+        Nothing is kept that could go stale
+      </h3>
+      <p className="mt-2 max-w-[68ch] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+        <code className="font-(family-name:--font-mono)">--pull=always</code>{' '}
+        fetches the current image on every start, so a profile tag that has
+        moved reaches you without your having to notice that it moved, and{' '}
+        <code className="font-(family-name:--font-mono)">--rm</code> means
+        nothing is kept that could go stale. There is no separate
+        coming-back-to-it path — which is exactly what used to leave people
+        running a <code className="font-(family-name:--font-mono)">motir</code>{' '}
+        months older than the page they were reading it from. Your sign-in
+        survives all of that: it is written to the{' '}
+        <code className="font-(family-name:--font-mono)">motir-auth</code>{' '}
+        volume, which lives outside the container, so you sign in once and every
+        later run picks it up — sign out for good with{' '}
+        <code className="font-(family-name:--font-mono)">
+          docker volume rm motir-auth
+        </code>
+        . Working offline? Drop{' '}
+        <code className="font-(family-name:--font-mono)">--pull=always</code>:
+        it reaches the registry on every start, so with no network the run fails
+        instead of falling back to the image you already have.
+      </p>
+
+      <h3 className="mt-6 text-[15px] font-semibold text-(--el-text)">
+        What next
+      </h3>
+      <p className="mt-2 max-w-[68ch] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+        <code className="font-(family-name:--font-mono)">motir run</code> takes
+        a SCOPE — one work item, a whole story, or{' '}
+        <code className="font-(family-name:--font-mono)">sprint</code> for the
+        active one.{' '}
+        <code className="font-(family-name:--font-mono)">motir auto</code>{' '}
+        drains the ready set unattended instead, one item at a time onto a
+        session branch. Every flag both accept is on the{' '}
+        <Link
+          href="/docs/cli"
+          className="text-(--el-accent-on-surface) underline underline-offset-2"
+        >
+          {copy.docs.cli}
+        </Link>{' '}
+        page.
       </p>
 
       <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
@@ -188,269 +292,6 @@ export default function SandboxPage() {
           </dd>
         </div>
       </dl>
-
-      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
-        Before you start
-      </h2>
-      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        Two things, and neither is a Motir account detail — you sign in{' '}
-        <strong className="text-(--el-text)">inside</strong> the container
-        below, so there is nothing to mint or copy first. You do not need the
-        Motir CLI on this machine either; it ships in the image.
-      </p>
-      <ul className="mt-3 max-w-[68ch] list-disc space-y-2 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
-        <li>
-          <strong className="text-(--el-text)">Docker, running.</strong> Docker
-          Desktop or any engine. The images are built for{' '}
-          <code className="font-(family-name:--font-mono)">linux/amd64</code>{' '}
-          <strong className="text-(--el-text)">and</strong>{' '}
-          <code className="font-(family-name:--font-mono)">linux/arm64</code>,
-          so Apple Silicon is a first-class machine and nothing is emulated.
-          There is no build step — you pull.
-        </li>
-        <li>
-          <strong className="text-(--el-text)">
-            Your agent’s own sign-in, on this machine.
-          </strong>{' '}
-          Sign in to your agent once, here, before you start — or have its API
-          key in your environment. Its credential mount is read-only, so the
-          container can use a sign-in and can never perform one.
-        </li>
-      </ul>
-      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        A Motir project usually spans several repositories and the work loop
-        runs across all of them — so what you mount is the folder that{' '}
-        <strong className="text-(--el-text)">contains</strong> your checkouts,
-        not any one of them. Start the container from there:
-      </p>
-      <div className="mt-3">
-        <CodeBlock
-          caption="your machine"
-          code={`~/work/                 ← start the container from HERE
-├── motir-core/         ← a checkout
-└── motir-ai/           ← another`}
-        />
-      </div>
-
-      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
-        Start one
-      </h2>
-      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        There is no build step — the image is published per agent profile, so
-        you pull the tag for the agent you use. Run this from the folder that
-        holds your checkouts.
-      </p>
-      <div className="mt-3">
-        <CodeBlock
-          caption="pull"
-          code="docker pull ghcr.io/moooon-b-v/motir-sandbox:claude"
-        />
-        <CodeBlock
-          caption="run"
-          code={`docker run -it --rm --pull=always \\
-  -v "$PWD:/workspace" \\
-  -v motir-auth:/home/node/.config/motir \\
-  -v "$HOME/.claude:/home/node/.claude:ro" \\
-  ghcr.io/moooon-b-v/motir-sandbox:claude`}
-        />
-      </div>
-      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        Tags follow the agent:{' '}
-        <code className="font-(family-name:--font-mono)">claude</code>,{' '}
-        <code className="font-(family-name:--font-mono)">codex</code>,{' '}
-        <code className="font-(family-name:--font-mono)">opencode</code> and{' '}
-        <code className="font-(family-name:--font-mono)">kimi</code> are the
-        first-tier profiles;{' '}
-        <code className="font-(family-name:--font-mono)">antigravity</code>,{' '}
-        <code className="font-(family-name:--font-mono)">cursor</code>,{' '}
-        <code className="font-(family-name:--font-mono)">aider</code> and{' '}
-        <code className="font-(family-name:--font-mono)">goose</code> follow,
-        and <code className="font-(family-name:--font-mono)">base</code> carries
-        no agent at all. Each profile mounts its own credential directory, so
-        swap both the tag and the{' '}
-        <code className="font-(family-name:--font-mono)">-v</code> line together
-        — pulling one tag and starting another is the one mistake that leaves
-        you worse off than not pulling.
-      </p>
-      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        That command is the same every time.{' '}
-        <code className="font-(family-name:--font-mono)">--pull=always</code>{' '}
-        fetches the current image on every start, so a profile tag that has
-        moved reaches you without your having to notice that it moved, and{' '}
-        <code className="font-(family-name:--font-mono)">--rm</code> means
-        nothing is kept that could go stale. There is no separate
-        coming-back-to-it path — which is exactly what used to leave people
-        running a <code className="font-(family-name:--font-mono)">motir</code>{' '}
-        months older than the page they were reading it from.
-      </p>
-      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        Your sign-in survives all of that. It is written to the{' '}
-        <code className="font-(family-name:--font-mono)">motir-auth</code>{' '}
-        volume, which lives outside the container, so you sign in once and every
-        later run picks it up — sign out for good with{' '}
-        <code className="font-(family-name:--font-mono)">
-          docker volume rm motir-auth
-        </code>
-        . Working offline? Drop{' '}
-        <code className="font-(family-name:--font-mono)">--pull=always</code>:
-        it reaches the registry on every start, so with no network the run fails
-        instead of falling back to the image you already have.
-      </p>
-
-      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
-        Or start it from VS Code instead
-      </h2>
-      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        The same confined image, as a dev container: VS Code opens{' '}
-        <code className="font-(family-name:--font-mono)">/workspace</code>{' '}
-        inside it with the same mounts, so your editor, terminal and agent all
-        run behind the same boundary. Three sub-steps, and they{' '}
-        <strong className="text-(--el-text)">replace</strong> the{' '}
-        <code className="font-(family-name:--font-mono)">docker run</code> above
-        rather than following it — everything after is the same either way.
-      </p>
-      <ol className="mt-3 max-w-[68ch] list-decimal space-y-3 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
-        <li>
-          <strong className="text-(--el-text)">
-            Install the Dev Containers extension.
-          </strong>{' '}
-          From the Extensions view, or from the command palette — ⇧⌘P on macOS,
-          Ctrl+Shift+P on Windows and Linux, F1 on all three — then{' '}
-          <em>Extensions: Install Extensions</em>. The palette is where two of
-          these three sub-steps happen, so it is worth pinning now. The
-          extension drives the same Docker engine the command above uses.
-        </li>
-        <li>
-          <strong className="text-(--el-text)">
-            Add{' '}
-            <code className="font-(family-name:--font-mono)">
-              .devcontainer/devcontainer.json
-            </code>
-          </strong>{' '}
-          to the folder you are mounting — the same one you would have started
-          from. It pins the published image and passes the mount your profile
-          needs. Write it from that folder in one command, because a GUI file
-          manager will not do it for you: macOS Finder and most file pickers
-          refuse a name beginning with a dot, and they refuse it without saying
-          why.
-        </li>
-        <li>
-          <strong className="text-(--el-text)">
-            Open the folder in the container.
-          </strong>{' '}
-          Command palette → <em>Dev Containers: Open Folder in Container…</em>,
-          and pick the folder you just wrote the file into. VS Code pulls the
-          image and attaches; its terminal is the same shell the{' '}
-          <code className="font-(family-name:--font-mono)">docker run</code>{' '}
-          above would have dropped you into. If that folder is{' '}
-          <em>already open</em> in VS Code,{' '}
-          <em>Dev Containers: Reopen in Container</em> does the same attach
-          without asking which folder.
-        </li>
-      </ol>
-      <div className="mt-3">
-        <CodeBlock
-          caption="your machine — in the folder you are mounting"
-          code={DEVCONTAINER_WRITE_COMMAND}
-        />
-      </div>
-      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        The quotes around{' '}
-        <code className="font-(family-name:--font-mono)">&lt;&lt;’JSON’</code>{' '}
-        are load-bearing: they are what stops your shell expanding{' '}
-        <code className="font-(family-name:--font-mono)">
-          ${'{'}localWorkspaceFolder{'}'}
-        </code>{' '}
-        and{' '}
-        <code className="font-(family-name:--font-mono)">
-          ${'{'}localEnv:HOME{'}'}
-        </code>{' '}
-        before they reach the file. Those are Dev Containers substitutions, and
-        the editor is what resolves them. That command writes exactly this — the
-        same file, if you would rather create it by hand:
-      </p>
-      <div className="mt-3">
-        <CodeBlock
-          caption=".devcontainer/devcontainer.json"
-          code={DEVCONTAINER_JSON}
-        />
-      </div>
-      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        The{' '}
-        <code className="font-(family-name:--font-mono)">postStartCommand</code>{' '}
-        line is load-bearing, and it is what keeps this route equivalent to the{' '}
-        <code className="font-(family-name:--font-mono)">docker run</code> one
-        rather than a quieter version of it.{' '}
-        <code className="font-(family-name:--font-mono)">overrideCommand</code>{' '}
-        replaces the image’s entrypoint as well as its command — it has to,
-        because the image’s own command exits and a dev container needs one that
-        stays up — so the setup that would otherwise run when the container
-        starts is invoked here instead. That setup is what points your agent at
-        a config directory it can write to, which is where its sign-in lands.
-      </p>
-      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        Swap the <code className="font-(family-name:--font-mono)">:claude</code>{' '}
-        tag and the{' '}
-        <code className="font-(family-name:--font-mono)">mounts</code> entry
-        together for the profile you use — the same pairing the{' '}
-        <code className="font-(family-name:--font-mono)">docker run</code> line
-        needs. A dev container is not torn down when you close the window, so
-        the sign-in below persists here with no extra flag — and for exactly
-        that reason it also keeps the image it was first created from. Dev
-        Containers reuses a local image just as{' '}
-        <code className="font-(family-name:--font-mono)">docker run</code> does,
-        so the{' '}
-        <code className="font-(family-name:--font-mono)">docker pull</code>{' '}
-        above is still yours to run before you reopen, and an existing container
-        then needs <em>Dev Containers: Rebuild Container</em> to pick the new
-        image up.
-      </p>
-      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        <strong className="text-(--el-text)">
-          The devcontainer files inside the motir-core repository are not this
-          file.
-        </strong>{' '}
-        They carry a{' '}
-        <code className="font-(family-name:--font-mono)">build</code> block
-        pointing at that repository’s own Dockerfile, because they are its dev
-        containers and a checkout is what those are for. For your own workspace,
-        pin the image as above.
-      </p>
-
-      <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
-        Inside: link, check, run
-      </h2>
-      <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        Three steps, in this order. The middle one is worth not skipping: it is
-        the only thing that tells you the agent binary and its credential are
-        actually visible inside the container, which is where a first run
-        usually goes wrong.
-      </p>
-      <div className="mt-3">
-        <CodeBlock
-          caption="in the container"
-          code={`motir login                 # or: motir auth login --token <pat>
-motir link --project ACME   # bind this folder to a project
-motir doctor                # auth, link, agent binary, credentials
-motir run ACME-7            # one work item — or a story key, or 'sprint'`}
-        />
-      </div>
-      <p className="mt-1 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        <code className="font-(family-name:--font-mono)">motir run</code> takes
-        a SCOPE — one work item, a whole story, or{' '}
-        <code className="font-(family-name:--font-mono)">sprint</code> for the
-        active one.{' '}
-        <code className="font-(family-name:--font-mono)">motir auto</code>{' '}
-        drains the ready set unattended instead, one item at a time onto a
-        session branch. Every flag both accept is on the{' '}
-        <Link
-          href="/docs/cli"
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.cli}
-        </Link>{' '}
-        page.
-      </p>
 
       <h2 className="mt-9 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
         What the environment gives you
@@ -510,8 +351,10 @@ motir run ACME-7            # one work item — or a story key, or 'sprint'`}
         breaks an unattended loop halfway through.
       </p>
       <div className="mt-3">
+        {/* A permission table, not a command — see `copyable` on `CodeBlock`. */}
         <CodeBlock
           caption="the grant a device-minted token carries"
+          copyable={false}
           code={`project:browse      read the project and its work items
 lesson:view         search the recorded lessons before building
 lesson:reinforce    record that a lesson described what went wrong
