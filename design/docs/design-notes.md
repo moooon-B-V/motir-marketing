@@ -414,6 +414,82 @@ command` — so two buttons on one page never announce identically.
 **The state is never carried by colour alone.** The LABEL changes in all three, which is what a
 reader who cannot separate mint from peach reads.
 
+## ⚠️ The PROFILE SELECTOR — and why a copy button forced it
+
+**The first draft of this asset drew one agent.** Every command carried `:claude`, `$HOME/.claude` and
+`"name": "Motir sandbox (Claude Code)"`, and the shipped page's own answer — the paragraph after the
+command saying _"swap both the tag and the `-v` line together"_ — had been moved BELOW the whole
+sequence into _Why it looks like this_. That is worse than the prose page it replaces, and the reason
+is this story's own premise: **the copy affordance exists so a reader can work down the page without
+reading.** Seven readers in eight would have clicked Copy and pasted a command for an agent they do
+not use, from a control that looked authoritative.
+
+**A copy button and a swap-it-yourself instruction cannot coexist.** So the swap becomes a CONTROL:
+a `role="radiogroup"` of the eight profiles plus the agent-less image, sitting directly above
+`Set it up`. Picking one rewrites the tag and the credential mount in **steps 1, 2 and 2b** — the
+three places they appear — and nothing else.
+
+**It is NOT a step, and that is a decision rather than an oversight.** Both step kinds are things the
+reader does OFF this page, in a terminal or in an editor. Picking an agent happens ON it, so admitting
+it as a third kind would break the rule the sequence rests on and falsify the story's criterion 1
+(_no step is both and none is neither_). It sits above the sequence because steps 1, 2 and 2b cannot
+be written until it is answered — the same reasoning that made the profile matrix **step 1** in the
+superseded `motir-core/design/agent-sandbox/` asset. That asset reached a TABLE; this one reaches a
+CONTROL, because this page has a Copy button and that one did not.
+
+| state         | ground                               | ink                                                                     |
+| ------------- | ------------------------------------ | ----------------------------------------------------------------------- |
+| unselected    | `--el-page-bg`, border `--el-border` | `--el-text-secondary`                                                   |
+| hover         | `--el-muted`                         | `--el-text`                                                             |
+| **selected**  | `--el-accent`                        | `--el-accent-text`, 600                                                 |
+| focus-visible | —                                    | 2px `--el-accent` ring, 2px offset — the same ring the copy button uses |
+
+**The tier break is a LABEL, not a second control.** The word _also supported_ between the two runs
+of chips, never a heading, a column or a tint. Both groups are published and both are built and
+smoke-tested; the split says how closely we track the vendor, never whether a profile works — and a
+reader choosing an agent is not choosing a tier.
+
+## ⚠️ THREE of the eight profiles break the one-`-v`-line shape
+
+This is why the selector cannot be a string substitution, and it is the half a claude-only drawing
+hides completely. Panel 9 draws all four shapes:
+
+| profiles                                    | shape                                                                                                                                                                                       |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code · Codex · Kimi · Cursor · Goose | one `-v` line — the ordinary case                                                                                                                                                           |
+| **OpenCode**                                | **TWO** `-v` lines — a config dir AND a data dir                                                                                                                                            |
+| **Antigravity CLI**                         | **NONE.** Its token lives in the OS keyring, which has no portable file to bind — so it signs in INSIDE the container, and _Before you start_'s second precondition does not apply to it    |
+| **Aider**                                   | a **FILE** (`~/.aider.conf.yml`), which must exist even empty or docker creates a directory in its place — **plus an `-e`**, because its credential is a model API key from the environment |
+
+**A build that treats the mount as one templated line is correct for five profiles and wrong for
+three.** `mounts` in the dev container file is an ARRAY for the same reason: two entries for OpenCode,
+none for Antigravity.
+
+### Where the per-profile values come from — and the field to READ
+
+The build card **TRANSCRIBES** the table from `motir-core` `packages/cli/src/agentProfiles.ts`, the
+same transcribe-rather-than-import rule this page already follows for every other claim.
+
+> **⚠️ Read `sandboxMounts`, NEVER `credentialPaths`.** That file's own docstring says so in terms:
+> the two answer different questions and diverge on **four of the eight** profiles — `cursor`, `aider`
+> and `goose` probe nothing at all while the image binds a path for each, and `opencode` probes one
+> file where two directories are mounted. **Deriving the published mount from `credentialPaths` would
+> tell three profiles they need no mount.** This asset draws the SHAPES; that field is the source for
+> the strings.
+
+**Step 2b's three moving keys**, and only three: `image` takes the tag, `mounts` takes the same
+per-profile lines as step 2, and `name` carries the agent's own label (`Motir sandbox (OpenCode)`) —
+because a reader with two dev containers open reads that string in the window title.
+`workspaceFolder`, `workspaceMount`, `remoteUser`, `overrideCommand` and `postStartCommand` are
+identical for every profile and are MOTIR-4970's literal, carried through unchanged.
+
+## ⚠️ THIS RE-OPENED THE BUILD CARD'S SIZE — see MOTIR-4977
+
+A design that lands after the card it gates re-opens that card's ESTIMATE, not only its wording. The
+selector is a stateful client control with four states driving three code blocks, plus a nine-row
+profile table transcribed across a repository boundary, plus an array-valued `mounts` key. That is
+work MOTIR-4977 was not sized for, and it is recorded on that card rather than absorbed silently.
+
 ## Ink — and what the lane caught
 
 Every colour resolves to an `--el-*` token declared in the mock's own block, copied 1:1 from
@@ -459,8 +535,25 @@ nothing in it.
 | **MOTIR-4979** | the Playwright E2E: a real copy click, and the **denied-permission** path                  |
 
 **GIVES / TAKES.** This asset GIVES MOTIR-4977 the step row, both step kinds, the copy button's three
-states and their verbatim copy, and the 1600 ms duration. It **TAKES nothing** from any card: it adds
-no element to MOTIR-4978's or MOTIR-4979's scope beyond what their own criteria already name, and it
-changes no criterion on a `done` card. The step COUNT — **five, plus 2a–2c** — is the figure
+states and their verbatim copy, the 1600 ms duration — **and the profile SELECTOR**, a stateful control
+driving three code blocks off a nine-row transcribed table.
+
+**⚠️ It TAKES from all three, and the selector is why.** This is the GIVES/TAKES sweep's
+structure-and-premise arm rather than its element arm — asked whether it gives or takes an ELEMENT the
+honest answer on two of these would be "neither", and both cards would still be wrong:
+
+- **MOTIR-4977 — TAKES its SIZE.** The selector is a client control with four states, a per-profile
+  table transcribed across a repository boundary, and an array-valued `mounts` key. The card was sized
+  at 5 points / 65 minutes for a step restructure plus one copy button. **Re-run the estimation gate
+  against this asset, not against those numbers.**
+- **MOTIR-4978 — TAKES a criterion.** Its structural assertions were written for ONE rendering of the
+  page. They now have to hold for **every profile**: each renders a complete command with the right
+  number of `-v` lines (two for OpenCode, none for Antigravity), and one selection drives all three
+  blocks together.
+- **MOTIR-4979 — TAKES its central assertion.** _"Click Copy and the clipboard holds that step's
+  command"_ becomes _"the clipboard holds **the SELECTED profile's** command"_ — and the profile worth
+  asserting is one of the three exceptional shapes, never the default.
+
+It changes no criterion on a `done` card. The step COUNT — **five, plus 2a–2c** — is the figure
 MOTIR-4978's criterion 2 asserts against; if the build changes it, that card's number changes with it
 and this table is where it is read from.
