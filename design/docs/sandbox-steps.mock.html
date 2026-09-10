@@ -3552,6 +3552,23 @@ docker run -it --rm --pull=always \
           one selected of nine rather than nine buttons.
         </div>
         <div class="callout">
+          <b
+            >EIGHT profiles — and <code class="inline">base</code> is not a
+            ninth.</b
+          >
+          It is the agent-less IMAGE TAG, which is why it sits after an
+          <i>or</i> rather than inside the tier grouping: no tier, no
+          credential, no mount, and a reader choosing it is choosing to have no
+          agent rather than choosing which one. (<code class="inline"
+            >motir-core#2746</code
+          >
+          corrects cards that said <i>"nine profiles including base"</i>;
+          <code class="inline">AGENT_PROFILES</code> has eight.) The superseded
+          motir-core asset kept it out of its profile TABLE for the same reason
+          — a row with nothing in three of its four columns. A PICKER is the one
+          surface where it belongs, because choosing it is a real choice.
+        </div>
+        <div class="callout">
           <b>The tier break is a LABEL, not a second control.</b> Both groups
           are published and both are built and smoke-tested; the split says how
           closely we track the vendor, never whether the profile works. Drawn as
@@ -3859,11 +3876,19 @@ docker run -it --rm --pull=always \
             >Read <code class="inline">sandboxMounts</code>, never
             <code class="inline">credentialPaths</code></b
           >
-          — that file's own docstring says so in terms: the two diverge on four
-          of the eight profiles, and deriving the published mount from
-          <code class="inline">credentialPaths</code> would tell three of them
-          they need no mount at all. This asset draws the SHAPES; that table is
-          the source for the strings.
+          — that file's own docstring says so in terms: the two answer different
+          questions and diverge on <b>most</b> of the eight profiles.
+          <b>Take the count from the docstring, not from here</b>: it is four
+          today, and MOTIR-4957's OPEN pull request (<code class="inline"
+            >motir-core#2746</code
+          >) widens it to <b>seven</b> by re-pointing three profiles' probes at
+          credential FILES while leaving
+          <code class="inline">sandboxMounts</code> untouched. That pull request
+          is evidence FOR this instruction rather than against it — the gap it
+          opens makes deriving the mount from the probe list worse, not better.
+          This asset draws the SHAPES;
+          <code class="inline">sandboxMounts</code> is the source for the
+          strings, and it is the field #2746 does not change.
         </div>
       </section>
 

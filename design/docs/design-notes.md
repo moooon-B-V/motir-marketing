@@ -449,6 +449,15 @@ of chips, never a heading, a column or a tint. Both groups are published and bot
 smoke-tested; the split says how closely we track the vendor, never whether a profile works — and a
 reader choosing an agent is not choosing a tier.
 
+## EIGHT profiles — and `base` is not a ninth
+
+`base` is the agent-less image TAG: no tier, no credential, no mount. It sits in the picker after an
+_or_ rather than inside the tier grouping, because choosing it is choosing to have no agent rather
+than choosing which one. (`motir-core#2746` corrects cards that said _"nine profiles including
+`base`"_; `AGENT_PROFILES` has eight.) The superseded motir-core asset kept it out of its profile
+TABLE for the same reason — a row with nothing in three of its four columns. A PICKER is the one
+surface where it belongs.
+
 ## ⚠️ THREE of the eight profiles break the one-`-v`-line shape
 
 This is why the selector cannot be a string substitution, and it is the half a claude-only drawing
@@ -471,11 +480,13 @@ The build card **TRANSCRIBES** the table from `motir-core` `packages/cli/src/age
 same transcribe-rather-than-import rule this page already follows for every other claim.
 
 > **⚠️ Read `sandboxMounts`, NEVER `credentialPaths`.** That file's own docstring says so in terms:
-> the two answer different questions and diverge on **four of the eight** profiles — `cursor`, `aider`
-> and `goose` probe nothing at all while the image binds a path for each, and `opencode` probes one
-> file where two directories are mounted. **Deriving the published mount from `credentialPaths` would
-> tell three profiles they need no mount.** This asset draws the SHAPES; that field is the source for
-> the strings.
+> the two answer different questions and diverge on **most** of the eight profiles. **Take the count
+> from the docstring, not from here** — it is four today, and MOTIR-4957's OPEN pull request
+> (`motir-core#2746`) widens it to **seven** by re-pointing three profiles' probes at credential FILES
+> while leaving `sandboxMounts` untouched. That pull request is evidence FOR this instruction rather
+> than against it: the gap it opens makes deriving the published mount from the probe list worse, not
+> better. This asset draws the SHAPES; `sandboxMounts` is the source for the strings, and it is the
+> field #2746 does not change.
 
 **Step 2b's three moving keys**, and only three: `image` takes the tag, `mounts` takes the same
 per-profile lines as step 2, and `name` carries the agent's own label (`Motir sandbox (OpenCode)`) —
