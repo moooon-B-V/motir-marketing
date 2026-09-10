@@ -1,0 +1,3041 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/docs/sandbox as SETUP STEPS — the step row, the click-to-copy
+      affordance and its three states · MOTIR-4975
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of `--el-*` (light + dark,
+         `warm-editorial`, `motir` palette), copied from `@motir/design-system`.
+         Standalone, as every asset in this repository is. Re-defines no
+         semantics. Nothing here is an invented hue; the only raw values are the
+         doc-annotation scaffold's own fills and the non-semantic shadows.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-sidebar-bg: #fafaf9;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-highlight: #ff64c8;
+        --el-link: #0070d2;
+        --el-link-pressed: #005bab;
+        --el-danger: #e03131;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #fde0ec;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        --radius-card: 12px;
+        --radius-btn: 8px;
+        --radius-input: 8px;
+        --radius-control: 6px;
+        --radius-badge: 9999px;
+        --radius-kbd: 4px;
+        --spacing-card-padding: 24px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 10px;
+        --spacing-control-y: 6px;
+        --spacing-input-x: 12px;
+        --spacing-input-y: 8px;
+        --spacing-kbd-x: 5px;
+        --spacing-kbd-y: 2px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-control: 36px;
+        --height-input: 36px;
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-card: 0 4px 12px rgba(15, 15, 15, 0.08);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --font-sans-source: 'Inter';
+        --font-serif-source: 'Source Serif 4';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-sidebar-bg: #161616;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-link-pressed: #79b8ff;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #3a1f2a;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 38px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        max-width: 78ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        background: var(--el-page-bg);
+      }
+      .frame.narrow {
+        max-width: 400px;
+      }
+      /* A callout in the annotation layer. `--el-text-strong` on a tint is the
+         AA recipe every coloured surface in this tree follows. */
+      .callout {
+        margin: 12px 0 0;
+        border-radius: var(--radius-card);
+        background: var(--el-tint-sky);
+        color: var(--el-text-strong);
+        padding: 12px 14px;
+        font-size: 13.5px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .callout.warn {
+        background: var(--el-tint-peach);
+      }
+      .callout b {
+        font-weight: 700;
+      }
+      .marker {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--el-accent);
+        color: #fff;
+        font: 700 11px/1 var(--font-mono);
+        vertical-align: middle;
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE CHROME — COMPOSED from this repository's shipped `SiteShell`
+         (`app/_components/SiteShell.tsx`, itself composed from
+         motir-core/design/public-site/, MOTIR-3880), not redrawn. The header
+         and footer below are that component's markup, class for class. This
+         asset draws ONLY what sits BETWEEN them.
+      ═══════════════════════════════════════════════════════════════ */
+      .site {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 12px var(--spacing-card-padding);
+      }
+      .brand-lockup {
+        --brand-size: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: calc(var(--brand-size) * 0.33);
+        text-decoration: none;
+        flex: none;
+      }
+      .brand-glyph {
+        color: var(--el-accent-on-surface);
+        flex: none;
+        display: block;
+      }
+      .brand-word {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: calc(var(--brand-size) * 0.72);
+        line-height: 1;
+        color: var(--el-text);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .nav a.current {
+        font-weight: 600;
+        color: var(--el-accent-on-surface);
+      }
+      .nav .ph {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        cursor: default;
+      }
+      .nav .ph .soon {
+        font: 600 9px/1 var(--font-mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-strong);
+        background: var(--el-tint-lavender);
+        border-radius: var(--radius-kbd);
+        padding: 2px 4px;
+      }
+      .bar-cta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font: 600 14px/1 var(--font-sans);
+        border-radius: var(--radius-btn);
+        padding: 0 18px;
+        height: var(--height-btn-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn.sm {
+        height: var(--height-btn-sm);
+        font-size: 13px;
+        padding: 0 12px;
+      }
+      .btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn.sm svg {
+        width: 14px;
+        height: 14px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text);
+      }
+      .foot {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 40px var(--spacing-card-padding);
+      }
+      .foot h2 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .foot ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .foot li,
+      .foot li a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .foot .tag {
+        margin: 10px 0 0;
+        max-width: 30rem;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE DOCS SHELL — what this asset OWNS.
+
+         The one structural change: `app/docs/layout.tsx` centres a single
+         46rem column, and this puts a RAIL beside it. The rail is the answer
+         to the navigation question; everything else about the chrome is
+         unchanged.
+      ═══════════════════════════════════════════════════════════════ */
+      .docs {
+        display: grid;
+        grid-template-columns: 264px minmax(0, 1fr);
+        /* ⚠️ STRETCH, and it is stated rather than left to the default so that
+           nobody re-adds `align-items: start` (MOTIR-4432). `start` shrinks the
+           rail to its own rows, and the rail is the element that PAINTS the
+           surface — so the tint and the right border stopped partway down the
+           page and the sidebar read as a floating box. The rail spans the row;
+           the sticky region is `.rail-inner`, inside it. */
+        align-items: stretch;
+        /* ⚠️ AND THE ROW FILLS THE LANDMARK — `flex-grow`, never a `min-height`
+           of its own (MOTIR-4465). `.site` is the chrome's column and this is
+           the room between its bar and its footer, so a row sized by its own
+           CONTENT stops wherever the content stops: on a page shorter than the
+           viewport the tint ended above the footer and the sidebar read as a
+           stub, which is MOTIR-4432's defect again on the other axis. The
+           panels below therefore carry their height on `.site` — the viewport
+           stand-in — and never here. Shipped as `md:flex md:flex-col` on the
+           landmark plus `md:grow` on the grid (`app/docs/layout.tsx` ·
+           `DocsShell.tsx`), gated at `md` because below the breakpoint the rail
+           is a band above the content and a full-height one would be wrong. */
+        flex-grow: 1;
+      }
+      .rail {
+        /* The SURFACE, and nothing else. No sticky, no max-height, no padding:
+           those belong to `.rail-inner` below, because a full-height element
+           cannot stick and a shrunk one cannot span. */
+        border-right: 1px solid var(--el-border);
+        background: var(--el-sidebar-bg);
+      }
+      .rail-inner {
+        position: sticky;
+        top: 0;
+        max-height: 100vh;
+        overflow: auto;
+        padding: 20px 14px 28px;
+      }
+      .rail .find {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: var(--height-input);
+        border: 1px solid var(--el-border-strong);
+        background: var(--el-page-bg);
+        border-radius: var(--radius-input);
+        padding: 0 var(--spacing-input-x);
+      }
+      .rail .find input {
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font: 400 13px var(--font-sans);
+        color: var(--el-text);
+        width: 100%;
+      }
+      .rail .find input::placeholder {
+        color: var(--el-text-secondary);
+      }
+      .rail .find kbd {
+        font: 600 10px var(--font-mono);
+        color: var(--el-text-secondary);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-kbd);
+        padding: var(--spacing-kbd-y) var(--spacing-kbd-x);
+      }
+      .rail .count {
+        margin: 8px 2px 14px;
+        font-size: 11.5px;
+        color: var(--el-text-secondary);
+      }
+      .rail .group {
+        margin: 0 0 6px;
+        padding: 0 8px;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .rail .group + .group {
+        margin-top: 18px;
+      }
+      .rail ul {
+        list-style: none;
+        margin: 0 0 4px;
+        padding: 0;
+      }
+      .rail li a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: var(--height-control);
+        padding: 0 var(--spacing-control-x);
+        border-radius: var(--radius-control);
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .rail li a:hover {
+        background: var(--el-muted);
+        color: var(--el-text-secondary);
+      }
+      .rail li a.current {
+        background: var(--el-muted);
+        color: var(--el-text);
+        font-weight: 600;
+        box-shadow: var(--shadow-subtle);
+      }
+      .rail li a .verb {
+        flex: none;
+        min-width: 40px;
+        text-align: center;
+        font: 700 9.5px/1 var(--font-mono);
+        letter-spacing: 0.02em;
+        color: var(--el-text-strong);
+        border-radius: var(--radius-badge);
+        padding: 3px 0;
+      }
+      .rail li a .op {
+        font: 400 12px var(--font-mono);
+        color: var(--el-text-secondary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .rail li a.current .op {
+        color: var(--el-text);
+      }
+
+      .room {
+        padding: 40px var(--spacing-card-padding) 56px;
+        max-width: 46rem;
+      }
+      .room h1 {
+        font: 700 30px/1.2 var(--font-serif);
+        letter-spacing: -0.01em;
+        margin: 0;
+        color: var(--el-text);
+      }
+      .room .meta {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .room .intro {
+        margin: 16px 0 0;
+        max-width: 68ch;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--el-text-secondary);
+      }
+      .room h2.area {
+        margin: 34px 0 0;
+        font: 600 20px var(--font-serif);
+        color: var(--el-text);
+      }
+      /* ══════════════════════════════════════════════════════════════
+         THE STEPPED GUIDE — MOTIR-4975. Everything above this line is
+         `docs.mock.html`'s, copied 1:1 so the two assets in this area
+         cannot drift. Everything below is this asset's own, and every
+         colour in it resolves to an `--el-*` token declared above.
+      ══════════════════════════════════════════════════════════════ */
+
+      /* ── the step sequence ─────────────────────────────────────────
+         A step is a ROW: a number in its own gutter, then the step's
+         body. The gutter is what makes the sequence legible as a
+         procedure at a glance rather than as headings that happen to
+         be counted, and it is why the number is not an `<h3>`. */
+      .steps {
+        margin: 20px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step;
+      }
+      .step {
+        display: grid;
+        grid-template-columns: 30px minmax(0, 1fr);
+        gap: 14px;
+        padding: 18px 0;
+        border-top: 1px solid var(--el-border-soft);
+      }
+      .step:first-child {
+        border-top: 0;
+        padding-top: 6px;
+      }
+      .step .num {
+        counter-increment: step;
+        grid-column: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: var(--radius-badge);
+        background: var(--el-muted);
+        color: var(--el-text);
+        font: 700 13px/1 var(--font-mono);
+      }
+      .step .num::before {
+        content: counter(step);
+      }
+      /* A step whose label is not its ordinal — the VS Code route's
+         2a/2b/2c, which REPLACE step 2 rather than following it. The
+         letters are what say so before the lede does. */
+      .step .num[data-n]::before {
+        content: attr(data-n);
+        font-size: 11.5px;
+      }
+      /* A UI-INSTRUCTION step's number is OUTLINED rather than filled —
+         the one visual difference that tells the two kinds apart before
+         a reader has read a word. Paired with the `.kind` chip below,
+         so the distinction is never carried by shape alone. */
+      .step.ui .num {
+        background: var(--el-page-bg);
+        border: 1.5px solid var(--el-border-strong);
+        color: var(--el-text-secondary);
+      }
+      .step .body {
+        grid-column: 2;
+        min-width: 0;
+      }
+      .step .intent {
+        margin: 5px 0 0;
+        font: 600 15px/1.4 var(--font-sans);
+        color: var(--el-text);
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .step .kind {
+        font: 600 10px/1 var(--font-sans);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        color: var(--el-text-strong);
+        background: var(--el-tint-sky);
+      }
+      .step.ui .kind {
+        background: var(--el-tint-lavender);
+      }
+      .step .say {
+        margin: 6px 0 0;
+        max-width: 62ch;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .step .pane {
+        margin-top: 10px;
+        margin-bottom: 0;
+      }
+      .step .alt {
+        margin: 10px 0 0;
+        border-left: 2px solid var(--el-border-strong);
+        padding: 2px 0 2px 12px;
+      }
+      .step .alt .lede {
+        margin: 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the copy affordance, in the caption bar ────────────────────
+         It sits BESIDE the caption, not over the code: a control on top
+         of the text it copies covers the first line at exactly the
+         moment a reader is checking they got the right block. */
+      .pane .cap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .copy {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 24px;
+        padding: 0 8px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-control);
+        background: var(--el-page-bg);
+        color: var(--el-text-secondary);
+        font: 600 11px/1 var(--font-sans);
+        letter-spacing: 0.02em;
+        text-transform: none;
+        cursor: pointer;
+        flex: none;
+      }
+      .copy svg {
+        width: 12px;
+        height: 12px;
+        flex: none;
+      }
+      .copy:hover {
+        background: var(--el-muted);
+        color: var(--el-text);
+      }
+      .copy.copied {
+        background: var(--el-tint-mint);
+        border-color: var(--el-tint-mint);
+        color: var(--el-text-strong);
+      }
+      .copy.failed {
+        background: var(--el-tint-peach);
+        border-color: var(--el-tint-peach);
+        color: var(--el-text-strong);
+      }
+      /* Focus-visible is drawn for all three states — the pane itself is
+         already keyboard-reachable (`tabIndex={0}`) and a control inside
+         it must not break that walk. */
+      .copy.focused {
+        outline: 2px solid var(--el-accent);
+        outline-offset: 2px;
+      }
+      /* The FAILED message. It sits under the caption bar, inside the
+         pane, and it does NOT time out — a notice that has gone by the
+         time the reader looks up is the defect this state exists for. */
+      .pane .failnote {
+        margin: 0;
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-tint-peach);
+        color: var(--el-text-strong);
+        padding: 7px 12px;
+        font: 400 12px/1.5 var(--font-sans);
+      }
+
+      /* ── the states board (panel 2) ─────────────────────────────── */
+      .states {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .state-cell > .lbl {
+        margin: 0 0 6px;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      /* ⚠️ `--el-text-secondary`, NOT `--el-text-muted`. The muted ink is
+         #787671 and this label sits on the sheet's own #f4f3f1, which
+         measures 4.09:1 — under 1.4.3 at 11px. The design lane caught it
+         (MOTIR-4975); the fix is the next ink up, never a bigger size or
+         an allowance. */
+      .state-cell > .lbl .when {
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the kinds board (panel 3) ──────────────────────────────── */
+      .kinds {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      /* ── explanation, moved BELOW the sequence ──────────────────── */
+      .room h3.sub {
+        margin: 26px 0 0;
+        font: 600 15px var(--font-sans);
+        color: var(--el-text);
+      }
+      .room .prose {
+        margin: 8px 0 0;
+        max-width: 68ch;
+        font-size: 13.5px;
+        line-height: 1.65;
+        color: var(--el-text-secondary);
+      }
+      .room .rule {
+        margin: 30px 0 0;
+        border: 0;
+        border-top: 1px solid var(--el-border);
+      }
+      .room .eyebrow {
+        margin: 26px 0 0;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .checks {
+        margin: 10px 0 0;
+        padding: 0;
+        list-style: none;
+        max-width: 68ch;
+      }
+      .checks li {
+        padding: 7px 0;
+        border-top: 1px solid var(--el-border-soft);
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .checks li:first-child {
+        border-top: 0;
+      }
+      .checks b {
+        color: var(--el-text);
+      }
+      code.inline {
+        font: 400 0.92em var(--font-mono);
+        color: var(--el-text);
+      }
+      /* ── narrow ──────────────────────────────────────────────────── */
+      .narrow .docs {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+      }
+      .narrow .rail {
+        border-right: 0;
+        border-bottom: 1px solid var(--el-border);
+      }
+      .narrow .rail-inner {
+        position: static;
+        max-height: none;
+        padding: 14px;
+      }
+      .narrow .rail .ops-group,
+      .narrow .rail .ops-list {
+        display: none;
+      }
+      .narrow .rail .disclosure {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: var(--height-control);
+        margin-top: 10px;
+        padding: 0 var(--spacing-control-x);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-control);
+        background: var(--el-page-bg);
+        font: 600 13px var(--font-sans);
+        color: var(--el-text);
+      }
+      .narrow .topbar .nav,
+      .narrow .topbar .bar-cta .btn.ghost {
+        display: none;
+      }
+      .narrow .room {
+        padding: 22px 16px 32px;
+      }
+      .narrow .room h1 {
+        font-size: 24px;
+      }
+      .narrow .foot {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .disclosure {
+        display: none;
+      }
+      /* ── narrow, this asset's own ──────────────────────────────── */
+      .narrow .steps .step {
+        grid-template-columns: 26px minmax(0, 1fr);
+        gap: 10px;
+      }
+      .narrow .steps .num {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+      }
+      .narrow .step .intent {
+        font-size: 14.5px;
+      }
+      .narrow .states,
+      .narrow .kinds {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <div class="doc-head">
+        <h1>
+          motir.co/docs/sandbox as SETUP STEPS — one action per step, and a copy
+          button that can fail out loud
+        </h1>
+        <p>
+          The guide is prose that happens to contain commands. This asset draws
+          it as a <b>procedure</b>: numbered steps where each one is either a
+          single copyable command or a single thing you do in your editor, with
+          the explanation moved out from between them. The affordance the
+          restructure turns on is a copy button, and the state that decides
+          whether it can be trusted is the one nobody pictures —
+          <code class="inline">navigator.clipboard.writeText</code> being
+          REFUSED.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-4975 · design</span>
+          <span class="ref muted">MOTIR-4971 · the story</span>
+          <span class="ref muted">MOTIR-4977 · the build it governs</span>
+          <span class="ref muted">MOTIR-4393 · the area's asset</span>
+          <span class="ref muted">repository: motir-marketing</span>
+        </div>
+        <div class="callout warn">
+          <b>Drawn against the surface as it SHIPS.</b>
+          <code class="inline">/docs/sandbox</code> was rendered in headless
+          chromium at 1280×900 on 2026-09-10 before anything here was drawn —
+          <code class="inline">200</code>, <b>6399px</b> of body, ten
+          <code class="inline">&lt;h2&gt;</code> prose sections, seven
+          <code class="inline">&lt;pre&gt;</code> panes, one
+          <code class="inline">&lt;ol&gt;</code> and
+          <b>zero <code class="inline">&lt;button&gt;</code></b> in
+          <code class="inline">main</code>. The chrome and the rail below are
+          <code class="inline">docs.mock.html</code>'s own markup, class for
+          class; the token block is copied from it 1:1. This asset draws only
+          what sits inside the reading column.
+        </div>
+      </div>
+
+      <!-- ══════════════════════ PANEL 1 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">1</span>
+          <h2>The stepped guide, end to end — 1280px</h2>
+          <span class="note"
+            >The whole surface, not the changed region: lede, preconditions, the
+            five steps, the VS Code route, the explanation that moved below
+            them.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a class="current" href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Documentation">
+                <div class="rail-inner">
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs">Overview</a></li>
+                    <li><a href="/docs/api">API reference</a></li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a class="current" href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Public address</a></li>
+                  </ul>
+                </div>
+              </nav>
+              <main class="room">
+                <h1>Sandbox</h1>
+                <p class="intro">
+                  A sandbox is a container you start on your own machine,
+                  holding your own agent, the Motir CLI and your checkouts — and
+                  nothing else. You bring your own agent credential, mounted
+                  read-only; the loop runs inside, so a misbehaving agent
+                  reaches your work tree and not the rest of your machine.
+                </p>
+
+                <p class="eyebrow">Before you start</p>
+                <ul class="checks">
+                  <li>
+                    <b>Docker, running.</b> Built for
+                    <code class="inline">linux/amd64</code> <b>and</b>
+                    <code class="inline">linux/arm64</code>, so Apple Silicon is
+                    native. There is no build step — you pull.
+                  </li>
+                  <li>
+                    <b>Your agent’s own sign-in, on this machine.</b> Its
+                    credential mount is read-only, so the container can use a
+                    sign-in and can never perform one.
+                  </li>
+                  <li>
+                    <b
+                      >Your workspace root — the folder that CONTAINS your
+                      checkouts.</b
+                    >
+                    A project usually spans several repositories and the loop
+                    runs across all of them.
+                  </li>
+                </ul>
+
+                <h2 class="area">Set it up</h2>
+                <p class="say" style="margin-top: 6px">
+                  Five steps. Each one is a single thing to do.
+                </p>
+                <ol class="steps">
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Pull the image for your agent
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        There is no build step — the image is published per
+                        agent profile. Swap the tag for the agent you use.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>pull</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the pull command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>
+docker pull ghcr.io/moooon-b-v/motir-sandbox:claude</pre>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Start the container from your workspace root
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        Run it from the folder that
+                        <b>contains</b> your checkouts, not from any one of
+                        them.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>run</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the run command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>
+docker run -it --rm --pull=always \
+  -v "$PWD:/workspace" \
+  -v motir-auth:/home/node/.config/motir \
+  -v "$HOME/.claude:/home/node/.claude:ro" \
+  ghcr.io/moooon-b-v/motir-sandbox:claude</pre>
+                      </div>
+                      <div class="alt">
+                        <p class="lede">
+                          <b>Using VS Code instead?</b> Steps 2a–2c below
+                          replace this one. Everything after is the same either
+                          way.
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Sign in, inside the container
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        A code and a URL are printed; approve it in any browser.
+                        The sign-in lands on the
+                        <code class="inline">motir-auth</code> volume, so you do
+                        this once.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>in the container</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the sign-in command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>motir login</pre>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Link the folder to your project
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        Swap <code class="inline">ACME</code> for your project
+                        key. If your workspace has exactly one project, drop the
+                        flag — that is the whole step.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>in the container</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the link command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>motir link --project ACME</pre>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Check it — all green is the end of this page
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        Auth, link, the agent binary and its credential. This is
+                        the only thing that tells you the container actually got
+                        what you passed it.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>in the container</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the check command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>motir doctor</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+                <h2 class="area" style="margin-top: 34px">
+                  Or start it from VS Code instead
+                </h2>
+                <p class="say" style="margin-top: 6px">
+                  The same confined image, as a dev container. These three
+                  <b>replace step 2</b> — steps 3 to 5 are the same either way.
+                </p>
+                <ol class="steps">
+                  <li class="step ui">
+                    <span class="num" aria-hidden="true" data-n="2a"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Install the Dev Containers extension
+                        <span class="kind">In your editor</span>
+                      </p>
+                      <p class="say">
+                        Extensions view, or the command palette — ⇧⌘P on macOS,
+                        Ctrl+Shift+P elsewhere, F1 on all three — then
+                        <i>Extensions: Install Extensions</i>. Two of these
+                        three steps happen in the palette, so it is worth
+                        pinning now.
+                      </p>
+                    </div>
+                  </li>
+
+                  <li class="step ui">
+                    <span class="num" aria-hidden="true" data-n="2b"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Create
+                        <code class="inline"
+                          >.devcontainer/devcontainer.json</code
+                        >
+                        <span class="kind">In your editor</span>
+                      </p>
+                      <p class="say">
+                        In the folder you are mounting. Create it from a
+                        terminal rather than a file picker: Finder and most GUI
+                        pickers refuse a name beginning with a dot, and refuse
+                        it without saying why.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>.devcontainer/devcontainer.json</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the devcontainer.json file"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>
+{
+  "name": "Motir sandbox (Claude Code)",
+  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "mounts": [
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
+  ],
+  "remoteUser": "node",
+  "overrideCommand": true,
+  "postStartCommand": "motir-sandbox-agent-config || true"
+}</pre>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step ui">
+                    <span class="num" aria-hidden="true" data-n="2c"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Open the folder in the container
+                        <span class="kind">In your editor</span>
+                      </p>
+                      <p class="say">
+                        Command palette →
+                        <i>Dev Containers: Open Folder in Container…</i>, and
+                        pick the folder you just wrote the file into. Its
+                        terminal is the same shell step 2 would have dropped you
+                        into — carry on at step 3.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+                <hr class="rule" />
+                <p class="eyebrow">Why it looks like this</p>
+                <h3 class="sub">Tags follow the agent</h3>
+                <p class="prose">
+                  <code class="inline">claude</code>,
+                  <code class="inline">codex</code>,
+                  <code class="inline">opencode</code> and
+                  <code class="inline">kimi</code> are the first-tier profiles;
+                  <code class="inline">antigravity</code>,
+                  <code class="inline">cursor</code>,
+                  <code class="inline">aider</code> and
+                  <code class="inline">goose</code> follow, and
+                  <code class="inline">base</code> carries no agent at all. Each
+                  profile mounts its own credential directory, so swap both the
+                  tag and the <code class="inline">-v</code> line together.
+                </p>
+                <h3 class="sub">Nothing is kept that could go stale</h3>
+                <p class="prose">
+                  <code class="inline">--pull=always</code> fetches the current
+                  image on every start and
+                  <code class="inline">--rm</code> keeps nothing behind, so
+                  there is no coming-back-to-it path that leaves you on a
+                  months-old CLI. Your sign-in survives it: it lives on the
+                  <code class="inline">motir-auth</code> volume, outside the
+                  container.
+                </p>
+                <h3 class="sub">What it confines — and what it does not</h3>
+                <p class="prose">
+                  Filesystem, confined. <b>Network, OPEN by design</b> — every
+                  agent needs its provider API. Privileges, unprivileged. Worth
+                  reading before you rely on it, because one of those three is
+                  an exception rather than a guarantee.
+                </p>
+                <p class="prose" style="margin-top: 14px">
+                  <b>What next.</b>
+                  <code class="inline">motir run &lt;key&gt;</code> takes one
+                  work item, a story, or <code class="inline">sprint</code>;
+                  <code class="inline">motir auto</code> drains the ready set
+                  unattended. Every flag is on the CLI page.
+                </p>
+              </main>
+            </div>
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li><a href="https://app.motir.co/sign-up">Start free</a></li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Developers</h2>
+                <ul>
+                  <li><a href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/mcp">MCP server</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/terms">Terms</a></li>
+                  <li><a href="/legal/privacy">Privacy</a></li>
+                </ul>
+              </div>
+            </footer>
+          </div>
+        </div>
+        <div class="callout">
+          <b>The step is the unit, and the gutter is what says so.</b> A number
+          in its own column reads as a procedure at a glance; the same content
+          under counted headings reads as an article. That is why the number is
+          not an <code class="inline">&lt;h3&gt;</code> — and why
+          <code class="inline">Set it up</code> is one
+          <code class="inline">&lt;ol&gt;</code>, so a screen reader announces
+          "list, 5 items" before the first one.
+        </div>
+        <div class="callout">
+          <b>The run recipe is carried through UNCHANGED.</b> Step 2's block is
+          byte-for-byte what
+          <code class="inline">app/docs/(guides)/sandbox/page.tsx:248-256</code>
+          holds on <code class="inline">origin/main</code> at
+          <code class="inline">b3386d63</code> — MOTIR-4970's settled recipe.
+          This asset restructures the page AROUND it and re-words nothing in it.
+        </div>
+        <div class="callout warn">
+          <b>Explanation moved, not deleted.</b> Everything under
+          <i>Why it looks like this</i> was previously interleaved with the
+          commands. A reader mid-setup wants the procedure; a reader deciding
+          whether to trust the thing wants the prose — and the second one is not
+          in a hurry.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 2 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">2</span>
+          <h2>The copy affordance — all three states, and focus-visible</h2>
+          <span class="note"
+            >Top row at rest; bottom row the same three with keyboard
+            focus.</span
+          >
+        </div>
+        <div class="states">
+          <div class="state-cell">
+            <p class="lbl">Idle <span class="when">· at rest</span></p>
+            <div class="frame">
+              <div class="site" style="padding: 14px">
+                <div class="pane" style="margin-bottom: 0">
+                  <p class="cap">
+                    <span>in the container</span
+                    ><button
+                      class="copy"
+                      type="button"
+                      aria-label="Copy the check command"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      >
+                        <rect x="5.2" y="5.2" width="8" height="8" rx="1.6" />
+                        <path
+                          d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                        /></svg
+                      >Copy
+                    </button>
+                  </p>
+                  <pre>motir doctor</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="state-cell">
+            <p class="lbl">
+              Copied <span class="when">· 1600&nbsp;ms, then back to Idle</span>
+            </p>
+            <div class="frame">
+              <div class="site" style="padding: 14px">
+                <div class="pane" style="margin-bottom: 0">
+                  <p class="cap">
+                    <span>in the container</span
+                    ><button
+                      class="copy copied"
+                      type="button"
+                      aria-label="Copy the check command"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                      >
+                        <path d="M3 8.4 6.4 11.8 13 5.2" /></svg
+                      >Copied
+                    </button>
+                  </p>
+                  <pre>motir doctor</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="state-cell">
+            <p class="lbl">
+              Failed <span class="when">· PERSISTS — no timer</span>
+            </p>
+            <div class="frame">
+              <div class="site" style="padding: 14px">
+                <div class="pane" style="margin-bottom: 0">
+                  <p class="cap">
+                    <span>in the container</span
+                    ><button
+                      class="copy failed"
+                      type="button"
+                      aria-label="Copy the check command"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      >
+                        <path d="M8 2.6 14.4 13.4H1.6z" />
+                        <path d="M8 6.6v3.1" />
+                        <path d="M8 11.8h.01" stroke-width="2" /></svg
+                      >Copy failed
+                    </button>
+                  </p>
+                  <p class="failnote">
+                    Couldn’t reach the clipboard — select the text and copy it
+                    by hand.
+                  </p>
+                  <pre>motir doctor</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="states" style="margin-top: 18px">
+          <div class="state-cell">
+            <p class="lbl">Idle <span class="when">· focus-visible</span></p>
+            <div class="frame">
+              <div class="site" style="padding: 14px">
+                <div class="pane" style="margin-bottom: 0">
+                  <p class="cap">
+                    <span>in the container</span
+                    ><button
+                      class="copy focused"
+                      type="button"
+                      aria-label="Copy the check command"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      >
+                        <rect x="5.2" y="5.2" width="8" height="8" rx="1.6" />
+                        <path
+                          d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                        /></svg
+                      >Copy
+                    </button>
+                  </p>
+                  <pre>motir doctor</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="state-cell">
+            <p class="lbl">Copied <span class="when">· focus-visible</span></p>
+            <div class="frame">
+              <div class="site" style="padding: 14px">
+                <div class="pane" style="margin-bottom: 0">
+                  <p class="cap">
+                    <span>in the container</span
+                    ><button
+                      class="copy copied focused"
+                      type="button"
+                      aria-label="Copy the check command"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                      >
+                        <path d="M3 8.4 6.4 11.8 13 5.2" /></svg
+                      >Copied
+                    </button>
+                  </p>
+                  <pre>motir doctor</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="state-cell">
+            <p class="lbl">Failed <span class="when">· focus-visible</span></p>
+            <div class="frame">
+              <div class="site" style="padding: 14px">
+                <div class="pane" style="margin-bottom: 0">
+                  <p class="cap">
+                    <span>in the container</span
+                    ><button
+                      class="copy failed focused"
+                      type="button"
+                      aria-label="Copy the check command"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      >
+                        <path d="M8 2.6 14.4 13.4H1.6z" />
+                        <path d="M8 6.6v3.1" />
+                        <path d="M8 11.8h.01" stroke-width="2" /></svg
+                      >Copy failed
+                    </button>
+                  </p>
+                  <p class="failnote">
+                    Couldn’t reach the clipboard — select the text and copy it
+                    by hand.
+                  </p>
+                  <pre>motir doctor</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="callout warn">
+          <b>FAILED does not time out, and that is the design.</b> Copied holds
+          <b>1600&nbsp;ms</b> and reverts to Idle. Failed <b>persists</b> until
+          the next successful copy or until focus leaves the pane, because a
+          notice that has gone by the time the reader looks up is precisely the
+          failure this state exists to prevent: they believe they hold the
+          command and paste whatever was in the clipboard before.
+        </div>
+        <div class="callout">
+          <b>The wording is the design's, not the builder's.</b> Idle
+          <code class="inline">Copy</code> · copied
+          <code class="inline">Copied</code> · failed
+          <code class="inline">Copy failed</code>, with the note reading
+          <code class="inline"
+            >Couldn’t reach the clipboard — select the text and copy it by
+            hand.</code
+          >
+          The accessible name is
+          <code class="inline">Copy the &lt;caption&gt; command</code>, so two
+          buttons on one page never announce identically.
+        </div>
+        <div class="callout">
+          <b>Tokens, named.</b> Button: border
+          <code class="inline">--el-border</code>, ink
+          <code class="inline">--el-text-secondary</code> on
+          <code class="inline">--el-page-bg</code>,
+          <code class="inline">--radius-control</code>. Copied:
+          <code class="inline">--el-tint-mint</code> with
+          <code class="inline">--el-text-strong</code>. Failed:
+          <code class="inline">--el-tint-peach</code> with
+          <code class="inline">--el-text-strong</code> — the same AA recipe
+          every tinted surface in this tree uses. Focus ring:
+          <code class="inline">--el-accent</code>, 2px, 2px offset. No hue is
+          invented, and the state is never carried by colour alone: the LABEL
+          changes in all three.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 3 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">3</span>
+          <h2>The two step KINDS, side by side</h2>
+          <span class="note"
+            >A reader must be able to tell <i>paste this</i> from
+            <i>do this in your editor</i> before reading a word.</span
+          >
+        </div>
+        <div class="kinds">
+          <div>
+            <p
+              class="lbl"
+              style="
+                margin: 0 0 6px;
+                font: 600 11px var(--font-sans);
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                color: var(--el-text-secondary);
+              "
+            >
+              A command step
+            </p>
+            <div class="frame">
+              <div class="site" style="padding: 16px">
+                <ol class="steps" style="margin: 0">
+                  <li class="step" style="padding-top: 0">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent" style="margin-top: 3px">
+                        Sign in, inside the container
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        A code and a URL are printed; approve it in any browser.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>in the container</span
+                          ><button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the sign-in command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>motir login</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p
+              class="lbl"
+              style="
+                margin: 0 0 6px;
+                font: 600 11px var(--font-sans);
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                color: var(--el-text-secondary);
+              "
+            >
+              A UI-instruction step
+            </p>
+            <div class="frame">
+              <div class="site" style="padding: 16px">
+                <ol class="steps" style="margin: 0">
+                  <li class="step ui" style="padding-top: 0">
+                    <span class="num" aria-hidden="true" data-n="2c"></span>
+                    <div class="body">
+                      <p class="intent" style="margin-top: 3px">
+                        Open the folder in the container
+                        <span class="kind">In your editor</span>
+                      </p>
+                      <p class="say">
+                        Command palette →
+                        <i>Dev Containers: Open Folder in Container…</i>, and
+                        pick the folder you just wrote the file into. Nothing to
+                        copy.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>Two signals, never one.</b> The number is FILLED on a command step
+          and OUTLINED on a UI-instruction step; the chip reads
+          <code class="inline">Command</code> or
+          <code class="inline">In your editor</code>. Shape alone would fail a
+          reader who cannot distinguish the two fills; the chip alone would make
+          the sequence look uniform while scanning. The tints are
+          <code class="inline">--el-tint-sky</code> and
+          <code class="inline">--el-tint-lavender</code> — two SLOTS, not two
+          shades of one hue, so they survive a palette swap.
+        </div>
+        <div class="callout warn">
+          <b>The letters are load-bearing.</b> The VS Code steps are
+          <code class="inline">2a</code> / <code class="inline">2b</code> /
+          <code class="inline">2c</code>, not 6 / 7 / 8: they REPLACE step 2
+          rather than following it, and a reader who has just run
+          <code class="inline">docker run</code> must not be invited to run them
+          too.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 4 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">4</span>
+          <h2>A UI-instruction step that CONTAINS a copyable body</h2>
+          <span class="note"
+            >The composition the card asked not to be left to guesswork.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" style="padding: 18px">
+            <ol class="steps" style="margin: 0">
+              <li class="step ui">
+                <span class="num" aria-hidden="true" data-n="2b"></span>
+                <div class="body">
+                  <p class="intent">
+                    Create
+                    <code class="inline">.devcontainer/devcontainer.json</code>
+                    <span class="kind">In your editor</span>
+                  </p>
+                  <p class="say">
+                    In the folder you are mounting. Create it from a terminal
+                    rather than a file picker: Finder and most GUI pickers
+                    refuse a name beginning with a dot, and refuse it without
+                    saying why.
+                  </p>
+                  <div class="pane">
+                    <p class="cap">
+                      <span>.devcontainer/devcontainer.json</span>
+                      <button
+                        class="copy"
+                        type="button"
+                        aria-label="Copy the devcontainer.json file"
+                      >
+                        <svg
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                        >
+                          <rect x="5.2" y="5.2" width="8" height="8" rx="1.6" />
+                          <path
+                            d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                          />
+                        </svg>
+                        Copy
+                      </button>
+                    </p>
+                    <pre>
+{
+  "name": "Motir sandbox (Claude Code)",
+  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "mounts": [
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
+  ],
+  "remoteUser": "node",
+  "overrideCommand": true,
+  "postStartCommand": "motir-sandbox-agent-config || true"
+}</pre>
+                  </div>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="callout">
+          <b>Both, and the outer kind wins the chip.</b> Creating a file is
+          something you do in your editor, and the file's CONTENT is still
+          something you paste — so the step stays a UI instruction, keeps the
+          outlined number and the
+          <code class="inline">In your editor</code> chip, and carries a
+          copyable pane inside its body. The rule the build follows:
+          <b>the chip describes the ACTION, the pane describes the material.</b>
+          A step is never both kinds; it can hold material of the other kind.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 5 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">5</span>
+          <h2>Narrow — 390px</h2>
+          <span class="note"
+            >The gutter narrows to 26px and survives; the panes scroll inside
+            their own boxes and the page never scrolls sideways.</span
+          >
+        </div>
+        <div class="frame narrow narrow">
+          <div class="narrow">
+            <div class="site">
+              <header class="topbar">
+                <a class="brand-lockup" href="/" aria-label="Motir">
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="26"
+                    height="26"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <nav class="nav" aria-label="Main">
+                  <a href="/explore">Explore</a>
+                  <a class="current" href="/docs">Docs</a>
+                  <a href="/design">Design</a>
+                  <span class="ph">Product<span class="soon">soon</span></span>
+                  <span class="ph">Pricing<span class="soon">soon</span></span>
+                </nav>
+                <div class="bar-cta">
+                  <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                    >Sign in</a
+                  >
+                  <a
+                    class="btn primary sm"
+                    href="https://app.motir.co/sign-up?intent=tracker"
+                    >Start free
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
+              </header>
+              <div class="docs">
+                <nav class="rail" aria-label="Documentation">
+                  <div class="rail-inner">
+                    <p class="group">Documentation</p>
+                    <ul>
+                      <li><a href="/docs">Overview</a></li>
+                      <li><a href="/docs/api">API reference</a></li>
+                      <li><a href="/docs/mcp">MCP server</a></li>
+                      <li><a href="/docs/cli">CLI</a></li>
+                      <li>
+                        <a class="current" href="/docs/sandbox">Sandbox</a>
+                      </li>
+                      <li><a href="/docs/public-address">Public address</a></li>
+                    </ul>
+                  </div>
+                </nav>
+                <main class="room">
+                  <h1>Sandbox</h1>
+                  <p class="intro">
+                    A sandbox is a container you start on your own machine,
+                    holding your own agent, the Motir CLI and your checkouts —
+                    and nothing else. You bring your own agent credential,
+                    mounted read-only; the loop runs inside, so a misbehaving
+                    agent reaches your work tree and not the rest of your
+                    machine.
+                  </p>
+
+                  <p class="eyebrow">Before you start</p>
+                  <ul class="checks">
+                    <li>
+                      <b>Docker, running.</b> Built for
+                      <code class="inline">linux/amd64</code> <b>and</b>
+                      <code class="inline">linux/arm64</code>, so Apple Silicon
+                      is native. There is no build step — you pull.
+                    </li>
+                    <li>
+                      <b>Your agent’s own sign-in, on this machine.</b> Its
+                      credential mount is read-only, so the container can use a
+                      sign-in and can never perform one.
+                    </li>
+                    <li>
+                      <b
+                        >Your workspace root — the folder that CONTAINS your
+                        checkouts.</b
+                      >
+                      A project usually spans several repositories and the loop
+                      runs across all of them.
+                    </li>
+                  </ul>
+
+                  <h2 class="area">Set it up</h2>
+                  <p class="say" style="margin-top: 6px">
+                    Five steps. Each one is a single thing to do.
+                  </p>
+                  <ol class="steps">
+                    <li class="step">
+                      <span class="num" aria-hidden="true"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Pull the image for your agent
+                          <span class="kind">Command</span>
+                        </p>
+                        <p class="say">
+                          There is no build step — the image is published per
+                          agent profile. Swap the tag for the agent you use.
+                        </p>
+                        <div class="pane">
+                          <p class="cap">
+                            <span>pull</span>
+                            <button
+                              class="copy"
+                              type="button"
+                              aria-label="Copy the pull command"
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              >
+                                <rect
+                                  x="5.2"
+                                  y="5.2"
+                                  width="8"
+                                  height="8"
+                                  rx="1.6"
+                                />
+                                <path
+                                  d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                                />
+                              </svg>
+                              Copy
+                            </button>
+                          </p>
+                          <pre>
+docker pull ghcr.io/moooon-b-v/motir-sandbox:claude</pre>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="step">
+                      <span class="num" aria-hidden="true"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Start the container from your workspace root
+                          <span class="kind">Command</span>
+                        </p>
+                        <p class="say">
+                          Run it from the folder that
+                          <b>contains</b> your checkouts, not from any one of
+                          them.
+                        </p>
+                        <div class="pane">
+                          <p class="cap">
+                            <span>run</span>
+                            <button
+                              class="copy"
+                              type="button"
+                              aria-label="Copy the run command"
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              >
+                                <rect
+                                  x="5.2"
+                                  y="5.2"
+                                  width="8"
+                                  height="8"
+                                  rx="1.6"
+                                />
+                                <path
+                                  d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                                />
+                              </svg>
+                              Copy
+                            </button>
+                          </p>
+                          <pre>
+docker run -it --rm --pull=always \
+  -v "$PWD:/workspace" \
+  -v motir-auth:/home/node/.config/motir \
+  -v "$HOME/.claude:/home/node/.claude:ro" \
+  ghcr.io/moooon-b-v/motir-sandbox:claude</pre>
+                        </div>
+                        <div class="alt">
+                          <p class="lede">
+                            <b>Using VS Code instead?</b> Steps 2a–2c below
+                            replace this one. Everything after is the same
+                            either way.
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="step">
+                      <span class="num" aria-hidden="true"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Sign in, inside the container
+                          <span class="kind">Command</span>
+                        </p>
+                        <p class="say">
+                          A code and a URL are printed; approve it in any
+                          browser. The sign-in lands on the
+                          <code class="inline">motir-auth</code> volume, so you
+                          do this once.
+                        </p>
+                        <div class="pane">
+                          <p class="cap">
+                            <span>in the container</span>
+                            <button
+                              class="copy"
+                              type="button"
+                              aria-label="Copy the sign-in command"
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              >
+                                <rect
+                                  x="5.2"
+                                  y="5.2"
+                                  width="8"
+                                  height="8"
+                                  rx="1.6"
+                                />
+                                <path
+                                  d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                                />
+                              </svg>
+                              Copy
+                            </button>
+                          </p>
+                          <pre>motir login</pre>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="step">
+                      <span class="num" aria-hidden="true"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Link the folder to your project
+                          <span class="kind">Command</span>
+                        </p>
+                        <p class="say">
+                          Swap <code class="inline">ACME</code> for your project
+                          key. If your workspace has exactly one project, drop
+                          the flag — that is the whole step.
+                        </p>
+                        <div class="pane">
+                          <p class="cap">
+                            <span>in the container</span>
+                            <button
+                              class="copy"
+                              type="button"
+                              aria-label="Copy the link command"
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              >
+                                <rect
+                                  x="5.2"
+                                  y="5.2"
+                                  width="8"
+                                  height="8"
+                                  rx="1.6"
+                                />
+                                <path
+                                  d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                                />
+                              </svg>
+                              Copy
+                            </button>
+                          </p>
+                          <pre>motir link --project ACME</pre>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="step">
+                      <span class="num" aria-hidden="true"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Check it — all green is the end of this page
+                          <span class="kind">Command</span>
+                        </p>
+                        <p class="say">
+                          Auth, link, the agent binary and its credential. This
+                          is the only thing that tells you the container
+                          actually got what you passed it.
+                        </p>
+                        <div class="pane">
+                          <p class="cap">
+                            <span>in the container</span>
+                            <button
+                              class="copy"
+                              type="button"
+                              aria-label="Copy the check command"
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              >
+                                <rect
+                                  x="5.2"
+                                  y="5.2"
+                                  width="8"
+                                  height="8"
+                                  rx="1.6"
+                                />
+                                <path
+                                  d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                                />
+                              </svg>
+                              Copy
+                            </button>
+                          </p>
+                          <pre>motir doctor</pre>
+                        </div>
+                      </div>
+                    </li>
+                  </ol>
+                  <h2 class="area" style="margin-top: 34px">
+                    Or start it from VS Code instead
+                  </h2>
+                  <p class="say" style="margin-top: 6px">
+                    The same confined image, as a dev container. These three
+                    <b>replace step 2</b> — steps 3 to 5 are the same either
+                    way.
+                  </p>
+                  <ol class="steps">
+                    <li class="step ui">
+                      <span class="num" aria-hidden="true" data-n="2a"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Install the Dev Containers extension
+                          <span class="kind">In your editor</span>
+                        </p>
+                        <p class="say">
+                          Extensions view, or the command palette — ⇧⌘P on
+                          macOS, Ctrl+Shift+P elsewhere, F1 on all three — then
+                          <i>Extensions: Install Extensions</i>. Two of these
+                          three steps happen in the palette, so it is worth
+                          pinning now.
+                        </p>
+                      </div>
+                    </li>
+
+                    <li class="step ui">
+                      <span class="num" aria-hidden="true" data-n="2b"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Create
+                          <code class="inline"
+                            >.devcontainer/devcontainer.json</code
+                          >
+                          <span class="kind">In your editor</span>
+                        </p>
+                        <p class="say">
+                          In the folder you are mounting. Create it from a
+                          terminal rather than a file picker: Finder and most
+                          GUI pickers refuse a name beginning with a dot, and
+                          refuse it without saying why.
+                        </p>
+                        <div class="pane">
+                          <p class="cap">
+                            <span>.devcontainer/devcontainer.json</span>
+                            <button
+                              class="copy"
+                              type="button"
+                              aria-label="Copy the devcontainer.json file"
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              >
+                                <rect
+                                  x="5.2"
+                                  y="5.2"
+                                  width="8"
+                                  height="8"
+                                  rx="1.6"
+                                />
+                                <path
+                                  d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                                />
+                              </svg>
+                              Copy
+                            </button>
+                          </p>
+                          <pre>
+{
+  "name": "Motir sandbox (Claude Code)",
+  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "mounts": [
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
+  ],
+  "remoteUser": "node",
+  "overrideCommand": true,
+  "postStartCommand": "motir-sandbox-agent-config || true"
+}</pre>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="step ui">
+                      <span class="num" aria-hidden="true" data-n="2c"></span>
+                      <div class="body">
+                        <p class="intent">
+                          Open the folder in the container
+                          <span class="kind">In your editor</span>
+                        </p>
+                        <p class="say">
+                          Command palette →
+                          <i>Dev Containers: Open Folder in Container…</i>, and
+                          pick the folder you just wrote the file into. Its
+                          terminal is the same shell step 2 would have dropped
+                          you into — carry on at step 3.
+                        </p>
+                      </div>
+                    </li>
+                  </ol>
+                  <hr class="rule" />
+                  <p class="eyebrow">Why it looks like this</p>
+                  <h3 class="sub">Tags follow the agent</h3>
+                  <p class="prose">
+                    <code class="inline">claude</code>,
+                    <code class="inline">codex</code>,
+                    <code class="inline">opencode</code> and
+                    <code class="inline">kimi</code> are the first-tier
+                    profiles; <code class="inline">antigravity</code>,
+                    <code class="inline">cursor</code>,
+                    <code class="inline">aider</code> and
+                    <code class="inline">goose</code> follow, and
+                    <code class="inline">base</code> carries no agent at all.
+                    Each profile mounts its own credential directory, so swap
+                    both the tag and the <code class="inline">-v</code> line
+                    together.
+                  </p>
+                  <h3 class="sub">Nothing is kept that could go stale</h3>
+                  <p class="prose">
+                    <code class="inline">--pull=always</code> fetches the
+                    current image on every start and
+                    <code class="inline">--rm</code> keeps nothing behind, so
+                    there is no coming-back-to-it path that leaves you on a
+                    months-old CLI. Your sign-in survives it: it lives on the
+                    <code class="inline">motir-auth</code> volume, outside the
+                    container.
+                  </p>
+                  <h3 class="sub">What it confines — and what it does not</h3>
+                  <p class="prose">
+                    Filesystem, confined. <b>Network, OPEN by design</b> — every
+                    agent needs its provider API. Privileges, unprivileged.
+                    Worth reading before you rely on it, because one of those
+                    three is an exception rather than a guarantee.
+                  </p>
+                  <p class="prose" style="margin-top: 14px">
+                    <b>What next.</b>
+                    <code class="inline">motir run &lt;key&gt;</code> takes one
+                    work item, a story, or <code class="inline">sprint</code>;
+                    <code class="inline">motir auto</code> drains the ready set
+                    unattended. Every flag is on the CLI page.
+                  </p>
+                </main>
+              </div>
+              <footer class="foot">
+                <div>
+                  <a
+                    class="brand-lockup"
+                    href="/"
+                    aria-label="Motir"
+                    style="--brand-size: 22px"
+                  >
+                    <svg
+                      class="brand-glyph"
+                      viewBox="0 0 24 24"
+                      width="22"
+                      height="22"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    <span class="brand-word">Motir</span>
+                  </a>
+                  <p class="tag">
+                    The AI planning, project-management and agent orchestration
+                    platform.
+                  </p>
+                </div>
+                <div>
+                  <h2>Product</h2>
+                  <ul>
+                    <li>
+                      <a href="https://app.motir.co/sign-up">Start free</a>
+                    </li>
+                    <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Developers</h2>
+                  <ul>
+                    <li><a href="/docs/api">API reference</a></li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Legal</h2>
+                  <ul>
+                    <li><a href="/legal/terms">Terms</a></li>
+                    <li><a href="/legal/privacy">Privacy</a></li>
+                  </ul>
+                </div>
+              </footer>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>The number keeps its own column at 390px.</b> Collapsing it inline
+          would turn the sequence back into prose at exactly the width where a
+          reader is most likely to lose their place. The
+          <code class="inline">docker run</code> pane is wider than the screen
+          and scrolls inside its box — which is what
+          <code class="inline">tabIndex={0}</code> on the pane is for, and why
+          the copy button must not take that reachability away.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 6 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">6</span>
+          <h2>Dark</h2>
+          <span class="note"
+            >Same structure, every colour the palette's dark value, none
+            invented.</span
+          >
+        </div>
+        <div class="frame dark">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a class="current" href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Documentation">
+                <div class="rail-inner">
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs">Overview</a></li>
+                    <li><a href="/docs/api">API reference</a></li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a class="current" href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Public address</a></li>
+                  </ul>
+                </div>
+              </nav>
+              <main class="room">
+                <h1>Sandbox</h1>
+                <p class="intro">
+                  A sandbox is a container you start on your own machine,
+                  holding your own agent, the Motir CLI and your checkouts — and
+                  nothing else. You bring your own agent credential, mounted
+                  read-only; the loop runs inside, so a misbehaving agent
+                  reaches your work tree and not the rest of your machine.
+                </p>
+
+                <p class="eyebrow">Before you start</p>
+                <ul class="checks">
+                  <li>
+                    <b>Docker, running.</b> Built for
+                    <code class="inline">linux/amd64</code> <b>and</b>
+                    <code class="inline">linux/arm64</code>, so Apple Silicon is
+                    native. There is no build step — you pull.
+                  </li>
+                  <li>
+                    <b>Your agent’s own sign-in, on this machine.</b> Its
+                    credential mount is read-only, so the container can use a
+                    sign-in and can never perform one.
+                  </li>
+                  <li>
+                    <b
+                      >Your workspace root — the folder that CONTAINS your
+                      checkouts.</b
+                    >
+                    A project usually spans several repositories and the loop
+                    runs across all of them.
+                  </li>
+                </ul>
+
+                <h2 class="area">Set it up</h2>
+                <p class="say" style="margin-top: 6px">
+                  Five steps. Each one is a single thing to do.
+                </p>
+                <ol class="steps">
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Pull the image for your agent
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        There is no build step — the image is published per
+                        agent profile. Swap the tag for the agent you use.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>pull</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the pull command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>
+docker pull ghcr.io/moooon-b-v/motir-sandbox:claude</pre>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Start the container from your workspace root
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        Run it from the folder that
+                        <b>contains</b> your checkouts, not from any one of
+                        them.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>run</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the run command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>
+docker run -it --rm --pull=always \
+  -v "$PWD:/workspace" \
+  -v motir-auth:/home/node/.config/motir \
+  -v "$HOME/.claude:/home/node/.claude:ro" \
+  ghcr.io/moooon-b-v/motir-sandbox:claude</pre>
+                      </div>
+                      <div class="alt">
+                        <p class="lede">
+                          <b>Using VS Code instead?</b> Steps 2a–2c below
+                          replace this one. Everything after is the same either
+                          way.
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Sign in, inside the container
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        A code and a URL are printed; approve it in any browser.
+                        The sign-in lands on the
+                        <code class="inline">motir-auth</code> volume, so you do
+                        this once.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>in the container</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the sign-in command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>motir login</pre>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Link the folder to your project
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        Swap <code class="inline">ACME</code> for your project
+                        key. If your workspace has exactly one project, drop the
+                        flag — that is the whole step.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>in the container</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the link command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>motir link --project ACME</pre>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="step">
+                    <span class="num" aria-hidden="true"></span>
+                    <div class="body">
+                      <p class="intent">
+                        Check it — all green is the end of this page
+                        <span class="kind">Command</span>
+                      </p>
+                      <p class="say">
+                        Auth, link, the agent binary and its credential. This is
+                        the only thing that tells you the container actually got
+                        what you passed it.
+                      </p>
+                      <div class="pane">
+                        <p class="cap">
+                          <span>in the container</span>
+                          <button
+                            class="copy"
+                            type="button"
+                            aria-label="Copy the check command"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.4"
+                            >
+                              <rect
+                                x="5.2"
+                                y="5.2"
+                                width="8"
+                                height="8"
+                                rx="1.6"
+                              />
+                              <path
+                                d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                              />
+                            </svg>
+                            Copy
+                          </button>
+                        </p>
+                        <pre>motir doctor</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </main>
+            </div>
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li><a href="https://app.motir.co/sign-up">Start free</a></li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Developers</h2>
+                <ul>
+                  <li><a href="/docs/api">API reference</a></li>
+                  <li><a href="/docs/mcp">MCP server</a></li>
+                  <li><a href="/docs/cli">CLI</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/terms">Terms</a></li>
+                  <li><a href="/legal/privacy">Privacy</a></li>
+                </ul>
+              </div>
+            </footer>
+          </div>
+        </div>
+        <div class="callout">
+          <b>Worth checking on the flip:</b> the two step-kind tints stay
+          mutually distinguishable, the copied and failed buttons stay legible
+          against the caption bar rather than reading as holes, and the outlined
+          number's border survives against
+          <code class="inline">--el-page-bg</code>.
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 7 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">7</span>
+          <h2>The ACCESS PATH — where a reader arrives from</h2>
+          <span class="note"
+            >Drawn in place, not named in prose: the rail's fifth documentation
+            row.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" style="min-height: 300px">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a class="current" href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Documentation">
+                <div class="rail-inner">
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs">Overview</a></li>
+                    <li><a href="/docs/api">API reference</a></li>
+                    <li><a href="/docs/mcp">MCP server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a class="current" href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Public address</a></li>
+                  </ul>
+                </div>
+              </nav>
+              <main class="room">
+                <h1>Sandbox</h1>
+                <p class="intro">
+                  The rail row marked
+                  <code class="inline">aria-current="page"</code> is this page's
+                  only entrance — nothing else in the product routes here. The
+                  top bar's <b>Docs</b> item lands on
+                  <code class="inline">/docs</code>, whose Overview list carries
+                  the same row.
+                </p>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>The rail is not this asset's to change.</b>
+          <code class="inline">design/docs/design-notes.md</code> owns it, the
+          shell and the code pane's own frame; this asset composes them
+          unchanged and adds only what happens inside the reading column. The
+          row already exists and already reads
+          <code class="inline">Sandbox</code>.
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

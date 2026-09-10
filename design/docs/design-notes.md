@@ -1,4 +1,13 @@
-# `motir.co/docs` — the reading surface, its rail, and an operation drawn open (`docs.*`)
+# `motir.co/docs` — the AREA note
+
+**Two assets, one note.** `docs.*` (MOTIR-4393) draws the reading surface, its rail and an operation
+open; `sandbox-steps.*` (MOTIR-4975) draws `/docs/sandbox` as a setup procedure. This file covers
+both — a `design-notes.md` is per AREA, not per asset. The second half starts at
+**`sandbox-steps.*`** below.
+
+---
+
+## `docs.*` — the reading surface, its rail, and an operation drawn open
 
 **Subtask:** MOTIR-4393 · (`type: design`) · **Bug:** MOTIR-4375 (`motir.co/docs` is unusable) ·
 **Epic MOTIR-3875 · Motir's public web presence.** **Repository: `motir-marketing`.**
@@ -260,3 +269,198 @@ layer or in the board chrome: muted clears AA only on the white page and faint c
 surface at all. `tests/design/inkContrast.test.ts` measures this asset — **and adding it to that
 file's `ASSETS` list is part of shipping it**, because the list is literal and an asset that is not
 in it is not measured.
+
+---
+
+---
+
+# `sandbox-steps.*` — `/docs/sandbox` as SETUP STEPS
+
+**Subtask:** MOTIR-4975 · (`type: design`) · **Story:** MOTIR-4971 ·
+**Epic MOTIR-653 · Launch readiness.** **Repository: `motir-marketing`.**
+
+**Asset files (two, joining the area's shared note):** `sandbox-steps.mock.html` (the source) ·
+`sandbox-steps.png` (full-page Playwright chromium export, light theme, `deviceScaleFactor: 2`,
+re-exported with `pnpm design:render --width 1280 design/docs/sandbox-steps.mock.html` — 2560×25162).
+**This file is the AREA's note and covers both assets**; a `design-notes.md` is per area, not per
+asset.
+
+> **⚠️ THIS SUPERSEDES `docs.mock.html`'s PANEL 3 for this page.** That panel draws `/docs/sandbox`
+> as an example of a _prose page_ — a rail with no operation tier — and it is correct about the
+> RAIL, which it owns. It is no longer the reference for the page's CONTENT: it draws the
+> pre-MOTIR-4970 `docker run -it --name motir-sandbox` recipe, which the product retired. Build the
+> page to `sandbox-steps.*`; read panel 3 for the shell around it.
+
+## What ships today — MEASURED, not remembered
+
+Rendered in headless chromium at 1280 × 900 on **2026-09-10**, from `origin/main` at `b3386d63`,
+before anything here was drawn. `200`.
+
+| what                            |  today |
+| ------------------------------- | -----: |
+| body height                     | 6399px |
+| `<h2>` prose sections in `main` |     10 |
+| `<pre>` panes                   |      7 |
+| `<ol>` lists                    |      1 |
+| **`<button>` in `main`**        |  **0** |
+
+The page is well-written prose that happens to contain commands. Its spine is ten headed sections;
+the seven code panes are scattered through them, and the paragraphs around each one carry
+instructions of their own — so a reader has to decide, sentence by sentence, which text is a thing to
+do. **The single `<ol>` is the VS Code route's three sub-steps**, which is the one place the page
+already reads as a procedure.
+
+> **⚠️ The story and the build card were authored saying there were `<ol>` lists at `:297`, `:444`
+> and `:545`. That was FALSIFIED here**:
+> `git show origin/main:'app/docs/(guides)/sandbox/page.tsx' | grep -n '<ol'` returns one hit, at
+> `:312`. `motir-marketing#55` (MOTIR-4970) merged 63 minutes after those cards were written and
+> rewrote the page. Both cards were amended on the record.
+
+## The panels (inspect every one)
+
+| panel | what it shows                                                                               |
+| ----- | ------------------------------------------------------------------------------------------- |
+| **1** | the stepped guide **end to end** at 1280 — the whole surface, not the changed region        |
+| **2** | the copy affordance: **idle · copied · failed**, then the same three with **focus-visible** |
+| **3** | the two step **KINDS** side by side                                                         |
+| **4** | a **UI-instruction step that contains a copyable body** — the devcontainer file             |
+| **5** | **narrow** (390)                                                                            |
+| **6** | **dark**                                                                                    |
+| **7** | the **ACCESS PATH**, drawn in place                                                         |
+
+## What this asset does NOT own
+
+| element                                         | owned by                                         | what THIS asset does                                                                        |
+| ----------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| The rail, the docs shell, the code pane's frame | this file's `docs.*` half (MOTIR-4393)           | Composes them unchanged, class for class.                                                   |
+| The site bar and footer                         | `motir-core/design/public-site/` via `SiteShell` | Nothing.                                                                                    |
+| The run recipe's CONTENT — flags, volume, tags  | MOTIR-4970, merged                               | Draws the literal verbatim. Re-words nothing.                                               |
+| The profile presentation                        | the page as it ships (`:257-274`)                | Carries the paragraph through into _Why it looks like this_. Does not turn it into a table. |
+| `motir-core/design/agent-sandbox/`              | a FROZEN record of this page's previous home     | Nothing. It is not the design of record and is not edited.                                  |
+
+## The step is the UNIT — and the gutter is what says so
+
+A step is a **row**: a 30px number in its own column, then the body. The number is not an `<h3>`, and
+the difference is the whole structural decision. Counted headings read as an article whose sections
+happen to be numbered; a number in its own gutter reads as a procedure before a word is read. `Set it
+up` is **one `<ol>`**, so a screen reader announces _"list, 5 items"_ first.
+
+**Five steps, each one action.** The shipped page's _Inside: link, check, run_ is one pane holding
+four commands — four actions in one block, which is exactly what the restructure exists to remove.
+They become steps 3, 4 and 5; `motir run ACME-7` is not setup and moves to the closing hand-off.
+
+|         step | kind           | what                                           |
+| -----------: | -------------- | ---------------------------------------------- |
+|            1 | command        | `docker pull …`                                |
+|            2 | command        | `docker run …` — with a rule pointing at 2a–2c |
+| 2a · 2b · 2c | UI instruction | the VS Code route, **replacing step 2**        |
+|            3 | command        | `motir login`                                  |
+|            4 | command        | `motir link --project ACME`                    |
+|            5 | command        | `motir doctor` — the stated finish line        |
+
+**The letters are load-bearing.** `2a` / `2b` / `2c` rather than 6 / 7 / 8, because those steps
+REPLACE step 2 rather than following it, and a reader who has just run `docker run` must not be
+invited to run them too. In the markup that is `data-n` **on the `.num` span**, not on the `<li>`:
+`attr()` resolves against the element the pseudo-element is attached to and does not look at an
+ancestor, so `data-n` on the row renders an empty circle. (It did, until the render caught it.)
+
+## Two step KINDS, told apart by TWO signals
+
+|        | command step                                      | UI-instruction step                                                              |
+| ------ | ------------------------------------------------- | -------------------------------------------------------------------------------- |
+| number | **filled** — `--el-muted` ground, `--el-text` ink | **outlined** — `--el-page-bg`, 1.5px `--el-border-strong`, `--el-text-secondary` |
+| chip   | `Command`, `--el-tint-sky` + `--el-text-strong`   | `In your editor`, `--el-tint-lavender` + `--el-text-strong`                      |
+| pane   | one, with a copy button                           | none — unless it hands over a FILE (below)                                       |
+
+Never one signal alone. The fills would fail a reader who cannot separate them; the chips alone would
+leave the sequence looking uniform to someone scanning. The two tints are separate **slots**, not two
+shades of one hue, so the distinction survives a palette swap.
+
+**A step is never BOTH kinds — but it may carry material of the other kind.** Creating
+`.devcontainer/devcontainer.json` is something you do in your editor, and the file's content is still
+something you paste. Panel 4 draws it: the step keeps the outlined number and the `In your editor`
+chip, and holds a copyable pane inside its body. **The chip describes the ACTION; the pane describes
+the MATERIAL.**
+
+## The copy affordance — three states, and the failure is the point
+
+It sits in the caption bar, **beside** the caption, right-aligned — never over the code, which is
+covering the first line at exactly the moment a reader is checking they took the right block.
+
+| state      | label         | ground                               | ink                   | duration                              |
+| ---------- | ------------- | ------------------------------------ | --------------------- | ------------------------------------- |
+| **idle**   | `Copy`        | `--el-page-bg`, border `--el-border` | `--el-text-secondary` | —                                     |
+| **copied** | `Copied`      | `--el-tint-mint`                     | `--el-text-strong`    | **1600 ms**, then reverts to **idle** |
+| **failed** | `Copy failed` | `--el-tint-peach`                    | `--el-text-strong`    | **none — it PERSISTS**                |
+
+Plus **focus-visible on all three**: a 2px `--el-accent` outline at 2px offset. The pane is already
+keyboard-reachable (`tabIndex={0}`, so an overflowing block can be scrolled), and a control inside it
+must not take that away.
+
+**FAILED does not time out, and that is a decision rather than an omission.** `writeText` is refused
+in an insecure context, on a denied permission, or when the browser did not see a gesture it trusts.
+A notice that has gone by the time the reader looks up leaves them believing they hold the command —
+so they paste whatever was in the clipboard before and debug the wrong thing. The failed state clears
+on the next successful copy, or when focus leaves the pane. Nothing else clears it.
+
+**The copy is the design's, verbatim — the build card does not invent wording:**
+
+- idle `Copy` · copied `Copied` · failed `Copy failed`
+- the failure note, inside the pane under the caption bar, on `--el-tint-peach`:
+  **`Couldn’t reach the clipboard — select the text and copy it by hand.`**
+- the accessible name: **`Copy the <caption> command`** — `Copy the run command`, `Copy the pull
+command` — so two buttons on one page never announce identically.
+
+**The state is never carried by colour alone.** The LABEL changes in all three, which is what a
+reader who cannot separate mint from peach reads.
+
+## Ink — and what the lane caught
+
+Every colour resolves to an `--el-*` token declared in the mock's own block, copied 1:1 from
+`docs.mock.html`. **No invented hue.** The area's `## Ink` rule above holds here: `--el-text-muted`
+and `--el-text-faint` appear nowhere.
+
+**That rule was broken and the lane caught it, which is why criterion 8 was amended.** The states
+board's `.when` sub-label shipped at `--el-text-muted` (`#787671`) on the sheet's `#f4f3f1` —
+**4.09:1, six sites, under 1.4.3 at 11px**. `pnpm test:design` named all six. The fix is the next ink
+up (`--el-text-secondary`), never a larger size and never an allowance row. **Had this asset not been
+added to `ASSETS`, the lane would have been green and the defect would have shipped** — the third
+time this area has had to write that sentence down.
+
+## Viewports — MEASURED
+
+Rendered and checked at both, and the check is `document.documentElement.scrollWidth` against
+`window.innerWidth` rather than an eyeball:
+
+|    width | page scrolls sideways?                      |
+| -------: | ------------------------------------------- |
+| **1280** | no — `scrollWidth` 1280 = `innerWidth` 1280 |
+|  **390** | no — `scrollWidth` 390 = `innerWidth` 390   |
+
+At 390 the gutter narrows to 26px and **keeps its own column**; collapsing the number inline would
+turn the sequence back into prose at exactly the width where a reader most easily loses their place.
+The `docker run` pane is wider than the screen and **scrolls inside its own box**, which is what the
+pane's `tabIndex` is for.
+
+## The ACCESS PATH
+
+**The rail's fifth documentation row**, `Sandbox`, carrying `aria-current="page"` — drawn in place in
+panel 7 rather than named in prose. It is this page's only entrance; nothing else in the product
+routes here. The top bar's `Docs` item lands on `/docs`, whose Overview list carries the same row.
+The row already exists and already reads `Sandbox`: this asset adds nothing to the rail and changes
+nothing in it.
+
+## What the code cards build from this
+
+| card           | builds                                                                                     |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| **MOTIR-4977** | the stepped page and the `CodeBlock` copy button with all three states                     |
+| **MOTIR-4978** | the integration vitest: one kind per step, the sequence gapless, the recipe literal intact |
+| **MOTIR-4979** | the Playwright E2E: a real copy click, and the **denied-permission** path                  |
+
+**GIVES / TAKES.** This asset GIVES MOTIR-4977 the step row, both step kinds, the copy button's three
+states and their verbatim copy, and the 1600 ms duration. It **TAKES nothing** from any card: it adds
+no element to MOTIR-4978's or MOTIR-4979's scope beyond what their own criteria already name, and it
+changes no criterion on a `done` card. The step COUNT — **five, plus 2a–2c** — is the figure
+MOTIR-4978's criterion 2 asserts against; if the build changes it, that card's number changes with it
+and this table is where it is read from.

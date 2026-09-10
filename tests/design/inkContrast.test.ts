@@ -44,6 +44,14 @@ const ASSETS = [
   // not in it is not measured, and the lane would be green on the day the asset
   // landed and green if the asset were wrong.
   resolve(ROOT, 'design', 'docs', 'docs.mock.html'),
+  // MOTIR-4975 — the stepped sandbox guide and its copy affordance. ⚠️ ADDED
+  // WITH THE ASSET, for the reason the two entries above state: this list is
+  // literal, so an asset that is not in it is not measured. This one draws the
+  // copy button's copied and failed states on `--el-tint-mint` and
+  // `--el-tint-peach`, which is exactly the tinted-surface recipe this file
+  // exists to hold to AA — an unmeasured asset here would be the gate passing
+  // because it is looking at nothing.
+  resolve(ROOT, 'design', 'docs', 'sandbox-steps.mock.html'),
 ]
 
 /*
