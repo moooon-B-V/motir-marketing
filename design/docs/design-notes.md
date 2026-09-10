@@ -349,14 +349,16 @@ up` is **one `<ol>`**, so a screen reader announces _"list, 5 items"_ first.
 four commands — four actions in one block, which is exactly what the restructure exists to remove.
 They become steps 3, 4 and 5; `motir run ACME-7` is not setup and moves to the closing hand-off.
 
-|         step | kind           | what                                           |
-| -----------: | -------------- | ---------------------------------------------- |
-|            1 | command        | `docker pull …`                                |
-|            2 | command        | `docker run …` — with a rule pointing at 2a–2c |
-| 2a · 2b · 2c | UI instruction | the VS Code route, **replacing step 2**        |
-|            3 | command        | `motir login`                                  |
-|            4 | command        | `motir link --project ACME`                    |
-|            5 | command        | `motir doctor` — the stated finish line        |
+|   step | kind           | what                                                                  |
+| -----: | -------------- | --------------------------------------------------------------------- |
+|      1 | command        | `docker pull …`                                                       |
+|      2 | command        | `docker run …` — with a rule pointing at 2a–2c                        |
+|     2a | UI instruction | install the Dev Containers extension                                  |
+| **2b** | **command**    | `mkdir -p .devcontainer` + a heredoc — **one paste**, folder and file |
+|     2c | UI instruction | open the folder in the container                                      |
+|      3 | command        | `motir login`                                                         |
+|      4 | command        | `motir link --project ACME`                                           |
+|      5 | command        | `motir doctor` — the stated finish line                               |
 
 **The letters are load-bearing.** `2a` / `2b` / `2c` rather than 6 / 7 / 8, because those steps
 REPLACE step 2 rather than following it, and a reader who has just run `docker run` must not be
@@ -376,11 +378,25 @@ Never one signal alone. The fills would fail a reader who cannot separate them; 
 leave the sequence looking uniform to someone scanning. The two tints are separate **slots**, not two
 shades of one hue, so the distinction survives a palette swap.
 
-**A step is never BOTH kinds — but it may carry material of the other kind.** Creating
-`.devcontainer/devcontainer.json` is something you do in your editor, and the file's content is still
-something you paste. Panel 4 draws it: the step keeps the outlined number and the `In your editor`
-chip, and holds a copyable pane inside its body. **The chip describes the ACTION; the pane describes
-the MATERIAL.**
+**A step is never BOTH kinds, and a ROUTE need not be all one kind.** The VS Code route runs
+**UI → COMMAND → UI**, and drawing it as homogeneous was a defect in this asset's first draft.
+
+> **⚠️ 2b was drawn as a UI-instruction step holding the devcontainer JSON as material — a file body
+> with no way to create it.** A reader cannot act on that. The folder is a DOTFILE, and Finder and
+> most GUI pickers refuse a name beginning with a dot _without saying why_ — which the page's own
+> source already says, at the constant that exists to solve it (`DEVCONTAINER_WRITE_COMMAND`). So 2b
+> is a **command step**: `mkdir -p .devcontainer` followed by a heredoc.
+
+**ONE PASTE, so ONE step — and that is the rule rather than a judgement about this case.** The block
+makes the folder AND writes the file, so it is one step. Had the two needed separate pastes it would
+be `2b` and `2c`, and the route would run to four. **A step is one PASTE, not one shell command**: the
+block holds two commands (`mkdir`, `cat`) and is still one action, because the reader performs it
+once.
+
+**The JSON listing left the step.** It is reference — what the command wrote — and sits below the
+sequence with the rest of the explanation, keeping its own Copy button for a reader who would rather
+create the file by hand. Both blocks are still built from ONE object, which is what
+`tests/docs/sandbox.test.tsx:118` asserts.
 
 ## The copy affordance — three states, and the failure is the point
 

@@ -1499,29 +1499,31 @@ docker run -it --rm --pull=always \
                     </div>
                   </li>
 
-                  <li class="step ui">
+                  <li class="step" data-x="2b">
                     <span class="num" aria-hidden="true" data-n="2b"></span>
                     <div class="body">
                       <p class="intent">
-                        Create
-                        <code class="inline"
-                          >.devcontainer/devcontainer.json</code
-                        >
-                        <span class="kind">In your editor</span>
+                        Create the dev container config
+                        <span class="kind">Command</span>
                       </p>
                       <p class="say">
-                        In the folder you are mounting. Create it from a
-                        terminal rather than a file picker: Finder and most GUI
-                        pickers refuse a name beginning with a dot, and refuse
-                        it without saying why.
+                        Run this in the folder you are mounting. One paste: it
+                        makes the
+                        <code class="inline">.devcontainer</code> folder and
+                        writes the file into it. Do not try to create them from
+                        a file picker — Finder and most GUI pickers refuse a
+                        name beginning with a dot, and refuse it without saying
+                        why.
                       </p>
                       <div class="pane">
                         <p class="cap">
-                          <span>.devcontainer/devcontainer.json</span>
+                          <span
+                            >your machine — in the folder you are mounting</span
+                          >
                           <button
                             class="copy"
                             type="button"
-                            aria-label="Copy the devcontainer.json file"
+                            aria-label="Copy the dev container config command"
                           >
                             <svg
                               viewBox="0 0 16 16"
@@ -1545,18 +1547,21 @@ docker run -it --rm --pull=always \
                           </button>
                         </p>
                         <pre>
+mkdir -p .devcontainer
+cat > .devcontainer/devcontainer.json &lt;&lt;'JSON'
 {
-  "name": "Motir sandbox (Claude Code)",
-  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
-  "workspaceFolder": "/workspace",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
+  &quot;name&quot;: &quot;Motir sandbox (Claude Code)&quot;,
+  &quot;image&quot;: &quot;ghcr.io/moooon-b-v/motir-sandbox:claude&quot;,
+  &quot;workspaceFolder&quot;: &quot;/workspace&quot;,
+  &quot;workspaceMount&quot;: &quot;source=${localWorkspaceFolder},target=/workspace,type=bind&quot;,
+  &quot;mounts&quot;: [
+    &quot;source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly&quot;
   ],
-  "remoteUser": "node",
-  "overrideCommand": true,
-  "postStartCommand": "motir-sandbox-agent-config || true"
-}</pre>
+  &quot;remoteUser&quot;: &quot;node&quot;,
+  &quot;overrideCommand&quot;: true,
+  &quot;postStartCommand&quot;: &quot;motir-sandbox-agent-config || true&quot;
+}
+JSON</pre>
                       </div>
                     </div>
                   </li>
@@ -1580,6 +1585,55 @@ docker run -it --rm --pull=always \
                 </ol>
                 <hr class="rule" />
                 <p class="eyebrow">Why it looks like this</p>
+                <h3 class="sub">The file that command writes</h3>
+                <p class="prose">
+                  Reference, not a step — step 2b already wrote it. It is here
+                  for the reader who would rather create the file by hand, and
+                  because the quotes around
+                  <code class="inline">&lt;&lt;'JSON'</code> are load-bearing:
+                  they stop your shell expanding
+                  <code class="inline">${localWorkspaceFolder}</code> and
+                  <code class="inline">${localEnv:HOME}</code> before they reach
+                  the file. Those are Dev Containers substitutions and the
+                  editor resolves them.
+                </p>
+                <div class="pane" style="margin-top: 10px">
+                  <p class="cap">
+                    <span>.devcontainer/devcontainer.json</span>
+                    <button
+                      class="copy"
+                      type="button"
+                      aria-label="Copy the devcontainer.json file"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      >
+                        <rect x="5.2" y="5.2" width="8" height="8" rx="1.6" />
+                        <path
+                          d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                        />
+                      </svg>
+                      Copy
+                    </button>
+                  </p>
+                  <pre>
+{
+  &quot;name&quot;: &quot;Motir sandbox (Claude Code)&quot;,
+  &quot;image&quot;: &quot;ghcr.io/moooon-b-v/motir-sandbox:claude&quot;,
+  &quot;workspaceFolder&quot;: &quot;/workspace&quot;,
+  &quot;workspaceMount&quot;: &quot;source=${localWorkspaceFolder},target=/workspace,type=bind&quot;,
+  &quot;mounts&quot;: [
+    &quot;source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly&quot;
+  ],
+  &quot;remoteUser&quot;: &quot;node&quot;,
+  &quot;overrideCommand&quot;: true,
+  &quot;postStartCommand&quot;: &quot;motir-sandbox-agent-config || true&quot;
+}</pre>
+                </div>
                 <h3 class="sub">What the profile picker changes</h3>
                 <p class="prose">
                   Picking an agent above rewrites three things and nothing else:
@@ -2073,35 +2127,37 @@ docker run -it --rm --pull=always \
       <section class="panel">
         <div class="panel-cap">
           <span class="n">4</span>
-          <h2>A UI-instruction step that CONTAINS a copyable body</h2>
+          <h2>The VS Code route MIXES kinds — UI, command, UI</h2>
           <span class="note"
-            >The composition the card asked not to be left to guesswork.</span
+            >2b is a COMMAND step. Creating a dotfile folder is not something a
+            reader can do in a file picker.</span
           >
         </div>
         <div class="frame">
           <div class="site" style="padding: 18px">
             <ol class="steps" style="margin: 0">
-              <li class="step ui">
+              <li class="step" data-x="2b">
                 <span class="num" aria-hidden="true" data-n="2b"></span>
                 <div class="body">
                   <p class="intent">
-                    Create
-                    <code class="inline">.devcontainer/devcontainer.json</code>
-                    <span class="kind">In your editor</span>
+                    Create the dev container config
+                    <span class="kind">Command</span>
                   </p>
                   <p class="say">
-                    In the folder you are mounting. Create it from a terminal
-                    rather than a file picker: Finder and most GUI pickers
-                    refuse a name beginning with a dot, and refuse it without
-                    saying why.
+                    Run this in the folder you are mounting. One paste: it makes
+                    the
+                    <code class="inline">.devcontainer</code> folder and writes
+                    the file into it. Do not try to create them from a file
+                    picker — Finder and most GUI pickers refuse a name beginning
+                    with a dot, and refuse it without saying why.
                   </p>
                   <div class="pane">
                     <p class="cap">
-                      <span>.devcontainer/devcontainer.json</span>
+                      <span>your machine — in the folder you are mounting</span>
                       <button
                         class="copy"
                         type="button"
-                        aria-label="Copy the devcontainer.json file"
+                        aria-label="Copy the dev container config command"
                       >
                         <svg
                           viewBox="0 0 16 16"
@@ -2119,33 +2175,59 @@ docker run -it --rm --pull=always \
                       </button>
                     </p>
                     <pre>
+mkdir -p .devcontainer
+cat > .devcontainer/devcontainer.json &lt;&lt;'JSON'
 {
-  "name": "Motir sandbox (Claude Code)",
-  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
-  "workspaceFolder": "/workspace",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
+  &quot;name&quot;: &quot;Motir sandbox (Claude Code)&quot;,
+  &quot;image&quot;: &quot;ghcr.io/moooon-b-v/motir-sandbox:claude&quot;,
+  &quot;workspaceFolder&quot;: &quot;/workspace&quot;,
+  &quot;workspaceMount&quot;: &quot;source=${localWorkspaceFolder},target=/workspace,type=bind&quot;,
+  &quot;mounts&quot;: [
+    &quot;source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly&quot;
   ],
-  "remoteUser": "node",
-  "overrideCommand": true,
-  "postStartCommand": "motir-sandbox-agent-config || true"
-}</pre>
+  &quot;remoteUser&quot;: &quot;node&quot;,
+  &quot;overrideCommand&quot;: true,
+  &quot;postStartCommand&quot;: &quot;motir-sandbox-agent-config || true&quot;
+}
+JSON</pre>
                   </div>
                 </div>
               </li>
             </ol>
           </div>
         </div>
+        <div class="callout warn">
+          <b
+            >The route is NOT homogeneous, and drawing it as though it were
+            homogeneous was a defect.</b
+          >
+          This asset first drew 2b as a UI-instruction step holding the
+          devcontainer JSON as material — a file body with no way to create it.
+          A reader cannot act on that: the folder is a DOTFILE, and Finder and
+          most GUI pickers refuse a name beginning with a dot without saying
+          why. The page's own source says so at the constant that exists to
+          solve it.
+        </div>
         <div class="callout">
-          <b>Both, and the outer kind wins the chip.</b> Creating a file is
-          something you do in your editor, and the file's CONTENT is still
-          something you paste — so the step stays a UI instruction, keeps the
-          outlined number and the
-          <code class="inline">In your editor</code> chip, and carries a
-          copyable pane inside its body. The rule the build follows:
-          <b>the chip describes the ACTION, the pane describes the material.</b>
-          A step is never both kinds; it can hold material of the other kind.
+          <b>One paste, so one step.</b> The command makes the folder AND writes
+          the file — <code class="inline">mkdir -p .devcontainer</code> then a
+          heredoc — which is why this is one step rather than two. Had the two
+          needed separate pastes it would be <code class="inline">2b</code> and
+          <code class="inline">2c</code>, and the route would run to four steps.
+          <b
+            >The rule the build follows: a step is one PASTE, not one shell
+            command.</b
+          >
+        </div>
+        <div class="callout">
+          <b>The JSON listing left the step.</b> It is reference — what the
+          command wrote — and it now sits below the sequence with the rest of
+          the explanation, keeping its own Copy button for a reader who would
+          rather create the file by hand. Both blocks are still built from ONE
+          object, which is what
+          <code class="inline">tests/docs/sandbox.test.tsx:118</code> asserts: a
+          <code class="inline">mounts</code> entry corrected in one cannot
+          publish a different config under the other caption.
         </div>
       </section>
 
@@ -2620,29 +2702,32 @@ docker run -it --rm --pull=always \
                       </div>
                     </li>
 
-                    <li class="step ui">
+                    <li class="step" data-x="2b">
                       <span class="num" aria-hidden="true" data-n="2b"></span>
                       <div class="body">
                         <p class="intent">
-                          Create
-                          <code class="inline"
-                            >.devcontainer/devcontainer.json</code
-                          >
-                          <span class="kind">In your editor</span>
+                          Create the dev container config
+                          <span class="kind">Command</span>
                         </p>
                         <p class="say">
-                          In the folder you are mounting. Create it from a
-                          terminal rather than a file picker: Finder and most
-                          GUI pickers refuse a name beginning with a dot, and
-                          refuse it without saying why.
+                          Run this in the folder you are mounting. One paste: it
+                          makes the
+                          <code class="inline">.devcontainer</code> folder and
+                          writes the file into it. Do not try to create them
+                          from a file picker — Finder and most GUI pickers
+                          refuse a name beginning with a dot, and refuse it
+                          without saying why.
                         </p>
                         <div class="pane">
                           <p class="cap">
-                            <span>.devcontainer/devcontainer.json</span>
+                            <span
+                              >your machine — in the folder you are
+                              mounting</span
+                            >
                             <button
                               class="copy"
                               type="button"
-                              aria-label="Copy the devcontainer.json file"
+                              aria-label="Copy the dev container config command"
                             >
                               <svg
                                 viewBox="0 0 16 16"
@@ -2666,18 +2751,21 @@ docker run -it --rm --pull=always \
                             </button>
                           </p>
                           <pre>
+mkdir -p .devcontainer
+cat > .devcontainer/devcontainer.json &lt;&lt;'JSON'
 {
-  "name": "Motir sandbox (Claude Code)",
-  "image": "ghcr.io/moooon-b-v/motir-sandbox:claude",
-  "workspaceFolder": "/workspace",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly"
+  &quot;name&quot;: &quot;Motir sandbox (Claude Code)&quot;,
+  &quot;image&quot;: &quot;ghcr.io/moooon-b-v/motir-sandbox:claude&quot;,
+  &quot;workspaceFolder&quot;: &quot;/workspace&quot;,
+  &quot;workspaceMount&quot;: &quot;source=${localWorkspaceFolder},target=/workspace,type=bind&quot;,
+  &quot;mounts&quot;: [
+    &quot;source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly&quot;
   ],
-  "remoteUser": "node",
-  "overrideCommand": true,
-  "postStartCommand": "motir-sandbox-agent-config || true"
-}</pre>
+  &quot;remoteUser&quot;: &quot;node&quot;,
+  &quot;overrideCommand&quot;: true,
+  &quot;postStartCommand&quot;: &quot;motir-sandbox-agent-config || true&quot;
+}
+JSON</pre>
                         </div>
                       </div>
                     </li>
@@ -2701,20 +2789,62 @@ docker run -it --rm --pull=always \
                   </ol>
                   <hr class="rule" />
                   <p class="eyebrow">Why it looks like this</p>
-                  <h3 class="sub">Tags follow the agent</h3>
+                  <h3 class="sub">The file that command writes</h3>
                   <p class="prose">
-                    <code class="inline">claude</code>,
-                    <code class="inline">codex</code>,
-                    <code class="inline">opencode</code> and
-                    <code class="inline">kimi</code> are the first-tier
-                    profiles; <code class="inline">antigravity</code>,
-                    <code class="inline">cursor</code>,
-                    <code class="inline">aider</code> and
-                    <code class="inline">goose</code> follow, and
-                    <code class="inline">base</code> carries no agent at all.
-                    Each profile mounts its own credential directory, so swap
-                    both the tag and the <code class="inline">-v</code> line
-                    together.
+                    Reference, not a step — step 2b already wrote it. Here for
+                    the reader who would rather create it by hand, and because
+                    the quotes around
+                    <code class="inline">&lt;&lt;'JSON'</code> are load-bearing.
+                  </p>
+                  <div class="pane" style="margin-top: 10px">
+                    <p class="cap">
+                      <span>.devcontainer/devcontainer.json</span>
+                      <button
+                        class="copy"
+                        type="button"
+                        aria-label="Copy the devcontainer.json file"
+                      >
+                        <svg
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                        >
+                          <rect x="5.2" y="5.2" width="8" height="8" rx="1.6" />
+                          <path
+                            d="M10.8 5.2V3.6A1.6 1.6 0 0 0 9.2 2H3.6A1.6 1.6 0 0 0 2 3.6v5.6a1.6 1.6 0 0 0 1.6 1.6h1.6"
+                          />
+                        </svg>
+                        Copy
+                      </button>
+                    </p>
+                    <pre>
+{
+  &quot;name&quot;: &quot;Motir sandbox (Claude Code)&quot;,
+  &quot;image&quot;: &quot;ghcr.io/moooon-b-v/motir-sandbox:claude&quot;,
+  &quot;workspaceFolder&quot;: &quot;/workspace&quot;,
+  &quot;workspaceMount&quot;: &quot;source=${localWorkspaceFolder},target=/workspace,type=bind&quot;,
+  &quot;mounts&quot;: [
+    &quot;source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,readonly&quot;
+  ],
+  &quot;remoteUser&quot;: &quot;node&quot;,
+  &quot;overrideCommand&quot;: true,
+  &quot;postStartCommand&quot;: &quot;motir-sandbox-agent-config || true&quot;
+}</pre>
+                  </div>
+                  <h3 class="sub">What the profile picker changes</h3>
+                  <p class="prose">
+                    Picking an agent above rewrites three things and nothing
+                    else: the image <b>tag</b>, the credential
+                    <b><code class="inline">-v</code> line</b>, and the dev
+                    container's <code class="inline">image</code>,
+                    <code class="inline">name</code> and
+                    <code class="inline">mounts</code> — which step 2b's heredoc
+                    carries. It is a control rather than a paragraph telling you
+                    to swap them yourself, because every command here has a Copy
+                    button and a reader who copies is a reader who did not read
+                    the swap instruction.
                   </p>
                   <h3 class="sub">Nothing is kept that could go stale</h3>
                   <p class="prose">
@@ -3896,7 +4026,7 @@ docker run -it --rm --pull=always \
       <section class="panel">
         <div class="panel-cap">
           <span class="n">10</span>
-          <h2>Step 2b follows the selector too — the dev container file</h2>
+          <h2>Step 2b follows the selector too — the heredoc it writes</h2>
           <span class="note"
             >Drawn with <b>OpenCode</b> selected, because it is the shape a
             claude-only drawing hides.</span
@@ -3989,27 +4119,28 @@ docker run -it --rm --pull=always \
               </p>
             </div>
             <ol class="steps" style="margin: 16px 0 0">
-              <li class="step ui" style="padding-top: 0">
+              <li class="step" data-x="2b">
                 <span class="num" aria-hidden="true" data-n="2b"></span>
                 <div class="body">
-                  <p class="intent" style="margin-top: 3px">
-                    Create
-                    <code class="inline">.devcontainer/devcontainer.json</code>
-                    <span class="kind">In your editor</span>
+                  <p class="intent">
+                    Create the dev container config
+                    <span class="kind">Command</span>
                   </p>
                   <p class="say">
-                    In the folder you are mounting. Create it from a terminal
-                    rather than a file picker: Finder and most GUI pickers
-                    refuse a name beginning with a dot, and refuse it without
-                    saying why.
+                    Run this in the folder you are mounting. One paste: it makes
+                    the
+                    <code class="inline">.devcontainer</code> folder and writes
+                    the file into it. Do not try to create them from a file
+                    picker — Finder and most GUI pickers refuse a name beginning
+                    with a dot, and refuse it without saying why.
                   </p>
                   <div class="pane">
                     <p class="cap">
-                      <span>.devcontainer/devcontainer.json</span>
+                      <span>your machine — in the folder you are mounting</span>
                       <button
                         class="copy"
                         type="button"
-                        aria-label="Copy the devcontainer.json file"
+                        aria-label="Copy the dev container config command"
                       >
                         <svg
                           viewBox="0 0 16 16"
@@ -4027,24 +4158,33 @@ docker run -it --rm --pull=always \
                       </button>
                     </p>
                     <pre>
+mkdir -p .devcontainer
+cat > .devcontainer/devcontainer.json &lt;&lt;'JSON'
 {
-  "name": "Motir sandbox (OpenCode)",
-  "image": "ghcr.io/moooon-b-v/motir-sandbox:opencode",
-  "workspaceFolder": "/workspace",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": [
-    "source=${localEnv:HOME}/.config/opencode,target=/home/node/.config/opencode,type=bind,readonly",
-    "source=${localEnv:HOME}/.local/share/opencode,target=/home/node/.local/share/opencode,type=bind,readonly"
+  &quot;name&quot;: &quot;Motir sandbox (OpenCode)&quot;,
+  &quot;image&quot;: &quot;ghcr.io/moooon-b-v/motir-sandbox:opencode&quot;,
+  &quot;workspaceFolder&quot;: &quot;/workspace&quot;,
+  &quot;workspaceMount&quot;: &quot;source=${localWorkspaceFolder},target=/workspace,type=bind&quot;,
+  &quot;mounts&quot;: [
+    &quot;source=${localEnv:HOME}/.config/opencode,target=/home/node/.config/opencode,type=bind,readonly&quot;,
+    &quot;source=${localEnv:HOME}/.local/share/opencode,target=/home/node/.local/share/opencode,type=bind,readonly&quot;
   ],
-  "remoteUser": "node",
-  "overrideCommand": true,
-  "postStartCommand": "motir-sandbox-agent-config || true"
-}</pre>
+  &quot;remoteUser&quot;: &quot;node&quot;,
+  &quot;overrideCommand&quot;: true,
+  &quot;postStartCommand&quot;: &quot;motir-sandbox-agent-config || true&quot;
+}
+JSON</pre>
                   </div>
                 </div>
               </li>
             </ol>
           </div>
+        </div>
+        <div class="callout warn">
+          <b>The profile reaches INSIDE the heredoc.</b> 2b's copyable block is
+          a command whose payload is the config file, so the selector rewrites
+          text the reader never edits — which is the whole reason it must be a
+          control and not an instruction to swap something afterwards.
         </div>
         <div class="callout warn">
           <b>THREE keys move with the profile, not one.</b>
