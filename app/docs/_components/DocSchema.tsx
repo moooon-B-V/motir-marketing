@@ -1,4 +1,5 @@
 import { describeSchema, schemaTypeLabel, type OpenApiSchema } from '@/lib/docs'
+import { CopyControls } from './CopyControls'
 
 /*
  * The three blocks the API reference renders an operation's DETAIL in
@@ -71,7 +72,19 @@ export function StatusPill({ status }: { status: string }) {
   )
 }
 
-/** A copyable code pane. `caption` names what the reader is looking at. */
+/**
+ * A copyable code pane. `caption` names what the reader is looking at.
+ *
+ * ⚠️ "COPYABLE" IS LITERAL SINCE MOTIR-4977. It used to mean hand-selectable —
+ * the docstring said "copyable" while the pane offered nothing but a `<pre>`
+ * you could drag across, which is exactly the awkwardness the comment below
+ * about wrapping was working around rather than solving. `CopyControls` puts a
+ * real button in the caption bar, with the three states
+ * `design/docs/design-notes.md` draws.
+ *
+ * This stays a SERVER component: only the caption row changes when the button
+ * is pressed, so only the caption row crosses the client boundary.
+ */
 export function CodeBlock({
   caption,
   code,
@@ -81,12 +94,12 @@ export function CodeBlock({
 }) {
   return (
     <div className="mb-4 overflow-hidden rounded-(--radius-card) border border-(--el-border)">
-      <p className="border-b border-(--el-border) bg-(--el-surface) px-3 py-1.5 font-(family-name:--font-mono) text-[11px] tracking-wide text-(--el-text-secondary) uppercase">
-        {caption}
-      </p>
+      <CopyControls caption={caption} code={code} />
       {/* The pane scrolls in its own box: a curl line is wider than a phone,
           and wrapping a shell command makes it uncopyable. `tabIndex` is what
-          makes an overflowing region reachable by keyboard. */}
+          makes an overflowing region reachable by keyboard — and the copy
+          button must not take that away, which is why it lives in the caption
+          bar rather than floating over the pane. */}
       <pre
         tabIndex={0}
         className="overflow-x-auto bg-(--el-page-bg) px-3 py-2.5 font-(family-name:--font-mono) text-[12.5px] leading-relaxed text-(--el-text)"
