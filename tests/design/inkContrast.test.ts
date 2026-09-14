@@ -2,10 +2,12 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { resolve } from 'node:path'
 import { ROOT, designMocks } from './designTree'
 import {
+  formatStateViolations,
   formatViolations,
   scanMocks,
   type InkSite,
   type MockScan,
+  type StateSite,
 } from './inkContrastScan'
 
 /*
@@ -28,6 +30,17 @@ import {
 const FIXTURE = resolve(
   ROOT,
   'tests/design/fixtures/board-chrome-pre-sweep.mock.html',
+)
+
+/*
+ * MOTIR-5448 — the STATE arm's evidence, for the same reason as the fixture
+ * above: every pair it plants CLEARS at rest and fails only while an element is
+ * hovered or focused, so the resting arm passes it — which is what the lane did
+ * for every `:hover` rule in `design/**` before the state arm existed.
+ */
+const STATE_FIXTURE = resolve(
+  ROOT,
+  'tests/design/fixtures/state-ink-pre-arm.mock.html',
 )
 
 /*
@@ -91,6 +104,60 @@ const DISPOSITIONED: {
   },
 ]
 
+/*
+ * STATE sites measured below 1.4.3 and ruled NOT a failure (MOTIR-5448). Same
+ * discipline as `DISPOSITIONED`, with the STATE in the key: the same element at
+ * rest and hovered are two different pairs, and an allowance for one must not
+ * cover the other.
+ */
+const STATE_DISPOSITIONED: {
+  file: string
+  selector: string
+  state: string
+  text: string
+  ratio: number
+  why: string
+}[] = [
+  {
+    file: 'landing.mock.html',
+    selector: 'button.btn.primary',
+    state: ':hover',
+    text: 'Starting…',
+    ratio: 3.07,
+    why:
+      'The same INACTIVE component `DISPOSITIONED` already exempts at rest — the ' +
+      "door's `disabled aria-busy` submitting state under `.btn[disabled] { " +
+      'opacity: 0.72 }` — now with `.btn.primary:hover` painting ' +
+      '`--el-accent-pressed` under it. A disabled button still matches `:hover` ' +
+      'in CSS, so the pair is real paint, and 1.4.3 exempts it by name under ' +
+      'Incidental. The DECLARED hovered pair (#ffffff on #4534b3) clears AA; ' +
+      'the 3.07 is the fade.',
+  },
+]
+
+/*
+ * State rules that match NO element in their own mock, so they paint no pair
+ * and there is nothing to measure. Named rather than tolerated: a rule that
+ * starts matching an element leaves this list and must then produce sites, and
+ * one that stops matching arrives here as a failure until it is recorded.
+ */
+const STATE_RULES_DRAWING_NOTHING: {
+  file: string
+  selector: string
+  state: string
+  why: string
+}[] = [
+  {
+    file: 'public-projects.mock.html',
+    selector: '.index a:hover',
+    state: ':hover',
+    why:
+      "`design/legal/legal.mock.html`'s chrome stylesheet, which this asset " +
+      'composes byte-for-byte; the board draws no `.index` rail, so the rule ' +
+      'has no element to hover.',
+  },
+]
+
 /**
  * A floor on the denominator. Without it a scan that silently walked nothing —
  * a document that failed to load, a selector that matched none — reports zero
@@ -102,7 +169,7 @@ const MINIMUM_SITES_PER_ASSET = 200
 const scanned: Record<string, MockScan> = {}
 
 beforeAll(async () => {
-  for (const scan of await scanMocks([FIXTURE, ...ASSETS]))
+  for (const scan of await scanMocks([FIXTURE, STATE_FIXTURE, ...ASSETS]))
     scanned[scan.file] = scan
 }, 120_000)
 
@@ -142,6 +209,48 @@ describe('the lane goes RED on the board chrome as it stood before MOTIR-3985', 
       '#ffffff 4.51',
     ])
     expect(scan.violations.filter((v) => v.pseudo !== null)).toHaveLength(1)
+  })
+})
+
+const describeState = (site: StateSite) =>
+  `${site.selector} ${site.state} @ ${site.ratio}`
+
+describe('the STATE arm goes RED on a pair only a hover or a focus paints', () => {
+  it('the resting arm passes the fixture — the blindness this arm exists for', () => {
+    const scan = scanned['state-ink-pre-arm.mock.html']
+    expect(scan.sites.length).toBeGreaterThan(0)
+    expect(formatViolations([scan])).toBe(
+      `scanned ${scan.sites.length} text-bearing sites; 0 below WCAG 1.4.3`,
+    )
+  })
+
+  it('reports each planted pair, with its STATE named', () => {
+    const scan = scanned['state-ink-pre-arm.mock.html']
+    expect(scan.states.violations.map(describeState).sort()).toEqual(
+      [
+        'a :hover @ 4.37', //                MOTIR-453: --el-link on a hovered --el-surface-soft
+        'span.meta :hover @ 4.34', //        the state is on the ANCESTOR `.row`
+        'span.field :focus-visible @ 4.34', // a focus state, not a pointer state
+      ].sort(),
+    )
+    expect(formatStateViolations([scan])).toContain(
+      'span.field :focus-visible  14px/400  #787671 on #fafaf9',
+    )
+  })
+
+  it('DISCRIMINATES: a repaint that clears is measured and passes, and a rule that paints no pair is not a state rule', () => {
+    const scan = scanned['state-ink-pre-arm.mock.html']
+    expect(
+      scan.states.sites.find((s) => s.text === 'A hover that clears'),
+    ).toMatchObject({ state: ':hover', color: '#1a1a1a' })
+    expect(scan.states.rules.map((r) => r.selector).sort()).toEqual(
+      [
+        '.field:focus-visible',
+        '.index a:hover',
+        '.ok:hover',
+        '.row:hover',
+      ].sort(),
+    )
   })
 })
 
@@ -219,6 +328,83 @@ describe('design/marketing/** clears WCAG 1.4.3', () => {
             v.ratio === d.ratio,
         ),
         `${d.file} ${d.selector} "${d.text}" @ ${d.ratio} is dispositioned and no longer measures that way — ` +
+          `re-measure it and either delete the entry or restate its reason`,
+      ).toHaveLength(1)
+    }
+  })
+})
+
+describe('design/** clears WCAG 1.4.3 in every :hover / :focus-visible state it draws', () => {
+  const stateScans = () => ASSETS.map((path) => scanned[basenameOf(path)])
+
+  it('reads every stylesheet and rewrites every state selector — nothing is skipped silently', () => {
+    for (const scan of stateScans()) {
+      expect(scan.states.unreadableSheets, scan.file).toEqual([])
+      expect(scan.states.unrewritten, scan.file).toEqual([])
+    }
+  })
+
+  it('measures every state rule that repaints — read from the sheets, not listed', () => {
+    const rules = stateScans().flatMap((scan) =>
+      scan.states.rules.map((rule) => ({ file: scan.file, ...rule })),
+    )
+    // A floor, for the reason `MINIMUM_SITES_PER_ASSET` states: a walk that
+    // silently found no rule reads exactly like a tree with none. 20 is what
+    // `design/**` drew when the arm landed; ADDING a rule needs no edit here.
+    expect(rules.length).toBeGreaterThanOrEqual(20)
+
+    const drawingNothing = rules.filter((rule) => rule.hosts === 0)
+    expect(
+      drawingNothing.map((r) => `${r.file} ${r.selector} ${r.state}`).sort(),
+    ).toEqual(
+      STATE_RULES_DRAWING_NOTHING.map(
+        (r) => `${r.file} ${r.selector} ${r.state}`,
+      ).sort(),
+    )
+    for (const rule of rules.filter((r) => r.hosts > 0)) {
+      expect(
+        rule.sites,
+        `${rule.file} ${rule.selector} matched ${rule.hosts} element(s) and measured no text`,
+      ).toBeGreaterThan(0)
+    }
+  })
+
+  it('has no undispositioned state site below its threshold', () => {
+    const open = stateScans().map((scan) => ({
+      ...scan,
+      states: {
+        ...scan.states,
+        violations: scan.states.violations.filter(
+          (v) =>
+            !STATE_DISPOSITIONED.some(
+              (d) =>
+                d.file === v.file &&
+                d.selector === v.selector &&
+                d.state === v.state &&
+                d.text === v.text &&
+                d.ratio === v.ratio,
+            ),
+        ),
+      },
+    }))
+    expect(formatStateViolations(open)).toBe(
+      `scanned ${open.reduce((n, s) => n + s.states.sites.length, 0)} state text sites; 0 below WCAG 1.4.3`,
+    )
+  })
+
+  it('carries no state disposition that has stopped describing a real site', () => {
+    const all = stateScans().flatMap((scan) => scan.states.violations)
+    for (const d of STATE_DISPOSITIONED) {
+      expect(
+        all.filter(
+          (v) =>
+            v.file === d.file &&
+            v.selector === d.selector &&
+            v.state === d.state &&
+            v.text === d.text &&
+            v.ratio === d.ratio,
+        ),
+        `${d.file} ${d.selector} ${d.state} "${d.text}" @ ${d.ratio} is dispositioned and no longer measures that way — ` +
           `re-measure it and either delete the entry or restate its reason`,
       ).toHaveLength(1)
     }
