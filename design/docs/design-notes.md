@@ -236,7 +236,7 @@ verb and must not be mistaken for one.
 
 ## What was KEPT from the prior art, and what was deliberately NOT
 
-The prior art is `motir-core` at `95a2d4468^`: `design/api-docs/design-notes.md`,
+The prior art is `motir-core` at `95a2d4468^`: `motir-core/design/api-docs/design-notes.md`,
 `api-docs.mock.html`, `docs-index.mock.html` and the components drawn to them
 (`OperationSection.tsx`, `MethodPill.tsx`, `CatalogueNav.tsx`, `DocBlocks.tsx`). **Every reference to
 it carries the `motir-core/` prefix, because it is in ANOTHER REPOSITORY** and a bare path here would

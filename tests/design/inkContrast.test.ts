@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 import { resolve } from 'node:path'
+import { ROOT, designMocks } from './designTree'
 import {
   formatViolations,
   scanMocks,
@@ -24,35 +25,29 @@ import {
  * site by site, before the second block asserts the shipped assets clear it.
  */
 
-const ROOT = resolve(import.meta.dirname, '../..')
 const FIXTURE = resolve(
   ROOT,
   'tests/design/fixtures/board-chrome-pre-sweep.mock.html',
 )
-const ASSETS = [
-  resolve(ROOT, 'design', 'marketing', 'design-showcase.mock.html'),
-  resolve(ROOT, 'design', 'marketing', 'landing.mock.html'),
-  resolve(ROOT, 'design', 'legal', 'legal.mock.html'),
-  // MOTIR-4113 — the /p/* room. ⚠️ ADDING IT HERE IS PART OF SHIPPING IT: this
-  // list is literal, so an asset that is not in it is not measured, and the
-  // lane would be green on the day the asset landed and green if the asset were
-  // wrong. That is the same "a gate that passes because it is measuring
-  // nothing" shape this file's own header describes.
-  resolve(ROOT, 'design', 'public-projects', 'public-projects.mock.html'),
-  // MOTIR-4393 — the /docs reading surface. ⚠️ ADDED WITH THE ASSET, for the
-  // reason the entry above states: this list is literal, so an asset that is
-  // not in it is not measured, and the lane would be green on the day the asset
-  // landed and green if the asset were wrong.
-  resolve(ROOT, 'design', 'docs', 'docs.mock.html'),
-  // MOTIR-4975 — the stepped sandbox guide and its copy affordance. ⚠️ ADDED
-  // WITH THE ASSET, for the reason the two entries above state: this list is
-  // literal, so an asset that is not in it is not measured. This one draws the
-  // copy button's copied and failed states on `--el-tint-mint` and
-  // `--el-tint-peach`, which is exactly the tinted-surface recipe this file
-  // exists to hold to AA — an unmeasured asset here would be the gate passing
-  // because it is looking at nothing.
-  resolve(ROOT, 'design', 'docs', 'sandbox-steps.mock.html'),
-]
+
+/*
+ * EVERY `*.mock.html` under `design/`, WALKED rather than listed (MOTIR-4990).
+ *
+ * This was a literal list of paths, and three cards in a row (MOTIR-4113,
+ * MOTIR-4393, MOTIR-4975) each added their own asset to it with a comment
+ * saying that forgetting would leave the lane green over an asset nobody
+ * opened. Each remembered; nothing would have failed if one had not. A walk
+ * removes the remembering instead of documenting it — which is why it was
+ * chosen over a drift guard that fails on an unlisted mock: that guard would
+ * still make the author edit this list, and would only move the moment of
+ * forgetting from "silently" to "at CI time".
+ *
+ * The fixture lives under `tests/`, so the walk never picks it up as an asset.
+ */
+const ASSETS = designMocks().map((path) => resolve(ROOT, path))
+
+/** Scans are keyed by basename, so the walk must not hand two mocks one key. */
+const basenameOf = (path: string) => path.split('/').pop() as string
 
 /*
  * Sites measured below 1.4.3 and ruled NOT a failure, each with its reason.
@@ -151,6 +146,17 @@ describe('the lane goes RED on the board chrome as it stood before MOTIR-3985', 
 })
 
 describe('design/marketing/** clears WCAG 1.4.3', () => {
+  it('measures every mock the design tree holds, under a key no other mock shares', () => {
+    // The walk is the population now, so the two ways it could still measure
+    // less than the tree are an EMPTY walk and a basename COLLISION: `scanned`
+    // is keyed by basename, and two areas each shipping `index.mock.html` would
+    // leave one scan silently overwriting the other.
+    expect(ASSETS.length).toBeGreaterThanOrEqual(6)
+    const names = ASSETS.map(basenameOf)
+    expect(names.filter((name, i) => names.indexOf(name) !== i)).toEqual([])
+    expect(Object.keys(scanned)).toEqual(expect.arrayContaining(names))
+  })
+
   it('scans enough of each asset for a zero to mean something', () => {
     for (const path of ASSETS) {
       const scan = scanned[path.split('/').pop() as string]

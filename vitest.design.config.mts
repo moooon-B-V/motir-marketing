@@ -26,9 +26,10 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['tests/design/**/*.test.ts'],
-    // One browser launch, two documents. The default pool would give each file
-    // its own process and its own chromium; there is one file, and this keeps
-    // it that way if a second is added.
+    // One browser launch at a time. Only `inkContrast` drives chromium; the
+    // address and three-file guards (MOTIR-4990) are plain file reads that cost
+    // milliseconds, so running the files in series costs nothing and keeps a
+    // second browser-driving spec from launching a chromium beside the first.
     fileParallelism: false,
     testTimeout: 60_000,
     hookTimeout: 60_000,
