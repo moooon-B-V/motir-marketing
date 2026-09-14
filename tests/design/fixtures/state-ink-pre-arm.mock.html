@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <title>FIXTURE — state-only ink pairs, PRE-MOTIR-5448</title>
+    <!--
+      MOTIR-5448 — THE FIXTURE THE STATE ARM IS ASSERTED AGAINST.
+
+      ⚠️ THIS FILE IS DELIBERATELY INACCESSIBLE AND MUST STAY THAT WAY — but
+      ONLY IN A STATE. At rest every text site here clears WCAG 1.4.3, so the
+      resting walk passes it, which is exactly what the lane did before this card
+      for every `:hover` rule in `design/**`. Each failing pair below exists only
+      while an element is hovered or focused.
+
+      It lives under `tests/`, so `designMocks()` never walks it as an asset.
+
+        .index a:hover          --el-link on --el-surface-soft          4.37
+                                (motir-core's MOTIR-453, verbatim: the link
+                                clears on white at rest, 4.57)
+        .row:hover (the .meta   --el-text-muted on --el-surface-soft    4.34
+          INSIDE it)            — the state sits on an ANCESTOR, and the
+                                site that fails is a descendant the rule
+                                never names
+        .field:focus-visible    --el-text-muted on --el-surface-soft    4.34
+                                — a focus state, not a pointer state
+
+      And two controls, so a green is a discrimination rather than an abstain:
+
+        .ok:hover               repaints to --el-text — measured, and CLEARS
+        .plain:hover            text-decoration only — paints no pair, so it
+                                is not in the state population at all
+    -->
+    <style>
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface-soft: #fafaf9;
+        --el-text: #1a1a1a;
+        --el-text-muted: #787671;
+        --el-link: #0075de;
+        --font-sans:
+          ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 24px;
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        font: 400 14px var(--font-sans);
+      }
+
+      .index a {
+        display: block;
+        padding: 6px 8px;
+        color: var(--el-link);
+        text-decoration: none;
+      }
+      .index a:hover {
+        background: var(--el-surface-soft);
+      }
+
+      .row {
+        padding: 8px;
+        background: var(--el-page-bg);
+      }
+      .row:hover {
+        background: var(--el-surface-soft);
+      }
+      .row .meta {
+        color: var(--el-text-muted);
+      }
+
+      .field {
+        display: inline-block;
+        padding: 4px 8px;
+        color: var(--el-text-muted);
+      }
+      .field:focus-visible {
+        outline: 2px solid var(--el-link);
+        background: var(--el-surface-soft);
+      }
+
+      .ok {
+        color: var(--el-text-muted);
+      }
+      .ok:hover {
+        color: var(--el-text);
+        background: var(--el-surface-soft);
+      }
+
+      .plain:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="index">
+      <a href="#one">Terms of service</a>
+    </nav>
+
+    <div class="row">
+      <strong>MOTIR-7</strong>
+      <span class="meta">updated 2 hours ago</span>
+    </div>
+
+    <span class="field" tabindex="0">Search the docs</span>
+
+    <p><a class="ok" href="#two">A hover that clears</a></p>
+
+    <p><a class="plain" href="#three">A hover that paints nothing</a></p>
+  </body>
+</html>

@@ -46,8 +46,35 @@
  *     out of. Neither asset paints text over one.
  *   - 1.4.11 non-text contrast, and 1.4.1 use-of-colour. Both are authoring
  *     obligations held by `design/marketing/design-notes.md`.
+ *
+ * ── The STATE arm (MOTIR-5448) ──────────────────────────────────────────────
+ * Everything above measures the document AS IT RESTS, and nobody reads a mock
+ * at rest: a `:hover` rule repaints an ink or the surface under it, and it
+ * paints a pair the resting walk never sees — onto exactly the tinted surfaces
+ * (`--el-muted`, `--el-surface-soft`) this repository's contrast defects were
+ * found on. motir-core's MOTIR-453 was a HOVERED row at 4.37:1.
+ *
+ * So after the resting walk, every `:hover` / `:focus-visible` / `:focus` /
+ * `:active` rule that sets `color`, `background` or `opacity` is REWRITTEN in
+ * place to an attribute selector (`[data-motir-state~="hover"]`) — same
+ * specificity, same sheet, same position in the cascade — and each element the
+ * rule can put into that state is switched into it ONE AT A TIME and its own
+ * text and its descendants' text re-measured by the same walk.
+ *
+ * Why a rewrite and not `page.hover()`: a real pointer hovers whatever is on
+ * top at that coordinate, needs the element scrolled into a viewport and
+ * un-overlapped, and cannot hold `:active`. The rewrite is exact about WHICH
+ * element is in the state, and it is what the browser's own cascade then paints.
+ * `:hover` and `:active` also match every ANCESTOR of the hovered element, so the
+ * attribute is set up the chain for those two; the focus states are the
+ * element's alone.
+ *
+ * The population is read from `document.styleSheets`, never listed: a state
+ * rule added to any mock is measured by the next run. A sheet this scan cannot
+ * read (a cross-origin `<link>`) or a selector the browser refuses to rewrite is
+ * REPORTED, not skipped, because either one is a rule silently unmeasured.
  */
-import { chromium, type Browser } from 'playwright'
+import { chromium, type Browser, type Page } from 'playwright'
 import { pathToFileURL } from 'node:url'
 
 /** One text site the document paints, with the verdict for it. */
@@ -76,7 +103,7 @@ export type InkSite = {
  * so it may not close over an import, a helper or a type from this module.
  */
 /* c8 ignore start -- runs inside the browser, not under this process */
-function collectSites(): Omit<InkSite, 'file'>[] {
+function collectSites(scopeAttribute: string | null): Omit<InkSite, 'file'>[] {
   const SKIP = new Set(['SCRIPT', 'STYLE', 'TITLE', 'NOSCRIPT', 'TEMPLATE'])
 
   const canvas = document.createElement('canvas')
@@ -220,7 +247,13 @@ function collectSites(): Omit<InkSite, 'file'>[] {
     })
   }
 
-  for (const el of Array.from(document.querySelectorAll('*'))) {
+  // With a scope, only the element carrying the attribute and its subtree — the
+  // state arm's "this element is hovered, re-measure what it paints".
+  const elements = scopeAttribute
+    ? document.querySelectorAll(`[${scopeAttribute}], [${scopeAttribute}] *`)
+    : document.querySelectorAll('*')
+
+  for (const el of Array.from(elements)) {
     if (SKIP.has(el.tagName)) continue
     const style = getComputedStyle(el)
     if (style.display === 'none' || style.visibility === 'hidden') continue
@@ -245,7 +278,192 @@ function collectSites(): Omit<InkSite, 'file'>[] {
 
   return sites
 }
+
+/** One state rule the document declares, as `prepareStateRules` found it. */
+type PreparedRule = {
+  /** The rule's selector as AUTHORED, before the rewrite. */
+  selector: string
+  /** `:hover` / `:focus-visible` / `:focus` / `:active`. */
+  state: string
+  /** How many elements the rule can put into that state. */
+  hosts: number
+}
+
+type PreparedStates = {
+  rules: PreparedRule[]
+  /** One entry per (element, state): the element is tagged `data-motir-host`. */
+  hosts: { id: number; state: string; rules: number[] }[]
+  /** Sheets whose rules could not be read — each a population silently lost. */
+  unreadableSheets: string[]
+  /** State selectors the browser refused to rewrite. */
+  unrewritten: string[]
+}
+
+/**
+ * Find every state rule that repaints, rewrite it to an attribute selector, and
+ * tag every element it can put into that state. In-page and self-contained, for
+ * the same reason `collectSites` is.
+ */
+function prepareStateRules(): PreparedStates {
+  // `:focus` must not also match `:focus-visible` / `:focus-within`.
+  const STATE = /:(hover|focus-visible|focus|active)(?![\w-])/g
+  const PAINTS = ['color', 'background', 'background-color', 'opacity']
+
+  // A rewritten selector that flips mid-`transition` would be measured between
+  // its two paints. Nothing below should animate.
+  const still = document.createElement('style')
+  still.textContent =
+    '*, *::before, *::after { transition: none !important; animation: none !important; }'
+  document.head.appendChild(still)
+
+  const out: PreparedStates = {
+    rules: [],
+    hosts: [],
+    unreadableSheets: [],
+    unrewritten: [],
+  }
+  const hostIds = new Map<Element, number>()
+  const hostByKey = new Map<string, PreparedStates['hosts'][number]>()
+
+  /** Split a selector list on its TOP-LEVEL commas only (`:is(a, b)` stays whole). */
+  const splitList = (list: string) => {
+    const parts: string[] = []
+    let depth = 0
+    let start = 0
+    for (let i = 0; i < list.length; i += 1) {
+      const ch = list[i]
+      if (ch === '(' || ch === '[') depth += 1
+      else if (ch === ')' || ch === ']') depth -= 1
+      else if (ch === ',' && depth === 0) {
+        parts.push(list.slice(start, i).trim())
+        start = i + 1
+      }
+    }
+    parts.push(list.slice(start).trim())
+    return parts
+  }
+
+  const visit = (rule: CSSStyleRule) => {
+    const authored = rule.selectorText
+    if (!new RegExp(STATE.source).test(authored)) return
+    if (!PAINTS.some((p) => rule.style.getPropertyValue(p) !== '')) return
+
+    const found: { index: number; state: string; host: string }[] = []
+    for (const selector of splitList(authored)) {
+      for (const match of selector.matchAll(STATE)) {
+        // The element IN the state is the compound the pseudo-class sits on:
+        // `.row:hover .name` hovers `.row`; `.btn.primary:hover` hovers the button.
+        const before = selector.slice(0, match.index)
+        const tail = selector
+          .slice((match.index ?? 0) + match[0].length)
+          .match(/^[^\s>+~]*/)?.[0]
+        const host = (before + (tail ?? '')).replace(STATE, '').trim()
+        const state = `:${match[1]}`
+        let index = out.rules.findIndex(
+          (r) => r.selector === authored && r.state === state,
+        )
+        if (index === -1) {
+          index = out.rules.push({ selector: authored, state, hosts: 0 }) - 1
+        }
+        found.push({ index, state, host: host === '' ? '*' : host })
+      }
+    }
+
+    const rewritten = authored.replace(
+      STATE,
+      (_, name: string) => `[data-motir-state~="${name}"]`,
+    )
+    rule.selectorText = rewritten
+    if (rule.selectorText === authored) {
+      out.unrewritten.push(authored)
+      return
+    }
+
+    for (const { index, state, host } of found) {
+      for (const el of Array.from(document.querySelectorAll(host))) {
+        let id = hostIds.get(el)
+        if (id === undefined) {
+          id = hostIds.size
+          hostIds.set(el, id)
+          el.setAttribute('data-motir-host', String(id))
+        }
+        const key = `${id}|${state}`
+        let entry = hostByKey.get(key)
+        if (!entry) {
+          entry = { id, state, rules: [] }
+          hostByKey.set(key, entry)
+          out.hosts.push(entry)
+        }
+        if (!entry.rules.includes(index)) {
+          entry.rules.push(index)
+          out.rules[index].hosts += 1
+        }
+      }
+    }
+  }
+
+  const walk = (list: CSSRuleList) => {
+    for (const rule of Array.from(list)) {
+      if (rule instanceof CSSStyleRule) visit(rule)
+      // `@media`, `@supports`, `@layer` blocks — and a nested style rule's own
+      // children — hold rules of their own.
+      const nested = (rule as CSSGroupingRule).cssRules
+      if (nested) walk(nested)
+    }
+  }
+
+  for (const sheet of Array.from(document.styleSheets)) {
+    let rules: CSSRuleList
+    try {
+      rules = sheet.cssRules
+    } catch {
+      out.unreadableSheets.push(sheet.href ?? '<inline>')
+      continue
+    }
+    walk(rules)
+  }
+  return out
+}
+
+/** Put one tagged element into (or out of) one state, and scope the walk to it. */
+function setState(arg: { id: number; state: string; on: boolean }) {
+  const el = document.querySelector(`[data-motir-host="${arg.id}"]`)
+  if (!el) return
+  const name = arg.state.slice(1)
+  // A hovered or pressed element makes every ancestor `:hover` / `:active` too.
+  const chain: Element[] = []
+  let node: Element | null = el
+  while (node) {
+    chain.push(node)
+    if (name !== 'hover' && name !== 'active') break
+    node = node.parentElement
+  }
+  for (const target of chain) {
+    if (arg.on) target.setAttribute('data-motir-state', name)
+    else target.removeAttribute('data-motir-state')
+  }
+  if (arg.on) el.setAttribute('data-motir-scope', '')
+  else el.removeAttribute('data-motir-scope')
+}
 /* c8 ignore stop */
+
+/** A text site measured while an element is in a state. */
+export type StateSite = InkSite & {
+  /** `:hover` / `:focus-visible` / `:focus` / `:active`. */
+  state: string
+  /** The authored selectors of the state rules that element matched. */
+  rules: string[]
+}
+
+export type StateScan = {
+  /** Every state rule that repaints, with the elements and sites it produced. */
+  rules: (PreparedRule & { sites: number })[]
+  /** Distinct state sites — one row per distinct measured pair. */
+  sites: StateSite[]
+  violations: StateSite[]
+  unreadableSheets: string[]
+  unrewritten: string[]
+}
 
 export type MockScan = {
   file: string
@@ -253,6 +471,8 @@ export type MockScan = {
   sites: InkSite[]
   /** The sites below their 1.4.3 threshold. */
   violations: InkSite[]
+  /** The same verdict for the pairs only a `:hover` / focus / active state paints. */
+  states: StateScan
 }
 
 /**
@@ -267,18 +487,77 @@ export async function scanMocks(absolutePaths: string[]): Promise<MockScan[]> {
     for (const absolutePath of absolutePaths) {
       const file = absolutePath.split('/').pop() ?? absolutePath
       await page.goto(pathToFileURL(absolutePath).href, { waitUntil: 'load' })
-      const collected = await page.evaluate(collectSites)
+      const collected = await page.evaluate(collectSites, null)
       const sites = collected.map((s) => ({ ...s, file }))
       scans.push({
         file,
         sites,
         violations: sites.filter((s) => s.ratio < s.threshold),
+        states: await scanStates(page, file),
       })
     }
     return scans
   } finally {
     await browser.close()
   }
+}
+
+/**
+ * The state arm, run on a page whose resting walk is already done — it rewrites
+ * the page's stylesheets, so it must come last.
+ */
+async function scanStates(page: Page, file: string): Promise<StateScan> {
+  const prepared = await page.evaluate(prepareStateRules)
+  const counts = prepared.rules.map(() => 0)
+  const distinct = new Map<string, StateSite>()
+
+  for (const host of prepared.hosts) {
+    await page.evaluate(setState, { id: host.id, state: host.state, on: true })
+    const collected = await page.evaluate(collectSites, 'data-motir-scope')
+    await page.evaluate(setState, { id: host.id, state: host.state, on: false })
+
+    for (const index of host.rules) counts[index] += collected.length
+    const rules = host.rules.map((i) => prepared.rules[i].selector)
+    for (const site of collected) {
+      const row: StateSite = { ...site, file, state: host.state, rules }
+      // Thirty footer links hovered one by one measure one pair thirty times.
+      const key = [
+        row.state,
+        row.selector,
+        row.text,
+        row.color,
+        row.background,
+        row.fontPx,
+        row.fontWeight,
+      ].join('|')
+      if (!distinct.has(key)) distinct.set(key, row)
+    }
+  }
+
+  const sites = [...distinct.values()]
+  return {
+    rules: prepared.rules.map((rule, i) => ({ ...rule, sites: counts[i] })),
+    sites,
+    violations: sites.filter((s) => s.ratio < s.threshold),
+    unreadableSheets: prepared.unreadableSheets,
+    unrewritten: prepared.unrewritten,
+  }
+}
+
+/** A one-line-per-violation report for the state arm, naming each site's state. */
+export function formatStateViolations(scans: MockScan[]): string {
+  const rows = scans.flatMap((scan) => scan.states.violations)
+  const scanned = scans.reduce((n, scan) => n + scan.states.sites.length, 0)
+  const lines = rows.map(
+    (v) =>
+      `  ${v.ratio.toFixed(2)} (needs ${v.threshold.toFixed(1)})  ${v.file}  ` +
+      `${v.selector} ${v.state}  ${v.fontPx}px/${v.fontWeight}  ` +
+      `${v.color} on ${v.background}  — "${v.text}"  [${v.rules.join(' | ')}]`,
+  )
+  return [
+    `scanned ${scanned} state text sites; ${rows.length} below WCAG 1.4.3`,
+    ...lines,
+  ].join('\n')
 }
 
 /** A one-line-per-violation report, for a failure message a reader can act on. */
