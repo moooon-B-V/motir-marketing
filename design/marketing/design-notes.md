@@ -232,13 +232,36 @@ weight, a line or a shape — never in hue alone.
 
 ---
 
-## ⚠️ Re-exporting a `.png` — `pnpm design:render` (MOTIR-4003)
+## ⚠️ The asset convention — TWO files per surface, and a change is a DELTA mock (MOTIR-5493)
+
+> **⚠️ THIS SECTION IS AREA-WIDE, AND IT IS THE CONVENTION FOR EVERY `design/<area>/` IN THIS
+> REPOSITORY.** It supersedes every "three files" / "the `.png` is required" sentence below that
+> predates 2026-09-14; those stay as records of how the assets they describe were made. The decision
+> is `motir-core` `docs/decisions/design-result.md` AMENDMENT 4.
+
+- **A design surface is TWO files:** the area's `design-notes.md` + `<surface>.mock.html`. **No
+  `.png` export is required**, and no new one is committed with a design card. A `.pen` source is not
+  accepted. Existing exports stay as records; nothing deletes or updates them.
+  `tests/design/designThreeFileSet.test.ts` fails an area that ships an asset with no
+  `design-notes.md`, and fails any `.pen`.
+- **A change to an existing design is a NEW delta mock** — `<surface>--<change>.mock.html` beside the
+  surface it amends, holding **only the panels that change**, plus a new `##` section in this
+  `design-notes.md` citing the section and mock it amends. The existing mock is not edited: it is the
+  record of its moment, and every run renders what ships before it builds.
+- **The design result is published ONLY when an open work item is `blocked_by` the design card.** Then
+  `publish_design_result` carries the mock(s) as `mock` and this notes file as the one `note_file` —
+  no `image`, no `noteMd`, both of which the server refuses. A design nothing waits on publishes
+  nothing; its pull request is its review.
+
+## ⚠️ Re-exporting a `.png` — `pnpm design:render` (MOTIR-4003) — an OPTIONAL tool since MOTIR-5493
 
 > **⚠️ THIS SECTION IS AREA-WIDE**, like the one above it. It governs BOTH assets in
 > `design/marketing/` and every asset added here afterwards.
 
-**Change a `.mock.html`, re-export its `.png`** — the export is the third file of the asset set and a
-mock whose export lags is an incomplete asset. The command is one line, from the repository root:
+~~**Change a `.mock.html`, re-export its `.png`** — the export is the third file of the asset set and a
+mock whose export lags is an incomplete asset.~~ **Superseded (MOTIR-5493): the export is no longer part
+of the asset set.** The renderer stays for anyone who wants to look at a mock as an image, and for the
+legacy exports already committed. The command is one line, from the repository root:
 
 ```
 pnpm design:render design/marketing/<surface>.mock.html    # writes the .png
@@ -941,7 +964,7 @@ retired the branch-derived publisher in every repository: the AGENT publishes, b
 in a **`publish_design_result`** MCP call, so a repository with no lane is not a repository whose
 design results cannot be published. Measured here rather than assumed — this card's own result
 published from this repository at `2026-08-29T11:42:47Z`, five assets, evidence
-`cmteba0wu0070hvn8i4rfe5yb`. **So a design card in `motir-marketing` OWES that call**, and MOTIR-3750
+`cmteba0wu0070hvn8i4rfe5yb`. **So a design card in `motir-marketing` OWES that call — when an open work item is `blocked_by` it (MOTIR-5493; a design nothing waits on publishes nothing)**, and MOTIR-3750
 is now only about the classifier's basename rule. (There is no MCP read-back door for a published
 result — `get_work_item` carries no field for it — so the receipt id the call returns is the evidence
 a run can quote; the reviewer reads the result on the card in Motir.)
