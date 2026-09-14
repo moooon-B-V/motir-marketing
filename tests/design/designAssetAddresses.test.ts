@@ -144,9 +144,10 @@ export function toPageAddress(raw: string): string | null {
 
   let address = raw.split('?')[0]!.split('#')[0]!
   // A prose glob names a FAMILY. `/p/*` is "a page one level under `/p`", so the
-  // star becomes a dynamic segment and matches `p/[identifier]` — stripping it
-  // to `/p`, as motir-core's sweep does, asks about a page nobody claimed
-  // exists. `/docs*` has no slash before the star, so it names a prefix.
+  // star becomes a dynamic segment and matches `p/[identifier]`; stripping it to
+  // `/p` would ask about a page nobody claimed exists. `/docs*` has no slash
+  // before the star, so it names a prefix. (A DEPARTURE from the motir-core
+  // spec this ports, which strips both forms — filed there as MOTIR-5447.)
   address = address.replace(/\/\*+$/, '/[*]').replace(/\*+$/, '')
   if (address.length > 1) address = address.replace(/\/+$/, '')
   if (address === '') return null
