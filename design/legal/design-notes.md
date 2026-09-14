@@ -4,7 +4,7 @@
 reading surface) · **Epic 8 · Launch readiness.** **Repository: `motir-marketing`.**
 
 `motir.co` is about to serve seven legal documents and an index for them, and **nothing draws that
-reading surface anywhere.** MOTIR-3880 (`design/public-site/`) draws the CHROME — one header, nav
+reading surface anywhere.** MOTIR-3880 (`motir-core/design/public-site/`) draws the CHROME — one header, nav
 and footer — and names `/legal` among its states with neither nav item current. A chrome asset
 naming `/legal` is a DOOR; it is not the room. This asset draws the room.
 
@@ -22,7 +22,7 @@ chromium export, `deviceScaleFactor: 2`, re-exported with
 | **`/legal`** — the index           | one row per published document, in `PREFERRED_ORDER` (terms · privacy · cookies · acceptable-use · dpa · subprocessors · model-providers), each row a title linking to `/legal/<slug>`; a contact line (`legal@motir.co`) |
 | **`/legal/<slug>`** — one document | a _← All legal documents_ breadcrumb, an `h1` title, a version-and-effective-date line, a rule, then the Markdown body at `max-w-[46rem]`                                                                                 |
 
-Both mirror the BEHAVIOUR of `motir-core` `app/(public)/legal/` (`page.tsx` + `[slug]/page.tsx`),
+Both mirror the BEHAVIOUR of `motir-core/app/(public)/legal/` (`page.tsx` + `[slug]/page.tsx`; that directory left motir-core with MOTIR-4103, when `/legal` moved to this repository's `app/legal/`),
 read on `origin/main` — not its layout, which is an app-host chrome this asset does not reproduce.
 
 ## Surfaces / panels (inspect every panel)

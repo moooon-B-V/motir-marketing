@@ -380,7 +380,7 @@
 
       /* ═══════════════════════════════════════════════════════════════
          THE ROOM — what this card draws. Both surfaces mirror
-         motir-core `app/(public)/legal/` at `max-w-[46rem]` (736px).
+         `motir-core/app/(public)/legal/` (moved here as `app/legal/` by MOTIR-4103) at `max-w-[46rem]` (736px).
       ═══════════════════════════════════════════════════════════════ */
       .room {
         flex: 1;
@@ -547,9 +547,10 @@
         <h1>motir.co/legal — the index and the document page</h1>
         <p>
           The reading surface for the seven published legal documents, drawn
-          INSIDE the chrome that <code>design/public-site/</code> (MOTIR-3880)
-          already specifies. This asset composes that chrome and draws only the
-          room between the header and the footer.
+          INSIDE the chrome that
+          <code>motir-core/design/public-site/</code> (MOTIR-3880) already
+          specifies. This asset composes that chrome and draws only the room
+          between the header and the footer.
         </p>
         <div class="refs">
           <span class="ref">MOTIR-4005</span>
@@ -557,7 +558,9 @@
           <span class="ref muted"
             >composes motir-core/design/public-site/ (MOTIR-3880)</span
           >
-          <span class="ref muted">mirrors app/(public)/legal/ behaviour</span>
+          <span class="ref muted"
+            >mirrors motir-core/app/(public)/legal/ behaviour</span
+          >
         </div>
       </header>
 

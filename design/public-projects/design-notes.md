@@ -86,7 +86,7 @@ the panel each row is drawn in. The three mechanisms:
 ### The mechanical reason, because it is not the one everybody names
 
 §4 forbids widening the session cookie's `Domain`, and that is the famous constraint. It is not the
-binding one. `lib/auth/index.ts` sets **`sameSite: 'lax'`**, so a `fetch` from `motir.co` with
+binding one. `motir-core/lib/auth/index.ts` sets **`sameSite: 'lax'`**, so a `fetch` from `motir.co` with
 `credentials: 'include'` sends no cookie at all. **The hand-off is not a preference — a direct
 credentialed call does not work**, and making it work would mean `sameSite: 'none'`, a second
 widening. AMENDMENT 4 §B carries this.
@@ -193,7 +193,7 @@ hosts answer 404 today.
 ## ⚠️ Planning flags
 
 - **The hand-off's DESTINATION screen (panel 14, moment 2) is `motir-core`'s, not this asset's.** It
-  is drawn here only so the journey is legible in one place. `app/act/route.ts` (MOTIR-4114) ships
+  is drawn here only so the journey is legible in one place. `motir-core/app/act/route.ts` (MOTIR-4114) ships
   the redirect; the application's sign-in screen already exists. **No card is owed** — nothing about
   that screen changes.
 - **Row 7 (in-place overview editing) is ABSENT here and its door is an APPLICATION surface.**
@@ -206,7 +206,7 @@ hosts answer 404 today.
 
 - `motir-core/docs/decisions/public-surface-hosts.md` — §2 (the host), §4 (the cookie), §8 (the
   costs), and **AMENDMENT 4** (the affordance table this asset draws)
-- `motir-core/design/public-projects/` · `design/public-site/` — prior art, READ while drawing; not
+- `motir-core/design/public-projects/` · `motir-core/design/public-site/` — prior art, READ while drawing; not
   deliverables of this card
 - `motir-marketing/design/legal/design-notes.md` — the precedent: a room inside this chrome
 - `motir-marketing/design/marketing/design-notes.md` — the area-wide AA rule
