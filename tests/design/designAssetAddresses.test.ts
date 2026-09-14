@@ -571,7 +571,7 @@ const reconcilablePath = (finding: PathFinding): Reconcilable => ({
 // Same contract as `KNOWN`: every pair the sweep finds today, with why it may
 // stay, asserted TIGHT in both directions.
 //
-// This sweep's first run found twenty pairs. THIRTEEN were citations of
+// This sweep's first run found twenty pairs. FIFTEEN were citations of
 // motir-core files written without the repository — a bare `design/public-site/`
 // or `lib/auth/index.ts` that a builder here would look for in this tree — and
 // were CORRECTED in the assets by qualifying them `motir-core/…`. The pairs below
