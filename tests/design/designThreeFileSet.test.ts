@@ -2,31 +2,33 @@ import { describe, expect, it } from 'vitest'
 import { MOCK_SUFFIX, designTree } from './designTree'
 
 /*
- * MOTIR-4990 — the THREE-FILE rule, ported from motir-core's
+ * MOTIR-4990 — the design-asset rule, ported from motir-core's
  * `tests/design-three-file-set.test.ts` (MOTIR-3069).
+ * MOTIR-5493 — and the rule is now TWO files, not three.
  *
  * ── The rule ─────────────────────────────────────────────────────────────────
- * A design surface under `design/<area>/` is complete only when its source, its
- * same-basename `.png` export and the area's `design-notes.md` all exist. The
- * four areas here honour that today — by inspection, which is to say by nobody
- * having forgotten yet. motir-core found seven mocks that had shipped with no
- * export, the oldest for ten weeks, before it measured this; the check is a
- * dozen lines and the rule should not have to be remembered in two repositories.
+ * A design surface under `design/<area>/` is the area's `design-notes.md` + its
+ * `<surface>.mock.html` (`design/marketing/design-notes.md` § _The asset
+ * convention_, from motir-core `docs/decisions/design-result.md` AMENDMENT 4).
+ * The `.png` export this guard used to require is RETIRED: it existed so a
+ * design could be skimmed on its pull request, and the mock now renders on the
+ * card. A `.pen` source is not accepted — it can only be reviewed through the
+ * export that is gone — and this repository has never shipped one, so there is
+ * no legacy list: any `.pen` fails.
+ *
+ * The file keeps its name so the design lane's include and every citation of it
+ * still land.
  *
  * ── What the failure message owes ────────────────────────────────────────────
- * The missing FILE and the command that writes it. This repository's renderer
- * is `pnpm design:render` (`scripts/design/render-design-mock.ts`), and a new
- * asset with no committed export has no viewport to recover, so `--width` is
- * the flag the message has to carry.
+ * The offending FILE and the rule it breaks.
  */
 
 const NOTES = 'design-notes.md'
 
 /**
  * A file that makes a directory a design SURFACE rather than a folder that
- * happens to sit under `design/`. The `.pen` is the legacy source form the rule
- * still accepts, and a bare `.png` counts because an area shipped as exports
- * alone is the "HTML + PNG, no notes" half of the rule, not an exemption.
+ * happens to sit under `design/`. A bare `.png` still counts: the legacy exports
+ * are assets, and an area of exports with no notes owes a spec like any other.
  */
 const ASSET = /(?:\.mock\.html|\.pen|\.png)$/
 
@@ -38,16 +40,13 @@ const ASSET = /(?:\.mock\.html|\.pen|\.png)$/
 /** The area an asset lives in: `design/docs/docs.mock.html` → `design/docs`. */
 const areaOf = (path: string): string => path.slice(0, path.lastIndexOf('/'))
 
-/** Every `*.mock.html` with no same-basename `.png`, and the command that writes it. */
-export function missingExports(paths: string[]): string[] {
-  const present = new Set(paths)
+/** Every `.pen` in the listing — a source form the two-file rule does not accept. */
+export function penSources(paths: string[]): string[] {
   return paths
-    .filter((path) => path.endsWith(MOCK_SUFFIX))
-    .map((mock) => ({ mock, png: `${mock.slice(0, -MOCK_SUFFIX.length)}.png` }))
-    .filter(({ png }) => !present.has(png))
+    .filter((path) => path.endsWith('.pen'))
     .map(
-      ({ mock, png }) =>
-        `${png} is missing — export it with: pnpm design:render --width <N> ${mock}`,
+      (pen) =>
+        `${pen} is a .pen source — a design surface is TWO files, design-notes.md + <surface>.mock.html; draw it as a mock`,
     )
     .sort()
 }
@@ -73,81 +72,48 @@ export function missingNotes(paths: string[]): string[] {
 
 const TREE = designTree()
 
-describe('a design surface ships all THREE files', () => {
+describe('a design surface ships its TWO files', () => {
   it('walks a design tree that actually has assets in it', () => {
     // Without this every assertion below passes vacuously if the walk breaks or
-    // the folder moves. Measured at ff7452c: six mocks, six exports.
+    // the folder moves. Measured at ff7452c: six mocks.
     expect(
       TREE.filter((path) => path.endsWith(MOCK_SUFFIX)).length,
     ).toBeGreaterThanOrEqual(5)
-    expect(
-      TREE.filter((path) => path.endsWith('.png')).length,
-    ).toBeGreaterThanOrEqual(5)
-  })
-
-  it('exports a `.png` beside every `*.mock.html`', () => {
-    expect(missingExports(TREE)).toEqual([])
   })
 
   it('keeps a `design-notes.md` in every area that ships an asset', () => {
     expect(missingNotes(TREE)).toEqual([])
   })
+
+  it('accepts no `.pen` source', () => {
+    expect(penSources(TREE)).toEqual([])
+  })
 })
 
 // ── The negative cases, on fixtures ──────────────────────────────────────────
 
-describe('the three-file check on a fixture tree', () => {
-  const HEALTHY = [
-    'design/docs/design-notes.md',
-    'design/docs/docs.mock.html',
-    'design/docs/docs.png',
-  ]
+describe('the two-file check on a fixture tree', () => {
+  const HEALTHY = ['design/docs/design-notes.md', 'design/docs/docs.mock.html']
 
-  it('passes a complete area', () => {
-    expect(missingExports(HEALTHY)).toEqual([])
+  it('passes a complete area — a mock and its notes, with NO `.png`', () => {
+    expect(penSources(HEALTHY)).toEqual([])
     expect(missingNotes(HEALTHY)).toEqual([])
   })
 
-  it('names the missing export AND the command that writes it', () => {
-    expect(
-      missingExports(HEALTHY.filter((path) => !path.endsWith('.png'))),
-    ).toEqual([
-      'design/docs/docs.png is missing — export it with: pnpm design:render --width <N> design/docs/docs.mock.html',
+  it('passes a delta mock beside the surface it amends, with no export for either', () => {
+    const delta = [...HEALTHY, 'design/docs/docs--rail-search.mock.html']
+    expect(penSources(delta)).toEqual([])
+    expect(missingNotes(delta)).toEqual([])
+  })
+
+  it('fails a `.pen` source, naming the two-file rule', () => {
+    expect(penSources([...HEALTHY, 'design/docs/docs.pen'])).toEqual([
+      'design/docs/docs.pen is a .pen source — a design surface is TWO files, design-notes.md + <surface>.mock.html; draw it as a mock',
     ])
   })
 
-  it('is not satisfied by a PLAUSIBLE NEIGHBOUR — another surface’s export in the same area', () => {
-    // `design/docs/` holds two surfaces. An eye-audit that matches on the AREA
-    // sees a `.png` beside the new mock and moves on; the check matches on the
-    // basename, so a sibling surface's export is not this surface's.
-    const neighbour = [
-      'design/docs/design-notes.md',
-      'design/docs/docs.mock.html',
-      'design/docs/docs.png',
-      'design/docs/sandbox-steps.mock.html',
-    ]
-    expect(
-      missingExports(neighbour).map((finding) => finding.split(' ')[0]),
-    ).toEqual(['design/docs/sandbox-steps.png'])
-  })
-
-  it('reports EVERY missing export, sorted — not just the first', () => {
-    const several = [
-      'design/a/design-notes.md',
-      'design/a/two.mock.html',
-      'design/a/one.mock.html',
-      'design/a/three.mock.html',
-      'design/a/three.png',
-    ]
-    expect(
-      missingExports(several).map((finding) => finding.split(' ')[0]),
-    ).toEqual(['design/a/one.png', 'design/a/two.png'])
-  })
-
-  it('reports an area whose assets ship with no spec', () => {
-    expect(
-      missingNotes(['design/legal/legal.mock.html', 'design/legal/legal.png']),
-    ).toEqual([
+  it('reports an area whose mock ships with no spec', () => {
+    expect(missingNotes(['design/legal/legal.mock.html'])).toEqual([
       'design/legal/design-notes.md is missing — the area ships assets with no spec',
     ])
   })

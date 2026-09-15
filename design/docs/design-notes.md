@@ -74,13 +74,13 @@ Screenshots are on file with the card; the numbers above are the part that survi
 Stated first, because two panels draw chrome that belongs to another design and would otherwise read
 as a redesign of it.
 
-| Element                                | Owned by                                                           | What THIS design does                                                      |
-| -------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| The site bar and the footer            | `app/_components/SiteShell.tsx` · `motir-core/design/public-site/` | **Composes** them, class for class. Marks `Docs` current. Changes nothing. |
-| The `main` landmark and the skip link  | `SiteShell` (MOTIR-4169)                                           | Nothing. The rail sits INSIDE the landmark's content box.                  |
-| The operation SCHEMA and its contents  | `motir-core`'s published OpenAPI document                          | Draws how a schema is READ, never what any operation contains.             |
-| The sandbox page's prose               | MOTIR-4392                                                         | Draws its shape in panel 3. Redraws none of its content.                   |
-| The three-file asset convention itself | `design/marketing/design-notes.md`                                 | Follows it.                                                                |
+| Element                                             | Owned by                                                           | What THIS design does                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| The site bar and the footer                         | `app/_components/SiteShell.tsx` · `motir-core/design/public-site/` | **Composes** them, class for class. Marks `Docs` current. Changes nothing. |
+| The `main` landmark and the skip link               | `SiteShell` (MOTIR-4169)                                           | Nothing. The rail sits INSIDE the landmark's content box.                  |
+| The operation SCHEMA and its contents               | `motir-core`'s published OpenAPI document                          | Draws how a schema is READ, never what any operation contains.             |
+| The sandbox page's prose                            | MOTIR-4392                                                         | Draws its shape in panel 3. Redraws none of its content.                   |
+| The asset convention itself (two files, MOTIR-5493) | `design/marketing/design-notes.md`                                 | Follows it.                                                                |
 
 ---
 
