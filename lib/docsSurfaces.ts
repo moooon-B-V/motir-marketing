@@ -118,6 +118,12 @@ export const DOCS_SURFACES: DocsSurface[] = [
     description: copy.docs.descPublicAddress,
     pages: [],
   },
+  {
+    href: '/docs/sentry',
+    label: copy.docs.sentry,
+    description: copy.docs.descSentry,
+    pages: [],
+  },
 ]
 
 /**

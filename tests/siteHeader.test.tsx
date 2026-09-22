@@ -128,6 +128,8 @@ describe('app/sitemap.ts', () => {
         '/docs/sandbox',
         // MOTIR-4227 — the customer-facing address guide.
         '/docs/public-address',
+        // MOTIR-6007 — the Sentry integration guide.
+        '/docs/sentry',
       ].map(siteUrl),
       siteUrl('/legal'),
       ...[
