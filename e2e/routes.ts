@@ -61,6 +61,7 @@ export const SITE_ROUTES: readonly SiteRoute[] = [
   { pattern: '/docs/mcp/tools', url: '/docs/mcp/tools' },
   { pattern: '/docs/sandbox', url: '/docs/sandbox' },
   { pattern: '/docs/public-address', url: '/docs/public-address' },
+  { pattern: '/docs/sentry', url: '/docs/sentry' },
 
   { pattern: '/legal', url: '/legal' },
   // `terms` is one of the seven files in `content/legal/`.
