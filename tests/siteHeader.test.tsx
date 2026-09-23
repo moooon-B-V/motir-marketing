@@ -130,6 +130,8 @@ describe('app/sitemap.ts', () => {
         '/docs/public-address',
         // MOTIR-6007 — the Sentry integration guide.
         '/docs/sentry',
+        // MOTIR-6016 — the difficulty levels guide.
+        '/docs/difficulty',
       ].map(siteUrl),
       siteUrl('/legal'),
       ...[
