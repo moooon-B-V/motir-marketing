@@ -124,6 +124,12 @@ export const DOCS_SURFACES: DocsSurface[] = [
     description: copy.docs.descSentry,
     pages: [],
   },
+  {
+    href: '/docs/difficulty',
+    label: copy.docs.difficulty,
+    description: copy.docs.descDifficulty,
+    pages: [],
+  },
 ]
 
 /**
