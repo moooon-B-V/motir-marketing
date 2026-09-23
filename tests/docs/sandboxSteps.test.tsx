@@ -253,4 +253,24 @@ describe('the profile selector drives EVERY profile to a complete command', () =
     expect(run).toContain('motir-auth:/home/node/.config/motir')
     expect(run).not.toContain('--name')
   })
+
+  it('the VS Code route says pull-then-Rebuild, and the page scopes "goes stale" to the run command', () => {
+    const { container } = render(<SandboxPage />)
+    const text = container.textContent ?? ''
+    // Step 2's own instruction, in the VS Code route rather than only prose elsewhere.
+    expect(text).toMatch(/docker pull[\s\S]*Dev Containers: Rebuild Container/)
+    // MOTIR-6120: the heading was untrue for the route the same page offers.
+    expect(text).not.toContain('Nothing is kept that could go stale')
+    expect(text).toContain(
+      'On the run command, nothing is kept that could go stale',
+    )
+  })
+
+  it('does not tell a Claude Code reader the container can never sign in', () => {
+    const { container } = render(<SandboxPage />)
+    const text = container.textContent ?? ''
+    expect(text).not.toMatch(/can never perform/i)
+    expect(text).toMatch(/Claude Code on macOS/)
+    expect(text).toMatch(/inside\s+the container/)
+  })
 })

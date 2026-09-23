@@ -145,8 +145,14 @@ export default function SandboxPage() {
             Your agent’s own sign-in, on this machine.
           </strong>{' '}
           Its credential mount is read-only, so the container can use a sign-in
-          and can never perform one. (Antigravity is the exception — step 2 says
-          so when you pick it.)
+          and cannot renew one. Claude Code on macOS is the exception you will
+          meet: it keeps its token in the login Keychain, so there is no file to
+          mount, and you sign in to{' '}
+          <code className="font-(family-name:--font-mono)">claude</code>{' '}
+          <strong className="text-(--el-text)">inside</strong> the container
+          instead — the image gives it a writable config directory, and that is
+          where the sign-in lands. (Antigravity is the same — step 2 says so
+          when you pick it.)
         </li>
         <li className="border-t border-(--el-border-soft) py-1.5 text-[13.5px] leading-relaxed text-(--el-text-secondary)">
           <strong className="text-(--el-text)">
@@ -205,7 +211,7 @@ export default function SandboxPage() {
       </p>
 
       <h3 className="mt-6 text-[15px] font-semibold text-(--el-text)">
-        Nothing is kept that could go stale
+        On the run command, nothing is kept that could go stale
       </h3>
       <p className="mt-2 max-w-[68ch] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
         <code className="font-(family-name:--font-mono)">--pull=always</code>{' '}
@@ -226,7 +232,10 @@ export default function SandboxPage() {
         . Working offline? Drop{' '}
         <code className="font-(family-name:--font-mono)">--pull=always</code>:
         it reaches the registry on every start, so with no network the run fails
-        instead of falling back to the image you already have.
+        instead of falling back to the image you already have. All of this is
+        the run command&apos;s. A dev container (steps 2a–2c) keeps the image it
+        was created from until you pull and choose{' '}
+        <em>Dev Containers: Rebuild Container</em>.
       </p>
 
       <h3 className="mt-6 text-[15px] font-semibold text-(--el-text)">

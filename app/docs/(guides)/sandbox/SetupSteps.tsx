@@ -122,6 +122,14 @@ function ProfileNote({ note }: { note?: string }) {
   )
 }
 
+function WarningNote({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mt-2.5 rounded-(--radius-control) bg-(--el-tint-yellow) px-2.5 py-2 text-[12.5px] leading-snug text-(--el-text-strong)">
+      {children}
+    </p>
+  )
+}
+
 export function SetupSteps() {
   const [profileId, setProfileId] = useState(SANDBOX_PROFILES[0]!.id)
   const profile = findProfile(profileId)
@@ -237,6 +245,21 @@ export function SetupSteps() {
               code={sandboxDevcontainerWriteCommand(profile.id)}
             />
           </div>
+          <WarningNote>
+            <b>A dev container keeps the image it was created from.</b>{' '}
+            <code className="font-(family-name:--font-mono)">
+              --pull=always
+            </code>{' '}
+            belongs to the run command in step 2, not to this route. To move to
+            the current image, run step 1&apos;s{' '}
+            <code className="font-(family-name:--font-mono)">docker pull</code>{' '}
+            first, then <em>Dev Containers: Rebuild Container</em>. A rebuild
+            keeps your Motir sign-in (it lives on the{' '}
+            <code className="font-(family-name:--font-mono)">motir-auth</code>{' '}
+            volume) but not a Claude Code sign-in made inside the container —
+            run <code className="font-(family-name:--font-mono)">claude</code>{' '}
+            and sign in again.
+          </WarningNote>
         </Step>
 
         <Step kind="ui" label="2c" intent="Open the folder in the container">
