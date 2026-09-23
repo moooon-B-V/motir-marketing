@@ -183,19 +183,37 @@ export function sandboxRunCommand(profileId: string): string {
  * carries the agent's own label, because a reader with two dev containers open
  * reads that string in the window title. Everything else is MOTIR-4970's
  * literal.
+ *
+ * ⚠️ EVERY PROFILE — `base` INCLUDED — ALSO MOUNTS THE `motir-auth` VOLUME
+ * (MOTIR-6120), first in `mounts`, from the same two constants
+ * `sandboxRunCommand` reads. MOTIR-4970 put the sign-in on that volume for the
+ * `docker run` literal only, and a dev container is REBUILT to pick up a new
+ * image, which deletes the writable layer a volume-less sign-in lands in. So the
+ * step-3 sentence "lands on the `motir-auth` volume" was false on this route.
+ * `tests/docs/sandboxParity.test.ts` asserts the two literals agree, per profile.
+ *
+ * CHOSEN, and said so on purpose: no volume for the agent's own config home
+ * (`~/.motir-sandbox/agent-config`), so Rebuild Container signs the reader out
+ * of Claude Code, though not out of Motir. That directory also holds what the
+ * image bakes and `motir-sandbox-agent-config` regenerates, and a volume over it
+ * would shadow the NEW image's copy with the old one on the very rebuild meant to
+ * refresh it. The page tells the reader to sign in to the agent again.
  */
 export function sandboxDevcontainerJson(profileId: string): string {
   const profile = findProfile(profileId)
-  const mounts = profile.mounts.map(
-    (m) =>
-      `    "source=\${localEnv:HOME}/${m.replace(/^~\//, '')},target=${containerPath(m)},type=bind,readonly"`,
-  )
+  const mounts = [
+    `    "source=${SANDBOX_AUTH_VOLUME},target=${SANDBOX_CONFIG_DIR},type=volume"`,
+    ...profile.mounts.map(
+      (m) =>
+        `    "source=\${localEnv:HOME}/${m.replace(/^~\//, '')},target=${containerPath(m)},type=bind,readonly"`,
+    ),
+  ]
   return `{
   "name": "Motir sandbox (${profile.label})",
   "image": "${SANDBOX_IMAGE}:${profile.id}",
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=\${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": [${mounts.length ? `\n${mounts.join(',\n')}\n  ` : ''}],
+  "mounts": [\n${mounts.join(',\n')}\n  ],
   "remoteUser": "node",
   "overrideCommand": true,
   "postStartCommand": "motir-sandbox-agent-config || true"
