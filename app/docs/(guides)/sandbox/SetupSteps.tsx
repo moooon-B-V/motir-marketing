@@ -251,10 +251,17 @@ export function SetupSteps() {
               --pull=always
             </code>{' '}
             belongs to the run command in step 2, not to this route. To move to
-            the current image, run step 1&apos;s{' '}
+            the current image and{' '}
+            <code className="font-(family-name:--font-mono)">motir</code> CLI:{' '}
+            <b>1.</b> run step 1&apos;s{' '}
             <code className="font-(family-name:--font-mono)">docker pull</code>{' '}
-            first, then <em>Dev Containers: Rebuild Container</em>. A rebuild
-            keeps your Motir sign-in (it lives on the{' '}
+            in a terminal on your machine; <b>2.</b>{' '}
+            <em>Dev Containers: Open Folder in Container…</em> on this folder,
+            which attaches the window; <b>3.</b>{' '}
+            <em>Dev Containers: Rebuild Container</em>, which recreates the
+            container from the image you just pulled. Rebuild Container only
+            appears in a window attached to the container, which is why step 2
+            comes first. A rebuild keeps your Motir sign-in (it lives on the{' '}
             <code className="font-(family-name:--font-mono)">motir-auth</code>{' '}
             volume) but not a Claude Code sign-in made inside the container —
             run <code className="font-(family-name:--font-mono)">claude</code>{' '}
