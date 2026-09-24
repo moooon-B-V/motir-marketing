@@ -266,6 +266,35 @@ describe('the profile selector drives EVERY profile to a complete command', () =
     )
   })
 
+  // MOTIR-6181: the palette offers Rebuild Container only in a window already
+  // attached to the dev container, and a reader who has just run `docker pull`
+  // on the host is in a local window. Every paragraph that names Rebuild
+  // Container attaches them first, unconditionally — scoped per paragraph,
+  // because step 2c's own Open Folder in Container sits between the warning and
+  // the page's closing note and would satisfy a whole-page regex vacuously.
+  it('attaches with Open Folder in Container before every Rebuild Container', () => {
+    const { container } = render(<SandboxPage />)
+    const paragraphs = [...container.querySelectorAll('p')]
+      .map((p) => (p.textContent ?? '').replace(/\s+/g, ' '))
+      .filter((t) => t.includes('Rebuild Container'))
+    expect(paragraphs.length).toBeGreaterThanOrEqual(2)
+    for (const text of paragraphs) {
+      expect(text).toMatch(
+        /Dev Containers: Open Folder in Container[\s\S]*Dev Containers: Rebuild Container/,
+      )
+      expect(text).not.toMatch(/skip|if the window is already/i)
+    }
+    const warning = paragraphs.find((t) =>
+      t.startsWith('A dev container keeps the image'),
+    )!
+    expect(warning).toMatch(
+      /docker pull[\s\S]*Dev Containers: Open Folder in Container[\s\S]*Dev Containers: Rebuild Container/,
+    )
+    expect(warning).toMatch(
+      /Rebuild Container only appears in a window attached to the container/,
+    )
+  })
+
   it('does not tell a Claude Code reader the container can never sign in', () => {
     const { container } = render(<SandboxPage />)
     const text = container.textContent ?? ''

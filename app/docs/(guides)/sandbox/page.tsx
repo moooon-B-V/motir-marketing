@@ -234,7 +234,8 @@ export default function SandboxPage() {
         it reaches the registry on every start, so with no network the run fails
         instead of falling back to the image you already have. All of this is
         the run command&apos;s. A dev container (steps 2a–2c) keeps the image it
-        was created from until you pull and choose{' '}
+        was created from until you pull, attach with{' '}
+        <em>Dev Containers: Open Folder in Container…</em> and choose{' '}
         <em>Dev Containers: Rebuild Container</em>.
       </p>
 
