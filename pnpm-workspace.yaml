@@ -56,6 +56,12 @@ allowBuilds:
 # identical palette tiles.** Published 2026-08-30T20:34:31Z, twelve minutes before
 # this install — squarely inside the cutoff, which is why the line is here.
 #
+# ⚠️ RE-POINTED 0.1.3 → 0.6.0 by MOTIR-6616 (2026-09-27), NOT APPENDED TO, for
+# the same reason. **0.6.0 carries MOTIR-6471's palette rename: until this
+# repository pins it, every motir.co page opens in the warm scheme under the
+# name "motir", a day after the product moved to the monochrome one.**
+# Published 2026-09-26T23:02:19Z, about fourteen hours before this install.
+#
 # ⚠️ AND BOTH ARE OWED A DELETION, WHICH IS WHY THE CONDITION IS WRITTEN AS A
 # COMMAND: once each version is more than a day old, run
 # `pnpm install --frozen-lockfile` with its line removed — green means delete it.
@@ -63,4 +69,4 @@ allowBuilds:
 # what gets appended to.
 minimumReleaseAgeExclude:
   - '@motir/brand@0.2.0'
-  - '@motir/design-system@0.1.3'
+  - '@motir/design-system@0.6.0'

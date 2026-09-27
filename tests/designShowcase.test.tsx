@@ -96,6 +96,24 @@ describe('the axis rail', () => {
     expect(count(copy.designShowcase.theme.name)).toBe(3)
   })
 
+  it('lists Motir first and Amethyst second, with no Graphite — the MOTIR-6471 rename, as installed', () => {
+    // Pinned on 0.1.3, this picker called the warm scheme "Motir" and offered
+    // the monochrome one as "Graphite" (MOTIR-6616). The rename lives in the
+    // package, so the pin IS the change and this is what proves it landed.
+    render(<DesignShowcase />)
+    const names = within(
+      screen.getByRole('radiogroup', {
+        name: copy.designShowcase.palette.name,
+      }),
+    )
+      .getAllByRole('radio')
+      .map((chip) => chip.textContent ?? '')
+    expect(names[0]).toMatch(/^Motir/)
+    expect(names[1]).toMatch(/^Amethyst/)
+    expect(names.some((name) => /Graphite/.test(name))).toBe(false)
+    expect(html()).toHaveAttribute('data-palette', 'motir')
+  })
+
   it('reports the selected option on every axis', () => {
     render(<DesignShowcase />)
     const selected = (name: string) =>
@@ -124,8 +142,8 @@ describe('each control restyles the WHOLE document', () => {
   it('writes data-palette onto <html> when a palette is picked', async () => {
     const user = userEvent.setup()
     render(<DesignShowcase />)
-    await user.click(screen.getByRole('radio', { name: /Graphite/ }))
-    expect(html()).toHaveAttribute('data-palette', 'graphite')
+    await user.click(screen.getByRole('radio', { name: /Amethyst/ }))
+    expect(html()).toHaveAttribute('data-palette', 'amethyst')
   })
 
   it('writes data-type onto <html> when a pairing is picked', async () => {
@@ -201,7 +219,7 @@ describe('Reset to default', () => {
   it('appears the moment ANY axis leaves its default', async () => {
     const user = userEvent.setup()
     render(<DesignShowcase />)
-    await user.click(screen.getByRole('radio', { name: /Graphite/ }))
+    await user.click(screen.getByRole('radio', { name: /Amethyst/ }))
     expect(
       screen.getByRole('button', { name: copy.designShowcase.reset }),
     ).toBeInTheDocument()
@@ -211,7 +229,7 @@ describe('Reset to default', () => {
     const user = userEvent.setup()
     render(<DesignShowcase />)
     await user.click(screen.getByRole('radio', { name: /Neo-Brutalism/ }))
-    await user.click(screen.getByRole('radio', { name: /Graphite/ }))
+    await user.click(screen.getByRole('radio', { name: /Amethyst/ }))
     await user.click(
       screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
     )

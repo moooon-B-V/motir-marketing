@@ -81,6 +81,11 @@ const AA = 4.5
  *                    by MOTIR-2455 in a different repository years of commits
  *                    before this resolver.
  *   · 0/10 · 0/10  — MOTIR-3872's ten-palette sweep of the tint-lavender arm.
+ *
+ * Every figure above was taken on the warm scheme, which was called `motir`
+ * until MOTIR-6471 and is `amethyst` from `@motir/design-system@0.6.0` on. The
+ * controls follow the COLOURS, not the id: under `motir` they would now measure
+ * the monochrome palette, a different set of inks the figures never described.
  */
 describe('the contrast harness, before it is trusted', () => {
   it('reproduces MOTIR-3874s browser measurement of the nav pair, to the digit', () => {
@@ -88,21 +93,21 @@ describe('the contrast harness, before it is trusted', () => {
       tokenContrast(
         '--el-accent-on-surface',
         '--el-surface-soft',
-        axesFor('dark', 'motir'),
+        axesFor('dark', 'amethyst'),
       ),
     ).toBe(5.76)
     expect(
       tokenContrast(
         '--el-accent-on-surface',
         '--el-surface-soft',
-        axesFor('light', 'motir'),
+        axesFor('light', 'amethyst'),
       ),
     ).toBe(6.29)
     expect(
       tokenContrast(
         '--el-accent-on-surface',
         '--el-surface',
-        axesFor('dark', 'motir'),
+        axesFor('dark', 'amethyst'),
       ),
     ).toBe(5.54)
   })
@@ -110,7 +115,7 @@ describe('the contrast harness, before it is trusted', () => {
   it('reproduces theme.css OWN stated figures for the muted ink', () => {
     // "AA-SAFE ONLY ON THE WHITE PAGE/CARD, and by 0.04 (4.54:1). On
     // --el-surface it is 4.17, on --el-surface-soft 4.34 — all under AA."
-    const light = axesFor('light', 'motir')
+    const light = axesFor('light', 'amethyst')
     expect(tokenContrast('--el-text-muted', '--el-page-bg', light)).toBe(4.54)
     expect(tokenContrast('--el-text-muted', '--el-surface', light)).toBe(4.17)
     expect(tokenContrast('--el-text-muted', '--el-surface-soft', light)).toBe(
@@ -145,7 +150,7 @@ describe('the contrast harness, before it is trusted', () => {
       tokenContrast(
         '--el-not-a-token',
         '--el-page-bg',
-        axesFor('light', 'motir'),
+        axesFor('light', 'amethyst'),
       ),
     ).toThrow(/not declared/)
   })
@@ -209,8 +214,9 @@ type Verdict =
   /** The site paints this, and it must clear AA on every palette × theme. */
   | 'clears-AA'
   /**
-   * Below AA in the light `motir` palette — the default a first-time visitor is
-   * served — so the site must not paint it. `theme.css` states the rule at the
+   * Below AA in light Amethyst — the warm palette, served by default until
+   * MOTIR-6616 and still one pick away on `/design` — so the site must not
+   * paint it. `theme.css` states the rule at the
    * token's own declaration: "a muted caption belongs inside a card, never on a
    * panel."
    */
@@ -379,11 +385,19 @@ describe('AA over every palette × theme, for every pair this site paints', () =
    * this file forbidding something that is no longer a defect, and nothing
    * would say so: the scan below would keep passing and the ban would harden
    * into folklore. So each one has to still FAIL, in the cell the ban is about.
+   *
+   * THAT CELL IS LIGHT AMETHYST, and it is no longer the default (MOTIR-6616).
+   * The monochrome palette a first-time visitor now meets clears every one of
+   * these rows (5.31 : 1 at worst). The ban stands anyway: `/design` lets a
+   * visitor wear any of the ten palettes on every page, Amethyst is the one
+   * `theme.css` wrote the rule against ("a muted caption belongs inside a card,
+   * never on a panel"), and a pair that fails in one palette the site offers is
+   * a pair the site must not paint.
    */
   it.each(BELOW)(
-    '$ink on $surface is still below AA in the default palette — $element',
+    '$ink on $surface is still below AA in light Amethyst — $element',
     ({ ink, surface }) => {
-      const light = axesFor('light', 'motir')
+      const light = axesFor('light', 'amethyst')
       expect(tokenContrast(ink, surface, light)).toBeLessThan(AA)
     },
   )

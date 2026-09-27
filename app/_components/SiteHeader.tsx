@@ -34,8 +34,11 @@ import { ChromeLink } from './ChromeLink'
  *     MOTIR-3872 published 0.1.1 with MOTIR-3745's and MOTIR-3774's lifted ink
  *     and this repository pins it: the same pair now measures **5.76:1** in
  *     dark and 6.29:1 in light, on `--el-surface-soft`, and the `md:hidden`
- *     panel's `--el-surface` reads 5.54:1 / 6.03:1. `tests/aaMatrix.test.ts`
- *     re-measures all four over every palette rather than trusting this note.
+ *     panel's `--el-surface` reads 5.54:1 / 6.03:1. Those four are the warm
+ *     palette's, which MOTIR-6471 renamed Amethyst; the monochrome Motir
+ *     palette that is the default since MOTIR-6616 reads 9.40 / 5.99 and
+ *     9.05 / 5.53. `tests/aaMatrix.test.ts` re-measures every pair over every
+ *     palette rather than trusting this note.
  *
  * The invented stand-in the old number forced — `--el-text` plus a 2px
  * `--el-accent` rule — is GONE rather than kept alongside: it existed only
