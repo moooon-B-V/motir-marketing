@@ -135,9 +135,11 @@ export function SiteFooter({ host }: { host: PublicHost }) {
       {/*
        * ⚠️ `--el-text-secondary`, NOT `--el-text-muted` (MOTIR-3984). This strip
        * sits on the footer's own `--el-surface-soft` band with no `Card` between
-       * it and that fill, and the muted ink on that band is **4.34:1** in the
-       * light `motir` palette — under the 4.5:1 WCAG 1.4.3 asks of 12px text,
-       * and `motir` is the palette a first-time visitor is served. `theme.css`
+       * it and that fill, and the muted ink on that band is **4.34:1** in light
+       * Amethyst — under the 4.5:1 WCAG 1.4.3 asks of 12px text. Amethyst was
+       * the palette a first-time visitor was served until MOTIR-6616 moved the
+       * default to the monochrome Motir palette (5.75:1 there), and it is still
+       * one pick away on `/design`, so the rule holds for every page. `theme.css`
        * states the figure at the token's own declaration and adds the rule in
        * its own words: "a muted caption belongs inside a card, never on a panel"
        * (MOTIR-2455). Secondary on the same band is what the rest of this footer
