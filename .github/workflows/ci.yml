@@ -286,6 +286,12 @@ jobs:
       # needs.
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       FLY_APP: motir-marketing
+      # The host the smoke asks for (MOTIR-6842). `proxy.ts` serves the site
+      # only on `SITE_ORIGIN`'s host — `lib/siteOrigin.ts`'s default, which the
+      # release is built with — and routes every other host as a tenant, so the
+      # bare Fly hostname answers the host router's 404 room by design. Change
+      # this with `NEXT_PUBLIC_MOTIR_SITE_ORIGIN` if the release ever overrides it.
+      SITE_HOST: motir.co
     steps:
       - uses: actions/checkout@v6
       - uses: superfly/flyctl-actions/setup-flyctl@master
@@ -293,12 +299,14 @@ jobs:
       # registry.fly.io, instead of Fly's remote builder — which flaked with
       # repeated 503s for motir-ai even while Fly itself was operational.
       - run: flyctl deploy --local-only --app "$FLY_APP"
-      # Prove the RELEASE, not a DNS record: this reads the Fly-owned hostname,
-      # so it is green before motir.co points anywhere and stays honest after.
+      # Prove the RELEASE, not a DNS record: this connects to the Fly-owned
+      # hostname, so it is green before motir.co points anywhere and stays
+      # honest after — and sends the site's own Host, so the host router serves
+      # the site rather than its unknown-host 404.
       - name: Smoke the release on its Fly hostname
         run: |
           set -euo pipefail
           code=$(curl -sS -o /dev/null -w '%{http_code}' --retry 6 --retry-delay 5 \
-            --retry-all-errors "https://$FLY_APP.fly.dev/")
-          echo "GET https://$FLY_APP.fly.dev/ -> $code"
+            --retry-all-errors -H "Host: $SITE_HOST" "https://$FLY_APP.fly.dev/")
+          echo "GET https://$FLY_APP.fly.dev/ (Host: $SITE_HOST) -> $code"
           [ "$code" = "200" ]
