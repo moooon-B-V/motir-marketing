@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import { Fragment } from 'react'
 
 import { copy } from '@/lib/copy'
 import {
   AGENT_INSTALLS,
   CHECKED_ON,
   CLAUDE_CODE_UPDATE,
+  RELEASE_SKILLS,
   SKILL_USAGE,
   SKILLS_RELEASE_TAG,
   SKILLS_RELEASE_URL,
@@ -23,9 +25,10 @@ import { CodeBlock } from '../../_components/DocSchema'
  * tag on the rendered page equals the one constant, so a release bump that
  * missed a block fails there rather than shipping two versions on one page.
  *
- * ⚠️ THE USAGE SECTIONS ARE THE SHAPE LATER SKILLS APPEND TO. `motir-fix-bugs`
- * and `motir-guide` ship in their own releases and add one entry each to
- * `SKILL_USAGE`; nothing on this page changes for them.
+ * ⚠️ THE USAGE SECTIONS ARE THE SHAPE LATER SKILLS APPEND TO. A new skill adds
+ * one entry to `SKILL_USAGE` (`motir-guide` did, MOTIR-6732); nothing in this
+ * file changes for it. The install copy names `RELEASE_SKILLS` rather than a
+ * count, because a release can carry a skill before its usage section lands.
  *
  * No design card, deliberately: a text guide in the shipped docs template,
  * composing `CodeBlock` and its copy control the way `/docs/mcp` does, and no
@@ -52,7 +55,8 @@ export default function SkillsDocsPage() {
         it and opens a linked pull request. Say <Mono>motir log bug</Mono> and
         it checks the defect and files it where it belongs. Say{' '}
         <Mono>motir mark</Mono> and it closes a manual work item once you have
-        done it.
+        done it. Say <Mono>motir guide</Mono> and it walks you through a manual
+        work item one step at a time.
       </Prose>
       <Prose>
         They are ordinary{' '}
@@ -100,10 +104,10 @@ export default function SkillsDocsPage() {
 
       <H2 id="install">Install</H2>
       <Prose>
-        Pick your agent. Each section installs all three skills for every
-        project on your machine. The terminal commands are for macOS and Linux:
-        they fetch the release, copy the skill folders into the folder that
-        agent reads, and remove the download.
+        Pick your agent. Each section installs every skill in the release for
+        every project on your machine. The terminal commands are for macOS and
+        Linux: they fetch the release, copy the skill folders into the folder
+        that agent reads, and remove the download.
       </Prose>
 
       {AGENT_INSTALLS.map((agent) => (
@@ -136,10 +140,16 @@ export default function SkillsDocsPage() {
       ))}
 
       <Prose>
-        Then ask your agent which skills it has. <Mono>motir-run</Mono>,{' '}
-        <Mono>motir-log-bug</Mono> and <Mono>motir-mark</Mono> are listed.
-        Another agent that reads <Mono>SKILL.md</Mono> skills works the same
-        way: copy the three folders into the folder it reads skills from.
+        Then ask your agent which skills it has.{' '}
+        {RELEASE_SKILLS.map((name, i) => (
+          <Fragment key={name}>
+            {i === 0 ? '' : i === RELEASE_SKILLS.length - 1 ? ' and ' : ', '}
+            <Mono>{name}</Mono>
+          </Fragment>
+        ))}{' '}
+        are listed. Another agent that reads <Mono>SKILL.md</Mono> skills works
+        the same way: copy the skill folders into the folder it reads skills
+        from.
       </Prose>
 
       <H2 id="use">Use</H2>

@@ -20,8 +20,8 @@
  *
  * Checked by RUNNING, not only by reading, on `CHECKED_ON`: the Claude Code
  * plugin-marketplace block and the `~/.claude/skills` copy (the agent listed
- * all three skills), and the OpenCode copy (`opencode debug skill` listed
- * all three). The other four were checked against their documentation only.
+ * all three skills of `v0.1.0`), and the OpenCode copy (`opencode debug
+ * skill` listed all three). The other four were checked against their documentation only.
  *
  * ⚠️ NO MCP TOOL NAMES HERE. The skills call Motir through its MCP server, and
  * this repository cannot check a tool name it types — the same rule
@@ -30,7 +30,7 @@
  */
 
 /** The `motir-skills` release every command on the page installs. */
-export const SKILLS_RELEASE_TAG = 'v0.1.0'
+export const SKILLS_RELEASE_TAG = 'v0.2.0'
 
 /** The public repository, as `owner/name`. */
 export const SKILLS_REPO = 'moooon-B-V/motir-skills'
@@ -42,8 +42,32 @@ export const SKILLS_RELEASE_URL = `${SKILLS_REPO_URL}/releases/tag/${SKILLS_RELE
 /** The date every agent's documentation was last read against this page. */
 export const CHECKED_ON = '28 September 2026'
 
-/** The skills this release carries, in the order the page documents them. */
-export const SKILL_NAMES = ['motir-run', 'motir-log-bug', 'motir-mark'] as const
+/**
+ * Every skill the release carries — what a reader's agent lists once the page's
+ * install step has run, since the copy step takes every `motir-*` folder and
+ * the plugin carries them all. Read from the tag's `skills/` folder.
+ */
+export const RELEASE_SKILLS = [
+  'motir-run',
+  'motir-log-bug',
+  'motir-mark',
+  'motir-guide',
+  'motir-fix-bugs',
+] as const
+
+/**
+ * The skills the page has a usage section for, in the order it documents them.
+ * ⚠️ A SUBSET OF `RELEASE_SKILLS`, not the same list: `v0.2.0` shipped
+ * `motir-fix-bugs` beside `motir-guide`, and its usage section lands with its
+ * own card (MOTIR-6724). The install copy counts `RELEASE_SKILLS`, so it stays
+ * true either way.
+ */
+export const SKILL_NAMES = [
+  'motir-run',
+  'motir-log-bug',
+  'motir-mark',
+  'motir-guide',
+] as const
 
 /**
  * The clone every copy-install starts from: a shallow clone OF THE TAG, into a
@@ -85,7 +109,7 @@ export const AGENT_INSTALLS: AgentInstall[] = [
     id: 'claude-code',
     label: 'Claude Code',
     intro:
-      'The repository is also a Claude Code plugin marketplace. Add it at the release tag, then install the plugin; it carries all three skills.',
+      'The repository is also a Claude Code plugin marketplace. Add it at the release tag, then install the plugin; it carries every skill in the release.',
     blocks: [
       {
         caption: 'in Claude Code',
@@ -210,6 +234,12 @@ export const SKILL_USAGE: SkillUsage[] = [
     say: ['motir mark ACME-12 done'],
     does: 'Closes a work item no pull request can close: a manual one, such as creating an account, setting a secret or changing a setting. Saying it is your confirmation that the work is finished. It refuses a work item that has a pull request, because that pull request’s merge closes it.',
     see: 'The work item moves to Done, with a comment recording that you confirmed it. Its parent’s status follows from its children.',
+  },
+  {
+    name: 'motir-guide',
+    say: ['motir guide ACME-12', 'motir guide'],
+    does: 'Walks you through a manual work item one step at a time. Name one, or say motir guide alone and it picks up your own unfinished one, else the next ready manual work item. It gives you one step, with its instructions and any command to copy, and waits. Say done, and it checks what it can without changing anything, such as fetching the address or running a read-only command, and tells you what it saw. A step whose check fails is not ticked; you get the same step again. You can stop at any step, and motir guide picks up where you left off. If the work item has no steps yet, it proposes some from the description and asks you before writing them onto the work item.',
+    see: 'The work item is assigned to you and moves to In Progress. Its To-do list ticks each step as you finish it, with who did it. When the last step is ticked, the work item moves to Done, with a comment summarising each step and how it was confirmed.',
   },
 ]
 

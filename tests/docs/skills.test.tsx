@@ -5,6 +5,7 @@ import { DOCS_SURFACES } from '@/lib/docsSurfaces'
 import {
   AGENT_INSTALLS,
   CLAUDE_CODE_UPDATE,
+  RELEASE_SKILLS,
   SKILL_NAMES,
   SKILL_USAGE,
   SKILLS_RELEASE_TAG,
@@ -16,7 +17,7 @@ import {
  * ⚠️ THE HEADINGS ARE NAMED HERE ON PURPOSE, which is the opposite of what the
  * surface tests next door do. Those walk the file system because the defect
  * they guard is a page nobody listed. This one guards a CONTRACT the story
- * made — six agents, three skills — so a section that silently drops out of
+ * made — six agents, and a usage section per documented skill — so a section that silently drops out of
  * `lib/skillsGuide.ts` must turn this red rather than shrink the expectation
  * with it. A later release that adds a skill adds its name here in the same
  * pull request.
@@ -59,9 +60,40 @@ describe('/docs/skills', () => {
       'motir-run',
       'motir-log-bug',
       'motir-mark',
+      'motir-guide',
     ])
     for (const skill of SKILL_NAMES) expect(h3, skill).toContain(skill)
     expect(SKILL_USAGE.map((s) => s.name)).toEqual([...SKILL_NAMES])
+  })
+
+  it('documents only skills the pinned release carries, and names every one it installs', () => {
+    // `v0.2.0` carries `motir-fix-bugs` before its usage section (MOTIR-6724),
+    // so the documented set is a subset and the install copy names the whole.
+    for (const skill of SKILL_NAMES)
+      expect(RELEASE_SKILLS, skill).toContain(skill)
+    const text = page().textContent ?? ''
+    for (const skill of RELEASE_SKILLS) expect(text, skill).toContain(skill)
+    expect(text).not.toMatch(/\bthree\b/)
+  })
+
+  it('tells a manual-card reader what motir-guide does and shows them', () => {
+    const container = page()
+    const section = container
+      .querySelector('h3#motir-guide')
+      ?.closest('section')
+    expect(section, 'the motir-guide section').not.toBeNull()
+    const text = section?.textContent ?? ''
+    // Outline 1 — what to say.
+    expect(text).toContain('motir guide ACME-12')
+    // Outline 2 — one step, a checked tick, a failed check left unticked,
+    // stop and resume, and it asks before writing steps it proposed.
+    expect(text).toContain('one step at a time')
+    expect(text).toContain('is not ticked')
+    expect(text).toContain('picks up where you left off')
+    expect(text).toContain('asks you before writing them')
+    // Outline 3 — the To-do list, and Done with a summary comment.
+    expect(text).toContain('To-do list')
+    expect(text).toContain('moves to Done, with a comment summarising')
   })
 
   it('has the prerequisite, the install, the use, the wrong-card and the updating sections', () => {
