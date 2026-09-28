@@ -61,14 +61,15 @@ describe('/docs/skills', () => {
       'motir-log-bug',
       'motir-mark',
       'motir-guide',
+      'motir-fix-bugs',
     ])
     for (const skill of SKILL_NAMES) expect(h3, skill).toContain(skill)
     expect(SKILL_USAGE.map((s) => s.name)).toEqual([...SKILL_NAMES])
   })
 
   it('documents only skills the pinned release carries, and names every one it installs', () => {
-    // The pinned release carries `motir-fix-bugs` before its usage section (MOTIR-6724),
-    // so the documented set is a subset and the install copy names the whole.
+    // A release can carry a skill before its usage section lands, so the
+    // documented set is a subset and the install copy names the whole.
     for (const skill of SKILL_NAMES)
       expect(RELEASE_SKILLS, skill).toContain(skill)
     const text = page().textContent ?? ''
@@ -94,6 +95,34 @@ describe('/docs/skills', () => {
     // Outline 3 — the To-do list, and Done with a summary comment.
     expect(text).toContain('To-do list')
     expect(text).toContain('moves to Done, with a comment summarising')
+  })
+
+  it('tells a Bugs-folder reader what motir-fix-bugs does and shows them', () => {
+    const section = page()
+      .querySelector('h3#motir-fix-bugs')
+      ?.closest('section')
+    expect(section, 'the motir-fix-bugs section').not.toBeNull()
+    const text = section?.textContent ?? ''
+    // Outline 1 — what to say, with and without a limit.
+    expect(text).toContain('motir fix bugs')
+    expect(text).toContain('motir fix bugs 3')
+    // Outline 2 — one at a time, oldest first; one pull request per bug; a
+    // waiting bug linked and moved beside its card; the rest commented and
+    // set aside; a closing report.
+    expect(text).toContain('one bug at a time, oldest first')
+    expect(text).toContain(
+      'one pull request that fixes that bug and nothing else',
+    )
+    expect(text).toContain(
+      'linked to that work item and moved under the same story',
+    )
+    expect(text).toContain('gets a comment and is set aside')
+    expect(text).toContain('It ends with a report')
+    // Outline 3 — Implemented with pull requests, Blocked with a link,
+    // comments with evidence.
+    expect(text).toContain('moves to Implemented with its pull request linked')
+    expect(text).toContain('moves to Blocked, with a blocked by link')
+    expect(text).toContain('a comment with the evidence')
   })
 
   it('has the prerequisite, the install, the use, the wrong-card and the updating sections', () => {

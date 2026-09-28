@@ -57,16 +57,17 @@ export const RELEASE_SKILLS = [
 
 /**
  * The skills the page has a usage section for, in the order it documents them.
- * ⚠️ A SUBSET OF `RELEASE_SKILLS`, not the same list: the pinned release (since `v0.2.0`) ships
- * `motir-fix-bugs` beside `motir-guide`, and its usage section lands with its
- * own card (MOTIR-6724). The install copy counts `RELEASE_SKILLS`, so it stays
- * true either way.
+ * ⚠️ A SUBSET OF `RELEASE_SKILLS` BY TYPE, not the same list: a release can
+ * carry a skill before its usage section lands (`v0.2.0` shipped
+ * `motir-fix-bugs` before MOTIR-6724 documented it). The install copy names
+ * `RELEASE_SKILLS`, so it stays true either way.
  */
 export const SKILL_NAMES = [
   'motir-run',
   'motir-log-bug',
   'motir-mark',
   'motir-guide',
+  'motir-fix-bugs',
 ] as const
 
 /**
@@ -240,6 +241,12 @@ export const SKILL_USAGE: SkillUsage[] = [
     say: ['motir guide ACME-12', 'motir guide'],
     does: 'Walks you through a manual work item one step at a time. Name one, or say motir guide alone and it picks up your own unfinished one, else the next ready manual work item. It gives you one step, with its instructions and any command to copy, and waits. Say done, and it checks what it can without changing anything, such as fetching the address or running a read-only command, and tells you what it saw. A step whose check fails is not ticked; you get the same step again. You can stop at any step, and motir guide picks up where you left off. If the work item has no steps yet, it proposes some from the description and asks you before writing them onto the work item.',
     see: 'The work item is assigned to you and moves to In Progress. Its To-do list ticks each step as you finish it, with who did it. When the last step is ticked, the work item moves to Done, with a comment summarising each step and how it was confirmed.',
+  },
+  {
+    name: 'motir-fix-bugs',
+    say: ['motir fix bugs', 'motir fix bugs 3'],
+    does: 'Works through the bugs in your project’s Bugs folder that are still To Do, one bug at a time, oldest first. Bugs in folders inside Bugs are left alone. For each one it first checks the bug is real on your default branch, then gives it exactly one outcome. A bug it can fix gets one pull request that fixes that bug and nothing else. A bug that waits on another work item that is not finished yet is linked to that work item and moved under the same story. A bug it cannot fix here gets a comment and is set aside: already fixed, with what fixed it; cannot be reproduced, with what it ran; or needs your decision, with the question and its recommendation. Every outcome takes the bug out of To Do, so the run ends by itself. Add a number and it stops after that many bugs. It ends with a report that lists the bugs waiting on you first.',
+    see: 'A fixed bug moves to Implemented with its pull request linked, and to Done when you merge it. A bug waiting on other work moves to Blocked, with a blocked by link to that work item. A bug already fixed moves to Done. One it cannot reproduce, or one needing your decision, moves to Blocked. Each of these has a comment with the evidence or the question. Answer the question and move the bug back to To Do, and the next run picks it up.',
   },
 ]
 

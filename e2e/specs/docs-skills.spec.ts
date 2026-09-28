@@ -14,7 +14,8 @@ import { expect, test } from '@playwright/test'
  * data lives in `lib/skillsGuide.ts`; a spec that read its expectations from
  * the same module would agree with any change to it, including a section
  * silently dropped. The story promised these six agents and these skills,
- * so the spec names them (`motir-guide` since MOTIR-6732).
+ * so the spec names them (`motir-guide` since MOTIR-6732, `motir-fix-bugs`
+ * since MOTIR-6724).
  */
 
 const PAGE = '/docs/skills'
@@ -29,7 +30,13 @@ const AGENTS: { label: string; host: string }[] = [
   { label: 'OpenCode', host: 'opencode.ai' },
 ]
 
-const SKILLS = ['motir-run', 'motir-log-bug', 'motir-mark', 'motir-guide']
+const SKILLS = [
+  'motir-run',
+  'motir-log-bug',
+  'motir-mark',
+  'motir-guide',
+  'motir-fix-bugs',
+]
 
 test('the rail’s Skills row opens the guide and marks it current', async ({
   page,
@@ -137,4 +144,22 @@ test('the motir-guide section says what to type and what the reader will see', a
   ).toBeVisible()
   await expect(section).toContainText('one step at a time')
   await expect(section).toContainText('To-do list')
+})
+
+test('the motir-fix-bugs section says what to type and what the reader will see', async ({
+  page,
+}) => {
+  await page.goto(PAGE)
+  const heading = page.getByRole('heading', {
+    level: 3,
+    name: 'motir-fix-bugs',
+    exact: true,
+  })
+  await expect(heading).toBeVisible()
+  const section = page.locator('section', { has: heading })
+  await expect(
+    section.getByText('motir fix bugs', { exact: true }),
+  ).toBeVisible()
+  await expect(section).toContainText('one bug at a time, oldest first')
+  await expect(section).toContainText('with a blocked by link')
 })
