@@ -166,6 +166,12 @@ describe('robots names THIS host’s sitemap', () => {
     expect(robots.sitemap).toBe(`${origin}/sitemap.xml`)
     expect(robots.host).toBe(`${origin}/`)
     expect(robots.rules).toEqual({ userAgent: '*', allow: '/' })
+    // MOTIR-6747: nor does it name a read path, allowed or disallowed — they
+    // are redirects into the app, not pages of this host.
+    // (The origin is cut first: `roadmap.acme.com` is a HOST, not a path.)
+    expect(JSON.stringify(robots).replaceAll(origin, '')).not.toMatch(
+      /\/(board|items|tree|roadmap)\b/,
+    )
   })
 })
 

@@ -301,3 +301,76 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
     expect(fallback).toBe(declared)
   })
 })
+
+/*
+ * ⚠️ NO READ VIEW COMES BACK TO motir.co (MOTIR-6747, Story MOTIR-6171).
+ *
+ * The board, items, tree, roadmap and item pages moved into the app, where a
+ * Visitor reads them behind sign-in and consent; motir.co answers each with a
+ * 308 (MOTIR-6743). The rule is written against the CONCEPT — "reads a read
+ * view from the public API" — not a list of the files that used to, so a later
+ * page that fetched `/p/<id>/board` again, or a loader named for one, fails
+ * here whatever it is called and wherever under `app/p/**` it lands.
+ */
+const READ_VIEW = /\/(board|items|tree|roadmap)\b/
+const CALL_LITERAL =
+  /\b(?:readPublic|fetch)\s*(?:<[^>]*>)?\s*\(\s*([`'"])([\s\S]*?)\1/g
+const BASE_LITERAL = /PUBLIC_API_BASE\}([^`]*)`/g
+const READ_VIEW_LOADER = /\bload(?:Board|Items?|WorkItems?|Tree|Roadmap)\w*\b/
+
+/** Every way `src` reads a retired read view — empty when it reads none. */
+function readViewReads(src: string): string[] {
+  const hits: string[] = []
+  for (const [, , literal] of src.matchAll(CALL_LITERAL)) {
+    if (READ_VIEW.test(literal!)) hits.push(`reads ${literal}`)
+  }
+  for (const [, rest] of src.matchAll(BASE_LITERAL)) {
+    if (READ_VIEW.test(rest!)) hits.push(`builds ${rest}`)
+  }
+  const loader = READ_VIEW_LOADER.exec(src)
+  if (loader) hits.push(`names ${loader[0]}`)
+  return hits
+}
+
+describe('NO READ VIEW COMES BACK TO motir.co — MOTIR-6747', () => {
+  it('the guard can fail — each shape a copy would take is caught', () => {
+    for (const bad of [
+      'const r = await fetch(`${APP_ORIGIN}/api/public/p/${id}/board`)',
+      'return readPublic<BoardDto>(`${seg(identifier)}/items?cursor=${c}`)',
+      "readPublic('/p/MOTIR/roadmap')",
+      'const url = `${PUBLIC_API_BASE}/p/${id}/tree`',
+      "import { loadBoard } from '@/lib/publicProject'",
+      'export function loadWorkItem(identifier: string, key: string) {}',
+    ]) {
+      expect(readViewReads(bad), bad).not.toEqual([])
+    }
+  })
+
+  it('and passes what legitimately stays — the project, changelog, requests', () => {
+    for (const good of [
+      'return readPublic<PublicProjectOverviewDto>(`/p/${encodeURIComponent(identifier)}`)',
+      'return readPublic<PublicChangelogPageDto>(`${seg(identifier)}/changelog${qs}`)',
+      'readPublic<PublicRequestDetailDto>(`${seg(identifier)}/requests/${key}`)',
+      "const to = visitorViewUrl(identifier, 'board')",
+    ]) {
+      expect(readViewReads(good), good).toEqual([])
+    }
+  })
+
+  it('no module under app/p/**, nor the read module, reads a read view', () => {
+    const files = [...tracked('app/p'), 'lib/publicProject.ts']
+    expect(files.length).toBeGreaterThanOrEqual(10)
+    const hits = files.flatMap((file) =>
+      readViewReads(read(file)).map((hit) => `${file}: ${hit}`),
+    )
+    expect(hits, hits.join('\n')).toEqual([])
+  })
+
+  it('and each retired read path is a route handler, never a page', () => {
+    for (const view of ['board', 'items', 'tree', 'roadmap', 'items/[key]']) {
+      const dir = `app/p/[identifier]/${view}`
+      expect(existsSync(join(ROOT, dir, 'route.ts')), dir).toBe(true)
+      expect(existsSync(join(ROOT, dir, 'page.tsx')), dir).toBe(false)
+    }
+  })
+})
