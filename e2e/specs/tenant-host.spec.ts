@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { SITE_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
+import { SITE_ORIGIN, STUB_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
 
 /*
  * THE TENANT HOST, IN A REAL BROWSER (MOTIR-4220's fifth criterion).
@@ -59,10 +59,12 @@ test('a project renders at the workspace host, with host-relative links', async 
   // the browser follows it to PRODUCTION. `e2e/stub/publicApiStub.ts` gives
   // `ACME` a primary on this host for exactly that reason; it cost one red run
   // that passed its status assertion against the live site.
-  const response = await page.goto(`${TENANT_ORIGIN}/ACME/board`)
+  const response = await page.goto(`${TENANT_ORIGIN}/ACME/changelog`)
   expect(response?.status()).toBe(200)
 
-  // The SAME page `/p/[identifier]/board` renders — no route is duplicated.
+  // The SAME page `/p/[identifier]/changelog` renders — no route is duplicated.
+  // (The changelog, not the board: the board is a redirect into the app since
+  // MOTIR-6743, asserted below.)
   await expect(page.getByRole('navigation', { name: 'Project' })).toBeVisible()
 
   const overview = page
@@ -75,6 +77,19 @@ test('a project renders at the workspace host, with host-relative links', async 
     .locator('a[href^="/p/"]')
     .evaluateAll((links) => links.map((l) => l.getAttribute('href')))
   expect(paths, 'a /p/ link survived on a tenant host').toEqual([])
+})
+
+test('a read page on that host redirects into the app, absolutely', async ({
+  request,
+}) => {
+  // MOTIR-6743. The router rewrites `/ACME/board` onto `/p/ACME/board`, whose
+  // handler answers the permanent redirect — ON THE APP'S ORIGIN, never on the
+  // tenant host, because the view exists in the app and nowhere else.
+  const res = await request.get(`${TENANT_ORIGIN}/ACME/board`, {
+    maxRedirects: 0,
+  })
+  expect(res.status()).toBe(308)
+  expect(res.headers()['location']).toBe(`${STUB_ORIGIN}/p/ACME/board`)
 })
 
 test('an unknown project on that host is a real 404, not a soft one', async ({
@@ -97,7 +112,7 @@ test('the site’s own host is untouched', async ({ page }) => {
   // `motir.co`. If it did, every spec in this lane would already be failing —
   // so this asserts the ONE thing they do not: that `/p/*` still answers at the
   // shape it shipped with, on the site host, while the tenant host answers too.
-  const response = await page.goto(`${SITE_ORIGIN}/p/MOTIR/board`)
+  const response = await page.goto(`${SITE_ORIGIN}/p/MOTIR/changelog`)
   expect(response?.status()).toBe(200)
 
   const overview = page

@@ -1,55 +1,11 @@
 import { expect, test } from '@playwright/test'
 
 /*
- * The two detail pages and the request intake (MOTIR-4117).
+ * The request detail page and the request intake (MOTIR-4117).
+ *
+ * (The work-item detail page is a redirect into the app since MOTIR-6743 —
+ * `project-tabs.spec.ts` asserts it.)
  */
-
-test('a work item renders its body, its parent and its children', async ({
-  page,
-}) => {
-  await page.goto('/p/MOTIR/items/MOTIR-4115')
-
-  await expect(
-    page.getByRole('heading', { name: 'motir.co serves /p/[identifier]' }),
-  ).toBeVisible()
-  await expect(page.getByText('What ships')).toBeVisible()
-  await expect(
-    page.getByRole('link', { name: /MOTIR-3877 · Public project pages/ }),
-  ).toBeVisible()
-  await expect(
-    page.getByRole('link', { name: 'MOTIR-9 · A child item' }),
-  ).toBeVisible()
-})
-
-test('a truncated child list SAYS it is truncated and points at the tree', async ({
-  page,
-}) => {
-  // `children` is a first page, not the child set. A list that showed one of two
-  // and looked complete is the failure this line prevents.
-  await page.goto('/p/MOTIR/items/MOTIR-4115')
-
-  await expect(
-    page.getByRole('link', { name: 'All 2 in the tree' }),
-  ).toHaveAttribute('href', '/p/MOTIR/tree?parentId=wi_1')
-})
-
-test('a work item shows NOTHING internal — no assignee, estimate or points', async ({
-  page,
-}) => {
-  // They are absent from the public projection, so the page cannot show them.
-  // Asserted because a future addition would be a leak rather than a feature.
-  await page.goto('/p/MOTIR/items/MOTIR-4115')
-
-  const main = page.getByRole('main')
-  await expect(main).not.toContainText(/assignee/i)
-  await expect(main).not.toContainText(/story point/i)
-  await expect(main).not.toContainText(/estimate/i)
-})
-
-test('an unknown work item is a real 404', async ({ page }) => {
-  const response = await page.goto('/p/MOTIR/items/MOTIR-9999')
-  expect(response?.status()).toBe(404)
-})
 
 test('a feature request renders its body, thread and vote COUNT', async ({
   page,
@@ -117,8 +73,47 @@ test('the intake is a HAND-OFF, and says so before asking for anything', async (
   expect(href).toContain('/act?')
   expect(href).toContain('intent=request')
   expect(href).toContain('subject=MOTIR')
-  // The return trip is carried, and it points back at this site.
-  expect(decodeURIComponent(href ?? '')).toContain('/p/MOTIR/roadmap')
+  // The return trip is carried, and it points back at this site — at the
+  // PROJECT page, since the roadmap is the app's now (MOTIR-6745).
+  const back = new URL(href!).searchParams.get('return')
+  expect(new URL(back!).pathname).toBe('/p/MOTIR')
+
+  // And nothing on the doorway points at a retired read page on this host.
+  expect(
+    await page
+      .locator('a[href$="/roadmap"], a[href*="/roadmap?"]')
+      .evaluateAll((links) =>
+        links
+          .map((l) => l.getAttribute('href')!)
+          .filter((h) => h.startsWith('/')),
+      ),
+  ).toEqual([])
+})
+
+test('the request page goes back to the PROJECT, not to a retired read page', async ({
+  page,
+}) => {
+  await page.goto('/p/MOTIR/requests/MOTIR-4051')
+
+  const main = page.getByRole('main')
+  await expect(main.getByRole('link', { name: /^← / })).toHaveAttribute(
+    'href',
+    '/p/MOTIR',
+  )
+  expect(
+    await page
+      .locator('a[href]')
+      .evaluateAll((links) =>
+        links
+          .map((l) => l.getAttribute('href')!)
+          .filter(
+            (h) =>
+              h.startsWith('/') &&
+              /\/(roadmap|board|items|tree)(\/|\?|$)/.test(h),
+          ),
+      ),
+    'a same-host link to a read page that 308s into the app',
+  ).toEqual([])
 })
 
 test('the intake is not indexed — a doorway must not outrank the roadmap', async ({
@@ -132,13 +127,10 @@ test('the intake is not indexed — a doorway must not outrank the roadmap', asy
   )
 })
 
-test('the detail canonicals name motir.co and their own paths', async ({
+test('the request canonical names motir.co and its own path', async ({
   page,
 }) => {
-  for (const path of [
-    '/p/MOTIR/items/MOTIR-4115',
-    '/p/MOTIR/requests/MOTIR-4051',
-  ]) {
+  for (const path of ['/p/MOTIR/requests/MOTIR-4051']) {
     await page.goto(path)
     const canonical = await page
       .locator('link[rel="canonical"]')

@@ -9,6 +9,7 @@ import {
 import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
 import { ProjectHeader } from './_components/ProjectHeader'
 import { EmptyState, ErrorState } from './_components/States'
+import { WatchLive } from './_components/WatchLive'
 import { ProjectJsonLd } from './_components/JsonLd'
 
 /**
@@ -26,8 +27,11 @@ import { ProjectJsonLd } from './_components/JsonLd'
  */
 export const dynamic = 'force-dynamic'
 
+// MOTIR-6745 — no longer a promise of reading without an account: the live board, items
+// and roadmap are in the app now, behind a Motir account (MOTIR-6743). What this
+// page offers without one is the overview, the changelog and requesting a feature.
 const FALLBACK_DESCRIPTION =
-  'A public project plan on Motir — work items, boards and a roadmap, free to read with no sign-up.'
+  'A project built in public on Motir — its overview, changelog and feature requests, and the live board in the Motir app.'
 
 export async function generateMetadata({
   params,
@@ -83,7 +87,14 @@ export default async function PublicProjectOverviewPage({
   // statement about the world, an error is a statement about us.
   if (read.status === 'not-found') notFound()
   if (read.status === 'failed') {
-    return <ErrorState what="this project" host={host} />
+    // The Watch entry needs only the identifier, so it still renders — the one
+    // way forward the visitor has (design MOTIR-6742 panel E).
+    return (
+      <>
+        <ErrorState what="this project" host={host} />
+        <WatchLive identifier={identifier} name={null} />
+      </>
+    )
   }
 
   const project = read.data
@@ -92,7 +103,7 @@ export default async function PublicProjectOverviewPage({
   return (
     <>
       <ProjectJsonLd project={project} />
-      <ProjectHeader project={project} current="" host={host} />
+      <ProjectHeader project={project} current="" host={host} watch />
 
       {project.publicOverviewMd ? (
         <div className="mt-7 max-w-[46rem]">
@@ -100,8 +111,8 @@ export default async function PublicProjectOverviewPage({
         </div>
       ) : (
         <EmptyState title="This project has not written an overview yet">
-          Its board, work items and roadmap are still public — the tabs above
-          are where the work is.
+          Its live board, work items and roadmap are in the Motir app — watch it
+          being built, above.
         </EmptyState>
       )}
     </>

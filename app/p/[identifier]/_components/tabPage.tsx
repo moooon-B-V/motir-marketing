@@ -21,7 +21,7 @@ import { ErrorState } from './States'
  * ⚠️ THE HOST IS READ HERE, ONCE (MOTIR-4220). This is the async component at
  * the top of every tab route, so it is the one place per request that can ask
  * `headers()` — everything below takes it as a parameter, which is what keeps
- * `WorkItemRow` and the tab bar synchronous and therefore testable.
+ * the rows and the tab bar synchronous and therefore testable.
  * `lib/publicHost.ts`'s header carries the full argument.
  *
  * ⚠️ AND THE TAB'S OWN READ FAILING IS NOT THE PROJECT FAILING. The project read

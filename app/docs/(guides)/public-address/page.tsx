@@ -137,8 +137,10 @@ export default function PublicAddressDocsPage() {
         </p>
         <p>
           A connected domain serves <em>one</em> project, at its root:{' '}
-          <Mono>roadmap.acme.com/</Mono> is that project&rsquo;s overview and{' '}
-          <Mono>roadmap.acme.com/board</Mono> its board.
+          <Mono>roadmap.acme.com/</Mono> is that project&rsquo;s page and{' '}
+          <Mono>roadmap.acme.com/changelog</Mono> its changelog. The live board,
+          work items and roadmap are in the Motir app, and their links there
+          lead in.
         </p>
         <p>
           You create two kinds of record at your registrar.{' '}

@@ -1,81 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import {
-  MoreLink,
-  StatusPill,
-  WorkItemRow,
-} from '@/app/p/[identifier]/_components/Rows'
+import { MoreLink, StatusPill } from '@/app/p/[identifier]/_components/Rows'
 import {
   EmptyState,
   ErrorState,
   LoadingRows,
 } from '@/app/p/[identifier]/_components/States'
-import type { PublicWorkItemDto } from '@/lib/publicProject'
-import { SITE_HOST } from '@/lib/publicHost'
 
 /*
  * The shared list primitives and the three states (MOTIR-4121).
  *
- * These are the pieces five tabs compose from, so a defect here is a defect on
- * every tab — which is exactly why they are shared and why they are covered
- * once rather than through five page tests.
+ * These are the pieces the pages compose from, so a defect here is a defect on
+ * every page — which is exactly why they are shared and why they are covered
+ * once rather than through the page tests. (The work-item row left with the read
+ * pages it served — MOTIR-6743.)
  */
-
-const item: PublicWorkItemDto = {
-  id: 'wi_1',
-  identifier: 'ACME-1',
-  key: 1,
-  title: 'A work item',
-  kind: 'subtask',
-  status: 'In Progress',
-  statusCategory: 'in_progress',
-  priority: 'medium',
-}
-
-describe('WorkItemRow', () => {
-  it('links to the item’s public detail page', () => {
-    render(<WorkItemRow identifier="ACME" item={item} host={SITE_HOST} />)
-
-    expect(screen.getByRole('link', { name: 'A work item' })).toHaveAttribute(
-      'href',
-      '/p/ACME/items/ACME-1',
-    )
-  })
-
-  it('renders the epic-privacy MARKER when the projection carries it', () => {
-    // Set only on a private epic seen by a non-member, whose descendants are
-    // already excluded server-side. Saying so is more honest than showing an
-    // epic that merely looks empty.
-    render(
-      <WorkItemRow
-        identifier="ACME"
-        item={{ ...item, kind: 'epic', childrenHidden: true }}
-        host={SITE_HOST}
-      />,
-    )
-
-    expect(screen.getByText('Children are not public.')).toBeVisible()
-  })
-
-  it('omits the marker on an ordinary row', () => {
-    render(<WorkItemRow identifier="ACME" item={item} host={SITE_HOST} />)
-    expect(screen.queryByText('Children are not public.')).toBeNull()
-  })
-
-  it('encodes an identifier that needs it', () => {
-    render(
-      <WorkItemRow
-        identifier="OPEN CORE"
-        item={{ ...item, identifier: 'A B' }}
-        host={SITE_HOST}
-      />,
-    )
-    expect(screen.getByRole('link', { name: 'A work item' })).toHaveAttribute(
-      'href',
-      '/p/OPEN%20CORE/items/A%20B',
-    )
-  })
-})
 
 describe('StatusPill', () => {
   it('tones by CATEGORY, not by the status string', () => {

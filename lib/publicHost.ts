@@ -25,7 +25,7 @@ import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
  * parameter. The alternative — every leaf component awaiting `headers()` — was
  * rejected for two reasons, and the second is the load-bearing one:
  *
- *   1. It makes `WorkItemRow`, `ErrorState` and the tab bar async Server
+ *   1. It makes the rows, `ErrorState` and the tab bar async Server
  *      Components, which `@testing-library/react` cannot render at all. The
  *      component tests that assert what these emit would have had to be deleted
  *      and replaced by end-to-end walks — a strictly worse trade for the exact

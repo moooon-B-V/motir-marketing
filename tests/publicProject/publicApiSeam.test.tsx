@@ -2,19 +2,8 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import {
-  loadBoard,
-  loadChangelog,
-  loadItems,
-  loadProject,
-  loadRequest,
-  loadRoadmap,
-  loadTreeLevel,
-  loadWorkItem,
-} from '@/lib/publicProject'
-import { SITE_HOST } from '@/lib/publicHost'
+import { loadChangelog, loadProject, loadRequest } from '@/lib/publicProject'
 import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
-import { WorkItemRow } from '@/app/p/[identifier]/_components/Rows'
 
 /*
  * THE SEAM THE UNITS MOCK (MOTIR-4121).
@@ -72,53 +61,12 @@ describe('a recorded response reaches the props a component renders', () => {
     expect(screen.getByText('128')).toBeVisible()
     expect(screen.getByText('1,204')).toBeVisible()
   })
-
-  it('a board card → a work-item row', async () => {
-    serve('board.json')
-    const read = await loadBoard('MOTIR')
-    if (read.status !== 'ok') throw new Error('fixture did not parse as ok')
-
-    const card = read.data.columns[0]?.cards[0]
-    expect(card, 'the recorded board has no cards').toBeDefined()
-
-    render(<WorkItemRow identifier="MOTIR" item={card!} host={SITE_HOST} />)
-    expect(screen.getByRole('link', { name: card!.title })).toHaveAttribute(
-      'href',
-      `/p/MOTIR/items/${card!.identifier}`,
-    )
-  })
-
-  it('the epic-privacy marker survives the whole path', async () => {
-    // The field is OPTIONAL in the contract and absent on most rows, which is
-    // exactly the shape a restatement drops. If it stopped arriving, a private
-    // epic would render as an ordinary empty one.
-    serve('board.json')
-    const read = await loadBoard('MOTIR')
-    if (read.status !== 'ok') throw new Error('fixture did not parse as ok')
-
-    const hidden = read.data.columns
-      .flatMap((c) => c.cards)
-      .find((c) => c.childrenHidden)
-    expect(hidden, 'the recorded board has no private epic').toBeDefined()
-
-    render(<WorkItemRow identifier="MOTIR" item={hidden!} host={SITE_HOST} />)
-    expect(screen.getByText('Children are not public.')).toBeVisible()
-  })
 })
 
 describe('every recorded shape parses, field for field', () => {
   const cases: Array<[string, string, () => Promise<unknown>]> = [
     ['project', 'project.json', () => loadProject('MOTIR')],
-    ['board', 'board.json', () => loadBoard('MOTIR')],
-    ['items', 'items.json', () => loadItems('MOTIR')],
-    ['tree level', 'tree.json', () => loadTreeLevel('MOTIR')],
-    ['roadmap', 'roadmap.json', () => loadRoadmap('MOTIR')],
     ['changelog', 'changelog.json', () => loadChangelog('MOTIR')],
-    [
-      'work item',
-      'item-detail.json',
-      () => loadWorkItem('MOTIR', 'MOTIR-4115'),
-    ],
     [
       'request',
       'request-detail.json',
@@ -140,37 +88,6 @@ describe('every recorded shape parses, field for field', () => {
   }
 })
 
-describe('the CURSOR round trip — a page-two read carries what page one returned', () => {
-  it('items', async () => {
-    serve('items.json')
-    const first = await loadItems('MOTIR')
-    if (first.status !== 'ok') throw new Error('fixture did not parse as ok')
-    expect(first.data.nextCursor).toBeTruthy()
-
-    fetchMock.mockClear()
-    serve('items-page2.json')
-    const second = await loadItems('MOTIR', first.data.nextCursor!)
-
-    // The cursor page one HANDED BACK is the one page two ASKS WITH. A pager
-    // that dropped it returns page one again, which looks like a working pager.
-    expect(fetchMock.mock.calls[0]?.[0]).toContain(
-      `cursor=${encodeURIComponent(first.data.nextCursor!)}`,
-    )
-    if (second.status !== 'ok') throw new Error('fixture did not parse as ok')
-    expect(second.data.items[0]?.identifier).not.toBe(
-      first.data.items[0]?.identifier,
-    )
-    // …and the walk terminates rather than cycling.
-    expect(second.data.nextCursor).toBeNull()
-  })
-
-  it('a roadmap column', async () => {
-    serve('roadmap.json')
-    const tab = await loadRoadmap('MOTIR')
-    if (tab.status !== 'ok') throw new Error('fixture did not parse as ok')
-
-    const column = tab.data.columns.find((c) => c.nextCursor)
-    expect(column, 'no recorded column pages').toBeDefined()
-    expect(column!.nextCursor).toBeTruthy()
-  })
-})
+// The board, items, tree, roadmap and work-item reads left with the pages that
+// made them (MOTIR-6743): those paths redirect into the app and read nothing,
+// so their recorded shapes and the items / roadmap cursor round trips went too.

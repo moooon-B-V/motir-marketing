@@ -1,120 +1,52 @@
 import { expect, test } from '@playwright/test'
+import { STUB_ORIGIN } from '../stub/origin'
 
 /*
- * The five tabs (MOTIR-4116), in a real browser against the real build.
+ * The project's tabs (MOTIR-4116), in a real browser against the real build.
  *
- * ⚠️ THE PAGING ASSERTIONS ARE THE POINT. A pager that renders is not a pager
- * that pages: the stub answers a DIFFERENT fixture for the second page, so a
- * "Load more" that dropped its cursor would return the same rows and fail here.
+ * ⚠️ FOUR OF THE FIVE ARE NOT PAGES ANY MORE (MOTIR-6743, Story MOTIR-6171).
+ * The Board, Items, Tree and Roadmap tabs — and every item page — answer a
+ * PERMANENT redirect (308) to the same path in the app, where a Visitor reads
+ * the live project after signing in and agreeing to be seen. The Roadmap was the
+ * public feature-request board, which is retired. The Changelog stays a page on
+ * this host, anonymous, as does the project page itself.
+ *
+ * In this lane the app's origin IS the stub (`NEXT_PUBLIC_MOTIR_APP_ORIGIN`),
+ * so a redirect names `STUB_ORIGIN`.
  */
 
-test('the Board tab renders its columns, its counts and the privacy marker', async ({
-  page,
+for (const view of ['board', 'items', 'tree', 'roadmap']) {
+  test(`/p/MOTIR/${view} answers 308 to the same path in the app`, async ({
+    request,
+  }) => {
+    const res = await request.get(`/p/MOTIR/${view}?cursor=wi_4`, {
+      maxRedirects: 0,
+    })
+    expect(res.status()).toBe(308)
+    // The query is dropped: this host's cursors mean nothing to the app.
+    expect(res.headers()['location']).toBe(`${STUB_ORIGIN}/p/MOTIR/${view}`)
+  })
+}
+
+test('an item page answers 308 to the same item in the app', async ({
+  request,
 }) => {
-  await page.goto('/p/MOTIR/board')
-
-  await expect(
-    page
-      .getByRole('navigation', { name: 'Project' })
-      .getByRole('link', { name: 'Board' }),
-  ).toHaveAttribute('aria-current', 'page')
-  await expect(page.getByRole('region', { name: 'To do' })).toBeVisible()
-  await expect(page.getByRole('region', { name: 'Done' })).toBeVisible()
-  // The epic-privacy marker is RENDERED rather than dropped — an epic that
-  // looked empty would be a worse lie than one that says its children are not
-  // public.
-  await expect(page.getByText('Children are not public.')).toBeVisible()
-  // Bounded, not paged, and it SAYS so.
-  await expect(page.getByText(/Showing the first 200 cards/)).toBeVisible()
-})
-
-test('the Items tab pages by URL, and the second page is different', async ({
-  page,
-}) => {
-  await page.goto('/p/MOTIR/items')
-
-  await expect(
-    page.getByRole('link', { name: 'A public work item 1' }),
-  ).toBeVisible()
-
-  await page.getByRole('link', { name: 'Load more' }).click()
-
-  await expect(page).toHaveURL(/\/p\/MOTIR\/items\?cursor=wi_4/)
-  await expect(
-    page.getByRole('link', { name: 'A public work item 5' }),
-  ).toBeVisible()
-  // The tell that the cursor was actually carried: page one's rows are gone.
-  await expect(
-    page.getByRole('link', { name: 'A public work item 1' }),
-  ).toHaveCount(0)
-})
-
-test('the Items pager is a real link, so it works with no JavaScript', async ({
-  page,
-}) => {
-  await page.goto('/p/MOTIR/items')
-
-  const more = page.getByRole('link', { name: 'Load more' })
-  await expect(more).toHaveAttribute('href', '/p/MOTIR/items?cursor=wi_4')
-  await expect(more).toHaveAttribute('rel', 'next')
-})
-
-test('the Tree tab expands one level by navigation', async ({ page }) => {
-  await page.goto('/p/MOTIR/tree')
-
-  await expect(page.getByText('Showing 2 of 12')).toBeVisible()
-
-  await page.getByRole('link', { name: 'An epic with children' }).click()
-
-  await expect(page).toHaveURL(/\/p\/MOTIR\/tree\?parentId=wi_1/)
-  await expect(page.getByRole('link', { name: 'A child item' })).toBeVisible()
-  await expect(
-    page.getByRole('link', { name: 'Back to the top level' }),
-  ).toBeVisible()
-})
-
-test('the Roadmap tab renders four buckets and their vote COUNTS', async ({
-  page,
-}) => {
-  await page.goto('/p/MOTIR/roadmap')
-
-  for (const label of ['Submitted', 'Planned', 'In progress', 'Done']) {
-    await expect(page.getByRole('region', { name: label })).toBeVisible()
-  }
-  await expect(page.getByText('84')).toBeVisible()
-})
-
-test('the Roadmap ships NO vote control — that is MOTIR-4119’s', async ({
-  page,
-}) => {
-  // The card's scope boundary, asserted rather than reviewed: this card renders
-  // the surface the vote will attach to and nothing that writes.
-  await page.goto('/p/MOTIR/roadmap')
-
-  await expect(page.getByRole('button', { name: /vote|upvote/i })).toHaveCount(
-    0,
+  const res = await request.get('/p/MOTIR/items/MOTIR-4115', {
+    maxRedirects: 0,
+  })
+  expect(res.status()).toBe(308)
+  expect(res.headers()['location']).toBe(
+    `${STUB_ORIGIN}/p/MOTIR/items/MOTIR-4115`,
   )
-  // A hand-off would be a link to the application; none ships here yet.
-  await expect(page.locator('a[href*="app.motir.co/act"]')).toHaveCount(0)
 })
 
-test('one Roadmap column pages independently of the others', async ({
-  page,
+test('an unknown project is redirected too — the app answers its not-found', async ({
+  request,
 }) => {
-  await page.goto('/p/MOTIR/roadmap?bucket=submitted&cursor=rm_52')
-
-  // The paged column shows its next page…
-  await expect(
-    page
-      .getByRole('region', { name: 'Submitted' })
-      .getByText('A feature request 56'),
-  ).toBeVisible()
-  // …and the other three are untouched.
-  await expect(
-    page
-      .getByRole('region', { name: 'Planned' })
-      .getByText('A feature request 53'),
-  ).toBeVisible()
+  // No read before the redirect, so there is nothing here to 404 or to 500.
+  const res = await request.get('/p/NOPE-XYZ/board', { maxRedirects: 0 })
+  expect(res.status()).toBe(308)
+  expect(res.headers()['location']).toBe(`${STUB_ORIGIN}/p/NOPE-XYZ/board`)
 })
 
 test('the Changelog tab lists what shipped and offers the feed', async ({
@@ -130,46 +62,42 @@ test('the Changelog tab lists what shipped and offers the feed', async ({
   ).toHaveAttribute('href', '/p/MOTIR/changelog.xml')
 })
 
-test('every tab canonical names motir.co and its own path', async ({
+test('the Changelog canonical names motir.co and its own path', async ({
   page,
 }) => {
-  for (const segment of ['board', 'items', 'tree', 'roadmap', 'changelog']) {
-    await page.goto(`/p/MOTIR/${segment}`)
-    const canonical = await page
-      .locator('link[rel="canonical"]')
-      .getAttribute('href')
+  await page.goto('/p/MOTIR/changelog')
+  const canonical = await page
+    .locator('link[rel="canonical"]')
+    .getAttribute('href')
 
-    expect(canonical, segment).toContain(`/p/MOTIR/${segment}`)
-    expect(canonical, segment).not.toContain('app.motir.co')
-  }
+  expect(canonical).toContain('/p/MOTIR/changelog')
+  expect(canonical).not.toContain('app.motir.co')
 })
 
-test('a tab whose OWN read fails keeps the shell and says which host', async ({
+test('the project page offers Watch live, and its app tabs leave for the app', async ({
   page,
 }) => {
-  // ACME resolves as a project (the stub has no fixture, so the project read
-  // 404s) — use MOTIR, whose project read succeeds, and a tab the stub does not
-  // serve. `/p/MOTIR/board` is fixtured; the roadmap COLUMN for an unfixtured
-  // bucket is not, which exercises the per-column failure.
-  await page.goto('/p/MOTIR/roadmap?bucket=done&cursor=nope')
+  // MOTIR-6745 (design MOTIR-6742 panel A). The one door into the live
+  // project states its cost first, and every app tab is a PLAIN link on the
+  // app's origin — so nothing is prefetched into a redirect off this host.
+  await page.goto('/p/MOTIR')
 
-  // The hero survives — the page is not blanked by one column's failure.
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Motir' }),
+    page.getByText('your name and email will be visible to', { exact: false }),
   ).toBeVisible()
+  await expect(page.getByRole('link', { name: /Watch live/ })).toHaveAttribute(
+    'href',
+    `${STUB_ORIGIN}/p/MOTIR/board`,
+  )
 
-  // ⚠️ SCOPED TO THE COLUMN, not `getByRole('alert')` at page level: Next.js
-  // renders its own always-present route announcer with `role="alert"`, so a
-  // bare page-level alert locator matches two elements and would fail on strict
-  // mode whatever the page did.
-  await expect(
-    page.getByRole('region', { name: 'Done' }).getByRole('alert'),
-  ).toContainText('could not load')
-
-  // And the failure is CONTAINED — the other three columns still have content.
-  await expect(
-    page
-      .getByRole('region', { name: 'Planned' })
-      .getByText('A feature request 53'),
-  ).toBeVisible()
+  const nav = page.getByRole('navigation', { name: 'Project' })
+  for (const view of ['board', 'items', 'tree', 'roadmap']) {
+    await expect(
+      nav.getByRole('link', { name: new RegExp(`^${view}`, 'i') }),
+    ).toHaveAttribute('href', `${STUB_ORIGIN}/p/MOTIR/${view}`)
+  }
+  await expect(nav.getByRole('link', { name: 'Changelog' })).toHaveAttribute(
+    'href',
+    '/p/MOTIR/changelog',
+  )
 })

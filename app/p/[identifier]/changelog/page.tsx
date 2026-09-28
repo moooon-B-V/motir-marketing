@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { loadChangelog, pagedTabHref } from '@/lib/publicProject'
+import {
+  loadChangelog,
+  pagedTabHref,
+  visitorViewUrl,
+} from '@/lib/publicProject'
 import { publicPathFor } from '@/lib/publicHost'
 import { renderTabPage, tabMetadata } from '../_components/tabPage'
 import { EmptyState, ErrorState } from '../_components/States'
@@ -78,16 +81,15 @@ export default async function ChangelogTab({
                   {DATE.format(new Date(entry.shippedAt))}
                 </time>
                 <span className="min-w-0 flex-1">
-                  <Link
-                    href={publicPathFor(
-                      host,
-                      identifier,
-                      `items/${encodeURIComponent(entry.identifier)}`,
-                    )}
+                  {/* A plain `<a>` straight into the app (MOTIR-6745): the
+                      item page on this host is a redirect now (MOTIR-6743),
+                      and a cross-origin `next/link` would be prefetched. */}
+                  <a
+                    href={visitorViewUrl(identifier, 'items', entry.identifier)}
                     className="text-[14px] font-medium text-(--el-text) hover:text-(--el-link)"
                   >
                     {entry.title}
-                  </Link>
+                  </a>
                   {entry.epic ? (
                     <span className="mt-1 block text-[12px] text-(--el-text-secondary)">
                       {entry.epic.title}

@@ -1,0 +1,3274 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/p/* once the read tabs leave — the split tab bar, “Watch it being
+      built” and the request pages’ way back · MOTIR-6742 (a delta over
+      public-projects.mock.html)
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of `--el-*` (light + dark,
+         `warm-editorial`, `motir` palette), copied from `@motir/design-system`.
+         Standalone, as every asset in `design/marketing/` is. Re-defines no
+         semantics. Nothing here is an invented hue; the only raw values are the
+         doc-annotation scaffold's own fills and the non-semantic shadows.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-highlight: #ff64c8;
+        --el-link: #0070d2;
+        --el-link-pressed: #005bab;
+        --el-danger: #e03131;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #fde0ec;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        --radius-card: 12px;
+        --radius-btn: 8px;
+        --radius-input: 8px;
+        --radius-control: 6px;
+        --radius-badge: 9999px;
+        --radius-kbd: 4px;
+        --spacing-card-padding: 24px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 10px;
+        --spacing-control-y: 6px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-control: 36px;
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-card: 0 4px 12px rgba(15, 15, 15, 0.08);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --font-sans-source: 'Inter';
+        --font-serif-source: 'Source Serif 4';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-link-pressed: #79b8ff;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #3a1f2a;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 38px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        max-width: 78ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        background: var(--el-page-bg);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE CHROME — COMPOSED from motir-core/design/public-site/ (MOTIR-3880),
+         not redrawn. The header and footer here are that asset's markup, class
+         for class. This asset draws ONLY what sits BETWEEN them.
+      ═══════════════════════════════════════════════════════════════ */
+      .site {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 12px var(--spacing-card-padding);
+      }
+      .brand-lockup {
+        --brand-size: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: calc(var(--brand-size) * 0.33);
+        text-decoration: none;
+        flex: none;
+      }
+      .brand-glyph {
+        color: var(--el-accent-on-surface);
+        flex: none;
+        display: block;
+      }
+      .brand-word {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: calc(var(--brand-size) * 0.72);
+        line-height: 1;
+        color: var(--el-text);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .nav a:hover {
+        color: var(--el-text);
+      }
+      .nav a.current {
+        font-weight: 600;
+        color: var(--el-accent-on-surface);
+      }
+      .nav .ph {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        cursor: default;
+      }
+      .nav .ph .soon {
+        font: 600 9px/1 var(--font-mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-strong);
+        background: var(--el-tint-lavender);
+        border-radius: var(--radius-kbd);
+        padding: 2px 4px;
+      }
+      .bar-cta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font: 600 14px/1 var(--font-sans);
+        border-radius: var(--radius-btn);
+        padding: 0 18px;
+        height: var(--height-btn-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn.sm {
+        height: var(--height-btn-sm);
+        font-size: 13px;
+        padding: 0 12px;
+      }
+      .btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn.sm svg {
+        width: 14px;
+        height: 14px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text);
+      }
+      .btn.ghost:hover {
+        background: var(--el-muted);
+      }
+      .foot {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 40px var(--spacing-card-padding);
+      }
+      .foot h2 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .foot ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .foot li,
+      .foot li a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .foot li a:hover {
+        color: var(--el-link);
+      }
+      .foot .tag {
+        margin: 10px 0 0;
+        max-width: 30rem;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .foot .tag + .tag {
+        margin-top: 8px;
+      }
+      .foot .legal {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--el-border);
+        padding-top: 16px;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE ROOM — what this card draws. Both surfaces mirror
+         `motir-core/app/(public)/legal/` (moved here as `app/legal/` by MOTIR-4103) at `max-w-[46rem]` (736px).
+      ═══════════════════════════════════════════════════════════════ */
+      .room {
+        flex: 1;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 46rem;
+        padding: 40px var(--spacing-card-padding);
+      }
+      .room h1 {
+        font-family: var(--font-serif);
+        font-size: 30px;
+        line-height: 1.2;
+        font-weight: 700;
+        margin: 0;
+        color: var(--el-text);
+        letter-spacing: -0.01em;
+      }
+      .intro {
+        margin: 8px 0 0;
+        max-width: 34rem;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+
+      /* the index */
+      .contact {
+        margin: 32px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* the document page */
+      .crumb {
+        margin: 0 0 24px;
+      }
+      .crumb a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .crumb a:hover {
+        color: var(--el-link);
+      }
+      .doc-head {
+        border-bottom: 1px solid var(--el-border);
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      .doc-head .vline {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .doc-body {
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--el-text);
+      }
+      .doc-body h2 {
+        font-family: var(--font-serif);
+        font-size: 20px;
+        font-weight: 700;
+        margin: 32px 0 12px;
+        color: var(--el-text-strong);
+        letter-spacing: -0.01em;
+      }
+      .doc-body h3 {
+        font-size: 15px;
+        font-weight: 600;
+        margin: 20px 0 8px;
+        color: var(--el-text-strong);
+      }
+      .doc-body p {
+        margin: 0 0 14px;
+      }
+      .doc-body ul {
+        margin: 0 0 14px;
+        padding-left: 22px;
+      }
+      .doc-body li {
+        margin: 6px 0;
+      }
+      .doc-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 0 20px;
+        font-size: 13px;
+      }
+      .doc-body th,
+      .doc-body td {
+        text-align: left;
+        padding: 8px 10px;
+        border: 1px solid var(--el-border);
+        vertical-align: top;
+      }
+      .doc-body th {
+        font-weight: 600;
+        color: var(--el-text-strong);
+        background: var(--el-surface-soft);
+      }
+      .doc-body strong {
+        color: var(--el-text-strong);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE /p/* ROOM (MOTIR-4113). Everything above this line is the AREA's
+         shared head — the resolved `--el-*` token block, the doc-annotation
+         scaffold and the CHROME, composed class-for-class from
+         motir-core/design/public-site/ (MOTIR-3880) exactly as
+         design/legal/legal.mock.html composes it. Nothing below re-defines a
+         semantic or invents a hue.
+      ═══════════════════════════════════════════════════════════════ */
+
+      /* A project page is WIDER than a legal document: a board needs columns.
+         The measure is the only chrome value this asset changes, and it changes
+         it by adding a variant rather than by editing `.room`. */
+      .room.wide {
+        max-width: 72rem;
+      }
+      .room.mid {
+        max-width: 58rem;
+      }
+
+      /* ── the hero ─────────────────────────────────────────────────── */
+      .hero {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .hero-id {
+        min-width: 0;
+      }
+      .org {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        margin: 0 0 4px;
+      }
+      .hero h1 {
+        font-family: var(--font-serif);
+        font-size: 30px;
+        line-height: 1.2;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .tagline {
+        margin: 8px 0 0;
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--el-text-secondary);
+        max-width: 44rem;
+      }
+      .tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        padding: 0;
+        list-style: none;
+      }
+      .tag {
+        font-size: 12px;
+        line-height: 1.4;
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+      }
+      .stats {
+        display: flex;
+        gap: 22px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .stats div {
+        text-align: right;
+      }
+      .stats .n {
+        display: block;
+        font: 700 20px/1.1 var(--font-sans);
+        color: var(--el-text);
+      }
+      .stats .k {
+        display: block;
+        font-size: 12px;
+        color: var(--el-text-muted);
+        margin-top: 2px;
+      }
+
+      /* ── the act rail ─────────────────────────────────────────────── */
+      .acts {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+      .btn.handoff::after {
+        content: '↗';
+        font-size: 11px;
+        margin-left: 5px;
+        opacity: 0.8;
+      }
+      .subscribe {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .subscribe input {
+        height: var(--height-control);
+        border: 1px solid var(--el-border-strong);
+        border-radius: var(--radius-input);
+        padding: 0 var(--spacing-control-x);
+        font: 400 13px var(--font-sans);
+        color: var(--el-text);
+        background: var(--el-page-bg);
+        min-width: 15rem;
+      }
+      .subscribe input::placeholder {
+        color: var(--el-text-muted);
+      }
+
+      /* ── the tab bar ──────────────────────────────────────────────── */
+      .tabs {
+        display: flex;
+        gap: 2px;
+        margin-top: 26px;
+        border-bottom: 1px solid var(--el-border);
+        overflow-x: auto;
+      }
+      .tabs a {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+        padding: 9px 12px;
+        border-bottom: 2px solid transparent;
+        white-space: nowrap;
+      }
+      .tabs a:hover {
+        color: var(--el-text);
+      }
+      .tabs a[aria-current='page'] {
+        color: var(--el-text);
+        font-weight: 600;
+        border-bottom-color: var(--el-accent);
+      }
+
+      /* ── the README ───────────────────────────────────────────────── */
+      .readme {
+        margin-top: 26px;
+        max-width: 46rem;
+      }
+      .readme h2 {
+        font-family: var(--font-serif);
+        font-size: 20px;
+        font-weight: 700;
+        margin: 26px 0 8px;
+      }
+      .readme p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--el-text-secondary);
+        margin: 0 0 12px;
+      }
+      .readme ul {
+        margin: 0 0 12px;
+        padding-left: 22px;
+      }
+      .readme li {
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the board ────────────────────────────────────────────────── */
+      .board {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .col {
+        background: var(--el-surface-soft);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        padding: 12px;
+        min-height: 220px;
+      }
+      .col-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .col-head .t {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .col-head .c {
+        font-size: 12px;
+        /* --el-text-secondary, NOT --el-text-muted: this count sits on
+           `--el-surface-soft`, where muted measures 4.34:1 (MOTIR-3984's pair,
+           swept once already on the footer). The area rule is fixed at the ink. */
+        color: var(--el-text-secondary);
+      }
+      .card {
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-control);
+        padding: 10px;
+        margin-bottom: 8px;
+        box-shadow: var(--shadow-subtle);
+      }
+      .card .k {
+        font: 500 11px var(--font-mono);
+        /* At 11px this is small text and needs 4.5:1. A card on `--el-page-bg`
+           clears it with muted; the `.hidden-epic` card sits on `--el-surface`
+           and does not (4.17:1) — so the KEY takes one ink everywhere rather
+           than two that differ by which card they land on. */
+        color: var(--el-text-secondary);
+      }
+      .card .t {
+        display: block;
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--el-text);
+        margin-top: 3px;
+      }
+      .card.hidden-epic {
+        border-style: solid;
+        background: var(--el-surface);
+      }
+      .card .hidden-note {
+        display: block;
+        font-size: 11px;
+        color: var(--el-text-secondary);
+        margin-top: 6px;
+      }
+
+      /* ── a list (items · changelog · roadmap column) ──────────────── */
+      .rows {
+        margin-top: 20px;
+        border-top: 1px solid var(--el-border);
+        list-style: none;
+        padding: 0;
+      }
+      .rows li {
+        border-bottom: 1px solid var(--el-border);
+        padding: 12px 0;
+        display: flex;
+        gap: 12px;
+        align-items: baseline;
+      }
+      .rows .k {
+        font: 500 11px var(--font-mono);
+        color: var(--el-text-muted);
+        width: 6.5rem;
+        flex: none;
+      }
+      .rows .t {
+        font-size: 14px;
+        color: var(--el-text);
+        flex: 1;
+        min-width: 0;
+      }
+      .pill {
+        font-size: 11px;
+        line-height: 1.5;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        border: 1px solid var(--el-border);
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        white-space: nowrap;
+      }
+      .pill.done {
+        background: var(--el-tint-mint);
+        border-color: transparent;
+        color: var(--el-text-strong);
+      }
+      .pill.prog {
+        background: var(--el-tint-sky);
+        border-color: transparent;
+        color: var(--el-text-strong);
+      }
+      .pager {
+        margin-top: 18px;
+      }
+
+      /* ── the tree ─────────────────────────────────────────────────── */
+      .tree {
+        margin-top: 20px;
+        list-style: none;
+        padding: 0;
+      }
+      .tree li {
+        padding: 8px 0;
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        border-bottom: 1px solid var(--el-border-soft);
+      }
+      .tree .tw {
+        width: 14px;
+        flex: none;
+        color: var(--el-text-muted);
+        font-size: 11px;
+      }
+      .tree .d1 {
+        padding-left: 26px;
+      }
+      .tree .d2 {
+        padding-left: 52px;
+      }
+
+      /* ── the roadmap ──────────────────────────────────────────────── */
+      .roadmap {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .vote {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+        border: 1px solid var(--el-border-strong);
+        border-radius: var(--radius-badge);
+        padding: 2px 9px;
+        background: var(--el-page-bg);
+        text-decoration: none;
+        margin-top: 8px;
+      }
+      .vote .caret {
+        font-size: 10px;
+      }
+
+      /* ── the detail pages ─────────────────────────────────────────── */
+      .detail-head {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .detail-head .k {
+        font: 500 12px var(--font-mono);
+        color: var(--el-text-muted);
+      }
+      .detail-head h1 {
+        font-family: var(--font-serif);
+        font-size: 24px;
+        font-weight: 700;
+        margin: 6px 0 0;
+        width: 100%;
+      }
+      .meta {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        margin: 8px 0 0;
+      }
+      .split {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 15rem;
+        gap: 28px;
+        margin-top: 24px;
+      }
+      .side h3 {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+        margin: 0 0 8px;
+      }
+      .side + .side {
+        margin-top: 22px;
+      }
+      .side p,
+      .side li {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        line-height: 1.6;
+      }
+
+      /* ── the comment thread ───────────────────────────────────────── */
+      .thread {
+        margin-top: 24px;
+        list-style: none;
+        padding: 0;
+      }
+      .thread li {
+        display: flex;
+        gap: 10px;
+        padding: 14px 0;
+        border-top: 1px solid var(--el-border);
+      }
+      .avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--radius-badge);
+        background: var(--el-tint-lavender);
+        color: var(--el-text-strong);
+        font: 600 11px var(--font-sans);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+      .thread .who {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .thread .when {
+        font-size: 12px;
+        color: var(--el-text-muted);
+      }
+      .thread .body {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+        margin: 4px 0 0;
+      }
+      .composer-handoff {
+        margin-top: 18px;
+        border: 1px dashed var(--el-border-strong);
+        border-radius: var(--radius-card);
+        padding: 16px;
+        background: var(--el-surface-soft);
+      }
+      .composer-handoff p {
+        margin: 0 0 10px;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the intake form ──────────────────────────────────────────── */
+      .form {
+        margin-top: 22px;
+        max-width: 38rem;
+      }
+      .field {
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      .field input,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--el-border-strong);
+        border-radius: var(--radius-input);
+        padding: 9px var(--spacing-control-x);
+        font: 400 13px/1.5 var(--font-sans);
+        color: var(--el-text);
+        background: var(--el-page-bg);
+      }
+      .field .hint {
+        font-size: 12px;
+        color: var(--el-text-muted);
+        margin-top: 5px;
+      }
+      .dupes {
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-surface-soft);
+        padding: 14px;
+        margin-bottom: 16px;
+      }
+      .dupes h4 {
+        font-size: 13px;
+        margin: 0 0 8px;
+      }
+      .dupes li {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+        padding: 7px 0;
+        border-top: 1px solid var(--el-border);
+        font-size: 13px;
+      }
+      .dupes ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ── the three states ─────────────────────────────────────────── */
+      .state {
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        padding: 32px 24px;
+        text-align: center;
+        margin-top: 22px;
+        background: var(--el-surface-soft);
+      }
+      .state h3 {
+        font-size: 15px;
+        margin: 0 0 6px;
+        color: var(--el-text);
+      }
+      .state p {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        margin: 0 auto;
+        max-width: 34rem;
+        line-height: 1.6;
+      }
+      .state.error {
+        background: var(--el-tint-peach);
+        border-color: transparent;
+      }
+      .skel {
+        background: var(--el-muted);
+        border-radius: var(--radius-control);
+        height: 12px;
+      }
+      .skel-rows {
+        margin-top: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .skel-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--el-border-soft);
+      }
+
+      /* ── the annotation callout (documentation, not product) ─────── */
+      .callout {
+        margin-top: 14px;
+        border-left: 3px solid var(--el-accent);
+        background: var(--el-surface-soft);
+        padding: 10px 14px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .callout strong {
+        color: var(--el-text);
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .narrow {
+        width: 390px;
+        margin: 0 auto;
+      }
+      table.rowtable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 14px;
+        font-size: 13px;
+      }
+      table.rowtable th,
+      table.rowtable td {
+        border: 1px solid var(--el-border);
+        padding: 8px 10px;
+        text-align: left;
+        vertical-align: top;
+        color: var(--el-text-secondary);
+        line-height: 1.55;
+      }
+      table.rowtable th {
+        background: var(--el-surface-soft);
+        color: var(--el-text);
+        font-weight: 600;
+      }
+      /* ── MOTIR-6742: the split tab bar and the Watch entry ──────────── */
+      .tabs {
+        align-items: center;
+      }
+      .tabs .tabs-sep {
+        flex: none;
+        width: 1px;
+        height: 18px;
+        margin: 0 8px;
+        background: var(--el-border);
+      }
+      .tabs .tabs-app {
+        flex: none;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+        padding: 0 4px;
+        white-space: nowrap;
+      }
+      .tabs a.app-link::after {
+        content: '↗';
+        font-size: 11px;
+        margin-left: 4px;
+        opacity: 0.8;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .watch {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: var(--radius-card);
+        background: var(--el-tint-sky);
+        color: var(--el-text-strong);
+      }
+      .watch-ico {
+        width: 20px;
+        height: 20px;
+        flex: none;
+        color: var(--el-info);
+      }
+      .watch-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .watch-title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--el-text-strong);
+      }
+      .watch-what,
+      .watch-cost {
+        margin: 3px 0 0;
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--el-text-strong);
+      }
+      .watch .btn {
+        flex: none;
+      }
+      .frame[style*='390px'] .watch {
+        flex-wrap: wrap;
+      }
+      .frame[style*='390px'] .watch .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .doorway {
+        max-width: 38rem;
+      }
+      .doorway h2 {
+        margin: 0;
+        font-family: var(--font-serif);
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--el-text);
+      }
+      .door-lede {
+        margin: 10px 0 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .door-box {
+        margin-top: 24px;
+        padding: 20px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-surface-soft);
+      }
+      .door-box h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .door-box p {
+        margin: 6px 0 0;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .door-box .door-go {
+        margin-top: 16px;
+      }
+      .door-foot {
+        margin: 20px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .host-tag {
+        margin: 0 0 8px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--el-text-secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <header class="doc-head">
+        <h1>motir.co/p/* once the read tabs leave — a delta (MOTIR-6742)</h1>
+        <p>
+          Only the panels that change, over
+          <code>design/public-projects/public-projects.mock.html</code>
+          (MOTIR-4113). The Board, Items, Tree and Roadmap pages redirect into
+          the app (MOTIR-6743); the request board is retired
+          (<code>public-request-board-retired.md</code>). This draws what stays
+          on <strong>motir.co</strong>: the project page with its tabs split and
+          a “Watch it being built” entry that states the cost before the click,
+          and the request pages’ way back. Spec: <code>design-notes.md</code> §
+          MOTIR-6742.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-6742</span
+          ><span class="ref">design/public-projects/</span
+          ><span class="ref muted"
+            >amends base panels 1, 8, 9, 10, 12, 15, 16, 17</span
+          ><span class="ref muted">consumed by MOTIR-6745</span>
+        </div>
+      </header>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">A</span>
+          <h2>
+            /p/MOTIR — the Overview, the tab bar split, and “Watch it being
+            built”
+          </h2>
+          <span class="note"
+            >Amends base panel 1. Overview and Changelog stay tabs on this host.
+            Board, Items, Tree and Roadmap are links into the app, grouped after
+            a divider under “In the app”, each with the ↗ affix the act rail’s
+            hand-offs already use. The Watch entry sits between the act rail and
+            the tab bar and states the cost BEFORE the click.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room wide">
+              <div class="hero">
+                <div class="hero-id">
+                  <p class="org">moooon B.V.</p>
+                  <h1>Motir</h1>
+                  <p class="tagline">
+                    The AI planning, project-management and agent-orchestration
+                    platform. Plans are drafted with AI, tracked on a real
+                    board, and executed end to end by hosted agents.
+                  </p>
+                  <ul class="tags">
+                    <li class="tag">developer-tools</li>
+                    <li class="tag">project-management</li>
+                    <li class="tag">open-source</li>
+                  </ul>
+                </div>
+                <ul class="stats">
+                  <div>
+                    <span class="n">128</span><span class="k">requests</span>
+                  </div>
+                  <div>
+                    <span class="n">1,204</span><span class="k">upvotes</span>
+                  </div>
+                  <div>
+                    <span class="n">37</span><span class="k">planned</span>
+                  </div>
+                  <div>
+                    <span class="n">311</span><span class="k">shipped</span>
+                  </div>
+                </ul>
+              </div>
+              <div class="acts">
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/act?intent=follow&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Follow</a
+                >
+                <form
+                  class="subscribe"
+                  action="/api/public/p/MOTIR/subscribe"
+                  method="post"
+                >
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    aria-label="Email for changelog updates"
+                  />
+                  <button class="btn ghost sm" type="submit">Subscribe</button>
+                </form>
+                <a
+                  class="btn ghost sm handoff"
+                  href="https://app.motir.co/act?intent=request&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Request a feature</a
+                >
+                <a class="btn ghost sm" href="/p/MOTIR/changelog.xml"
+                  >Atom feed</a
+                >
+              </div>
+              <section class="watch" aria-labelledby="watch-MOTIR">
+                <svg
+                  class="watch-ico"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <div class="watch-body">
+                  <h2 class="watch-title" id="watch-MOTIR">
+                    Watch Motir being built
+                  </h2>
+                  <p class="watch-what">
+                    The live board, the plans as they are drafted and the agent
+                    runs as they happen — in the Motir app.
+                  </p>
+                  <p class="watch-cost">
+                    You’ll need a Motir account. If you continue, your
+                    <strong>name and email</strong> will be visible to
+                    <strong>this project’s workspace Managers</strong>, along
+                    with when you visit.
+                  </p>
+                </div>
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/p/MOTIR/board"
+                  >Watch live<span class="sr-only">
+                    — opens in the Motir app</span
+                  ></a
+                >
+              </section>
+              <nav class="tabs" aria-label="Project">
+                <a href="/p/MOTIR" aria-current="page">Overview</a
+                ><a href="/p/MOTIR/changelog">Changelog</a
+                ><span class="tabs-sep" aria-hidden="true"></span
+                ><span class="tabs-app" aria-hidden="true">In the app</span
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/board"
+                  >Board<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/items"
+                  >Items<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/tree"
+                  >Tree<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/roadmap"
+                  >Roadmap<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                >
+              </nav>
+              <div class="readme">
+                <h2>What Motir is</h2>
+                <p>
+                  Describe what you want to build in chat, and Motir drafts the
+                  issue tree. Read it, change it, approve it — then hosted
+                  agents execute it, card by card, and the pull requests come
+                  back to the board they came from.
+                </p>
+                <h2>How it is built</h2>
+                <ul>
+                  <li>
+                    Open core: the whole project-management tool is GPL-3.0.
+                  </li>
+                  <li>
+                    The AI planning layer is a hosted service the tool calls.
+                  </li>
+                  <li>
+                    Agents do design, decisions and content — not only code.
+                  </li>
+                </ul>
+              </div>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">B</span>
+          <h2>/p/MOTIR/requests/new — the doorway, back to the project page</h2>
+          <span class="note"
+            >Amends base panel 9 (as shipped — the doorway, not the retired
+            form). The back-link returns to the project page; the request board
+            it named is retired. The closing line is redrawn true: the project
+            page, its changelog and the request pages stay open, and the read
+            tabs do not.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room mid">
+              <div class="hero">
+                <div class="hero-id">
+                  <p class="org">moooon B.V.</p>
+                  <h1>Motir</h1>
+                  <p class="tagline">
+                    The AI planning, project-management and agent-orchestration
+                    platform. Plans are drafted with AI, tracked on a real
+                    board, and executed end to end by hosted agents.
+                  </p>
+                  <ul class="tags">
+                    <li class="tag">developer-tools</li>
+                    <li class="tag">project-management</li>
+                    <li class="tag">open-source</li>
+                  </ul>
+                </div>
+                <ul class="stats">
+                  <div>
+                    <span class="n">128</span><span class="k">requests</span>
+                  </div>
+                  <div>
+                    <span class="n">1,204</span><span class="k">upvotes</span>
+                  </div>
+                  <div>
+                    <span class="n">37</span><span class="k">planned</span>
+                  </div>
+                  <div>
+                    <span class="n">311</span><span class="k">shipped</span>
+                  </div>
+                </ul>
+              </div>
+              <div class="acts">
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/act?intent=follow&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Follow</a
+                >
+                <form
+                  class="subscribe"
+                  action="/api/public/p/MOTIR/subscribe"
+                  method="post"
+                >
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    aria-label="Email for changelog updates"
+                  />
+                  <button class="btn ghost sm" type="submit">Subscribe</button>
+                </form>
+                <a
+                  class="btn ghost sm handoff"
+                  href="https://app.motir.co/act?intent=request&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Request a feature</a
+                >
+                <a class="btn ghost sm" href="/p/MOTIR/changelog.xml"
+                  >Atom feed</a
+                >
+              </div>
+              <nav class="tabs" aria-label="Project">
+                <a href="/p/MOTIR">Overview</a
+                ><a href="/p/MOTIR/changelog">Changelog</a
+                ><span class="tabs-sep" aria-hidden="true"></span
+                ><span class="tabs-app" aria-hidden="true">In the app</span
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/board"
+                  >Board<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/items"
+                  >Items<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/tree"
+                  >Tree<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/roadmap"
+                  >Roadmap<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                >
+              </nav>
+              <p class="crumb"><a href="/p/MOTIR">← Motir</a></p>
+              <div class="doorway">
+                <h2>Request a feature</h2>
+                <p class="door-lede">
+                  Tell the Motir team what you need. Requests are public: anyone
+                  reading this project can see and upvote yours.
+                </p>
+                <div class="door-box">
+                  <h3>You will sign in first</h3>
+                  <p>
+                    Submitting a request needs an account, so the form lives on
+                    <strong>app.motir.co</strong>. You will be signed in, shown
+                    anything similar that has already been asked for — so you
+                    can upvote it instead — and brought back to this project.
+                  </p>
+                  <p class="door-go">
+                    <a
+                      class="btn primary handoff"
+                      href="https://app.motir.co/act?intent=request&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                      >Continue to Motir</a
+                    >
+                  </p>
+                </div>
+                <p class="door-foot">
+                  The project page, its changelog and every request’s own page
+                  are open to everyone, no account needed.
+                </p>
+              </div>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">C</span>
+          <h2>
+            /p/MOTIR/requests/MOTIR-4051 — one request, back to the project page
+          </h2>
+          <span class="note"
+            >Amends base panel 8: only the back-link changes (← Motir, to
+            /p/MOTIR). The upvote and comment hand-offs are unchanged and drawn
+            as context.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room wide">
+              <div class="hero">
+                <div class="hero-id">
+                  <p class="org">moooon B.V.</p>
+                  <h1>Motir</h1>
+                  <p class="tagline">
+                    The AI planning, project-management and agent-orchestration
+                    platform. Plans are drafted with AI, tracked on a real
+                    board, and executed end to end by hosted agents.
+                  </p>
+                  <ul class="tags">
+                    <li class="tag">developer-tools</li>
+                    <li class="tag">project-management</li>
+                    <li class="tag">open-source</li>
+                  </ul>
+                </div>
+                <ul class="stats">
+                  <div>
+                    <span class="n">128</span><span class="k">requests</span>
+                  </div>
+                  <div>
+                    <span class="n">1,204</span><span class="k">upvotes</span>
+                  </div>
+                  <div>
+                    <span class="n">37</span><span class="k">planned</span>
+                  </div>
+                  <div>
+                    <span class="n">311</span><span class="k">shipped</span>
+                  </div>
+                </ul>
+              </div>
+              <div class="acts">
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/act?intent=follow&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Follow</a
+                >
+                <form
+                  class="subscribe"
+                  action="/api/public/p/MOTIR/subscribe"
+                  method="post"
+                >
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    aria-label="Email for changelog updates"
+                  />
+                  <button class="btn ghost sm" type="submit">Subscribe</button>
+                </form>
+                <a
+                  class="btn ghost sm handoff"
+                  href="https://app.motir.co/act?intent=request&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Request a feature</a
+                >
+                <a class="btn ghost sm" href="/p/MOTIR/changelog.xml"
+                  >Atom feed</a
+                >
+              </div>
+              <nav class="tabs" aria-label="Project">
+                <a href="/p/MOTIR">Overview</a
+                ><a href="/p/MOTIR/changelog">Changelog</a
+                ><span class="tabs-sep" aria-hidden="true"></span
+                ><span class="tabs-app" aria-hidden="true">In the app</span
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/board"
+                  >Board<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/items"
+                  >Items<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/tree"
+                  >Tree<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/roadmap"
+                  >Roadmap<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                >
+              </nav>
+              <p class="crumb">
+                <a href="/p/MOTIR">← Motir</a>
+              </p>
+              <div class="detail-head">
+                <span class="k">MOTIR-4051</span>
+                <span class="pill">Submitted</span>
+                <h1>Gantt view for the roadmap</h1>
+              </div>
+              <p class="meta">Opened by Dana Okoye · 14 August 2026</p>
+              <div class="split">
+                <div>
+                  <div class="readme">
+                    <p>
+                      The roadmap columns tell me what is planned but not when.
+                      A date axis across the same buckets would let me plan a
+                      migration around your release, rather than guessing from
+                      the changelog.
+                    </p>
+                  </div>
+                  <ul class="thread">
+                    <li>
+                      <span class="avatar">SK</span>
+                      <div>
+                        <span class="who">Sam Kelly</span>
+                        <span class="when"> · 16 August 2026</span>
+                        <p class="body">
+                          Same here — even a quarter granularity would be
+                          enough.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <span class="avatar">DO</span>
+                      <div>
+                        <span class="who">Dana Okoye</span>
+                        <span class="when"> · 18 August 2026</span>
+                        <p class="body">
+                          Quarters would do it. Months would be better.
+                        </p>
+                      </div>
+                    </li>
+                  </ul>
+                  <div class="composer-handoff">
+                    <p>
+                      Adding to this discussion signs you in on
+                      <strong>app.motir.co</strong> and brings you back to this
+                      request.
+                    </p>
+                    <a
+                      class="btn ghost sm handoff"
+                      href="https://app.motir.co/act?intent=comment&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR%2Frequests%2FMOTIR-4051"
+                      >Add a comment</a
+                    >
+                  </div>
+                </div>
+                <aside>
+                  <div class="side">
+                    <h3>Demand</h3>
+                    <p>84 upvotes</p>
+                    <a
+                      class="vote handoff"
+                      href="https://app.motir.co/act?intent=upvote&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR%2Frequests%2FMOTIR-4051"
+                      ><span class="caret">▲</span> Upvote</a
+                    >
+                  </div>
+                  <div class="side">
+                    <h3>Status</h3>
+                    <p>Submitted — not yet planned.</p>
+                  </div>
+                </aside>
+              </div>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">D</span>
+          <h2>EMPTY overview — pointing at the app, not at the tabs</h2>
+          <span class="note"
+            >Amends base panel 10’s overview copy: “the tabs above are where the
+            work is” is false once the read tabs leave, so it points at the
+            Watch entry.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room wide">
+              <div class="hero">
+                <div class="hero-id">
+                  <p class="org">moooon B.V.</p>
+                  <h1>Motir</h1>
+                  <p class="tagline">
+                    The AI planning, project-management and agent-orchestration
+                    platform. Plans are drafted with AI, tracked on a real
+                    board, and executed end to end by hosted agents.
+                  </p>
+                  <ul class="tags">
+                    <li class="tag">developer-tools</li>
+                    <li class="tag">project-management</li>
+                    <li class="tag">open-source</li>
+                  </ul>
+                </div>
+                <ul class="stats">
+                  <div>
+                    <span class="n">128</span><span class="k">requests</span>
+                  </div>
+                  <div>
+                    <span class="n">1,204</span><span class="k">upvotes</span>
+                  </div>
+                  <div>
+                    <span class="n">37</span><span class="k">planned</span>
+                  </div>
+                  <div>
+                    <span class="n">311</span><span class="k">shipped</span>
+                  </div>
+                </ul>
+              </div>
+              <div class="acts">
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/act?intent=follow&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Follow</a
+                >
+                <form
+                  class="subscribe"
+                  action="/api/public/p/MOTIR/subscribe"
+                  method="post"
+                >
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    aria-label="Email for changelog updates"
+                  />
+                  <button class="btn ghost sm" type="submit">Subscribe</button>
+                </form>
+                <a
+                  class="btn ghost sm handoff"
+                  href="https://app.motir.co/act?intent=request&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Request a feature</a
+                >
+                <a class="btn ghost sm" href="/p/MOTIR/changelog.xml"
+                  >Atom feed</a
+                >
+              </div>
+              <section class="watch" aria-labelledby="watch-MOTIR">
+                <svg
+                  class="watch-ico"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <div class="watch-body">
+                  <h2 class="watch-title" id="watch-MOTIR">
+                    Watch Motir being built
+                  </h2>
+                  <p class="watch-what">
+                    The live board, the plans as they are drafted and the agent
+                    runs as they happen — in the Motir app.
+                  </p>
+                  <p class="watch-cost">
+                    You’ll need a Motir account. If you continue, your
+                    <strong>name and email</strong> will be visible to
+                    <strong>this project’s workspace Managers</strong>, along
+                    with when you visit.
+                  </p>
+                </div>
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/p/MOTIR/board"
+                  >Watch live<span class="sr-only">
+                    — opens in the Motir app</span
+                  ></a
+                >
+              </section>
+              <nav class="tabs" aria-label="Project">
+                <a href="/p/MOTIR" aria-current="page">Overview</a
+                ><a href="/p/MOTIR/changelog">Changelog</a
+                ><span class="tabs-sep" aria-hidden="true"></span
+                ><span class="tabs-app" aria-hidden="true">In the app</span
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/board"
+                  >Board<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/items"
+                  >Items<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/tree"
+                  >Tree<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/roadmap"
+                  >Roadmap<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                >
+              </nav>
+              <div class="state">
+                <h3>This project has not written an overview yet</h3>
+                <p>
+                  Its live board, work items and roadmap are in the Motir app —
+                  watch it being built, above.
+                </p>
+              </div>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">E</span>
+          <h2>
+            ERROR — the overview read fails, and the Watch entry still renders
+          </h2>
+          <span class="note"
+            >Amends base panel 12 for the overview. The entry needs only the
+            identifier, so it renders under the error state (titled with “this
+            project”, because the name came from the failed read). It is the one
+            way forward a visitor still has.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room wide">
+              <div class="state error" role="alert">
+                <h3>We could not load this project</h3>
+                <p>
+                  The Motir application is not answering right now. The page you
+                  are on is fine — this reads from
+                  <strong>app.motir.co</strong>, which is a separate deployment.
+                  Try again in a moment.
+                </p>
+              </div>
+              <section class="watch" aria-labelledby="watch-MOTIR">
+                <svg
+                  class="watch-ico"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <div class="watch-body">
+                  <h2 class="watch-title" id="watch-MOTIR">
+                    Watch this project being built
+                  </h2>
+                  <p class="watch-what">
+                    The live board, the plans as they are drafted and the agent
+                    runs as they happen — in the Motir app.
+                  </p>
+                  <p class="watch-cost">
+                    You’ll need a Motir account. If you continue, your
+                    <strong>name and email</strong> will be visible to
+                    <strong>this project’s workspace Managers</strong>, along
+                    with when you visit.
+                  </p>
+                </div>
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/p/MOTIR/board"
+                  >Watch live<span class="sr-only">
+                    — opens in the Motir app</span
+                  ></a
+                >
+              </section>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">F</span>
+          <h2>
+            A TENANT HOST — acme.motir.site/ACME: the site tabs host-relative,
+            the app links absolute
+          </h2>
+          <span class="note"
+            >The Overview and Changelog tabs are host-relative (/ACME,
+            /ACME/changelog). The four app links and the Watch entry point at
+            app.motir.co/p/ACME/…, never at the tenant host: the views exist in
+            the app and nowhere else. A custom domain is the same with /,
+            /changelog.</span
+          >
+        </div>
+        <div class="frame">
+          <p class="host-tag">acme.motir.site/ACME</p>
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room wide">
+              <div class="hero">
+                <div class="hero-id">
+                  <p class="org">Acme</p>
+                  <h1>Acme Roadmap</h1>
+                  <p class="tagline">
+                    The AI planning, project-management and agent-orchestration
+                    platform. Plans are drafted with AI, tracked on a real
+                    board, and executed end to end by hosted agents.
+                  </p>
+                  <ul class="tags">
+                    <li class="tag">developer-tools</li>
+                    <li class="tag">project-management</li>
+                    <li class="tag">open-source</li>
+                  </ul>
+                </div>
+                <ul class="stats">
+                  <div>
+                    <span class="n">128</span><span class="k">requests</span>
+                  </div>
+                  <div>
+                    <span class="n">1,204</span><span class="k">upvotes</span>
+                  </div>
+                  <div>
+                    <span class="n">37</span><span class="k">planned</span>
+                  </div>
+                  <div>
+                    <span class="n">311</span><span class="k">shipped</span>
+                  </div>
+                </ul>
+              </div>
+              <div class="acts">
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/act?intent=follow&amp;subject=ACME&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FACME"
+                  >Follow</a
+                >
+                <form
+                  class="subscribe"
+                  action="/api/public/p/MOTIR/subscribe"
+                  method="post"
+                >
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    aria-label="Email for changelog updates"
+                  />
+                  <button class="btn ghost sm" type="submit">Subscribe</button>
+                </form>
+                <a
+                  class="btn ghost sm handoff"
+                  href="https://app.motir.co/act?intent=request&amp;subject=ACME&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FACME"
+                  >Request a feature</a
+                >
+                <a
+                  class="btn ghost sm"
+                  href="https://acme.motir.site/ACME/changelog.xml"
+                  >Atom feed</a
+                >
+              </div>
+              <section class="watch" aria-labelledby="watch-ACME">
+                <svg
+                  class="watch-ico"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <div class="watch-body">
+                  <h2 class="watch-title" id="watch-ACME">
+                    Watch Acme Roadmap being built
+                  </h2>
+                  <p class="watch-what">
+                    The live board, the plans as they are drafted and the agent
+                    runs as they happen — in the Motir app.
+                  </p>
+                  <p class="watch-cost">
+                    You’ll need a Motir account. If you continue, your
+                    <strong>name and email</strong> will be visible to
+                    <strong>this project’s workspace Managers</strong>, along
+                    with when you visit.
+                  </p>
+                </div>
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/p/ACME/board"
+                  >Watch live<span class="sr-only">
+                    — opens in the Motir app</span
+                  ></a
+                >
+              </section>
+              <nav class="tabs" aria-label="Project">
+                <a href="https://acme.motir.site/ACME" aria-current="page"
+                  >Overview</a
+                ><a href="https://acme.motir.site/ACME/changelog">Changelog</a
+                ><span class="tabs-sep" aria-hidden="true"></span
+                ><span class="tabs-app" aria-hidden="true">In the app</span
+                ><a class="app-link" href="https://app.motir.co/p/ACME/board"
+                  >Board<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/ACME/items"
+                  >Items<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/ACME/tree"
+                  >Tree<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/ACME/roadmap"
+                  >Roadmap<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                >
+              </nav>
+              <div class="readme">
+                <h2>What Motir is</h2>
+                <p>
+                  Describe what you want to build in chat, and Motir drafts the
+                  issue tree. Read it, change it, approve it — then hosted
+                  agents execute it, card by card, and the pull requests come
+                  back to the board they came from.
+                </p>
+                <h2>How it is built</h2>
+                <ul>
+                  <li>
+                    Open core: the whole project-management tool is GPL-3.0.
+                  </li>
+                  <li>
+                    The AI planning layer is a hosted service the tool calls.
+                  </li>
+                  <li>
+                    Agents do design, decisions and content — not only code.
+                  </li>
+                </ul>
+              </div>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">G</span>
+          <h2>NARROW (390 × 844) and DARK</h2>
+          <span class="note"
+            >Narrow: the Watch entry stacks — glyph and text, then the button
+            full width; the tab bar scrolls sideways as it always has, the app
+            links after the divider. Dark: the entry’s fill is the dark
+            --el-tint-sky with --el-text-strong ink; nothing else changes.</span
+          >
+        </div>
+        <div class="frame" style="max-width: 390px">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir">
+                <svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="brand-word">Motir</span>
+              </a>
+              <nav class="nav" aria-label="Main">
+                <a href="/explore">Explore</a>
+                <a href="/docs">Docs</a>
+                <a href="/design">Design</a>
+                <span class="ph">Product<span class="soon">soon</span></span>
+                <span class="ph">Pricing<span class="soon">soon</span></span>
+              </nav>
+              <div class="bar-cta">
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                >
+                <a
+                  class="btn primary sm"
+                  href="https://app.motir.co/sign-up?intent=tracker"
+                  >Start free
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </header>
+
+            <main class="room wide">
+              <div class="hero">
+                <div class="hero-id">
+                  <p class="org">moooon B.V.</p>
+                  <h1>Motir</h1>
+                  <p class="tagline">
+                    The AI planning, project-management and agent-orchestration
+                    platform. Plans are drafted with AI, tracked on a real
+                    board, and executed end to end by hosted agents.
+                  </p>
+                  <ul class="tags">
+                    <li class="tag">developer-tools</li>
+                    <li class="tag">project-management</li>
+                    <li class="tag">open-source</li>
+                  </ul>
+                </div>
+                <ul class="stats">
+                  <div>
+                    <span class="n">128</span><span class="k">requests</span>
+                  </div>
+                  <div>
+                    <span class="n">1,204</span><span class="k">upvotes</span>
+                  </div>
+                  <div>
+                    <span class="n">37</span><span class="k">planned</span>
+                  </div>
+                  <div>
+                    <span class="n">311</span><span class="k">shipped</span>
+                  </div>
+                </ul>
+              </div>
+              <div class="acts">
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/act?intent=follow&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Follow</a
+                >
+                <form
+                  class="subscribe"
+                  action="/api/public/p/MOTIR/subscribe"
+                  method="post"
+                >
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    aria-label="Email for changelog updates"
+                  />
+                  <button class="btn ghost sm" type="submit">Subscribe</button>
+                </form>
+                <a
+                  class="btn ghost sm handoff"
+                  href="https://app.motir.co/act?intent=request&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                  >Request a feature</a
+                >
+                <a class="btn ghost sm" href="/p/MOTIR/changelog.xml"
+                  >Atom feed</a
+                >
+              </div>
+              <section class="watch" aria-labelledby="watch-MOTIR">
+                <svg
+                  class="watch-ico"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <div class="watch-body">
+                  <h2 class="watch-title" id="watch-MOTIR">
+                    Watch Motir being built
+                  </h2>
+                  <p class="watch-what">
+                    The live board, the plans as they are drafted and the agent
+                    runs as they happen — in the Motir app.
+                  </p>
+                  <p class="watch-cost">
+                    You’ll need a Motir account. If you continue, your
+                    <strong>name and email</strong> will be visible to
+                    <strong>this project’s workspace Managers</strong>, along
+                    with when you visit.
+                  </p>
+                </div>
+                <a
+                  class="btn primary sm handoff"
+                  href="https://app.motir.co/p/MOTIR/board"
+                  >Watch live<span class="sr-only">
+                    — opens in the Motir app</span
+                  ></a
+                >
+              </section>
+              <nav class="tabs" aria-label="Project">
+                <a href="/p/MOTIR" aria-current="page">Overview</a
+                ><a href="/p/MOTIR/changelog">Changelog</a
+                ><span class="tabs-sep" aria-hidden="true"></span
+                ><span class="tabs-app" aria-hidden="true">In the app</span
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/board"
+                  >Board<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/items"
+                  >Items<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/tree"
+                  >Tree<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                ><a class="app-link" href="https://app.motir.co/p/MOTIR/roadmap"
+                  >Roadmap<span class="sr-only">
+                    — opens in the Motir app; needs an account</span
+                  ></a
+                >
+              </nav>
+              <div class="readme">
+                <h2>What Motir is</h2>
+                <p>
+                  Describe what you want to build in chat, and Motir drafts the
+                  issue tree. Read it, change it, approve it — then hosted
+                  agents execute it, card by card, and the pull requests come
+                  back to the board they came from.
+                </p>
+                <h2>How it is built</h2>
+                <ul>
+                  <li>
+                    Open core: the whole project-management tool is GPL-3.0.
+                  </li>
+                  <li>
+                    The AI planning layer is a hosted service the tool calls.
+                  </li>
+                  <li>
+                    Agents do design, decisions and content — not only code.
+                  </li>
+                </ul>
+              </div>
+            </main>
+
+            <footer class="foot">
+              <div>
+                <a
+                  class="brand-lockup"
+                  href="/"
+                  aria-label="Motir"
+                  style="--brand-size: 22px"
+                >
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <p class="tag">
+                  The AI planning, project-management and agent orchestration
+                  platform.
+                </p>
+                <p class="tag">
+                  The project-management core is open source, GPL-3.0.
+                </p>
+              </div>
+              <div>
+                <h2>Product</h2>
+                <ul>
+                  <li>
+                    <a href="https://app.motir.co/sign-up?intent=tracker"
+                      >Start free</a
+                    >
+                  </li>
+                  <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Resources</h2>
+                <ul>
+                  <li><a href="/explore">Explore projects</a></li>
+                  <li><a href="/docs">Docs</a></li>
+                  <li>
+                    <a href="https://github.com/moooon-B-V/motir-core"
+                      >GitHub</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2>Legal</h2>
+                <ul>
+                  <li><a href="/legal/privacy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms">Terms of Service</a></li>
+                  <li><a href="/legal">All legal documents</a></li>
+                </ul>
+              </div>
+              <div class="legal">
+                © 2026 moooon B.V. · Motir is a product of moooon B.V.
+              </div>
+            </footer>
+          </div>
+        </div>
+        <div data-theme="dark" data-appearance-scope="">
+          <div class="frame">
+            <div class="site">
+              <header class="topbar">
+                <a class="brand-lockup" href="/" aria-label="Motir">
+                  <svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="26"
+                    height="26"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span class="brand-word">Motir</span>
+                </a>
+                <nav class="nav" aria-label="Main">
+                  <a href="/explore">Explore</a>
+                  <a href="/docs">Docs</a>
+                  <a href="/design">Design</a>
+                  <span class="ph">Product<span class="soon">soon</span></span>
+                  <span class="ph">Pricing<span class="soon">soon</span></span>
+                </nav>
+                <div class="bar-cta">
+                  <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                    >Sign in</a
+                  >
+                  <a
+                    class="btn primary sm"
+                    href="https://app.motir.co/sign-up?intent=tracker"
+                    >Start free
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
+              </header>
+
+              <main class="room wide">
+                <div class="hero">
+                  <div class="hero-id">
+                    <p class="org">moooon B.V.</p>
+                    <h1>Motir</h1>
+                    <p class="tagline">
+                      The AI planning, project-management and
+                      agent-orchestration platform. Plans are drafted with AI,
+                      tracked on a real board, and executed end to end by hosted
+                      agents.
+                    </p>
+                    <ul class="tags">
+                      <li class="tag">developer-tools</li>
+                      <li class="tag">project-management</li>
+                      <li class="tag">open-source</li>
+                    </ul>
+                  </div>
+                  <ul class="stats">
+                    <div>
+                      <span class="n">128</span><span class="k">requests</span>
+                    </div>
+                    <div>
+                      <span class="n">1,204</span><span class="k">upvotes</span>
+                    </div>
+                    <div>
+                      <span class="n">37</span><span class="k">planned</span>
+                    </div>
+                    <div>
+                      <span class="n">311</span><span class="k">shipped</span>
+                    </div>
+                  </ul>
+                </div>
+                <div class="acts">
+                  <a
+                    class="btn primary sm handoff"
+                    href="https://app.motir.co/act?intent=follow&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                    >Follow</a
+                  >
+                  <form
+                    class="subscribe"
+                    action="/api/public/p/MOTIR/subscribe"
+                    method="post"
+                  >
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      aria-label="Email for changelog updates"
+                    />
+                    <button class="btn ghost sm" type="submit">
+                      Subscribe
+                    </button>
+                  </form>
+                  <a
+                    class="btn ghost sm handoff"
+                    href="https://app.motir.co/act?intent=request&amp;subject=MOTIR&amp;return=https%3A%2F%2Fmotir.co%2Fp%2FMOTIR"
+                    >Request a feature</a
+                  >
+                  <a class="btn ghost sm" href="/p/MOTIR/changelog.xml"
+                    >Atom feed</a
+                  >
+                </div>
+                <section class="watch" aria-labelledby="watch-MOTIR">
+                  <svg
+                    class="watch-ico"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                    />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <div class="watch-body">
+                    <h2 class="watch-title" id="watch-MOTIR">
+                      Watch Motir being built
+                    </h2>
+                    <p class="watch-what">
+                      The live board, the plans as they are drafted and the
+                      agent runs as they happen — in the Motir app.
+                    </p>
+                    <p class="watch-cost">
+                      You’ll need a Motir account. If you continue, your
+                      <strong>name and email</strong> will be visible to
+                      <strong>this project’s workspace Managers</strong>, along
+                      with when you visit.
+                    </p>
+                  </div>
+                  <a
+                    class="btn primary sm handoff"
+                    href="https://app.motir.co/p/MOTIR/board"
+                    >Watch live<span class="sr-only">
+                      — opens in the Motir app</span
+                    ></a
+                  >
+                </section>
+                <nav class="tabs" aria-label="Project">
+                  <a href="/p/MOTIR" aria-current="page">Overview</a
+                  ><a href="/p/MOTIR/changelog">Changelog</a
+                  ><span class="tabs-sep" aria-hidden="true"></span
+                  ><span class="tabs-app" aria-hidden="true">In the app</span
+                  ><a class="app-link" href="https://app.motir.co/p/MOTIR/board"
+                    >Board<span class="sr-only">
+                      — opens in the Motir app; needs an account</span
+                    ></a
+                  ><a class="app-link" href="https://app.motir.co/p/MOTIR/items"
+                    >Items<span class="sr-only">
+                      — opens in the Motir app; needs an account</span
+                    ></a
+                  ><a class="app-link" href="https://app.motir.co/p/MOTIR/tree"
+                    >Tree<span class="sr-only">
+                      — opens in the Motir app; needs an account</span
+                    ></a
+                  ><a
+                    class="app-link"
+                    href="https://app.motir.co/p/MOTIR/roadmap"
+                    >Roadmap<span class="sr-only">
+                      — opens in the Motir app; needs an account</span
+                    ></a
+                  >
+                </nav>
+                <div class="readme">
+                  <h2>What Motir is</h2>
+                  <p>
+                    Describe what you want to build in chat, and Motir drafts
+                    the issue tree. Read it, change it, approve it — then hosted
+                    agents execute it, card by card, and the pull requests come
+                    back to the board they came from.
+                  </p>
+                  <h2>How it is built</h2>
+                  <ul>
+                    <li>
+                      Open core: the whole project-management tool is GPL-3.0.
+                    </li>
+                    <li>
+                      The AI planning layer is a hosted service the tool calls.
+                    </li>
+                    <li>
+                      Agents do design, decisions and content — not only code.
+                    </li>
+                  </ul>
+                </div>
+              </main>
+
+              <footer class="foot">
+                <div>
+                  <a
+                    class="brand-lockup"
+                    href="/"
+                    aria-label="Motir"
+                    style="--brand-size: 22px"
+                  >
+                    <svg
+                      class="brand-glyph"
+                      viewBox="0 0 24 24"
+                      width="22"
+                      height="22"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    <span class="brand-word">Motir</span>
+                  </a>
+                  <p class="tag">
+                    The AI planning, project-management and agent orchestration
+                    platform.
+                  </p>
+                  <p class="tag">
+                    The project-management core is open source, GPL-3.0.
+                  </p>
+                </div>
+                <div>
+                  <h2>Product</h2>
+                  <ul>
+                    <li>
+                      <a href="https://app.motir.co/sign-up?intent=tracker"
+                        >Start free</a
+                      >
+                    </li>
+                    <li><a href="https://app.motir.co/sign-in">Sign in</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Resources</h2>
+                  <ul>
+                    <li><a href="/explore">Explore projects</a></li>
+                    <li><a href="/docs">Docs</a></li>
+                    <li>
+                      <a href="https://github.com/moooon-B-V/motir-core"
+                        >GitHub</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Legal</h2>
+                  <ul>
+                    <li><a href="/legal/privacy">Privacy Policy</a></li>
+                    <li><a href="/legal/terms">Terms of Service</a></li>
+                    <li><a href="/legal">All legal documents</a></li>
+                  </ul>
+                </div>
+                <div class="legal">
+                  © 2026 moooon B.V. · Motir is a product of moooon B.V.
+                </div>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

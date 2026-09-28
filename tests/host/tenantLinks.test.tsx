@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
-import { MoreLink, WorkItemRow } from '@/app/p/[identifier]/_components/Rows'
+import { MoreLink } from '@/app/p/[identifier]/_components/Rows'
 import { ErrorState } from '@/app/p/[identifier]/_components/States'
 import {
   pagedTabHref,
@@ -40,16 +40,7 @@ const project: PublicProjectOverviewDto = {
   addresses: { primary: 'https://motir.co/p/PROD', alternates: [] },
 }
 
-const item = {
-  id: 'wi_1',
-  identifier: 'PROD-42',
-  key: 42,
-  title: 'A work item',
-  kind: 'subtask',
-  status: 'In Progress',
-  statusCategory: 'in_progress' as const,
-  priority: 'medium',
-}
+const APP = 'https://app.test.motir.co'
 
 const WORKSPACE: PublicHost = {
   kind: 'workspace',
@@ -70,21 +61,35 @@ function hrefs(container: HTMLElement): string[] {
 }
 
 describe.each([
-  ['the site', SITE_HOST, '/p/PROD', '/p/PROD/board'],
-  ['a workspace subdomain', WORKSPACE, '/PROD', '/PROD/board'],
-  ['a customer domain', CUSTOM, '/', '/board'],
-])('%s', (_label, host, overview, board) => {
-  it('the TAB BAR points at this host', () => {
-    render(<ProjectHeader project={project} current="board" host={host} />)
+  ['the site', SITE_HOST, '/p/PROD', '/p/PROD/changelog'],
+  ['a workspace subdomain', WORKSPACE, '/PROD', '/PROD/changelog'],
+  ['a customer domain', CUSTOM, '/', '/changelog'],
+])('%s', (_label, host, overview, changelog) => {
+  it('the SITE tabs point at this host; the APP tabs at the app, on every host', () => {
+    // MOTIR-6745: Overview and Changelog are pages on this host. Board, Items,
+    // Tree and Roadmap are the Visitor's views in the app (MOTIR-6743), so their
+    // href is ABSOLUTE on `APP_ORIGIN` whichever address the reader arrived on —
+    // never a host-relative path that would 308 off this host.
+    render(
+      <ProjectHeader project={project} current="changelog" host={host} watch />,
+    )
 
     const nav = screen.getByRole('navigation', { name: 'Project' })
     expect(within(nav).getByRole('link', { name: 'Overview' })).toHaveAttribute(
       'href',
       overview,
     )
-    expect(within(nav).getByRole('link', { name: 'Board' })).toHaveAttribute(
+    expect(
+      within(nav).getByRole('link', { name: 'Changelog' }),
+    ).toHaveAttribute('href', changelog)
+    for (const view of ['Board', 'Items', 'Tree', 'Roadmap']) {
+      expect(
+        within(nav).getByRole('link', { name: new RegExp(`^${view}`) }),
+      ).toHaveAttribute('href', `${APP}/p/PROD/${view.toLowerCase()}`)
+    }
+    expect(screen.getByRole('link', { name: /Watch live/ })).toHaveAttribute(
       'href',
-      board,
+      `${APP}/p/PROD/board`,
     )
   })
 
@@ -101,19 +106,6 @@ describe.each([
         : host.kind === 'workspace'
           ? '/PROD/items?cursor=w9'
           : '/items?cursor=w9',
-    ])
-  })
-
-  it('a DETAIL LINK points at this host', () => {
-    const { container } = render(
-      <WorkItemRow identifier="PROD" item={item} host={host} />,
-    )
-    expect(hrefs(container)).toEqual([
-      host.kind === 'site'
-        ? '/p/PROD/items/PROD-42'
-        : host.kind === 'workspace'
-          ? '/PROD/items/PROD-42'
-          : '/items/PROD-42',
     ])
   })
 
@@ -138,7 +130,8 @@ describe.each([
       <ProjectHeader project={project} current="board" host={host} />,
     )
     const relative = hrefs(container).filter((h) => h.startsWith('/'))
-    expect(relative.length).toBeGreaterThan(6)
+    // Four since MOTIR-6745: the four app tabs left this host for `APP_ORIGIN`.
+    expect(relative.length).toBeGreaterThanOrEqual(4)
     if (host.kind !== 'site') {
       expect(relative.filter((h) => h.startsWith('/p/'))).toEqual([])
     }

@@ -107,93 +107,11 @@ export interface PublicProjectAddressesDto {
 }
 
 /* ── the tab shapes (MOTIR-4116) ──────────────────────────────────────────── */
-
-/** One public-safe work item — the same stripped projection every list uses. */
-export interface PublicWorkItemDto {
-  id: string
-  identifier: string
-  key: number
-  title: string
-  kind: string
-  status: string
-  statusCategory: 'todo' | 'in_progress' | 'done'
-  priority: string
-  /**
-   * Present and TRUE only on a private epic seen by a non-member. Its
-   * descendants are excluded server-side, not hidden here — this is the display
-   * signal, and the reason a row can say so honestly.
-   */
-  childrenHidden?: boolean
-}
-
-export interface PublicWorkItemPageDto {
-  items: PublicWorkItemDto[]
-  nextCursor: string | null
-}
-
-export interface PublicBoardColumnDto {
-  id: string
-  name: string
-  statusKeys: string[]
-  cards: PublicWorkItemDto[]
-  totalCount: number
-}
-
-export interface PublicBoardDto {
-  boardId: string
-  name: string
-  columns: PublicBoardColumnDto[]
-  /** The board-level load cap: this read is BOUNDED, not paged. */
-  cap: number
-  truncated: boolean
-}
-
-export interface PublicTreeRowDto extends PublicWorkItemDto {
-  parentId: string | null
-  hasChildren: boolean
-}
-
-export interface PublicTreeLevelDto {
-  rows: PublicTreeRowDto[]
-  hasMore: boolean
-  /** The level's FULL sibling count, independent of paging. */
-  total: number
-}
-
-export type PublicRoadmapBucket =
-  'submitted' | 'planned' | 'in_progress' | 'done'
-
-export const ROADMAP_BUCKETS: readonly {
-  key: PublicRoadmapBucket
-  label: string
-}[] = [
-  { key: 'submitted', label: 'Submitted' },
-  { key: 'planned', label: 'Planned' },
-  { key: 'in_progress', label: 'In progress' },
-  { key: 'done', label: 'Done' },
-] as const
-
-export interface PublicRoadmapCardDto {
-  id: string
-  identifier: string
-  key: number
-  title: string
-  kind: string
-  voteCount: number
-  /** Always false on this host — see `viewerCanManage`'s note. */
-  voted: boolean
-}
-
-export interface PublicRoadmapColumnDto {
-  key: PublicRoadmapBucket
-  totalCount: number
-  cards: PublicRoadmapCardDto[]
-  nextCursor: string | null
-}
-
-export interface PublicRoadmapDto {
-  columns: PublicRoadmapColumnDto[]
-}
+//
+// ⚠️ ONLY THE CHANGELOG'S REMAIN (MOTIR-6743). The board, items, tree, roadmap
+// and work-item shapes left with the pages that rendered them: those five paths
+// answer a permanent redirect into the app's Visitor views now, and nothing on
+// this host reads the public API's read operations any more.
 
 export interface PublicChangelogEntryDto {
   identifier: string
@@ -260,25 +178,81 @@ export interface ProjectTab {
   /** The path segment under `/p/<identifier>`; '' is the Overview itself. */
   segment: string
   label: string
+  /**
+   * WHO SERVES IT (MOTIR-6743). `site` — this host renders it (the Overview and
+   * the Changelog, which stay public and anonymous here). `app` — the page moved
+   * into the application's Visitor views at `app.motir.co/p/<identifier>/<view>`,
+   * behind sign-in and a one-time consent; the path on this host is a permanent
+   * redirect to {@link visitorViewUrl}. The sitemap lists only the `site` tabs,
+   * and the project page links the `app` ones into the app.
+   */
+  served: 'site' | 'app'
 }
 
 /**
  * The five tabs plus the Overview, in the order the design draws them.
  *
  * ⚠️ ONE LIST, and the shell is what renders it — so a tab cannot be added to a
- * route tree and forgotten in the navigation, or vice versa. The tab ROUTES
- * arrive in MOTIR-4116; until they do these links point at 404s, which is
- * expected and is why that card is `blocked_by` this one rather than the
- * reverse.
+ * route tree and forgotten in the navigation, or vice versa.
  */
 export const PROJECT_TABS: readonly ProjectTab[] = [
-  { segment: '', label: 'Overview' },
-  { segment: 'board', label: 'Board' },
-  { segment: 'items', label: 'Items' },
-  { segment: 'tree', label: 'Tree' },
-  { segment: 'roadmap', label: 'Roadmap' },
-  { segment: 'changelog', label: 'Changelog' },
+  { segment: '', label: 'Overview', served: 'site' },
+  { segment: 'board', label: 'Board', served: 'app' },
+  { segment: 'items', label: 'Items', served: 'app' },
+  { segment: 'tree', label: 'Tree', served: 'app' },
+  { segment: 'roadmap', label: 'Roadmap', served: 'app' },
+  { segment: 'changelog', label: 'Changelog', served: 'site' },
 ] as const
+
+/** The read views this host no longer renders — each one lives in the app. */
+export type VisitorView = 'board' | 'items' | 'tree' | 'roadmap'
+
+/**
+ * The ONE builder of an app read-view URL (MOTIR-6743): the same path on
+ * `app.motir.co`, `${APP_ORIGIN}/p/<identifier>/<view>[/<sub>]`. The app's
+ * Visitor route tree mirrors this host's read paths on purpose, so moving a
+ * reader is a HOST SWAP (motir-core `docs/decisions/public-surface-hosts.md`
+ * AMENDMENT 7). `sub` is a work item's FULL identifier (`MOTIR-42`) under
+ * `items`. Both segments are encoded exactly once.
+ *
+ * ⚠️ ALWAYS ABSOLUTE ON `APP_ORIGIN`, never on the host the reader is on: the
+ * views exist in the app and nowhere else, and a customer domain has no
+ * `/board` to keep.
+ */
+export function visitorViewUrl(
+  identifier: string,
+  view: VisitorView,
+  sub?: string,
+): string {
+  const base = `${APP_ORIGIN}/p/${encodeURIComponent(identifier)}/${view}`
+  return sub ? `${base}/${encodeURIComponent(sub)}` : base
+}
+
+/**
+ * The PERMANENT redirect a retired read page answers (MOTIR-6743) — 308, to
+ * {@link visitorViewUrl}, with no body and no read.
+ *
+ * ⚠️ NO READ BEFORE IT. The handler needs only the identifier and the view: an
+ * unknown or non-public project is redirected too, and the app answers
+ * not-found for it as it does for any caller. One fewer hop per old link, and
+ * nothing to 500 when the contract is down.
+ *
+ * ⚠️ THE QUERY STRING IS DROPPED — this host's `?cursor=` / `?bucket=` mean
+ * nothing to the in-app views.
+ *
+ * 308 rather than 301 for the reason `redirectIfNotPrimary` gives: a page-level
+ * permanent redirect that preserves the method.
+ */
+export function visitorViewRedirect(
+  identifier: string,
+  view: VisitorView,
+  sub?: string,
+): Response {
+  return new Response(null, {
+    status: 308,
+    headers: { Location: visitorViewUrl(identifier, view, sub) },
+  })
+}
 
 /**
  * The path of one tab ON THE HOST THIS REQUEST ARRIVED ON (MOTIR-4220).
@@ -320,75 +294,14 @@ export function deriveDescription(md: string | null, fallback: string): string {
     : text
 }
 
-/* ── the five tab reads (MOTIR-4116) ──────────────────────────────────────── */
+/* ── the tab read (MOTIR-4116) ────────────────────────────────────────────── */
 //
-// Each takes the project key and whatever paging coordinate its endpoint uses,
-// and returns the same three-outcome `PublicRead`. The `not-found` arm belongs
-// to the PROJECT — a tab is never 404 in its own right, because the shell has
-// already resolved the project by the time a tab renders.
+// The changelog is the one tab this host still reads; it returns the same
+// three-outcome `PublicRead`. The `not-found` arm belongs to the PROJECT — a tab
+// is never 404 in its own right, because the shell has already resolved the
+// project by the time a tab renders.
 
 const seg = (identifier: string) => `/p/${encodeURIComponent(identifier)}`
-
-/** The BOARD — bounded by the API's own cap, not paged. */
-export function loadBoard(
-  identifier: string,
-): Promise<PublicRead<PublicBoardDto>> {
-  return readPublic<PublicBoardDto>(`${seg(identifier)}/board`)
-}
-
-/** The ITEMS list — cursor-paged; `cursor` omitted is the first page. */
-export function loadItems(
-  identifier: string,
-  cursor?: string,
-): Promise<PublicRead<PublicWorkItemPageDto>> {
-  const qs = cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
-  return readPublic<PublicWorkItemPageDto>(`${seg(identifier)}/items${qs}`)
-}
-
-/**
- * ONE LEVEL of the tree — the roots, or one parent's direct children.
- *
- * OFFSET-paged, not cursor-paged, and that is the endpoint's contract rather
- * than a choice here: a level is a stable sibling set, so the loaded count is
- * the next offset.
- */
-export function loadTreeLevel(
-  identifier: string,
-  opts: { parentId?: string; offset?: number } = {},
-): Promise<PublicRead<PublicTreeLevelDto>> {
-  const params = new URLSearchParams()
-  if (opts.parentId) params.set('parentId', opts.parentId)
-  if (opts.offset) params.set('offset', String(opts.offset))
-  const qs = params.toString()
-  return readPublic<PublicTreeLevelDto>(
-    `${seg(identifier)}/tree${qs ? `?${qs}` : ''}`,
-  )
-}
-
-/** The whole ROADMAP — four columns, each with its first page. */
-export function loadRoadmap(
-  identifier: string,
-): Promise<PublicRead<PublicRoadmapDto>> {
-  return readPublic<PublicRoadmapDto>(`${seg(identifier)}/roadmap`)
-}
-
-/**
- * ONE roadmap column's next page.
- *
- * ⚠️ BOTH parameters or NEITHER. The endpoint serves the whole tab when neither
- * is present and refuses a half-specified request — a bucket with no cursor is
- * `MISSING_ROADMAP_CURSOR`, not "start from the top". That refusal is
- * deliberate (a pager that silently restarted would be far harder to notice),
- * so this function requires both and cannot produce the ambiguous call.
- */
-export function loadRoadmapColumn(
-  identifier: string,
-  bucket: PublicRoadmapBucket,
-  cursor: string,
-): Promise<PublicRead<PublicRoadmapColumnDto>> {
-  const qs = `?bucket=${encodeURIComponent(bucket)}&cursor=${encodeURIComponent(cursor)}`
-  return readPublic<PublicRoadmapColumnDto>(`${seg(identifier)}/roadmap${qs}`)
-}
 
 /** The CHANGELOG — cursor-paged. */
 export function loadChangelog(
@@ -415,26 +328,7 @@ export function pagedTabHref(
   return publicPathWithQuery(host, identifier, segment, params)
 }
 
-/* ── the two DETAIL reads (MOTIR-4117) ────────────────────────────────────── */
-
-export interface PublicWorkItemDetailParentDto {
-  identifier: string
-  key: number
-  title: string
-  kind: string
-}
-
-export interface PublicWorkItemDetailDto extends PublicWorkItemDto {
-  statusLabel: string
-  descriptionMd: string | null
-  parent: PublicWorkItemDetailParentDto | null
-  /** True only on a private epic seen by a non-member; the display signal. */
-  childrenHidden: boolean
-  childCount: number
-  /** The FIRST page of public-safe direct children, not the whole set. */
-  children: PublicTreeRowDto[]
-  childrenHasMore: boolean
-}
+/* ── the request DETAIL read (MOTIR-4117) ─────────────────────────────────── */
 
 export interface PublicRequestCommentDto {
   id: string
@@ -464,25 +358,6 @@ export interface PublicRequestDetailDto {
   /** Always false on this host — `actorUserId` is structurally null here. */
   voted: boolean
   comments: PublicRequestCommentDto[]
-}
-
-/**
- * ONE work item, as the public surface shows it.
- *
- * ⚠️ THE SECOND ARGUMENT IS THE FULL IDENTIFIER (`ACME-42`), not the bare
- * number. The URL segment is called `key` because that is the address the public
- * page has always used, and the `key` FIELD in the response is the number — two
- * different things with one name. The endpoint takes the identifier and this
- * passes the segment through verbatim; rebuilding `${identifier}-${key}` works
- * on every fixture anyone would write and breaks on a project key with a dash.
- */
-export function loadWorkItem(
-  identifier: string,
-  key: string,
-): Promise<PublicRead<PublicWorkItemDetailDto>> {
-  return readPublic<PublicWorkItemDetailDto>(
-    `${seg(identifier)}/items/${encodeURIComponent(key)}`,
-  )
 }
 
 /** ONE feature request, with its public thread and its vote count. */

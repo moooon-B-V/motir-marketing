@@ -1,11 +1,9 @@
 import Link from 'next/link'
-import type { PublicWorkItemDto } from '@/lib/publicProject'
-import { publicPathFor, type PublicHost } from '@/lib/publicHost'
 
 /**
- * The shared list primitives the tabs compose from (MOTIR-4116) — one status
- * pill and one work-item row, so five tabs cannot drift into five treatments of
- * the same thing.
+ * The shared list primitives the pages compose from (MOTIR-4116) — one status
+ * pill and one pager. (The work-item row left with the read pages it served,
+ * MOTIR-6743: those paths redirect into the app now.)
  */
 
 const TONE: Record<string, string> = {
@@ -28,50 +26,6 @@ export function StatusPill({
     >
       {status}
     </span>
-  )
-}
-
-/**
- * One work-item row, linking to its public detail page.
- *
- * ⚠️ THE `childrenHidden` MARKER IS RENDERED, not silently dropped. It is set
- * only on a PRIVATE epic seen by a non-member, and its descendants are already
- * excluded server-side — so the honest thing is to say the row is there and its
- * children are not, rather than show an epic that looks empty.
- */
-export function WorkItemRow({
-  identifier,
-  item,
-  host,
-}: {
-  identifier: string
-  item: PublicWorkItemDto
-  host: PublicHost
-}) {
-  return (
-    <li className="flex items-baseline gap-3 border-b border-(--el-border) py-3">
-      <span className="w-[6.5rem] flex-none font-(family-name:--font-mono) text-[11px] font-medium text-(--el-text-secondary)">
-        {item.identifier}
-      </span>
-      <span className="min-w-0 flex-1 text-[14px] text-(--el-text)">
-        <Link
-          href={publicPathFor(
-            host,
-            identifier,
-            `items/${encodeURIComponent(item.identifier)}`,
-          )}
-          className="hover:text-(--el-link) hover:underline hover:underline-offset-2"
-        >
-          {item.title}
-        </Link>
-        {item.childrenHidden ? (
-          <span className="mt-0.5 block text-[12px] text-(--el-text-secondary)">
-            Children are not public.
-          </span>
-        ) : null}
-      </span>
-      <StatusPill status={item.status} category={item.statusCategory} />
-    </li>
   )
 }
 

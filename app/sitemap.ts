@@ -79,7 +79,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((project) => project.primaryHost === thisHost)
     .flatMap((project) => {
       const lastModified = new Date(project.updatedAt)
-      return PROJECT_TABS.map((tab) => ({
+      // Only the pages THIS host serves (MOTIR-6743): the project page and its
+      // changelog. The board, items, tree and roadmap are permanent redirects
+      // into the app now, and a sitemap that listed a redirect would ask a
+      // crawler to index an address that is not a page.
+      return PROJECT_TABS.filter((tab) => tab.served === 'site').map((tab) => ({
         // ⚠️ ONE EXPRESSION FOR ALL THREE HOST KINDS. `publicPathFor` is the
         // same helper every rendered link goes through, so a sitemap entry and
         // the page's own navigation cannot spell the address differently —

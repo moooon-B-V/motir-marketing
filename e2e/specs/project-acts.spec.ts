@@ -34,12 +34,14 @@ test('row 2 — Follow NEVER reads "Following"', async ({ page }) => {
 test('the hand-off returns to the TAB you were on, not the project root', async ({
   page,
 }) => {
-  await page.goto('/p/MOTIR/roadmap')
+  // The changelog: since MOTIR-6743 the only tab besides the overview that is
+  // still a page on this host.
+  await page.goto('/p/MOTIR/changelog')
 
   const href = await page
     .getByRole('link', { name: /^Follow/ })
     .getAttribute('href')
-  expect(decodeURIComponent(href ?? '')).toContain('/p/MOTIR/roadmap')
+  expect(decodeURIComponent(href ?? '')).toContain('/p/MOTIR/changelog')
 })
 
 test('row 3 — SUBSCRIBE stays on this host and takes an email', async ({
@@ -59,13 +61,9 @@ test('row 3 — SUBSCRIBE stays on this host and takes an email', async ({
   expect(subscribeIsHandoff).toBe(0)
 })
 
-test('rows 4 and 5 — vote, upvote and comment are hand-offs', async ({
-  page,
-}) => {
-  await page.goto('/p/MOTIR/roadmap')
-  const vote = page.locator(ACT).filter({ hasText: '84' }).first()
-  expect(await vote.getAttribute('href')).toContain('intent=vote')
-
+test('rows 4 and 5 — upvote and comment are hand-offs', async ({ page }) => {
+  // The roadmap card's VOTE hand-off left with the request board (MOTIR-6743,
+  // `public-request-board-retired.md`); the request page's two stay.
   await page.goto('/p/MOTIR/requests/MOTIR-4051')
   expect(
     await page.getByRole('link', { name: /Upvote/ }).getAttribute('href'),
@@ -119,8 +117,7 @@ test('⚠️ THE HARD GATE — no response sets a cookie scoped to .motir.co', a
 
   for (const path of [
     '/p/MOTIR',
-    '/p/MOTIR/board',
-    '/p/MOTIR/roadmap',
+    '/p/MOTIR/changelog',
     '/p/MOTIR/requests/MOTIR-4051',
     '/p/MOTIR/requests/new',
   ]) {

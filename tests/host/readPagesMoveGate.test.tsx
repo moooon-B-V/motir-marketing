@@ -1,0 +1,357 @@
+import { readFileSync } from 'node:fs'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { cleanup, render } from '@testing-library/react'
+import {
+  PUBLIC_ADDRESS_KIND_HEADER,
+  PUBLIC_HOST_HEADER,
+  PUBLIC_ORIGIN_HEADER,
+} from '@/lib/publicHost'
+
+/*
+ * THE STORY'S motir-marketing GATE (MOTIR-6747, Story MOTIR-6171).
+ *
+ * Each code card shipped its own tests: the redirect handlers alone
+ * (`tests/publicProject/readPageRedirects.test.ts`), the header alone
+ * (`tests/host/tenantLinks.test.tsx`). This file asks what neither can: whether
+ * the ASSEMBLED surface — the real `proxy()`, its rewrite, its SECOND look at
+ * its own rewrite (`alreadyRouted`), then the route handler — still lands every
+ * old read link in the app, on all three host kinds.
+ *
+ * ⚠️ BOTH PASSES ARE DRIVEN. The router rewrites `acme.motir.site/ACME/board`
+ * onto `/p/ACME/board`, and Next then runs the proxy again over that rewritten
+ * path. A matrix that called only the handler, or the proxy once, stays green
+ * while a second pass that answered `not-found` 404s every tenant link — the
+ * shape that has broken tenant hosts before.
+ *
+ * ⚠️ `fetch` IS THE ONE STUB, and it answers only the contract: the host read
+ * and the project, changelog and request reads the surviving pages make. It is
+ * a router over URLs rather than a queue of answers, so a module that started
+ * reading a board or an item would hit the `404 — unexpected read` arm rather
+ * than being fed something plausible.
+ */
+
+vi.mock('@/lib/tenantDomain', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/tenantDomain')>()),
+  TENANT_DOMAIN: 'motir.site',
+}))
+
+const headerScope = vi.hoisted(() => ({ current: new Headers() }))
+vi.mock('next/headers', () => ({
+  headers: async () => headerScope.current,
+}))
+
+const { proxy } = await import('@/proxy')
+const { NextRequest } = await import('next/server')
+const { resetHostResolutionCache, ROUTER_PATHS } =
+  await import('@/lib/hostResolution')
+const boardRoute = await import('@/app/p/[identifier]/board/route')
+const itemsRoute = await import('@/app/p/[identifier]/items/route')
+const treeRoute = await import('@/app/p/[identifier]/tree/route')
+const roadmapRoute = await import('@/app/p/[identifier]/roadmap/route')
+const itemRoute = await import('@/app/p/[identifier]/items/[key]/route')
+const OverviewPage = (await import('@/app/p/[identifier]/page')).default
+const ChangelogPage = (await import('@/app/p/[identifier]/changelog/page'))
+  .default
+const IntakePage = (await import('@/app/p/[identifier]/requests/new/page'))
+  .default
+const RequestPage = (
+  await import('@/app/p/[identifier]/requests/[requestKey]/page')
+).default
+
+const APP = 'https://app.test.motir.co'
+const fixture = (name: string) =>
+  JSON.parse(readFileSync(`e2e/fixtures/${name}`, 'utf8'))
+
+/* ── the three host kinds ─────────────────────────────────────────────────── */
+
+interface HostCase {
+  label: string
+  origin: string
+  /** The address a reader types for `<view>` of ACME on this host. */
+  path: (view: string) => string
+  /** What `proxy.ts` forwards to a page on this host. */
+  headers: Record<string, string>
+  /** The project's primary, so the page does not redirect to another host. */
+  primary: string
+}
+
+const SITE: HostCase = {
+  label: 'motir.co',
+  origin: 'https://motir.co',
+  path: (view) => `/p/ACME${view ? `/${view}` : ''}`,
+  headers: {},
+  primary: 'https://motir.co/p/ACME',
+}
+const WORKSPACE: HostCase = {
+  label: 'a workspace subdomain',
+  origin: 'https://acme.motir.site',
+  path: (view) => `/ACME${view ? `/${view}` : ''}`,
+  headers: {
+    [PUBLIC_ADDRESS_KIND_HEADER]: 'workspace',
+    [PUBLIC_HOST_HEADER]: 'acme.motir.site',
+    [PUBLIC_ORIGIN_HEADER]: 'https://acme.motir.site',
+  },
+  primary: 'https://acme.motir.site/ACME',
+}
+const CUSTOM: HostCase = {
+  label: 'a custom domain',
+  origin: 'https://roadmap.acme.com',
+  path: (view) => (view ? `/${view}` : '/'),
+  headers: {
+    [PUBLIC_ADDRESS_KIND_HEADER]: 'project',
+    [PUBLIC_HOST_HEADER]: 'roadmap.acme.com',
+    [PUBLIC_ORIGIN_HEADER]: 'https://roadmap.acme.com',
+  },
+  primary: 'https://roadmap.acme.com',
+}
+const HOSTS = [SITE, WORKSPACE, CUSTOM]
+
+const HOST_READS: Record<string, unknown> = {
+  'acme.motir.site': {
+    kind: 'workspace',
+    workspace: { name: 'Acme' },
+    projects: [{ identifier: 'ACME', name: 'Acme Roadmap' }],
+  },
+  'roadmap.acme.com': {
+    kind: 'project',
+    project: { identifier: 'ACME', name: 'Acme Roadmap' },
+    primary: true,
+  },
+  'old.motir.site': { kind: 'alias', redirectTo: 'acme.motir.site' },
+}
+
+/** Every URL the contract was asked for, in order. */
+let asked: string[] = []
+
+function stubContract(primary: string) {
+  asked = []
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: string | URL | Request) => {
+      const url = String(input instanceof Request ? input.url : input)
+      asked.push(url)
+      const path = url.replace(`${APP}/api/public`, '')
+      const host = /^\/hosts\/([^/?]+)$/.exec(path)?.[1]
+      if (host) {
+        const read = HOST_READS[decodeURIComponent(host)]
+        return read ? Response.json(read) : new Response(null, { status: 404 })
+      }
+      if (path === '/p/ACME') {
+        return Response.json({
+          ...fixture('project.json'),
+          identifier: 'ACME',
+          name: 'Acme Roadmap',
+          addresses: { primary, alternates: [] },
+        })
+      }
+      if (path.startsWith('/p/ACME/changelog')) {
+        return Response.json(fixture('changelog.json'))
+      }
+      if (path === '/p/ACME/requests/ACME-4051') {
+        return Response.json({
+          ...fixture('request-detail.json'),
+          identifier: 'ACME-4051',
+        })
+      }
+      return new Response('unexpected read', { status: 404 })
+    }),
+  )
+}
+
+beforeEach(() => {
+  resetHostResolutionCache()
+  stubContract(SITE.primary)
+})
+afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
+  headerScope.current = new Headers()
+})
+
+const request = (url: string) =>
+  new NextRequest(url, { headers: { host: new URL(url).host } })
+
+const rewriteOf = (res: Response) => {
+  const to = res.headers.get('x-middleware-rewrite')
+  return to ? new URL(to).pathname : null
+}
+
+/**
+ * Drive one URL the way Next does: the proxy, then — when it rewrote — the
+ * proxy AGAIN over its own rewrite, and return the path that reaches the app.
+ */
+async function route(url: string): Promise<string> {
+  const origin = new URL(url).origin
+  const first = await proxy(request(url))
+  const rewritten = rewriteOf(first)
+  if (!rewritten) {
+    expect(first.headers.get('x-middleware-next'), url).toBe('1')
+    return new URL(url).pathname
+  }
+  const second = await proxy(request(`${origin}${rewritten}`))
+  // The second pass recognises its own rewrite and steps aside. A rewrite here
+  // would mean the router re-routed `/p/ACME/…` as if a reader had typed it.
+  expect(rewriteOf(second), `second pass over ${rewritten}`).toBeNull()
+  expect(second.headers.get('x-middleware-next'), rewritten).toBe('1')
+  return rewritten
+}
+
+/** Call the route handler Next would match for an app path. */
+async function handle(path: string): Promise<Response> {
+  const [, p, identifier, view, key] = path.split('/')
+  expect(p).toBe('p')
+  const req = new Request(`https://motir.co${path}`)
+  if (view === 'items' && key) {
+    return itemRoute.GET(req, {
+      params: Promise.resolve({
+        identifier: decodeURIComponent(identifier!),
+        key: decodeURIComponent(key),
+      }),
+    })
+  }
+  const handler = {
+    board: boardRoute,
+    items: itemsRoute,
+    tree: treeRoute,
+    roadmap: roadmapRoute,
+  }[view!]!
+  return handler.GET(req, {
+    params: Promise.resolve({ identifier: decodeURIComponent(identifier!) }),
+  })
+}
+
+/* ── 1 · the redirect matrix ──────────────────────────────────────────────── */
+
+const READ_PATHS = ['board', 'items', 'tree', 'roadmap', 'items/ACME-42']
+
+describe.each(HOSTS)('$label — every old read link lands in the app', (h) => {
+  it.each(READ_PATHS)(
+    '%s → 308 to the same view on APP_ORIGIN',
+    async (view) => {
+      const url = `${h.origin}${h.path(view)}`
+      const reached = await route(url)
+      expect(reached).toBe(`/p/ACME/${view}`)
+
+      const res = await handle(reached)
+      expect(res.status, url).toBe(308)
+      expect(res.headers.get('location'), url).toBe(`${APP}/p/ACME/${view}`)
+    },
+  )
+})
+
+describe('the matrix is fifteen cases, not fewer', () => {
+  it('three host kinds × five read paths', () => {
+    expect(HOSTS.length * READ_PATHS.length).toBe(15)
+  })
+
+  it('and no case read the contract for anything but a HOST', async () => {
+    for (const h of HOSTS) {
+      for (const view of READ_PATHS) {
+        await handle(await route(`${h.origin}${h.path(view)}`))
+      }
+    }
+    expect(asked.filter((u) => !u.includes('/api/public/hosts/'))).toEqual([])
+  })
+})
+
+/* ── 2 · the router's refusals, unchanged by the story ────────────────────── */
+
+describe('the router still refuses what it refused before', () => {
+  it('a workspace host asked for a project it does not publish → not-found, never a redirect', async () => {
+    for (const path of [
+      '/p/OTHER/board',
+      '/OTHER/board',
+      '/p/OTHER/items/OTHER-1',
+    ]) {
+      const res = await proxy(request(`https://acme.motir.site${path}`))
+      expect(rewriteOf(res), path).toBe(ROUTER_PATHS.notFound)
+      expect(res.headers.get('location'), path).toBeNull()
+    }
+  })
+
+  it('a retired alias subdomain → 301 with the path kept, then the 308 on the live host', async () => {
+    const res = await proxy(request('https://old.motir.site/ACME/board'))
+    expect(res.status).toBe(301)
+    const live = res.headers.get('location')!
+    expect(live).toBe('https://acme.motir.site/ACME/board')
+
+    const onward = await handle(await route(live))
+    expect(onward.status).toBe(308)
+    expect(onward.headers.get('location')).toBe(`${APP}/p/ACME/board`)
+  })
+
+  it('the tenant base domain → not-found, without asking the contract', async () => {
+    const res = await proxy(request('https://motir.site/ACME/board'))
+    expect(rewriteOf(res)).toBe(ROUTER_PATHS.notFound)
+    expect(asked).toEqual([])
+  })
+})
+
+/* ── 3 · the pages that stay, on each host ────────────────────────────────── */
+
+/** A same-host href to a read page — which would 308 off this host. */
+const READ_HREF = /\/(board|items|tree|roadmap)(\/|\?|$)/
+
+async function renderPage(h: HostCase, page: () => Promise<React.ReactNode>) {
+  headerScope.current = new Headers(h.headers)
+  stubContract(h.primary)
+  const { container } = render(await page())
+  return [...container.querySelectorAll('a[href]')].map((a) =>
+    a.getAttribute('href')!,
+  )
+}
+
+const PAGES: [string, () => Promise<React.ReactNode>][] = [
+  [
+    'the overview',
+    () => OverviewPage({ params: Promise.resolve({ identifier: 'ACME' }) }),
+  ],
+  [
+    'the changelog',
+    () =>
+      ChangelogPage({
+        params: Promise.resolve({ identifier: 'ACME' }),
+        searchParams: Promise.resolve({}),
+      }),
+  ],
+  [
+    'the request doorway',
+    () => IntakePage({ params: Promise.resolve({ identifier: 'ACME' }) }),
+  ],
+  [
+    'a request page',
+    () =>
+      RequestPage({
+        params: Promise.resolve({
+          identifier: 'ACME',
+          requestKey: 'ACME-4051',
+        }),
+      }),
+  ],
+]
+
+describe.each(HOSTS)('$label — the pages that stay still render', (h) => {
+  it.each(PAGES)('%s links no read path on this host', async (_label, page) => {
+    const hrefs = await renderPage(h, page)
+    expect(hrefs.length).toBeGreaterThan(3)
+
+    // Every read-view link is the APP's, absolute; none is a path here.
+    const reads = hrefs.filter((href) => READ_HREF.test(href.split('#')[0]!))
+    for (const href of reads) {
+      const onThisSite =
+        href.startsWith('/') ||
+        href.startsWith(`${h.origin}/`) ||
+        href.startsWith('https://motir.co/')
+      // The hand-offs to `app/act` carry a `return` — it names a page here,
+      // never a read path, so the whole href is judged by its own pathname.
+      expect(onThisSite ? href : new URL(href).origin, href).toBe(
+        onThisSite ? '(no same-host read link)' : APP,
+      )
+    }
+    // And no hand-off sends a reader back to a read path on return.
+    for (const href of hrefs.filter((x) => x.includes('return='))) {
+      const back = new URL(href).searchParams.get('return')!
+      expect(READ_HREF.test(new URL(back).pathname), href).toBe(false)
+    }
+  })
+})

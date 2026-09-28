@@ -108,38 +108,14 @@ test('the whole /p/* journey, as MOTIR-3877 asks to be accepted', async ({
   ).toBeVisible()
   await beat(page, 1400)
 
-  // ── 2 · MOVE THROUGH THE FIVE TABS ──────────────────────────────────────
-  chapter('Move through the five tabs')
+  // ── 2 · THE TAB THAT STAYS, AND THE ONES THAT MOVED ─────────────────────
+  // ⚠️ AMENDED BY MOTIR-6743 (Story MOTIR-6171). The Board, Items, Tree and
+  // Roadmap tabs are permanent redirects into the app's Visitor views now, and
+  // the Roadmap's request board is retired — so the walk no longer tours them
+  // here (`project-tabs.spec.ts` asserts each redirect). The Changelog is still
+  // a page on this host, anonymous, and is walked as before.
+  chapter('The changelog, still on this host')
   const nav = page.getByRole('navigation', { name: 'Project' })
-
-  await nav.getByRole('link', { name: 'Board' }).click()
-  await expect(page.getByRole('region', { name: 'To do' })).toBeVisible()
-  await beat(page)
-
-  await nav.getByRole('link', { name: 'Items' }).click()
-  await expect(
-    page.getByRole('link', { name: 'A public work item 1' }),
-  ).toBeVisible()
-  await beat(page)
-
-  // …and PAGE one list past its first page.
-  await page.getByRole('link', { name: 'Load more' }).click()
-  await expect(page).toHaveURL(/cursor=/)
-  await expect(
-    page.getByRole('link', { name: 'A public work item 5' }),
-  ).toBeVisible()
-  await beat(page)
-
-  await nav.getByRole('link', { name: 'Tree' }).click()
-  await expect(page.getByText('Showing 2 of 12')).toBeVisible()
-  // …and EXPAND one level.
-  await page.getByRole('link', { name: 'An epic with children' }).click()
-  await expect(page.getByRole('link', { name: 'A child item' })).toBeVisible()
-  await beat(page)
-
-  await nav.getByRole('link', { name: 'Roadmap' }).click()
-  await expect(page.getByRole('region', { name: 'Submitted' })).toBeVisible()
-  await beat(page)
 
   await nav.getByRole('link', { name: 'Changelog' }).click()
   await expect(
@@ -147,15 +123,11 @@ test('the whole /p/* journey, as MOTIR-3877 asks to be accepted', async ({
   ).toBeVisible()
   await beat(page, 1200)
 
-  // ── 3 · OPEN A WORK ITEM, AND A FEATURE REQUEST ─────────────────────────
-  chapter('Open a work item, and a feature request')
-  await nav.getByRole('link', { name: 'Items' }).click()
-  await page.getByRole('link', { name: 'A public work item 1' }).click()
-  await expect(page).toHaveURL(/\/items\/MOTIR-1$/)
-  await beat(page)
-
-  await page.goto('/p/MOTIR/roadmap')
-  await page.getByRole('link', { name: 'Gantt view for the roadmap' }).click()
+  // ── 3 · OPEN A FEATURE REQUEST ──────────────────────────────────────────
+  chapter('Open a feature request')
+  // Reached by its own address: the request board that used to list it is
+  // retired, and the request page stays on this host with its hand-offs.
+  await page.goto('/p/MOTIR/requests/MOTIR-4051')
   await expect(
     page.getByRole('heading', { name: 'Gantt view for the roadmap' }),
   ).toBeVisible()
@@ -179,8 +151,9 @@ test('the whole /p/* journey, as MOTIR-3877 asks to be accepted', async ({
   expect(href).toContain('intent=request')
   expect(href).toContain('subject=MOTIR')
   // …and it carries the way back. This is the seam; the far side is motir-core's.
-  expect(decodeURIComponent(href ?? '')).toContain(
-    'https://motir.co/p/MOTIR/roadmap',
+  // (The project page since MOTIR-6745 — the roadmap is the app's now.)
+  expect(new URL(href!).searchParams.get('return')).toBe(
+    'https://motir.co/p/MOTIR',
   )
   await beat(page, 1400)
 
@@ -203,17 +176,6 @@ test('the whole /p/* journey, as MOTIR-3877 asks to be accepted', async ({
 
   // ── 6 · THE STATES A VISITOR WILL ACTUALLY MEET ─────────────────────────
   chapter('The states a visitor will meet')
-  // An EMPTY tab: a project whose board has nothing public.
-  await page.goto('/p/MOTIR/roadmap?bucket=done&cursor=broken')
-  await expect(
-    page.getByRole('region', { name: 'Done' }).getByRole('alert'),
-  ).toContainText('could not load')
-  // …and the rest of the page is intact, which is the point of that containment.
-  await expect(
-    page.getByRole('heading', { level: 1, name: 'Motir' }),
-  ).toBeVisible()
-  await beat(page, 1200)
-
   // A real 404 — the project that does not exist, distinct from an outage.
   const missing = await page.goto('/p/NOPE')
   expect(missing?.status()).toBe(404)
