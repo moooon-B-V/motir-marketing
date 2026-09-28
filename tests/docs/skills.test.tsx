@@ -67,7 +67,7 @@ describe('/docs/skills', () => {
   })
 
   it('documents only skills the pinned release carries, and names every one it installs', () => {
-    // `v0.2.0` carries `motir-fix-bugs` before its usage section (MOTIR-6724),
+    // The pinned release carries `motir-fix-bugs` before its usage section (MOTIR-6724),
     // so the documented set is a subset and the install copy names the whole.
     for (const skill of SKILL_NAMES)
       expect(RELEASE_SKILLS, skill).toContain(skill)

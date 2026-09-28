@@ -30,7 +30,7 @@
  */
 
 /** The `motir-skills` release every command on the page installs. */
-export const SKILLS_RELEASE_TAG = 'v0.2.0'
+export const SKILLS_RELEASE_TAG = 'v0.2.1'
 
 /** The public repository, as `owner/name`. */
 export const SKILLS_REPO = 'moooon-B-V/motir-skills'
@@ -57,7 +57,7 @@ export const RELEASE_SKILLS = [
 
 /**
  * The skills the page has a usage section for, in the order it documents them.
- * ⚠️ A SUBSET OF `RELEASE_SKILLS`, not the same list: `v0.2.0` shipped
+ * ⚠️ A SUBSET OF `RELEASE_SKILLS`, not the same list: the pinned release (since `v0.2.0`) ships
  * `motir-fix-bugs` beside `motir-guide`, and its usage section lands with its
  * own card (MOTIR-6724). The install copy counts `RELEASE_SKILLS`, so it stays
  * true either way.
