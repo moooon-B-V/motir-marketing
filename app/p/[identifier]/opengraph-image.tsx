@@ -1,10 +1,15 @@
 import { ImageResponse } from 'next/og'
 import {
-  BRAND_ACCENT_HEX,
+  BRAND_GLYPH_HEX,
   WAVE_BAND_PATH,
   WAVE_BAND_VIEW_BOX,
 } from '@motir/brand'
 import { loadOgFonts, OG_FONT_FAMILY } from '@/app/_brand/ogFonts'
+import {
+  OG_TEXT_HEX,
+  OG_TEXT_SECONDARY_HEX,
+  OG_WASH,
+} from '@/app/_brand/ogColours'
 import { loadProject } from '@/lib/publicProject'
 
 /*
@@ -22,9 +27,11 @@ import { loadProject } from '@/lib/publicProject'
  *
  * `motir-core/design/brand/design-notes.md` §6 is the design of record and this
  * is its section layout, with the same numbers the root card uses: canvas
- * 1200 × 630 at padding 80; glyph 72 in the brand accent, wordmark 30 / 700;
+ * 1200 × 630 at padding 80; glyph 72 in `BRAND_GLYPH_HEX`, wordmark 30 / 700;
  * headline 60 / 800 / 1.1; lede 28 at max-width 920. Three social cards of one
- * product, one table.
+ * product, one table. The colours are §10's ("§6 amended — OG template",
+ * MOTIR-6473) and come from `app/_brand/ogColours.ts`, which the root card
+ * shares.
  *
  * What differs is only the CONTENT: the project's own name and tagline rather
  * than the site's headline, plus a small eyebrow naming the project key, so a
@@ -74,21 +81,21 @@ export default async function ProjectOpengraphImage({
         justifyContent: 'space-between',
         padding: '80px',
         // --color-tint-lavender → --color-tint-sky.
-        background: 'linear-gradient(135deg, #e6e0f5 0%, #dcecfa 100%)',
+        background: OG_WASH,
         fontFamily: OG_FONT_FAMILY,
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <svg viewBox={WAVE_BAND_VIEW_BOX} width={72} height={72}>
-          <path d={WAVE_BAND_PATH} fill={BRAND_ACCENT_HEX} />
+          <path d={WAVE_BAND_PATH} fill={BRAND_GLYPH_HEX} />
         </svg>
         <div
           style={{
             fontSize: 30,
             fontWeight: 700,
             letterSpacing: '-0.02em',
-            // --el-text-strong, light.
-            color: '#2a2342',
+            // --el-text, light.
+            color: OG_TEXT_HEX,
           }}
         >
           Motir
@@ -100,7 +107,7 @@ export default async function ProjectOpengraphImage({
             fontSize: 24,
             fontWeight: 600,
             // --el-text-secondary, light.
-            color: '#473f63',
+            color: OG_TEXT_SECONDARY_HEX,
             letterSpacing: '0.04em',
           }}
         >
@@ -111,7 +118,7 @@ export default async function ProjectOpengraphImage({
             fontSize: 60,
             fontWeight: 800,
             // --el-text, light.
-            color: '#1f1b2e',
+            color: OG_TEXT_HEX,
             lineHeight: 1.1,
           }}
         >
@@ -120,7 +127,8 @@ export default async function ProjectOpengraphImage({
         <div
           style={{
             fontSize: 28,
-            color: '#473f63',
+            // --el-text-secondary, light.
+            color: OG_TEXT_SECONDARY_HEX,
             maxWidth: 920,
           }}
         >

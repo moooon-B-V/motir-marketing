@@ -11,7 +11,7 @@
  * over to a different rasteriser. It is a PORT rather than a copy of the
  * outputs: the artwork itself is imported from `@motir/brand`, so there is no
  * second copy of the mark anywhere in this repository — `WAVE_BAND_PATH` and
- * the two baked colour literals arrive from the package, exactly as
+ * the baked colour literals arrive from the package, exactly as
  * `public/motir-mark.svg` already takes `waveBandSvg()` from it (MOTIR-1154).
  *
  * What this site does NOT ship, and why the absence is deliberate:
@@ -55,7 +55,9 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import {
+  BRAND_ACCENT_DARK_HEX,
   BRAND_ACCENT_HEX,
+  BRAND_ACCENT_INK_DARK_HEX,
   BRAND_ACCENT_INK_HEX,
   WAVE_BAND_PATH,
 } from '@motir/brand'
@@ -132,6 +134,14 @@ export function tiledIconSvg({
  * name written as `var(--el-accent)` in a file header makes the whole document
  * malformed (design-notes.md §2). Provenance lives in this module instead,
  * in source, where it can name the token safely.
+ *
+ * ⚠️ IT CARRIES A `prefers-color-scheme: dark` VARIANT, and it is the only file
+ * in the set that can (design-notes.md §10, the dark tab strip). The ink tile
+ * reads 1.05:1 against Chrome's dark tab strip, so a dark browser swaps it to
+ * the dark accent tile with its dark ink. The fill ATTRIBUTES stay the light
+ * values, so a client that ignores the embedded style still draws the ink
+ * tile. The rasters below have one appearance each and take the ink tile.
+ * This is the same file motir-core's generator emits.
  */
 export function iconSvgFile(): string {
   const canvas = ICON_SVG_CANVAS
@@ -140,9 +150,10 @@ export function iconSvgFile(): string {
   const unit = round(box / 24)
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas}" height="${canvas}" viewBox="0 0 ${canvas} ${canvas}" role="img" aria-label="Motir">`,
-    `  <rect width="${canvas}" height="${canvas}" rx="${tileRadius(canvas)}" fill="${BRAND_ACCENT_HEX}"/>`,
+    `  <style>@media (prefers-color-scheme: dark) { .tile { fill: ${BRAND_ACCENT_DARK_HEX}; } .glyph { fill: ${BRAND_ACCENT_INK_DARK_HEX}; } }</style>`,
+    `  <rect class="tile" width="${canvas}" height="${canvas}" rx="${tileRadius(canvas)}" fill="${BRAND_ACCENT_HEX}"/>`,
     `  <g transform="translate(${offset} ${offset}) scale(${unit})">`,
-    `    <path d="${WAVE_BAND_PATH}" fill="${BRAND_ACCENT_INK_HEX}"/>`,
+    `    <path class="glyph" d="${WAVE_BAND_PATH}" fill="${BRAND_ACCENT_INK_HEX}"/>`,
     `  </g>`,
     `</svg>`,
     '',

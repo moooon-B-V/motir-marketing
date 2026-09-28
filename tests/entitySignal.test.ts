@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
-import { BRAND_ACCENT_HEX, waveBandSvg } from '@motir/brand'
+import { BRAND_GLYPH_HEX, waveBandSvg } from '@motir/brand'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
 import {
@@ -189,7 +189,7 @@ describe('the committed logomark', () => {
       'utf8',
     )
     expect(committed).toBe(
-      `${waveBandSvg({ size: 512, fill: BRAND_ACCENT_HEX })}\n`,
+      `${waveBandSvg({ size: 512, fill: BRAND_GLYPH_HEX })}\n`,
     )
   })
 })
