@@ -13,8 +13,8 @@ import { expect, test } from '@playwright/test'
  * ⚠️ THE AGENTS AND THEIR DOMAINS ARE TYPED HERE, NOT IMPORTED. The page's
  * data lives in `lib/skillsGuide.ts`; a spec that read its expectations from
  * the same module would agree with any change to it, including a section
- * silently dropped. The story promised these six agents and these three
- * skills, so the spec names them.
+ * silently dropped. The story promised these six agents and these skills,
+ * so the spec names them (`motir-guide` since MOTIR-6732).
  */
 
 const PAGE = '/docs/skills'
@@ -29,7 +29,7 @@ const AGENTS: { label: string; host: string }[] = [
   { label: 'OpenCode', host: 'opencode.ai' },
 ]
 
-const SKILLS = ['motir-run', 'motir-log-bug', 'motir-mark']
+const SKILLS = ['motir-run', 'motir-log-bug', 'motir-mark', 'motir-guide']
 
 test('the rail’s Skills row opens the guide and marks it current', async ({
   page,
@@ -119,4 +119,22 @@ test.describe('a reader copies the Claude Code install command', () => {
     expect(held).toBe(onScreen)
     expect(held).toContain('/plugin install motir@motir-skills')
   })
+})
+
+test('the motir-guide section says what to type and what the reader will see', async ({
+  page,
+}) => {
+  await page.goto(PAGE)
+  const heading = page.getByRole('heading', {
+    level: 3,
+    name: 'motir-guide',
+    exact: true,
+  })
+  await expect(heading).toBeVisible()
+  const section = page.locator('section', { has: heading })
+  await expect(
+    section.getByText('motir guide ACME-12', { exact: true }),
+  ).toBeVisible()
+  await expect(section).toContainText('one step at a time')
+  await expect(section).toContainText('To-do list')
 })
