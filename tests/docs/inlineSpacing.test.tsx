@@ -7,6 +7,7 @@ import PublicAddressPage from '@/app/docs/(guides)/public-address/page'
 import SandboxPage from '@/app/docs/(guides)/sandbox/page'
 import SentryPage from '@/app/docs/(guides)/sentry/page'
 import DifficultyPage from '@/app/docs/(guides)/difficulty/page'
+import SkillsPage from '@/app/docs/(guides)/skills/page'
 import GettingStartedPage from '@/app/docs/api/getting-started/page'
 import StabilityPage from '@/app/docs/api/stability/page'
 
@@ -146,6 +147,7 @@ describe('no /docs page runs a word into the element before it', () => {
     ],
     ['/docs/sentry', async () => render(<SentryPage />).container],
     ['/docs/difficulty', async () => render(<DifficultyPage />).container],
+    ['/docs/skills', async () => render(<SkillsPage />).container],
     [
       '/docs/api/getting-started',
       async () => {

@@ -130,6 +130,12 @@ export const DOCS_SURFACES: DocsSurface[] = [
     description: copy.docs.descDifficulty,
     pages: [],
   },
+  {
+    href: '/docs/skills',
+    label: copy.docs.skills,
+    description: copy.docs.descSkills,
+    pages: [],
+  },
 ]
 
 /**

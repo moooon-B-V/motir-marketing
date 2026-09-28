@@ -246,8 +246,14 @@ const SHORT_ROUTE = '/docs'
  * case about a page that does not fill its window needs a window the page does
  * not fill. The width is `WIDE`'s, because the breakpoint behaviour under test
  * is the same one.
+ *
+ * Raised from 1800 to 2200 by MOTIR-6717: `/docs/skills` added a section to the
+ * index, which measured 1923px at this width in CI, and the premise below went
+ * red exactly as it was written to. Raised by ~280px of headroom, about two more
+ * index sections, rather than to the new height, so the next surface does not
+ * trip it on arrival.
  */
-const SHORT_VIEWPORT = { width: WIDE.width, height: 1800 }
+const SHORT_VIEWPORT = { width: WIDE.width, height: 2200 }
 
 /**
  * The rail against the chrome around it: the landmark it should fill, and the
