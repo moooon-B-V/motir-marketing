@@ -73,12 +73,20 @@ afterEach(() => {
 })
 
 describe('the sitemap on motir.co', () => {
-  it('lists a project whose primary IS motir.co, with its tabs', async () => {
+  it('lists a project whose primary IS motir.co — its page and changelog only', async () => {
     const { entries } = await crawlSurfaceAs({})
     const urls = entries.map((e) => e.url)
 
     expect(urls).toContain('https://motir.co/p/MOTIR')
-    expect(urls).toContain('https://motir.co/p/MOTIR/board')
+    expect(urls).toContain('https://motir.co/p/MOTIR/changelog')
+    // MOTIR-6743 — the board, items, tree and roadmap are permanent redirects
+    // into the app now, and a sitemap must not list an address that redirects.
+    for (const view of ['/board', '/items', '/tree', '/roadmap']) {
+      expect(
+        urls.join(' '),
+        `a read page (${view}) is not a page on this host`,
+      ).not.toContain(view)
+    }
   })
 
   it('OMITS a project whose primary is elsewhere — the card’s first criterion', async () => {
@@ -105,7 +113,13 @@ describe('the sitemap on a workspace subdomain', () => {
     const urls = entries.map((e) => e.url)
 
     expect(urls).toContain('https://acme.motir.site/PROD')
-    expect(urls).toContain('https://acme.motir.site/PROD/roadmap')
+    expect(urls).toContain('https://acme.motir.site/PROD/changelog')
+    for (const view of ['/board', '/items', '/tree', '/roadmap']) {
+      expect(
+        urls.join(' '),
+        `a read page (${view}) is not a page on this host`,
+      ).not.toContain(view)
+    }
     // ⚠️ NOT `/p/PROD`. The sitemap entry and the page's own navigation go
     // through the SAME helper, so they cannot spell the address differently —
     // which is the way a sitemap normally goes stale.
@@ -126,14 +140,15 @@ describe('the sitemap on a workspace subdomain', () => {
 })
 
 describe('the sitemap on a customer domain', () => {
-  it('lists ONE project’s tabs, at the host’s root', async () => {
+  it('lists ONE project’s page and changelog, at the host’s root', async () => {
     const { entries } = await crawlSurfaceAs(asCustom)
     const urls = entries.map((e) => e.url)
 
     expect(urls).toContain('https://roadmap.acme.com/')
-    expect(urls).toContain('https://roadmap.acme.com/board')
     expect(urls).toContain('https://roadmap.acme.com/changelog')
-    expect(urls).toHaveLength(6) // the overview plus the five tabs, and nothing else
+    // The overview and the changelog, and nothing else: the read views are
+    // redirects into the app (MOTIR-6743).
+    expect(urls).toHaveLength(2)
   })
 })
 

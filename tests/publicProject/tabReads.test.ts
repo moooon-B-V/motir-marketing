@@ -1,18 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import {
-  ROADMAP_BUCKETS,
-  loadBoard,
-  loadChangelog,
-  loadItems,
-  loadRoadmap,
-  loadRoadmapColumn,
-  loadTreeLevel,
-  pagedTabHref,
-} from '@/lib/publicProject'
+import { loadChangelog, pagedTabHref } from '@/lib/publicProject'
 import { SITE_HOST } from '@/lib/publicHost'
 
 /*
- * The five tab reads (MOTIR-4116) — what each one ASKS FOR.
+ * The tab read (MOTIR-4116) — what it ASKS FOR.
+ *
+ * ⚠️ ONE READ LEFT (MOTIR-6743). The board, items, tree and roadmap tabs are
+ * permanent redirects into the app now and read nothing; their request tests
+ * left with them (`readPageRedirects.test.ts` asserts they read nothing at all).
  *
  * The shapes are the producing repository's to guard (`public-surface-hosts.md`
  * §3). What belongs here is the REQUEST: each tab's paging coordinate is a
@@ -35,67 +30,10 @@ const pathOf = (call = 0) =>
   new URL(fetchMock.mock.calls[call]?.[0] as string).pathname +
   new URL(fetchMock.mock.calls[call]?.[0] as string).search
 
-describe('each tab reads its own endpoint', () => {
-  it('board — no paging coordinate at all', async () => {
-    await loadBoard('ACME')
-    expect(pathOf()).toBe('/api/public/p/ACME/board')
-  })
-
-  it('items — cursor, omitted on the first page', async () => {
-    await loadItems('ACME')
-    expect(pathOf()).toBe('/api/public/p/ACME/items')
-
-    fetchMock.mockClear()
-    await loadItems('ACME', 'wi_42')
-    expect(pathOf()).toBe('/api/public/p/ACME/items?cursor=wi_42')
-  })
-
+describe('the changelog reads its own endpoint', () => {
   it('changelog — cursor, same shape', async () => {
     await loadChangelog('ACME', 'c_9')
     expect(pathOf()).toBe('/api/public/p/ACME/changelog?cursor=c_9')
-  })
-
-  it('tree — OFFSET and parentId, not a cursor', async () => {
-    // A level is a stable sibling set, so the endpoint pages by offset. Sending
-    // a cursor here would be silently ignored and the level would never advance.
-    await loadTreeLevel('ACME')
-    expect(pathOf()).toBe('/api/public/p/ACME/tree')
-
-    fetchMock.mockClear()
-    await loadTreeLevel('ACME', { parentId: 'wi_1', offset: 50 })
-    expect(pathOf()).toBe('/api/public/p/ACME/tree?parentId=wi_1&offset=50')
-  })
-
-  it('tree — an offset of 0 is omitted rather than sent', async () => {
-    await loadTreeLevel('ACME', { offset: 0 })
-    expect(pathOf()).toBe('/api/public/p/ACME/tree')
-  })
-
-  it('roadmap — the WHOLE tab carries neither parameter', async () => {
-    // ⚠️ The endpoint serves the tab only when BOTH are absent. Sending an
-    // empty `bucket=` would be an unknown bucket, which is a 400.
-    await loadRoadmap('ACME')
-    expect(pathOf()).toBe('/api/public/p/ACME/roadmap')
-  })
-
-  it('roadmap column — BOTH parameters, never one', async () => {
-    // The signature requires both, so the ambiguous call cannot be written: a
-    // bucket with no cursor is MISSING_ROADMAP_CURSOR, not "start from the top".
-    await loadRoadmapColumn('ACME', 'planned', 'abc')
-    expect(pathOf()).toBe(
-      '/api/public/p/ACME/roadmap?bucket=planned&cursor=abc',
-    )
-  })
-})
-
-describe('the roadmap buckets', () => {
-  it('are the four the contract names, in display order', () => {
-    expect(ROADMAP_BUCKETS.map((b) => b.key)).toEqual([
-      'submitted',
-      'planned',
-      'in_progress',
-      'done',
-    ])
   })
 })
 

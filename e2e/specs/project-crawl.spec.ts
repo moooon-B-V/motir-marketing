@@ -47,14 +47,17 @@ test('the feed 404s for a project that is not public — and NOT for an outage',
   expect(res.status()).toBe(404)
 })
 
-test('the sitemap lists every project whose CANONICAL is this host, and its tabs', async ({
+test('the sitemap lists every project whose CANONICAL is this host — its page and changelog', async ({
   request,
 }) => {
   const xml = await (await request.get('/sitemap.xml')).text()
 
   expect(xml).toContain('https://motir.co/p/MOTIR</loc>')
-  expect(xml).toContain('https://motir.co/p/MOTIR/board</loc>')
   expect(xml).toContain('https://motir.co/p/MOTIR/changelog</loc>')
+  // MOTIR-6743 — no read page: those are redirects into the app now.
+  for (const view of ['board', 'items', 'tree', 'roadmap']) {
+    expect(xml).not.toContain(`/p/MOTIR/${view}</loc>`)
+  }
   // The static entries survive alongside them.
   expect(xml).toContain('https://motir.co/explore</loc>')
   expect(xml).toContain('https://motir.co/legal</loc>')
@@ -80,7 +83,8 @@ test('the tenant host’s sitemap lists ITS project, at its own paths', async ({
   const xml = await (await request.get(`${TENANT_ORIGIN}/sitemap.xml`)).text()
 
   expect(xml).toContain(`${TENANT_ORIGIN}/ACME</loc>`)
-  expect(xml).toContain(`${TENANT_ORIGIN}/ACME/board</loc>`)
+  expect(xml).toContain(`${TENANT_ORIGIN}/ACME/changelog</loc>`)
+  expect(xml).not.toContain(`${TENANT_ORIGIN}/ACME/board</loc>`)
   // Not `/p/ACME`, and none of the marketing site's own pages: a tenant host is
   // a project's address, not a copy of motir.co.
   expect(xml).not.toContain('/p/ACME')

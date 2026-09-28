@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
-import { MoreLink, WorkItemRow } from '@/app/p/[identifier]/_components/Rows'
+import { MoreLink } from '@/app/p/[identifier]/_components/Rows'
 import { ErrorState } from '@/app/p/[identifier]/_components/States'
 import {
   pagedTabHref,
@@ -38,17 +38,6 @@ const project: PublicProjectOverviewDto = {
   links: {},
   viewerCanManage: false,
   addresses: { primary: 'https://motir.co/p/PROD', alternates: [] },
-}
-
-const item = {
-  id: 'wi_1',
-  identifier: 'PROD-42',
-  key: 42,
-  title: 'A work item',
-  kind: 'subtask',
-  status: 'In Progress',
-  statusCategory: 'in_progress' as const,
-  priority: 'medium',
 }
 
 const WORKSPACE: PublicHost = {
@@ -101,19 +90,6 @@ describe.each([
         : host.kind === 'workspace'
           ? '/PROD/items?cursor=w9'
           : '/items?cursor=w9',
-    ])
-  })
-
-  it('a DETAIL LINK points at this host', () => {
-    const { container } = render(
-      <WorkItemRow identifier="PROD" item={item} host={host} />,
-    )
-    expect(hrefs(container)).toEqual([
-      host.kind === 'site'
-        ? '/p/PROD/items/PROD-42'
-        : host.kind === 'workspace'
-          ? '/PROD/items/PROD-42'
-          : '/items/PROD-42',
     ])
   })
 

@@ -140,7 +140,11 @@ describe('THE ERROR STATE IS REACHABLE — every /p/* screen has one', () => {
     // surface must not do. Derived from the filesystem so a screen added later
     // cannot skip it.
     const pages = tracked('app/p').filter((f) => f.endsWith('page.tsx'))
-    expect(pages.length).toBeGreaterThanOrEqual(9)
+    // Four since MOTIR-6743: the overview, the changelog and the two request
+    // pages. The board, items, tree, roadmap and item pages are route handlers
+    // answering a redirect into the app, which read nothing and so have no
+    // outage to render.
+    expect(pages.length).toBeGreaterThanOrEqual(4)
 
     const missing = pages.filter((file) => {
       const src = read(file)

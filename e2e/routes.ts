@@ -82,18 +82,10 @@ export const SITE_ROUTES: readonly SiteRoute[] = [
   { pattern: '/host-unavailable', url: '/host-unavailable' },
 
   { pattern: '/p/[identifier]', url: '/p/MOTIR' },
-  { pattern: '/p/[identifier]/board', url: '/p/MOTIR/board' },
   { pattern: '/p/[identifier]/changelog', url: '/p/MOTIR/changelog' },
-  { pattern: '/p/[identifier]/items', url: '/p/MOTIR/items' },
-  {
-    pattern: '/p/[identifier]/items/[key]',
-    url: '/p/MOTIR/items/MOTIR-4115',
-  },
   {
     pattern: '/p/[identifier]/requests/[requestKey]',
     url: '/p/MOTIR/requests/MOTIR-4051',
   },
   { pattern: '/p/[identifier]/requests/new', url: '/p/MOTIR/requests/new' },
-  { pattern: '/p/[identifier]/roadmap', url: '/p/MOTIR/roadmap' },
-  { pattern: '/p/[identifier]/tree', url: '/p/MOTIR/tree' },
 ]

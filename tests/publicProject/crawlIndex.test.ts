@@ -4,7 +4,6 @@ import {
   loadAllPublicProjects,
   loadChangelog,
   loadRequest,
-  loadWorkItem,
 } from '@/lib/publicProject'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
@@ -105,33 +104,28 @@ describe('loadAllPublicProjects — the sitemap walk', () => {
   })
 })
 
-describe('the two detail reads', () => {
-  it('take the FULL identifier and pass it through verbatim', async () => {
-    // The segment is named `key` and the DTO field of that name is the bare
-    // number — two things with one name. Rebuilding `${id}-${key}` works on
-    // every fixture anyone would write and breaks on a dashed project key.
+describe('the request detail read', () => {
+  it('takes the FULL identifier and passes it through verbatim', async () => {
+    // The segment is named `requestKey` and a DTO's `key` is the bare number —
+    // two things with one name. Rebuilding `${id}-${key}` works on every fixture
+    // anyone would write and breaks on a dashed project key. (The work-item
+    // detail read left with its page — MOTIR-6743.)
     fetchMock.mockResolvedValue(ok({}))
 
-    await loadWorkItem('OPEN-CORE', 'OPEN-CORE-7')
-    expect(fetchMock.mock.calls[0]?.[0]).toContain(
-      '/p/OPEN-CORE/items/OPEN-CORE-7',
-    )
-
-    fetchMock.mockClear()
     await loadRequest('OPEN-CORE', 'OPEN-CORE-3')
     expect(fetchMock.mock.calls[0]?.[0]).toContain(
       '/p/OPEN-CORE/requests/OPEN-CORE-3',
     )
   })
 
-  it('map a 404 to not-found, not to a failure', async () => {
+  it('maps a 404 to not-found, not to a failure', async () => {
     fetchMock.mockResolvedValue({
       ok: false,
       status: 404,
       json: async () => ({}),
     })
 
-    await expect(loadWorkItem('ACME', 'ACME-1')).resolves.toEqual({
+    await expect(loadRequest('ACME', 'ACME-1')).resolves.toEqual({
       status: 'not-found',
     })
   })

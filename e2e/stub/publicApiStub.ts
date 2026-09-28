@@ -56,20 +56,18 @@ const FIXTURE_DIR = join(
  * `GET` paths under `/api/public` → the fixture file that answers them.
  *
  * Keyed by PATHNAME only: a query string selects a page or a facet and every
- * fixture here is the first page, which is what a smoke lane needs. A spec that
- * needs a second page adds a fixture and a key rather than teaching this file to
- * parse parameters.
+ * fixture here is the first page, which is what a smoke lane needs.
+ *
+ * ⚠️ THE READ-PAGE FIXTURES ARE GONE (MOTIR-6743). The board, items, tree,
+ * roadmap and work-item pages are permanent redirects into the app and read
+ * nothing, so their fixtures, their second pages and the parameterised table
+ * that served those pages left with them.
  */
 const ROUTES: Record<string, string> = {
   '/api/public/explore': 'explore.json',
   '/api/public/categories': 'categories.json',
   '/api/public/p/MOTIR': 'project.json',
-  '/api/public/p/MOTIR/board': 'board.json',
-  '/api/public/p/MOTIR/items': 'items.json',
-  '/api/public/p/MOTIR/tree': 'tree.json',
-  '/api/public/p/MOTIR/roadmap': 'roadmap.json',
   '/api/public/p/MOTIR/changelog': 'changelog.json',
-  '/api/public/p/MOTIR/items/MOTIR-4115': 'item-detail.json',
   '/api/public/p/MOTIR/requests/MOTIR-4051': 'request-detail.json',
   '/api/public/projects': 'projects-index.json',
   // The HOST CONTRACT (MOTIR-4220). `acme.localhost` is the lane's tenant host
@@ -85,8 +83,9 @@ const ROUTES: Record<string, string> = {
   // `e2e/stub/origin.ts` exists to prevent. `MOTIR` stays canonical on the site
   // and `ACME` on `acme.localhost`, so both halves of the lane are self-hosted.
   '/api/public/p/ACME': 'project-acme.json',
-  '/api/public/p/ACME/board': 'board-acme.json',
-  '/api/public/p/ACME/items': 'items-acme.json',
+  // The one tab a tenant walk can still open on this host (MOTIR-6743): the
+  // board, items, tree and roadmap are redirects into the app and read nothing.
+  '/api/public/p/ACME/changelog': 'changelog.json',
   // The ADDRESS MATRIX the acceptance walk needs (MOTIR-4226). Five labels
   // under `.localhost`, so all five reach the same server with a different
   // `Host` header — which is the only thing the router reads. What each one IS
@@ -96,7 +95,6 @@ const ROUTES: Record<string, string> = {
   '/api/public/hosts/old.localhost': 'host-alias.json',
   '/api/public/hosts/empty.localhost': 'host-workspace-empty.json',
   '/api/public/p/ROAD': 'project-road.json',
-  '/api/public/p/ROAD/board': 'board-road.json',
 }
 
 /**
@@ -125,52 +123,12 @@ const NON_JSON: Record<string, [string, string]> = {
   ],
 }
 
-/**
- * Paths whose answer depends on a QUERY parameter — the second page of a list,
- * one expanded tree level, one paged roadmap column.
- *
- * ⚠️ THIS IS WHAT MAKES A PAGING SPEC MEAN ANYTHING. A stub that answered the
- * same fixture whatever the cursor would let a broken pager pass: the second
- * page would look exactly like the first, and "Load more" returning the same
- * rows is precisely the bug. Each entry is `[pathname, param, value, fixture]`
- * and is matched BEFORE the table above.
- */
-const PARAMETERISED: Array<[string, string, string, string]> = [
-  ['/api/public/p/MOTIR/items', 'cursor', 'wi_4', 'items-page2.json'],
-  ['/api/public/p/ACME/items', 'cursor', 'wi_4', 'items-acme-page2.json'],
-  ['/api/public/p/MOTIR/tree', 'parentId', 'wi_1', 'tree-child.json'],
-  ['/api/public/p/MOTIR/roadmap', 'bucket', 'submitted', 'roadmap-column.json'],
-]
-
 function fixture(name: string): string {
   return readFileSync(join(FIXTURE_DIR, name), 'utf8')
 }
 
 function handle(req: IncomingMessage, res: ServerResponse): void {
   const url = new URL(req.url ?? '/', 'http://stub.invalid')
-
-  const parameterised = PARAMETERISED.find(
-    ([path, param, value]) =>
-      url.pathname === path && url.searchParams.get(param) === value,
-  )
-
-  // ⚠️ THE ROADMAP HAS TWO ARMS AND THE STUB HAS TO KEEP THEM APART. Falling
-  // through to the whole-tab fixture for a request that carried `bucket` would
-  // answer a `PublicRoadmap` where the caller asked for a `PublicRoadmapColumn`
-  // — two different shapes on one path, 200, and the page renders undefined.
-  // The real endpoint refuses instead: an unknown bucket is
-  // `INVALID_ROADMAP_BUCKET` and a malformed cursor is `INVALID_ROADMAP_CURSOR`,
-  // both 400. A stub that is more permissive than the thing it stands in for
-  // lets a spec pass on a path production would refuse.
-  if (
-    parameterised === undefined &&
-    url.pathname.endsWith('/roadmap') &&
-    (url.searchParams.has('bucket') || url.searchParams.has('cursor'))
-  ) {
-    res.writeHead(400, { 'content-type': 'application/json' })
-    res.end(JSON.stringify({ code: 'INVALID_ROADMAP_CURSOR' }))
-    return
-  }
 
   if (FAILING.has(url.pathname)) {
     res.writeHead(500, { 'content-type': 'application/json' })
@@ -186,7 +144,7 @@ function handle(req: IncomingMessage, res: ServerResponse): void {
     return
   }
 
-  const file = parameterised?.[3] ?? ROUTES[url.pathname]
+  const file = ROUTES[url.pathname]
 
   if (file === undefined) {
     // ⚠️ 404 WITH A `code`, which is the shape `motir-core` answers with — and

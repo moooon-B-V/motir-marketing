@@ -78,6 +78,11 @@ export default defineConfig({
       include: [
         'lib/publicProject.ts',
         'app/p/**/*.tsx',
+        // MOTIR-6743 — the five retired read pages are ROUTE HANDLERS now
+        // (board, items, tree, roadmap and an item), each a permanent redirect
+        // into the app. `.ts`, so the `.tsx` glob above does not reach them;
+        // added WITH the files, per the rule the entry below records.
+        'app/p/**/route.ts',
         // MOTIR-4220. Added WITH the files rather than after them, which is the
         // rule the entry above earned: a file outside this list is not
         // measured, and a gate that measures nothing is green.
@@ -132,6 +137,9 @@ export default defineConfig({
         'proxy.ts': { lines: 90, functions: 90, branches: 85 },
         'app/sitemap.ts': { lines: 90, functions: 90, branches: 85 },
         'app/robots.ts': { lines: 90, functions: 90, branches: 85 },
+        // MOTIR-6743 — measured first: the five redirect handlers are 100
+        // across under `tests/publicProject/readPageRedirects.test.ts`.
+        'app/p/**/route.ts': { lines: 90, functions: 90, branches: 90 },
         'app/p/**/_components/*.tsx': {
           lines: 90,
           functions: 90,

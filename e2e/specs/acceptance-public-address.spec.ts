@@ -6,6 +6,7 @@ import {
   CUSTOM_ORIGIN,
   EMPTY_ORIGIN,
   SITE_ORIGIN,
+  STUB_ORIGIN,
   TENANT_ORIGIN,
 } from '../stub/origin'
 
@@ -109,22 +110,13 @@ test('a project at its own address, as MOTIR-3878 asks to be accepted', async ({
   )
   await beat(page)
 
-  // ── 3 · TWO TABS AND A PAGE OF ITEMS, ALL ON THIS HOST ──────────────────
-  chapter('Walk the tabs — every navigation stays on the host')
-  await nav.getByRole('link', { name: 'Board' }).click()
-  await page.waitForURL(`${TENANT_ORIGIN}/ACME/board`)
-  await expect(page.getByRole('main')).toBeVisible()
-  await beat(page)
-
-  await nav.getByRole('link', { name: 'Items' }).click()
-  await page.waitForURL(`${TENANT_ORIGIN}/ACME/items`)
-  await expect(page.getByRole('link', { name: 'Load more' })).toBeVisible()
-  await beat(page)
-
-  chapter('Page the items list')
-  await page.getByRole('link', { name: 'Load more' }).click()
-  await page.waitForURL(/\/ACME\/items\?cursor=/)
-  expect(new URL(page.url()).host).toBe(new URL(TENANT_ORIGIN).host)
+  // ── 3 · A TAB ON THIS HOST, AND A READ PAGE THAT MOVED ──────────────────
+  // ⚠️ AMENDED BY MOTIR-6743. The Board, Items, Tree and Roadmap are permanent
+  // redirects into the app now, so the tab walk opens the Changelog — the tab
+  // that is still a page here — and checks the Board's redirect by its answer.
+  chapter('Walk a tab — the navigation stays on the host')
+  await nav.getByRole('link', { name: 'Changelog' }).click()
+  await page.waitForURL(`${TENANT_ORIGIN}/ACME/changelog`)
   await expect(page.getByRole('main')).toBeVisible()
 
   // Nothing anywhere on the page points back at the `/p/` shape.
@@ -136,9 +128,17 @@ test('a project at its own address, as MOTIR-3878 asks to be accepted', async ({
   ).toEqual([])
   await beat(page)
 
+  chapter('A read page on this host answers a redirect into the app')
+  const board = await page.request.get(`${TENANT_ORIGIN}/ACME/board`, {
+    maxRedirects: 0,
+  })
+  expect(board.status()).toBe(308)
+  expect(board.headers()['location']).toBe(`${STUB_ORIGIN}/p/ACME/board`)
+  await beat(page)
+
   // ── 4 · A CUSTOMER DOMAIN, WITH THE PROJECT AT ITS ROOT ─────────────────
   chapter('A customer domain serves one project at its root')
-  const custom = await page.goto(`${CUSTOM_ORIGIN}/board`)
+  const custom = await page.goto(`${CUSTOM_ORIGIN}/`)
   expect(custom?.status()).toBe(200)
   expect(new URL(page.url()).host).toBe(new URL(CUSTOM_ORIGIN).host)
 
@@ -149,13 +149,14 @@ test('a project at its own address, as MOTIR-3878 asks to be accepted', async ({
   ).toHaveAttribute('href', '/')
 
   // The canonical and `og:url` name the primary the fixture declares.
+  // (The overview's canonical is the bare origin — no trailing slash.)
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     'href',
-    `${CUSTOM_ORIGIN}/board`,
+    CUSTOM_ORIGIN,
   )
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
     'content',
-    `${CUSTOM_ORIGIN}/board`,
+    CUSTOM_ORIGIN,
   )
   await beat(page)
 
@@ -163,10 +164,10 @@ test('a project at its own address, as MOTIR-3878 asks to be accepted', async ({
   chapter('A non-primary address redirects to the primary')
   // `ROAD` is published by the workspace AND has its primary on the customer
   // domain, so the subdomain's path for it is an alternate — the ADR §7 case.
-  const moved = await page.goto(`${TENANT_ORIGIN}/ROAD/board`)
+  const moved = await page.goto(`${TENANT_ORIGIN}/ROAD`)
   expect(moved?.status()).toBe(200)
   expect(page.url(), 'the path must survive the redirect').toBe(
-    `${CUSTOM_ORIGIN}/board`,
+    `${CUSTOM_ORIGIN}/`,
   )
   // Asserted from the response CHAIN, not merely from where we ended up.
   const chain = moved?.request().redirectedFrom()
@@ -181,9 +182,9 @@ test('a project at its own address, as MOTIR-3878 asks to be accepted', async ({
 
   // ── 6 · A RETIRED SUBDOMAIN KEEPS ITS PROMISE ───────────────────────────
   chapter('A retired subdomain 301s to the live one, path preserved')
-  const alias = await page.goto(`${ALIAS_ORIGIN}/ACME/board`)
+  const alias = await page.goto(`${ALIAS_ORIGIN}/ACME/changelog`)
   expect(alias?.status()).toBe(200)
-  expect(page.url()).toBe(`${TENANT_ORIGIN}/ACME/board`)
+  expect(page.url()).toBe(`${TENANT_ORIGIN}/ACME/changelog`)
 
   const aliasHop = alias?.request().redirectedFrom()
   expect((await aliasHop!.response())?.status()).toBe(301)
@@ -205,7 +206,7 @@ test('the crawl surface belongs to the host that asks for it', async ({
     await request.get(`${CUSTOM_ORIGIN}/sitemap.xml`)
   ).text()
   expect(custom).toContain(`${CUSTOM_ORIGIN}/</loc>`)
-  expect(custom).toContain(`${CUSTOM_ORIGIN}/board</loc>`)
+  expect(custom).not.toContain(`${CUSTOM_ORIGIN}/board</loc>`)
   expect(custom).not.toContain('ACME')
 
   const site = await (await request.get(`${SITE_ORIGIN}/sitemap.xml`)).text()
