@@ -15,10 +15,14 @@ import { expect, test } from '@playwright/test'
  * the same module would agree with any change to it, including a section
  * silently dropped. The story promised these six agents and these skills,
  * so the spec names them (`motir-guide` since MOTIR-6732, `motir-fix-bugs`
- * since MOTIR-6724).
+ * since MOTIR-6724, `motir-fix` since MOTIR-6814), and the release tag every
+ * install command names.
  */
 
 const PAGE = '/docs/skills'
+
+/** The `motir-skills` release every install command must fetch. */
+const RELEASE_TAG = 'v0.3.0'
 
 /** Each agent the page documents, and the domain its own docs live on. */
 const AGENTS: { label: string; host: string }[] = [
@@ -32,6 +36,7 @@ const AGENTS: { label: string; host: string }[] = [
 
 const SKILLS = [
   'motir-run',
+  'motir-fix',
   'motir-log-bug',
   'motir-mark',
   'motir-guide',
@@ -162,4 +167,35 @@ test('the motir-fix-bugs section says what to type and what the reader will see'
   ).toBeVisible()
   await expect(section).toContainText('one bug at a time, oldest first')
   await expect(section).toContainText('with a blocked by link')
+})
+
+test('the motir-fix section says what to type and how it differs from motir fix bugs', async ({
+  page,
+}) => {
+  await page.goto(PAGE)
+  const heading = page.getByRole('heading', {
+    level: 3,
+    name: 'motir-fix',
+    exact: true,
+  })
+  await expect(heading).toBeVisible()
+  const section = page.locator('section', { has: heading })
+  await expect(
+    section.getByText('motir fix ACME-12', { exact: true }),
+  ).toBeVisible()
+  await expect(section).toContainText('never a new one')
+  await expect(section).toContainText('Not the same as motir fix bugs')
+})
+
+test('every install command names the pinned release tag', async ({ page }) => {
+  await page.goto(PAGE)
+  const panes = page.locator('pre')
+  const count = await panes.count()
+  expect(count).toBeGreaterThan(0)
+  const texts = await panes.allTextContents()
+  const tagged = texts.filter((t) => t.includes('motir-skills'))
+  expect(tagged.length).toBeGreaterThan(0)
+  for (const text of tagged) expect(text).toContain(RELEASE_TAG)
+  const tags = new Set(texts.join('\n').match(/\bv\d+\.\d+\.\d+\b/g) ?? [])
+  expect([...tags]).toEqual([RELEASE_TAG])
 })
