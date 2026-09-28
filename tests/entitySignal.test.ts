@@ -89,6 +89,8 @@ describe('sitemap', () => {
       'https://motir.co/docs/public-address',
       'https://motir.co/docs/sentry',
       'https://motir.co/docs/difficulty',
+      // MOTIR-6717 — installing Motir's skills in your agent.
+      'https://motir.co/docs/skills',
       'https://motir.co/legal',
       'https://motir.co/legal/terms',
       'https://motir.co/legal/privacy',

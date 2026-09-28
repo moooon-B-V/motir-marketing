@@ -132,6 +132,8 @@ describe('app/sitemap.ts', () => {
         '/docs/sentry',
         // MOTIR-6016 — the difficulty levels guide.
         '/docs/difficulty',
+        // MOTIR-6717 — installing Motir's skills in your agent.
+        '/docs/skills',
       ].map(siteUrl),
       siteUrl('/legal'),
       ...[
