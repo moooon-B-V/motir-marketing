@@ -30,7 +30,7 @@
  */
 
 /** The `motir-skills` release every command on the page installs. */
-export const SKILLS_RELEASE_TAG = 'v0.2.1'
+export const SKILLS_RELEASE_TAG = 'v0.3.0'
 
 /** The public repository, as `owner/name`. */
 export const SKILLS_REPO = 'moooon-B-V/motir-skills'
@@ -53,6 +53,7 @@ export const RELEASE_SKILLS = [
   'motir-mark',
   'motir-guide',
   'motir-fix-bugs',
+  'motir-fix',
 ] as const
 
 /**
@@ -64,6 +65,7 @@ export const RELEASE_SKILLS = [
  */
 export const SKILL_NAMES = [
   'motir-run',
+  'motir-fix',
   'motir-log-bug',
   'motir-mark',
   'motir-guide',
@@ -223,6 +225,12 @@ export const SKILL_USAGE: SkillUsage[] = [
     say: ['motir run', 'motir run ACME-12', 'motir next'],
     does: 'Takes the next ready work item in your project, or the one you name, and builds it. It first tidies up after earlier runs whose pull requests have merged, then claims the work item, builds it on a branch of its own, opens one pull request, and links that pull request to the work item. Name a story whose children have no children of their own, and it runs the whole story: one branch and one pull request per repository, with one commit per child. motir next stops after the claim and prints the prompt, for you to hand to an agent yourself.',
     see: 'The work item is assigned to you and moves to In Progress, then to Implemented once its pull request is open. Its page shows the pull request and a How to test section. Motir moves it to In Review when CI passes and to Done when the pull request merges; the skill never does either.',
+  },
+  {
+    name: 'motir-fix',
+    say: ['motir fix ACME-12'],
+    does: 'Repairs a red pull request after the run that opened it has ended: its checks failed, the merge queue threw it out, or a reviewer sent the story’s acceptance video back with Re-run. It first claims the repair, so nobody else pushes over it. Then it fixes each of the work item’s pull requests on the branch it already has, never a new one: it merges the base branch, fixes what the failing check named, and pushes. It keeps going until CI is green or it has tried five times, and it records the acceptance video again once CI is green after a Re-run. It never opens a pull request, merges one or moves the work item’s status. Not the same as motir fix bugs, which works through your project’s Bugs folder: motir fix ACME-12 repairs the pull requests of one work item you name.',
+    see: 'While the repair runs, the work item’s Development section says it is being fixed, and by whom. The same pull requests get new commits, and Motir moves the work item on by itself once their checks pass. If the repair gives up, the work item says so and how many attempts it made.',
   },
   {
     name: 'motir-log-bug',

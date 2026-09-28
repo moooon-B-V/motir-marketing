@@ -58,6 +58,7 @@ describe('/docs/skills', () => {
     const h3 = headings(page(), 'h3')
     expect([...SKILL_NAMES]).toEqual([
       'motir-run',
+      'motir-fix',
       'motir-log-bug',
       'motir-mark',
       'motir-guide',
@@ -95,6 +96,23 @@ describe('/docs/skills', () => {
     // Outline 3 — the To-do list, and Done with a summary comment.
     expect(text).toContain('To-do list')
     expect(text).toContain('moves to Done, with a comment summarising')
+  })
+
+  it('tells a reader with a red pull request what motir-fix does and shows them', () => {
+    const section = page().querySelector('h3#motir-fix')?.closest('section')
+    expect(section, 'the motir-fix section').not.toBeNull()
+    const text = section?.textContent ?? ''
+    // What to say: one work item, named.
+    expect(text).toContain('motir fix ACME-12')
+    // What it does: claims the repair, fixes on the pull request's own
+    // branch, keeps going until green or five attempts.
+    expect(text).toContain('claims the repair')
+    expect(text).toContain('on the branch it already has, never a new one')
+    expect(text).toContain('until CI is green or it has tried five times')
+    // How it differs from motir fix bugs.
+    expect(text).toContain('Not the same as motir fix bugs')
+    // What the reader sees: the repair on the work item.
+    expect(text).toContain('says it is being fixed, and by whom')
   })
 
   it('tells a Bugs-folder reader what motir-fix-bugs does and shows them', () => {
