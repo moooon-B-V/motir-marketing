@@ -1,0 +1,22 @@
+{
+  "id": "proj_quiet",
+  "name": "Quiet Project",
+  "identifier": "QUIET",
+  "workspaceName": "moooon B.V.",
+  "publicOverviewMd": null,
+  "publicTagline": null,
+  "publicTags": ["developer-tools", "project-management", "open-source"],
+  "stats": {
+    "publicRequests": 128,
+    "upvotes": 1204,
+    "planned": 37,
+    "shipped": 311,
+    "inProgress": 6
+  },
+  "links": {},
+  "viewerCanManage": false,
+  "addresses": {
+    "primary": "https://motir.co/p/QUIET",
+    "alternates": []
+  }
+}

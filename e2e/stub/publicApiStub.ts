@@ -95,6 +95,9 @@ const ROUTES: Record<string, string> = {
   '/api/public/hosts/old.localhost': 'host-alias.json',
   '/api/public/hosts/empty.localhost': 'host-workspace-empty.json',
   '/api/public/p/ROAD': 'project-road.json',
+  // MOTIR-6749 — a project that has written no overview, for the EMPTY state
+  // the project page redrew when the read tabs left it (design MOTIR-6742).
+  '/api/public/p/QUIET': 'project-quiet.json',
 }
 
 /**
@@ -108,6 +111,9 @@ const ROUTES: Record<string, string> = {
  */
 const FAILING: ReadonlySet<string> = new Set([
   '/api/public/hosts/broken.localhost',
+  // MOTIR-6749 — the project page's ERROR state, on the site's own host, where
+  // the "Watch it being built" entry still renders (design MOTIR-6742 panel E).
+  '/api/public/p/DOWN',
 ])
 
 /**
@@ -129,6 +135,21 @@ function fixture(name: string): string {
 
 function handle(req: IncomingMessage, res: ServerResponse): void {
   const url = new URL(req.url ?? '/', 'http://stub.invalid')
+
+  // ⚠️ THE APP'S STAND-IN (MOTIR-6749). In this lane the stub IS the app's
+  // origin, so a reader who follows a read link off motir.co lands HERE. It
+  // answers a one-line page naming the path it was asked for — enough for the
+  // recording to show where the reader landed. A spec asserts the URL, never
+  // this page's content: what the real app does there is the Visitor story's.
+  if (url.pathname.startsWith('/p/')) {
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' })
+    res.end(
+      `<!doctype html><title>Motir app</title><main style="font:16px system-ui;padding:48px">` +
+        `<h1>The Motir app</h1><p>Stand-in for <code>app.motir.co${url.pathname.replace(/[<>&]/g, '')}</code> — ` +
+        `sign-in and the Visitor view are the app’s, not this lane’s.</p></main>`,
+    )
+    return
+  }
 
   if (FAILING.has(url.pathname)) {
     res.writeHead(500, { 'content-type': 'application/json' })
