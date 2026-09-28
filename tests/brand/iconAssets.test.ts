@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
+  BRAND_ACCENT_DARK_HEX,
   BRAND_ACCENT_HEX,
+  BRAND_ACCENT_INK_DARK_HEX,
   BRAND_ACCENT_INK_HEX,
   WAVE_BAND_PATH,
 } from '@motir/brand'
@@ -113,11 +115,55 @@ describe('the artwork comes from @motir/brand, never a second copy', () => {
   })
 })
 
+describe('icon.svg switches tiles on a dark tab strip (design-notes.md §10)', () => {
+  const svg = iconSvgFile()
+
+  it('swaps to the dark accent tile and its dark ink under prefers-color-scheme: dark', () => {
+    // The ink tile reads 1.05:1 against Chrome's dark strip, so the one icon
+    // that can switch does. The rasters cannot and keep the ink tile.
+    expect(svg).toContain(
+      `<style>@media (prefers-color-scheme: dark) { .tile { fill: ${BRAND_ACCENT_DARK_HEX}; } .glyph { fill: ${BRAND_ACCENT_INK_DARK_HEX}; } }</style>`,
+    )
+    expect(svg).toContain(`<rect class="tile" `)
+    expect(svg).toContain(`<path class="glyph" `)
+  })
+
+  it('keeps the LIGHT values in the fill attributes, for clients that ignore the style', () => {
+    expect(svg).toMatch(/<rect class="tile"[^>]* fill="#1a1d21"\/>/)
+    expect(svg).toMatch(/<path class="glyph"[^>]* fill="#ffffff"\/>/)
+  })
+
+  it('draws the tile in the monochrome Motir palette, not the old purple', () => {
+    expect(BRAND_ACCENT_HEX).toBe('#1a1d21')
+    expect(BRAND_ACCENT_DARK_HEX).toBe('#edeef0')
+    expect(BRAND_ACCENT_INK_DARK_HEX).toBe('#0c0d0f')
+    expect(readFileSync(path.join(REPO, 'app/icon.svg'), 'utf8')).not.toContain(
+      '#5645d4',
+    )
+  })
+})
+
 describe('the committed files still match the generator', () => {
   it('app/icon.svg is byte-identical to what the script emits', () => {
     expect(readFileSync(path.join(REPO, 'app/icon.svg'), 'utf8')).toBe(
       iconSvgFile(),
     )
+  })
+
+  it('app/apple-icon.png is byte-identical to what the script rasterises', async () => {
+    // The raster pin the SVG comparison above cannot give. sharp is the
+    // generator's own rasteriser and the same pinned version, so a re-run over
+    // an unchanged mark and palette is byte-stable; a stale raster, left behind
+    // when the package's colours moved, is not.
+    const { default: sharp } = await import('sharp')
+    const fresh = await sharp(
+      Buffer.from(tiledIconSvg({ canvas: APPLE_ICON_CANVAS })),
+    )
+      .png({ compressionLevel: 9 })
+      .toBuffer()
+    expect(
+      readFileSync(path.join(REPO, 'app/apple-icon.png')).equals(fresh),
+    ).toBe(true)
   })
 
   it('app/apple-icon.png is a PNG at its declared canvas', () => {
