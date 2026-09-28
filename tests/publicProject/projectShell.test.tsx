@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import type { PublicProjectOverviewDto } from '@/lib/publicProject'
@@ -75,40 +75,54 @@ describe('the hero', () => {
     )
 
     expect(screen.queryByRole('button', { name: /edit/i })).toBeNull()
+    // Anchored: the app tabs' accessible names END "…; needs an account"
+    // (MOTIR-6745), which states a cost — it is not an account menu.
     expect(
-      screen.queryByRole('link', { name: /account|sign out|profile/i }),
+      screen.queryByRole('link', { name: /^(my )?account|sign out|profile/i }),
     ).toBeNull()
     expect(container.textContent).not.toMatch(/\bEdit\b/)
   })
 })
 
 describe('the tab bar', () => {
-  it('renders all six destinations as links', () => {
+  it('renders all six destinations as links — the site’s two, then the app’s four', () => {
     render(<ProjectHeader project={project} current="" />)
 
     const nav = screen.getByRole('navigation', { name: 'Project' })
-    for (const label of [
+    const names = within(nav)
+      .getAllByRole('link')
+      .map((a) => a.textContent!.replace(/\s+/g, ' ').trim())
+    expect(names).toEqual([
       'Overview',
-      'Board',
-      'Items',
-      'Tree',
-      'Roadmap',
       'Changelog',
-    ]) {
-      expect(screen.getByRole('link', { name: label })).toBeInTheDocument()
-    }
+      'Board ↗ — opens in the Motir app; needs an account',
+      'Items ↗ — opens in the Motir app; needs an account',
+      'Tree ↗ — opens in the Motir app; needs an account',
+      'Roadmap ↗ — opens in the Motir app; needs an account',
+    ])
+    expect(nav).toHaveTextContent('In the app')
     expect(nav).toBeVisible()
   })
 
   it('marks the CURRENT tab, and only that one', () => {
-    render(<ProjectHeader project={project} current="roadmap" />)
+    render(<ProjectHeader project={project} current="changelog" />)
 
     const current = screen
       .getAllByRole('link')
       .filter((a) => a.getAttribute('aria-current') === 'page')
 
     expect(current).toHaveLength(1)
-    expect(current[0]).toHaveTextContent('Roadmap')
+    expect(current[0]).toHaveTextContent('Changelog')
+  })
+
+  it('marks NO tab current on a page that is no tab (the request pages)', () => {
+    render(<ProjectHeader project={project} current={null} />)
+
+    expect(
+      screen
+        .getAllByRole('link')
+        .filter((a) => a.getAttribute('aria-current') === 'page'),
+    ).toEqual([])
   })
 
   it('marks Overview current on the Overview itself', () => {
@@ -127,10 +141,14 @@ describe('the tab bar', () => {
       'href',
       '/p/MOTIR',
     )
-    expect(screen.getByRole('link', { name: 'Board' })).toHaveAttribute(
+    // An app tab is a plain link on the app's origin (MOTIR-6745), not a
+    // path on this host that would 308 there.
+    const board = screen.getByRole('link', { name: /^Board/ })
+    expect(board).toHaveAttribute(
       'href',
-      '/p/MOTIR/board',
+      'https://app.test.motir.co/p/MOTIR/board',
     )
+    expect(board.tagName).toBe('A')
   })
 })
 

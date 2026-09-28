@@ -104,7 +104,7 @@ describe('a recorded workspace resolution, driven to a rendered tab page', () =>
 
     // 3. the RENDERED page — links and canonical together, which is the join
     const subject = project('https://acme.motir.site/ACME')
-    render(<ProjectHeader project={subject} current="board" host={host} />)
+    render(<ProjectHeader project={subject} current="changelog" host={host} />)
     const { container } = render(<ProjectJsonLd project={subject} />)
 
     const nav = screen.getAllByRole('navigation', { name: 'Project' })[0]!
@@ -112,10 +112,9 @@ describe('a recorded workspace resolution, driven to a rendered tab page', () =>
       'href',
       '/ACME',
     )
-    expect(within(nav).getByRole('link', { name: 'Board' })).toHaveAttribute(
-      'href',
-      '/ACME/board',
-    )
+    expect(
+      within(nav).getByRole('link', { name: 'Changelog' }),
+    ).toHaveAttribute('href', '/ACME/changelog')
 
     const graph = JSON.parse(container.querySelector('script')!.innerHTML)
     expect(graph['@id']).toBe('https://acme.motir.site/ACME')

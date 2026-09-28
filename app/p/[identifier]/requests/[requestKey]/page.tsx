@@ -103,11 +103,11 @@ export default async function PublicRequestPage({
           identifier,
           `requests/${encodeURIComponent(request.data.identifier)}`,
         )
-      : publicPathFor(SITE_HOST, identifier, 'roadmap')
+      : publicPathFor(SITE_HOST, identifier)
 
   return (
     <>
-      <ProjectHeader project={project.data} current="roadmap" host={host} />
+      <ProjectHeader project={project.data} current={null} host={host} />
 
       {request.status === 'failed' ? (
         <ErrorState
@@ -119,11 +119,13 @@ export default async function PublicRequestPage({
         <article className="mt-6 grid gap-7 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div>
             <p className="mb-5 text-[13px]">
+              {/* Back to the project page: the request board this pointed at is
+                  retired (MOTIR-6745; design MOTIR-6742 panel C). */}
               <Link
-                href={publicPathFor(host, identifier, 'roadmap')}
+                href={publicPathFor(host, identifier)}
                 className="text-(--el-text-secondary) hover:text-(--el-link)"
               >
-                ← {project.data.name} · Roadmap
+                ← {project.data.name}
               </Link>
             </p>
 

@@ -62,7 +62,7 @@ export default async function ProjectOpengraphImage({
   const name = project?.name ?? params.identifier
   const tagline =
     project?.publicTagline ??
-    'A public project plan on Motir — work items, boards and a roadmap.'
+    'A project built in public on Motir — watch it being built.'
 
   return new ImageResponse(
     <div

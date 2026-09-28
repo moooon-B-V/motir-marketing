@@ -151,8 +151,9 @@ test('the whole /p/* journey, as MOTIR-3877 asks to be accepted', async ({
   expect(href).toContain('intent=request')
   expect(href).toContain('subject=MOTIR')
   // …and it carries the way back. This is the seam; the far side is motir-core's.
-  expect(decodeURIComponent(href ?? '')).toContain(
-    'https://motir.co/p/MOTIR/roadmap',
+  // (The project page since MOTIR-6745 — the roadmap is the app's now.)
+  expect(new URL(href!).searchParams.get('return')).toBe(
+    'https://motir.co/p/MOTIR',
   )
   await beat(page, 1400)
 

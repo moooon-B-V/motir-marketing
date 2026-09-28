@@ -2,10 +2,13 @@ import Link from 'next/link'
 import {
   PROJECT_TABS,
   projectTabHref,
+  visitorViewUrl,
   type PublicProjectOverviewDto,
+  type VisitorView,
 } from '@/lib/publicProject'
 import { SITE_HOST, type PublicHost } from '@/lib/publicHost'
 import { ActRail } from './ActRail'
+import { WatchLive } from './WatchLive'
 
 /**
  * The project HERO and the TAB BAR (MOTIR-4115) — panel 1 of
@@ -25,10 +28,16 @@ export function ProjectHeader({
   project,
   current,
   host = SITE_HOST,
+  watch = false,
 }: {
   project: PublicProjectOverviewDto
-  /** The tab segment that is current — `''` for the Overview. */
-  current: string
+  /**
+   * The SITE tab that is current — `''` for the Overview, `'changelog'` — or
+   * `null` on a page that is no tab (the request pages, MOTIR-6745).
+   */
+  current: string | null
+  /** Render the "Watch it being built" entry — the project page only (design MOTIR-6742 panel A). */
+  watch?: boolean
   /**
    * The address this request arrived on (MOTIR-4220). Defaulted to the site,
    * which is what an unrouted request already is — so the shipped behaviour is
@@ -44,7 +53,11 @@ export function ProjectHeader({
   // prefixes this with `SITE_ORIGIN`, so a host-relative path would become
   // `motir.co/board` — a URL that does not exist. `actHref`'s note carries the
   // reasoning and the consequence.
-  const returnPath = projectTabHref(SITE_HOST, project.identifier, current)
+  const returnPath = projectTabHref(
+    SITE_HOST,
+    project.identifier,
+    current ?? '',
+  )
   const { identifier, name, workspaceName, publicTagline, publicTags, stats } =
     project
 
@@ -89,14 +102,24 @@ export function ProjectHeader({
 
       <ActRail identifier={identifier} returnPath={returnPath} host={host} />
 
+      {watch ? <WatchLive identifier={identifier} name={name} /> : null}
+
       {/* ⚠️ SCROLLS, never wraps. Six short labels; a wrapped row would push the
           content down by a line on every project whose window is narrow, which
           the design's narrow panel (16) settles. */}
+      {/* ⚠️ SPLIT BY WHO SERVES THE TAB (MOTIR-6745; design MOTIR-6742 panel A).
+          Overview and Changelog are pages on this host — `next/link`, host-
+          relative. Board, Items, Tree and Roadmap live in the app now
+          (MOTIR-6743 redirects the old paths): they follow a divider under
+          "In the app", carry the ↗ the act rail's hand-offs use, and are PLAIN
+          `<a>`s on `APP_ORIGIN`, never `next/link` — a cross-origin `next/link`
+          is RSC-prefetched on render (MOTIR-4372), and a relative one would be
+          prefetched into a redirect off this host. SCROLLS, never wraps. */}
       <nav
         aria-label="Project"
-        className="mt-6 flex gap-0.5 overflow-x-auto border-b border-(--el-border)"
+        className="mt-6 flex items-center gap-0.5 overflow-x-auto border-b border-(--el-border)"
       >
-        {PROJECT_TABS.map((tab) => {
+        {PROJECT_TABS.filter((tab) => tab.served === 'site').map((tab) => {
           const isCurrent = tab.segment === current
           return (
             <Link
@@ -113,6 +136,29 @@ export function ProjectHeader({
             </Link>
           )
         })}
+        <span
+          aria-hidden
+          className="mx-2 h-[18px] w-px flex-none bg-(--el-border)"
+        />
+        <span
+          aria-hidden
+          className="flex-none px-1 text-[12px] whitespace-nowrap text-(--el-text-secondary)"
+        >
+          In the app
+        </span>
+        {PROJECT_TABS.filter((tab) => tab.served === 'app').map((tab) => (
+          <a
+            key={tab.segment}
+            href={visitorViewUrl(identifier, tab.segment as VisitorView)}
+            className="border-b-2 border-transparent px-3 py-2.5 text-[13px] font-medium whitespace-nowrap text-(--el-text-secondary) hover:text-(--el-text)"
+          >
+            {tab.label}&nbsp;<span aria-hidden>↗</span>
+            <span className="sr-only">
+              {' '}
+              — opens in the Motir app; needs an account
+            </span>
+          </a>
+        ))}
       </nav>
     </header>
   )

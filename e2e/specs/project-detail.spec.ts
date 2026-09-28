@@ -73,8 +73,47 @@ test('the intake is a HAND-OFF, and says so before asking for anything', async (
   expect(href).toContain('/act?')
   expect(href).toContain('intent=request')
   expect(href).toContain('subject=MOTIR')
-  // The return trip is carried, and it points back at this site.
-  expect(decodeURIComponent(href ?? '')).toContain('/p/MOTIR/roadmap')
+  // The return trip is carried, and it points back at this site — at the
+  // PROJECT page, since the roadmap is the app's now (MOTIR-6745).
+  const back = new URL(href!).searchParams.get('return')
+  expect(new URL(back!).pathname).toBe('/p/MOTIR')
+
+  // And nothing on the doorway points at a retired read page on this host.
+  expect(
+    await page
+      .locator('a[href$="/roadmap"], a[href*="/roadmap?"]')
+      .evaluateAll((links) =>
+        links
+          .map((l) => l.getAttribute('href')!)
+          .filter((h) => h.startsWith('/')),
+      ),
+  ).toEqual([])
+})
+
+test('the request page goes back to the PROJECT, not to a retired read page', async ({
+  page,
+}) => {
+  await page.goto('/p/MOTIR/requests/MOTIR-4051')
+
+  const main = page.getByRole('main')
+  await expect(main.getByRole('link', { name: /^← / })).toHaveAttribute(
+    'href',
+    '/p/MOTIR',
+  )
+  expect(
+    await page
+      .locator('a[href]')
+      .evaluateAll((links) =>
+        links
+          .map((l) => l.getAttribute('href')!)
+          .filter(
+            (h) =>
+              h.startsWith('/') &&
+              /\/(roadmap|board|items|tree)(\/|\?|$)/.test(h),
+          ),
+      ),
+    'a same-host link to a read page that 308s into the app',
+  ).toEqual([])
 })
 
 test('the intake is not indexed — a doorway must not outrank the roadmap', async ({

@@ -104,9 +104,11 @@ test('a project at its own address, as MOTIR-3878 asks to be accepted', async ({
     'href',
     '/ACME',
   )
-  await expect(nav.getByRole('link', { name: 'Board' })).toHaveAttribute(
+  // The Board is the app's since MOTIR-6745: a plain link on the app origin
+  // (the stub, in this lane), never a path on this host.
+  await expect(nav.getByRole('link', { name: /^Board/ })).toHaveAttribute(
     'href',
-    '/ACME/board',
+    `${STUB_ORIGIN}/p/ACME/board`,
   )
   await beat(page)
 

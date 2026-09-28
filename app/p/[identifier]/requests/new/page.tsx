@@ -81,21 +81,25 @@ export default async function RequestIntakePage({
   //   • the BACK LINK stays on this host, so it is host-relative;
   //   • the HAND-OFF's return is prefixed with `SITE_ORIGIN` by `actHref`, so
   //     it must be the SITE path or the round trip lands on a URL that does not
-  //     exist (`motir.co/roadmap`). `actHref`'s note carries the reasoning.
-  const roadmapHref = publicPathFor(host, identifier, 'roadmap')
-  const returnPath = publicPathFor(SITE_HOST, identifier, 'roadmap')
+  //     exist (`motir.co/<identifier>`). `actHref`'s note carries the reasoning.
+  //
+  // ⚠️ BOTH ARE THE PROJECT PAGE since MOTIR-6745 (design MOTIR-6742 panel B).
+  // They named the roadmap, which was the request board — retired, and its
+  // path a redirect into the app's sign-in now (MOTIR-6743).
+  const projectHref = publicPathFor(host, identifier)
+  const returnPath = publicPathFor(SITE_HOST, identifier)
 
   return (
     <>
-      <ProjectHeader project={project} current="roadmap" host={host} />
+      <ProjectHeader project={project} current={null} host={host} />
 
       <div className="mt-6 max-w-[38rem]">
         <p className="mb-5 text-[13px]">
           <Link
-            href={roadmapHref}
+            href={projectHref}
             className="text-(--el-text-secondary) hover:text-(--el-link)"
           >
-            ← {project.name} · Roadmap
+            ← {project.name}
           </Link>
         </p>
 
@@ -127,12 +131,14 @@ export default async function RequestIntakePage({
           </p>
         </div>
 
+        {/* Redrawn TRUE (design MOTIR-6742 panel B): the read tabs need an
+            account now, so this names only what still does not. */}
         <p className="mt-5 text-[13px] text-(--el-text-secondary)">
-          Reading this project needs no account at all — the{' '}
-          <Link href={returnPath} className="text-(--el-link) hover:underline">
-            roadmap
-          </Link>{' '}
-          and every tab above are open to everyone.
+          Anyone can read{' '}
+          <Link href={projectHref} className="text-(--el-link) hover:underline">
+            the project page
+          </Link>
+          , its changelog and every request’s own page without an account.
         </p>
       </div>
     </>

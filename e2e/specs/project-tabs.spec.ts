@@ -73,3 +73,31 @@ test('the Changelog canonical names motir.co and its own path', async ({
   expect(canonical).toContain('/p/MOTIR/changelog')
   expect(canonical).not.toContain('app.motir.co')
 })
+
+test('the project page offers Watch live, and its app tabs leave for the app', async ({
+  page,
+}) => {
+  // MOTIR-6745 (design MOTIR-6742 panel A). The one door into the live
+  // project states its cost first, and every app tab is a PLAIN link on the
+  // app's origin — so nothing is prefetched into a redirect off this host.
+  await page.goto('/p/MOTIR')
+
+  await expect(
+    page.getByText('your name and email will be visible to', { exact: false }),
+  ).toBeVisible()
+  await expect(page.getByRole('link', { name: /Watch live/ })).toHaveAttribute(
+    'href',
+    `${STUB_ORIGIN}/p/MOTIR/board`,
+  )
+
+  const nav = page.getByRole('navigation', { name: 'Project' })
+  for (const view of ['board', 'items', 'tree', 'roadmap']) {
+    await expect(
+      nav.getByRole('link', { name: new RegExp(`^${view}`, 'i') }),
+    ).toHaveAttribute('href', `${STUB_ORIGIN}/p/MOTIR/${view}`)
+  }
+  await expect(nav.getByRole('link', { name: 'Changelog' })).toHaveAttribute(
+    'href',
+    '/p/MOTIR/changelog',
+  )
+})
