@@ -212,3 +212,138 @@ hosts answer 404 today.
 - `motir-marketing/design/marketing/design-notes.md` — the area-wide AA rule
 - `motir-marketing/app/explore/` — the shipped unreachable-API treatment this asset follows
 - MOTIR-4115 · MOTIR-4116 · MOTIR-4117 · MOTIR-4118 · MOTIR-4119 — the cards that build to this
+
+---
+
+## MOTIR-6742 — the project page once the read tabs leave (`public-projects--watch-live.mock.html`)
+
+**Subtask:** MOTIR-6742 (`type: design`) · **Story:** MOTIR-6171 (motir.co's public read pages move into
+the app). **A delta:** `public-projects--watch-live.mock.html` holds only the panels that change. The
+base mock above is a record of MOTIR-4113 and is not edited.
+
+**What changed underneath it.** motir.co's Board, Items, Tree and Roadmap pages, and every work-item
+page, answer a **permanent redirect (308)** to the same path in the app, where a signed-in, consented
+Visitor reads the live project (MOTIR-6743; motir-core `public-surface-hosts.md` AMENDMENT 8). The
+Roadmap tab was the public **feature-request board**, and it is **retired**, not moved
+(motir-core `docs/decisions/public-request-board-retired.md`, MOTIR-6744). What stays on this host,
+anonymous, is the project page, follow, subscribe, the changelog and its feed, the request doorway, and
+each request's page with its upvote and comment hand-offs.
+
+**How it was checked against shipped reality.** `/p/MOTIR`, `/p/MOTIR/requests/new` and
+`/p/MOTIR/requests/MOTIR-4051` were rendered from the real build against the browser lane's stub on
+this story's branch (after MOTIR-6743), and the delta composes the base mock's markup and classes
+verbatim: `.topbar`, `.hero`, `.acts`, `.tabs`, `.btn.handoff`, `.crumb`, `.state`, `.foot`.
+
+### Panels
+
+| panel | draws                                                                               | amends                                                 |
+| ----- | ----------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **A** | the Overview: the tab bar split, and the **Watch it being built** entry             | base 1                                                 |
+| **B** | the request doorway: back to the project page; the closing line redrawn true        | base 9 (as shipped: the doorway, not the retired form) |
+| **C** | one request: back to the project page; upvote and comment hand-offs unchanged       | base 8                                                 |
+| **D** | the EMPTY overview, pointing at the app                                             | base 10                                                |
+| **E** | ERROR: the overview read fails and the Watch entry still renders                    | base 12                                                |
+| **F** | a TENANT HOST (`acme.motir.site/ACME`): site tabs host-relative, app links absolute | base 1 on a tenant                                     |
+| **G** | narrow (390 × 844) and dark                                                         | base 16, 17                                            |
+
+### The tab bar, split
+
+**Overview** and **Changelog** stay tabs on this host and keep their current-page underline.
+**Board, Items, Tree, Roadmap** follow a thin divider and a small **"In the app"** label, and each
+carries the **↗ affix**, the same mark the act rail's hand-offs (Follow, Request a feature) already use
+for a door that leaves this host (base panels 13–14). The affix was chosen over a lock or an "App" pill
+because a visitor on this surface has already learned what ↗ means on this page, and nothing else is.
+Each link's accessible name adds _"— opens in the Motir app; needs an account"_. They point at
+`app.motir.co/p/<identifier>/<view>` on EVERY host.
+
+**Roadmap now means the in-app roadmap canvas.** The demand-ordered request board it used to be is
+retired, and its pending requests are the Visitor's **Requested features** view in the app. That view
+gets **no link from motir.co** (the story's scope boundary): a reader reaches it inside the app.
+
+### The Watch entry
+
+**Placement:** between the act rail and the tab bar, full width. Next to the hero it would read as a
+stat. Inside the act rail it would be one more button among Follow and Subscribe, with no room for the
+sentence that is its whole point. Above the tab bar it is the last thing a reader passes before the
+links it explains.
+
+| part   | copy                                                                                                                                                       | token                         |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| title  | Watch **{project}** being built                                                                                                                            | 14 px 600, `--el-text-strong` |
+| what   | The live board, the plans as they are drafted and the agent runs as they happen — in the Motir app.                                                        | 13 px `--el-text-strong`      |
+| cost   | You’ll need a Motir account. If you continue, your **name and email** will be visible to **this project’s workspace Managers**, along with when you visit. | 13 px `--el-text-strong`      |
+| action | **Watch live ↗** → `app.motir.co/p/<identifier>/board`                                                                                                     | `.btn.primary.sm.handoff`     |
+| strip  | `Eye` glyph in `--el-info` on `--el-tint-sky`, `--radius-card`                                                                                             | —                             |
+
+**The sentence is checked against the consent screen it leads to.** motir-core `messages/en.json`
+`visitor.consent.body` reads: _"If you continue, your <b>name and email</b> will be visible to <b>this
+project’s workspace Managers</b>, along with when you visit."_ The cost line here repeats that clause
+word for word, adding only _"You’ll need a Motir account."_ before it. The reader is told on motir.co
+exactly what the consent screen then asks, and nothing it doesn't. It also agrees with
+`settings.publicPage.visitorLink.subtitle` (_"after they sign in and agree to share their name and email
+with this project’s Managers"_).
+
+**Why the board.** It is the Visitor tree's default view, the one the consent screen returns to
+(`VISITOR_DEFAULT_VIEW`), and the one view that shows a project moving at a glance. The in-app rail
+then offers items, tree, roadmap, plans, approvals, runs and Requested features.
+
+**Ink.** Every line of text on the tint is `--el-text-strong`, never `--el-text-muted` or
+`--el-text-secondary`: the area AA rule above, applied before it could fail.
+
+### The request doorway and the request page
+
+- **The back-link** was _"← {Project} · Roadmap"_ to the board. It is now **"← {Project}"** to
+  `/p/<identifier>`, on both pages.
+- **The doorway's closing line**, _"Reading this project needs no account at all — the roadmap and every
+  tab above are open to everyone"_, is false after this story. It is redrawn true: **"The project page,
+  its changelog and every request’s own page are open to everyone, no account needed."** It is not
+  dropped: a visitor about to be sent to sign in should still learn what they can read without it.
+- **The hand-off's return** (`actHref`'s `return`) is the project page, `motir.co/p/<identifier>`,
+  instead of the retired roadmap. This is a build note for MOTIR-6745; the mock's hrefs show it.
+- The request page's **upvote** and **comment** hand-offs are unchanged, drawn as context.
+
+### States
+
+- **Empty overview (D):** _"This project has not written an overview yet"_, then _"Its live board, work
+  items and roadmap are in the Motir app — watch it being built, above."_ The old body pointed at "the
+  tabs above", which now leave the site.
+- **Error (E):** when the overview read fails, the page renders the shipped `ErrorState` and **the Watch
+  entry still renders below it**, titled _"Watch this project being built"_ because the name came from
+  the failed read. It needs only the identifier, and it is the one way forward the visitor still has.
+- **Tenant host (F):** Overview and Changelog are host-relative (`acme.motir.site/ACME`,
+  `acme.motir.site/ACME/changelog`; the mock spells them absolute so the frame is unambiguous). The app
+  links and the Watch entry are absolute on `app.motir.co`, never on the tenant host. A custom domain is
+  the same at `roadmap.acme.com/` and `roadmap.acme.com/changelog`.
+- **Narrow (G):** the Watch strip wraps, with glyph and text first and the button full width below. The
+  tab bar scrolls sideways as it always has. **Dark (G):** the dark `--el-tint-sky` fill with
+  `--el-text-strong` ink; nothing else changes.
+- **No loading state:** the entry is static and reads nothing.
+
+### SUPERSEDED in the base mock
+
+The base is a record and is not edited. These of its panels no longer describe the product:
+
+- **Panels 2–5** (Board, Items, Tree, Roadmap tabs) and **panel 7** (work-item detail): the paths
+  redirect into the app (MOTIR-6743).
+- **Panel 5's roadmap-card vote row** (AMENDMENT 4 row 4's _roadmap vote_ hand-off): retired with the
+  request board. The request page's _upvote_ hand-off stands.
+- **Panel 11** (LOADING, drawn over the Items tab): no read tab is left for it to load. The changelog
+  keeps the grammar.
+
+### The access path, updated (base panel 15)
+
+The doors in are unchanged: `/explore`'s squares, a shared link, a changelog feed item, and the
+`app.motir.co/p/<id>` → `motir.co/p/<id>` 308 for the bare path. **What changed is where the read doors
+lead.** `motir.co/p/<id>/board | items | tree | roadmap | items/<KEY>` now 308 into the app, on every
+host. Inside this site, the only doors into the app are the four tab links and the Watch entry, and
+both say before the click that an account is needed.
+
+### ⚠️ Planning flags
+
+- **MOTIR-6745:** `PROJECT_TABS[].served` (MOTIR-6743) splits the bar, and `visitorViewUrl` builds each
+  app link. The Watch entry reuses `visitorViewUrl(identifier, 'board')`. `actHref`'s return path and
+  the two back-links move to the project page. The changelog's work-item links point at the app
+  (`visitorViewUrl(identifier, 'items', KEY)`), because `/p/<id>/items/<KEY>` on this host is a redirect
+  now. The meta description's _"free to read with no sign-up"_ is corrected.
+- **Nothing else is owed.** The in-app consent screen and Visitor chrome are MOTIR-6641's, drawn and
+  shipped.
