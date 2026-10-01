@@ -3,8 +3,10 @@ import {
   countCatalogueTools,
   describeSchema,
   fetchMcpToolCatalogue,
+  toolHint,
   type McpToolCatalogue,
   type McpToolEntry,
+  type McpToolHint,
 } from '@/lib/docs'
 import { copy } from '@/lib/copy'
 import { SchemaTable } from '../../../_components/DocSchema'
@@ -51,6 +53,16 @@ import { SchemaTable } from '../../../_components/DocSchema'
  * Collapsing those two into one empty block is the failure this card exists to
  * fix, one level up: an empty rendering that reads as an answer.
  *
+ * ── Each row's TITLE and behaviour HINT (MOTIR-7080) ────────────────────────
+ * Built to the design delta `design/docs/docs--mcp-tool-hints.mock.html`
+ * (MOTIR-7077): the title beside the name, one chip per row in the docs chip
+ * recipe (Reads = the GET tint, Writes = the PATCH tint, Destructive = the
+ * DELETE tint), and the page-top line saying what the chips mean. The same
+ * absence rule as the arguments: no `annotations` on a row ⇒ "this Motir
+ * version does not publish this tool's behaviour hints", and NO chip — a blank
+ * would read as "nothing to warn about", which is the one wrong answer that
+ * could make a write look safe. `toolHint` in `lib/docs.ts` is the mapping.
+ *
  * ⚠️ NO FALLBACK, DELIBERATELY. Unreachable or unreadable ⇒ this page SAYS SO.
  * A committed default is stale exactly when it is displayed.
  */
@@ -85,6 +97,52 @@ function ToolArguments({ tool }: { tool: McpToolEntry }) {
   return (
     <div className="mt-2">
       <SchemaTable schema={tool.inputSchema} labelledBy={`tool-${tool.name}`} />
+    </div>
+  )
+}
+
+/** The chip recipe from `design/docs/design-notes.md` § The chips, per hint. */
+const HINT_CHIPS: Record<
+  Exclude<McpToolHint, 'unpublished'>,
+  { label: string; tint: string }
+> = {
+  reads: { label: copy.docs.mcpHintReads, tint: 'bg-(--el-tint-sky)' },
+  writes: { label: copy.docs.mcpHintWrites, tint: 'bg-(--el-tint-peach)' },
+  destructive: {
+    label: copy.docs.mcpHintDestructive,
+    tint: 'bg-(--el-tint-rose)',
+  },
+}
+
+function HintChip({ hint }: { hint: Exclude<McpToolHint, 'unpublished'> }) {
+  const chip = HINT_CHIPS[hint]
+  return (
+    <span
+      data-hint={hint}
+      className={`inline-flex justify-center rounded-(--radius-badge) px-(--spacing-chip-x) py-(--spacing-chip-y) font-(family-name:--font-mono) text-[10.5px] leading-[1.5] font-bold tracking-[0.02em] whitespace-nowrap text-(--el-text-strong) ${chip.tint}`}
+    >
+      {chip.label}
+    </span>
+  )
+}
+
+/** The name, the title beside it and the chip — wrapping, never truncating the name. */
+function ToolHead({ tool }: { tool: McpToolEntry }) {
+  const hint = toolHint(tool)
+  return (
+    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
+      <code
+        id={`tool-${tool.name}`}
+        className="font-(family-name:--font-mono) text-[13px] [overflow-wrap:anywhere] text-(--el-text)"
+      >
+        {tool.name}
+      </code>
+      {tool.title ? (
+        <span className="text-[13px] font-semibold text-(--el-text)">
+          {tool.title}
+        </span>
+      ) : null}
+      {hint === 'unpublished' ? null : <HintChip hint={hint} />}
     </div>
   )
 }
@@ -143,6 +201,12 @@ export default async function McpToolsPage() {
         grant it carries, so the list your client shows is already scoped to
         you.
       </p>
+      <p className="mt-3 max-w-[68ch] text-[14px] leading-[1.9] text-(--el-text-secondary)">
+        {copy.docs.mcpHintLedeIntro} <HintChip hint="reads" />{' '}
+        {copy.docs.mcpHintReadsMeans} <HintChip hint="writes" />{' '}
+        {copy.docs.mcpHintWritesMeans} <HintChip hint="destructive" />{' '}
+        {copy.docs.mcpHintDestructiveMeans} {copy.docs.mcpHintLedeClaude}
+      </p>
       <p className="mt-3 max-w-[68ch] text-[13px] leading-relaxed text-(--el-text-secondary)">
         Argument tables render one level: a nested object or a list shows its
         type, and the handshake carries the shape inside it.
@@ -160,15 +224,15 @@ export default async function McpToolsPage() {
           <ul className="mt-3 flex flex-col divide-y divide-(--el-border) border-y border-(--el-border)">
             {group.tools.map((tool) => (
               <li key={tool.name} className="py-4">
-                <code
-                  id={`tool-${tool.name}`}
-                  className="font-(family-name:--font-mono) text-[13px] text-(--el-text)"
-                >
-                  {tool.name}
-                </code>
+                <ToolHead tool={tool} />
                 <p className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
                   {tool.summary}
                 </p>
+                {toolHint(tool) === 'unpublished' ? (
+                  <p className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
+                    {copy.docs.mcpHintsUnpublished}
+                  </p>
+                ) : null}
                 <ToolArguments tool={tool} />
               </li>
             ))}
