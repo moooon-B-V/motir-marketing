@@ -1,6 +1,6 @@
 ---
 title: Model providers
-version: 1.0.1
+version: 1.0.2
 effectiveDate: TBD
 status: approved
 ---
@@ -149,11 +149,26 @@ The table exists so it can be acted on, not only read.
   and it is not decided on this page.
 - **Hosted agents choose their own model**, which need not be the planner's — so a
   workspace can plan on one provider and execute on another.
-- **The constraint is enforced where the request leaves.** The gateway routes on a
-  residency group, and a provider without a recorded transfer basis cannot enter the
-  group that serves EU traffic. A request that would breach it **fails rather than
-  routing** — the correct failure, because a job that errors can be retried and a
-  transfer that has happened cannot be undone.
+- **Motir never assigns a provider that trains on your prompts.** Motir's own defaults
+  — the planner's, and a hosted agent run's at every difficulty level — are not
+  DeepSeek, Zhipu AI or Moonshot AI. Those three are reached only when someone chooses
+  one of their models, for a request, for a hosted agent run (which sends the content of
+  the repository the run works in), or as a project's own default for a difficulty level.
+- **Refuse a provider's data practices per request.** The gateway takes a data policy on
+  each request, in the `X-Motir-Data-Policy` header. `must-not-train` admits only a
+  provider that states it does not train on API content, the way OpenRouter's
+  `data_collection: "deny"` does. `zero-retention` admits only a provider that commits
+  not to retain prompts, the way OpenRouter's `zdr` does, and a provider whose retention
+  is _not stated_ does not qualify. Either policy keeps a request away from DeepSeek. A
+  request with no policy is not restricted.
+- **The restriction is enforced where the request leaves.** A request whose policy no
+  provider for its model satisfies **fails rather than routing** — the correct failure,
+  because a job that errors can be retried and a transfer that has happened cannot be
+  undone.
+- **⚠️ Updated 2026-10-01.** This section used to say that a provider without a recorded
+  transfer basis cannot enter the group that serves EU traffic. That group exists, but no
+  caller is bound to it, so it restricts nothing. The per-request data policy is the
+  control.
 
 ---
 
