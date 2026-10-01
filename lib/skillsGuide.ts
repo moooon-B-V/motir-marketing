@@ -30,7 +30,7 @@
  */
 
 /** The `motir-skills` release every command on the page installs. */
-export const SKILLS_RELEASE_TAG = 'v0.3.0'
+export const SKILLS_RELEASE_TAG = 'v0.4.0'
 
 /** The public repository, as `owner/name`. */
 export const SKILLS_REPO = 'moooon-B-V/motir-skills'
@@ -93,6 +93,16 @@ export interface InstallBlock {
   copyLabel: string
 }
 
+/** One thing an install brings, for the agent whose install brings more than skills. */
+export interface InstallBrings {
+  /** What it is, in a few words — bolded on the page. */
+  title: string
+  /** One sentence on what it does and what it needs. */
+  text: string
+  /** A page on this site that says more. */
+  link?: { href: string; label: string }
+}
+
 export interface AgentInstall {
   /** Anchor id on the page. */
   id: string
@@ -101,6 +111,12 @@ export interface AgentInstall {
   /** One or two sentences before the blocks: what this agent reads. */
   intro: string
   blocks: InstallBlock[]
+  /**
+   * What the install brings, when it is more than the skills — the Claude Code
+   * plugin since `v0.4.0` (MOTIR-6975). Read from `motir-skills` `README.md`
+   * § *Install in Claude Code* AT THE TAG, never at `main`.
+   */
+  brings?: InstallBrings[]
   /** After the blocks: the other directories, and how to check it worked. */
   note: string
   /** That agent's own skills documentation. */
@@ -112,7 +128,7 @@ export const AGENT_INSTALLS: AgentInstall[] = [
     id: 'claude-code',
     label: 'Claude Code',
     intro:
-      'The repository is also a Claude Code plugin marketplace. Add it at the release tag, then install the plugin; it carries every skill in the release.',
+      'The repository is also a Claude Code plugin marketplace. Add it at the release tag, then install the plugin. One install brings the skills, Motir’s MCP server and a runner for its CLI, and connects Motir without a token.',
     blocks: [
       {
         caption: 'in Claude Code',
@@ -123,12 +139,27 @@ export const AGENT_INSTALLS: AgentInstall[] = [
         copyLabel: 'Copy the Claude Code plugin commands',
       },
       {
-        caption: 'or copy them, in a terminal',
+        caption: 'or copy the skills only, in a terminal',
         code: copyInstall('~/.claude/skills'),
         copyLabel: 'Copy the Claude Code copy-install commands',
       },
     ],
-    note: 'A plugin’s skills are listed under the plugin’s name, for example /motir:motir-run. Copied skills keep their own names. For one repository only, copy into .claude/skills in that repository instead.',
+    brings: [
+      {
+        title: 'The six skills',
+        text: 'Every skill in the release, listed under the plugin’s name.',
+      },
+      {
+        title: 'The Motir MCP server',
+        text: 'Claude Code signs into it in the browser the first time it is used: run /mcp, pick motir and choose Authenticate, then pick the workspace and approve on Motir’s consent screen. There is no token to create or paste.',
+        link: { href: '/docs/mcp#claude', label: 'Add Motir to Claude' },
+      },
+      {
+        title: 'The motir runner',
+        text: 'Runs the pinned Motir CLI with npx, so nothing is installed globally. It needs Node.js 22 or newer, and the CLI signs in on its own with motir login.',
+      },
+    ],
+    note: `To check it: /plugin shows motir at ${SKILLS_RELEASE_TAG.replace(/^v/, '')}, and /mcp lists motir. A plugin’s skills are listed under the plugin’s name, for example /motir:motir-run. Copying the skills brings the skills alone — connect the MCP server yourself, as the other agents do. For one repository only, copy into .claude/skills in that repository instead.`,
     docsUrl: 'https://code.claude.com/docs/en/discover-plugins',
   },
   {

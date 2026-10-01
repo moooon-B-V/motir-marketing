@@ -155,6 +155,39 @@ describe('/docs/skills', () => {
     ).not.toBeNull()
   })
 
+  it('installs v0.4.0 — the first release whose plugin brings the MCP and the runner', () => {
+    // MOTIR-7081. A literal on purpose: the constant moving is the change this
+    // card makes, so a test that read the constant back would agree with any tag.
+    expect(SKILLS_RELEASE_TAG).toBe('v0.4.0')
+  })
+
+  it('says the Claude Code plugin brings three things, and links the MCP sign-in', () => {
+    const container = page()
+    const section = container
+      .querySelector('h3#claude-code')!
+      .closest('section')!
+    const items = [...section.querySelectorAll('li')].map(
+      (li) => li.textContent ?? '',
+    )
+    expect(items).toHaveLength(3)
+    expect(items[0]).toContain('The six skills')
+    expect(items[1]).toContain('The Motir MCP server')
+    expect(items[1]).toContain('no token')
+    expect(items[2]).toContain('The motir runner')
+    expect(items[2]).toContain('Node.js 22 or newer')
+    expect(section.querySelector('a[href="/docs/mcp#claude"]')).not.toBeNull()
+    // Only Claude Code's install brings more than skills.
+    for (const agent of AGENT_INSTALLS.filter((a) => a.id !== 'claude-code')) {
+      expect(agent.brings, agent.id).toBeUndefined()
+    }
+  })
+
+  it('tells a Claude Code reader they need no token, and the others where to get one', () => {
+    const before = page().querySelector('h2#before')!.nextElementSibling!
+    expect(before.textContent).toContain('there is no token')
+    expect(before.textContent).toContain('personal access token')
+  })
+
   it('pins every command it renders to ONE release tag', () => {
     const container = page()
     const panes = [...container.querySelectorAll('pre')].map(
