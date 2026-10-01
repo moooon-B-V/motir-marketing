@@ -2,7 +2,9 @@ import Link from 'next/link'
 import { copy } from '@/lib/copy'
 import { fetchMcpToolCatalogue, type McpToolCatalogue } from '@/lib/docs'
 import {
+  CONNECTED_APPS_PATH,
   MCP_REFERENCE_URL,
+  claudeRoutes,
   mcpClients,
   mcpForkRows,
   mcpTransportFactRows,
@@ -39,6 +41,16 @@ import { CodeBlock } from '../../_components/DocSchema'
  * second copy of a scope list it could not check, and the no-fallback contract
  * applies here as everywhere else in this area: unreachable ⇒ the page says so
  * and the wiring above it still works, because the wiring needs no fetch.
+ *
+ * ── IT LEADS WITH THE ROUTE THAT NEEDS NO TOKEN (MOTIR-7078) ───────────────
+ * Since MOTIR-6973 the server is an OAuth resource: a Claude client signs in on
+ * app.motir.co and the person picks ONE workspace and approves what it may do.
+ * That route comes first, as "Add Motir to Claude" (`#claude`), because it is
+ * the one a person adding Motir to Claude should take and the one Anthropic's
+ * connector reviewer is pointed at. The token route follows, unchanged in
+ * substance, for other clients and for CI — and keeps its `#token` / `#wire` /
+ * `#check` anchors so inbound links still land. The Claude steps are data in
+ * `lib/mcpWiring.ts` (`claudeRoutes`), interpolated from the same facts.
  *
  * ⚠️ AND THIS FILE NAMES NO TOOL AND NO VENDOR CONFIG KEY.
  * `tests/docs/docs.test.ts` scans this source for a lowercase underscore-joined
@@ -198,6 +210,8 @@ function Scopes({ catalogue }: { catalogue: McpToolCatalogue | null }) {
 export default async function McpPage() {
   const facts = mcpTransportFacts()
   const clients = mcpClients(facts)
+  const routes = claudeRoutes(facts)
+  const connectedAppsUrl = `${facts.origin}${CONNECTED_APPS_PATH}`
 
   /*
    * ⚠️ THE FETCH IS CAUGHT, and only this one section depends on it. The
@@ -223,9 +237,99 @@ export default async function McpPage() {
         Motir exposes a Model Context Protocol server — one streamable-HTTP
         endpoint that agents and the CLI call to read and drive the
         project-management core. It is the same surface the hosted agents use to
-        execute a plan. Three steps below take you from nothing to a client that
-        is connected.
+        execute a plan. Adding it to Claude takes one sign-in and no token; any
+        other client, or a pipeline, connects with a token in three steps.
       </p>
+
+      <H2 id="claude">Add Motir to Claude</H2>
+      <Prose>
+        You sign in with your Motir account, pick one workspace and approve what
+        Claude may do there. Nothing is copied or pasted — there is no token to
+        mint or keep safe.
+      </Prose>
+
+      {routes.map((route) => (
+        <div key={route.id} id={route.id} className="mt-6 scroll-mt-6">
+          <h3 className="mb-1.5 text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase">
+            {route.label}
+          </h3>
+          <ol className="mt-1 max-w-[68ch] list-decimal space-y-1 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
+            {route.steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+          <div className="mt-3">
+            <CodeBlock
+              caption={route.caption}
+              code={route.code}
+              copyLabel={route.copyLabel}
+            />
+          </div>
+          <p className="mt-1.5 max-w-[68ch] text-[12px] leading-relaxed text-(--el-text-secondary)">
+            {route.note} ·{' '}
+            <a
+              className="text-(--el-accent-on-surface) underline underline-offset-2"
+              href={route.docsUrl}
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              Anthropic’s {route.label} documentation
+            </a>{' '}
+            · steps checked {route.checkedOn}
+          </p>
+        </div>
+      ))}
+
+      <h3
+        id="consent"
+        className="mt-8 mb-1.5 scroll-mt-6 text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase"
+      >
+        What you approve, and how to take it back
+      </h3>
+      <Prose>
+        The sign-in page on Motir names the app that is asking, has you choose
+        one workspace, and lists the permissions it wants. Claude then acts as
+        you in that workspace, within what you approved — never beyond what your
+        own role allows.
+      </Prose>
+      <Prose>
+        Claude asks before it uses a tool that changes anything: every tool says
+        whether it only reads, writes or deletes, and{' '}
+        <Link
+          href="/docs/mcp/tools"
+          className="text-(--el-accent-on-surface) underline underline-offset-2"
+        >
+          {copy.docs.mcpTools}
+        </Link>{' '}
+        shows which is which. Want the plugin for Claude Code instead? It brings
+        this server with it —{' '}
+        <Link
+          href="/docs/skills"
+          className="text-(--el-accent-on-surface) underline underline-offset-2"
+        >
+          {copy.docs.skills}
+        </Link>
+        .
+      </Prose>
+      <Prose>
+        Every app you connect is listed under{' '}
+        <a
+          className="text-(--el-accent-on-surface) underline underline-offset-2"
+          href={connectedAppsUrl}
+        >
+          Connected apps
+        </a>
+        , on Settings → Account → Tokens in Motir, with its workspace,
+        permissions and when it was last used. Revoke ends its access at its
+        next request.
+      </Prose>
+
+      <H2 id="token-route">Other clients and CI: use a token</H2>
+      <Prose>
+        Choose this route for a client without OAuth sign-in, a headless agent,
+        or a CI pipeline. It is the same server; a personal access token stands
+        in for the sign-in.
+      </Prose>
 
       <H2 id="fork">This server, or the REST API?</H2>
       <Prose>
@@ -335,12 +439,13 @@ export default async function McpPage() {
         in Motir.
       </Prose>
 
-      <H2 id="scopes">What a token may call</H2>
+      <H2 id="scopes">What a connection may call</H2>
       <Prose>
-        Every tool is gated by a scope, and the grant a token carries decides
-        which tools it may call — so the list your client shows is already
-        scoped to you. These are read from Motir itself when this page is
-        requested, so they are whatever the server ships right now.
+        Every tool is gated by a scope. The permissions you approved for a
+        connected app, or the grant a token carries, decide which tools it may
+        call — so the list your client shows is already scoped to you. These are
+        read from Motir itself when this page is requested, so they are whatever
+        the server ships right now.
       </Prose>
       <Scopes catalogue={catalogue} />
 
