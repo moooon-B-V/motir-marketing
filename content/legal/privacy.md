@@ -1,9 +1,9 @@
 ---
 title: Privacy Policy
-version: 1.1.0
+version: 1.2.0
 effectiveDate: TBD
 status: approved
-changeSummary: §6 now covers the work items you reported or were assigned in a shared workspace, not only comments on a public project.
+changeSummary: §2 and §4 now cover AI clients, such as Claude, that you connect to Motir with your Motir account — what they can reach, what we record about the connection, where to see and revoke it, and that we never receive your conversation with the client.
 ---
 
 # Privacy Policy
@@ -51,18 +51,24 @@ will answer.
 
 ### We generate
 
-|                               |                                                                                      |
-| ----------------------------- | ------------------------------------------------------------------------------------ |
-| **Activity records**          | Who changed what and when, which is a product feature as much as a log               |
-| **Usage and metering**        | For AI features and billing entitlements                                             |
-| **Service and security logs** | Including IP address and browser user-agent, for operating and defending the service |
-| **Email delivery metadata**   | Whether a message we sent you was delivered                                          |
+|                               |                                                                                                                                                                            |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Activity records**          | Who changed what and when, which is a product feature as much as a log                                                                                                     |
+| **Usage and metering**        | For AI features and billing entitlements                                                                                                                                   |
+| **Service and security logs** | Including IP address and browser user-agent, for operating and defending the service                                                                                       |
+| **Email delivery metadata**   | Whether a message we sent you was delivered                                                                                                                                |
+| **Connected apps**            | For each app you sign into with your Motir account — such as Claude — its name, the workspace and permissions you approved, and when you connected it and it was last used |
 
 ### From others
 
-Only what you ask us to fetch. If you connect a repository or import from another tool,
-we receive the data that connection covers. **A workspace that connects nothing receives
-nothing from anywhere.**
+Only what you ask us to fetch, or what an app you connect sends us. If you connect a
+repository or import from another tool, we receive the data that connection covers.
+**A workspace that connects nothing receives nothing from anywhere.**
+
+**An AI client you connect — such as Claude — sends us the requests it makes for you**:
+which action it wants to take in Motir, and with what details. **It does not send us your
+conversation with it**, and we never receive that conversation: we see only the requests
+it makes to Motir and what Motir answers.
 
 ### What we do not collect
 
@@ -109,6 +115,17 @@ not on this page.
 | **AI features — only when you use one**                                     | The text you send, and the work-item content you ask the planner to reason over. It goes through our own gateway to an upstream model provider, and to a search provider where a lookup is part of the answer |
 | **Sign-in with Google — only if you choose it**                             | Your Google account identifier, name and email                                                                                                                                                                |
 | **Integrations you connect yourself** — GitHub, GitLab, Jira, Linear, Plane | Only what that connection covers, and only for the workspace that authorised it                                                                                                                               |
+| **AI clients you connect yourself** — such as Claude                        | Only the one workspace you chose when you approved it, and only within the permissions you granted. It acts as you, so it can never do more than you could do yourself                                        |
+
+**An AI client you connect is your choice and your service, not ours.** You add it in that
+client, sign in with your Motir account and approve one workspace and a set of permissions.
+Every change it makes is recorded as your change, like any other. **You can see every
+connected app, and revoke any of them, under Connected apps on Settings → Account → Tokens
+in Motir**; revoking ends its access at its next request. The client's provider — for
+example Anthropic, for Claude — serves you under its own terms with you. It is not acting
+as our subprocessor when you connect it, which is why that connection adds nothing to the
+subprocessor page: we send it nothing beyond Motir's answers to the requests it makes for
+you.
 
 **We do not sell your data. We do not use your content to train machine-learning models,
 ours or anyone else's.**
