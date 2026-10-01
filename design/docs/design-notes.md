@@ -1,9 +1,10 @@
 # `motir.co/docs` — the AREA note
 
-**Two assets, one note.** `docs.*` (MOTIR-4393) draws the reading surface, its rail and an operation
-open; `sandbox-steps.*` (MOTIR-4975) draws `/docs/sandbox` as a setup procedure. This file covers
-both — a `design-notes.md` is per AREA, not per asset. The second half starts at
-**`sandbox-steps.*`** below.
+**Three assets, one note.** `docs.*` (MOTIR-4393) draws the reading surface, its rail and an operation
+open; `sandbox-steps.*` (MOTIR-4975) draws `/docs/sandbox` as a setup procedure; the delta
+`docs--mcp-tool-hints.*` (MOTIR-7077) adds each MCP tool's title and behaviour hint to
+`/docs/mcp/tools`. This file covers all three — a `design-notes.md` is per AREA, not per asset. The
+second half starts at **`sandbox-steps.*`** below, and the delta's section is last.
 
 ---
 
@@ -584,3 +585,128 @@ honest answer on two of these would be "neither", and both cards would still be 
 It changes no criterion on a `done` card. The step COUNT — **five, plus 2a–2c** — is the figure
 MOTIR-4978's criterion 2 asserts against; if the build changes it, that card's number changes with it
 and this table is where it is read from.
+
+---
+
+---
+
+# `docs--mcp-tool-hints.*` — each MCP tool's TITLE and BEHAVIOUR HINT (a delta)
+
+**Subtask:** MOTIR-7077 · (`type: design`) · **Story:** MOTIR-6976 · **Epic MOTIR-6972 · Motir inside
+Claude.** **Repository: `motir-marketing`.** **Built by:** MOTIR-7080.
+
+**Asset file:** `docs--mcp-tool-hints.mock.html` — a DELTA on `docs.mock.html`. It holds only what
+changes: the tool ROW on `/docs/mcp/tools` and one line at the top of that page. The rail, the group
+headings, the argument tables and the unreachable state are the base asset's and are not redrawn.
+
+## What ships today — MEASURED, not remembered
+
+Rendered in headless chromium at 1280 × 900 and 390 × 844 on **2026-10-01**, from `origin/main` at
+`beeb8c0`, against the live catalogue at `https://app.motir.co/api/docs/mcp-tools.json`. `200`.
+
+| what                              | today                           |
+| --------------------------------- | ------------------------------- |
+| tools in the catalogue            | **78**                          |
+| rows carrying `title`             | **78** — none rendered          |
+| rows carrying `annotations`       | **78** — none rendered          |
+| a row reads                       | name → summary → argument table |
+| body height at 1280 / 390         | 40 144px / 72 743px             |
+| horizontal overflow at 1280 / 390 | none / none                     |
+
+**The catalogue, read the same day:** 24 tools are `readOnlyHint: true` with no `destructiveHint`;
+54 are `readOnlyHint: false`, and **every one of those 54 sets `destructiveHint` explicitly** (46
+`true`, 8 `false`). So the "unset" case below is a defensive rule, not one the live catalogue
+exercises.
+
+## The panels (inspect every one)
+
+| panel | what it shows                                                                                                                              |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1** | the page top with the new hint line, a group with a row in each of the **five row states**, and a mixed group as the live catalogue has it |
+| **2** | **narrow** (390 wide) — the head wrapping under a long name, and a hint-less row                                                           |
+| **3** | **dark** — the three chips and the absent-hints line in the dark token set                                                                 |
+| **4** | the **mapping** table, from MCP's own definitions                                                                                          |
+
+**Every tool name in the asset is an EXAMPLE** (`exampleReadTool`, …), and each row's summary says
+so. The page names no tool of its own — `tests/docs/docs.test.ts` holds it to that — and neither does
+this asset. The "unreachable" state is unchanged and not redrawn.
+
+## The row
+
+`name · title · chip`, on one line that **wraps**: at a narrow width the title and the chip fall
+under the name, and **the name is never truncated** — it is the string a reader is about to type.
+
+- **Name** — unchanged: mono 13px `--el-text`, still carrying the `tool-<name>` anchor.
+- **Title** — NEW: 13px semibold `--el-text`, beside the name. **Absent ⇒ the name alone**, exactly as
+  today; nothing stands in for it.
+- **Chip** — NEW, after the title (after the name when there is no title).
+- **Summary and arguments** — unchanged.
+
+## The chip — mapped from the MCP specification
+
+MCP's tool annotations (`ToolAnnotations`, specification **2025-06-18**,
+`https://modelcontextprotocol.io/specification/2025-06-18/server/tools`; schema
+`schema/2025-06-18/schema.ts` in `modelcontextprotocol/modelcontextprotocol`):
+
+> `readOnlyHint` — "If true, the tool does not modify its environment. Default: false"
+> `destructiveHint` — "If true, the tool may perform destructive updates to its environment. If
+> false, the tool performs only additive updates. (This property is meaningful only when
+> `readOnlyHint == false`) Default: true"
+
+| `readOnlyHint`              | `destructiveHint` | chip            | tint (from § The chips)              |
+| --------------------------- | ----------------- | --------------- | ------------------------------------ |
+| `true`                      | (ignored)         | **Reads**       | `--el-tint-sky` — the `GET` tint     |
+| `false`                     | `false`           | **Writes**      | `--el-tint-peach` — the `PATCH` tint |
+| `false`                     | `true`            | **Destructive** | `--el-tint-rose` — the `DELETE` tint |
+| `false`                     | unset             | **Writes**      | `--el-tint-peach`                    |
+| no `annotations` on the row | —                 | **no chip**     | — and the absent-hints line          |
+
+- **The recipe is § The chips, unchanged**: the hue in the BACKGROUND, `--el-text-strong` ink,
+  `--radius-badge`, the verb chip's mono 700 10.5px. **No new token.** The three tints are the ones a
+  reader already learned for `GET` / `PATCH` / `DELETE` on `/docs/api` — the same three meanings,
+  read / change / remove — so this adds no colour to learn.
+- **Never colour alone**: every chip carries its word. Destructive is the one tint meant to be
+  noticed, and the word says why.
+- **⚠️ Unset `destructiveHint` on a write is shown as Writes, NOT Destructive — a deliberate
+  departure from the spec's default (`true`).** The chip states what Motir PUBLISHED, and Motir's
+  catalogue sets the field on every write (54 of 54, read 2026-10-01). A row that does not set it is a
+  row this page cannot vouch for, and shouting Destructive at it would be the page inventing a claim.
+  If motir-core ever ships a write without it, the cure is there (a bug against MOTIR-6974), not here.
+- **⚠️ Destructive will be on most write rows, and that is the spec's meaning, not a bug.** MCP counts
+  any non-additive update as destructive, so a status change, an edit or a claim carries it (46 of 78
+  tools today). The page-top line says what the word means — "may change or remove what is already
+  there" — so the chip reads as a fact, not an alarm. What each tool's hint SAYS is motir-core's.
+
+## The copy
+
+| element           | copy                                                                                                                                                                                                                                                            |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| chip              | **Reads** · **Writes** · **Destructive**                                                                                                                                                                                                                        |
+| absent-hints line | "This Motir version does not publish this tool’s behaviour hints."                                                                                                                                                                                              |
+| page-top line     | "Each tool says what it does to your data: [Reads] changes nothing, [Writes] only adds, and [Destructive] may change or remove what is already there. Claude reads these hints, and asks before using a tool that is not read-only unless you have allowed it." |
+
+**The absent-hints line follows the page's own precedent** — `app/docs/(guides)/mcp/tools/page.tsx`
+already renders a missing `inputSchema` as "This Motir version does not publish this tool's
+arguments": an absence is a fact about the SERVER, said as one. **It must never read as Reads**: a
+row with no chip and no line would, because "nothing to warn about" is exactly what a blank looks
+like. Same ink and size as the argument line (13px `--el-text-secondary`).
+
+The page-top line sits **after the shipped intro paragraph and before the argument-tables note**, in
+the intro's ink, with the three chips inline so the legend IS the chips.
+
+## Ink
+
+`--el-text`, `--el-text-secondary`, and `--el-text-strong` on a tint — nothing else.
+`tests/design/inkContrast.test.ts` discovers this asset from the tree and measures it.
+
+## The ACCESS PATH
+
+**The docs rail → MCP server → Tools** (`/docs/mcp/tools`), the rail's third tier under _MCP server_
+— drawn in the base asset's panel 4 and unchanged. `/docs/mcp`'s "What next" and its _Add Motir to
+Claude_ section both link here, the latter at the sentence saying Claude asks before a write.
+
+## What the code card builds from this
+
+**MOTIR-7080** — `lib/docs.ts`'s catalogue parser reads `title` and `annotations` (both optional, so
+either merge order is safe), and `app/docs/(guides)/mcp/tools/page.tsx` renders the row above, the
+page-top line, and the absent-hints line, with the mapping table as the rule.

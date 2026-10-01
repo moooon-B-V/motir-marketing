@@ -1,0 +1,911 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/docs/mcp/tools — each tool's title and its behaviour hint ·
+      MOTIR-7077
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of `--el-*` (light + dark,
+         `warm-editorial`, `motir` palette), copied from `@motir/design-system`.
+         Standalone, as every asset in this repository is. Re-defines no
+         semantics. Nothing here is an invented hue; the only raw values are the
+         doc-annotation scaffold's own fills and the non-semantic shadows.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-sidebar-bg: #fafaf9;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-highlight: #ff64c8;
+        --el-link: #0070d2;
+        --el-link-pressed: #005bab;
+        --el-danger: #e03131;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #fde0ec;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        --radius-card: 12px;
+        --radius-btn: 8px;
+        --radius-input: 8px;
+        --radius-control: 6px;
+        --radius-badge: 9999px;
+        --radius-kbd: 4px;
+        --spacing-card-padding: 24px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 10px;
+        --spacing-control-y: 6px;
+        --spacing-input-x: 12px;
+        --spacing-input-y: 8px;
+        --spacing-kbd-x: 5px;
+        --spacing-kbd-y: 2px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-control: 36px;
+        --height-input: 36px;
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-card: 0 4px 12px rgba(15, 15, 15, 0.08);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --font-sans-source: 'Inter';
+        --font-serif-source: 'Source Serif 4';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-sidebar-bg: #161616;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-link-pressed: #79b8ff;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #3a1f2a;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 38px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        max-width: 78ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        background: var(--el-page-bg);
+      }
+      .frame.narrow {
+        max-width: 400px;
+      }
+      /* A callout in the annotation layer. `--el-text-strong` on a tint is the
+         AA recipe every coloured surface in this tree follows. */
+      .callout {
+        margin: 12px 0 0;
+        border-radius: var(--radius-card);
+        background: var(--el-tint-sky);
+        color: var(--el-text-strong);
+        padding: 12px 14px;
+        font-size: 13.5px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .callout.warn {
+        background: var(--el-tint-peach);
+      }
+      .callout b {
+        font-weight: 700;
+      }
+      code.inline {
+        border-radius: var(--radius-kbd);
+        background: var(--el-muted);
+        padding: 1px 5px;
+        font: 400 12.5px var(--font-mono);
+        color: var(--el-text);
+      }
+
+      /* ═══ PRODUCT — the /docs/mcp/tools row, class for class ══════════
+         Sizes and inks mirror `app/docs/(guides)/mcp/tools/page.tsx` as it
+         ships: the name is mono 13px `--el-text`, the summary and the argument
+         line 13px `--el-text-secondary`, rows `py-4` between `--el-border`
+         rules. The ONLY new elements are `.tool-title`, `.hint` and
+         `.tool-nohints`. */
+      .col {
+        max-width: 46rem;
+        padding: 40px 24px 32px;
+      }
+      .col h1 {
+        font: 700 30px/1.2 var(--font-serif);
+        letter-spacing: -0.01em;
+        color: var(--el-text);
+        margin: 0;
+      }
+      .count {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .page-lede {
+        margin: 16px 0 0;
+        max-width: 68ch;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .elided {
+        font-style: italic;
+      }
+      .hint-lede {
+        margin: 12px 0 0;
+        max-width: 68ch;
+        font-size: 14px;
+        line-height: 1.9;
+        color: var(--el-text-secondary);
+      }
+      .page-small {
+        margin: 12px 0 0;
+        max-width: 68ch;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .group {
+        margin-top: 32px;
+      }
+      .group-h {
+        font: 600 18px/1.3 var(--font-serif);
+        color: var(--el-text);
+        margin: 0;
+      }
+      .group-gates {
+        margin: 4px 0 0;
+        max-width: 40rem;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .tools {
+        list-style: none;
+        margin: 12px 0 0;
+        padding: 0;
+        border-top: 1px solid var(--el-border);
+        border-bottom: 1px solid var(--el-border);
+      }
+      .tool {
+        position: relative;
+        padding: 16px 0;
+      }
+      .tool + .tool {
+        border-top: 1px solid var(--el-border);
+      }
+      /* The head WRAPS: at a narrow width the title and the chip drop under
+         the name rather than squeezing it. The name never truncates. */
+      .tool-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 10px;
+        row-gap: 6px;
+      }
+      .tool-name {
+        font: 400 13px var(--font-mono);
+        color: var(--el-text);
+        overflow-wrap: anywhere;
+      }
+      .tool-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      /* THE HINT CHIP — the area's verb-chip recipe (§ The chips), unchanged:
+         the hue in the BACKGROUND, `--el-text-strong` ink, `--radius-badge`.
+         Reads = the GET tint, Writes = the PATCH tint, Destructive = the
+         DELETE tint. No new token. */
+      .hint {
+        display: inline-flex;
+        justify-content: center;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        font: 700 10.5px/1.5 var(--font-mono);
+        letter-spacing: 0.02em;
+        color: var(--el-text-strong);
+        white-space: nowrap;
+      }
+      .hint.reads {
+        background: var(--el-tint-sky);
+      }
+      .hint.writes {
+        background: var(--el-tint-peach);
+      }
+      .hint.destructive {
+        background: var(--el-tint-rose);
+      }
+      .tool-summary,
+      .tool-args,
+      .tool-nohints {
+        margin: 4px 0 0;
+        max-width: 68ch;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+      }
+      .tool-args {
+        margin-top: 8px;
+      }
+
+      /* ═══ annotation layer — never product UI ═════════════════════ */
+      .state-tag {
+        position: absolute;
+        top: 16px;
+        left: calc(100% + 18px);
+        width: 250px;
+        font: 600 11px/1.45 var(--font-mono);
+        color: var(--el-text-secondary);
+        border: 1px dashed var(--el-border-strong);
+        border-radius: 6px;
+        padding: 4px 8px;
+        background: var(--el-page-bg);
+      }
+      /* The annotation gutter is ADDED to the 46rem column, never taken
+         from it, so the rows wrap exactly where the shipped page does. */
+      .col.with-tags {
+        max-width: calc(46rem + 300px);
+        padding-right: 324px;
+      }
+      .frame.narrow .state-tag {
+        position: static;
+        display: inline-block;
+        width: auto;
+        margin-top: 8px;
+      }
+      .frame.narrow .col {
+        padding: 28px 16px 24px;
+      }
+      .dark-strip {
+        background: var(--el-page-bg);
+        padding: 20px 24px;
+      }
+      .dark-strip .tools {
+        margin: 16px 0 0;
+      }
+      table.map {
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-top: 10px;
+        background: var(--el-page-bg);
+      }
+      table.map th,
+      table.map td {
+        border: 1px solid var(--el-border);
+        padding: 6px 10px;
+        text-align: left;
+        color: var(--el-text);
+      }
+      table.map th {
+        color: var(--el-text-secondary);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <div class="doc-head">
+        <h1>
+          /docs/mcp/tools — each tool’s title and its behaviour hint (a delta)
+        </h1>
+        <p>
+          A <b>delta</b> on
+          <code class="inline">design/docs/docs.mock.html</code>: only the tool
+          ROW and one line at the top of the page change. Since MOTIR-6974 every
+          row of the published catalogue carries a human
+          <code class="inline">title</code> and MCP
+          <code class="inline">annotations</code>; the page shows neither. This
+          draws the title beside the name, one hint chip per row in the area’s
+          existing chip recipe, the row a hint-less Motir version produces, and
+          the narrow width. Everything else on the page — the rail, the group
+          headings, the argument tables, the unreachable state — is the base
+          asset’s and is not redrawn.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-7077 · design</span>
+          <span class="ref muted">MOTIR-6976 · the story</span>
+          <span class="ref muted"
+            >MOTIR-7080 · the code card that builds it</span
+          >
+          <span class="ref muted">amends: design/docs/docs.mock.html</span>
+          <span class="ref muted">repository: motir-marketing</span>
+        </div>
+        <div class="callout warn">
+          <b>Drawn against the page as it SHIPS.</b>
+          <code class="inline">/docs/mcp/tools</code> was rendered in headless
+          chromium at 1280×900 and 390×844 on 2026-10-01 from
+          <code class="inline">origin/main</code> at
+          <code class="inline">beeb8c0</code> against the live catalogue (78
+          tools, 88 list rows, body 40 144px tall at 1280). Every row is name →
+          summary → arguments, and no row shows a title or a hint. The row below
+          is that markup with three additions.
+          <b>Every tool name here is an EXAMPLE</b> — the page names no tool of
+          its own, and neither does this asset.
+        </div>
+      </div>
+
+      <!-- ══════════════════════ PANEL 1 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">1</span>
+          <h2>
+            The page top, a group with a row in each of the five states, and a
+            mixed group
+          </h2>
+          <span class="note"
+            >1280 wide; the docs rail to the left is unchanged and not drawn.
+            The tags at the right are annotation, not UI.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="col with-tags">
+            <h1>MCP tools</h1>
+            <p class="count">
+              78 tools at <code class="inline">/api/mcp</code>, grouped by the
+              permission that gates them
+            </p>
+            <p class="page-lede">
+              This list is fetched from Motir when the page is requested, so it
+              is whatever the server ships right now. Each tool shows the
+              arguments it takes …
+              <span class="elided">(the shipped paragraph, unchanged)</span>
+            </p>
+            <p class="hint-lede">
+              Each tool says what it does to your data:
+              <span class="hint reads">Reads</span> changes nothing,
+              <span class="hint writes">Writes</span> only adds, and
+              <span class="hint destructive">Destructive</span> may change or
+              remove what is already there. Claude reads these hints, and asks
+              before using a tool that is not read-only unless you have allowed
+              it.
+            </p>
+            <p class="page-small">
+              Argument tables render one level: a nested object or a list shows
+              its type, and the handshake carries the shape inside it.
+            </p>
+            <section class="group">
+              <h2 class="group-h">Example group</h2>
+              <p class="group-gates">
+                Example permission — the group heading and its gate sentence are
+                unchanged by this delta. · granted by default
+              </p>
+              <ul class="tools">
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleReadTool</code>
+                    <span class="tool-title">Read an example thing</span>
+                    <span class="hint reads">Reads</span>
+                  </div>
+                  <p class="tool-summary">
+                    Example row — a tool that only reads.
+                  </p>
+                  <p class="tool-args">Takes no arguments.</p>
+                  <span class="state-tag">state 1 · readOnlyHint: true</span>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleWriteTool</code>
+                    <span class="tool-title">Add an example thing</span>
+                    <span class="hint writes">Writes</span>
+                  </div>
+                  <p class="tool-summary">
+                    Example row — a tool that adds, and never changes or removes
+                    what exists.
+                  </p>
+                  <p class="tool-args">Takes no arguments.</p>
+                  <span class="state-tag"
+                    >state 2 · readOnlyHint: false · destructiveHint:
+                    false</span
+                  >
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleDestructiveTool</code>
+                    <span class="tool-title">Delete an example thing</span>
+                    <span class="hint destructive">Destructive</span>
+                  </div>
+                  <p class="tool-summary">
+                    Example row — a tool that may change or remove what already
+                    exists.
+                  </p>
+                  <p class="tool-args">Takes no arguments.</p>
+                  <span class="state-tag"
+                    >state 3 · readOnlyHint: false · destructiveHint: true</span
+                  >
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleUnhintedTool</code>
+                    <span class="tool-title"
+                      >Read or change an example thing</span
+                    >
+                  </div>
+                  <p class="tool-summary">
+                    Example row — served by a Motir version that publishes no
+                    annotations.
+                  </p>
+                  <p class="tool-nohints">
+                    This Motir version does not publish this tool’s behaviour
+                    hints.
+                  </p>
+                  <p class="tool-args">Takes no arguments.</p>
+                  <span class="state-tag"
+                    >state 4 · annotations absent — NO chip, never “Reads”</span
+                  >
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleUntitledTool</code>
+                    <span class="hint writes">Writes</span>
+                  </div>
+                  <p class="tool-summary">
+                    Example row — the catalogue row carries no title.
+                  </p>
+                  <p class="tool-args">Takes no arguments.</p>
+                  <span class="state-tag"
+                    >state 5 · title absent — the name alone, as today</span
+                  >
+                </li>
+              </ul>
+            </section>
+            <section class="group">
+              <h2 class="group-h">
+                Another example group — a mix as the live catalogue has it
+              </h2>
+              <p class="group-gates">
+                Example permission. Today 24 of 78 tools read, 8 only add and 46
+                may change or remove; most write rows will carry Destructive.
+              </p>
+              <ul class="tools">
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleListTool</code>
+                    <span class="tool-title">List example things</span>
+                    <span class="hint reads">Reads</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleSearchTool</code>
+                    <span class="tool-title">Search example things</span>
+                    <span class="hint reads">Reads</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleGetTool</code>
+                    <span class="tool-title">Get one example thing</span>
+                    <span class="hint reads">Reads</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleCreateTool</code>
+                    <span class="tool-title">Create an example thing</span>
+                    <span class="hint writes">Writes</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleCommentTool</code>
+                    <span class="tool-title">Comment on an example thing</span>
+                    <span class="hint writes">Writes</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleEditTool</code>
+                    <span class="tool-title">Edit an example thing</span>
+                    <span class="hint destructive">Destructive</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleMoveTool</code>
+                    <span class="tool-title">Move an example thing</span>
+                    <span class="hint destructive">Destructive</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleStatusTool</code>
+                    <span class="tool-title"
+                      >Change an example thing’s status</span
+                    >
+                    <span class="hint destructive">Destructive</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleArchiveTool</code>
+                    <span class="tool-title">Archive an example thing</span>
+                    <span class="hint destructive">Destructive</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+                <li class="tool">
+                  <div class="tool-head">
+                    <code class="tool-name">exampleRemoveTool</code>
+                    <span class="tool-title">Remove an example thing</span>
+                    <span class="hint destructive">Destructive</span>
+                  </div>
+                  <p class="tool-summary">Example row.</p>
+                  <p class="tool-args">Takes no arguments.</p>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 2 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">2</span>
+          <h2>Narrow (390 × 844)</h2>
+          <span class="note"
+            >The head wraps: the title and the chip fall under the name, and the
+            name is never truncated — a reader may be about to type it.</span
+          >
+        </div>
+        <div class="frame narrow">
+          <div class="col">
+            <h1>MCP tools</h1>
+            <p class="hint-lede">
+              Each tool says what it does to your data:
+              <span class="hint reads">Reads</span> changes nothing,
+              <span class="hint writes">Writes</span> only adds, and
+              <span class="hint destructive">Destructive</span> may change or
+              remove what is already there. Claude reads these hints, and asks
+              before using a tool that is not read-only unless you have allowed
+              it.
+            </p>
+            <ul class="tools">
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleReadTool</code>
+                  <span class="tool-title">Read an example thing</span>
+                  <span class="hint reads">Reads</span>
+                </div>
+                <p class="tool-summary">Example row.</p>
+                <p class="tool-args">Takes no arguments.</p>
+                <span class="state-tag">narrow · state 1</span>
+              </li>
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleWriteTool</code>
+                  <span class="tool-title">Add an example thing</span>
+                  <span class="hint writes">Writes</span>
+                </div>
+                <p class="tool-summary">Example row.</p>
+                <p class="tool-args">Takes no arguments.</p>
+                <span class="state-tag">narrow · state 2</span>
+              </li>
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleDestructiveTool</code>
+                  <span class="tool-title"
+                    >Delete an example thing, and everything filed under
+                    it</span
+                  >
+                  <span class="hint destructive">Destructive</span>
+                </div>
+                <p class="tool-summary">
+                  Example row — the title and the chip wrap UNDER the name; the
+                  name is never truncated.
+                </p>
+                <p class="tool-args">Takes no arguments.</p>
+                <span class="state-tag">narrow · state 3, long title</span>
+              </li>
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleUnhintedTool</code>
+                  <span class="tool-title"
+                    >Read or change an example thing</span
+                  >
+                </div>
+                <p class="tool-summary">Example row — no annotations.</p>
+                <p class="tool-nohints">
+                  This Motir version does not publish this tool’s behaviour
+                  hints.
+                </p>
+                <p class="tool-args">Takes no arguments.</p>
+                <span class="state-tag">narrow · state 4</span>
+              </li>
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleUntitledTool</code>
+                  <span class="hint writes">Writes</span>
+                </div>
+                <p class="tool-summary">Example row — no title.</p>
+                <p class="tool-args">Takes no arguments.</p>
+                <span class="state-tag">narrow · state 5</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 3 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">3</span>
+          <h2>Dark — the three chips and the absent-hints line</h2>
+          <span class="note"
+            >The same recipe in the dark token set: the tint darkens and the ink
+            stays <code class="inline">--el-text-strong</code>.</span
+          >
+        </div>
+        <div class="frame dark">
+          <div class="dark-strip">
+            <p class="hint-lede">
+              Each tool says what it does to your data:
+              <span class="hint reads">Reads</span> changes nothing,
+              <span class="hint writes">Writes</span> only adds, and
+              <span class="hint destructive">Destructive</span> may change or
+              remove what is already there. Claude reads these hints, and asks
+              before using a tool that is not read-only unless you have allowed
+              it.
+            </p>
+            <ul class="tools">
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleReadTool</code>
+                  <span class="tool-title">Read an example thing</span>
+                  <span class="hint reads">Reads</span>
+                </div>
+                <p class="tool-summary">Example row.</p>
+                <p class="tool-args">Takes no arguments.</p>
+              </li>
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleWriteTool</code>
+                  <span class="tool-title">Add an example thing</span>
+                  <span class="hint writes">Writes</span>
+                </div>
+                <p class="tool-summary">Example row.</p>
+                <p class="tool-args">Takes no arguments.</p>
+              </li>
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleDestructiveTool</code>
+                  <span class="tool-title">Delete an example thing</span>
+                  <span class="hint destructive">Destructive</span>
+                </div>
+                <p class="tool-summary">Example row.</p>
+                <p class="tool-args">Takes no arguments.</p>
+              </li>
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleUnhintedTool</code>
+                  <span class="tool-title"
+                    >Read or change an example thing</span
+                  >
+                </div>
+                <p class="tool-summary">Example row.</p>
+                <p class="tool-nohints">
+                  This Motir version does not publish this tool’s behaviour
+                  hints.
+                </p>
+                <p class="tool-args">Takes no arguments.</p>
+              </li>
+
+              <li class="tool">
+                <div class="tool-head">
+                  <code class="tool-name">exampleUntitledTool</code>
+                  <span class="hint writes">Writes</span>
+                </div>
+                <p class="tool-summary">Example row.</p>
+                <p class="tool-args">Takes no arguments.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════ PANEL 4 ══════════════════════ -->
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">4</span>
+          <h2>The mapping — from MCP’s own definitions</h2>
+          <span class="note"
+            >The full reasoning, and the spec citation, is in
+            <code class="inline">design-notes.md</code>.</span
+          >
+        </div>
+        <table class="map">
+          <tr>
+            <th>readOnlyHint</th>
+            <th>destructiveHint</th>
+            <th>chip</th>
+          </tr>
+          <tr>
+            <td>true</td>
+            <td>(ignored — the spec gives it no meaning on a read)</td>
+            <td><span class="hint reads">Reads</span></td>
+          </tr>
+          <tr>
+            <td>false</td>
+            <td>false</td>
+            <td><span class="hint writes">Writes</span></td>
+          </tr>
+          <tr>
+            <td>false</td>
+            <td>true</td>
+            <td><span class="hint destructive">Destructive</span></td>
+          </tr>
+          <tr>
+            <td>false</td>
+            <td>unset</td>
+            <td><span class="hint writes">Writes</span> — never Destructive</td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              no <code class="inline">annotations</code> on the row
+            </td>
+            <td>no chip, and the absent-hints line</td>
+          </tr>
+        </table>
+      </section>
+    </div>
+  </body>
+</html>
