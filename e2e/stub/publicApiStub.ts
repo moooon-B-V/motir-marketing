@@ -129,6 +129,57 @@ const NON_JSON: Record<string, [string, string]> = {
   ],
 }
 
+/**
+ * THE MCP TOOL CATALOGUE (MOTIR-7084) — `GET /api/docs/mcp-tools.json`, which
+ * `/docs/mcp/tools` and `/docs/mcp`'s scope table read SERVER-SIDE.
+ *
+ * ⚠️ ONE PATH, THREE ANSWERS, AND A SPEC PICKS WHICH. The page fetches a fixed
+ * URL from inside the Node process, so nothing about the BROWSER's request can
+ * select a variant (the header comment above says why `page.route()` cannot).
+ * The stub therefore keeps a MODE, switched by a spec through
+ * `POST /__stub/mcp-tools?mode=recorded|stripped|failing`:
+ *
+ *   · `recorded` (the default) — the production response the integration gate
+ *     recorded (`tests/docs/fixtures/mcp-tools.production.json`), REUSED rather
+ *     than copied, so the two lanes measure one recording;
+ *   · `stripped` — the same rows with `title` and `annotations` removed, which
+ *     is what an older or self-hosted Motir serves;
+ *   · `failing` — a 500, the unreachable state.
+ *
+ * The spec that switches it runs SERIALLY and puts it back to `recorded` after
+ * every test. A parallel spec that opens a docs page in that window sees the
+ * page's own degraded states — no chip, or "temporarily unreachable" — and no
+ * other spec asserts on the catalogue, so a switch cannot redden one.
+ */
+type CatalogueMode = 'recorded' | 'stripped' | 'failing'
+let catalogueMode: CatalogueMode = 'recorded'
+
+const RECORDED_CATALOGUE = join(
+  fileURLToPath(new URL('.', import.meta.url)),
+  '..',
+  '..',
+  'tests',
+  'docs',
+  'fixtures',
+  'mcp-tools.production.json',
+)
+
+function mcpToolCatalogue(mode: Exclude<CatalogueMode, 'failing'>): string {
+  const catalogue = JSON.parse(readFileSync(RECORDED_CATALOGUE, 'utf8'))
+    .catalogue as {
+    groups: { tools: Record<string, unknown>[] }[]
+  }
+  if (mode === 'stripped') {
+    for (const group of catalogue.groups) {
+      for (const tool of group.tools) {
+        delete tool['title']
+        delete tool['annotations']
+      }
+    }
+  }
+  return JSON.stringify(catalogue)
+}
+
 function fixture(name: string): string {
   return readFileSync(join(FIXTURE_DIR, name), 'utf8')
 }
@@ -148,6 +199,30 @@ function handle(req: IncomingMessage, res: ServerResponse): void {
         `<h1>The Motir app</h1><p>Stand-in for <code>app.motir.co${url.pathname.replace(/[<>&]/g, '')}</code> — ` +
         `sign-in and the Visitor view are the app’s, not this lane’s.</p></main>`,
     )
+    return
+  }
+
+  if (url.pathname === '/__stub/mcp-tools' && req.method === 'POST') {
+    const mode = url.searchParams.get('mode')
+    if (mode !== 'recorded' && mode !== 'stripped' && mode !== 'failing') {
+      res.writeHead(400, { 'content-type': 'application/json' })
+      res.end(JSON.stringify({ code: 'STUB_BAD_MODE', mode }))
+      return
+    }
+    catalogueMode = mode
+    res.writeHead(204)
+    res.end()
+    return
+  }
+
+  if (url.pathname === '/api/docs/mcp-tools.json') {
+    if (catalogueMode === 'failing') {
+      res.writeHead(500, { 'content-type': 'application/json' })
+      res.end(JSON.stringify({ code: 'STUB_FORCED_FAILURE' }))
+      return
+    }
+    res.writeHead(200, { 'content-type': 'application/json' })
+    res.end(mcpToolCatalogue(catalogueMode))
     return
   }
 
