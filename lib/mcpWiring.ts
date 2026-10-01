@@ -269,6 +269,94 @@ export function mcpClients(
   ]
 }
 
+/**
+ * ADDING MOTIR TO CLAUDE, OVER OAUTH (MOTIR-7078).
+ *
+ * The route that needs no token: the person adds the server URL to a Claude
+ * client, signs in on app.motir.co, picks ONE workspace and approves what the
+ * client may do. Motir's half is the URL alone, interpolated from the same
+ * facts as every block above. Everything else in a step is ANTHROPIC'S UI or
+ * CLI, transcribed from its own documentation on {@link CLAUDE_ROUTES_CHECKED_ON}
+ * and checked against `claude mcp add --help` (Claude Code 2.1.286), so each
+ * route carries the page it was read from — that page is the authority when a
+ * menu moves.
+ */
+export const CLAUDE_ROUTES_CHECKED_ON = '2026-10-01'
+
+/** The Account → Tokens page, where the Connected apps card lists and revokes grants. */
+export const CONNECTED_APPS_PATH = '/settings/account/tokens#connected-apps'
+
+/** One Claude client's route to the connector. Everything but `code` is Anthropic's. */
+export interface ClaudeRoute {
+  /** Stable id — the React key and the sub-anchor. */
+  id: string
+  label: string
+  /** The steps, in order, as plain sentences. */
+  steps: string[]
+  /** What to paste or run — always built from the facts. */
+  code: string
+  /** The pane caption for `code`. */
+  caption: string
+  /** The copy control's accessible name. */
+  copyLabel: string
+  /** One line after the steps — what to know that is not a step. */
+  note: string
+  /** Anthropic's page the steps were read from. */
+  docsUrl: string
+  checkedOn: string
+}
+
+export function claudeRoutes(
+  facts: McpTransportFacts = mcpTransportFacts(),
+): ClaudeRoute[] {
+  return [
+    {
+      id: 'claude-ai',
+      label: 'claude.ai',
+      steps: [
+        'Open Customize → Connectors.',
+        'Click “+”, then Add custom connector, and paste the server URL below. Leave the OAuth client ID and secret empty — Motir needs neither. If the dialog asks how Claude should identify itself, choose Register automatically.',
+        'Click Add, then Connect. Claude sends you to app.motir.co to sign in and approve.',
+      ],
+      code: facts.url,
+      caption: 'Remote MCP server URL',
+      copyLabel: 'Copy the Motir MCP server URL',
+      note: 'On a Team or Enterprise plan an Owner adds the connector once, under Organization settings → Connectors → Add → Custom → Web, and each member then clicks Connect under Customize → Connectors with their own Motir account.',
+      docsUrl: 'https://claude.com/docs/connectors/custom/remote-mcp',
+      checkedOn: CLAUDE_ROUTES_CHECKED_ON,
+    },
+    {
+      id: 'claude-desktop',
+      label: 'Claude desktop app',
+      steps: [
+        'If you already connected Motir on claude.ai, there is nothing to add: a connected connector is available in your conversations on the web, the desktop app and mobile.',
+        'To add it from the desktop app instead, select Customize in the sidebar, then Connectors, and follow the claude.ai steps with the same URL.',
+        'The Motir sign-in page opens in your browser; approve there and return to the app.',
+      ],
+      code: facts.url,
+      caption: 'Remote MCP server URL',
+      copyLabel: 'Copy the Motir MCP server URL',
+      note: 'This is a remote connector, not a local desktop extension: Claude reaches Motir from Anthropic’s cloud, so nothing is installed on your machine.',
+      docsUrl: 'https://claude.com/docs/connectors/overview',
+      checkedOn: CLAUDE_ROUTES_CHECKED_ON,
+    },
+    {
+      id: 'claude-code',
+      label: 'Claude Code',
+      steps: [
+        'Add the server with the command below — no header and no token.',
+        'In Claude Code, run /mcp, select motir and follow the sign-in in your browser.',
+      ],
+      code: `claude mcp add --transport http motir ${facts.url}`,
+      caption: 'your terminal',
+      copyLabel: 'Copy the Claude Code command',
+      note: 'If you signed Claude Code in with your Claude account, a connector you connected on claude.ai is already available there. The Motir plugin for Claude Code brings this server with it, beside the skills.',
+      docsUrl: 'https://code.claude.com/docs/en/mcp',
+      checkedOn: CLAUDE_ROUTES_CHECKED_ON,
+    },
+  ]
+}
+
 /** How a reader verifies the connection, once the config is in place. */
 export function mcpVerifyCommand(
   facts: McpTransportFacts = mcpTransportFacts(),

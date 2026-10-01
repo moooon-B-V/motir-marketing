@@ -467,7 +467,64 @@ export interface McpToolEntry {
    * "takes no arguments".
    */
   inputSchema?: OpenApiSchema
+  /**
+   * The tool's human TITLE — e.g. "Dispatch prompt" — as motir-core publishes
+   * it since MOTIR-7002. OPTIONAL for the same reason as `inputSchema`: an older
+   * or self-hosted Motir does not serve it, and then the row shows the name
+   * alone, exactly as before.
+   */
+  title?: string
+  /**
+   * The tool's MCP behaviour HINTS (`ToolAnnotations`, MCP 2025-06-18), as
+   * motir-core publishes them since MOTIR-7002. OPTIONAL — absent is its own
+   * state ("this Motir version does not publish …"), never read as read-only.
+   * All four are kept; the page renders only the two a reader acts on
+   * (`toolHint`).
+   */
+  annotations?: McpToolAnnotations
 }
+
+/** The four MCP tool-annotation hints, each optional on the wire. */
+export interface McpToolAnnotations {
+  readOnlyHint?: boolean
+  destructiveHint?: boolean
+  idempotentHint?: boolean
+  openWorldHint?: boolean
+}
+
+/**
+ * What a row's chip says, from its annotations — the mapping the design delta
+ * `design/docs/docs--mcp-tool-hints.mock.html` (MOTIR-7077) draws.
+ *
+ *   · `readOnlyHint: true`               → reads (`destructiveHint` is ignored:
+ *                                           MCP gives it no meaning on a read)
+ *   · `destructiveHint: true`            → destructive
+ *   · annotations present, neither       → writes — INCLUDING a write that does
+ *                                           not set `destructiveHint`, though the
+ *                                           spec's default is `true`: the chip
+ *                                           states what Motir PUBLISHED, and
+ *                                           Motir sets it on every write
+ *   · annotations absent                 → unpublished — never "reads", which
+ *                                           would be the dangerous wrong answer
+ */
+export type McpToolHint = 'reads' | 'writes' | 'destructive' | 'unpublished'
+
+export function toolHint(
+  entry: Pick<McpToolEntry, 'annotations'>,
+): McpToolHint {
+  const annotations = entry.annotations
+  if (!annotations) return 'unpublished'
+  if (annotations.readOnlyHint === true) return 'reads'
+  if (annotations.destructiveHint === true) return 'destructive'
+  return 'writes'
+}
+
+const ANNOTATION_KEYS = [
+  'readOnlyHint',
+  'destructiveHint',
+  'idempotentHint',
+  'openWorldHint',
+] as const
 
 /** One group — a permission, and the tools it gates. */
 export interface McpToolGroup {
@@ -504,6 +561,56 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
+/**
+ * Read a tool row's `annotations`. Absent ⇒ `undefined`. Present but not an
+ * object, or a known hint that is present but not a boolean ⇒ the SHAPE ERROR.
+ *
+ * ⚠️ STRICTER THAN `inputSchema`, on purpose (MOTIR-7080). A malformed schema
+ * read as absent costs a reader an argument table; a malformed hint read as
+ * absent or — worse — as `false` could put a "Writes" chip on a destructive
+ * tool, or no warning where one belongs. A field that decides whether a write
+ * is shown as safe is shape contract, so a wrong type fails loudly.
+ */
+function readAnnotations(
+  entry: Record<string, unknown>,
+  at: string,
+): McpToolAnnotations | undefined {
+  const raw = entry.annotations
+  if (raw === undefined) return undefined
+  if (!isRecord(raw)) {
+    throw new McpToolCatalogueShapeError(
+      `has a ${at}.annotations that is not an object`,
+    )
+  }
+  const annotations: McpToolAnnotations = {}
+  for (const key of ANNOTATION_KEYS) {
+    const value = raw[key]
+    if (value === undefined) continue
+    if (typeof value !== 'boolean') {
+      throw new McpToolCatalogueShapeError(
+        `has a ${at}.annotations.${key} that is not a boolean`,
+      )
+    }
+    annotations[key] = value
+  }
+  return annotations
+}
+
+/** Read a tool row's `title`. Absent ⇒ `undefined`; not a string ⇒ the shape error. */
+function readTitle(
+  entry: Record<string, unknown>,
+  at: string,
+): string | undefined {
+  const raw = entry.title
+  if (raw === undefined) return undefined
+  if (typeof raw !== 'string') {
+    throw new McpToolCatalogueShapeError(
+      `has a ${at}.title that is not a string`,
+    )
+  }
+  return raw === '' ? undefined : raw
+}
+
 function requireString(
   holder: Record<string, unknown>,
   key: string,
@@ -514,6 +621,14 @@ function requireString(
     throw new McpToolCatalogueShapeError(`is missing ${where}.${key}`)
   }
   return value
+}
+
+/** `{ [key]: value }` when defined, `{}` when not — so an absent field stays absent. */
+function optionalField<K extends string, V>(
+  key: K,
+  value: V | undefined,
+): Partial<Record<K, V>> {
+  return value === undefined ? {} : ({ [key]: value } as Record<K, V>)
 }
 
 /**
@@ -583,6 +698,8 @@ export function parseMcpToolCatalogue(value: unknown): McpToolCatalogue {
           ...(isRecord(entry.inputSchema)
             ? { inputSchema: entry.inputSchema as OpenApiSchema }
             : {}),
+          ...optionalField('title', readTitle(entry, at)),
+          ...optionalField('annotations', readAnnotations(entry, at)),
         }
       }),
     }

@@ -164,7 +164,14 @@ const EXCLUDED_DOCUMENTS: ReadonlyArray<readonly [string, string]> = [
  */
 const REVIEWED_BASELINE: Record<string, string> = {
   terms: '1.0.0',
-  privacy: '1.1.0',
+  // MOTIR-7079 — 1.1.0 → 1.2.0 for AI clients connected over OAuth (§2 From
+  // others and We generate, §4's new row and paragraph). MINOR because it is
+  // MATERIAL: it adds a new RECIPIENT CATEGORY under Art. 13(1)(e) — a client
+  // the person connects, acting for them — and a new record we keep about the
+  // connection. A new recipient is what §14 promises not to enact by silence,
+  // so this revision is re-consent-triggering. Read against the diff in the
+  // pull request that ships it.
+  privacy: '1.2.0',
   // MOTIR-4212 — 1.0.0 → 1.1.0 for the *Addresses you connect* section. MINOR
   // because it is MATERIAL: it places a NEW REPRESENTATION on the customer
   // (that they control the domain they point at us, and are authorised to have

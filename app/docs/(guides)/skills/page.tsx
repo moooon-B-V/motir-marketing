@@ -91,15 +91,19 @@ export default function SkillsDocsPage() {
 
       <H2 id="before">Before you start</H2>
       <Prose>
-        The skills talk to Motir through its MCP server, so your agent needs
-        that server connected first: a Motir project, a personal access token,
-        and the setup for your agent in the{' '}
+        The skills talk to Motir through its MCP server. In Claude Code the
+        plugin connects it for you: you sign in with your Motir account in the
+        browser, and there is no token. Every other agent needs that server
+        connected first — a Motir project, a personal access token, and the
+        setup for your agent in the{' '}
         <Link href="/docs/mcp" className={linkClass}>
           {copy.docs.mcp}
         </Link>{' '}
-        guide. A token with the default permissions can do everything these
-        skills do. You also need <Mono>git</Mono>, and the GitHub CLI (
-        <Mono>gh</Mono>) for the skills that open or read pull requests.
+        guide, which also covers the token route in Claude Code if you cannot
+        use the browser sign-in. A token with the default permissions can do
+        everything these skills do. You also need <Mono>git</Mono>, and the
+        GitHub CLI (<Mono>gh</Mono>) for the skills that open or read pull
+        requests.
       </Prose>
 
       <H2 id="install">Install</H2>
@@ -114,6 +118,24 @@ export default function SkillsDocsPage() {
         <section key={agent.id} className="mt-6">
           <H3 id={agent.id}>{agent.label}</H3>
           <Prose>{agent.intro}</Prose>
+          {agent.brings ? (
+            <ul className="mt-2 max-w-[68ch] list-disc space-y-1.5 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
+              {agent.brings.map((item) => (
+                <li key={item.title}>
+                  <strong className="text-(--el-text)">{item.title}.</strong>{' '}
+                  {item.text}
+                  {item.link ? (
+                    <>
+                      {' '}
+                      <Link href={item.link.href} className={linkClass}>
+                        {item.link.label}
+                      </Link>
+                    </>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : null}
           <div className="mt-3">
             {agent.blocks.map((block) => (
               <CodeBlock

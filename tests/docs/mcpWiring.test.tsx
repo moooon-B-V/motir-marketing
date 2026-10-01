@@ -4,11 +4,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import McpPage from '@/app/docs/(guides)/mcp/page'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import {
+  CONNECTED_APPS_PATH,
   MCP_AUTH_HEADER,
   MCP_AUTH_SCHEME,
   MCP_ENDPOINT_PATH,
   MCP_TOKEN_ENV_VAR,
   MCP_TOKEN_PLACEHOLDER,
+  claudeRoutes,
   mcpClients,
   mcpForkRows,
   mcpTransportFactRows,
@@ -205,20 +207,37 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
     }
   })
 
-  it('walks the three steps: mint, wire, check', async () => {
+  it('leads with Add Motir to Claude, then walks the token route: mint, wire, check', async () => {
     stubCatalogue(catalogueFixture)
     const { container } = render(await McpPage())
     const headings = [...container.querySelectorAll('h2')].map(
       (heading) => heading.textContent ?? '',
     )
     expect(headings).toEqual([
+      'Add Motir to Claude',
+      'Other clients and CI: use a token',
       'This server, or the REST API?',
       '1Mint a token',
       '2Wire your client',
       '3Check the connection',
-      'What a token may call',
+      'What a connection may call',
       'What next',
     ])
+  })
+
+  it('KEEPS the token-route anchors, so inbound links still land', async () => {
+    stubCatalogue(catalogueFixture)
+    const { container } = render(await McpPage())
+    for (const id of [
+      'claude',
+      'token-route',
+      'token',
+      'wire',
+      'check',
+      'scopes',
+    ]) {
+      expect(container.querySelector(`#${id}`), id).not.toBeNull()
+    }
   })
 
   it('warns that an unauthorized answer is about the TOKEN', async () => {
@@ -256,5 +275,83 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
       [...container.querySelectorAll('pre')].length,
       'the config blocks survive an unreachable catalogue',
     ).toBeGreaterThanOrEqual(mcpClients().length)
+  })
+})
+
+describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
+  it('every Claude route interpolates the origin, and none carries a header or token', () => {
+    const routes = claudeRoutes(mcpTransportFacts(SENTINEL))
+    expect(routes.map((route) => route.id)).toEqual([
+      'claude-ai',
+      'claude-desktop',
+      'claude-code',
+    ])
+    for (const route of routes) {
+      expect(route.code, route.id).toContain(`${SENTINEL}${MCP_ENDPOINT_PATH}`)
+      expect(route.code, route.id).not.toContain(MCP_AUTH_HEADER)
+      expect(route.code, route.id).not.toContain(MCP_TOKEN_PLACEHOLDER)
+      expect(route.steps.length, route.id).toBeGreaterThan(0)
+      expect(route.docsUrl, route.id).toMatch(/^https:\/\//)
+      expect(route.checkedOn, route.id).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    }
+    expect(routes.find((route) => route.id === 'claude-code')!.code).toBe(
+      `claude mcp add --transport http motir ${SENTINEL}${MCP_ENDPOINT_PATH}`,
+    )
+  })
+
+  it('renders the three clients INSIDE the first section, before the token route', async () => {
+    stubCatalogue(catalogueFixture)
+    const { container } = render(await McpPage())
+    const first = container.querySelector('h2')!
+    const tokenRoute = container.querySelector('#token-route')!
+    expect(first.textContent).toBe('Add Motir to Claude')
+    for (const route of claudeRoutes()) {
+      const block = container.querySelector(`#${route.id}`)
+      expect(block, route.id).not.toBeNull()
+      // Between the first H2 and the token route, in document order.
+      expect(
+        first.compareDocumentPosition(block!) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+        route.id,
+      ).toBeTruthy()
+      expect(
+        block!.compareDocumentPosition(tokenRoute) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+        route.id,
+      ).toBeTruthy()
+      expect(block!.textContent, route.id).toContain(route.label)
+      expect(block!.textContent, route.id).toContain(
+        `${APP_ORIGIN}${MCP_ENDPOINT_PATH}`,
+      )
+    }
+  })
+
+  it('prints the Claude Code command with a copy control', async () => {
+    stubCatalogue(catalogueFixture)
+    const { container } = render(await McpPage())
+    const block = container.querySelector('#claude-code')!
+    expect(block.querySelector('pre')!.textContent).toBe(
+      `claude mcp add --transport http motir ${APP_ORIGIN}${MCP_ENDPOINT_PATH}`,
+    )
+    expect(
+      block.querySelector('button[aria-label="Copy the Claude Code command"]'),
+    ).not.toBeNull()
+  })
+
+  it('says what is approved, that Claude asks before a write, and where to revoke', async () => {
+    stubCatalogue(catalogueFixture)
+    const { container } = render(await McpPage())
+    const text = container.textContent ?? ''
+    expect(text).toContain('pick one workspace')
+    expect(text).toContain(
+      'Claude asks before it uses a tool that changes anything',
+    )
+    expect(text).toContain('Settings → Account → Tokens')
+    expect(container.querySelector('a[href="/docs/mcp/tools"]')).not.toBeNull()
+    expect(container.querySelector('a[href="/docs/skills"]')).not.toBeNull()
+    const revoke = container.querySelector(
+      `a[href="${APP_ORIGIN}${CONNECTED_APPS_PATH}"]`,
+    )
+    expect(revoke?.textContent).toBe('Connected apps')
   })
 })

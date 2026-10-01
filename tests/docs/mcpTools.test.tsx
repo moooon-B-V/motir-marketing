@@ -3,7 +3,12 @@ import { join } from 'node:path'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import McpToolsPage from '@/app/docs/(guides)/mcp/tools/page'
-import { parseMcpToolCatalogue } from '@/lib/docs'
+import {
+  McpToolCatalogueShapeError,
+  parseMcpToolCatalogue,
+  toolHint,
+} from '@/lib/docs'
+import { copy } from '@/lib/copy'
 
 /*
  * THE FETCH-VERSUS-RENDER GUARD, SECOND INSTANCE (MOTIR-4394) — the same shape
@@ -242,5 +247,216 @@ describe('the tokens really are unique to this file', () => {
       }
     }
     expect(offenders).toEqual([])
+  })
+})
+
+/*
+ * EACH ROW'S TITLE AND BEHAVIOUR HINT (MOTIR-7080), built to the design delta
+ * `design/docs/docs--mcp-tool-hints.mock.html` (MOTIR-7077).
+ *
+ * The three hinted rows are RECORDED from production — `GET
+ * https://app.motir.co/api/docs/mcp-tools.json`, read 2026-10-01, `inputSchema`
+ * dropped — so the parse is driven with the shape motir-core actually serves.
+ * The two absence rows are those recordings with a field removed, which is
+ * exactly what an older or self-hosted Motir serves.
+ */
+const recorded = {
+  reads: {
+    name: 'dispatch_prompt',
+    permission: 'project:browse',
+    summary:
+      'The server-generated coding-agent prompt for one item — the same text the CLI hands an agent.',
+    title: 'Dispatch prompt',
+    annotations: { readOnlyHint: true, openWorldHint: false },
+  },
+  writes: {
+    name: 'add_lesson',
+    permission: 'lesson:manage',
+    summary:
+      'Record a lesson for this project, so later plans for it are given the lesson. This project only.',
+    title: 'Add lesson',
+    annotations: {
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
+  },
+  destructive: {
+    name: 'delete_work_item',
+    permission: 'work_item:delete',
+    summary:
+      'Permanently delete an item and its whole subtree. Irreversible, and off by default.',
+    title: 'Delete work item',
+    annotations: {
+      readOnlyHint: false,
+      destructiveHint: true,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
+  },
+}
+
+/** A recorded row with one field removed — what a server that omits it serves. */
+function without<T extends object, K extends keyof T>(
+  row: T,
+  key: K,
+): Omit<T, K> {
+  const trimmed = { ...row }
+  delete trimmed[key]
+  return trimmed
+}
+const unhinted = without(recorded.writes, 'annotations')
+const untitled = without(recorded.destructive, 'title')
+
+const hintedCatalogue = {
+  endpoint: '/api/mcp',
+  toolCount: 5,
+  groups: [
+    {
+      permission: 'project:browse',
+      label: 'View project',
+      gates:
+        'Open the project and read its work items, boards, backlog and reports.',
+      grantedByDefault: true,
+      tools: [recorded.reads, recorded.writes, recorded.destructive],
+    },
+    {
+      permission: 'thing:older',
+      label: 'From an older Motir',
+      gates: 'Rows a hint-less or title-less server serves.',
+      grantedByDefault: false,
+      tools: [
+        { ...unhinted, name: 'zqUnhintedRow' },
+        { ...untitled, name: 'zqUntitledRow' },
+      ],
+    },
+  ],
+}
+
+/** The rendered row for a tool, found by its anchor. */
+function rowOf(container: HTMLElement, name: string): HTMLElement {
+  const anchor = container.querySelector(`[id="tool-${name}"]`)
+  if (!anchor) throw new Error(`no row for ${name}`)
+  return anchor.closest('li') as HTMLElement
+}
+
+describe("toolHint — the design delta's mapping", () => {
+  it('maps each annotation shape to its state', () => {
+    expect(toolHint({ annotations: { readOnlyHint: true } })).toBe('reads')
+    expect(
+      toolHint({
+        annotations: { readOnlyHint: false, destructiveHint: false },
+      }),
+    ).toBe('writes')
+    expect(
+      toolHint({ annotations: { readOnlyHint: false, destructiveHint: true } }),
+    ).toBe('destructive')
+    expect(toolHint({})).toBe('unpublished')
+  })
+
+  it('a write that does not set destructiveHint is Writes, never Destructive', () => {
+    expect(toolHint({ annotations: { readOnlyHint: false } })).toBe('writes')
+    expect(toolHint({ annotations: {} })).toBe('writes')
+  })
+
+  it('a read ignores destructiveHint — MCP gives it no meaning there', () => {
+    expect(
+      toolHint({ annotations: { readOnlyHint: true, destructiveHint: true } }),
+    ).toBe('reads')
+  })
+
+  it('ABSENT annotations are never read as Reads', () => {
+    expect(toolHint({ annotations: undefined })).not.toBe('reads')
+  })
+})
+
+describe('the parse reads title and annotations, and refuses a wrong type', () => {
+  it('reads both when the row carries them', () => {
+    const parsed = parseMcpToolCatalogue(hintedCatalogue)
+    const [reads, writes] = parsed.groups[0]!.tools
+    expect(reads!.title).toBe('Dispatch prompt')
+    expect(reads!.annotations).toEqual({
+      readOnlyHint: true,
+      openWorldHint: false,
+    })
+    expect(writes!.annotations?.idempotentHint).toBe(true)
+  })
+
+  it('leaves both undefined when the row does not carry them — not `{}`', () => {
+    const [unhintedRow, untitledRow] =
+      parseMcpToolCatalogue(hintedCatalogue).groups[1]!.tools
+    expect('annotations' in unhintedRow!).toBe(false)
+    expect('title' in untitledRow!).toBe(false)
+  })
+
+  it.each([
+    ['a non-object annotations', { annotations: 'readOnly' }],
+    ['an array annotations', { annotations: [true] }],
+    ['a non-boolean readOnlyHint', { annotations: { readOnlyHint: 'yes' } }],
+    ['a non-boolean destructiveHint', { annotations: { destructiveHint: 1 } }],
+    ['a non-string title', { title: 7 }],
+  ])('raises the shape error for %s', (_label, patch) => {
+    const broken = structuredClone(hintedCatalogue)
+    Object.assign(broken.groups[0]!.tools[0]!, patch)
+    expect(() => parseMcpToolCatalogue(broken)).toThrow(
+      McpToolCatalogueShapeError,
+    )
+  })
+})
+
+describe("/docs/mcp/tools renders each row's title and hint", () => {
+  it('a row in each of the five states', async () => {
+    stubCatalogueFetch(hintedCatalogue)
+    const { container } = render(await McpToolsPage())
+    const chipOf = (row: HTMLElement) =>
+      row.querySelector('[data-hint]')?.textContent ?? null
+
+    const reads = rowOf(container, 'dispatch_prompt')
+    expect(reads.textContent).toContain('Dispatch prompt')
+    expect(chipOf(reads)).toBe(copy.docs.mcpHintReads)
+
+    const writes = rowOf(container, 'add_lesson')
+    expect(writes.textContent).toContain('Add lesson')
+    expect(chipOf(writes)).toBe(copy.docs.mcpHintWrites)
+
+    const destructive = rowOf(container, 'delete_work_item')
+    expect(destructive.textContent).toContain('Delete work item')
+    expect(chipOf(destructive)).toBe(copy.docs.mcpHintDestructive)
+
+    // Annotations absent: NO chip, and the absent-hints line instead.
+    const unhinted = rowOf(container, 'zqUnhintedRow')
+    expect(unhinted.textContent).toContain('Add lesson')
+    expect(chipOf(unhinted)).toBeNull()
+    expect(unhinted.textContent).toContain(copy.docs.mcpHintsUnpublished)
+
+    // Title absent: the name alone, and the chip still renders.
+    const untitled = rowOf(container, 'zqUntitledRow')
+    expect(untitled.textContent).not.toContain('Delete work item')
+    expect(chipOf(untitled)).toBe(copy.docs.mcpHintDestructive)
+
+    // Only the unhinted row carries the absent-hints line.
+    for (const row of [reads, writes, destructive, untitled]) {
+      expect(row.textContent).not.toContain(copy.docs.mcpHintsUnpublished)
+    }
+  })
+
+  it("carries the chips in the design's tints", async () => {
+    stubCatalogueFetch(hintedCatalogue)
+    const { container } = render(await McpToolsPage())
+    const tint = (name: string) =>
+      rowOf(container, name).querySelector('[data-hint]')!.className
+    expect(tint('dispatch_prompt')).toContain('bg-(--el-tint-sky)')
+    expect(tint('add_lesson')).toContain('bg-(--el-tint-peach)')
+    expect(tint('delete_work_item')).toContain('bg-(--el-tint-rose)')
+  })
+
+  it('says what the hints mean at the top of the page', async () => {
+    stubCatalogueFetch(hintedCatalogue)
+    const { container } = render(await McpToolsPage())
+    const text = container.textContent ?? ''
+    expect(text).toContain(copy.docs.mcpHintLedeIntro)
+    expect(text).toContain(copy.docs.mcpHintDestructiveMeans)
+    expect(text).toContain(copy.docs.mcpHintLedeClaude)
   })
 })
