@@ -93,6 +93,12 @@ export default defineConfig({
         // MOTIR-4222 — the per-host crawl surface.
         'app/sitemap.ts',
         'app/robots.ts',
+        // MOTIR-7083 — the docs data modules Story MOTIR-6976 changed, added
+        // WITH their top-up tests rather than after them. Before this story no
+        // docs file was measured at all.
+        'lib/docs.ts',
+        'lib/skillsGuide.ts',
+        'lib/mcpWiring.ts',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -145,6 +151,13 @@ export default defineConfig({
           functions: 90,
           branches: 75,
         },
+        // MOTIR-7083 — MEASURED FIRST under the docs tests on this branch:
+        // `docs.ts` 100 lines / 98.6 branches / 100 functions (after
+        // `tests/docs/docsLib.test.ts` topped up the helpers no page reached),
+        // `skillsGuide.ts` and `mcpWiring.ts` 100 across. Pinned at the floor.
+        'lib/docs.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/skillsGuide.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/mcpWiring.ts': { lines: 90, functions: 90, branches: 90 },
       },
     },
   },
