@@ -59,6 +59,7 @@ describe('/docs/skills', () => {
     expect([...SKILL_NAMES]).toEqual([
       'motir-run',
       'motir-fix',
+      'motir-continue',
       'motir-log-bug',
       'motir-mark',
       'motir-guide',
@@ -115,6 +116,33 @@ describe('/docs/skills', () => {
     expect(text).toContain('says it is being fixed, and by whom')
   })
 
+  it('tells a reader whose run died what motir-continue does, and when to use fix or run instead', () => {
+    const section = page()
+      .querySelector('h3#motir-continue')
+      ?.closest('section')
+    expect(section, 'the motir-continue section').not.toBeNull()
+    const text = section?.textContent ?? ''
+    // What to say: one work item, named.
+    expect(text).toContain('motir continue ACME-12')
+    // What it does: claims the continue, carries on the branch the dead run
+    // left, delivers as a fresh run does.
+    expect(text).toContain('whose run died')
+    expect(text).toContain('claims the continue')
+    expect(text).toContain('the branch that run left')
+    expect(text).toContain('never a new one')
+    // How it differs from motir fix (a red pull request) and motir run (a
+    // work item nobody has started).
+    expect(text).toContain(
+      'Use motir fix ACME-12 instead when the work item already has a pull request that is red',
+    )
+    expect(text).toContain(
+      'motir run ACME-12 for a work item nobody has started',
+    )
+    // What the reader sees: the Development section's own words.
+    expect(text).toContain('Run died')
+    expect(text).toContain('it is being continued, and by whom')
+  })
+
   it('tells a Bugs-folder reader what motir-fix-bugs does and shows them', () => {
     const section = page()
       .querySelector('h3#motir-fix-bugs')
@@ -155,10 +183,26 @@ describe('/docs/skills', () => {
     ).not.toBeNull()
   })
 
-  it('installs v0.4.0 — the first release whose plugin brings the MCP and the runner', () => {
-    // MOTIR-7081. A literal on purpose: the constant moving is the change this
+  it('installs v0.5.0 — the first release that carries motir-continue', () => {
+    // MOTIR-7268. A literal on purpose: the constant moving is the change this
     // card makes, so a test that read the constant back would agree with any tag.
-    expect(SKILLS_RELEASE_TAG).toBe('v0.4.0')
+    expect(SKILLS_RELEASE_TAG).toBe('v0.5.0')
+    expect(RELEASE_SKILLS).toContain('motir-continue')
+  })
+
+  it('copies the skills from where the pinned release keeps them', () => {
+    // Since v0.4.2 (MOTIR-7186) the skills live under plugins/motir/skills/,
+    // and a copy from a root skills/ folder at that tag copies nothing.
+    const panes = [...page().querySelectorAll('pre')]
+      .map((pre) => pre.textContent ?? '')
+      .filter((text) => text.includes('git clone'))
+    expect(panes).toHaveLength(
+      AGENT_INSTALLS.reduce((n, a) => n + a.blocks.length, 0) - 1,
+    )
+    for (const pane of panes) {
+      expect(pane).toContain('cp -R motir-skills/plugins/motir/skills/motir-* ')
+      expect(pane).not.toMatch(/motir-skills\/skills\//)
+    }
   })
 
   it('says the Claude Code plugin brings three things, and links the MCP sign-in', () => {
@@ -170,7 +214,7 @@ describe('/docs/skills', () => {
       (li) => li.textContent ?? '',
     )
     expect(items).toHaveLength(3)
-    expect(items[0]).toContain('The six skills')
+    expect(items[0]).toContain('The seven skills')
     expect(items[1]).toContain('The Motir MCP server')
     expect(items[1]).toContain('no token')
     expect(items[2]).toContain('The motir runner')
