@@ -4,6 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import McpPage from '@/app/docs/(guides)/mcp/page'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import {
+  CLAUDE_AI_ROUTE_CHECKED_ON,
+  CLAUDE_ROUTES_CHECKED_ON,
   CONNECTED_APPS_PATH,
   MCP_AUTH_HEADER,
   MCP_AUTH_SCHEME,
@@ -324,6 +326,44 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
         `${APP_ORIGIN}${MCP_ENDPOINT_PATH}`,
       )
     }
+  })
+
+  // MOTIR-7178: the claude.ai step names the OAuth client option the
+  // production proof (MOTIR-7177, 2026-10-02) chose — Use Claude's published
+  // identity, marked Detected — and no longer the DCR one. The desktop and
+  // Claude Code routes were not re-checked, so their wording and date stand
+  // and nothing says how Claude Code identifies itself.
+  it('tells claude.ai users to choose Claude’s published identity, and only them', () => {
+    const [claudeAi, desktop, claudeCode] = claudeRoutes()
+    const step = claudeAi.steps.join(' ')
+    expect(step).toContain(
+      'Under OAuth client, choose Use Claude’s published identity',
+    )
+    expect(step).toContain('claude.ai marks it Detected')
+    expect(step).toContain('Leave the OAuth client ID and secret empty')
+    expect(step).not.toMatch(/Register\s+automatically/)
+    expect(claudeAi.checkedOn).toBe(CLAUDE_AI_ROUTE_CHECKED_ON)
+    for (const route of [desktop, claudeCode]) {
+      const text = [...route.steps, route.note].join(' ')
+      expect(text, route.id).not.toMatch(
+        /published identity|Register\s+automatically|verified/i,
+      )
+      expect(route.checkedOn, route.id).toBe(CLAUDE_ROUTES_CHECKED_ON)
+    }
+  })
+
+  it('says claude.ai shows as a verified domain, and a self-registered client as Unverified', async () => {
+    stubCatalogue(catalogueFixture)
+    const { container } = render(await McpPage())
+    const consent =
+      container.querySelector('#consent')!.parentElement!.textContent!
+    expect(consent).toContain(
+      'shows claude.ai as a verified domain on the sign-in page and in Connected apps',
+    )
+    expect(consent).toContain(
+      'Any other MCP client that registers itself reads Unverified',
+    )
+    expect(container.textContent).not.toMatch(/Register\s+automatically/)
   })
 
   it('prints the Claude Code command with a copy control', async () => {

@@ -283,6 +283,17 @@ export function mcpClients(
  */
 export const CLAUDE_ROUTES_CHECKED_ON = '2026-10-01'
 
+/**
+ * The claude.ai route's own check date (MOTIR-7178). Its OAuth client step was
+ * re-read on this date against Anthropic's page, which now lists Use Claude's
+ * published identity (CIMD) as the recommended option, and against the
+ * production proof (MOTIR-7177, 2026-10-02): a real claude.ai connector chose
+ * that option, marked Detected, and Motir's consent screen named claude.ai a
+ * verified domain. The desktop and Claude Code routes were not re-checked, so
+ * they keep {@link CLAUDE_ROUTES_CHECKED_ON}.
+ */
+export const CLAUDE_AI_ROUTE_CHECKED_ON = '2026-10-02'
+
 /** The Account → Tokens page, where the Connected apps card lists and revokes grants. */
 export const CONNECTED_APPS_PATH = '/settings/account/tokens#connected-apps'
 
@@ -315,15 +326,16 @@ export function claudeRoutes(
       label: 'claude.ai',
       steps: [
         'Open Customize → Connectors.',
-        'Click “+”, then Add custom connector, and paste the server URL below. Leave the OAuth client ID and secret empty — Motir needs neither. If the dialog asks how Claude should identify itself, choose Register automatically.',
+        'Click “+”, then Add custom connector, and paste the server URL below. Under OAuth client, choose Use Claude’s published identity — claude.ai marks it Detected, because Motir supports it. Leave the OAuth client ID and secret empty — Motir needs neither.',
         'Click Add, then Connect. Claude sends you to app.motir.co to sign in and approve.',
       ],
       code: facts.url,
       caption: 'Remote MCP server URL',
       copyLabel: 'Copy the Motir MCP server URL',
       note: 'On a Team or Enterprise plan an Owner adds the connector once, under Organization settings → Connectors → Add → Custom → Web, and each member then clicks Connect under Customize → Connectors with their own Motir account.',
-      docsUrl: 'https://claude.com/docs/connectors/custom/remote-mcp',
-      checkedOn: CLAUDE_ROUTES_CHECKED_ON,
+      docsUrl:
+        'https://claude.com/docs/connectors/custom/remote-mcp#choose-authentication-settings',
+      checkedOn: CLAUDE_AI_ROUTE_CHECKED_ON,
     },
     {
       id: 'claude-desktop',
