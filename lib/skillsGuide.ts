@@ -30,7 +30,7 @@
  */
 
 /** The `motir-skills` release every command on the page installs. */
-export const SKILLS_RELEASE_TAG = 'v0.4.0'
+export const SKILLS_RELEASE_TAG = 'v0.5.0'
 
 /** The public repository, as `owner/name`. */
 export const SKILLS_REPO = 'moooon-B-V/motir-skills'
@@ -45,7 +45,8 @@ export const CHECKED_ON = '28 September 2026'
 /**
  * Every skill the release carries — what a reader's agent lists once the page's
  * install step has run, since the copy step takes every `motir-*` folder and
- * the plugin carries them all. Read from the tag's `skills/` folder.
+ * the plugin carries them all. Read from the tag's `plugins/motir/skills/`
+ * folder.
  */
 export const RELEASE_SKILLS = [
   'motir-run',
@@ -54,6 +55,7 @@ export const RELEASE_SKILLS = [
   'motir-guide',
   'motir-fix-bugs',
   'motir-fix',
+  'motir-continue',
 ] as const
 
 /**
@@ -66,6 +68,7 @@ export const RELEASE_SKILLS = [
 export const SKILL_NAMES = [
   'motir-run',
   'motir-fix',
+  'motir-continue',
   'motir-log-bug',
   'motir-mark',
   'motir-guide',
@@ -75,12 +78,17 @@ export const SKILL_NAMES = [
 /**
  * The clone every copy-install starts from: a shallow clone OF THE TAG, into a
  * folder the next line removes, so nothing is left behind to go stale.
+ *
+ * ⚠️ THE SKILLS LIVE UNDER `plugins/motir/skills/` SINCE `v0.4.2`
+ * (MOTIR-7186), not at the repository root. The path is the release's, so it
+ * moves with `SKILLS_RELEASE_TAG`: a copy from a root `skills/` folder at a
+ * newer tag matches nothing and copies nothing.
  */
 function copyInstall(skillsDir: string): string {
   return [
     `git clone --depth 1 --branch ${SKILLS_RELEASE_TAG} ${SKILLS_REPO_URL}.git`,
     `mkdir -p ${skillsDir}`,
-    `cp -R motir-skills/skills/motir-* ${skillsDir}/`,
+    `cp -R motir-skills/plugins/motir/skills/motir-* ${skillsDir}/`,
     'rm -rf motir-skills',
   ].join('\n')
 }
@@ -146,7 +154,7 @@ export const AGENT_INSTALLS: AgentInstall[] = [
     ],
     brings: [
       {
-        title: 'The six skills',
+        title: 'The seven skills',
         text: 'Every skill in the release, listed under the plugin’s name.',
       },
       {
@@ -262,6 +270,12 @@ export const SKILL_USAGE: SkillUsage[] = [
     say: ['motir fix ACME-12'],
     does: 'Repairs a red pull request after the run that opened it has ended: its checks failed, the merge queue threw it out, or a reviewer sent the story’s acceptance video back with Re-run. It first claims the repair, so nobody else pushes over it. Then it fixes each of the work item’s pull requests on the branch it already has, never a new one: it merges the base branch, fixes what the failing check named, and pushes. It keeps going until CI is green or it has tried five times, and it records the acceptance video again once CI is green after a Re-run. It never opens a pull request, merges one or moves the work item’s status. Not the same as motir fix bugs, which works through your project’s Bugs folder: motir fix ACME-12 repairs the pull requests of one work item you name.',
     see: 'While the repair runs, the work item’s Development section says it is being fixed, and by whom. The same pull requests get new commits, and Motir moves the work item on by itself once their checks pass. If the repair gives up, the work item says so and how many attempts it made.',
+  },
+  {
+    name: 'motir-continue',
+    say: ['motir continue ACME-12'],
+    does: 'Carries on a work item whose run died part-way: the laptop closed, the sandbox was lost, or the process was killed. The work item is still In Progress and its work is on the branch that run left. It first claims the continue, so nobody else works the same branch. Then it checks out that branch in every repository the work item spans, never a new one and never resetting what is already there, and carries the work on from where it stopped. It delivers the way a fresh run does: one pull request per repository, linked to the work item. Use motir fix ACME-12 instead when the work item already has a pull request that is red, and motir run ACME-12 for a work item nobody has started.',
+    see: 'A work item whose run died says Run died in its Development section, with the motir continue command to copy. While the continue runs, that section says it is being continued, and by whom. When it finishes, the work item moves on exactly as after motir run: to Implemented, with its pull requests linked and a How to test section.',
   },
   {
     name: 'motir-log-bug',
