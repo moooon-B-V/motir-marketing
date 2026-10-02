@@ -293,6 +293,13 @@ export default async function McpPage() {
         own role allows.
       </Prose>
       <Prose>
+        When claude.ai connects with Claude’s published identity, Motir checks
+        that claude.ai publishes it, and shows claude.ai as a verified domain on
+        the sign-in page and in Connected apps. Any other MCP client that
+        registers itself reads Unverified: the name it shows is one it chose,
+        and Motir cannot check it.
+      </Prose>
+      <Prose>
         Claude asks before it uses a tool that changes anything: every tool says
         whether it only reads, writes or deletes, and{' '}
         <Link
