@@ -7,8 +7,8 @@ import { SITE_ORIGIN, STUB_ORIGIN } from '../stub/origin'
  * ships", on motir.co. A reader opens /docs/mcp and finds Add Motir to Claude,
  * copies the Claude Code command, finds the token route below it, follows the
  * hints to /docs/mcp/tools and sees each tool's title with a Reads, Writes or
- * Destructive chip, opens /docs/skills installing v0.4.0 with the plugin's three
- * things, and reaches the privacy notice's passage on connected AI clients.
+ * Destructive chip, opens /docs/skills installing the plugin from a release tag
+ * with its three things, and reaches the privacy notice's passage on connected AI clients.
  * PACED FOR A PERSON TO WATCH.
  *
  * The first test is the RECEIPT: its recording is published onto the story and
@@ -150,8 +150,11 @@ test.describe('the receipt', () => {
       await beat(page, 2000)
     }
 
-    // ── 3 · /docs/skills INSTALLS v0.4.0 ─────────────────────────────────────
-    chapter('/docs/skills — the plugin brings three things, from v0.4.0')
+    // ── 3 · /docs/skills INSTALLS THE PLUGIN FROM A RELEASE TAG ──────────────
+    // WHICH tag is `docs-skills.spec.ts`'s assertion, and it moves with every
+    // release. This walk asserts only that the command pins one, so a release
+    // does not turn MOTIR-6976's receipt red (MOTIR-7268 moved it to v0.5.0).
+    chapter('/docs/skills — the plugin brings three things, from a release tag')
     await page.goto(`${SITE_ORIGIN}/docs/skills`)
     const claudeCode = page.locator('section', {
       has: page.getByRole('heading', { level: 3, name: 'Claude Code' }),
@@ -162,7 +165,7 @@ test.describe('the receipt', () => {
     await expect(claudeCode).toContainText('The motir runner')
     await expect(
       claudeCode.locator('pre', { hasText: '/plugin marketplace add' }),
-    ).toContainText('moooon-B-V/motir-skills#v0.4.0')
+    ).toContainText(/moooon-B-V\/motir-skills#v\d+\.\d+\.\d+\b/)
     await beat(page, 3200)
 
     // ── 4 · THE PRIVACY NOTICE ───────────────────────────────────────────────
