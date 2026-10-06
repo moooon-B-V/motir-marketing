@@ -62,6 +62,14 @@ allowBuilds:
 # name "motir", a day after the product moved to the monochrome one.**
 # Published 2026-09-26T23:02:19Z, about fourteen hours before this install.
 #
+# ⚠️ RE-POINTED 0.6.0 → 0.8.2 by MOTIR-7588 (2026-10-06), NOT APPENDED TO, for
+# the same reason. **0.8.2 carries MOTIR-7582's warm touches in the `motir`
+# palette: until this repository pins it, motir.co keeps the all-blue default
+# while the product shows the warm orange accent, the citrine Design hue and the
+# warmed peach / yellow washes.** Published 2026-10-06T01:57:19Z, about eight
+# hours before this install. The 0.6.0 line matched nothing once the pin moved
+# (`grep -c 'design-system@0.6.0' pnpm-lock.yaml` → 0), so it was deleted.
+#
 # ⚠️ AND BOTH ARE OWED A DELETION, WHICH IS WHY THE CONDITION IS WRITTEN AS A
 # COMMAND: once each version is more than a day old, run
 # `pnpm install --frozen-lockfile` with its line removed — green means delete it.
@@ -69,4 +77,4 @@ allowBuilds:
 # what gets appended to.
 minimumReleaseAgeExclude:
   - '@motir/brand@0.2.0'
-  - '@motir/design-system@0.6.0'
+  - '@motir/design-system@0.8.2'
