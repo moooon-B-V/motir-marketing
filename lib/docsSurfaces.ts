@@ -136,6 +136,18 @@ export const DOCS_SURFACES: DocsSurface[] = [
     description: copy.docs.descSkills,
     pages: [],
   },
+  {
+    href: '/docs/claude-code-plugin',
+    label: copy.docs.claudeCodePlugin,
+    description: copy.docs.descClaudeCodePlugin,
+    pages: [],
+  },
+  {
+    href: '/docs/claude-code-connector',
+    label: copy.docs.claudeCodeConnector,
+    description: copy.docs.descClaudeCodeConnector,
+    pages: [],
+  },
 ]
 
 /**

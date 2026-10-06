@@ -65,14 +65,18 @@ export function ProjectHeader({
     <header>
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div className="min-w-0">
-          <p className="text-[13px] text-(--el-text-secondary)">
+          <p className="flex items-center gap-2.5 font-(family-name:--font-mono) text-[12px] tracking-[0.1em] text-(--el-text) uppercase">
+            <i
+              aria-hidden="true"
+              className="size-[10px] bg-(--el-showcase-highlight)"
+            />
             {workspaceName}
           </p>
-          <h1 className="mt-1 font-(family-name:--font-serif) text-[30px] leading-tight font-bold tracking-[-0.01em] text-(--el-text)">
+          <h1 className="mt-3 font-(family-name:--font-serif) text-[clamp(40px,5.4vw,80px)] leading-[0.94] font-bold tracking-[-0.035em] text-(--el-text)">
             {name}
           </h1>
           {publicTagline ? (
-            <p className="mt-2 max-w-[44rem] text-[15px] leading-[1.55] text-(--el-text-secondary)">
+            <p className="mt-4 max-w-[60ch] text-[clamp(17px,1.4vw,20px)] leading-[1.5] text-(--el-text-secondary)">
               {publicTagline}
             </p>
           ) : null}
@@ -92,7 +96,7 @@ export function ProjectHeader({
 
         {/* The four stat figures the design puts opposite the name. `dl` rather
             than a list of divs: each is a term and its value. */}
-        <dl className="flex gap-[22px]">
+        <dl className="flex gap-[clamp(20px,2.4vw,40px)] self-end">
           <Stat n={stats.publicRequests} k="requests" />
           <Stat n={stats.upvotes} k="upvotes" />
           <Stat n={stats.planned} k="planned" />
@@ -102,7 +106,11 @@ export function ProjectHeader({
 
       <ActRail identifier={identifier} returnPath={returnPath} host={host} />
 
-      {watch ? <WatchLive identifier={identifier} name={name} /> : null}
+      {watch ? (
+        <div className="mt-5">
+          <WatchLive identifier={identifier} name={name} />
+        </div>
+      ) : null}
 
       {/* ⚠️ SCROLLS, never wraps. Six short labels; a wrapped row would push the
           content down by a line on every project whose window is narrow, which
@@ -117,7 +125,7 @@ export function ProjectHeader({
           prefetched into a redirect off this host. SCROLLS, never wraps. */}
       <nav
         aria-label="Project"
-        className="mt-6 flex items-center gap-0.5 overflow-x-auto border-b border-(--el-border)"
+        className="mt-8 flex items-center gap-0.5 overflow-x-auto border-b border-(--el-border)"
       >
         {PROJECT_TABS.filter((tab) => tab.served === 'site').map((tab) => {
           const isCurrent = tab.segment === current
@@ -128,8 +136,8 @@ export function ProjectHeader({
               aria-current={isCurrent ? 'page' : undefined}
               className={
                 isCurrent
-                  ? 'border-b-2 border-(--el-accent) px-3 py-2.5 text-[13px] font-semibold whitespace-nowrap text-(--el-text)'
-                  : 'border-b-2 border-transparent px-3 py-2.5 text-[13px] font-medium whitespace-nowrap text-(--el-text-secondary) hover:text-(--el-text)'
+                  ? 'border-b-2 border-(--el-accent) px-3 py-3 text-[15px] font-semibold whitespace-nowrap text-(--el-text)'
+                  : 'border-b-2 border-transparent px-3 py-3 text-[15px] font-medium whitespace-nowrap text-(--el-text-secondary) hover:text-(--el-text)'
               }
             >
               {tab.label}
@@ -150,7 +158,7 @@ export function ProjectHeader({
           <a
             key={tab.segment}
             href={visitorViewUrl(identifier, tab.segment as VisitorView)}
-            className="border-b-2 border-transparent px-3 py-2.5 text-[13px] font-medium whitespace-nowrap text-(--el-text-secondary) hover:text-(--el-text)"
+            className="border-b-2 border-transparent px-3 py-3 text-[15px] font-medium whitespace-nowrap text-(--el-text-secondary) hover:text-(--el-text)"
           >
             {tab.label}&nbsp;<span aria-hidden>↗</span>
             <span className="sr-only">
@@ -167,10 +175,12 @@ export function ProjectHeader({
 function Stat({ n, k }: { n: number; k: string }) {
   return (
     <div className="text-right">
-      <dd className="text-[20px] leading-[1.1] font-bold text-(--el-text)">
+      <dd className="font-(family-name:--font-serif) text-[clamp(28px,2.6vw,40px)] leading-[1] font-bold tracking-[-0.02em] text-(--el-text)">
         {n.toLocaleString('en')}
       </dd>
-      <dt className="mt-0.5 text-[12px] text-(--el-text-muted)">{k}</dt>
+      <dt className="mt-1.5 font-(family-name:--font-mono) text-[11px] tracking-[0.1em] text-(--el-text-secondary) uppercase">
+        {k}
+      </dt>
     </div>
   )
 }

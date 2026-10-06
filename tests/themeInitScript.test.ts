@@ -85,3 +85,31 @@ describe('a returning visitor who picked a palette under 0.1.x', () => {
     expect(html()).toHaveAttribute('data-palette', 'motir')
   })
 })
+
+describe("motir.co's default type", () => {
+  // The site's own script runs right after the design system's (layout.tsx).
+  async function runSiteDefault() {
+    const { siteDefaultTypeScript } = await import('@/lib/siteDefaultType')
+    new Function(siteDefaultTypeScript)()
+  }
+
+  it('is the Grotesk pairing for a visitor who has chosen nothing', async () => {
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-type')).toBe('grotesk')
+  })
+
+  it('leaves a picked type alone', async () => {
+    window.localStorage.setItem(THEME_STORAGE_KEYS.type, 'editorial')
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-type')).toBe('editorial')
+  })
+
+  it("leaves a picked style's own type alone", async () => {
+    window.localStorage.setItem(THEME_STORAGE_KEYS.style, 'neo-brutalism')
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-type')).not.toBe('grotesk')
+  })
+})

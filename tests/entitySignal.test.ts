@@ -75,6 +75,8 @@ describe('sitemap', () => {
     // joined in MOTIR-4009, read from the same directory the routes glob.
     expect(entries.map((entry) => entry.url)).toEqual([
       'https://motir.co/',
+      // 2026-10 redesign — "How Motir works", the developer page.
+      'https://motir.co/how-it-works',
       'https://motir.co/design',
       'https://motir.co/explore',
       'https://motir.co/docs',
@@ -91,6 +93,9 @@ describe('sitemap', () => {
       'https://motir.co/docs/difficulty',
       // MOTIR-6717 — installing Motir's skills in your agent.
       'https://motir.co/docs/skills',
+      // 2026-10 redesign — the Claude Code plugin and connector guides.
+      'https://motir.co/docs/claude-code-plugin',
+      'https://motir.co/docs/claude-code-connector',
       'https://motir.co/legal',
       'https://motir.co/legal/terms',
       'https://motir.co/legal/privacy',

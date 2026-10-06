@@ -88,12 +88,12 @@ export function SubscribeForm({ identifier }: { identifier: string }) {
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         placeholder="you@example.com"
-        className="h-(--height-control) min-w-[15rem] rounded-(--radius-input) border border-(--el-border-strong) bg-(--el-page-bg) px-(--spacing-control-x) text-[13px] text-(--el-text) placeholder:text-(--el-text-secondary)"
+        className="h-(--height-btn-md) min-w-[16rem] rounded-(--radius-input) border border-(--el-border-strong) bg-(--el-page-bg) px-(--spacing-input-x) text-[14px] text-(--el-text) placeholder:text-(--el-text-secondary)"
       />
       <button
         type="submit"
         disabled={state.kind === 'sending'}
-        className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-3 text-[13px] font-medium text-(--el-text) hover:bg-(--el-surface-soft) disabled:opacity-60"
+        className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-(--spacing-btn-x) text-[14px] font-medium text-(--el-text) hover:bg-(--el-surface-soft) disabled:opacity-60"
       >
         {state.kind === 'sending' ? 'Subscribing…' : 'Subscribe'}
       </button>

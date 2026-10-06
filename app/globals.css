@@ -60,3 +60,278 @@ body {
     animation: none;
   }
 }
+
+/*
+ * THE LANDING'S PICTURES — "Vibe the project" (2026-10 redesign).
+ *
+ * The pictures on the landing and on "How Motir works" paint with the design
+ * system's showcase element tokens (`--el-showcase-*`), named for what they
+ * paint — field, ground, highlight, decision, record, wash, paper — and mapped
+ * to palette colours in @motir/design-system, so the theme, the palette and
+ * the style all reach them. `.landing-art` only marks the regions that hold
+ * pictures.
+ */
+
+/* A printed halftone across a colour field, fading in from one corner. */
+.mk-halftone {
+  position: relative;
+  isolation: isolate;
+}
+.mk-halftone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--el-showcase-field-text) 22%, transparent) 1.4px,
+    transparent 1.7px
+  );
+  background-size: 9px 9px;
+  mask-image: linear-gradient(135deg, transparent 30%, #000 100%);
+}
+.mk-halftone-yellow::before {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--el-showcase-highlight) 35%, transparent) 1.4px,
+    transparent 1.7px
+  );
+}
+
+/*
+ * "HOW MOTIR WORKS" — the developer page (2026-10 redesign).
+ *
+ * The workflow is drawn as one instrument: modules on a rack, joined by
+ * cables. Cool (blue, crisp panels) is Motir and its agents; warm (orange
+ * controls, peach panels) is you. The panels and inks read the `--el-*` palette
+ * so the drawing follows the theme; the small displays are dark in every theme,
+ * like a device's screen. Flat on purpose — no textures, bevels or shadows.
+ */
+.hiw-rack {
+  --r-panel: var(--el-page-bg);
+  --r-line: var(--el-border);
+  --r-ink: var(--el-text);
+  --r-soft: var(--el-text-secondary);
+  --r-cool: var(--el-accent-on-surface);
+  --r-warm: var(--el-highlight);
+  --r-warm-panel: var(--el-tint-peach);
+  --r-off: var(--el-border);
+  --r-lcd: var(--el-showcase-ground);
+  --r-lcd-cool: color-mix(
+    in srgb,
+    var(--el-showcase-ground-text) 72%,
+    var(--el-showcase-field)
+  );
+  --r-lcd-warm: color-mix(
+    in srgb,
+    var(--el-showcase-ground-text) 55%,
+    var(--el-showcase-decision)
+  );
+}
+.hiw-rack text {
+  font-family: var(--font-sans);
+}
+.hiw-rack .ttl,
+.hiw-rack .ttl-d {
+  font-family: var(--font-serif);
+}
+.hiw-rack .p {
+  fill: var(--r-panel);
+  stroke: var(--r-line);
+  stroke-width: 1;
+}
+.hiw-rack .p-h {
+  fill: var(--r-warm-panel);
+  stroke: none;
+}
+.hiw-rack .p-dark {
+  fill: var(--r-lcd);
+  stroke: none;
+}
+.hiw-rack .dot {
+  fill: var(--r-line);
+}
+.hiw-rack .face {
+  fill: var(--el-surface-soft);
+}
+.hiw-rack .jack-ring {
+  fill: var(--r-panel);
+  stroke: var(--r-ink);
+  stroke-width: 1.5;
+}
+.hiw-rack .jack-i {
+  fill: var(--r-ink);
+}
+.hiw-rack .key {
+  fill: var(--el-surface);
+  stroke: var(--r-line);
+}
+.hiw-rack .rule-a {
+  stroke: var(--r-line);
+  stroke-width: 1;
+}
+.hiw-rack .rule-ah {
+  stroke: color-mix(in srgb, var(--r-warm) 40%, transparent);
+  stroke-width: 1;
+}
+.hiw-rack .stripe-c {
+  fill: var(--r-cool);
+}
+.hiw-rack .stripe-w {
+  fill: var(--r-warm);
+}
+.hiw-rack .stripe-s {
+  fill: var(--r-soft);
+}
+.hiw-rack .lbl,
+.hiw-rack .lbl-h,
+.hiw-rack .lbl-d,
+.hiw-rack .klbl,
+.hiw-rack .btn-t,
+.hiw-rack .lcd-t,
+.hiw-rack .lcd-w {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+.hiw-rack .lbl {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  fill: var(--r-soft);
+}
+.hiw-rack .lbl-h {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  fill: var(--r-ink);
+}
+.hiw-rack .lbl-d {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  fill: var(--r-lcd-cool);
+}
+.hiw-rack .ttl {
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  fill: var(--r-ink);
+}
+.hiw-rack .ttl-d {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  fill: var(--el-showcase-ground-text);
+}
+.hiw-rack .sm {
+  font-size: 12.5px;
+  fill: var(--r-soft);
+}
+.hiw-rack .sm-d {
+  font-size: 13px;
+  fill: var(--el-showcase-ground-muted);
+}
+.hiw-rack .lcd {
+  fill: var(--r-lcd);
+}
+.hiw-rack .lcd-t {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  fill: var(--r-lcd-cool);
+}
+.hiw-rack .lcd-w {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  fill: var(--r-lcd-warm);
+}
+.hiw-rack .ledc {
+  fill: var(--r-cool);
+}
+.hiw-rack .ledw {
+  fill: var(--r-warm);
+}
+.hiw-rack .ledoff {
+  fill: var(--r-off);
+}
+.hiw-rack .knob {
+  fill: var(--r-warm);
+}
+.hiw-rack .tick {
+  stroke: var(--r-ink);
+  stroke-width: 1.4;
+}
+.hiw-rack .pointer {
+  stroke: var(--el-page-bg);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.hiw-rack .klbl {
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  fill: var(--r-ink);
+}
+.hiw-rack .sw-track {
+  fill: var(--r-panel);
+  stroke: color-mix(in srgb, var(--r-warm) 40%, transparent);
+}
+.hiw-rack .btn-t {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  fill: var(--r-ink);
+}
+.hiw-rack .cable-c {
+  fill: none;
+  stroke: var(--r-cool);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.hiw-rack .cable-w {
+  fill: none;
+  stroke: var(--r-warm);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.hiw-rack .plug-c {
+  fill: var(--r-cool);
+}
+.hiw-rack .plug-w {
+  fill: var(--r-warm);
+}
+.hiw-rack .pulse {
+  fill: var(--r-panel);
+}
+/* The drawing takes the style's shape too: panels round like cards, screens
+   and switches like small controls, memory keys like buttons. (CSS `rx` wins
+   over the drawing's own `rx` attribute.) */
+.hiw-rack .face,
+.hiw-rack .face-dots,
+.hiw-rack .p,
+.hiw-rack .p-h,
+.hiw-rack .p-dark {
+  rx: var(--radius-card);
+}
+.hiw-rack .lcd,
+.hiw-rack .sw-track {
+  rx: var(--radius-control);
+}
+.hiw-rack .key {
+  rx: var(--radius-btn);
+}
+.hiw-rack [data-step] {
+  cursor: pointer;
+  outline: none;
+}
+.hiw-rack [data-step].on .p,
+.hiw-rack [data-step]:focus-visible .p,
+.hiw-rack [data-step].on .p-dark {
+  stroke: var(--r-cool);
+  stroke-width: 2.5;
+}
+.hiw-rack [data-step].on .p-h,
+.hiw-rack [data-step]:focus-visible .p-h {
+  stroke: var(--r-warm);
+  stroke-width: 2.5;
+}

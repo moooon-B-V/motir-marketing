@@ -283,7 +283,7 @@ describe('accessibility is a criterion, not a polish pass', () => {
   it('every rail row is a real link, so the whole rail is in the tab order', async () => {
     const { container } = await renderRail('/docs/api')
     const rows = container.querySelectorAll('nav li > a')
-    expect(rows.length).toBe(49 + 9 + 2)
+    expect(rows.length).toBe(49 + 11 + 2)
     for (const row of rows) expect(row.getAttribute('href')).toBeTruthy()
   })
 
@@ -362,7 +362,7 @@ describe('the route GROUP is what decides the operation tier', () => {
 
   it('every docs page sits under exactly one of the two sub-area layouts', () => {
     const pages = pagesUnder('app/docs')
-    expect(pages.length).toBe(12)
+    expect(pages.length).toBe(14)
     const unclaimed = pages.filter(
       (page) =>
         !page.startsWith(join('app', 'docs', '(guides)')) &&

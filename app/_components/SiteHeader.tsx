@@ -1,26 +1,37 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { ArrowRight, Menu } from 'lucide-react'
-import { BrandMark } from '@motir/brand'
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
+import { PRODUCT_MARK, productGroups, productItems } from './products'
+import { BrandTile } from './BrandTile'
 import {
   DESIGN,
   DOCS,
   EXPLORE,
+  IDEAS,
   FREE_DOOR,
   SIGN_IN,
   SITE_ROOT,
+  PRODUCT_DOCS,
+  productPath,
+  type ProductSlug,
 } from '@/lib/destinations'
 import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
 import { ChromeLink } from './ChromeLink'
 
 /*
- * The top bar — the `ExploreTopBar` pattern (`--el-surface-soft` fill, an
- * `--el-border` bottom hairline, the `py-3` rhythm), carrying DOOR 3's first
- * half: the `Start free` nav entry.
+ * The top bar, carrying DOOR 3's first half: the `Start free` nav entry.
+ *
+ * Since the 2026-10 redesign it has NO FILL AND NO RULE of its own: it sits on
+ * the page's own background, so it reads as the top of the hero rather than a
+ * stripe above it, and its links sit on the left beside the Motir lockup, with
+ * Sign in and Start free on the right. (It was the `ExploreTopBar` pattern: an
+ * `--el-surface-soft` fill, an `--el-border` hairline and centred links.) The
+ * ink notes below were measured on that fill; on the page background the same
+ * pairs are the page's own, and `tests/aaMatrix.test.ts` re-measures them.
  *
  * ⚠️ THE CURRENT-PAGE ITEM IS `--el-accent-on-surface` AT `font-weight: 600` —
  * the pairing `ExploreTopBar` ships, byte for byte. This comment used to say
@@ -70,6 +81,7 @@ import { ChromeLink } from './ChromeLink'
  */
 const navItems = [
   { path: EXPLORE, label: copy.nav.explore },
+  { path: IDEAS, label: copy.nav.ideas },
   { path: DOCS, label: copy.nav.docs },
   { path: DESIGN, label: copy.nav.design },
 ] as const
@@ -84,6 +96,108 @@ const navItems = [
  * serves that project at `acme.motir.site/explore`, where a pathname test alone
  * would light the nav item up on a page that is not the Explore surface.
  */
+/*
+ * The Products menu (2026-10 redesign): every product, in its three groups
+ * (`./products`), each with its mark colour and its own page. It opens from a
+ * real button, closes on Escape and on a click outside it, and its entries are
+ * ordinary links.
+ */
+
+/** A product's address: its page, or — for the tooling — its documentation. */
+const productHref = (host: PublicHost, slug: ProductSlug) =>
+  siteLinkFor(host, PRODUCT_DOCS[slug] ?? productPath(slug))
+const NEW_TAB = { target: '_blank', rel: 'noopener noreferrer' } as const
+
+function ProductsMenu({ host }: { host: PublicHost }) {
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const onSite = host.kind === 'site'
+
+  useEffect(() => {
+    if (!open) return
+    const onPointer = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
+    }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointer)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointer)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls="products-menu"
+        onClick={() => setOpen((value) => !value)}
+        className={cn(
+          NAV_ITEM,
+          NAV_REST,
+          'inline-flex items-center gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)',
+        )}
+      >
+        {copy.nav.products}
+        <ChevronDown
+          aria-hidden="true"
+          className={cn('size-3.5 transition-transform', open && 'rotate-180')}
+        />
+      </button>
+      {open ? (
+        <div
+          id="products-menu"
+          aria-label={copy.nav.productsMenuLabel}
+          role="group"
+          className="absolute top-[calc(100%+12px)] left-[-14px] z-40 grid w-[min(920px,calc(100vw-32px))] gap-x-4 gap-y-3 rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-(--spacing-card-padding) shadow-(--shadow-elevated) md:grid-cols-3"
+        >
+          {productGroups.map((group) => (
+            <div key={group.label} className="grid content-start gap-1">
+              <p className="m-0 px-(--spacing-control-x) pb-1 font-(family-name:--font-mono) text-[11px] tracking-[0.1em] text-(--el-text-secondary) uppercase">
+                {group.label}
+              </p>
+              {group.items.map((product) => (
+                <ChromeLink
+                  key={product.slug}
+                  href={productHref(host, product.slug)}
+                  internal={onSite && !PRODUCT_DOCS[product.slug]}
+                  {...(PRODUCT_DOCS[product.slug] ? NEW_TAB : {})}
+                  onClick={() => setOpen(false)}
+                  className="grid grid-cols-[10px_minmax(0,1fr)] gap-x-3 gap-y-0.5 rounded-(--radius-control) px-(--spacing-control-x) py-(--spacing-control-y) no-underline hover:bg-(--el-surface-soft) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
+                >
+                  <i
+                    aria-hidden="true"
+                    className={cn(
+                      'row-span-2 mt-1.5 size-2.5',
+                      PRODUCT_MARK[product.slug],
+                    )}
+                  />
+                  <b className="inline-flex items-center gap-1 text-[14.5px] font-semibold text-(--el-text)">
+                    {product.name}
+                    {PRODUCT_DOCS[product.slug] ? (
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className="size-3.5 text-(--el-text-secondary)"
+                      />
+                    ) : null}
+                  </b>
+                  <span className="text-[13px] text-(--el-text-secondary)">
+                    {product.blurb}
+                  </span>
+                </ChromeLink>
+              ))}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 const isCurrent = (host: PublicHost, path: string, pathname: string) =>
   host.kind !== 'site'
     ? false
@@ -91,64 +205,74 @@ const isCurrent = (host: PublicHost, path: string, pathname: string) =>
       ? pathname === path || pathname.startsWith(`${path}/`)
       : pathname === path
 
-const NAV_ITEM = 'text-[13.5px]'
-const NAV_REST = 'text-(--el-text-secondary) hover:text-(--el-text)'
+const NAV_ITEM = 'text-[15px] font-medium'
+const NAV_REST = 'text-(--el-text) hover:text-(--el-accent-on-surface)'
 const NAV_CURRENT = 'font-semibold text-(--el-accent-on-surface)'
 
-export function SiteHeader({ host }: { host: PublicHost }) {
+export function SiteHeader({
+  host,
+  overlay = false,
+}: {
+  host: PublicHost
+  /** Over the page's first section rather than above it (`SiteShell`). */
+  overlay?: boolean
+}) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
   const onSite = host.kind === 'site'
 
   return (
-    <header className="border-b border-(--el-border) bg-(--el-surface-soft)">
-      <div className="flex items-center justify-between gap-4 px-4 py-2.5 sm:px-(--spacing-card-padding) sm:py-3">
-        {/* motir.co's own root — internal ON THE SITE, and an absolute link
+    <header className={cn(overlay && 'absolute inset-x-0 top-0 z-30')}>
+      <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-(--spacing-card-padding) sm:py-4">
+        <div className="flex min-w-0 items-center gap-8">
+          {/* motir.co's own root — internal ON THE SITE, and an absolute link
             HOME from a tenant host, where `/` is that workspace's or that
             project's root rather than ours (MOTIR-4372). This comment used to
             call it "the ONE internal link on the page", which was true of the
             host it was written on and of no other. Every destination that is a
             different ORIGIN stays a plain `<a>`: `next/link` prefetches and
             client-routes, neither of which means anything across origins. */}
-        <ChromeLink
-          href={siteLinkFor(host, SITE_ROOT)}
-          internal={onSite}
-          aria-label={copy.nav.brandAriaLabel}
-          className="flex flex-none items-center"
-        >
-          {/* 26px in the bar, 22px in the footer — the §7c proportions. The
+          <ChromeLink
+            href={siteLinkFor(host, SITE_ROOT)}
+            internal={onSite}
+            aria-label={copy.nav.brandAriaLabel}
+            className="flex flex-none items-center"
+          >
+            {/* 28px in the bar, 22px in the footer — the §7c proportions. The
               accessible name comes from the visible wordmark and the glyph is
               aria-hidden inside BrandMark: a lockup is decoration plus visible
               text, never both an image and a label. */}
-          <BrandMark size={26} label="Motir" />
-        </ChromeLink>
+            <BrandTile size={28} />
+          </ChromeLink>
 
-        <nav
-          aria-label={copy.nav.ariaLabel}
-          className="hidden items-center gap-5 md:flex"
-        >
-          {navItems.map((item) => {
-            const current = isCurrent(host, item.path, pathname)
-            return (
-              <ChromeLink
-                key={item.path}
-                href={siteLinkFor(host, item.path)}
-                internal={onSite}
-                aria-current={current ? 'page' : undefined}
-                className={cn(NAV_ITEM, current ? NAV_CURRENT : NAV_REST)}
-              >
-                {item.label}
-              </ChromeLink>
-            )
-          })}
-        </nav>
+          <nav
+            aria-label={copy.nav.ariaLabel}
+            className="hidden items-center gap-5 md:flex"
+          >
+            <ProductsMenu host={host} />
+            {navItems.map((item) => {
+              const current = isCurrent(host, item.path, pathname)
+              return (
+                <ChromeLink
+                  key={item.path}
+                  href={siteLinkFor(host, item.path)}
+                  internal={onSite}
+                  aria-current={current ? 'page' : undefined}
+                  className={cn(NAV_ITEM, current ? NAV_CURRENT : NAV_REST)}
+                >
+                  {item.label}
+                </ChromeLink>
+              )
+            })}
+          </nav>
+        </div>
 
         <div className="flex flex-none items-center gap-2">
           <a
             href={SIGN_IN}
             className={cn(
-              buttonVariants({ variant: 'ghost', size: 'sm' }),
-              'hidden md:inline-flex',
+              buttonVariants({ variant: 'ghost', size: 'md' }),
+              'hidden text-[15px] md:inline-flex',
             )}
           >
             {copy.nav.signIn}
@@ -157,7 +281,10 @@ export function SiteHeader({ host }: { host: PublicHost }) {
               a narrow viewport, not the first — it is the only door up here,
               and a visitor who wants the project-management tool has no other
               route in from the public web. */}
-          <a href={FREE_DOOR} className={buttonVariants({ size: 'sm' })}>
+          <a
+            href={FREE_DOOR}
+            className={cn(buttonVariants({ size: 'md' }), 'text-[15px]')}
+          >
             {copy.nav.startFree}
             <ArrowRight aria-hidden="true" className="size-3.5" />
           </a>
@@ -192,7 +319,7 @@ export function SiteHeader({ host }: { host: PublicHost }) {
         <nav
           id="site-menu"
           aria-label={copy.nav.ariaLabel}
-          className="flex flex-col gap-3 border-t border-(--el-border) px-4 py-3 md:hidden"
+          className="flex flex-col gap-3 border-t border-(--el-border) bg-(--el-page-bg) px-4 py-3 shadow-(--shadow-elevated) md:hidden"
         >
           {/* The current-page treatment is drawn HERE TOO. It is a separate
               branch in the same component, which is exactly how a treatment
@@ -200,6 +327,13 @@ export function SiteHeader({ host }: { host: PublicHost }) {
               open panel (panel 4) rather than describing it, for that
               reason. */}
           {[
+            ...productItems.map((product) => ({
+              href: productHref(host, product.slug),
+              label: product.name,
+              internal: onSite && !PRODUCT_DOCS[product.slug],
+              current: false,
+              newTab: Boolean(PRODUCT_DOCS[product.slug]),
+            })),
             ...navItems.map((item) => ({
               href: siteLinkFor(host, item.path),
               label: item.label,
@@ -218,6 +352,7 @@ export function SiteHeader({ host }: { host: PublicHost }) {
               href={item.href}
               internal={item.internal}
               aria-current={item.current ? 'page' : undefined}
+              {...('newTab' in item && item.newTab ? NEW_TAB : {})}
               className={cn(NAV_ITEM, item.current ? NAV_CURRENT : NAV_REST)}
             >
               {item.label}

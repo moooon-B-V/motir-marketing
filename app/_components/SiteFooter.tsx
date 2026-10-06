@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import { BrandMark } from '@motir/brand'
 import { copy, format } from '@/lib/copy'
 import {
   DOCS,
   EXPLORE,
+  IDEAS,
+  HOW_IT_WORKS,
   FREE_DOOR,
   LEGAL_INDEX,
   LEGAL_PRIVACY,
@@ -13,6 +14,7 @@ import {
   SOURCE_REPO,
 } from '@/lib/destinations'
 import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
+import { BrandTile } from './BrandTile'
 
 /*
  * The footer — the `ExploreFooter` four-column shape: the brand column plus
@@ -48,6 +50,7 @@ const columns = [
   {
     heading: copy.footer.productHeading,
     items: [
+      { href: HOW_IT_WORKS, label: copy.footer.howItWorks, site: true },
       { href: FREE_DOOR, label: copy.footer.startFree },
       { href: SIGN_IN, label: copy.footer.signIn },
     ],
@@ -56,6 +59,7 @@ const columns = [
     heading: copy.footer.resourcesHeading,
     items: [
       { href: EXPLORE, label: copy.footer.explore, site: true },
+      { href: IDEAS, label: copy.footer.ideas, site: true },
       { href: DOCS, label: copy.footer.docs, site: true },
       { href: SOURCE_REPO, label: copy.footer.github },
     ],
@@ -89,7 +93,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
             aria-label={copy.nav.brandAriaLabel}
             className="inline-flex"
           >
-            <BrandMark size={22} label="Motir" />
+            <BrandTile size={22} />
           </Link>
         ) : (
           <a
@@ -97,7 +101,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
             aria-label={copy.nav.brandAriaLabel}
             className="inline-flex"
           >
-            <BrandMark size={22} label="Motir" />
+            <BrandTile size={22} />
           </a>
         )}
         <p className="mt-2.5 max-w-[30rem] text-[13px] leading-relaxed text-(--el-text-secondary)">

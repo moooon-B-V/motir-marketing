@@ -183,10 +183,13 @@ describe('/docs/skills', () => {
     ).not.toBeNull()
   })
 
-  it('installs v0.5.0 — the first release that carries motir-continue', () => {
-    // MOTIR-7268. A literal on purpose: the constant moving is the change this
-    // card makes, so a test that read the constant back would agree with any tag.
-    expect(SKILLS_RELEASE_TAG).toBe('v0.5.0')
+  it('installs v0.7.0 — the release whose motir-guide corrects a step on your yes', () => {
+    // A literal on purpose: the constant moving is the change being made, so a
+    // test that read the constant back would agree with any tag. v0.5.0 was the
+    // first to carry motir-continue (MOTIR-7268); v0.6.0 made a decision work
+    // item publish its page, and v0.7.0 lets motir-guide correct a step
+    // (MOTIR-7552). Every skill is still the seven of v0.5.0.
+    expect(SKILLS_RELEASE_TAG).toBe('v0.7.0')
     expect(RELEASE_SKILLS).toContain('motir-continue')
   })
 

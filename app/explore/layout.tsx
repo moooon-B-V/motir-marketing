@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 import { copy } from '@/lib/copy'
-import { SiteShell } from '@/app/_components/SiteShell'
-import { SITE_HOST } from '@/lib/publicHost'
 
 /**
  * The project-square shell (MOTIR-4045). Composes the same chrome every
@@ -16,15 +14,13 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+/*
+ * The frame is each page's own (2026-10 redesign): the Build in public page
+ * opens on a full-width wave hero with the header laid over it, while a topic
+ * page keeps the centred column. So this layout passes its children through.
+ */
 export default function ExploreLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <SiteShell
-      host={SITE_HOST}
-      contentClassName="mx-auto w-full max-w-[72rem] px-(--spacing-card-padding) py-10"
-    >
-      {children}
-    </SiteShell>
-  )
+  return children
 }

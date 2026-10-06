@@ -1,98 +1,256 @@
-import { Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
-import { FREE_DOOR } from '@/lib/destinations'
-import { DoorCard } from './_components/DoorCard'
-import { IdeaDoor } from './_components/IdeaDoor'
-import { ImportDoor } from './_components/ImportDoor'
-import { OpenCore } from './_components/OpenCore'
-import { Pillars } from './_components/Pillars'
-import { Proof } from './_components/Proof'
-import { SiteShell } from './_components/SiteShell'
+import {
+  FREE_DOOR,
+  HOW_IT_WORKS,
+  IMPORT_DOOR,
+  SOURCE_REPO,
+} from '@/lib/destinations'
 import { SITE_HOST } from '@/lib/publicHost'
+import { SiteShell } from './_components/SiteShell'
+import {
+  ArtTile,
+  DecideArt,
+  DesignArt,
+  DocsArt,
+  HistoryArt,
+  PlanArt,
+  ProductArt,
+  ResumeArt,
+  SayArt,
+  WatchArt,
+} from './_components/landing/Art'
+import { BuiltByMotirSection } from './_components/landing/BuiltByMotirSection'
+import { HeroBrief } from './_components/landing/HeroBrief'
+import { HeroWaves } from './_components/landing/HeroWaves'
+import { ProjectManagerSection } from './_components/landing/ProjectManagerSection'
 
 /*
- * motir.co — the public landing (MOTIR-1152 · 8.3.6).
+ * motir.co — the public landing: "Vibe the project" (2026-10 redesign).
  *
- * Layout and hierarchy from `design/marketing/` (MOTIR-1143); every word from
- * `messages/en.json` (MOTIR-1144); every primitive and token from
- * `@motir/design-system` and `@motir/brand`, installed from npm rather than
- * re-cut here.
+ * The page sells one idea: you bring the idea, Motir delivers the whole
+ * project, and you make the calls. In order:
+ *   1. the hero — headline, intro and ONE brief box, over wave lines drawn
+ *      from the Motir mark;
+ *   2. Motir Project Manager — the way in for a project that already exists,
+ *      then "Motir builds itself", linking straight into Motir's own project;
+ *   3. "A project is more than code" — plan, design, product, docs, history;
+ *   4. "AI does the work. You make the calls." — say it, watch it, you decide;
+ *   5. "Pick up where you left off";
+ *   6. the closing band.
  *
- * ⚠️ THE PAGE'S WHOLE JOB IS TO HAND A READER ACROSS, AND IT BUILDS NOTHING
- * BEHIND ITS OWN DOORS. No connect, import-source, index, generate or chat UI
- * ships on the marketing site — each of those is owned downstream (7.15 /
- * 7.17 / 7.3) and each door stops at the redirect. That boundary is what keeps
- * the split between the two properties legible instead of arbitrary: motir.co
- * decides WHO you are and hands you across; motir-core decides what happens
- * next. A flow surface on this side is a second, half-built onboarding.
+ * EVERYTHING FOLLOWS THE VISITOR'S DESIGN — theme, palette, style and type.
+ * Headlines take the headline role (`--font-serif`), text the body role and
+ * labels the mono role; corners, borders and shadows read the style's shape
+ * tokens; every colour is a theme token (see `globals.css` § the landing's
+ * artwork inks). In the default Motir palette cool slate and blue carry the
+ * page, orange marks a decision that is yours, and yellow is the design touch.
  *
- * Server-rendered, with exactly two client islands — the top bar (its narrow
- * menu) and door 1 (its four states).
+ * ⚠️ THE PAGE STILL BUILDS NOTHING BEHIND ITS OWN DOORS. The brief hands the
+ * idea to motir-core and the import buttons all lead to motir-core's import
+ * door; the choosing, connecting and planning happen there.
  */
-export default function Page() {
-  return (
-    <SiteShell host={SITE_HOST}>
-      <div className="mx-auto max-w-[1080px] px-4 pt-12 pb-2 text-center sm:px-7 sm:pt-[72px]">
-        <span className="mb-4 inline-flex items-center gap-1.5 rounded-(--radius-badge) bg-(--el-tint-lavender) px-(--spacing-chip-x) py-(--spacing-chip-y) text-[12px] font-semibold text-(--el-text-strong)">
-          <Sparkles aria-hidden="true" className="size-3.5" />
-          {copy.landing.hero.eyebrow}
-        </span>
-        {/* Exactly ONE h1 on the page. Both fork doors take h2, the pillars
-            take h3 — no level is skipped and none is chosen for its size. */}
-        <h1 className="mb-3 font-(family-name:--font-serif) text-[30px] leading-[1.1] font-bold tracking-[-0.02em] text-(--el-text) sm:text-[46px]">
-          {copy.landing.hero.headline}
-        </h1>
-        <p className="mx-auto max-w-[56ch] text-[14.5px] leading-relaxed text-(--el-text-secondary) sm:text-[16px]">
-          {copy.landing.hero.lede}
-        </p>
 
-        {/*
-         * THE FORK — doors 1 and 2, CO-EQUAL (Yue, 2026-08-28). Equal grid
-         * tracks, `items-stretch` so both bottom their footers on the same
-         * line, and NO `OR` DIVIDER: a divider is precisely what makes one
-         * side an alternative to the other. A visitor arrives already
-         * belonging to one of these two and the page must not tell them
-         * which is the real way in.
-         */}
-        <div className="mt-7 grid items-stretch gap-[18px] text-left md:grid-cols-2">
-          <DoorCard>
-            <IdeaDoor />
-          </DoorCard>
-          <DoorCard>
-            <ImportDoor />
-          </DoorCard>
+const GUTTER = 'px-[clamp(16px,3vw,48px)]'
+const H2 =
+  'm-0 font-(family-name:--font-serif) text-[clamp(40px,5.4vw,88px)] leading-[0.94] font-bold tracking-[-0.035em] text-balance'
+
+export default function Page() {
+  const l = copy.landing
+  return (
+    <>
+      <SiteShell host={SITE_HOST} className="bg-(--el-surface)" overlayHeader>
+        <section className="relative isolate grid justify-items-center gap-[22px] overflow-hidden px-[clamp(16px,3vw,48px)] pt-[calc(clamp(72px,9vw,136px)+4.75rem)] pb-[clamp(96px,11vw,168px)] text-center">
+          <HeroWaves />
+          <h1 className="m-0 font-(family-name:--font-serif) text-[clamp(56px,9.6vw,156px)] leading-[0.9] font-bold tracking-[-0.04em]">
+            {l.hero.headline}
+            {/* The full stop is drawn, not typed: it is the warm touch, and an
+                orange glyph would be measured (and fail) as text. */}
+            <span
+              aria-hidden="true"
+              className="ml-[0.03em] inline-block size-[0.15em] rounded-full bg-(--el-highlight) align-baseline"
+            />
+          </h1>
+          <p
+            data-hero-lede
+            className="m-0 max-w-[62ch] text-[clamp(17px,1.45vw,21px)] leading-normal text-balance text-(--el-text-secondary)"
+          >
+            {l.hero.lede}
+          </p>
+          <div className="mt-[18px] flex w-full justify-center">
+            <HeroBrief />
+          </div>
+        </section>
+
+        <div className={GUTTER}>
+          <ProjectManagerSection />
         </div>
 
-        <p className="mx-0.5 mt-3 text-center text-[12.5px] text-(--el-text-secondary)">
-          {copy.landing.doors.hint}
-        </p>
+        <div className={cn(GUTTER, 'pt-[clamp(32px,4vw,56px)]')}>
+          <BuiltByMotirSection />
+        </div>
 
-        {/*
-         * DOOR 3 (TERTIARY), half two of two: ONE line, not a third card.
-         * A third co-equal card would make "project management only" one of
-         * three equal things Motir is; it is not — it is the way in for
-         * somebody who wants neither AI door, and it needs to be findable
-         * rather than promoted. A nav entry plus a line is the convention
-         * the mirror PM tools already use.
-         */}
-        <p className="mx-0.5 mt-3.5 text-center text-[13px] leading-relaxed text-(--el-text-secondary)">
-          {copy.landing.doors.free.lead}{' '}
-          <a
-            href={FREE_DOOR}
-            className="font-semibold text-(--el-link) hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
+        <section
+          aria-labelledby="more-h"
+          className={cn(GUTTER, 'landing-art pt-[clamp(64px,8vw,120px)]')}
+        >
+          <SectionHead id="more-h" title={l.moreThanCode.headline}>
+            {l.moreThanCode.lede}
+          </SectionHead>
+          <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+            <ArtTile
+              tone="blue"
+              halftone="white"
+              {...l.moreThanCode.items.plan}
+            >
+              <PlanArt />
+            </ArtTile>
+            <ArtTile
+              tone="ink"
+              halftone="yellow"
+              {...l.moreThanCode.items.design}
+            >
+              <DesignArt />
+            </ArtTile>
+            <ArtTile tone="paper" {...l.moreThanCode.items.product}>
+              <ProductArt />
+            </ArtTile>
+            <ArtTile tone="soft" {...l.moreThanCode.items.docs}>
+              <DocsArt />
+            </ArtTile>
+            <ArtTile
+              tone="teal"
+              halftone="white"
+              {...l.moreThanCode.items.history}
+            >
+              <HistoryArt />
+            </ArtTile>
+          </div>
+        </section>
+
+        <section
+          aria-labelledby="calls-h"
+          className={cn(GUTTER, 'landing-art pt-[clamp(64px,8vw,120px)]')}
+        >
+          <SectionHead id="calls-h" title={l.calls.headline}>
+            {l.calls.lede}
+          </SectionHead>
+          <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-3">
+            <ArtTile tone="soft" height="h-[290px]" {...l.calls.items.say}>
+              <SayArt />
+            </ArtTile>
+            <ArtTile
+              tone="blue"
+              halftone="white"
+              height="h-[290px]"
+              {...l.calls.items.watch}
+            >
+              <WatchArt />
+            </ArtTile>
+            <ArtTile tone="orange" height="h-[290px]" {...l.calls.items.decide}>
+              <DecideArt />
+            </ArtTile>
+          </div>
+        </section>
+
+        <section
+          aria-labelledby="resume-h"
+          className={cn(
+            GUTTER,
+            'landing-art grid items-center gap-x-16 gap-y-8 pt-[clamp(64px,8vw,120px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]',
+          )}
+        >
+          <div>
+            <h2 id="resume-h" className={cn(H2, 'mb-5')}>
+              {l.resume.headline}
+            </h2>
+            <p className="m-0 max-w-[42ch] text-[18px] text-(--el-text-secondary)">
+              {l.resume.body}
+            </p>
+          </div>
+          <ArtTile
+            tone="blue"
+            halftone="white"
+            tab={l.art.resume.tab}
+            height="h-auto p-7"
           >
-            {copy.landing.doors.free.cta}
-          </a>{' '}
-          {copy.landing.doors.free.tail}
-        </p>
-      </div>
+            <ResumeArt />
+          </ArtTile>
+        </section>
 
-      <section className="mt-11 border-t border-(--el-border) bg-(--el-surface-soft) px-4 py-9 sm:mt-[72px] sm:px-(--spacing-card-padding) sm:py-14">
-        <Pillars />
-        <OpenCore />
-      </section>
+        <div className={cn(GUTTER, 'pt-[clamp(64px,8vw,120px)]')}>
+          <section
+            aria-labelledby="close-h"
+            data-showcase="field"
+            className="landing-art mk-halftone grid justify-items-center gap-5 overflow-hidden rounded-(--radius-card) border border-(--el-border) bg-(--el-showcase-field) shadow-(--shadow-card) px-[calc(var(--spacing-card-padding)*2)] py-[calc(var(--spacing-card-padding)*3)] text-center text-(--el-showcase-field-text)"
+          >
+            <h2 id="close-h" className={H2}>
+              {l.close.headline}
+              <span
+                aria-hidden="true"
+                className="ml-[0.03em] inline-block size-[0.15em] rounded-full bg-(--el-showcase-highlight) align-baseline"
+              />
+            </h2>
+            <p className="m-0 max-w-[46ch] text-[18px] text-(--el-showcase-field-text)/85">
+              {l.close.body}
+            </p>
+            <div className="flex flex-wrap justify-center gap-2.5">
+              <a href="#hero-brief" className={CLOSE_BTN.primary}>
+                {l.close.start}
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </a>
+              <a href={IMPORT_DOOR} className={CLOSE_BTN.plain}>
+                {l.close.import}
+              </a>
+              <a href={HOW_IT_WORKS} className={CLOSE_BTN.plain}>
+                {l.close.developers}
+              </a>
+            </div>
+            <p className="m-0 text-[14px] text-(--el-showcase-field-text)/85">
+              {l.close.free.lead}{' '}
+              <a
+                href={FREE_DOOR}
+                className="font-semibold text-(--el-showcase-field-text) underline underline-offset-2"
+              >
+                {l.close.free.cta}
+              </a>{' '}
+              {l.close.free.tail}
+            </p>
+            <a
+              href={SOURCE_REPO}
+              className="font-(family-name:--font-mono) text-[12px] tracking-[0.06em] text-(--el-showcase-field-text)/85 uppercase no-underline hover:underline"
+            >
+              {l.close.openCore}
+            </a>
+          </section>
+        </div>
+        <div className="h-[clamp(48px,6vw,88px)]" />
+      </SiteShell>
+    </>
+  )
+}
 
-      <Proof />
-    </SiteShell>
+const CLOSE_BTN = {
+  primary:
+    'inline-flex items-center gap-2 rounded-(--radius-btn) bg-(--el-showcase-ground) h-(--height-btn-lg) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-ground-text) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text)',
+  plain:
+    'inline-flex items-center rounded-(--radius-btn) border border-(--el-showcase-field-text)/40 h-(--height-btn-lg) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-field-text) no-underline hover:border-(--el-showcase-field-text) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text)',
+}
+
+function SectionHead({
+  id,
+  title,
+  children,
+}: Readonly<{ id: string; title: string; children: React.ReactNode }>) {
+  return (
+    <div className="mb-[52px] grid items-end gap-x-14 gap-y-4 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <h2 id={id} className={H2}>
+        {title}
+      </h2>
+      <p className="m-0 max-w-[44ch] text-[18px] text-(--el-text-secondary)">
+        {children}
+      </p>
+    </div>
   )
 }

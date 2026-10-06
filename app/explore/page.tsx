@@ -17,6 +17,9 @@ import { ExploreGallery } from './_components/Gallery'
 import { CategoriesBrowse } from './_components/CategoriesBrowse'
 import { ExploreFaq, exploreFaqItems } from './_components/Faq'
 import { ExploreJsonLd } from './_components/JsonLd'
+import { ExploreClose } from './_components/Close'
+import { SiteShell } from '@/app/_components/SiteShell'
+import { SITE_HOST } from '@/lib/publicHost'
 
 /*
  * The PROJECT SQUARE (MOTIR-4045) — the fully-public, server-rendered, crawlable
@@ -68,44 +71,44 @@ export default async function ExplorePage({
   const heading = galleryHeading(query)
 
   return (
-    <>
+    <SiteShell host={SITE_HOST} overlayHeader>
       <ExploreHero basePath={BASE} query={query} />
-
-      <div className="mt-8 flex flex-col gap-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <RankTabs basePath={BASE} query={query} />
-          <CategoryFilter
+      <div className="mx-auto w-full max-w-[1400px] px-[clamp(16px,3vw,48px)] pb-[clamp(56px,7vw,112px)]">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <RankTabs basePath={BASE} query={query} />
+            <CategoryFilter
+              basePath={BASE}
+              query={query}
+              categories={categories}
+            />
+          </div>
+          <ActiveFilters
             basePath={BASE}
             query={query}
-            categories={categories}
+            categoryLabel={categoryLabel(categories, query.category ?? '')}
           />
         </div>
-        <ActiveFilters
-          basePath={BASE}
-          query={query}
-          categoryLabel={categoryLabel(categories, query.category ?? '')}
-        />
-      </div>
-
-      <div className="mt-6">
-        <ExploreGallery
-          basePath={BASE}
-          query={query}
-          page={page}
-          heading={heading}
-        />
-      </div>
-
-      {!failed ? (
-        <div className="mt-14 border-t border-(--el-border) pt-10">
-          <CategoriesBrowse categories={categories} />
+        <div className="mt-6">
+          <ExploreGallery
+            basePath={BASE}
+            query={query}
+            page={page}
+            heading={heading}
+          />
         </div>
-      ) : null}
-
-      <div className="mt-10">
-        <ExploreFaq />
+        {!failed ? (
+          <div className="mt-14 border-t border-(--el-border) pt-10">
+            <CategoriesBrowse categories={categories} />
+          </div>
+        ) : null}
+        <div className="mt-14">
+          <ExploreFaq />
+        </div>
+        <div className="mt-6">
+          <ExploreClose />
+        </div>
       </div>
-
       <ExploreJsonLd
         pageUrl={canonicalUrl(query)}
         name={copy.explore.metaTitle}
@@ -113,6 +116,6 @@ export default async function ExplorePage({
         cards={page?.items ?? []}
         faq={exploreFaqItems()}
       />
-    </>
+    </SiteShell>
   )
 }

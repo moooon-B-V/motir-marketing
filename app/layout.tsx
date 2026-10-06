@@ -7,7 +7,12 @@ import {
   Source_Serif_4,
   Space_Grotesk,
 } from 'next/font/google'
-import { themeInitScript } from '@motir/design-system'
+import {
+  HandDrawnFilter,
+  ImmersiveTilt,
+  themeInitScript,
+} from '@motir/design-system'
+import { siteDefaultTypeScript } from '@/lib/siteDefaultType'
 import { copy } from '@/lib/copy'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 import { RootJsonLd } from './_components/RootJsonLd'
@@ -171,8 +176,18 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
           suppressHydrationWarning
         />
+        <script
+          dangerouslySetInnerHTML={{ __html: siteDefaultTypeScript }}
+          suppressHydrationWarning
+        />
       </head>
       <body>
+        {/* The two style engines the app mounts too: the pointer tilt the 3D /
+            Immersive style animates `data-tilt` panels with, and the roughen
+            filter the Hand-Drawn style references. Both are inert under every
+            other style (and the tilt under reduced motion). */}
+        <ImmersiveTilt />
+        <HandDrawnFilter />
         {children}
         {/*
          * The Organization + WebSite entity graph (MOTIR-1154). It sits at the
