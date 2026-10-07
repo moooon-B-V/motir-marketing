@@ -74,7 +74,7 @@ export default function Page() {
           </h1>
           <p
             data-hero-lede
-            className="m-0 max-w-[62ch] text-[clamp(17px,1.45vw,21px)] leading-normal text-balance text-(--el-text-secondary)"
+            className="m-0 max-w-[62ch] text-[clamp(17px,1.45vw,21px)] leading-normal font-medium text-balance text-(--el-accent-on-surface)"
           >
             {l.hero.lede}
           </p>
