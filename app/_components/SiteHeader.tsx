@@ -194,7 +194,7 @@ function ProductsMenu({ host }: { host: PublicHost }) {
                 </ChromeLink>
               ))}
               {group.label === copy.nav.productGroups.tooling ? (
-                <SetupPromptButton look="row" className="mt-1" />
+                <SetupPromptButton look="row" className="mt-2" />
               ) : null}
             </div>
           ))}
@@ -274,6 +274,9 @@ export function SiteHeader({
         </div>
 
         <div className="flex flex-none items-center gap-2">
+          {/* Hidden until the bar has room beside six nav links; narrower
+              viewports reach it in the Products menu. */}
+          <SetupPromptButton look="header" className="hidden xl:inline-flex" />
           <a
             href={SIGN_IN}
             className={cn(

@@ -1956,7 +1956,11 @@
     "copied": "Copied. Paste it into your agent",
     "failed": "Couldn't copy. Select the prompt below instead",
     "menuLabel": "Copy a setup prompt for your agent",
-    "show": "Show the prompt"
+    "show": "Show the prompt",
+    "menuHint": "Paste it into any agent — it sets up Motir there.",
+    "headerLabel": "Copy setup prompt",
+    "headerCopied": "Copied",
+    "headerFailed": "Couldn't copy"
   },
   "builtByMotirPage": {
     "metaTitle": "Motir builds itself · Motir",
