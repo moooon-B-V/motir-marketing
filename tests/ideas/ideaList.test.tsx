@@ -278,6 +278,49 @@ describe('the cards', () => {
     expect(document.querySelector('dl')).toBeNull()
     expect(screen.queryByText(/more sources/)).toBeNull()
   })
+  it('draws only the half of the footnote that has text', () => {
+    render(
+      <ol>
+        <BuyCard
+          idea={{ ...buy, slug: 'm', whyMotir: 'Because.', whoElse: '' }}
+          index={0}
+          params={EMPTY}
+        />
+        <BuyCard
+          idea={{ ...buy, slug: 'w', whyMotir: null, whoElse: 'Nobody.' }}
+          index={1}
+          params={EMPTY}
+        />
+      </ol>,
+    )
+    const m = document.getElementById('idea-m') as HTMLElement
+    const w = document.getElementById('idea-w') as HTMLElement
+    expect(m).toHaveTextContent(copy.ideas.needLabel)
+    expect(m).not.toHaveTextContent(copy.ideas.whoLabel)
+    expect(w).toHaveTextContent(copy.ideas.whoLabel)
+    expect(w).not.toHaveTextContent(copy.ideas.needLabel)
+  })
+
+  it('a direction card draws the evidence without a gap, and the gap without evidence', () => {
+    render(
+      <ul>
+        <DirectionCard
+          idea={{ ...direction, slug: 'e', gap: '  ' }}
+          params={EMPTY}
+        />
+        <DirectionCard
+          idea={{ ...direction, slug: 'g', evidence: [] }}
+          params={EMPTY}
+        />
+      </ul>,
+    )
+    const e = document.getElementById('idea-e') as HTMLElement
+    const g = document.getElementById('idea-g') as HTMLElement
+    expect(e).toHaveTextContent(copy.ideas.more.evidenceLabel)
+    expect(e).not.toHaveTextContent(copy.ideas.more.gapLabel)
+    expect(g).toHaveTextContent(copy.ideas.more.gapLabel)
+    expect(g).not.toHaveTextContent(copy.ideas.more.evidenceLabel)
+  })
 })
 
 describe('the states', () => {

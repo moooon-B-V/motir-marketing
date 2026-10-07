@@ -184,6 +184,18 @@ describe('IdeaDetail', () => {
     expect(document.activeElement).toBe(first)
     fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
     expect(document.activeElement).toBe(last)
+    // From outside the sheet, Tab and Shift+Tab come back in at its ends.
+    document.body.focus()
+    fireEvent.keyDown(document, { key: 'Tab' })
+    expect(document.activeElement).toBe(first)
+    document.body.focus()
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
+    expect(document.activeElement).toBe(last)
+    // Mid-sheet, Tab is left to the browser.
+    links[1].focus()
+    fireEvent.keyDown(document, { key: 'Tab' })
+    expect(document.activeElement).toBe(links[1])
+    last.focus()
     // A key that is neither Tab nor Escape is left alone.
     fireEvent.keyDown(document, { key: 'a' })
     expect(document.activeElement).toBe(last)
