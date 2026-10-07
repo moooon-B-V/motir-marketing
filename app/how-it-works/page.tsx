@@ -54,7 +54,7 @@ function Inline({ text }: { text: string }) {
         part.startsWith('`') ? (
           <code
             key={i}
-            className="rounded-(--radius-control) border border-(--el-border) bg-(--el-surface-soft) px-[5px] py-px font-(family-name:--font-mono) text-[0.84em] break-words"
+            className="rounded-(--radius-control) border border-(--el-border) bg-(--el-surface-soft) px-[5px] py-px font-(family-name:--font-mono) text-[0.84em] whitespace-nowrap"
           >
             {part.slice(1, -1)}
           </code>
@@ -115,8 +115,20 @@ export default function HowItWorksPage() {
         </section>
 
         <div className={GUTTER}>
-          <div className="overflow-x-auto rounded-(--radius-card)">
-            <WorkflowRack />
+          {/* A card surface, so the style axis reaches the rack the way it
+              reaches every other panel: its border weight, its shadow, its
+              material (sheen, glass, neumorphic relief) and the 3D tilt. */}
+          <div
+            data-surface="card"
+            data-tilt=""
+            className="rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) shadow-(--shadow-card)"
+          >
+            {/* The scroll lives INSIDE the frame: a style that draws past the
+                frame's edge (hand-drawn's roughened overlay) must not become
+                content of the scroll container, or it scrolls both ways. */}
+            <div className="overflow-x-auto overflow-y-hidden rounded-(--radius-card)">
+              <WorkflowRack />
+            </div>
           </div>
           <p className="mt-2.5 text-[13px] font-medium text-(--el-text-secondary) min-[1100px]:hidden">
             {h.scrollHint}

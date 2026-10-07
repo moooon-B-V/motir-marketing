@@ -129,6 +129,28 @@ body {
     var(--el-showcase-decision)
   );
 }
+/* The rack's modules follow the style axis like every framed box: the two
+   bordered styles thicken a frame to 2px (theme.css's `.border` rules), so
+   the rack's module outlines thicken with them, and hand-drawn roughens them
+   with its own `#hd-rough` filter (mounted by `<HandDrawnFilter />`). Stroke
+   weight only — no colour, so the palette axis is untouched. */
+@scope ([data-style='neo-brutalism']) to ([data-style]) {
+  .hiw-rack .p,
+  .hiw-rack .key,
+  .hiw-rack .jack-ring {
+    stroke-width: 2.5;
+  }
+}
+@scope ([data-style='hand-drawn-indie']) to ([data-style]) {
+  .hiw-rack .p,
+  .hiw-rack .p-h,
+  .hiw-rack .p-dark,
+  .hiw-rack .key {
+    stroke-width: 2;
+    filter: url(#hd-rough);
+  }
+}
+
 .hiw-rack text {
   font-family: var(--font-sans);
 }

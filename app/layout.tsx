@@ -12,7 +12,7 @@ import {
   ImmersiveTilt,
   themeInitScript,
 } from '@motir/design-system'
-import { siteDefaultTypeScript } from '@/lib/siteDefaultType'
+import { siteDefaultsScript } from '@/lib/siteDefaults'
 import { copy } from '@/lib/copy'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 import { RootJsonLd } from './_components/RootJsonLd'
@@ -177,7 +177,7 @@ export default function RootLayout({
           suppressHydrationWarning
         />
         <script
-          dangerouslySetInnerHTML={{ __html: siteDefaultTypeScript }}
+          dangerouslySetInnerHTML={{ __html: siteDefaultsScript }}
           suppressHydrationWarning
         />
       </head>

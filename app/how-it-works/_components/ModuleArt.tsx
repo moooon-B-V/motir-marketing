@@ -356,7 +356,7 @@ export function RepairArt({ cap }: { cap: string }) {
         />
       </span>
       <b className="text-[12px] font-medium">{what}</b>
-      <code className="rounded-(--radius-badge) px-(--spacing-chip-x) py-(--spacing-chip-y) bg-(--el-showcase-rule) font-(family-name:--font-mono) text-[10px]">
+      <code className="rounded-(--radius-badge) px-(--spacing-chip-x) py-(--spacing-chip-y) bg-(--el-showcase-rule) font-(family-name:--font-mono) text-[10px] whitespace-nowrap">
         {command}
       </code>
     </div>
