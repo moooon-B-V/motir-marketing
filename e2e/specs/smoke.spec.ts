@@ -40,7 +40,7 @@ test('the explore directory renders the projects the stub serves', async ({
   await page.goto('/explore')
 
   await expect(
-    page.getByRole('heading', { name: /Explore public project/i }),
+    page.getByRole('heading', { name: /Projects built in public/i }),
   ).toBeVisible()
   await expect(
     page.getByRole('heading', { name: 'Acme', exact: true }),

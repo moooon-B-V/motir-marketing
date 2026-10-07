@@ -87,7 +87,7 @@ test('the whole /p/* journey, as MOTIR-3877 asks to be accepted', async ({
   // while both hosts answered 404.
   await page.goto('/explore')
   await expect(
-    page.getByRole('heading', { name: /Explore public project/i }),
+    page.getByRole('heading', { name: /Projects built in public/i }),
   ).toBeVisible()
   await beat(page)
 

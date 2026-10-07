@@ -591,6 +591,14 @@ const KNOWN_PATHS: { file: string; path: string; why: string }[] = [
     path: 'app/legal/not-found.tsx',
     why: 'The same prohibition, on the mock\'s 404 panel ("Do not add `app/legal/not-found.tsx`"). Its absence is the design, so this row is permanent.',
   },
+  // ── A file a dated record names, retired since ───────────────────────────
+  // The notes are a record of their moment: a section that says which file a
+  // fix landed in stays true of that day after the file is gone.
+  {
+    file: 'design/marketing/design-notes.md',
+    path: 'app/_components/Pillars.tsx',
+    why: 'The MOTIR-3984 record (2026-08-30) names the pillars section as one of the two elements whose muted eyebrow moved to --el-text-secondary. The 2026-10 redesign retired the pillars section and deleted the file; the record stays true of the page it describes, so it is not rewritten.',
+  },
   // ── A path inside a quoted COMMAND run in motir-core ─────────────────────
   // The notes record the exact `git` invocation that verified a claim, and its
   // pathspecs are relative to motir-core's root. Qualifying them would make the
