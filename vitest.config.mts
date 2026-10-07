@@ -99,6 +99,8 @@ export default defineConfig({
         'lib/docs.ts',
         'lib/skillsGuide.ts',
         'lib/mcpWiring.ts',
+        // MOTIR-7685 — the ideas data layer, added WITH the file.
+        'lib/ideas.ts',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -158,6 +160,8 @@ export default defineConfig({
         'lib/docs.ts': { lines: 90, functions: 90, branches: 90 },
         'lib/skillsGuide.ts': { lines: 90, functions: 90, branches: 90 },
         'lib/mcpWiring.ts': { lines: 90, functions: 90, branches: 90 },
+        // MOTIR-7685 — measured first under `tests/ideas.test.ts`.
+        'lib/ideas.ts': { lines: 90, functions: 90, branches: 90 },
       },
     },
   },

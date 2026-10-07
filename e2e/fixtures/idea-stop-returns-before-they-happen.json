@@ -1,0 +1,35 @@
+{
+  "slug": "stop-returns-before-they-happen",
+  "title": "Stop returns before they happen",
+  "pitch": "Spots the order bought in three sizes to send two back, answers the fit question before checkout, and scores each return for fraud.",
+  "kind": "direction",
+  "category": {
+    "slug": "ecommerce",
+    "label": "E-commerce"
+  },
+  "tags": [
+    {
+      "slug": "smb",
+      "label": "Small businesses"
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "Vertical software"
+    }
+  ],
+  "capabilities": [],
+  "evidence": [
+    {
+      "claim": "Shoppers were expected to return $849.9 billion of goods in 2025, 19.3% of online sales, and 9% of returns are fraudulent.",
+      "sourceName": "National Retail Federation and Happy Returns, October 2025",
+      "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
+      "sourceDate": "2025-10-01"
+    }
+  ],
+  "gap": "Return platforms handle the return once it starts. Preventing it, for stores below enterprise size, is barely served.",
+  "whyNow": null,
+  "whyMotir": null,
+  "whoElse": null,
+  "addedAt": "2026-10-06T23:59:53.000Z",
+  "lastReviewedAt": null
+}

@@ -98,6 +98,14 @@ const ROUTES: Record<string, string> = {
   // MOTIR-6749 — a project that has written no overview, for the EMPTY state
   // the project page redrew when the read tabs left it (design MOTIR-6742).
   '/api/public/p/QUIET': 'project-quiet.json',
+  // MOTIR-7685 — the idea store, recorded from production on 2026-10-07. The
+  // list fixture is the unfiltered store: a filter is answered with the whole
+  // list, so a spec that narrows asserts the URL and the query the page sent,
+  // not a server-side narrowing the stub does not perform.
+  '/api/public/ideas': 'ideas.json',
+  '/api/public/ideas/tags': 'ideas-tags.json',
+  '/api/public/ideas/stop-returns-before-they-happen':
+    'idea-stop-returns-before-they-happen.json',
 }
 
 /**

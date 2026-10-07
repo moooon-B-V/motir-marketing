@@ -1,0 +1,613 @@
+{
+  "items": [
+    {
+      "slug": "an-ai-legal-team-for-software-companies",
+      "title": "An AI legal team for software companies",
+      "pitch": "Terms, privacy policies, data processing agreements and the record of every vendor that touches customer data, drafted, kept current and reviewed by a lawyer.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "legal",
+        "label": "Legal"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "AI agents"
+        },
+        {
+          "slug": "b2b-saas",
+          "label": "B2B software"
+        },
+        {
+          "slug": "compliance",
+          "label": "Compliance"
+        },
+        {
+          "slug": "eu-ai-act",
+          "label": "EU AI Act"
+        }
+      ],
+      "capabilities": [
+        "Drafts and updates terms, privacy policies and data processing agreements as the product changes",
+        "Reviews vendor and customer contracts and flags what needs a lawyer",
+        "Tracks new rules, like the EU AI Act, and says what each one changes for you"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Every model provider Motir adds needs a data processing agreement and a recorded legal basis for sending customer data to it. Today that is slow, manual work.",
+      "whoElse": "Every software company that handles customer data, which is all of them.",
+      "addedAt": "2026-10-07T00:00:00.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "an-ai-finance-team-for-startups",
+      "title": "An AI finance team for startups",
+      "pitch": "Price the plans, bill for usage, file the taxes and pay the vendors, from one place that understands what each customer actually costs.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "finance",
+        "label": "Finance"
+      },
+      "tags": [
+        {
+          "slug": "b2b-saas",
+          "label": "B2B software"
+        },
+        {
+          "slug": "pricing-and-billing",
+          "label": "Pricing and billing"
+        },
+        {
+          "slug": "startups",
+          "label": "Startups"
+        }
+      ],
+      "capabilities": [
+        "Sets plan prices from real costs: model calls, machine time, storage",
+        "Reconciles usage billing and files sales tax and VAT in every country you sell to",
+        "Pays vendors, tracks runway and closes the books each month"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Motir resells model calls and machine minutes at a margin. Pricing a plan means knowing the cost of every credit, in every currency, after tax.",
+      "whoElse": "Every usage-priced software startup, from its first invoice to its first audit.",
+      "addedAt": "2026-10-06T23:59:59.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "ai-security-and-compliance-from-the-evidence",
+      "title": "AI security and compliance, from the evidence",
+      "pitch": "SOC 2 and ISO 27001 evidence collected from the code, the cloud and the project itself, and security questionnaires answered from it.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "security_compliance",
+        "label": "Security & compliance"
+      },
+      "tags": [
+        {
+          "slug": "b2b-saas",
+          "label": "B2B software"
+        },
+        {
+          "slug": "compliance",
+          "label": "Compliance"
+        }
+      ],
+      "capabilities": [
+        "Collects evidence from repositories, cloud accounts and the project's history",
+        "Answers customer security questionnaires from that evidence, with sources",
+        "Watches for drift and opens a work item when a control slips"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "A business customer asks for a security review before it signs. Every answer is somewhere in Motir's code and records, and finding it takes days we would rather spend building.",
+      "whoElse": "Every software company selling to a business big enough to ask.",
+      "addedAt": "2026-10-06T23:59:58.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "ai-support-that-knows-the-product",
+      "title": "AI support that knows the product",
+      "pitch": "Answers customers from the docs, the code and the live state of the product, and turns a real bug into a planned work item instead of a reply.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "customer_support",
+        "label": "Customer support"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "AI agents"
+        },
+        {
+          "slug": "b2b-saas",
+          "label": "B2B software"
+        },
+        {
+          "slug": "developer-tools",
+          "label": "Developer tools"
+        }
+      ],
+      "capabilities": [
+        "Answers from documentation, code and the customer's own account",
+        "Hands a real defect to the engineering team as a planned work item, with the evidence",
+        "Learns from every answer a person corrects"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Motir's users ask about agents, models, credits and repositories. A good answer needs the code and the account, not a help-center search.",
+      "whoElse": "Every developer-tool and B2B software company with more customers than support staff.",
+      "addedAt": "2026-10-06T23:59:57.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "ai-localization-that-keeps-up-with-the-product",
+      "title": "AI localization that keeps up with the product",
+      "pitch": "Translates the interface, the docs and the emails as they change, keeps every term consistent, and has a native speaker review what matters.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "localization",
+        "label": "Localization"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "AI agents"
+        },
+        {
+          "slug": "b2b-saas",
+          "label": "B2B software"
+        }
+      ],
+      "capabilities": [
+        "Translates each change as it lands, not in a yearly project",
+        "Keeps a glossary so a term means one thing everywhere",
+        "Sends the risky strings, legal text and pricing to a native reviewer"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Motir ships in English and Chinese, and every release changes hundreds of strings. Keeping both right by hand does not scale to a third language.",
+      "whoElse": "Every software company that wants customers outside its home country.",
+      "addedAt": "2026-10-06T23:59:56.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "ai-growth-for-b2b-software",
+      "title": "AI growth for B2B software",
+      "pitch": "Turns what a team ships into launch posts, changelog announcements, comparison pages and search-ready docs, and measures what brings customers.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "growth_marketing",
+        "label": "Growth & marketing"
+      },
+      "tags": [
+        {
+          "slug": "b2b-saas",
+          "label": "B2B software"
+        },
+        {
+          "slug": "startups",
+          "label": "Startups"
+        }
+      ],
+      "capabilities": [
+        "Writes the announcement for each release from the work that shipped",
+        "Builds and refreshes the pages people search for before they buy",
+        "Shows which pages and posts bring customers, not just visitors"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Motir ships every day, in public. Turning that into posts and pages people find takes a marketing team we do not have.",
+      "whoElse": "Every B2B software company that ships faster than it can tell anyone.",
+      "addedAt": "2026-10-06T23:59:55.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "make-a-store-visible-to-ai-shoppers",
+      "title": "Make a store visible to AI shoppers",
+      "pitch": "Gets a small store's products found and recommended by the AI assistants people now shop through, and shows how often each product is picked.",
+      "kind": "direction",
+      "category": {
+        "slug": "ecommerce",
+        "label": "E-commerce"
+      },
+      "tags": [
+        {
+          "slug": "smb",
+          "label": "Small businesses"
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "Vertical software"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "Traffic from AI assistants to US retail sites rose 693% in the 2025 holiday season and converted 31% better than other traffic.",
+          "sourceName": "Adobe Analytics, via Digital Commerce 360, January 2026",
+          "url": "https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/",
+          "sourceDate": "2026-01-01"
+        }
+      ],
+      "gap": "The funded players sell to large brands and big catalogs. Millions of small stores have nothing yet, and the window is short.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:54.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "stop-returns-before-they-happen",
+      "title": "Stop returns before they happen",
+      "pitch": "Spots the order bought in three sizes to send two back, answers the fit question before checkout, and scores each return for fraud.",
+      "kind": "direction",
+      "category": {
+        "slug": "ecommerce",
+        "label": "E-commerce"
+      },
+      "tags": [
+        {
+          "slug": "smb",
+          "label": "Small businesses"
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "Vertical software"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "Shoppers were expected to return $849.9 billion of goods in 2025, 19.3% of online sales, and 9% of returns are fraudulent.",
+          "sourceName": "National Retail Federation and Happy Returns, October 2025",
+          "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
+          "sourceDate": "2025-10-01"
+        }
+      ],
+      "gap": "Return platforms handle the return once it starts. Preventing it, for stores below enterprise size, is barely served.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:53.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "apis-that-update-their-customers-code",
+      "title": "APIs that update their customers' code",
+      "pitch": "When an API makes a breaking change, the provider opens the pull request that migrates each customer's code, instead of sending an email.",
+      "kind": "direction",
+      "category": {
+        "slug": "ai_infrastructure",
+        "label": "AI infrastructure"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "AI agents"
+        },
+        {
+          "slug": "developer-tools",
+          "label": "Developer tools"
+        },
+        {
+          "slug": "yc-rfs",
+          "label": "On YC's request list"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "On Y Combinator's Fall 2026 Requests for Startups: API providers shouldn't just announce changes; they should apply them.",
+          "sourceName": "Y Combinator, Requests for Startups, Fall 2026",
+          "url": "https://www.ycombinator.com/rfs",
+          "sourceDate": "2026-09-01"
+        }
+      ],
+      "gap": "Dependency bots only bump version numbers, and SDK generators don't touch customer code. Agents can now edit unfamiliar code well enough to open the pull request.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:52.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "ai-cost-by-feature-and-by-customer",
+      "title": "AI cost by feature and by customer",
+      "pitch": "Splits the AI bill by feature and by customer, sets budgets, and shows finance and engineering the margin of every plan in one view.",
+      "kind": "direction",
+      "category": {
+        "slug": "ai_infrastructure",
+        "label": "AI infrastructure"
+      },
+      "tags": [
+        {
+          "slug": "developer-tools",
+          "label": "Developer tools"
+        },
+        {
+          "slug": "pricing-and-billing",
+          "label": "Pricing and billing"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "79% of finance leaders report AI cost overruns, and only 15% can calculate the return on AI spend without significant bottlenecks.",
+          "sourceName": "DoiT and Sapio Research, survey of 500 finance leaders, February 2026",
+          "url": "https://www.doit.com/blog/ai-spending-survey",
+          "sourceDate": "2026-02-01"
+        }
+      ],
+      "gap": "Cloud cost tools are built around the cloud bill, and AI observability tools are built for developers. Neither gives finance a margin per feature.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:51.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "the-ai-transparency-kit",
+      "title": "The AI transparency kit",
+      "pitch": "A drop-in kit that tells users they're talking to an AI, marks generated content in a machine-readable way and labels deepfakes, as the EU now requires.",
+      "kind": "direction",
+      "category": {
+        "slug": "ai_infrastructure",
+        "label": "AI infrastructure"
+      },
+      "tags": [
+        {
+          "slug": "compliance",
+          "label": "Compliance"
+        },
+        {
+          "slug": "developer-tools",
+          "label": "Developer tools"
+        },
+        {
+          "slug": "eu-ai-act",
+          "label": "EU AI Act"
+        },
+        {
+          "slug": "smb",
+          "label": "Small businesses"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "The EU AI Act's Article 50 transparency duties apply from 2 August 2026, with systems already on the market given until 2 December 2026, and fines of up to \u20ac15 million or 3% of worldwide turnover.",
+          "sourceName": "Jones Walker, AI Law Blog, July 2026",
+          "url": "https://www.joneswalker.com/en/insights/blogs/ai-law-blog/yes-august-2-still-matters-the-eu-approved-a-high-risk-ai-delay-but-most-trans.html?id=102nbon",
+          "sourceDate": "2026-07-01"
+        }
+      ],
+      "gap": "Content-marking vendors serve enterprises or one platform. A small app maker has no simple way to comply before the deadline.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:50.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "a-first-tutor-for-young-children",
+      "title": "A first tutor for young children",
+      "pitch": "A voice tutor at home that teaches four-to-eight-year-olds to read, write and count, one child at a time, at the child's own pace.",
+      "kind": "direction",
+      "category": {
+        "slug": "personal_growth",
+        "label": "Personal growth"
+      },
+      "tags": [
+        {
+          "slug": "consumer",
+          "label": "Consumers"
+        },
+        {
+          "slug": "education",
+          "label": "Education"
+        },
+        {
+          "slug": "yc-rfs",
+          "label": "On YC's request list"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "On Y Combinator's Fall 2026 Requests for Startups as \"The Primer\", noting the cost of the AI per child is falling about ten times a year.",
+          "sourceName": "Y Combinator, Requests for Startups, Fall 2026",
+          "url": "https://www.ycombinator.com/rfs",
+          "sourceDate": "2026-09-01"
+        }
+      ],
+      "gap": "Ello, the funded AI tutor for this age, teaches reading only, and the best-known AI tutors are built for schools, not homes.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:49.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "a-career-coach-for-people-who-pay-for-themselves",
+      "title": "A career coach for people who pay for themselves",
+      "pitch": "Coaching and practice conversations for the job you want next, for the many workers whose employer won't pay for training.",
+      "kind": "direction",
+      "category": {
+        "slug": "personal_growth",
+        "label": "Personal growth"
+      },
+      "tags": [
+        {
+          "slug": "consumer",
+          "label": "Consumers"
+        },
+        {
+          "slug": "education",
+          "label": "Education"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "Valence raised a $50 million Series B for AI coaching, after more than a million coaching conversations, showing AI coaching works when employers buy it.",
+          "sourceName": "Valence, September 2025",
+          "url": "https://www.valence.co/blog/series-b-press-release",
+          "sourceDate": "2025-09-01"
+        }
+      ],
+      "gap": "AI coaching is sold only to employers, and learning platforms sell courses, not coaching. Nobody serves the person who pays for themselves.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:48.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "treatment-options-for-vet-clinics",
+      "title": "Treatment options for vet clinics",
+      "pitch": "During the exam, turns one diagnosis into two or three priced treatment plans with a payment plan attached, so the pet gets care the owner can afford.",
+      "kind": "direction",
+      "category": {
+        "slug": "pets",
+        "label": "Pets"
+      },
+      "tags": [
+        {
+          "slug": "healthcare",
+          "label": "Healthcare"
+        },
+        {
+          "slug": "pricing-and-billing",
+          "label": "Pricing and billing"
+        },
+        {
+          "slug": "smb",
+          "label": "Small businesses"
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "Vertical software"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+          "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+          "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+          "sourceDate": "2025-01-01"
+        }
+      ],
+      "gap": "Vet AI tools write the visit notes and practice software books the visits. None turns a case into priced options.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:47.000Z",
+      "lastReviewedAt": null
+    },
+    {
+      "slug": "a-care-team-app-for-families",
+      "title": "A care team app for families",
+      "pitch": "Shares medicines, tasks and appointments across the family looking after a parent, and explains each care task in plain words.",
+      "kind": "direction",
+      "category": {
+        "slug": "family_care",
+        "label": "Family care"
+      },
+      "tags": [
+        {
+          "slug": "caregiving",
+          "label": "Caregiving"
+        },
+        {
+          "slug": "consumer",
+          "label": "Consumers"
+        },
+        {
+          "slug": "healthcare",
+          "label": "Healthcare"
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "63 million Americans are family caregivers, about 45% more than in 2015. More than half do medical or nursing tasks, and only 20% have been trained.",
+          "sourceName": "AARP and the National Alliance for Caregiving, July 2025",
+          "url": "https://www.aarp.org/press/releases/2025-07-24-new-report-reveals-crisis-point-for-americas-63-million-family-caregivers.html",
+          "sourceDate": "2025-07-01"
+        }
+      ],
+      "gap": "Care coordination is sold to employers as a benefit, or comes with paid carers. The free apps families use are basic.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:46.000Z",
+      "lastReviewedAt": null
+    }
+  ],
+  "categories": [
+    {
+      "slug": "legal",
+      "label": "Legal",
+      "count": 1
+    },
+    {
+      "slug": "finance",
+      "label": "Finance",
+      "count": 1
+    },
+    {
+      "slug": "security_compliance",
+      "label": "Security & compliance",
+      "count": 1
+    },
+    {
+      "slug": "customer_support",
+      "label": "Customer support",
+      "count": 1
+    },
+    {
+      "slug": "localization",
+      "label": "Localization",
+      "count": 1
+    },
+    {
+      "slug": "growth_marketing",
+      "label": "Growth & marketing",
+      "count": 1
+    },
+    {
+      "slug": "ecommerce",
+      "label": "E-commerce",
+      "count": 2
+    },
+    {
+      "slug": "pets",
+      "label": "Pets",
+      "count": 1
+    },
+    {
+      "slug": "family_care",
+      "label": "Family care",
+      "count": 1
+    },
+    {
+      "slug": "personal_growth",
+      "label": "Personal growth",
+      "count": 2
+    },
+    {
+      "slug": "ai_infrastructure",
+      "label": "AI infrastructure",
+      "count": 3
+    }
+  ],
+  "total": 15
+}
