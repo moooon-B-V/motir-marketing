@@ -21,6 +21,7 @@ import {
 } from '@/lib/destinations'
 import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
 import { ChromeLink } from './ChromeLink'
+import { SetupPromptButton } from './SetupPromptButton'
 
 /*
  * The top bar, carrying DOOR 3's first half: the `Start free` nav entry.
@@ -190,6 +191,9 @@ function ProductsMenu({ host }: { host: PublicHost }) {
                   </span>
                 </ChromeLink>
               ))}
+              {group.label === copy.nav.productGroups.tooling ? (
+                <SetupPromptButton look="row" className="mt-1" />
+              ) : null}
             </div>
           ))}
         </div>

@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { copy } from '@/lib/copy'
+import { setupPrompt } from '@/lib/setupPrompt'
+import { SetupPromptButton } from '@/app/_components/SetupPromptButton'
 import { DOCS_SURFACES } from '@/lib/docsSurfaces'
 
 /*
@@ -23,6 +25,31 @@ export default function DocsIndexPage() {
       <p className="mt-2 max-w-[40rem] text-[14px] leading-relaxed text-(--el-text-secondary)">
         {copy.docs.indexIntro}
       </p>
+
+      <section
+        aria-labelledby="setup-prompt-h"
+        data-surface="card"
+        className="mt-6 grid gap-3 rounded-(--radius-card) border border-(--el-border) bg-(--el-card) p-(--spacing-card-padding) shadow-(--shadow-card)"
+      >
+        <h2
+          id="setup-prompt-h"
+          className="m-0 font-(family-name:--font-serif) text-lg font-semibold text-(--el-text)"
+        >
+          {copy.setupPrompt.title}
+        </h2>
+        <p className="m-0 max-w-[60ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+          {copy.setupPrompt.body}
+        </p>
+        <div>
+          <SetupPromptButton />
+        </div>
+        <details className="text-[13px] text-(--el-text-secondary)">
+          <summary className="cursor-pointer">{copy.setupPrompt.show}</summary>
+          <pre className="mt-2 max-h-[22rem] overflow-auto rounded-(--radius-control) bg-(--el-code-bg) p-3 font-(family-name:--font-mono) text-[12px] leading-relaxed whitespace-pre-wrap text-(--el-code-text)">
+            {setupPrompt()}
+          </pre>
+        </details>
+      </section>
 
       {DOCS_SURFACES.map((surface) => (
         <section key={surface.href} className="mt-8">

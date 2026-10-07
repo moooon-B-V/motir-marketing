@@ -1945,5 +1945,14 @@
         }
       ]
     }
+  },
+  "setupPrompt": {
+    "title": "Set up Motir in your agent",
+    "body": "Copy one prompt and paste it into Claude Code, Codex, Cursor or any other agent. It connects Motir's MCP server, installs the CLI and the skills, and checks they work. In Claude Code it installs the Motir plugin.",
+    "button": "Copy the setup prompt",
+    "copied": "Copied. Paste it into your agent",
+    "failed": "Couldn't copy. Select the prompt below instead",
+    "menuLabel": "Copy a setup prompt for your agent",
+    "show": "Show the prompt"
   }
 }
