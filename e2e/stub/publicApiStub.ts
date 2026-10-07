@@ -99,9 +99,8 @@ const ROUTES: Record<string, string> = {
   // the project page redrew when the read tabs left it (design MOTIR-6742).
   '/api/public/p/QUIET': 'project-quiet.json',
   // MOTIR-7685 — the idea store, recorded from production on 2026-10-07. The
-  // list fixture is the unfiltered store: a filter is answered with the whole
-  // list, so a spec that narrows asserts the URL and the query the page sent,
-  // not a server-side narrowing the stub does not perform.
+  // list fixture is the unfiltered store; `ideasList` below NARROWS it the way
+  // motir-core does (MOTIR-7690), so a spec that filters sees a filtered page.
   '/api/public/ideas': 'ideas.json',
   '/api/public/ideas/tags': 'ideas-tags.json',
   '/api/public/ideas/stop-returns-before-they-happen':
@@ -188,6 +187,61 @@ function mcpToolCatalogue(mode: Exclude<CatalogueMode, 'failing'>): string {
   return JSON.stringify(catalogue)
 }
 
+/**
+ * THE IDEA STORE'S LIST, NARROWED (MOTIR-7690) — `GET /api/public/ideas`.
+ *
+ * The recording is the whole store; a filter is answered the way motir-core's
+ * `ideasPublicService.list` answers it: category exact, EVERY tag required,
+ * text case-insensitive over title, pitch, gap and tag label, kind exact, and
+ * the category counts over every filter EXCEPT the category (so the chips stay
+ * choosable). `tests/ideas/ideasPage.test.tsx` checks the page against the
+ * same rules, written independently.
+ *
+ * And a MODE, the catalogue's pattern above: `POST /__stub/ideas?mode=failing`
+ * turns every ideas read into a 500 — the unreachable state — until a spec
+ * puts it back with `mode=ok`. Only `ideas.spec.ts` switches it, serially.
+ */
+let ideasFailing = false
+
+interface StubIdea {
+  slug: string
+  kind: string
+  title: string
+  pitch: string
+  gap: string | null
+  category: { slug: string }
+  tags: { slug: string; label: string }[]
+}
+
+function ideasList(search: URLSearchParams): string {
+  const store = JSON.parse(fixture('ideas.json')) as {
+    items: StubIdea[]
+    categories: { slug: string; label: string; count: number }[]
+  }
+  const category = search.get('category')
+  const tags = search.getAll('tag')
+  const q = search.get('q')?.toLowerCase()
+  const kind = search.get('kind')
+  const matches = (idea: StubIdea, withCategory: boolean) =>
+    (!withCategory || !category || idea.category.slug === category) &&
+    tags.every((t) => idea.tags.some((x) => x.slug === t)) &&
+    (!kind || idea.kind === kind) &&
+    (!q ||
+      [idea.title, idea.pitch, idea.gap ?? '', ...idea.tags.map((t) => t.label)]
+        .join('\n')
+        .toLowerCase()
+        .includes(q))
+  const items = store.items.filter((i) => matches(i, true))
+  const countable = store.items.filter((i) => matches(i, false))
+  const categories = store.categories
+    .map((c) => ({
+      ...c,
+      count: countable.filter((i) => i.category.slug === c.slug).length,
+    }))
+    .filter((c) => c.count > 0)
+  return JSON.stringify({ items, categories, total: items.length })
+}
+
 function fixture(name: string): string {
   return readFileSync(join(FIXTURE_DIR, name), 'utf8')
 }
@@ -232,6 +286,32 @@ function handle(req: IncomingMessage, res: ServerResponse): void {
     res.writeHead(200, { 'content-type': 'application/json' })
     res.end(mcpToolCatalogue(catalogueMode))
     return
+  }
+
+  if (url.pathname === '/__stub/ideas' && req.method === 'POST') {
+    const mode = url.searchParams.get('mode')
+    if (mode !== 'ok' && mode !== 'failing') {
+      res.writeHead(400, { 'content-type': 'application/json' })
+      res.end(JSON.stringify({ code: 'STUB_BAD_MODE', mode }))
+      return
+    }
+    ideasFailing = mode === 'failing'
+    res.writeHead(204)
+    res.end()
+    return
+  }
+
+  if (url.pathname.startsWith('/api/public/ideas')) {
+    if (ideasFailing) {
+      res.writeHead(500, { 'content-type': 'application/json' })
+      res.end(JSON.stringify({ code: 'STUB_FORCED_FAILURE' }))
+      return
+    }
+    if (url.pathname === '/api/public/ideas') {
+      res.writeHead(200, { 'content-type': 'application/json' })
+      res.end(ideasList(url.searchParams))
+      return
+    }
   }
 
   if (FAILING.has(url.pathname)) {
