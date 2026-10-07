@@ -15,6 +15,8 @@ import {
   KIND_ICON,
   KIND_ICON_COLOR,
   KIND_TINT,
+  LevelCrumbs,
+  ManualChip,
   type Kind,
 } from './realUi'
 
@@ -140,11 +142,13 @@ function ProposedCard({
   title,
   children,
   difficulty,
+  manual,
 }: Readonly<{
   kind: Kind
   title: string
   children?: boolean
   difficulty?: string
+  manual?: boolean
 }>) {
   const Icon = KIND_ICON[kind]
   return (
@@ -176,8 +180,13 @@ function ProposedCard({
           <Icon className={cn('size-4', KIND_ICON_COLOR[kind])} />
         </span>
         <div className="min-w-0 flex-1">
-          <span className="font-mono text-xs text-(--el-text-secondary)">
-            {u.newItem}
+          <span className="flex items-center gap-2">
+            <span className="font-mono text-xs text-(--el-text-secondary)">
+              {u.newItem}
+            </span>
+            {/* A person does this one — a decision defaults to a human — so it
+                carries `WorkItemNode`'s Manual chip on the id line. */}
+            {manual ? <ManualChip label={u.manual} /> : null}
           </span>
           <span className="mt-0.5 line-clamp-2 block text-sm leading-snug font-semibold text-(--el-text)">
             {title}
@@ -199,15 +208,17 @@ const NODE_H = 124
 const COL = NODE_W + 96
 const ROW = NODE_H + 56
 const PLACE: ReadonlyArray<[number, number]> = [
-  [0, 0], // Accounts and sign-in
-  [1, 0], // Goals and daily check-ins — blocked by sign-in
-  [0, 1], // Choose the email provider
-  [2, 0.5], // Daily summary email — blocked by the check-ins and the provider
+  [0, 0], // Set a goal with a target date
+  [1, 0], // Break a goal into weekly milestones — blocked by the goal
+  [0, 1], // Decide which calendar to support
+  [1, 1], // Connect a calendar — blocked by the calendar decision
+  [2, 0.5], // Book the week's sessions — blocked by the milestones and the calendar
 ]
 const EDGES: ReadonlyArray<[number, number]> = [
   [0, 1],
-  [1, 3],
   [2, 3],
+  [1, 4],
+  [3, 4],
 ]
 const WORLD_W = COL * 2 + NODE_W
 const WORLD_H = ROW + NODE_H
@@ -222,12 +233,17 @@ function edgePath(from: number, to: number) {
   return `M${sx} ${sy} C${sx + 48} ${sy}, ${tx - 48} ${ty}, ${tx} ${ty}`
 }
 
+/*
+ * The canvas is drilled into the epic being planned, so it carries the
+ * roadmap's breadcrumb row; the cards are that epic's stories.
+ */
 function PlanCanvas() {
   const cards = u.cards as ReadonlyArray<{
     kind: Kind
     title: string
     children?: boolean
     difficulty?: string
+    manual?: boolean
   }>
   return (
     <div className="flex min-h-[300px] flex-1 items-center justify-center overflow-hidden bg-(--el-canvas) px-6 py-8">
@@ -317,6 +333,7 @@ export function PlannerWorkspaceUi() {
               </span>
             </div>
           </div>
+          <LevelCrumbs root={u.roadmap} epic={u.epic} back={u.back} />
           <PlanCanvas />
           <div className="flex shrink-0 items-center gap-3 border-t border-(--el-border) bg-(--el-surface) px-4 py-2.5">
             <span className="flex min-w-0 flex-col">
@@ -342,7 +359,7 @@ export function PlannerWorkspaceUi() {
           </div>
         </div>
         <div className="flex flex-col border-l border-(--el-border) bg-(--el-surface)">
-          <RailHeader />
+          <RailHeader mode={u.modeInContext} />
           <div className="flex flex-1 flex-col gap-3 px-4 py-4">
             {u.changeTurns.map((turn) => (
               <Bubble key={turn.text} role={turn.role}>

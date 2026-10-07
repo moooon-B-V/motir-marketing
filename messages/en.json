@@ -581,7 +581,8 @@
       "gate": {
         "eyebrow": "You decide",
         "headline": "You approve the plan",
-        "body": "Nothing reaches the board until you say so. Ask for changes in plain words: move this later, split that, drop the export. Each round is a new turn, and the plan keeps every version and the reason it changed."
+        "body": "Nothing reaches the board until you say so. Ask for changes in plain words: move this later, split that, drop the export. Each round is a new turn, and the plan keeps every version and the reason it changed.",
+        "motirPlans": "Create an account to see what Motir planned for itself"
       },
       "holds": {
         "eyebrow": "What a plan holds",
@@ -660,22 +661,28 @@
         "cards": [
           {
             "kind": "story",
-            "title": "Accounts and sign-in",
+            "title": "Set a goal with a target date",
             "children": true
           },
           {
             "kind": "story",
-            "title": "Goals and daily check-ins",
+            "title": "Break a goal into weekly milestones",
             "children": true
           },
           {
             "kind": "task",
-            "title": "Choose the email provider",
-            "difficulty": "Low"
+            "title": "Decide which calendar to support",
+            "difficulty": "Low",
+            "manual": true
           },
           {
             "kind": "story",
-            "title": "Daily summary email",
+            "title": "Connect a calendar to find free time",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "Book the week's sessions into free time",
             "children": true
           }
         ],
@@ -685,17 +692,22 @@
         "changeTurns": [
           {
             "role": "user",
-            "text": "Choosing the email provider is mine to do."
+            "text": "Drop the reminders story for now. People can check in on their own."
           },
           {
             "role": "assistant",
-            "text": "Made it a manual task for you. The daily summary email now waits on it."
+            "text": "Dropped it. Booking the week's sessions still waits on the milestones and the calendar."
           }
         ],
-        "barCounts": "12 added",
+        "barCounts": "17 added",
         "consequence": "Approving adds these to your backlog. Declining ends the plan and changes nothing.",
         "approve": "Approve",
-        "decline": "Decline"
+        "decline": "Decline",
+        "roadmap": "Roadmap",
+        "epic": "Personal schedule and goal planner",
+        "back": "Back",
+        "modeInContext": "in context",
+        "manual": "Manual"
       }
     },
     "importExisting": "Bring a project from Jira, Linear or Plane",
@@ -706,12 +718,14 @@
       "board": {
         "eyebrow": "The board",
         "headline": "A board that knows what agents do",
-        "body": "An agent's work moves through the same columns as everyone else's, with two that tell the truth about it. Implemented means an agent opened a pull request that nobody has checked yet. Approved means a person said yes and it hasn't shipped. Failing checks show on the work item itself."
+        "body": "An agent's work moves through the same columns as everyone else's, with two that tell the truth about it. Implemented means an agent opened a pull request that nobody has checked yet. Approved means a person said yes and it hasn't shipped. Failing checks show on the work item itself.",
+        "motirBoard": "Create an account to see Motir's own board"
       },
       "roadmap": {
         "eyebrow": "The roadmap",
         "headline": "See what's ready to start",
-        "body": "The roadmap draws every work item with what it waits on. Work that can start now is marked ready, so you, a teammate or an agent always know what to pick up next."
+        "body": "The roadmap draws every work item with what it waits on. Work that can start now is marked ready, so you, a teammate or an agent always know what to pick up next.",
+        "motirRoadmap": "Create an account to see Motir's own roadmap"
       },
       "holds": {
         "eyebrow": "Everything a team expects",
@@ -753,16 +767,16 @@
             "cards": [
               {
                 "kind": "story",
-                "key": "PA-12",
-                "title": "Goals and daily check-ins",
+                "key": "PA-23",
+                "title": "Book the week's sessions into free time",
                 "pill": "blocked",
                 "points": 5,
                 "who": "–"
               },
               {
                 "kind": "task",
-                "key": "PA-19",
-                "title": "Choose the email provider",
+                "key": "PA-24",
+                "title": "Decide which calendar to support",
                 "pill": "high",
                 "points": 1,
                 "who": "Y"
@@ -774,8 +788,8 @@
             "cards": [
               {
                 "kind": "subtask",
-                "key": "PA-8",
-                "title": "Sign-in screen",
+                "key": "PA-28",
+                "title": "Milestones on the goal page",
                 "pill": "medium",
                 "points": 3,
                 "who": "A",
@@ -788,8 +802,8 @@
             "cards": [
               {
                 "kind": "subtask",
-                "key": "PA-9",
-                "title": "Sign-in service",
+                "key": "PA-27",
+                "title": "Split a goal into weeks",
                 "pill": "medium",
                 "points": 5,
                 "who": "A",
@@ -802,8 +816,8 @@
             "cards": [
               {
                 "kind": "subtask",
-                "key": "PA-7",
-                "title": "Password reset email",
+                "key": "PA-26",
+                "title": "Store milestones with their goal",
                 "pill": "awaiting",
                 "points": 2,
                 "who": "A"
@@ -815,10 +829,10 @@
             "cards": [
               {
                 "kind": "story",
-                "key": "PA-3",
-                "title": "Project set up",
+                "key": "PA-21",
+                "title": "Set a goal with a target date",
                 "pill": "low",
-                "points": 2,
+                "points": 3,
                 "who": "A"
               }
             ]
@@ -880,41 +894,46 @@
         "roadmap": [
           {
             "kind": "story",
-            "key": "PA-2",
-            "title": "Accounts and sign-in",
-            "status": "in_progress",
-            "label": "In Progress",
-            "progress": "3 / 5"
-          },
-          {
-            "kind": "task",
-            "key": "PA-19",
-            "title": "Choose the email provider",
-            "status": "ready",
-            "label": "Ready"
-          },
-          {
-            "kind": "story",
-            "key": "PA-3",
-            "title": "Project set up",
+            "key": "PA-21",
+            "title": "Set a goal with a target date",
             "status": "done",
             "label": "Done"
           },
           {
+            "kind": "task",
+            "key": "PA-24",
+            "title": "Decide which calendar to support",
+            "status": "ready",
+            "label": "Ready",
+            "manual": true
+          },
+          {
             "kind": "story",
-            "key": "PA-12",
-            "title": "Goals and daily check-ins",
+            "key": "PA-22",
+            "title": "Break a goal into weekly milestones",
+            "status": "in_progress",
+            "label": "In Progress",
+            "progress": "2 / 5"
+          },
+          {
+            "kind": "story",
+            "key": "PA-25",
+            "title": "Connect a calendar to find free time",
             "status": "todo",
             "label": "To Do"
           },
           {
             "kind": "story",
-            "key": "PA-14",
-            "title": "Daily summary email",
+            "key": "PA-23",
+            "title": "Book the week's sessions into free time",
             "status": "todo",
             "label": "To Do"
           }
-        ]
+        ],
+        "roadmapRoot": "Roadmap",
+        "roadmapEpic": "Personal schedule and goal planner",
+        "back": "Back",
+        "manual": "Manual"
       },
       "close": {
         "headline": "Bring the project.",

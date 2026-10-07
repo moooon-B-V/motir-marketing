@@ -25,6 +25,8 @@ import {
   KIND_ICON,
   KIND_ICON_COLOR,
   KIND_TINT,
+  LevelCrumbs,
+  ManualChip,
   type Kind,
 } from './realUi'
 
@@ -255,22 +257,24 @@ export function ApprovalsUi() {
 /* ── The roadmap canvas ─────────────────────────────────────────────── */
 
 const NODE_W = 280
-const NODE_H = 124
+// Tall enough for a two-line title AND a container's progress row.
+const NODE_H = 140
 const COL = NODE_W + 96
 const ROW = NODE_H + 56
 /** Column = dependency rank; a blocker sits left of what it blocks. */
 const PLACE: Record<string, [number, number]> = {
-  'PA-3': [0, 0],
-  'PA-19': [0, 1],
-  'PA-2': [1, 0],
-  'PA-12': [2, 0],
-  'PA-14': [2, 1],
+  'PA-21': [0, 0], // Set a goal
+  'PA-24': [0, 1], // Decide which calendar to support
+  'PA-22': [1, 0], // Weekly milestones — blocked by the goal
+  'PA-25': [1, 1], // Connect a calendar — blocked by the decision
+  'PA-23': [2, 0.5], // Book the sessions — blocked by milestones and calendar
 }
 /** [blocker, blocked]; an edge from a done blocker is drawn committed. */
 const EDGES: ReadonlyArray<[string, string]> = [
-  ['PA-3', 'PA-2'],
-  ['PA-2', 'PA-12'],
-  ['PA-19', 'PA-14'],
+  ['PA-21', 'PA-22'],
+  ['PA-24', 'PA-25'],
+  ['PA-22', 'PA-23'],
+  ['PA-25', 'PA-23'],
 ]
 const WORLD_W = COL * 2 + NODE_W
 const WORLD_H = ROW + NODE_H
@@ -300,7 +304,7 @@ function RoadmapNode({ node }: Readonly<{ node: (typeof u.roadmap)[number] }>) {
   return (
     <div
       className={cn(
-        'relative flex h-[124px] w-[280px] flex-col overflow-hidden rounded-(--radius-card) border p-3.5',
+        'relative flex h-[140px] w-[280px] flex-col overflow-hidden rounded-(--radius-card) border p-3.5',
         frame,
       )}
     >
@@ -332,8 +336,13 @@ function RoadmapNode({ node }: Readonly<{ node: (typeof u.roadmap)[number] }>) {
           <Icon className={cn('size-4', KIND_ICON_COLOR[node.kind as Kind])} />
         </span>
         <div className="min-w-0 flex-1">
-          <span className="font-mono text-xs text-(--el-text-secondary)">
-            {node.key}
+          <span className="flex items-center gap-2">
+            <span className="font-mono text-xs text-(--el-text-secondary)">
+              {node.key}
+            </span>
+            {'manual' in node && node.manual ? (
+              <ManualChip label={u.manual} />
+            ) : null}
           </span>
           <span
             className={cn(
@@ -350,7 +359,7 @@ function RoadmapNode({ node }: Readonly<{ node: (typeof u.roadmap)[number] }>) {
       {'progress' in node && node.progress ? (
         <div className="mt-2 flex shrink-0 items-center gap-2">
           <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-(--el-muted)">
-            <span className="block h-full w-3/5 bg-(--el-success)" />
+            <span className="block h-full w-2/5 bg-(--el-success)" />
           </span>
           <span className="text-xs font-medium text-(--el-text-secondary) tabular-nums">
             {node.progress}
@@ -378,6 +387,7 @@ export function RoadmapUi({ zoom = 0.8 }: Readonly<{ zoom?: number }>) {
   )
   return (
     <Frame>
+      <LevelCrumbs root={u.roadmapRoot} epic={u.roadmapEpic} back={u.back} />
       <div className="flex items-center justify-center overflow-hidden bg-(--el-canvas) px-6 py-10">
         <div style={{ zoom }}>
           <div className="relative" style={{ width: WORLD_W, height: WORLD_H }}>

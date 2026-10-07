@@ -162,6 +162,12 @@ export const PRODUCT_DOCS: Partial<Record<ProductSlug, string>> = {
  */
 export const MOTIR_PROJECT = `${APP_ORIGIN}/p/MOTIR`
 export const MOTIR_PROJECT_RUNS = `${APP_ORIGIN}/p/MOTIR/runs`
+/** Motir's own plans, in the same visitor view: what it planned for itself. */
+export const MOTIR_PROJECT_PLANS = `${APP_ORIGIN}/p/MOTIR/plans`
+/** Motir's own roadmap, in the same visitor view. */
+export const MOTIR_PROJECT_ROADMAP = `${APP_ORIGIN}/p/MOTIR/roadmap`
+/** Motir's own board, in the same visitor view. */
+export const MOTIR_PROJECT_BOARD = `${APP_ORIGIN}/p/MOTIR/board`
 
 /** The difficulty guide: the four levels, and the models suggested for each. */
 export const DOCS_DIFFICULTY = '/docs/difficulty'
