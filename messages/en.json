@@ -8,22 +8,75 @@
     "brandAriaLabel": "Motir — home",
     "skipToContent": "Skip to content",
     "menu": "Menu",
-    "explore": "Explore",
+    "explore": "Build in public",
+    "ideas": "Ideas to build",
+    "buildsItself": "Motir builds itself",
     "docs": "Docs",
     "design": "Design",
     "signIn": "Sign in",
-    "startFree": "Start free"
+    "startFree": "Start free",
+    "products": "Products",
+    "productsMenuLabel": "Motir products",
+    "productGroups": {
+      "ai": "AI products",
+      "tooling": "Tooling",
+      "infrastructure": "Infrastructure"
+    },
+    "productItems": {
+      "aiPlanner": {
+        "name": "Motir AI Planner",
+        "blurb": "Turns an idea into a plan you approve"
+      },
+      "projectManagement": {
+        "name": "Motir Project Management",
+        "blurb": "Boards, sprints, backlog and roadmap"
+      },
+      "projectManager": {
+        "name": "Motir Project Manager",
+        "blurb": "Runs the whole project and reports to you"
+      },
+      "aiDebugging": {
+        "name": "Motir AI Debugging",
+        "blurb": "Every bug traced to the code and planned"
+      },
+      "mcp": {
+        "name": "Motir MCP",
+        "blurb": "Your project, inside any AI assistant that speaks MCP"
+      },
+      "cli": {
+        "name": "Motir CLI",
+        "blurb": "Hand work to your own agent from the terminal"
+      },
+      "claudeCodeConnector": {
+        "name": "Motir Claude Code connector",
+        "blurb": "Connect once on claude.ai, use Motir in Claude Code"
+      },
+      "claudeCodePlugin": {
+        "name": "Motir Claude Code plugin",
+        "blurb": "Skills, MCP server and CLI in one install"
+      },
+      "agentFleet": {
+        "name": "Motir Agent Fleet",
+        "blurb": "Hosted agents that work your plan in parallel"
+      },
+      "agentHosting": {
+        "name": "Motir Agent Hosting",
+        "blurb": "Your own agents, on Motir's machines"
+      },
+      "sandbox": {
+        "name": "Motir Sandbox",
+        "blurb": "A sealed container for agents on your own machine"
+      }
+    }
   },
   "landing": {
     "hero": {
-      "eyebrow": "Build with AI",
-      "headline": "What do you want to build?",
-      "lede": "The AI planning, project-management and agent orchestration platform. Describe what you want to build — Motir drafts the plan with you, then agents take over the work.",
-      "ideaLabel": "Your idea",
-      "placeholder": "Describe what you want to build — who it's for, and the core things people should be able to do. For example: a tool for freelancers to send invoices and track which clients have paid.",
-      "cta": "Start planning",
-      "hint": "Start with a rough idea — Motir asks follow-up questions next. Free to start, no credit card.",
-      "counter": "{count} / {max}",
+      "headline": "Vibe the project",
+      "lede": "You bring the idea. Motir delivers the whole project: the plan, the design, the build, the documents, and the full story of how it got there.",
+      "ideaLabel": "What are you building?",
+      "placeholder": "An AI personal assistant that helps people reach their goals…",
+      "hint": "A few sentences is enough. Motir asks about the rest.",
+      "cta": "Start",
       "ctaSubmitting": "Starting…",
       "statusSubmitting": "Saving your idea and taking you to Motir…",
       "errorTitle": "We couldn't save your idea just now.",
@@ -31,63 +84,256 @@
       "errorRetry": "Try again",
       "errorFallback": "Continue to Motir"
     },
-    "doors": {
-      "new": {
-        "title": "Start something new",
-        "description": "Describe it and Motir plans it with you — no code, no board, nothing yet."
+    "projectManager": {
+      "eyebrow": "Motir Project Manager",
+      "headline": "Already have a project? Hand it to Motir Project Manager.",
+      "lede": "You're the product owner. Motir Project Manager reads the project you already have, plans what's next, puts agents to work and reports back. It runs the project. You decide what ships.",
+      "points": [
+        "Reads your code, tasks and history before changing anything",
+        "Plans the next steps and keeps the plan up to date",
+        "Runs agents on the work, around the clock",
+        "Brings every decision and every release to you"
+      ],
+      "importLabel": "Import from",
+      "sources": {
+        "codebase": "A code repository",
+        "jira": "Jira",
+        "linear": "Linear",
+        "plane": "Plane"
       },
-      "import": {
-        "title": "I have an existing project",
-        "description": "Motir reads what is already there and plans on top of it.",
-        "sourcesLabel": "Bring it from",
-        "sources": {
-          "codebase": {
-            "title": "Your codebase",
-            "description": "Connect a repository — Motir reads the code and plans on top of what is already built."
+      "report": {
+        "ariaLabel": "An example weekly report from Motir Project Manager",
+        "title": "Weekly report · AI personal assistant",
+        "range": "Oct 6 – Oct 12",
+        "done": "done this week",
+        "inProgress": "in progress",
+        "waiting": "waiting for you",
+        "log": [
+          {
+            "day": "Mon",
+            "what": "Calendar connection shipped",
+            "state": "Done",
+            "tone": "plain"
           },
-          "jira": {
-            "title": "Jira",
-            "description": "Bring existing work items across, with their structure intact."
+          {
+            "day": "Tue",
+            "what": "Plan updated: email summaries split in two",
+            "state": "Planned",
+            "tone": "cool"
           },
-          "linearPlane": {
-            "title": "Linear or Plane",
-            "description": "Same import, same structure."
+          {
+            "day": "Wed",
+            "what": "Approve the AI cost limit per user",
+            "state": "Your call",
+            "tone": "you"
+          },
+          {
+            "day": "Thu",
+            "what": "Login error on Android found and fixed",
+            "state": "Fixed",
+            "tone": "plain"
+          },
+          {
+            "day": "Fri",
+            "what": "Morning brief ready to try",
+            "state": "Review",
+            "tone": "you"
           }
+        ]
+      }
+    },
+    "builtByMotir": {
+      "eyebrow": "Built with Motir",
+      "headline": "Motir builds itself.",
+      "body": "Motir is planned, built, tested and shipped by Motir. Its agents run its own roadmap, and a person approves every plan and every release. It can run your project the same way.",
+      "points": [
+        "Every plan, run and decision is open to follow",
+        "Watch the work happen as it happens",
+        "The same Project Manager you would use"
+      ],
+      "watch": "Watch Motir build itself",
+      "runs": "Create an account to watch its agent runs",
+      "start": "Start your project",
+      "note": "The Motir project, live on app.motir.co",
+      "story": "How Motir builds itself"
+    },
+    "moreThanCode": {
+      "headline": "A project is more than code",
+      "lede": "Vibe coding hands you code and leaves you to figure out the rest. Motir delivers everything a real product needs to launch and keep growing.",
+      "items": {
+        "plan": {
+          "tab": "Plan",
+          "title": "The plan",
+          "body": "What's being made, in what order, and why. Motir asks the questions a good partner would ask first."
         },
-        "cta": "Import a project"
-      },
-      "hint": "Either way you end up with a plan you read and edit before anything is built. No credit card.",
+        "design": {
+          "tab": "Design",
+          "title": "The design",
+          "body": "How it looks and feels, before anything is built. You pick the direction."
+        },
+        "product": {
+          "tab": "Product",
+          "title": "The product",
+          "body": "The thing itself, working and tested, built to grow from the first user to the hundred-thousandth."
+        },
+        "docs": {
+          "tab": "Docs",
+          "title": "The documents",
+          "body": "Decisions, guides and notes, kept next to the work so nobody has to write them up later."
+        },
+        "history": {
+          "tab": "History",
+          "title": "The history",
+          "body": "Every decision with its reason and date, so the context is never lost."
+        }
+      }
+    },
+    "calls": {
+      "headline": "AI does the work. You make the calls.",
+      "lede": "Motir moves fast, and it stops wherever a choice is yours. Nothing moves forward without your yes.",
+      "items": {
+        "say": {
+          "tab": "Say it",
+          "title": "Say what you want",
+          "body": "A few sentences or a messy brain dump. Motir asks until it understands."
+        },
+        "watch": {
+          "tab": "Watch it",
+          "title": "Watch it take shape",
+          "body": "The plan, the designs, the product and the documents get made step by step, out in the open."
+        },
+        "decide": {
+          "tab": "You decide",
+          "title": "You decide",
+          "body": "Every piece comes back to you to look at, try and approve. You stay in charge of what ships."
+        }
+      }
+    },
+    "resume": {
+      "headline": "Pick up where you left off",
+      "body": "Come back tomorrow or in six months, or hand it to someone new. The project remembers everything, so nobody starts from scratch or explains it again."
+    },
+    "close": {
+      "headline": "Vibe the project",
+      "body": "Start with a few sentences, or hand an existing project to Motir Project Manager.",
+      "start": "Start a project",
+      "import": "Import a project",
+      "developers": "How Motir works, for developers",
+      "openCore": "Open source at the core · Your project is always yours",
       "free": {
         "lead": "Just want project management?",
         "cta": "Start free",
         "tail": "— boards, sprints and a backlog, with no AI in the way."
       }
     },
-    "pillars": {
-      "eyebrow": "A vibe project",
-      "headline": "You've heard of vibe coding. This is a vibe project.",
-      "lede": "You bring the idea. Motir carries it from a sentence to a shipped project — the planning, the tracking, and the work itself. And not only the code: design, decisions, content and tests are work items too.",
-      "planning": {
-        "title": "AI planning",
-        "body": "Describe what you want in your own words. Motir asks follow-up questions, then drafts a plan you read before anything is built — epics, stories and work items, with the dependencies between them."
+    "art": {
+      "plan": {
+        "title": "AI personal assistant",
+        "rows": [
+          ["Accounts and sign-in", "Done"],
+          ["Calendar and email", "3 of 5"],
+          ["AI cost per user", "Your call"],
+          ["Mobile app", "Later"]
+        ]
       },
-      "projectManagement": {
-        "title": "Project management",
-        "body": "A complete project-management tool underneath it all: boards, sprints, a backlog, roadmaps, dependencies, comments and reports. It stands on its own, whether or not you ever use the AI."
+      "design": {
+        "screen": "Your morning brief",
+        "time": "07:30",
+        "items": [
+          ["09:00", "Review moved to 10:00"],
+          ["Mail", "3 replies waiting"],
+          ["To do", "Send the contract"]
+        ],
+        "optionA": "Option A",
+        "optionB": "Option B"
       },
-      "agents": {
-        "title": "Agent orchestration",
-        "body": "Approve the plan and agents take over the work, one work item at a time, each arriving as a pull request you review. Use Motir's agents, or your own."
+      "product": {
+        "greeting": "Good morning",
+        "needs": "3 things need you",
+        "rows": [
+          ["Reply about the contract", "Asks first"],
+          ["Move gym to 18:00", "Calendar"]
+        ],
+        "edit": "Edit",
+        "send": "Send",
+        "count": "64",
+        "countLabel": "checks passed",
+        "checks": [
+          "Never sends without asking",
+          "Each user's data kept apart",
+          "Fast with 100,000 users"
+        ]
+      },
+      "docs": {
+        "title": "Written as it goes",
+        "page": "What the assistant may read",
+        "decisionLabel": "Decision · you",
+        "decision": "Users choose what it can see",
+        "chips": ["Setup guide", "Privacy", "AI cost limits"]
+      },
+      "history": {
+        "title": "Who decided what",
+        "events": [
+          ["Oct 1", "You described it", "one paragraph", "you"],
+          ["Oct 2", "You approved the plan", "after 3 rounds", "you"],
+          ["Oct 3", "You chose design B", "the brief comes first", "you"],
+          ["Oct 9", "Calendar built and tested", "64 checks", "motir"]
+        ]
+      },
+      "say": {
+        "idea": "An AI personal assistant that helps people reach their goals.",
+        "qa": [
+          [
+            "Should it act on its own, or ask before it sends anything?",
+            "Always ask first."
+          ],
+          [
+            "For individuals, or for teams too?",
+            "Individuals first, teams next year."
+          ]
+        ]
+      },
+      "watch": {
+        "lanes": [
+          ["Plan", "done"],
+          ["Design", "done"],
+          ["Build", "running"],
+          ["Tests", "waiting"],
+          ["Docs", "ready"]
+        ],
+        "states": {
+          "done": "Done",
+          "running": "Agent running",
+          "ready": "Ready",
+          "waiting": "Waits on Build"
+        },
+        "live": "pricing-page.tsx"
+      },
+      "decide": {
+        "stamp": "Ready for you",
+        "title": "Calendar connection is built",
+        "body": "Watch the recording, then try it yourself.",
+        "changes": "Ask for changes",
+        "approve": "Approve",
+        "video": {
+          "label": "Acceptance video",
+          "length": "0:48",
+          "chapters": [
+            "Connect a calendar",
+            "Move a meeting",
+            "The brief updates"
+          ]
+        }
+      },
+      "resume": {
+        "tab": "Back after 3 weeks",
+        "hello": "Welcome back. Here's where the AI personal assistant is.",
+        "cells": [
+          ["Last time", "Calendar connection shipped"],
+          ["In progress", "Email summaries"],
+          ["Waiting for you", "2 decisions"]
+        ]
       }
-    },
-    "openCore": {
-      "title": "Open core",
-      "body": "The project-management core is open source under the GPL — the whole tool, not a cut-down edition. Run it yourself, read every line of it, or let us host it. AI planning and agent orchestration are the commercial layers on top.",
-      "cta": "Motir on GitHub"
-    },
-    "proof": {
-      "caption": "Find Motir on",
-      "slots": ["Product Hunt", "G2", "GitHub", "AlternativeTo"]
     }
   },
   "designShowcase": {
@@ -121,7 +367,7 @@
     "productHeading": "Product",
     "resourcesHeading": "Resources",
     "legalHeading": "Legal",
-    "explore": "Explore projects",
+    "explore": "Projects built in public",
     "docs": "Docs",
     "signIn": "Sign in",
     "startFree": "Start free",
@@ -131,7 +377,10 @@
     "privacy": "Privacy Policy",
     "legalIndex": "All legal documents",
     "entity": "Motir is a product of moooon B.V.",
-    "copyright": "© {year} moooon B.V."
+    "copyright": "© {year} moooon B.V.",
+    "howItWorks": "How Motir works",
+    "ideas": "Ideas to build",
+    "buildsItself": "Motir builds itself"
   },
   "legal": {
     "metaTitle": "Legal",
@@ -146,15 +395,15 @@
     "indexContact": "Questions about any of these: legal@motir.co"
   },
   "explore": {
-    "metaTitle": "Explore public project plans · Motir",
-    "metaDescription": "Browse public product roadmaps and project plans from teams building in the open on Motir — work items, boards, and sprints, free to read with no sign-up.",
-    "metaTitleTopic": "{topic} projects · Project square · Motir",
-    "metaDescriptionTopic": "Public projects tagged {topic} — real roadmaps, boards, and sprints from teams building {topic} in the open on Motir.",
-    "heroEyebrow": "Project square",
-    "heroTitle": "Explore public project plans built on Motir",
-    "heroLede": "Browse real, public product roadmaps and project plans from teams building in the open — work items, boards, and sprints, free to read with no sign-up. Search by name, filter by topic, and sort by what's trending.",
-    "trustCrawlable": "Open to everyone",
-    "trustNoSignup": "No sign-up required",
+    "metaTitle": "Build in public · Projects on Motir",
+    "metaDescription": "Projects teams build in public on Motir: their roadmaps, boards, plans and agent runs. Read any project's overview, and follow the live work with a free account.",
+    "metaTitleTopic": "{topic} projects built in public · Motir",
+    "metaDescriptionTopic": "Public projects tagged {topic}: real roadmaps, boards and sprints from teams building {topic} in public on Motir.",
+    "heroEyebrow": "Build in public",
+    "heroTitle": "Projects built in public on Motir",
+    "heroLede": "Teams build in public on Motir. Read any project's overview and changelog, and create a free account to follow its live board, roadmap, plans and agent runs.",
+    "trustCrawlable": "Open overview and changelog",
+    "trustNoSignup": "Free account to follow the live work",
     "trustUpdated": "Updated daily",
     "searchAria": "Search public projects",
     "searchPlaceholder": "Search public projects by name or topic…",
@@ -186,12 +435,12 @@
     "browseTitle": "Browse by topic",
     "browseSubtitle": "Topics sorted by their public-project count — each is its own crawlable landing page.",
     "browseCountAria": "{count} public projects",
-    "faqHeading": "What is the project square?",
-    "faqLede": "The project square is a public, crawlable directory of every project teams have chosen to build in the open on Motir — their real roadmaps, boards, and sprints, free to read with no account.",
-    "faqQ1": "What is the project square?",
-    "faqA1": "It's a public directory of project plans built on Motir. Every listed project is public by choice — you can read its roadmap, board, and work items with no sign-up.",
-    "faqQ2": "Are these projects free to view?",
-    "faqA2": "Yes. Every project in the square is fully public and free to read — no account, no paywall. You only need an account to create your own project.",
+    "faqHeading": "What is building in public?",
+    "faqLede": "Building in public turns a Motir project into a page anyone on the web can find: its overview and changelog are open to all, and anyone with a free Motir account can follow its live board, roadmap and work items. This page lists every project built in public.",
+    "faqQ1": "What becomes public, and what stays private?",
+    "faqA1": "The board, the roadmap and the work items, with their titles, types and descriptions. Assignees, estimates and internal comments are never shown. The first time you open a project's live views, Motir tells you that your name and email will be visible to the project's team.",
+    "faqQ2": "Do I need an account?",
+    "faqA2": "Not to read a project's overview and changelog. To follow its live board, roadmap, plans and agent runs, you sign in with a free Motir account. There is no paywall.",
     "faqQ3": "How are projects ranked?",
     "faqA3": "Trending surfaces projects with recent upvotes and activity, Popular ranks by lifetime upvotes, and New lists the most recently published — each a shareable, crawlable URL.",
     "cardViewAria": "{name} — public project",
@@ -199,7 +448,18 @@
     "statActivityAria": "Last active {time}",
     "statActivityNone": "No activity yet",
     "errorTitle": "Couldn't load the project square",
-    "errorBody": "The directory is temporarily unreachable. Please try again in a moment."
+    "errorBody": "The directory is temporarily unreachable. Please try again in a moment.",
+    "featured": {
+      "eyebrow": "Built in public by Motir",
+      "title": "Motir builds itself.",
+      "body": "Motir is planned, built and shipped by Motir, in public. Every plan, run and decision is open to follow.",
+      "cta": "Watch Motir build itself"
+    },
+    "close": {
+      "headline": "Build yours in public.",
+      "body": "Turn any Motir project into a public page with one switch. Show what you're building, take feature requests and upvotes, and keep internal details private.",
+      "cta": "Start free"
+    }
   },
   "docs": {
     "metaTitle": "Docs · Motir",
@@ -225,7 +485,11 @@
     "metaTitleDifficulty": "Difficulty levels · Motir docs",
     "metaDescriptionDifficulty": "The four difficulty levels a work item can carry, and the models we suggest running each level on, with what a task costs.",
     "metaTitleSkills": "Skills · Motir docs",
+    "metaTitleClaudeCodeConnector": "Claude Code connector · Motir docs",
+    "metaTitleClaudeCodePlugin": "Claude Code plugin · Motir docs",
     "metaDescriptionSkills": "Install Motir’s skills in Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot or OpenCode, and run your Motir project from the agent you already use.",
+    "metaDescriptionClaudeCodeConnector": "Connect Motir to Claude Code as a remote MCP connector: add it once on claude.ai or with one command, sign in with your Motir account, and approve what Claude may do.",
+    "metaDescriptionClaudeCodePlugin": "Install Motir’s Claude Code plugin: one install brings the skills, the Motir MCP server and a runner for the CLI, and connects Motir without a token.",
     "indexTitle": "Documentation",
     "indexIntro": "Everything you need to build against Motir: the public read API, the MCP server agents call, and the CLI.",
     "api": "API reference",
@@ -248,6 +512,8 @@
     "sentry": "Sentry",
     "difficulty": "Difficulty levels",
     "skills": "Skills",
+    "claudeCodeConnector": "Claude Code connector",
+    "claudeCodePlugin": "Claude Code plugin",
     "descApi": "The public read API — every endpoint, parameter and status, generated from the served OpenAPI document.",
     "descApiGettingStarted": "The five-step path from a token to your first request.",
     "descApiStability": "Versioning, deprecation and what a breaking change is.",
@@ -259,6 +525,8 @@
     "descSentry": "Turn Sentry errors into bug work items, and resolve them in Sentry when the bug is done.",
     "descDifficulty": "What each difficulty level means, and which models to run it on, with the cost per task.",
     "descSkills": "Install Motir’s skills in your agent, and what to say to use each one.",
+    "descClaudeCodeConnector": "Connect Motir to Claude Code with your Motir account and no token, from claude.ai or with one command.",
+    "descClaudeCodePlugin": "One install in Claude Code brings Motir’s skills, its MCP server and its CLI, signed in without a token.",
     "apiIntro": "Every operation the API serves, generated from the OpenAPI document Motir publishes and fetched when this page is requested — so it is exactly what the server ships right now. Each one lists its parameters, the body it accepts, a request you can copy, and every status it can answer with.",
     "sectionRequest": "Request",
     "sectionBody": "Request body",
@@ -274,7 +542,1549 @@
     "eyebrow": "404",
     "title": "That page isn’t here",
     "lede": "The address may be mistyped — or the page it pointed to is no longer public.",
-    "exploreDoor": "Explore projects",
+    "exploreDoor": "See projects built in public",
     "homeDoor": "Go to the homepage"
+  },
+  "products": {
+    "eyebrow": "Motir products",
+    "comingSoon": "This page is on its way. Until then, the quickest way to see it is to try Motir.",
+    "start": "Start a project",
+    "back": "Back to motir.co",
+    "metaTitle": "{name} — Motir",
+    "worksWith": "Works with",
+    "aiPlanner": {
+      "metaDescription": "Motir AI Planner asks until it is clear what you are building, then drafts the whole plan: every piece of work, in order, with who does it. Nothing starts until you approve it.",
+      "headline": "First the what. Then the whole plan.",
+      "lede": "Describe what you want to build. The planner asks until it is clear what you mean, because it won't plan a guess. Then it reads what already exists and drafts the whole plan: every piece of work, in the order it has to happen, with who does it. Nothing starts until you approve it.",
+      "steps": {
+        "eyebrow": "How it plans",
+        "headline": "It thinks it through with you",
+        "items": [
+          {
+            "title": "Asks until it's clear",
+            "body": "If it isn't yet clear what you're building, it asks. It won't plan until it knows."
+          },
+          {
+            "title": "Reads what exists",
+            "body": "Your repositories, documents and board, or a project you bring from Jira, Linear or Plane. It plans from where you are, not from a blank page."
+          },
+          {
+            "title": "Drafts the whole plan",
+            "body": "Every piece of work from the big goals down to the small steps, each with who does it and what it waits on."
+          },
+          {
+            "title": "Checks its own work",
+            "body": "Every plan is checked before you see it, so what reaches you is a plan that can be built."
+          }
+        ]
+      },
+      "gate": {
+        "eyebrow": "You decide",
+        "headline": "You approve the plan",
+        "body": "Nothing reaches the board until you say so. Ask for changes in plain words: move this later, split that, drop the export. Each round is a new turn, and the plan keeps every version and the reason it changed."
+      },
+      "holds": {
+        "eyebrow": "What a plan holds",
+        "headline": "Everything the work needs",
+        "items": [
+          {
+            "title": "The whole tree",
+            "body": "Epics, stories, tasks and subtasks, from the goal down to the step."
+          },
+          {
+            "title": "Who does it",
+            "body": "Each work item goes to an agent or to a person. Work only a person can do is a manual task."
+          },
+          {
+            "title": "The order",
+            "body": "What waits on what, so each piece starts the moment it can."
+          },
+          {
+            "title": "The difficulty",
+            "body": "A level on every work item, so it runs on a model that fits it."
+          },
+          {
+            "title": "The kind of work",
+            "body": "Code, design, tests, documents, research, review: each kind is marked."
+          },
+          {
+            "title": "The schedule",
+            "body": "Once you approve: sprints, a backlog and a roadmap."
+          }
+        ]
+      },
+      "learns": {
+        "eyebrow": "It gets better",
+        "headline": "It learns from every mistake",
+        "body": "When an agent can't build what the plan asked for, Motir first checks whether the plan was wrong or was changed after you approved it. A real planning mistake becomes a lesson, or strengthens one. Every new plan reads the lessons first, and a lesson that hasn't been needed for 90 days retires.",
+        "library": "Lessons",
+        "lessons": [
+          ["Put sign-in before anything that needs a user", "Used 14×"],
+          ["Keep an email provider choice a manual task", "Used 6×"],
+          ["Split a story that needs two kinds of work", "Used 9×"],
+          ["Plan the empty state with the screen", "New"]
+        ]
+      },
+      "close": {
+        "headline": "Bring the idea.",
+        "body": "The planner does the rest of the thinking with you."
+      },
+      "ui": {
+        "railLabel": "Motir AI",
+        "modeFirstPlan": "first plan",
+        "asking": "asking",
+        "close": "Close",
+        "esc": "Esc",
+        "composer": "Reply, or refine further…",
+        "chat": [
+          {
+            "role": "user",
+            "text": "An AI personal assistant that helps people reach their goals."
+          },
+          {
+            "role": "assistant",
+            "tone": "asking",
+            "text": "Who sets the goals: each person for themselves, or a coach for their clients?"
+          },
+          {
+            "role": "user",
+            "text": "Each person for themselves. Coaches can come later."
+          },
+          {
+            "role": "assistant",
+            "text": "Clear. I'll read what you have and draft the first plan."
+          }
+        ],
+        "newItem": "New",
+        "opAdd": "add",
+        "cards": [
+          {
+            "kind": "story",
+            "title": "Accounts and sign-in",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "Goals and daily check-ins",
+            "children": true
+          },
+          {
+            "kind": "task",
+            "title": "Choose the email provider",
+            "difficulty": "Low"
+          },
+          {
+            "kind": "story",
+            "title": "Daily summary email",
+            "children": true
+          }
+        ],
+        "project": "AI personal assistant",
+        "list": "List",
+        "canvas": "Canvas",
+        "changeTurns": [
+          {
+            "role": "user",
+            "text": "Choosing the email provider is mine to do."
+          },
+          {
+            "role": "assistant",
+            "text": "Made it a manual task for you. The daily summary email now waits on it."
+          }
+        ],
+        "barCounts": "12 added",
+        "consequence": "Approving adds these to your backlog. Declining ends the plan and changes nothing.",
+        "approve": "Approve",
+        "decline": "Decline"
+      }
+    },
+    "importExisting": "Bring a project from Jira, Linear or Plane",
+    "projectManagement": {
+      "metaDescription": "Boards, sprints, a backlog and a roadmap where agents and people work the same plan, and every decision waits for a person.",
+      "headline": "Where agents and people work the same plan.",
+      "lede": "Boards, sprints, a backlog and a roadmap, the way your team already works. Agents and people take work from the same board, and anything that needs a decision waits for a person.",
+      "board": {
+        "eyebrow": "The board",
+        "headline": "A board that knows what agents do",
+        "body": "An agent's work moves through the same columns as everyone else's, with two that tell the truth about it. Implemented means an agent opened a pull request that nobody has checked yet. Approved means a person said yes and it hasn't shipped. Failing checks show on the work item itself."
+      },
+      "roadmap": {
+        "eyebrow": "The roadmap",
+        "headline": "See what's ready to start",
+        "body": "The roadmap draws every work item with what it waits on. Work that can start now is marked ready, so you, a teammate or an agent always know what to pick up next."
+      },
+      "holds": {
+        "eyebrow": "Everything a team expects",
+        "headline": "The tools you already know",
+        "items": [
+          {
+            "title": "Sprints and a backlog",
+            "body": "Plan sprints from the backlog, set a goal and follow the burndown."
+          },
+          {
+            "title": "Boards your way",
+            "body": "Several boards per project, swimlanes, limits on work in progress and filters."
+          },
+          {
+            "title": "Bring your project",
+            "body": "Import from Jira, Linear, Plane, GitHub or a CSV file."
+          },
+          {
+            "title": "Open to the public",
+            "body": "Make a project public and take feature requests, with upvotes and comments."
+          },
+          {
+            "title": "Manual tasks",
+            "body": "Work only a person can do is its own kind of work item, walked through step by step."
+          },
+          {
+            "title": "Open source",
+            "body": "The project-management core is open source under GPL-3.0."
+          }
+        ]
+      },
+      "ui": {
+        "boardsHeading": "Boards",
+        "boardsSubtitle": "Kanban board for AI personal assistant",
+        "newItem": "New work item",
+        "columns": [
+          {
+            "name": "To Do",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-12",
+                "title": "Goals and daily check-ins",
+                "pill": "blocked",
+                "points": 5,
+                "who": "–"
+              },
+              {
+                "kind": "task",
+                "key": "PA-19",
+                "title": "Choose the email provider",
+                "pill": "high",
+                "points": 1,
+                "who": "Y"
+              }
+            ]
+          },
+          {
+            "name": "In Progress",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-8",
+                "title": "Sign-in screen",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "Implemented",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-9",
+                "title": "Sign-in service",
+                "pill": "medium",
+                "points": 5,
+                "who": "A",
+                "ci": "failing"
+              }
+            ]
+          },
+          {
+            "name": "In Review",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-7",
+                "title": "Password reset email",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "Done",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-3",
+                "title": "Project set up",
+                "pill": "low",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "pill": {
+          "blocked": "Blocked",
+          "high": "High",
+          "medium": "Medium",
+          "low": "Low",
+          "awaiting": "Awaiting you",
+          "running": "Checks running",
+          "failing": "Checks failing"
+        },
+        "waitingOnYou": "Waiting on you",
+        "waitedHeader": ["Waiting on", "Waited"],
+        "rows": [
+          {
+            "kind": "plan",
+            "title": "AI personal assistant",
+            "sentence": "Plan for {title}",
+            "key": "",
+            "waited": "2 hours",
+            "action": "Review"
+          },
+          {
+            "kind": "pr",
+            "title": "Password reset email",
+            "sentence": "{title} is finished",
+            "key": "PA-7",
+            "waited": "1 day",
+            "action": "Review"
+          },
+          {
+            "kind": "design",
+            "title": "Sign-in screen",
+            "sentence": "Design for {title}",
+            "key": "PA-8",
+            "waited": "3 hours",
+            "action": "Review"
+          },
+          {
+            "kind": "video",
+            "title": "Accounts and sign-in",
+            "sentence": "Acceptance video for story {title}",
+            "key": "PA-2",
+            "waited": "40 min",
+            "action": "Review"
+          },
+          {
+            "kind": "manual",
+            "title": "Choose the email provider",
+            "sentence": "{title} is waiting on you",
+            "key": "PA-19",
+            "waited": "1 day",
+            "action": "Mark done"
+          }
+        ],
+        "roadmap": [
+          {
+            "kind": "story",
+            "key": "PA-2",
+            "title": "Accounts and sign-in",
+            "status": "in_progress",
+            "label": "In Progress",
+            "progress": "3 / 5"
+          },
+          {
+            "kind": "task",
+            "key": "PA-19",
+            "title": "Choose the email provider",
+            "status": "ready",
+            "label": "Ready"
+          },
+          {
+            "kind": "story",
+            "key": "PA-3",
+            "title": "Project set up",
+            "status": "done",
+            "label": "Done"
+          },
+          {
+            "kind": "story",
+            "key": "PA-12",
+            "title": "Goals and daily check-ins",
+            "status": "todo",
+            "label": "To Do"
+          },
+          {
+            "kind": "story",
+            "key": "PA-14",
+            "title": "Daily summary email",
+            "status": "todo",
+            "label": "To Do"
+          }
+        ]
+      },
+      "close": {
+        "headline": "Bring the project.",
+        "body": "Start from an idea, or bring the one you already have."
+      }
+    },
+    "aiDebugging": {
+      "metaDescription": "Bugs from production, from your team and from agents mid-run arrive traced to the code and planned. Motir AI names the likely cause, checks for a card that covers it, and resolves the Sentry error when the bug is done.",
+      "headline": "Every bug arrives traced to the code and planned.",
+      "lede": "From production, from someone on your team, or from an agent in the middle of a run: each bug lands with what done looks like, where in the code to start and what might be wrong. You decide who fixes it.",
+      "plan": {
+        "eyebrow": "AI plans each bug",
+        "headline": "Possible causes, never a guess passed off as the answer",
+        "body": "The planner reads the stack trace against your repositories and writes the bug like a teammate would: what done looks like, where in the code to start, and why it matters. Likely causes are listed as possibilities to rule in or out, and when the trace can't be matched to your code, the bug says so."
+      },
+      "fix": {
+        "eyebrow": "You decide how it's fixed",
+        "headline": "Fix it by hand, or hand it to an agent",
+        "body": "A planned bug is an ordinary work item. Fix it yourself, or let an agent pick up the Bugs folder and open a pull request for each one. You review and merge, the bug is done, and the error is resolved in Sentry."
+      },
+      "setup": {
+        "eyebrow": "Set up in two steps",
+        "headline": "Connect once, choose what counts",
+        "body": "Connect your Sentry organization, then choose which of its projects send errors to this board. For each one, set the lowest level that counts, and whether finishing a bug resolves the error and whether Sentry's assignee carries over."
+      },
+      "ui": {
+        "errorsTitle": "Errors",
+        "errorsGloss": "— Linked Sentry errors · counts as of the last check",
+        "linkError": "Link error",
+        "error": {
+          "title": "TypeError: Cannot read properties of undefined (reading 'goalId')",
+          "where": "acme / web-frontend · production · 2.14.0",
+          "level": "error",
+          "seenPre": "Seen ",
+          "count": "1,284",
+          "seenPost": " times",
+          "lastSeen": "last seen 6 minutes ago",
+          "hideEvidence": "Hide evidence",
+          "summary": "· TypeError · POST /api/check-ins · latest event 6 minutes ago",
+          "exception": "Exception",
+          "exceptionType": "TypeError",
+          "exceptionMessage": ": Cannot read properties of undefined (reading 'goalId')",
+          "stack": "Stack trace",
+          "stackGloss": "· 2 in your code · 14 framework · most recent call first",
+          "frames": [
+            ["app/api/check-ins/route.ts:42", "in saveCheckIn"],
+            ["lib/goals/progress.ts:18", "in currentGoalFor"]
+          ],
+          "showFramework": "Show 14 framework frames"
+        },
+        "aiDrafted": "AI-drafted",
+        "explanation": "Explanation",
+        "explanationGloss": "— why it matters",
+        "explanationBody": "Every daily check-in for a person with no active goal fails, so they lose the streak they came back for. It started with release 2.14.0.",
+        "description": "Description",
+        "descriptionGloss": "— what to do",
+        "sections": [
+          {
+            "heading": "Acceptance criteria",
+            "items": [
+              "A check-in saves for a person with no active goal",
+              "The check-ins endpoint answers 422, not 500, when the goal is missing"
+            ]
+          },
+          {
+            "heading": "Context refs",
+            "items": ["app/api/check-ins/route.ts", "lib/goals/progress.ts"]
+          },
+          {
+            "heading": "Candidate mechanisms",
+            "note": "None of these is established. Each is a hypothesis the stack trace is consistent with, listed so the first person to look can rule them in or out — not a diagnosis.",
+            "items": [
+              "currentGoalFor returns undefined when the last goal was archived",
+              "The client sends the check-in before the goals list has loaded"
+            ]
+          }
+        ],
+        "monitoring": "Monitoring",
+        "monitoringBody": "Connect the error monitor your services already report to, and Motir turns its errors into work items on this project's board.",
+        "sentry": "Sentry",
+        "connected": "Connected",
+        "org": "acme",
+        "checked": "checked 4 minutes ago",
+        "recheck": "Re-check",
+        "monitored": "Monitored projects",
+        "monitoredBody": "Errors from these Sentry projects become bug work items on this board.",
+        "project": "web-frontend",
+        "bound": "Bound 3 days ago",
+        "poll": "Checked for new errors 2 minutes ago · ",
+        "filed": "3 bugs filed",
+        "minLevel": "Minimum level",
+        "everyLevel": "Every level",
+        "sync": "Sync with Sentry",
+        "toggles": [
+          [
+            "Resolve in Sentry when the bug is done",
+            "Turn off to leave Sentry errors as they are when their bugs are done."
+          ],
+          [
+            "Take the assignee from Sentry",
+            "Turn off to ignore assignments made in Sentry."
+          ]
+        ],
+        "add": "Add a monitored project",
+        "board": [
+          {
+            "name": "To Do",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-41",
+                "title": "TypeError in saveCheckIn for a person with no goal",
+                "pill": "high",
+                "points": 2,
+                "who": "–"
+              }
+            ]
+          },
+          {
+            "name": "In Progress",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-38",
+                "title": "Reminder email sent twice at midnight",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "In Review",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-35",
+                "title": "Streak resets when the time zone changes",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "Done",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-31",
+                "title": "Goal list crashes on an empty title",
+                "pill": "low",
+                "points": 1,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "debug": {
+          "mode": "plan",
+          "turnLabel": "Turn 1",
+          "user": "Daily check-ins fail for people who archived their last goal. The streak resets and the check-in is lost.",
+          "acts": [
+            ["Reading", "Reading your request…"],
+            ["Hand-off", "Tracing the bug…"],
+            ["Retrieval", "Read the code graph"],
+            ["Retrieval", "Read the plan tree"],
+            ["Match", "Checked whether a card already covers it"]
+          ],
+          "causeLabel": "Likely cause:",
+          "cause": "currentGoalFor returns undefined once the last goal is archived, and saveCheckIn reads goalId from it without a check.",
+          "cause2": "No card covers this yet.",
+          "outcomePre": "Filed ",
+          "outcomeKey": "PA-44",
+          "outcomeTitle": "Check-in fails after the last goal is archived",
+          "outcomePost": " in Triage with the diagnosis. Nothing else changed."
+        },
+        "run": {
+          "title": "PA-8 · Sign-in screen",
+          "status": "Running",
+          "findings": "What this run produced",
+          "bugFiled": "Bug filed",
+          "key": "PA-45",
+          "open": "Open →",
+          "found": "Found while: running PA-8",
+          "bugTitle": "Password reset link expires before the email arrives"
+        }
+      },
+      "close": {
+        "headline": "Let bugs plan themselves.",
+        "body": "Describe one, connect Sentry, or let your agents report what they find."
+      },
+      "sources": {
+        "eyebrow": "Where bugs come from",
+        "headline": "Three ways in, one kind of bug",
+        "items": [
+          {
+            "title": "Describe it to Motir AI",
+            "body": "Tell it what's broken. It reads the code, names the likely cause, checks whether a card already covers it, then writes exactly one: a new bug or a note on the existing one."
+          },
+          {
+            "title": "From production",
+            "body": "Connect Sentry and each new error becomes a bug with its stack trace. When it happens again, the count goes up, not the pile."
+          },
+          {
+            "title": "From an agent run",
+            "body": "An agent that finds a bug outside its own work files it, with what it saw and where, and keeps going."
+          }
+        ]
+      },
+      "describe": {
+        "eyebrow": "Describe it",
+        "headline": "Say what's broken. Motir AI traces it.",
+        "body": "Describe the bug in your own words, or report it and hand it over. Motir AI reads your code and your plan, names the likely cause, and checks for a card that already covers it. It writes one thing and says exactly what: a new bug in Triage with the diagnosis, or the diagnosis added to the card that already tracks it. If it can't trace the bug to the code, it writes nothing."
+      },
+      "production": {
+        "eyebrow": "From production",
+        "headline": "Errors arrive as bugs, with the evidence",
+        "body": "Each new Sentry error becomes one bug work item with its exception, stack trace and a link back. When the bug is done, Motir resolves the error in Sentry. If it comes back, a new bug is filed, linked to the old one."
+      },
+      "runs": {
+        "eyebrow": "From agent runs",
+        "headline": "Agents report what they find",
+        "body": "An agent building one work item that hits a bug somewhere else doesn't stop and doesn't hide it. It files the bug with what it saw, notes the run it was found in, and carries on with its own work. The run lists every bug it filed."
+      }
+    },
+    "agentFleet": {
+      "metaDescription": "Motir's hosted agents work every ready item of your plan at once, each on its own machine with a model that fits the job. Start them yourself or let Motir Project Manager keep them busy.",
+      "headline": "Your whole plan, worked in parallel.",
+      "lede": "Motir's hosted agents take every work item that is ready and work them at the same time, each on a fresh machine with its own branch and pull request. Start them yourself, or let Motir Project Manager keep them busy, and the project moves on every front at once.",
+      "parallel": {
+        "eyebrow": "Scale",
+        "headline": "One machine for every ready work item",
+        "body": "Everything that can start, starts. Each run claims its work item, so no two agents ever take the same one, and works it on a machine of its own. A story runs its pieces in the order they depend on each other. The more work is ready, the more runs at once."
+      },
+      "pm": {
+        "eyebrow": "Hands-free",
+        "headline": "Motir Project Manager keeps the fleet busy",
+        "body": "Hand the project to Motir Project Manager and it starts a run the moment a work item is ready, picks the model, and brings you only what needs your decision: the pull requests, the designs, the plans."
+      },
+      "models": {
+        "eyebrow": "The right model for each job",
+        "headline": "Every work item has a difficulty. It picks the model.",
+        "body": "The planner gives every task, subtask and bug a difficulty: how hard the work is to get right, not how big it is. A one-line change to lock ordering can be high while a large rename is trivial. The fleet reads it to choose the model, so a rename doesn't pay for the strongest model and a data migration never runs on the cheapest.",
+        "items": [
+          {
+            "title": "Trivial",
+            "body": "Mechanical work with an unambiguous spec: a rename, a copy change, a config flip. Runs on a faster, cheaper model."
+          },
+          {
+            "title": "Low",
+            "body": "Routine work that follows a pattern the code already has, like a new field through an existing form. Runs on a faster, cheaper model."
+          },
+          {
+            "title": "Medium",
+            "body": "Real design choices across several files or services, or a bug whose cause isn't known yet. Runs on the strongest model."
+          },
+          {
+            "title": "High",
+            "body": "Work where a subtle mistake is costly: concurrency, security, a migration on live data. Runs on the strongest model."
+          },
+          {
+            "title": "Your choice",
+            "body": "Set your own model for any level in the project, or pick one for a single run, from Claude, DeepSeek, GLM and Qwen."
+          },
+          {
+            "title": "Pay for what runs",
+            "body": "Billed in credits for model calls and machine time. Nothing runs, nothing is billed."
+          }
+        ],
+        "docsLink": "How difficulty levels work, and what a task costs on each model"
+      },
+      "care": {
+        "eyebrow": "Runs that look after themselves",
+        "headline": "Problems handled without you",
+        "items": [
+          {
+            "title": "Checks failing",
+            "body": "A run repairs its pull request on the same branch, up to five attempts."
+          },
+          {
+            "title": "A run that died",
+            "body": "The work stays on its branch, and a new run continues it without starting over."
+          },
+          {
+            "title": "A stalled agent",
+            "body": "A run that goes quiet for 15 minutes is stopped, so a stuck agent never burns credits."
+          },
+          {
+            "title": "A bug along the way",
+            "body": "An agent that finds a bug outside its own work files it and keeps going."
+          }
+        ]
+      },
+      "record": {
+        "eyebrow": "On the record",
+        "headline": "Every run, step by step",
+        "body": "Each run records its model, every step, what it cost and how each work item ended: implemented, failed, re-planned or skipped."
+      },
+      "ui": {
+        "runsHeading": "Runs",
+        "runsSubtitle": "Every run AI personal assistant has made — current and past.",
+        "runningNow": "Running now",
+        "pastRuns": "Past runs",
+        "columns": [
+          "Command",
+          "Scope",
+          "Agent",
+          "Started",
+          "Status",
+          "Work items"
+        ],
+        "live": [
+          {
+            "command": "Run",
+            "scope": "PA-8 · Sign-in screen",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:42",
+            "status": "Running",
+            "tone": "running",
+            "summary": "0 of 1 done"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-21 · Goal reminders",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:42",
+            "status": "Running",
+            "tone": "running",
+            "summary": "0 of 1 done"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-22 · Reminder time picker",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:41",
+            "status": "Running",
+            "tone": "running",
+            "summary": "0 of 1 done"
+          },
+          {
+            "command": "Run",
+            "scope": "Story PA-2 · Accounts and sign-in",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:38",
+            "status": "Running",
+            "tone": "running",
+            "summary": "2 of 5 done"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-17 · Settings page",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:35",
+            "status": "Running",
+            "tone": "running",
+            "summary": "0 of 1 done"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-30 · Weekly summary",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:31",
+            "status": "Running",
+            "tone": "running",
+            "summary": "0 of 1 done"
+          }
+        ],
+        "past": [
+          {
+            "command": "Run",
+            "scope": "Story PA-6 · Goals",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Yesterday 18:04",
+            "status": "Succeeded",
+            "tone": "implemented",
+            "summary": "4 of 4 done · 1 waiting on you"
+          },
+          {
+            "command": "motir fix",
+            "scope": "PA-9 · Sign-in service",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "Yesterday 16:20",
+            "status": "Succeeded",
+            "tone": "implemented",
+            "summary": "1 of 1 done"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-31 · Export to calendar",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Yesterday 14:55",
+            "status": "Failed",
+            "tone": "failed",
+            "summary": "1 failed"
+          },
+          {
+            "command": "motir continue",
+            "scope": "PA-12 · Goals and daily check-ins",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Yesterday 11:02",
+            "status": "Succeeded",
+            "tone": "implemented",
+            "summary": "1 of 1 done"
+          }
+        ],
+        "readyHeading": "Ready to start",
+        "readyLane": "Ready to run",
+        "ready": [
+          {
+            "kind": "task",
+            "key": "PA-19",
+            "title": "Choose the email provider"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-22",
+            "title": "Reminder time picker"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-23",
+            "title": "Reminder email template"
+          },
+          {
+            "kind": "bug",
+            "key": "PA-44",
+            "title": "Check-in fails after the last goal is archived"
+          }
+        ]
+      },
+      "close": {
+        "headline": "Move every front at once.",
+        "body": "Bring the idea or the project you have, and let the fleet work everything that's ready."
+      }
+    },
+    "agentHosting": {
+      "metaDescription": "Run Claude Code, Codex or the agent you already use on its own machine in Motir's cloud, signed in with your own account. Send it work from Motir; it sleeps when you're done and you pay only for its machine time.",
+      "headline": "Your own agents, on Motir's machines.",
+      "lede": "Run Claude Code, Codex or the agent you already use in Motir's cloud, signed in with your own account and set up with your project's code. Send it a work item and close your laptop: it keeps working, and sleeps when you're done.",
+      "setup": {
+        "eyebrow": "Set up once",
+        "headline": "Three steps to your agent in the cloud",
+        "items": [
+          {
+            "title": "Create it",
+            "body": "Name it, pick the project and the agent: Claude Code, Codex, OpenCode, Kimi Code, Aider or Goose. Your project's repositories are cloned into its home."
+          },
+          {
+            "title": "Sign in as you",
+            "body": "Sign in from its terminal with your own account, the same way you would on your laptop."
+          },
+          {
+            "title": "Send it work",
+            "body": "Press Send to my agent on any ready work item. It claims it, builds it on its own branch and opens a pull request."
+          }
+        ]
+      },
+      "away": {
+        "eyebrow": "Away from your desk",
+        "headline": "It keeps going when you close the laptop",
+        "items": [
+          {
+            "title": "Its own machine",
+            "body": "Nothing runs on your laptop, so a closed lid or a dropped connection doesn't stop the work."
+          },
+          {
+            "title": "Watch from anywhere",
+            "body": "Its runs show in Runs beside every other agent's, and its terminal is a click away in My agents."
+          },
+          {
+            "title": "Several at once",
+            "body": "Keep up to ten agents, each working its own work item."
+          }
+        ]
+      },
+      "ui": {
+        "title": "My agents",
+        "subtitle": "Your own agents, on your own sign-in, in Motir's cloud — AI personal assistant",
+        "newAgent": "New agent",
+        "columns": [
+          "Name",
+          "Agent",
+          "State",
+          "Machine time this month",
+          "Credits"
+        ],
+        "rows": [
+          {
+            "name": "yue-claude",
+            "agent": "Claude Code",
+            "state": "Running",
+            "tone": "implemented",
+            "time": "3 h 12 min",
+            "credits": "212"
+          },
+          {
+            "name": "yue-codex",
+            "agent": "Codex",
+            "state": "Hibernated",
+            "tone": "cancelled",
+            "time": "1 h 05 min",
+            "credits": "95"
+          },
+          {
+            "name": "night-shift",
+            "agent": "OpenCode",
+            "state": "Waking",
+            "tone": "running",
+            "time": "6 h 40 min",
+            "credits": "430"
+          }
+        ]
+      },
+      "close": {
+        "headline": "Give your agent a desk.",
+        "body": "Bring the agent you use, and let it work while you don't."
+      },
+      "terms": {
+        "eyebrow": "Your sign-in, our machine",
+        "headline": "You pay for the machine, and only while it works",
+        "items": [
+          {
+            "title": "Your account, your model",
+            "body": "The agent runs on your own sign-in, with the model and settings you chose. Its model usage is billed to you by its vendor, and Motir never sees your sign-in."
+          },
+          {
+            "title": "One credit a minute",
+            "body": "Motir charges only the agent's machine time, one credit a minute while it runs."
+          },
+          {
+            "title": "Sleeps when you're done",
+            "body": "After 30 minutes without use it hibernates and costs nothing but a little storage. It wakes when you send it the next work item."
+          }
+        ]
+      }
+    }
+  },
+  "howItWorks": {
+    "metaTitle": "How Motir works",
+    "metaDescription": "The workflow behind “vibe the project”: AI planning, the plan gate, agent runs, the merge gate, repair, the learning loop and the project's memory.",
+    "eyebrow": "For developers · the machine behind “vibe the project”",
+    "headline": "How Motir works",
+    "lede": "Every Motir project runs through the same instrument. The modules are Motir and its agents. The knobs and switches are yours: nothing moves forward until a person turns them.",
+    "legendMotir": "Motir and agents",
+    "legendYou": "You decide",
+    "scrollHint": "Scroll the drawing sideways →",
+    "rackTitle": "The Motir workflow as a rack of modules",
+    "rackDesc": "Your idea is patched into the planner, then into a knob where you approve the plan, then the board, then an agent run, then a knob where you review and merge, then Done. Manual tasks go from the board to Done. An agent run can log a bug it finds into the Bugs folder and keep going. A repair module loops failed runs back into the agent run. A learning loop runs from the agent run through a verdict, a re-plan and the lesson library back into the planner. A memory bank along the bottom holds designs, decisions, docs, lessons, run history, revisions and who decided what.",
+    "rack": {
+      "engine": "Motir · project engine",
+      "engineTitle": "From idea to done.",
+      "engineSub": "Blue modules do the work. Orange controls are yours.",
+      "signal": "Signal",
+      "signalMotir": "Motir and agents",
+      "signalYou": "you decide",
+      "idea": {
+        "label": "[01] You",
+        "title": "Your idea",
+        "screen": ["> an AI personal", "  assistant…_"],
+        "note": ["or import a repo,", "Jira, Linear or Plane"]
+      },
+      "planner": {
+        "label": "[01] AI planning",
+        "title": "Planner",
+        "screen": [
+          "? Follow-up questions",
+          "Epic › story › task",
+          "blocked_by · size",
+          "validate_plan  OK"
+        ]
+      },
+      "approve": {
+        "label": "[02] You",
+        "title": "Approve",
+        "min": "Edit",
+        "max": "Go",
+        "screen": "Plan · all turns"
+      },
+      "board": {
+        "label": "[03] Work items",
+        "title": "Board",
+        "screen": ["Executor agent|human", "Sprint · backlog", "Roadmap"],
+        "ready": "Ready 4/6"
+      },
+      "run": {
+        "label": "[04] Agent run",
+        "title": "Agent run",
+        "screen": [
+          "Claim › own branch",
+          "1 PR per repository",
+          "Harness · model",
+          "Steps ▮▮▮▮▯"
+        ]
+      },
+      "review": {
+        "label": "[05] You",
+        "title": "Review",
+        "min": "Fix",
+        "max": "Merge",
+        "screen": "Test · video"
+      },
+      "done": {
+        "label": "[05]",
+        "title": "Done",
+        "note": ["merge closes", "the work item"]
+      },
+      "manual": {
+        "label": "[03] You · manual task",
+        "title": "Manual task",
+        "screen": "motir guide · 3/7"
+      },
+      "learning": {
+        "label": "[07] Learning loop",
+        "title": ["The planner", "learns"],
+        "note": ["each mistake makes", "the next plan better"]
+      },
+      "lessons": {
+        "label": "[07] Lessons",
+        "title": "Lessons",
+        "screen": [
+          "Mistake › lesson",
+          "Again › reinforce",
+          "No rule › planning bug",
+          "Unused 90d › retire"
+        ]
+      },
+      "replan": {
+        "label": "[07] Re-plan",
+        "title": "Re-plan",
+        "screen": ["Change classified", "Reason recorded", "Plan history +1"]
+      },
+      "verdict": {
+        "label": "[07] Verdict",
+        "title": "Verdict",
+        "screen": [
+          "Still what the plan",
+          "approved?",
+          "Yes › planner missed",
+          "No  › a later edit"
+        ]
+      },
+      "repair": {
+        "label": "[06] Repair",
+        "title": "When runs break",
+        "rows": [
+          ["PR red", "motir fix"],
+          ["Run died", "motir continue"]
+        ]
+      },
+      "memory": {
+        "label": "[08] Memory",
+        "title": "The project remembers",
+        "keys": [
+          "Designs",
+          "Decisions",
+          "Docs",
+          "Lessons",
+          "Run history",
+          "Revisions",
+          "Who decided"
+        ]
+      },
+      "bugs": {
+        "label": "[04] Bug found",
+        "screen": "Log bug › Bugs folder",
+        "note": "the run keeps going"
+      }
+    },
+    "modulesHeadline": "Module by module",
+    "modulesLede": "Each module in the drawing above, up close. Hover one to find it in the drawing.",
+    "modules": [
+      {
+        "step": "1",
+        "human": false,
+        "label": "[01] AI planning",
+        "title": "From a prompt to a plan",
+        "paras": [
+          "Start with a sentence, a repository, or an import from Jira, Linear or Plane. The planner reads what exists, including a code graph of your repositories, and asks follow-up questions where the request is ambiguous.",
+          "It drafts epics, stories, tasks and subtasks, each with a type, an executor, a size and its `blocked_by` edges. `validate_plan` checks the tree before you see it."
+        ]
+      },
+      {
+        "step": "2",
+        "human": true,
+        "label": "[02] You · plan gate",
+        "title": "You approve the plan",
+        "paras": [
+          "Nothing lands on the board until a person approves the plan. Ask for changes in plain words; each round is a new turn, and the plan's history keeps every version and why it changed."
+        ]
+      },
+      {
+        "step": "3",
+        "human": false,
+        "label": "[03] Work items",
+        "title": "The board",
+        "paras": [
+          "The approved plan becomes work items with sprints, a backlog and a roadmap. Each work item's executor is `agent` or `human`.",
+          "Manual tasks (an account, a secret, a DNS record, a release sign-off) are walked through one step at a time by `motir guide`."
+        ]
+      },
+      {
+        "step": "4",
+        "human": false,
+        "label": "[04] Agent run",
+        "title": "Agents build",
+        "paras": [
+          "An agent takes the next ready work item (`motir next` or `motir run <KEY>`), claims it, builds on its own branch and opens one pull request per repository, linked to the work item.",
+          "A bug it finds outside its own work item doesn't stop the run: the agent root-causes it, files it with `motir log bug` into the Bugs folder as a work item of its own, and keeps going.",
+          "Each run records the agent harness, the model, every step and the outcome. Agents connect over MCP, on your machine or Motir's hosted agents."
+        ]
+      },
+      {
+        "step": "5",
+        "human": true,
+        "label": "[05] You · merge gate",
+        "title": "You review and merge",
+        "paras": [
+          "The work item moves to `Implemented` and the agent publishes How to test. Stories get an acceptance video recorded in CI. You review, approve and merge; the merge closes the work item. Nothing reaches `Done` without a person."
+        ]
+      },
+      {
+        "step": "6",
+        "human": false,
+        "label": "[06] Repair",
+        "title": "When runs break",
+        "paras": [
+          "A red or conflicting pull request is repaired on its own branch with `motir fix`, up to five attempts. A run that died (a laptop closed, a sandbox lost) is resumed with `motir continue` on the branch it left.",
+          "Bugs logged along the way wait in the Bugs folder; `motir fix bugs` works through them, oldest first."
+        ]
+      },
+      {
+        "step": "7",
+        "human": false,
+        "label": "[07] Learning loop",
+        "title": "The planner learns",
+        "paras": [
+          "An agent that can't build a work item first asks whether it is still what the approved plan approved (`get_approved_shape_verdict`), so a later edit isn't blamed on the planner. If the plan was wrong, it is re-planned and the change is recorded with its reason.",
+          "The mistake becomes a lesson, or reinforces one; with no rule to cover it, a planning bug is filed. The next plan reads the lessons first. Lessons that don't recur for 90 days retire."
+        ]
+      },
+      {
+        "step": "8",
+        "human": false,
+        "label": "[08] Memory",
+        "title": "The project remembers",
+        "paras": [
+          "Designs, decision pages, docs, lessons, plan revisions and every run's history live next to the work items. You, a new teammate or the next agent can pick the project up months later without anyone explaining it again."
+        ]
+      }
+    ],
+    "art": {
+      "plan": {
+        "prompt": "an AI personal assistant that helps people reach their goals",
+        "question": "Act on its own, or ask before sending?",
+        "answers": ["On its own", "Ask first"],
+        "tree": [
+          ["0", "Epic · Connections", ""],
+          ["1", "Story · Calendar sync", ""],
+          ["2", "Task · Read events", "blocked_by 2"],
+          ["1", "Story · Morning brief", ""],
+          ["2m", "Manual task · Email provider account", ""]
+        ]
+      },
+      "approve": {
+        "title": "Plan · turn 3",
+        "turns": [
+          ["Turn 1", "Drafted from your prompt"],
+          ["Turn 2", "“Split email into two stories”"],
+          ["Turn 3", "Ready for your call"]
+        ],
+        "min": "Revise",
+        "max": "Approve",
+        "cta": "Approve plan"
+      },
+      "board": {
+        "title": "Work items",
+        "sub": "Sprint 1 · connections",
+        "count": "24",
+        "columns": ["To do", "In progress", "Implemented", "Done"],
+        "agent": "agent",
+        "manual": "manual task"
+      },
+      "run": {
+        "run": "Run ·",
+        "key": "PA-12",
+        "agent": "Your agent",
+        "title": "Calendar sync",
+        "faders": ["Claim", "Branch", "Build", "Test", "PR"],
+        "stats": [
+          ["steps", "9 / 14"],
+          ["bugs logged", "1"],
+          ["branch", "pa-12"]
+        ]
+      },
+      "review": {
+        "title": "How to test",
+        "checks": [
+          "Connect a test calendar",
+          "Move a meeting, see the brief update",
+          "Revoke access, see it stop reading"
+        ],
+        "video": "acceptance.mp4",
+        "length": "0:42",
+        "merge": "Merge"
+      },
+      "repair": {
+        "title": "When runs break",
+        "rows": [
+          ["Pull request red", "motir fix"],
+          ["Run died", "motir continue"],
+          ["Bugs folder", "motir fix bugs"]
+        ],
+        "attempt": "Attempt 2 of 5"
+      },
+      "learning": {
+        "loop": ["Read", "before", "planning"],
+        "title": "Lesson library",
+        "lessons": [
+          ["One test gate per repository", "Reinforced ×3", 80],
+          [
+            "Don't duplicate a branch that exists",
+            "New · retires if unused 90 days",
+            25
+          ]
+        ]
+      },
+      "memory": {
+        "title": ":: History",
+        "span": "PA · 41 days",
+        "tip": "Ask before sending · you · Oct 3",
+        "axis": ["Day 1", "Day 20", "Day 41"],
+        "tabs": ["Designs", "Decisions", "Docs", "Lessons", "Runs"]
+      }
+    },
+    "closeHeadline": "Open at the core",
+    "closeBody": "The project-management core is open source under GPL-3.0. Self-host it, or use it on motir.co.",
+    "closeStart": "Vibe a project",
+    "closeDocs": "Read the docs",
+    "closeMcp": "Connect your agent"
+  },
+  "ideas": {
+    "metaTitle": "Ideas to build · Motir",
+    "metaDescription": "Products Motir would buy: AI platforms for the work a software company can't do with code alone. Build one that scales, and Motir will be your first customer.",
+    "eyebrow": "Ideas to build",
+    "headline": "Build what Motir would buy.",
+    "lede": "A software company runs on more than code. It needs a lawyer, an accountant, a security team and people who know other markets, and Motir is no different. We would rather buy that work from a product built on Motir. These are the ones we need. Build one that scales, and Motir will be your first customer.",
+    "promiseTitle": "Motir is your first customer",
+    "promiseBody": "Build one of these on Motir, in public, and we will use it, pay for it and tell you what is missing.",
+    "rulesEyebrow": "What makes a good idea here",
+    "rulesHeadline": "Products that scale, not tools for one team",
+    "rules": [
+      {
+        "title": "Many customers, one product",
+        "body": "Every idea serves thousands of companies with the same problem, not one company's own process."
+      },
+      {
+        "title": "Expertise you can't hire cheaply",
+        "body": "Law, tax, security, languages: work that needs a specialist, made affordable by AI and kept honest by people."
+      },
+      {
+        "title": "A person still signs",
+        "body": "The AI drafts, checks and files the work. A qualified person approves what carries risk, the same way Motir puts a person at every gate."
+      }
+    ],
+    "listEyebrow": "The ideas",
+    "listHeadline": "Six products Motir would buy today",
+    "needLabel": "Why Motir needs it",
+    "whoLabel": "Who else buys it",
+    "items": [
+      {
+        "tab": "Legal",
+        "title": "An AI legal team for software companies",
+        "pitch": "Terms, privacy policies, data processing agreements and the record of every vendor that touches customer data, drafted, kept current and reviewed by a lawyer.",
+        "does": [
+          "Drafts and updates terms, privacy policies and data processing agreements as the product changes",
+          "Reviews vendor and customer contracts and flags what needs a lawyer",
+          "Tracks new rules, like the EU AI Act, and says what each one changes for you"
+        ],
+        "need": "Every model provider Motir adds needs a data processing agreement and a recorded legal basis for sending customer data to it. Today that is slow, manual work.",
+        "who": "Every software company that handles customer data, which is all of them."
+      },
+      {
+        "title": "An AI finance team for startups",
+        "tab": "Finance",
+        "pitch": "Price the plans, bill for usage, file the taxes and pay the vendors, from one place that understands what each customer actually costs.",
+        "does": [
+          "Sets plan prices from real costs: model calls, machine time, storage",
+          "Reconciles usage billing and files sales tax and VAT in every country you sell to",
+          "Pays vendors, tracks runway and closes the books each month"
+        ],
+        "need": "Motir resells model calls and machine minutes at a margin. Pricing a plan means knowing the cost of every credit, in every currency, after tax.",
+        "who": "Every usage-priced software startup, from its first invoice to its first audit."
+      },
+      {
+        "tab": "Security",
+        "title": "AI security and compliance, from the evidence",
+        "pitch": "SOC 2 and ISO 27001 evidence collected from the code, the cloud and the project itself, and security questionnaires answered from it.",
+        "does": [
+          "Collects evidence from repositories, cloud accounts and the project's history",
+          "Answers customer security questionnaires from that evidence, with sources",
+          "Watches for drift and opens a work item when a control slips"
+        ],
+        "need": "A business customer asks for a security review before it signs. Every answer is somewhere in Motir's code and records, and finding it takes days we would rather spend building.",
+        "who": "Every software company selling to a business big enough to ask."
+      },
+      {
+        "tab": "Support",
+        "title": "AI support that knows the product",
+        "pitch": "Answers customers from the docs, the code and the live state of the product, and turns a real bug into a planned work item instead of a reply.",
+        "does": [
+          "Answers from documentation, code and the customer's own account",
+          "Hands a real defect to the engineering team as a planned work item, with the evidence",
+          "Learns from every answer a person corrects"
+        ],
+        "need": "Motir's users ask about agents, models, credits and repositories. A good answer needs the code and the account, not a help-center search.",
+        "who": "Every developer-tool and B2B software company with more customers than support staff."
+      },
+      {
+        "tab": "Languages",
+        "title": "AI localization that keeps up with the product",
+        "pitch": "Translates the interface, the docs and the emails as they change, keeps every term consistent, and has a native speaker review what matters.",
+        "does": [
+          "Translates each change as it lands, not in a yearly project",
+          "Keeps a glossary so a term means one thing everywhere",
+          "Sends the risky strings, legal text and pricing to a native reviewer"
+        ],
+        "need": "Motir ships in English and Chinese, and every release changes hundreds of strings. Keeping both right by hand does not scale to a third language.",
+        "who": "Every software company that wants customers outside its home country."
+      },
+      {
+        "tab": "Growth",
+        "title": "AI growth for B2B software",
+        "pitch": "Turns what a team ships into launch posts, changelog announcements, comparison pages and search-ready docs, and measures what brings customers.",
+        "does": [
+          "Writes the announcement for each release from the work that shipped",
+          "Builds and refreshes the pages people search for before they buy",
+          "Shows which pages and posts bring customers, not just visitors"
+        ],
+        "need": "Motir ships every day, in public. Turning that into posts and pages people find takes a marketing team we do not have.",
+        "who": "Every B2B software company that ships faster than it can tell anyone."
+      }
+    ],
+    "close": {
+      "headline": "Build one. We'll be your first customer.",
+      "body": "Start with the idea, plan it with Motir and build it in public. Pick one of these, or bring your own."
+    },
+    "placeholder": "An AI finance team for startups: it prices the plans, files sales tax and pays the vendors…",
+    "more": {
+      "eyebrow": "More directions",
+      "headline": "Good products to build, beyond what Motir needs",
+      "body": "Motir won't be your first customer for these. Each is a market with documented demand, a gap the current players leave open, and a reason it can be built now and not five years ago. The evidence is linked under each one.",
+      "evidenceLabel": "The evidence",
+      "gapLabel": "The gap",
+      "ideas": [
+        {
+          "category": "E-commerce",
+          "mark": "decision",
+          "title": "Make a store visible to AI shoppers",
+          "pitch": "Gets a small store's products found and recommended by the AI assistants people now shop through, and shows how often each product is picked.",
+          "evidence": "Traffic from AI assistants to US retail sites rose 693% in the 2025 holiday season and converted 31% better than other traffic.",
+          "sourceName": "Adobe Analytics, via Digital Commerce 360, January 2026",
+          "url": "https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/",
+          "gap": "The funded players sell to large brands and big catalogs. Millions of small stores have nothing yet, and the window is short."
+        },
+        {
+          "category": "E-commerce",
+          "mark": "decision",
+          "title": "Stop returns before they happen",
+          "pitch": "Spots the order bought in three sizes to send two back, answers the fit question before checkout, and scores each return for fraud.",
+          "evidence": "Shoppers were expected to return $849.9 billion of goods in 2025, 19.3% of online sales, and 9% of returns are fraudulent.",
+          "sourceName": "National Retail Federation and Happy Returns, October 2025",
+          "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
+          "gap": "Return platforms handle the return once it starts. Preventing it, for stores below enterprise size, is barely served."
+        },
+        {
+          "category": "AI infrastructure",
+          "mark": "field",
+          "title": "APIs that update their customers' code",
+          "pitch": "When an API makes a breaking change, the provider opens the pull request that migrates each customer's code, instead of sending an email.",
+          "evidence": "On Y Combinator's Fall 2026 Requests for Startups: API providers shouldn't just announce changes; they should apply them.",
+          "sourceName": "Y Combinator, Requests for Startups, Fall 2026",
+          "url": "https://www.ycombinator.com/rfs",
+          "gap": "Dependency bots only bump version numbers, and SDK generators don't touch customer code. Agents can now edit unfamiliar code well enough to open the pull request."
+        },
+        {
+          "category": "AI infrastructure",
+          "mark": "field",
+          "title": "AI cost by feature and by customer",
+          "pitch": "Splits the AI bill by feature and by customer, sets budgets, and shows finance and engineering the margin of every plan in one view.",
+          "evidence": "79% of finance leaders report AI cost overruns, and only 15% can calculate the return on AI spend without significant bottlenecks.",
+          "sourceName": "DoiT and Sapio Research, survey of 500 finance leaders, February 2026",
+          "url": "https://www.doit.com/blog/ai-spending-survey",
+          "gap": "Cloud cost tools are built around the cloud bill, and AI observability tools are built for developers. Neither gives finance a margin per feature."
+        },
+        {
+          "category": "AI infrastructure",
+          "mark": "field",
+          "title": "The AI transparency kit",
+          "pitch": "A drop-in kit that tells users they're talking to an AI, marks generated content in a machine-readable way and labels deepfakes, as the EU now requires.",
+          "evidence": "The EU AI Act's Article 50 transparency duties apply from 2 August 2026, with systems already on the market given until 2 December 2026, and fines of up to €15 million or 3% of worldwide turnover.",
+          "sourceName": "Jones Walker, AI Law Blog, July 2026",
+          "url": "https://www.joneswalker.com/en/insights/blogs/ai-law-blog/yes-august-2-still-matters-the-eu-approved-a-high-risk-ai-delay-but-most-trans.html?id=102nbon",
+          "gap": "Content-marking vendors serve enterprises or one platform. A small app maker has no simple way to comply before the deadline."
+        },
+        {
+          "category": "Personal growth",
+          "mark": "record",
+          "title": "A first tutor for young children",
+          "pitch": "A voice tutor at home that teaches four-to-eight-year-olds to read, write and count, one child at a time, at the child's own pace.",
+          "evidence": "On Y Combinator's Fall 2026 Requests for Startups as \"The Primer\", noting the cost of the AI per child is falling about ten times a year.",
+          "sourceName": "Y Combinator, Requests for Startups, Fall 2026",
+          "url": "https://www.ycombinator.com/rfs",
+          "gap": "Ello, the funded AI tutor for this age, teaches reading only, and the best-known AI tutors are built for schools, not homes."
+        },
+        {
+          "category": "Personal growth",
+          "mark": "record",
+          "title": "A career coach for people who pay for themselves",
+          "pitch": "Coaching and practice conversations for the job you want next, for the many workers whose employer won't pay for training.",
+          "evidence": "Valence raised a $50 million Series B for AI coaching, after more than a million coaching conversations, showing AI coaching works when employers buy it.",
+          "sourceName": "Valence, September 2025",
+          "url": "https://www.valence.co/blog/series-b-press-release",
+          "gap": "AI coaching is sold only to employers, and learning platforms sell courses, not coaching. Nobody serves the person who pays for themselves."
+        },
+        {
+          "category": "Pets",
+          "mark": "highlight",
+          "title": "Treatment options for vet clinics",
+          "pitch": "During the exam, turns one diagnosis into two or three priced treatment plans with a payment plan attached, so the pet gets care the owner can afford.",
+          "evidence": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+          "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+          "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+          "gap": "Vet AI tools write the visit notes and practice software books the visits. None turns a case into priced options."
+        },
+        {
+          "category": "Family care",
+          "mark": "decision",
+          "title": "A care team app for families",
+          "pitch": "Shares medicines, tasks and appointments across the family looking after a parent, and explains each care task in plain words.",
+          "evidence": "63 million Americans are family caregivers, about 45% more than in 2015. More than half do medical or nursing tasks, and only 20% have been trained.",
+          "sourceName": "AARP and the National Alliance for Caregiving, July 2025",
+          "url": "https://www.aarp.org/press/releases/2025-07-24-new-report-reveals-crisis-point-for-americas-63-million-family-caregivers.html",
+          "gap": "Care coordination is sold to employers as a benefit, or comes with paid carers. The free apps families use are basic."
+        }
+      ]
+    }
+  },
+  "setupPrompt": {
+    "title": "Set up Motir in your agent",
+    "body": "Copy one prompt and paste it into Claude Code, Codex, Cursor or any other agent. It connects Motir's MCP server, installs the CLI and the skills, and checks they work. In Claude Code it installs the Motir plugin.",
+    "button": "Copy the setup prompt",
+    "copied": "Copied. Paste it into your agent",
+    "failed": "Couldn't copy. Select the prompt below instead",
+    "menuLabel": "Copy a setup prompt for your agent",
+    "show": "Show the prompt",
+    "menuHint": "Paste it into any agent — it sets up Motir there.",
+    "headerLabel": "Copy setup prompt",
+    "headerCopied": "Copied",
+    "headerFailed": "Couldn't copy"
+  },
+  "builtByMotirPage": {
+    "metaTitle": "Motir builds itself · Motir",
+    "metaDescription": "How Motir builds Motir: it started as a folder of prompts, a task list and a store of mistakes, and every feature it shipped became the tool for building the next one.",
+    "eyebrow": "Motir builds itself",
+    "headline": "How Motir builds Motir.",
+    "lede": "It sounds like a chicken-and-egg problem. It isn't. Motir started as a folder of prompts, and every feature it shipped became a tool for building the next one.",
+    "watch": "Watch Motir build itself",
+    "runs": "Create an account to watch its agent runs",
+    "lost": {
+      "eyebrow": "Where it started",
+      "headline": "We vibe coded. The project fell apart.",
+      "body": "Vibe coding made the code fast. But the further we got, the more of the project we lost — because a project is not only code.",
+      "items": [
+        {
+          "title": "A bug found, never tracked",
+          "body": "Spotted in the middle of a session, forgotten by the end of it."
+        },
+        {
+          "title": "Too much at once",
+          "body": "Five features in flight, and no way to tell which one to start next."
+        },
+        {
+          "title": "Tests that weren't there",
+          "body": "Missing, or not up to the standard the rest of the code needed."
+        },
+        {
+          "title": "Decisions lost in a chat",
+          "body": "Why something was built that way ended when the coding session did."
+        }
+      ]
+    },
+    "missing": {
+      "eyebrow": "What we needed",
+      "headline": "Jira and Linear track work. We needed more.",
+      "body": "We plugged our process into the project tools we knew. They held the tasks, but not the thing we were missing.",
+      "items": [
+        {
+          "title": "A plan before the code",
+          "body": "An agent should start from a plan a person approved, not from a prompt.",
+          "product": "ai-planner"
+        },
+        {
+          "title": "Ready, or blocked by what",
+          "body": "See which work can start now, and which waits — on exactly which other work."
+        },
+        {
+          "title": "Someone running the whole project",
+          "body": "A project manager that oversees everything and puts it together, without being asked.",
+          "product": "project-manager"
+        }
+      ],
+      "after": "So we built it."
+    },
+    "bootstrap": {
+      "eyebrow": "The bootstrap",
+      "headline": "Every feature becomes the tool for the next.",
+      "body": "Motir didn't wait to be finished before it was used. Each feature it shipped replaced the scaffolding it was built with.",
+      "steps": [
+        {
+          "tag": "Day 0",
+          "title": "motir-meta",
+          "body": "An internal project: a set of prompts, a task list and a store of mistakes. It prompted a model to build Motir's first features.",
+          "uses": "Prompts and a task file"
+        },
+        {
+          "tag": "Then",
+          "title": "Work items",
+          "body": "With work items shipped, Motir asked itself what to build next, not an outside tool.",
+          "uses": "Its own work items"
+        },
+        {
+          "tag": "Then",
+          "title": "The MCP server",
+          "body": "With the MCP shipped, those lookups became MCP calls, and status kept itself in sync.",
+          "uses": "Its own MCP server"
+        },
+        {
+          "tag": "Then",
+          "title": "AI planning",
+          "body": "With planning shipped, Motir planned its next features with its own planner.",
+          "uses": "Its own planner"
+        },
+        {
+          "tag": "Now",
+          "title": "Agents and approvals",
+          "body": "Agents build Motir's work items; a person approves every plan and every merge.",
+          "uses": "All of it"
+        }
+      ],
+      "loop": ["Build a feature", "Use it", "Build the next one with it"]
+    },
+    "live": {
+      "eyebrow": "Still building",
+      "headline": "It hasn't stopped.",
+      "body": "Motir is still adding features to itself, in public. These numbers are live from Motir's own project.",
+      "stats": {
+        "shipped": "shipped",
+        "planned": "planned",
+        "requests": "feature requests",
+        "upvotes": "upvotes"
+      },
+      "recent": "Shipped lately",
+      "unavailable": "The live numbers couldn't be loaded just now. Motir's project page has them."
+    },
+    "close": {
+      "headline": "Build yours the same way.",
+      "body": "Start with an idea. Motir plans it, builds it and keeps the whole project together.",
+      "cta": "Start free"
+    }
   }
 }

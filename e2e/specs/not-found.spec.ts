@@ -99,7 +99,9 @@ test('the room gives a lost visitor a way out — two doors, Explore first', asy
   const room = page.getByRole('main')
   await expect(room).toBeVisible()
 
-  const explore = room.getByRole('link', { name: 'Explore projects' })
+  const explore = room.getByRole('link', {
+    name: 'See projects built in public',
+  })
   const home = room.getByRole('link', { name: 'Go to the homepage' })
 
   const exploreHref = await explore.getAttribute('href')
@@ -114,7 +116,9 @@ test('the room gives a lost visitor a way out — two doors, Explore first', asy
   // RANKING, and Explore is first because three of the four arrivals wanted a
   // public project or to browse for one.
   await expect(room.getByRole('link')).toHaveCount(2)
-  await expect(room.getByRole('link').first()).toHaveText('Explore projects')
+  await expect(room.getByRole('link').first()).toHaveText(
+    'See projects built in public',
+  )
 
   /*
    * And the destination WORKS — a door that renders and does not lead anywhere

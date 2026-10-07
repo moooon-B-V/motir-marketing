@@ -1,13 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { IdeaDoor } from '@/app/_components/IdeaDoor'
+import { HeroBrief } from '@/app/_components/landing/HeroBrief'
 
 /*
- * Door 1's FOUR states — Panel 3 of `design/marketing/landing.mock.html`:
- * empty (rest), typing, submitting, submit-failed. The failure arm is the one
- * that gets dropped, and it is the one a cross-origin POST guarantees you will
- * meet, so it is asserted hardest here.
+ * The hero brief's states — rest, submitting, submit-failed (it took them over
+ * from the old door 1 in the 2026-10 redesign). The failure arm is the one that
+ * gets dropped, and it is the one a cross-origin POST guarantees you will meet,
+ * so it is asserted hardest here.
  */
 
 const assign = vi.fn()
@@ -32,49 +32,28 @@ function jsonResponse(status: number, body: unknown): Response {
   })
 }
 
-describe('IdeaDoor — state A, empty (rest)', () => {
+describe('HeroBrief — state A, empty (rest)', () => {
   it('gives the textarea a real <label for>, not a placeholder standing in for one', () => {
-    render(<IdeaDoor />)
-    const field = screen.getByLabelText('Your idea')
+    render(<HeroBrief />)
+    const field = screen.getByLabelText('What are you building?')
     expect(field).toBeInstanceOf(HTMLTextAreaElement)
   })
 
   it('enables submit on an EMPTY idea — the box is a head-start, not a gate', () => {
-    render(<IdeaDoor />)
-    expect(
-      screen.getByRole('button', { name: /start planning/i }),
-    ).toBeEnabled()
+    render(<HeroBrief />)
+    expect(screen.getByRole('button', { name: /^start$/i })).toBeEnabled()
   })
 
   it('caps the field at motir-cores own truncation bound', () => {
-    render(<IdeaDoor />)
-    expect(screen.getByLabelText('Your idea')).toHaveAttribute(
+    render(<HeroBrief />)
+    expect(screen.getByLabelText('What are you building?')).toHaveAttribute(
       'maxlength',
       '2000',
     )
   })
-
-  it('renders the counter INVISIBLE rather than absent, so revealing it never reflows', () => {
-    render(<IdeaDoor />)
-    const counter = screen.getByText('0 / 2000')
-    expect(counter).toBeInTheDocument()
-    expect(counter).toHaveStyle({ visibility: 'hidden' })
-  })
 })
 
-describe('IdeaDoor — state B, typing', () => {
-  it('reveals the counter on the first keystroke and tracks the length', async () => {
-    const user = userEvent.setup()
-    render(<IdeaDoor />)
-
-    await user.type(screen.getByLabelText('Your idea'), 'a salon app')
-
-    const counter = screen.getByText('11 / 2000')
-    expect(counter).not.toHaveStyle({ visibility: 'hidden' })
-  })
-})
-
-describe('IdeaDoor — state C, submitting', () => {
+describe('HeroBrief — state C, submitting', () => {
   it('changes the LABEL as well as the glyph, and disables the field', async () => {
     const user = userEvent.setup()
     let release!: (value: Response) => void
@@ -83,10 +62,13 @@ describe('IdeaDoor — state C, submitting', () => {
         release = resolve
       }),
     )
-    render(<IdeaDoor />)
+    render(<HeroBrief />)
 
-    await user.type(screen.getByLabelText('Your idea'), 'a salon app')
-    await user.click(screen.getByRole('button', { name: /start planning/i }))
+    await user.type(
+      screen.getByLabelText('What are you building?'),
+      'a salon app',
+    )
+    await user.click(screen.getByRole('button', { name: /^start$/i }))
 
     // The label is the whole of the signal under `prefers-reduced-motion`,
     // where the spinner does not turn — so it is asserted, not the animation.
@@ -94,7 +76,7 @@ describe('IdeaDoor — state C, submitting', () => {
     expect(button).toBeDisabled()
     expect(button).toHaveAttribute('aria-busy', 'true')
     // The textarea is disabled so a second submit cannot double-POST the draft.
-    expect(screen.getByLabelText('Your idea')).toBeDisabled()
+    expect(screen.getByLabelText('What are you building?')).toBeDisabled()
 
     release(jsonResponse(201, { draftId: 'd-1' }))
     await waitFor(() => expect(assign).toHaveBeenCalled())
@@ -103,10 +85,13 @@ describe('IdeaDoor — state C, submitting', () => {
   it('navigates the whole browser to the sign-in URL carrying the draft', async () => {
     const user = userEvent.setup()
     vi.mocked(fetch).mockResolvedValue(jsonResponse(201, { draftId: 'd-42' }))
-    render(<IdeaDoor />)
+    render(<HeroBrief />)
 
-    await user.type(screen.getByLabelText('Your idea'), 'a salon app')
-    await user.click(screen.getByRole('button', { name: /start planning/i }))
+    await user.type(
+      screen.getByLabelText('What are you building?'),
+      'a salon app',
+    )
+    await user.click(screen.getByRole('button', { name: /^start$/i }))
 
     await waitFor(() =>
       expect(assign).toHaveBeenCalledWith(
@@ -116,20 +101,20 @@ describe('IdeaDoor — state C, submitting', () => {
   })
 })
 
-describe('IdeaDoor — state D, submit failed', () => {
+describe('HeroBrief — state D, submit failed', () => {
   it('KEEPS the typed idea, says so, and offers two exits', async () => {
     const user = userEvent.setup()
     vi.mocked(fetch).mockRejectedValue(new TypeError('Failed to fetch'))
-    render(<IdeaDoor />)
+    render(<HeroBrief />)
 
     const idea = 'a time-off app for a 20-person startup'
-    await user.type(screen.getByLabelText('Your idea'), idea)
-    await user.click(screen.getByRole('button', { name: /start planning/i }))
+    await user.type(screen.getByLabelText('What are you building?'), idea)
+    await user.click(screen.getByRole('button', { name: /^start$/i }))
 
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent(/couldn't save your idea/i)
     // THE assertion of this whole file: nothing the visitor typed is lost.
-    expect(screen.getByLabelText('Your idea')).toHaveValue(idea)
+    expect(screen.getByLabelText('What are you building?')).toHaveValue(idea)
     expect(assign).not.toHaveBeenCalled()
 
     // Two exits, so nobody is stranded on a dead button.
@@ -144,13 +129,16 @@ describe('IdeaDoor — state D, submit failed', () => {
     vi.mocked(fetch).mockResolvedValue(
       jsonResponse(429, { code: 'RATE_LIMITED' }),
     )
-    render(<IdeaDoor />)
+    render(<HeroBrief />)
 
-    await user.type(screen.getByLabelText('Your idea'), 'a salon app')
-    await user.click(screen.getByRole('button', { name: /start planning/i }))
+    await user.type(
+      screen.getByLabelText('What are you building?'),
+      'a salon app',
+    )
+    await user.click(screen.getByRole('button', { name: /^start$/i }))
 
     await screen.findByRole('alert')
-    expect(screen.getByLabelText('Your idea')).toBeEnabled()
+    expect(screen.getByLabelText('What are you building?')).toBeEnabled()
 
     vi.mocked(fetch).mockResolvedValue(jsonResponse(201, { draftId: 'd-2' }))
     await user.click(screen.getByRole('button', { name: /try again/i }))
@@ -163,9 +151,9 @@ describe('IdeaDoor — state D, submit failed', () => {
 
   it('an EMPTY submit skips the POST and still leaves the door', async () => {
     const user = userEvent.setup()
-    render(<IdeaDoor />)
+    render(<HeroBrief />)
 
-    await user.click(screen.getByRole('button', { name: /start planning/i }))
+    await user.click(screen.getByRole('button', { name: /^start$/i }))
 
     await waitFor(() =>
       expect(assign).toHaveBeenCalledWith('https://app.test.motir.co/sign-in'),

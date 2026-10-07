@@ -23,7 +23,7 @@ import { expect, test } from '@playwright/test'
 const PAGE = '/docs/skills'
 
 /** The `motir-skills` release every install command must fetch. */
-const RELEASE_TAG = 'v0.5.0'
+const RELEASE_TAG = 'v0.7.0'
 
 /** Each agent the page documents, and the domain its own docs live on. */
 const AGENTS: { label: string; host: string }[] = [

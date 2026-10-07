@@ -31,7 +31,8 @@ export function WatchLive({
   return (
     <section
       aria-labelledby={titleId}
-      className="mt-5 flex flex-wrap items-center gap-3.5 rounded-(--radius-card) bg-(--el-tint-sky) px-4 py-3.5 text-(--el-text-strong) sm:flex-nowrap"
+      data-showcase="field"
+      className="landing-art mk-halftone flex flex-col gap-4 overflow-hidden rounded-(--radius-card) border border-(--el-border) bg-(--el-showcase-field) p-[calc(var(--spacing-card-padding)*1.5)] text-(--el-showcase-field-text) shadow-(--shadow-card)"
     >
       <svg
         viewBox="0 0 24 24"
@@ -41,23 +42,23 @@ export function WatchLive({
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden
-        className="h-5 w-5 flex-none text-(--el-info)"
+        className="h-6 w-6 flex-none"
       >
         <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
         <circle cx="12" cy="12" r="3" />
       </svg>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0">
         <h2
           id={titleId}
-          className="text-[14px] font-semibold text-(--el-text-strong)"
+          className="font-(family-name:--font-serif) text-[clamp(24px,2.2vw,32px)] leading-[1.05] font-bold tracking-[-0.02em]"
         >
           Watch {name ?? 'this project'} being built
         </h2>
-        <p className="mt-0.5 text-[13px] leading-[1.55]">
+        <p className="mt-3 text-[15px] leading-[1.55]">
           The live board, the plans as they are drafted and the agent runs as
           they happen — in the Motir app.
         </p>
-        <p className="mt-0.5 text-[13px] leading-[1.55]">
+        <p className="mt-3 text-[13.5px] leading-[1.55]">
           You’ll need a Motir account. If you continue, your{' '}
           <strong className="font-semibold">name and email</strong> will be
           visible to{' '}
@@ -69,7 +70,7 @@ export function WatchLive({
       </div>
       <a
         href={visitorViewUrl(identifier, 'board')}
-        className="inline-flex h-(--height-btn-sm) w-full flex-none items-center justify-center rounded-(--radius-btn) bg-(--el-accent) px-3 text-[13px] font-medium text-(--el-accent-text) hover:bg-(--el-accent-pressed) sm:w-auto"
+        className="inline-flex h-(--height-btn-lg) items-center justify-center self-start rounded-(--radius-btn) bg-(--el-showcase-field-text) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-field) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text)"
       >
         Watch live&nbsp;<span aria-hidden>↗</span>
         <span className="sr-only"> — opens in the Motir app</span>

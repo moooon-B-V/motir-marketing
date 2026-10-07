@@ -312,105 +312,114 @@ function ComposedUi() {
   const [modalOpen, setModalOpen] = useState(false)
   const [popoverOpen, setPopoverOpen] = useState(false)
 
+  // ⚠️ The layout lives on a wrapper INSIDE the card: `Card` puts its
+  // children in a plain `<div>` of its own, so a `flex flex-col gap-*` on the
+  // Card itself spaces that one wrapper and none of the rows below.
   return (
-    <Card className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center gap-2">
-        <Button variant="primary">Primary</Button>
-        <Button variant="secondary">Secondary</Button>
-        <Button variant="ghost">Ghost</Button>
-        <Button variant="danger">Danger</Button>
-        <Pill>Badge</Pill>
-        <Pill status="done">Done</Pill>
-        <Pill status="in-progress">In progress</Pill>
-        <Tooltip content="A tooltip, drawn from the same tokens.">
-          <Button variant="ghost" size="sm">
-            Hover me
-          </Button>
-        </Tooltip>
-        <Spinner />
-      </div>
-
-      <div className="flex flex-wrap items-end gap-4">
-        <Input
-          label="Work item title"
-          defaultValue="Ship the billing flow"
-          className="min-w-[220px]"
-        />
-        <Combobox
-          label="Assignee"
-          placeholder="Select…"
-          options={[...ASSIGNEES]}
-          value={assignee}
-          onChange={setAssignee}
-        />
-        <Segmented
-          label="View"
-          value={view}
-          onChange={setView}
-          options={[
-            { value: 'board', label: 'Board' },
-            { value: 'list', label: 'List' },
-          ]}
-        />
-        <div className="flex items-center gap-2">
-          <Switch
-            id="showcase-live"
-            checked={live}
-            onCheckedChange={setLive}
-            aria-label="Live updates"
-          />
-          <label
-            htmlFor="showcase-live"
-            className="text-sm text-(--el-text-secondary)"
-          >
-            Live updates
-          </label>
-        </div>
-      </div>
-
-      <Textarea
-        label="Notes"
-        rows={2}
-        defaultValue="Every control on this card is the shipped primitive."
-      />
-
-      <div className="flex flex-wrap items-center gap-2">
-        <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-          <Popover.Trigger asChild>
-            <Button variant="secondary" size="sm">
-              Popover
+    <Card>
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="primary">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="danger">Danger</Button>
+          <Pill>Badge</Pill>
+          <Pill status="done">Done</Pill>
+          <Pill status="in-progress">In progress</Pill>
+          <Tooltip content="A tooltip, drawn from the same tokens.">
+            <Button variant="ghost" size="sm">
+              Hover me
             </Button>
-          </Popover.Trigger>
-          <Popover.Content>
-            <p className="text-sm text-(--el-text-secondary)">
-              An overlay drawn from the same tokens.
-            </p>
-          </Popover.Content>
-        </Popover>
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => setModalOpen(true)}
-        >
-          Modal
-        </Button>
-        <Modal
-          open={modalOpen}
-          onOpenChange={setModalOpen}
-          title="Modal"
-          description="Dialogs re-shape with the style axis too."
-        />
-      </div>
+          </Tooltip>
+          <Spinner />
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <EmptyState
-          title="Nothing here yet"
-          description="EmptyState — the shipped primitive."
+        <div className="flex flex-wrap items-end gap-4">
+          <Input
+            label="Work item title"
+            defaultValue="Ship the billing flow"
+            className="min-w-[220px]"
+          />
+          <Combobox
+            label="Assignee"
+            placeholder="Select…"
+            options={[...ASSIGNEES]}
+            value={assignee}
+            onChange={setAssignee}
+          />
+          <Segmented
+            label="View"
+            value={view}
+            onChange={setView}
+            options={[
+              { value: 'board', label: 'Board' },
+              { value: 'list', label: 'List' },
+            ]}
+          />
+          <div className="flex items-center gap-2">
+            <Switch
+              id="showcase-live"
+              checked={live}
+              onCheckedChange={setLive}
+              aria-label="Live updates"
+            />
+            <label
+              htmlFor="showcase-live"
+              className="text-sm text-(--el-text-secondary)"
+            >
+              Live updates
+            </label>
+          </div>
+        </div>
+
+        <Textarea
+          label="Notes"
+          rows={2}
+          defaultValue="Every control on this card is the shipped primitive."
         />
-        <ErrorState
-          title="Something broke"
-          description="ErrorState — the shipped primitive."
-        />
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+            <Popover.Trigger asChild>
+              <Button variant="secondary" size="sm">
+                Popover
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content className="grid w-80 gap-1.5 p-(--spacing-card-padding)">
+              <p className="m-0 text-[15px] font-semibold text-(--el-text)">
+                Popover
+              </p>
+              <p className="m-0 text-sm text-(--el-text-secondary)">
+                An overlay drawn from the same tokens. Its radius, border and
+                shadow change with the style, its colours with the palette.
+              </p>
+            </Popover.Content>
+          </Popover>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setModalOpen(true)}
+          >
+            Modal
+          </Button>
+          <Modal
+            open={modalOpen}
+            onOpenChange={setModalOpen}
+            title="Modal"
+            description="Dialogs re-shape with the style axis too."
+          />
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <EmptyState
+            title="Nothing here yet"
+            description="EmptyState — the shipped primitive."
+          />
+          <ErrorState
+            title="Something broke"
+            description="ErrorState — the shipped primitive."
+          />
+        </div>
       </div>
     </Card>
   )

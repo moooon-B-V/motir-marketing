@@ -8,6 +8,8 @@ import SandboxPage from '@/app/docs/(guides)/sandbox/page'
 import SentryPage from '@/app/docs/(guides)/sentry/page'
 import DifficultyPage from '@/app/docs/(guides)/difficulty/page'
 import SkillsPage from '@/app/docs/(guides)/skills/page'
+import ClaudeCodePluginPage from '@/app/docs/(guides)/claude-code-plugin/page'
+import ClaudeCodeConnectorPage from '@/app/docs/(guides)/claude-code-connector/page'
 import GettingStartedPage from '@/app/docs/api/getting-started/page'
 import StabilityPage from '@/app/docs/api/stability/page'
 
@@ -148,6 +150,14 @@ describe('no /docs page runs a word into the element before it', () => {
     ['/docs/sentry', async () => render(<SentryPage />).container],
     ['/docs/difficulty', async () => render(<DifficultyPage />).container],
     ['/docs/skills', async () => render(<SkillsPage />).container],
+    [
+      '/docs/claude-code-plugin',
+      async () => render(<ClaudeCodePluginPage />).container,
+    ],
+    [
+      '/docs/claude-code-connector',
+      async () => render(<ClaudeCodeConnectorPage />).container,
+    ],
     [
       '/docs/api/getting-started',
       async () => {

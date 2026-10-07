@@ -30,7 +30,7 @@
  */
 
 /** The `motir-skills` release every command on the page installs. */
-export const SKILLS_RELEASE_TAG = 'v0.5.0'
+export const SKILLS_RELEASE_TAG = 'v0.7.0'
 
 /** The public repository, as `owner/name`. */
 export const SKILLS_REPO = 'moooon-B-V/motir-skills'
@@ -40,7 +40,7 @@ export const SKILLS_REPO_URL = `https://github.com/${SKILLS_REPO}`
 export const SKILLS_RELEASE_URL = `${SKILLS_REPO_URL}/releases/tag/${SKILLS_RELEASE_TAG}`
 
 /** The date every agent's documentation was last read against this page. */
-export const CHECKED_ON = '28 September 2026'
+export const CHECKED_ON = '6 October 2026'
 
 /**
  * Every skill the release carries — what a reader's agent lists once the page's
@@ -262,7 +262,7 @@ export const SKILL_USAGE: SkillUsage[] = [
   {
     name: 'motir-run',
     say: ['motir run', 'motir run ACME-12', 'motir next'],
-    does: 'Takes the next ready work item in your project, or the one you name, and builds it. It first tidies up after earlier runs whose pull requests have merged, then claims the work item, builds it on a branch of its own, opens one pull request, and links that pull request to the work item. Name a story whose children have no children of their own, and it runs the whole story: one branch and one pull request per repository, with one commit per child. motir next stops after the claim and prints the prompt, for you to hand to an agent yourself.',
+    does: 'Takes the next ready work item in your project, or the one you name, and builds it. It first tidies up after earlier runs whose pull requests have merged, then claims the work item, builds it on a branch of its own, opens one pull request, and links that pull request to the work item. Name a story whose children have no children of their own, and it runs the whole story: one branch and one pull request per repository, with one commit per child. motir next stops after the claim and prints the prompt, for you to hand to an agent yourself. A decision work item is the one exception: it writes the decision page and publishes it for your approval, with no branch and no pull request.',
     see: 'The work item is assigned to you and moves to In Progress, then to Implemented once its pull request is open. Its page shows the pull request and a How to test section. Motir moves it to In Review when CI passes and to Done when the pull request merges; the skill never does either.',
   },
   {
@@ -292,7 +292,7 @@ export const SKILL_USAGE: SkillUsage[] = [
   {
     name: 'motir-guide',
     say: ['motir guide ACME-12', 'motir guide'],
-    does: 'Walks you through a manual work item one step at a time. Name one, or say motir guide alone and it picks up your own unfinished one, else the next ready manual work item. It gives you one step, with its instructions and any command to copy, and waits. Say done, and it checks what it can without changing anything, such as fetching the address or running a read-only command, and tells you what it saw. A step whose check fails is not ticked; you get the same step again. You can stop at any step, and motir guide picks up where you left off. If the work item has no steps yet, it proposes some from the description and asks you before writing them onto the work item.',
+    does: 'Walks you through a manual work item one step at a time. Name one, or say motir guide alone and it picks up your own unfinished one, else the next ready manual work item. It gives you one step, with its instructions and any command to copy, and waits. Say done, and it checks what it can without changing anything, such as fetching the address or running a read-only command, and tells you what it saw. A step whose check fails is not ticked; you get the same step again. You can stop at any step, and motir guide picks up where you left off. If the work item has no steps yet, it proposes some from the description and asks you before writing them onto the work item. If a step turns out to be wrong, it offers a correction and changes the step or the work item’s text only when you say yes.',
     see: 'The work item is assigned to you and moves to In Progress. Its To-do list ticks each step as you finish it, with who did it. When the last step is ticked, the work item moves to Done, with a comment summarising each step and how it was confirmed.',
   },
   {

@@ -65,6 +65,9 @@ export const SIGN_IN = `${APP_ORIGIN}/sign-in`
  */
 export const EXPLORE = '/explore'
 
+/** Ideas to build — products Motir would buy (2026-10 redesign). */
+export const IDEAS = '/ideas'
+
 /**
  * Docs is now SAME-ORIGIN (MOTIR-4046): `motir.co` serves `/docs` itself, so
  * this stops being built from `APP_ORIGIN`. The footer link and the nav item
@@ -118,8 +121,60 @@ export const DESIGN = '/design'
  * `SOURCE_REPO` and every `APP_ORIGIN` door are absent on purpose: they are
  * already absolute, on a host that is not this one.
  */
+/*
+ * The product pages the header's Products menu points at (2026-10 redesign).
+ * Each product gets its own page; until a page is written, its route renders
+ * the product's name and one line with a way into Motir, and is kept OUT of
+ * `SITE_PATHS` (and so out of the sitemap) on purpose.
+ */
+export const PRODUCT_SLUGS = [
+  'ai-planner',
+  'project-management',
+  'project-manager',
+  'ai-debugging',
+  'mcp',
+  'cli',
+  'claude-code-connector',
+  'claude-code-plugin',
+  'agent-fleet',
+  'agent-hosting',
+  'sandbox',
+] as const
+export type ProductSlug = (typeof PRODUCT_SLUGS)[number]
+export const productPath = (slug: ProductSlug) => `/products/${slug}`
+
+/**
+ * The products whose page IS their documentation (2026-10 redesign): the
+ * tooling, and the sandbox. The Products menu opens these in a new tab and their
+ * `/products/<slug>` address forwards here.
+ */
+export const PRODUCT_DOCS: Partial<Record<ProductSlug, string>> = {
+  mcp: '/docs/mcp',
+  cli: '/docs/cli',
+  'claude-code-connector': '/docs/claude-code-connector',
+  'claude-code-plugin': '/docs/claude-code-plugin',
+  sandbox: '/docs/sandbox',
+}
+
+/**
+ * Motir's own project, public on app.motir.co (the visitor view), and its agent
+ * runs — the landing's "Motir builds itself" section points straight at them.
+ */
+export const MOTIR_PROJECT = `${APP_ORIGIN}/p/MOTIR`
+export const MOTIR_PROJECT_RUNS = `${APP_ORIGIN}/p/MOTIR/runs`
+
+/** The difficulty guide: the four levels, and the models suggested for each. */
+export const DOCS_DIFFICULTY = '/docs/difficulty'
+
+/** "Motir builds itself" — how Motir bootstrapped itself (2026-10 redesign). */
+export const MOTIR_BUILDS_ITSELF = '/motir-builds-itself'
+
+/** The "How Motir works" page for developers. */
+export const HOW_IT_WORKS = '/how-it-works'
+
 export const SITE_PATHS = [
   SITE_ROOT,
+  HOW_IT_WORKS,
   EXPLORE,
   DOCS,
   DESIGN,

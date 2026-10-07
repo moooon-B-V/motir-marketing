@@ -55,7 +55,7 @@ export default async function PublicProjectLayout({
   return (
     <SiteShell
       host={host}
-      contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10"
+      contentClassName="mx-auto w-full max-w-[1400px] px-[clamp(16px,3vw,48px)] pt-[clamp(32px,4vw,56px)] pb-[clamp(56px,7vw,112px)]"
     >
       {children}
     </SiteShell>

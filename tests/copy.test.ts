@@ -42,17 +42,26 @@ describe('the copy catalogue', () => {
   it('keeps the tagline whole — all THREE pillars', () => {
     // Dropping agent orchestration describes a different, smaller product.
     const whole = 'AI planning, project-management and agent orchestration'
-    expect(copy.landing.hero.lede).toContain(whole)
     expect(copy.footer.tagline).toContain(whole)
     expect(copy.meta.description).toContain(whole)
   })
 
-  it('names the three pillars exactly', () => {
-    expect(copy.landing.pillars.planning.title).toBe('AI planning')
-    expect(copy.landing.pillars.projectManagement.title).toBe(
-      'Project management',
-    )
-    expect(copy.landing.pillars.agents.title).toBe('Agent orchestration')
+  it('names every product exactly, in menu order', () => {
+    expect(
+      Object.values(copy.nav.productItems).map((item) => item.name),
+    ).toEqual([
+      'Motir AI Planner',
+      'Motir Project Management',
+      'Motir Project Manager',
+      'Motir AI Debugging',
+      'Motir MCP',
+      'Motir CLI',
+      'Motir Claude Code connector',
+      'Motir Claude Code plugin',
+      'Motir Agent Fleet',
+      'Motir Agent Hosting',
+      'Motir Sandbox',
+    ])
   })
 
   it('never says "coding agent" — agents do all kinds of work', () => {
@@ -68,35 +77,41 @@ describe('the copy catalogue', () => {
     const jargon = /\brepo(sitory|s)?\b|\bgit\b|\bcodebase\b|\bAPI\b/i
     const ideaPath = [
       ...leafStrings(copy.landing.hero),
-      ...leafStrings(copy.landing.doors.free),
-      ...leafStrings(copy.landing.doors.new),
+      ...leafStrings(copy.landing.close.free),
+      ...leafStrings(copy.landing.moreThanCode),
+      ...leafStrings(copy.landing.calls),
+      ...leafStrings(copy.landing.resume),
     ]
     expect(
       ideaPath.filter(([, text]) => jargon.test(text)).map(([key]) => key),
     ).toEqual([])
   })
 
-  it('has no OR divider string left over — the doors are CO-EQUAL', () => {
-    // Yue, 2026-08-28: doors 1 and 2 are co-equal and the divider is GONE. A
-    // stranded `or` key is how a later edit puts it back.
-    expect('or' in copy.landing.doors).toBe(false)
-  })
-
-  it('stays byte-identical in key SHAPE to what the page renders', () => {
-    // A guard on the README's own rule: keys are stable, values are not. Any
-    // key this page reads must exist; a rename is a code change and this is
-    // where it surfaces.
-    expect(Object.keys(copy.landing.doors).sort()).toEqual([
-      'free',
-      'hint',
-      'import',
-      'new',
+  it('stays in key SHAPE with what the landing renders', () => {
+    expect(Object.keys(copy.landing).sort()).toEqual([
+      'art',
+      'builtByMotir',
+      'calls',
+      'close',
+      'hero',
+      'moreThanCode',
+      'projectManager',
+      'resume',
     ])
-    expect(Object.keys(copy.landing.doors.free).sort()).toEqual([
+    expect(Object.keys(copy.landing.close.free).sort()).toEqual([
       'cta',
       'lead',
       'tail',
     ])
+  })
+
+  it('never names a third-party agent product in the landing copy', () => {
+    const named = /claude|cursor|codex|copilot|devin|opencode/i
+    expect(
+      leafStrings(copy.landing)
+        .filter(([, text]) => named.test(text))
+        .map(([key]) => key),
+    ).toEqual([])
   })
 
   it('carries the /design showcase, in the shape the pickers read', () => {
@@ -160,7 +175,7 @@ describe('the copy catalogue', () => {
 
 describe('format', () => {
   it('fills every named placeholder', () => {
-    expect(format(copy.landing.hero.counter, { count: 12, max: 2000 })).toBe(
+    expect(format('{count} / {max}', { count: 12, max: 2000 })).toBe(
       '12 / 2000',
     )
     expect(format(copy.footer.copyright, { year: 2026 })).toBe(

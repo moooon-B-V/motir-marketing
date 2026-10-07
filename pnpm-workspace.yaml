@@ -75,6 +75,14 @@ allowBuilds:
 # `pnpm install --frozen-lockfile` with its line removed — green means delete it.
 # Two stale entries read as a list rather than as an exemption, and a list is
 # what gets appended to.
+#
+# ⚠️ RE-POINTED brand 0.2.0 → 0.4.1 and design-system 0.8.2 → 0.10.0 (2026-10-07),
+# NOT APPENDED TO, for the same reason. **They carry the 2026-10 redesign's
+# showcase, logo and product role tokens and the Space Grotesk wordmark: until
+# this repository pins them, the landing art, the logo tile and the products
+# menu's dots read tokens that do not exist.** Both published
+# 2026-10-07T08:36Z, minutes before this install. The 0.2.0 and 0.8.2 lines
+# match nothing once the pins move, so they were deleted.
 minimumReleaseAgeExclude:
-  - '@motir/brand@0.2.0'
-  - '@motir/design-system@0.8.2'
+  - '@motir/brand@0.4.1'
+  - '@motir/design-system@0.10.0'

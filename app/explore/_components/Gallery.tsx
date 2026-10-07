@@ -70,7 +70,7 @@ function ProjectCard({ card }: { card: ProjectSquareCardDto }) {
 
         {card.description ? (
           <p className="mt-1.5 line-clamp-3 text-[13px] leading-relaxed text-(--el-text-secondary)">
-            {card.description}
+            {plainSnippet(card.description)}
           </p>
         ) : null}
 
@@ -103,6 +103,19 @@ function ProjectCard({ card }: { card: ProjectSquareCardDto }) {
       </Link>
     </article>
   )
+}
+
+/**
+ * A project's description is Markdown; a three-line card snippet shows it as
+ * plain text, so a heading's `##` or a link's brackets never reach the reader.
+ */
+function plainSnippet(markdown: string): string {
+  return markdown
+    .replace(/^\s{0,3}#{1,6}\s+/gm, '')
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[*_`>~]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 export function ExploreGallery({
@@ -179,7 +192,7 @@ export function ExploreGallery({
       >
         {heading}
       </h2>
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {page.items.map((card) => (
           <ProjectCard key={card.identifier} card={card} />
         ))}

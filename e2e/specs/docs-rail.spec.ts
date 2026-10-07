@@ -252,8 +252,12 @@ const SHORT_ROUTE = '/docs'
  * red exactly as it was written to. Raised by ~280px of headroom, about two more
  * index sections, rather than to the new height, so the next surface does not
  * trip it on arrival.
+ *
+ * Raised from 2200 to 2900 by the 2026-10 redesign: the index gained the
+ * Claude Code plugin and connector guides and the "Set up Motir in your
+ * agent" card, about 560px together. The same headroom kept again.
  */
-const SHORT_VIEWPORT = { width: WIDE.width, height: 2200 }
+const SHORT_VIEWPORT = { width: WIDE.width, height: 2900 }
 
 /**
  * The rail against the chrome around it: the landmark it should fill, and the

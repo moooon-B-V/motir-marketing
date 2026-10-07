@@ -24,25 +24,29 @@ export function ExploreFaq() {
   return (
     <section
       aria-labelledby="explore-faq-heading"
-      className="rounded-(--radius-card) border border-(--el-border) bg-(--el-tint-mint) p-(--spacing-card-padding)"
+      data-showcase="ground"
+      className="landing-art rounded-(--radius-card) border border-(--el-border) bg-(--el-showcase-ground) p-[calc(var(--spacing-card-padding)*2)] text-(--el-showcase-ground-text) shadow-(--shadow-card)"
     >
       <h2
         id="explore-faq-heading"
-        className="font-(family-name:--font-serif) text-lg font-semibold text-(--el-text-strong)"
+        className="m-0 font-(family-name:--font-serif) text-[clamp(28px,3.2vw,48px)] leading-[1] font-bold tracking-[-0.03em]"
       >
         {copy.explore.faqHeading}
       </h2>
-      <p className="mt-2 max-w-[48rem] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+      <p className="mt-4 max-w-[60ch] text-[17px] leading-relaxed text-(--el-showcase-ground-muted)">
         {copy.explore.faqLede}
       </p>
-      <dl className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+      <dl className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-3">
         {items.map((item) => (
           <div
             key={item.q}
-            className="rounded-(--radius-card) border border-(--el-border-soft) bg-(--el-surface) p-4"
+            data-showcase="ground-raised"
+            className="rounded-(--radius-card) border border-(--el-showcase-ground-rule) bg-(--el-showcase-ground-raised) p-(--spacing-card-padding)"
           >
-            <dt className="text-sm font-semibold text-(--el-text)">{item.q}</dt>
-            <dd className="mt-1.5 text-[13px] leading-relaxed text-(--el-text-secondary)">
+            <dt className="text-[16px] font-semibold text-(--el-showcase-ground-text)">
+              {item.q}
+            </dt>
+            <dd className="mt-2 text-[14px] leading-relaxed text-(--el-showcase-ground-muted)">
               {item.a}
             </dd>
           </div>

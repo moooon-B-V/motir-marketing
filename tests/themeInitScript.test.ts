@@ -85,3 +85,59 @@ describe('a returning visitor who picked a palette under 0.1.x', () => {
     expect(html()).toHaveAttribute('data-palette', 'motir')
   })
 })
+
+describe("motir.co's default style and type", () => {
+  // The site's own script runs right after the design system's (layout.tsx).
+  async function runSiteDefault() {
+    const { siteDefaultsScript } = await import('@/lib/siteDefaults')
+    new Function(siteDefaultsScript)()
+  }
+
+  it('is the Hand-Drawn style for a visitor who has chosen nothing', async () => {
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-style')).toBe('hand-drawn-indie')
+  })
+
+  it('leaves a picked style alone', async () => {
+    window.localStorage.setItem(THEME_STORAGE_KEYS.style, 'neo-brutalism')
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-style')).toBe('neo-brutalism')
+  })
+
+  it('pairs a picked type with the default style', async () => {
+    window.localStorage.setItem(THEME_STORAGE_KEYS.type, 'editorial')
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-style')).toBe('hand-drawn-indie')
+    expect(html().getAttribute('data-type')).toBe('editorial')
+  })
+
+  it('writes nothing to storage, so the pickers still read no choice', async () => {
+    runInitScript()
+    await runSiteDefault()
+    expect(window.localStorage.getItem(THEME_STORAGE_KEYS.style)).toBeNull()
+    expect(window.localStorage.getItem(THEME_STORAGE_KEYS.type)).toBeNull()
+  })
+
+  it('is the Grotesk pairing for a visitor who has chosen nothing', async () => {
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-type')).toBe('grotesk')
+  })
+
+  it('leaves a picked type alone', async () => {
+    window.localStorage.setItem(THEME_STORAGE_KEYS.type, 'editorial')
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-type')).toBe('editorial')
+  })
+
+  it("leaves a picked style's own type alone", async () => {
+    window.localStorage.setItem(THEME_STORAGE_KEYS.style, 'neo-brutalism')
+    runInitScript()
+    await runSiteDefault()
+    expect(html().getAttribute('data-type')).not.toBe('grotesk')
+  })
+})

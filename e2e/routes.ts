@@ -44,6 +44,9 @@ export type SiteRoute = {
 export const SITE_ROUTES: readonly SiteRoute[] = [
   { pattern: '/', url: '/' },
   { pattern: '/design', url: '/design' },
+  { pattern: '/how-it-works', url: '/how-it-works' },
+  { pattern: '/ideas', url: '/ideas' },
+  { pattern: '/motir-builds-itself', url: '/motir-builds-itself' },
 
   { pattern: '/explore', url: '/explore' },
   {
@@ -64,10 +67,28 @@ export const SITE_ROUTES: readonly SiteRoute[] = [
   { pattern: '/docs/sentry', url: '/docs/sentry' },
   { pattern: '/docs/difficulty', url: '/docs/difficulty' },
   { pattern: '/docs/skills', url: '/docs/skills' },
+  {
+    pattern: '/docs/claude-code-plugin',
+    url: '/docs/claude-code-plugin',
+  },
+  {
+    pattern: '/docs/claude-code-connector',
+    url: '/docs/claude-code-connector',
+  },
 
   { pattern: '/legal', url: '/legal' },
   // `terms` is one of the seven files in `content/legal/`.
   { pattern: '/legal/[slug]', url: '/legal/terms' },
+  // A product's page (2026-10 redesign) — one per product in the header's menu.
+  { pattern: '/products/[slug]', url: '/products/project-manager' },
+  { pattern: '/products/ai-planner', url: '/products/ai-planner' },
+  {
+    pattern: '/products/project-management',
+    url: '/products/project-management',
+  },
+  { pattern: '/products/ai-debugging', url: '/products/ai-debugging' },
+  { pattern: '/products/agent-fleet', url: '/products/agent-fleet' },
+  { pattern: '/products/agent-hosting', url: '/products/agent-hosting' },
 
   // ⚠️ THE ONLY ROW WHOSE URL IS ABSOLUTE, AND IT HAS TO BE (MOTIR-4220).
   // `/w` renders a WORKSPACE's project list, so it exists only on a workspace

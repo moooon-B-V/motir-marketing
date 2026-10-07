@@ -92,7 +92,9 @@ export default async function PublicProjectOverviewPage({
     return (
       <>
         <ErrorState what="this project" host={host} />
-        <WatchLive identifier={identifier} name={null} />
+        <div className="mt-5 max-w-[40rem]">
+          <WatchLive identifier={identifier} name={null} />
+        </div>
       </>
     )
   }
@@ -103,18 +105,25 @@ export default async function PublicProjectOverviewPage({
   return (
     <>
       <ProjectJsonLd project={project} />
-      <ProjectHeader project={project} current="" host={host} watch />
+      <ProjectHeader project={project} current="" host={host} />
 
-      {project.publicOverviewMd ? (
-        <div className="mt-7 max-w-[46rem]">
-          <MarkdownBody value={project.publicOverviewMd} />
+      {/* The overview reads in its own column; "Watch it being built" stands
+          beside it (2026-10 redesign — the page uses the full width). */}
+      <div className="mt-8 grid items-start gap-x-[clamp(32px,4vw,64px)] gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,400px)]">
+        <div className="max-w-[46rem] min-w-0">
+          {project.publicOverviewMd ? (
+            <MarkdownBody value={project.publicOverviewMd} />
+          ) : (
+            <EmptyState title="This project has not written an overview yet">
+              Its live board, work items and roadmap are in the Motir app —
+              watch it being built, beside this.
+            </EmptyState>
+          )}
         </div>
-      ) : (
-        <EmptyState title="This project has not written an overview yet">
-          Its live board, work items and roadmap are in the Motir app — watch it
-          being built, above.
-        </EmptyState>
-      )}
+        <aside className="lg:sticky lg:top-6">
+          <WatchLive identifier={identifier} name={project.name} />
+        </aside>
+      </div>
     </>
   )
 }

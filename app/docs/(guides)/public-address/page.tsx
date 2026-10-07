@@ -302,7 +302,7 @@ function H3({ children }: { children: React.ReactNode }) {
 
 function Mono({ children }: { children: React.ReactNode }) {
   return (
-    <code className="font-(family-name:--font-mono) text-[13px]">
+    <code className="font-(family-name:--font-mono) text-[13px] whitespace-nowrap">
       {children}
     </code>
   )

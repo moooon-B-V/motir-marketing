@@ -38,7 +38,7 @@ export function ActRail({
       {/* Row 2 — FOLLOW, a hand-off. */}
       <Link
         href={actHref('follow', identifier, returnPath)}
-        className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) bg-(--el-accent) px-3 text-[13px] font-medium text-(--el-accent-text) hover:bg-(--el-accent-pressed)"
+        className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) bg-(--el-accent) px-(--spacing-btn-x) text-[14px] font-medium text-(--el-accent-text) hover:bg-(--el-accent-pressed)"
       >
         Follow&nbsp;<span aria-hidden>↗</span>
         <span className="sr-only"> — continues on app.motir.co</span>
@@ -50,7 +50,7 @@ export function ActRail({
       {/* Row 6 — REQUEST A FEATURE, a hand-off through the doorway page. */}
       <Link
         href={publicPathFor(host, identifier, 'requests/new')}
-        className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-3 text-[13px] font-medium text-(--el-text) hover:bg-(--el-surface-soft)"
+        className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-(--spacing-btn-x) text-[14px] font-medium text-(--el-text) hover:bg-(--el-surface-soft)"
       >
         Request a feature
       </Link>
@@ -64,7 +64,7 @@ export function ActRail({
           (`e2e/specs/tenant-chrome.spec.ts`). */}
       <a
         href={publicPathFor(host, identifier, 'changelog.xml')}
-        className="inline-flex h-(--height-btn-sm) items-center px-2 text-[13px] text-(--el-text-secondary) hover:text-(--el-link)"
+        className="inline-flex h-(--height-btn-md) items-center px-2 text-[14px] text-(--el-text-secondary) hover:text-(--el-link)"
       >
         Atom feed
       </a>

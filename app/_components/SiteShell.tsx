@@ -63,6 +63,7 @@ export function SiteShell({
   host,
   contentClassName,
   className,
+  overlayHeader = false,
 }: Readonly<{
   children: React.ReactNode
   /**
@@ -96,11 +97,18 @@ export function SiteShell({
   contentClassName?: string
   /** Extra classes for the outer frame. Rarely needed. */
   className?: string
+  /**
+   * Lay the header OVER the top of the page instead of above it (2026-10
+   * redesign), for a page that opens on the wave hero: the lines then run up
+   * behind the bar. The page's first section owes the header its height —
+   * 4.75rem — in its own top padding.
+   */
+  overlayHeader?: boolean
 }>) {
   return (
     <div
       className={cn(
-        'flex min-h-dvh flex-col bg-(--el-page-bg) text-(--el-text)',
+        'relative flex min-h-dvh flex-col bg-(--el-page-bg) text-(--el-text)',
         className,
       )}
     >
@@ -120,7 +128,7 @@ export function SiteShell({
         {copy.nav.skipToContent}
       </a>
 
-      <SiteHeader host={host} />
+      <SiteHeader host={host} overlay={overlayHeader} />
 
       {/* `tabIndex={-1}` is what makes the skip link WORK rather than merely
           move the URL fragment: without it the anchor scrolls the landmark

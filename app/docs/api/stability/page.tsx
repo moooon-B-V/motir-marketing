@@ -86,7 +86,7 @@ function Prose({ children }: { children: React.ReactNode }) {
 
 function Mono({ children }: { children: React.ReactNode }) {
   return (
-    <code className="font-(family-name:--font-mono) text-[12.5px] text-(--el-text)">
+    <code className="font-(family-name:--font-mono) text-[12.5px] text-(--el-text) whitespace-nowrap">
       {children}
     </code>
   )

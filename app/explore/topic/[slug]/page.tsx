@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
 import { copy, format } from '@/lib/copy'
+import { SITE_HOST } from '@/lib/publicHost'
+import { SiteShell } from '@/app/_components/SiteShell'
 import { siteUrl } from '@/lib/siteOrigin'
 import {
   buildExploreHref,
@@ -73,7 +75,10 @@ export default async function TopicPage({
   const label = categoryLabel(categories, slug) ?? slug
 
   return (
-    <>
+    <SiteShell
+      host={SITE_HOST}
+      contentClassName="mx-auto w-full max-w-[72rem] px-(--spacing-card-padding) py-10"
+    >
       <nav
         aria-label="Project square"
         className="mb-4 flex items-center gap-1 text-[13px]"
@@ -146,7 +151,7 @@ export default async function TopicPage({
           squareLabel: copy.explore.heroEyebrow,
         }}
       />
-    </>
+    </SiteShell>
   )
 }
 

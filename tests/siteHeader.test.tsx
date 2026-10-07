@@ -115,6 +115,8 @@ describe('app/sitemap.ts', () => {
     // what remains — see `tests/entitySignal.test.ts` for that arm's own case.
     expect((await sitemap()).map((entry) => entry.url)).toEqual([
       siteUrl('/'),
+      // 2026-10 redesign — "How Motir works", the developer page.
+      siteUrl('/how-it-works'),
       siteUrl('/design'),
       siteUrl('/explore'),
       siteUrl('/docs'),
@@ -134,6 +136,9 @@ describe('app/sitemap.ts', () => {
         '/docs/difficulty',
         // MOTIR-6717 — installing Motir's skills in your agent.
         '/docs/skills',
+        // 2026-10 redesign — the Claude Code plugin and connector guides.
+        '/docs/claude-code-plugin',
+        '/docs/claude-code-connector',
       ].map(siteUrl),
       siteUrl('/legal'),
       ...[
