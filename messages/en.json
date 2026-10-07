@@ -295,20 +295,35 @@
       },
       "watch": {
         "lanes": [
-          ["Plan", 100],
-          ["Design", 100],
-          ["Build", 62],
-          ["Tests", 40],
-          ["Docs", 55]
+          ["Plan", "done"],
+          ["Design", "done"],
+          ["Build", "running"],
+          ["Tests", "waiting"],
+          ["Docs", "ready"]
         ],
-        "done": "Done"
+        "states": {
+          "done": "Done",
+          "running": "Agent running",
+          "ready": "Ready",
+          "waiting": "Waits on Build"
+        },
+        "live": "pricing-page.tsx"
       },
       "decide": {
         "stamp": "Ready for you",
         "title": "Calendar connection is built",
-        "body": "Try it: connect a test calendar, then move a meeting and watch the brief update.",
+        "body": "Watch the recording, then try it yourself.",
         "changes": "Ask for changes",
-        "approve": "Approve"
+        "approve": "Approve",
+        "video": {
+          "label": "Acceptance video",
+          "length": "0:48",
+          "chapters": [
+            "Connect a calendar",
+            "Move a meeting",
+            "The brief updates"
+          ]
+        }
       },
       "resume": {
         "tab": "Back after 3 weeks",

@@ -1,3 +1,4 @@
+import { Check, Play } from 'lucide-react'
 import { cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
 
@@ -408,47 +409,124 @@ function QA({ n, q, a }: { n: number; q: string; a: string }) {
 }
 
 /* ── Watch it take shape ─────────────────────────────────────────────── */
-export function WatchArt() {
+/*
+ * Motir does not know how FAR along a piece of work is, only where it stands,
+ * so the lanes show STATUS, never a percentage: done, an agent running on it
+ * (with the file it is in), ready to start, or waiting on another lane — the
+ * same states the board and the Ready list show.
+ */
+type WatchState = 'done' | 'running' | 'ready' | 'waiting'
+
+/** The mark on a lane at rest; the running lane draws its own live dot. */
+function WatchMark({ state }: Readonly<{ state: WatchState }>) {
+  if (state === 'done')
+    return (
+      <span className="grid size-[18px] place-items-center rounded-full bg-(--el-showcase-field-text) text-(--el-showcase-field)">
+        <Check aria-hidden="true" className="size-3" strokeWidth={3} />
+      </span>
+    )
   return (
-    <div className="grid h-full content-center gap-[9px]">
-      {art.watch.lanes.map(([lane, done]) => {
-        const finished = done === 100
+    <span
+      className={cn(
+        'size-[18px] rounded-full border-2 border-(--el-showcase-field-text)',
+        state === 'waiting' && 'border-dashed opacity-70',
+      )}
+    />
+  )
+}
+
+export function WatchArt() {
+  const w = art.watch
+  return (
+    <ol className="m-0 grid h-full list-none content-center gap-[7px] p-0">
+      {w.lanes.map(([lane, raw]) => {
+        const state = raw as WatchState
         return (
-          <div
+          <li
             key={lane}
             className={cn(
-              MONO,
-              'grid grid-cols-[70px_minmax(0,1fr)] items-center gap-2.5 text-[10.5px]',
+              'grid grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-2.5 rounded-(--radius-control) px-2.5 py-[7px] text-[13px]',
+              state === 'running'
+                ? 'bg-(--el-showcase-field-text) text-(--el-showcase-field)'
+                : 'bg-(--el-showcase-field-text)/12',
             )}
           >
-            <span>{lane}</span>
-            <div className="relative h-[22px] overflow-hidden rounded-(--radius-control) bg-(--el-showcase-field-text)/14">
-              {/* A finished lane carries its label INSIDE the fill, so the
-                  label sits on the colour it is drawn against. */}
-              <i
-                className={cn(
-                  'absolute inset-y-0 left-0 bg-(--el-showcase-field-text)',
-                  finished &&
-                    'flex items-center justify-end pr-[7px] text-[10px] text-(--el-showcase-field) not-italic',
-                )}
-                style={{ width: `${done}%` }}
-              >
-                {finished ? art.watch.done : null}
-              </i>
-              {finished ? null : (
-                <em className="absolute top-1 right-[7px] text-[10px] not-italic">
-                  {`${done}%`}
-                </em>
-              )}
-            </div>
-          </div>
+            {state === 'running' ? (
+              <span className="relative grid size-[18px] place-items-center">
+                <i className="absolute inset-0 animate-ping rounded-full bg-(--el-showcase-field)/40 motion-reduce:animate-none" />
+                <i className="size-2.5 rounded-full bg-(--el-showcase-field)" />
+              </span>
+            ) : (
+              <WatchMark state={state} />
+            )}
+            <span className="grid min-w-0">
+              <b className="font-semibold">{lane}</b>
+              {state === 'running' ? (
+                <small
+                  className={cn(MONO, 'truncate text-[9.5px] normal-case')}
+                >
+                  {w.live}
+                </small>
+              ) : null}
+            </span>
+            <span className={cn(MONO, 'text-[10px]')}>{w.states[state]}</span>
+          </li>
         )
       })}
-    </div>
+    </ol>
   )
 }
 
 /* ── You decide ──────────────────────────────────────────────────────── */
+/*
+ * The acceptance recording a finished piece of work comes back with: a short
+ * video of it working, split into chapters, that the person watches before
+ * approving. Drawn still — a frame, a play button, the length and the chapter
+ * marks on its timeline.
+ */
+function AcceptanceVideo() {
+  const v = art.decide.video
+  return (
+    <div className="grid overflow-hidden rounded-(--radius-control) border border-(--el-showcase-rule) bg-(--el-showcase-ground) text-(--el-showcase-ground-text)">
+      <div className="relative grid h-[74px] place-items-center">
+        {/* The screen being recorded, as a few quiet rows behind the play button. */}
+        <div
+          aria-hidden="true"
+          className="absolute top-2.5 left-3 grid w-[30%] gap-1.5 opacity-40"
+        >
+          <i className="h-1.5 w-2/5 rounded-full bg-(--el-showcase-ground-text)" />
+          <i className="h-1.5 w-full rounded-full bg-(--el-showcase-ground-text)" />
+          <i className="h-1.5 w-3/5 rounded-full bg-(--el-showcase-ground-text)" />
+        </div>
+        <span className="relative grid size-9 place-items-center rounded-full bg-(--el-showcase-highlight) text-(--el-showcase-ground)">
+          <Play aria-hidden="true" className="ml-0.5 size-4 fill-current" />
+        </span>
+        <span className={cn(MONO, 'absolute top-2 right-2.5 text-[9.5px]')}>
+          {v.length}
+        </span>
+        <span
+          className={cn(
+            MONO,
+            'absolute bottom-1.5 left-2.5 text-[9.5px] text-(--el-showcase-ground-muted)',
+          )}
+        >
+          {v.label} · {v.chapters.length} chapters
+        </span>
+      </div>
+      {/* The timeline, cut at its chapters. */}
+      <div className="flex gap-[3px] px-2.5 pb-2">
+        {v.chapters.map((chapter) => (
+          <i
+            key={chapter}
+            title={chapter}
+            className="h-1 flex-1 rounded-full bg-(--el-showcase-ground-text)/35"
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function DecideArt() {
   const d = art.decide
   return (
@@ -466,6 +544,7 @@ export function DecideArt() {
         <small className="text-[12px] text-(--el-showcase-muted)">
           {d.body}
         </small>
+        <AcceptanceVideo />
         <div className="flex gap-2">
           <span className="flex-1 rounded-(--radius-control) border border-(--el-showcase-rule) py-[9px] text-center text-[13px]">
             {d.changes}

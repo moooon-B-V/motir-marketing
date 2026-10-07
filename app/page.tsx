@@ -203,7 +203,7 @@ export default function Page() {
               <a href={IMPORT_DOOR} className={CLOSE_BTN.plain}>
                 {l.close.import}
               </a>
-              <a href={HOW_IT_WORKS} className={CLOSE_BTN.plain}>
+              <a href={HOW_IT_WORKS} className={CLOSE_BTN.warm}>
                 {l.close.developers}
               </a>
             </div>
@@ -234,6 +234,9 @@ export default function Page() {
 const CLOSE_BTN = {
   primary:
     'inline-flex items-center gap-2 rounded-(--radius-btn) bg-(--el-showcase-ground) h-(--height-btn-lg) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-ground-text) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text)',
+  // The developers' door: the palette's warm decision fill and its own ink, so
+  // it reads apart from the ink Start and the outlined import.
+  warm: 'inline-flex items-center rounded-(--radius-btn) bg-(--el-showcase-decision) h-(--height-btn-lg) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-decision-text) no-underline hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text)',
   plain:
     'inline-flex items-center rounded-(--radius-btn) border border-(--el-showcase-field-text)/40 h-(--height-btn-lg) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-field-text) no-underline hover:border-(--el-showcase-field-text) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text)',
 }
