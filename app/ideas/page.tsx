@@ -27,6 +27,7 @@ import {
 } from '../products/_components/ProductPage'
 import { BuyCard, DirectionCard, MONO } from './_components/IdeaCards'
 import { IdeaControls } from './_components/IdeaControls'
+import { IdeaDetail } from './_components/IdeaDetail'
 import { IdeasNavProvider, ResultsRegion } from './_components/IdeasNav'
 import { IdeasEmpty, IdeasUnavailable } from './_components/IdeaStates'
 
@@ -109,6 +110,7 @@ export default async function IdeasPage({
   const items = list?.items ?? []
   const buys = items.filter((idea) => idea.kind === 'motir_buys')
   const directions = items.filter((idea) => idea.kind === 'direction')
+  const open = list ? await loadOpenIdea(params.idea, items) : null
 
   return (
     <SiteShell host={SITE_HOST} overlayHeader>
@@ -299,6 +301,7 @@ export default async function IdeasPage({
         ) : null}
 
         <ProductClose headline={i.close.headline} body={i.close.body} />
+        {open ? <IdeaDetail idea={open} params={params} /> : null}
       </IdeasNavProvider>
     </SiteShell>
   )
