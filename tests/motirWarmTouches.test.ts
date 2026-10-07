@@ -103,12 +103,18 @@ const IDENTITY = {
 } as const
 
 describe('the installed design system', () => {
-  it('is the pinned 0.8.2, read from node_modules', () => {
+  // The installed version is the one package.json pins, read from there so a
+  // re-pin moves this with it; the warm-touch values below are what hold it at
+  // 0.8.2 or later.
+  it('is the pinned version, read from node_modules', () => {
     const pkg = JSON.parse(
       // `exports` does not expose ./package.json, so read it beside theme.css.
       readFileSync(join(dirname(THEME_CSS_PATH), 'package.json'), 'utf8'),
     ) as { version: string }
-    expect(pkg.version).toBe('0.8.2')
+    const site = JSON.parse(
+      readFileSync(join(process.cwd(), 'package.json'), 'utf8'),
+    ) as { dependencies: Record<string, string> }
+    expect(pkg.version).toBe(site.dependencies['@motir/design-system'])
     expect(THEME_CSS_PATH).toMatch(
       /node_modules[\\/]@motir[\\/]design-system[\\/]theme\.css$/,
     )
