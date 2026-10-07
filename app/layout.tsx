@@ -161,10 +161,11 @@ export default function RootLayout({
       /*
        * motir.co's ONE look — light, Hand-Drawn / Indie, Grotesk — rendered
        * on the first byte (MOTIR-7724). No init script, no `system` theme and
-       * no stored choice: dark exists only while a visitor has picked it on
-       * `/design`, whose sandbox writes these attributes live and puts them
-       * back on leaving. `suppressHydrationWarning` stays for the attributes
-       * that sandbox (and browser extensions) change on the client.
+       * no stored choice. A visitor who picks another look on `/design`
+       * (`lib/useVisitAppearance.ts`) restyles every page for the rest of that
+       * visit — this `<html>` survives client-side navigation — and the next
+       * fresh load is this look again. `suppressHydrationWarning` stays for
+       * the attributes that pick (and browser extensions) change on the client.
        */
       {...siteAppearanceAttributes}
     >

@@ -4,14 +4,15 @@ import { THEME_STORAGE_KEYS } from '@motir/design-system'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { DesignShowcase } from '@/app/_components/DesignShowcase'
 import { copy } from '@/lib/copy'
-import { SITE_APPEARANCE, siteAppearanceAttributes } from '@/lib/siteDefaults'
+import { siteAppearanceAttributes } from '@/lib/siteDefaults'
+import { forgetVisitAppearance } from '@/lib/useVisitAppearance'
 
 /*
  * `/design` — the showcase island (MOTIR-1043 · 8.3.16).
  *
  * ⚠️ THE ASSERTION IS ON `<html>`, NOT ON THE CONTROL. The page's claim is
  * that the WHOLE document restyles — bar and footer included — and the whole
- * of that mechanism is `useAppearanceSandbox` writing `data-style` / `data-palette` /
+ * of that mechanism is `useVisitAppearance` writing `data-style` / `data-palette` /
  * `data-type` / `data-theme` onto `document.documentElement`, which
  * `theme.css`'s 23 `[data-palette]`, 112 `[data-style]` and 9 `[data-type]`
  * blocks then re-resolve for every element on the page. A test that asserted
@@ -22,7 +23,7 @@ import { SITE_APPEARANCE, siteAppearanceAttributes } from '@/lib/siteDefaults'
 const html = () => document.documentElement
 
 /*
- * ⚠️ jsdom SHIPS NO `matchMedia`, and the sandbox reads it through
+ * ⚠️ jsdom SHIPS NO `matchMedia`, and the visit store reads it through
  * `useSyncExternalStore` to resolve the `system` pattern. `stubColorScheme` is also how the `system` arm below is driven:
  * the default answer is "not dark", which is precisely what makes a BROKEN
  * `system` arm indistinguishable from a working one.
@@ -58,8 +59,13 @@ const htmlAppearance = () =>
     ]),
   )
 
-beforeEach(serveSitePage)
-afterEach(serveSitePage)
+function freshVisit() {
+  forgetVisitAppearance()
+  serveSitePage()
+}
+
+beforeEach(freshVisit)
+afterEach(freshVisit)
 
 describe('the axis rail', () => {
   it('labels every axis region, so the rail is navigable by role', () => {
@@ -237,7 +243,7 @@ describe('Reset to default', () => {
   })
 })
 
-describe('a sandbox over the site look, never kept (MOTIR-7724)', () => {
+describe('a choice for the visit, never stored (MOTIR-7724)', () => {
   it('changes nothing on arrival — style, palette, type and theme stay the site look', () => {
     stubColorScheme(true)
     render(<DesignShowcase />)
@@ -302,27 +308,52 @@ describe('a sandbox over the site look, never kept (MOTIR-7724)', () => {
     }
   })
 
-  it('gives the site its own look back when the visitor leaves /design', async () => {
+  it('keeps the choice on the whole site after the visitor leaves /design', async () => {
+    // motir.co has one root layout, so <html> outlives the /design route on a
+    // client-side navigation; nothing may put the site look back on unmount.
     const user = userEvent.setup()
     const { unmount } = render(<DesignShowcase />)
     await user.click(
       screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
     )
     await user.click(screen.getByRole('radio', { name: /Neo-Brutalism/ }))
-    expect(html()).toHaveAttribute('data-theme', 'dark')
     unmount()
-    expect(htmlAppearance()).toEqual(siteAppearanceAttributes)
+    expect(html()).toHaveAttribute('data-theme', 'dark')
+    expect(html()).toHaveAttribute('data-style', 'neo-brutalism')
   })
 
-  it('opens on the site look again on the next visit', async () => {
+  it('shows the same choice on coming back to /design in the same visit', async () => {
+    const user = userEvent.setup()
+    const first = render(<DesignShowcase />)
+    await user.click(
+      screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
+    )
+    await user.click(screen.getByRole('radio', { name: /Neo-Brutalism/ }))
+    first.unmount()
+    render(<DesignShowcase />)
+    expect(html()).toHaveAttribute('data-theme', 'dark')
+    expect(html()).toHaveAttribute('data-style', 'neo-brutalism')
+    expect(
+      screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
+    ).toHaveAttribute('aria-checked', 'true')
+    expect(
+      screen.getByRole('button', { name: copy.designShowcase.reset }),
+    ).toBeInTheDocument()
+  })
+
+  it('starts a fresh visit from the site look', async () => {
     const user = userEvent.setup()
     const first = render(<DesignShowcase />)
     await user.click(
       screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
     )
     first.unmount()
+    // A fresh page load: a new JS realm (no in-memory choice) and the
+    // server-rendered <html> of app/layout.tsx.
+    forgetVisitAppearance()
+    serveSitePage()
     render(<DesignShowcase />)
-    expect(html()).toHaveAttribute('data-theme', SITE_APPEARANCE.pattern)
+    expect(htmlAppearance()).toEqual(siteAppearanceAttributes)
     expect(
       screen.queryByRole('button', { name: copy.designShowcase.reset }),
     ).toBeNull()

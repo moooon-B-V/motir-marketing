@@ -30,7 +30,7 @@ import {
 } from '@motir/design-system'
 import { RotateCcw } from 'lucide-react'
 import { copy } from '@/lib/copy'
-import { useAppearanceSandbox } from '@/lib/useAppearanceSandbox'
+import { useVisitAppearance } from '@/lib/useVisitAppearance'
 
 /*
  * motir.co/design — the public design showcase (MOTIR-1043 · 8.3.16).
@@ -51,18 +51,19 @@ import { useAppearanceSandbox } from '@/lib/useAppearanceSandbox'
  * imported from the package.
  *
  * ⚠️ HOW THE WHOLE DOCUMENT RESTYLES, INCLUDING THE CHROME THIS COMPONENT DOES
- * NOT RENDER. `useAppearanceSandbox` writes `data-theme` / `-style` /
+ * NOT RENDER. `useVisitAppearance` writes `data-theme` / `-style` /
  * `-palette` / `-type` onto `document.documentElement`; `theme.css`'s 23
  * `[data-palette]`, 112 `[data-style]` and 9 `[data-type]` blocks then
  * re-resolve the token layer for the entire document. So the bar and the
  * footer change with the specimen even though they are rendered by
  * `app/layout.tsx`'s tree.
  *
- * ⚠️ AND NONE OF IT IS KEPT (MOTIR-7724, reversing MOTIR-3861's *a visitor's
- * choice PERSISTS*). The page opens on exactly the look the visitor was just
- * on — motir.co's own light Hand-Drawn / Grotesk — so arriving changes
- * nothing; a pick lasts while they are here; leaving or reloading returns the
- * site's look, and nothing is written to storage. **Reset to default** returns
+ * ⚠️ FOR THE VISIT, AND NO LONGER (MOTIR-7724, narrowing MOTIR-3861's *a
+ * visitor's choice PERSISTS*). The page opens on exactly the look the visitor
+ * is already on, so arriving changes nothing. A pick restyles all of motir.co
+ * for the rest of the visit — a visitor who picks Neo-Brutalism here meets the
+ * landing in Neo-Brutalism — but nothing is written to storage, so the next
+ * fresh load is light Hand-Drawn / Grotesk again. **Reset to default** returns
  * to that site look, and it is present exactly while any axis is off it.
  */
 export function DesignShowcase() {
@@ -70,10 +71,10 @@ export function DesignShowcase() {
    * ⚠️ HELD HERE, ON THE PARENT, NOT IN THE RAIL: the package's
    * `TokensSpecimen` mounts its own `ThemeProvider`, which stamps the APP's
    * defaults onto `<html>` when it mounts. React runs a parent's effects after
-   * its children's, so the sandbox's write is the one that lands and arriving
+   * its children's, so the visit's choice is the write that lands and arriving
    * on the page still changes nothing.
    */
-  const theme = useAppearanceSandbox()
+  const theme = useVisitAppearance()
   return (
     <>
       <AxisRail theme={theme} />
@@ -109,11 +110,7 @@ export function DesignShowcase() {
  * the band the asset's layout is built on. `tests/aaMatrix.test.ts` measures
  * it over all ten palettes in both themes rather than taking this on trust.
  */
-function AxisRail({
-  theme,
-}: {
-  theme: ReturnType<typeof useAppearanceSandbox>
-}) {
+function AxisRail({ theme }: { theme: ReturnType<typeof useVisitAppearance> }) {
   const { offDefault, reset } = theme
 
   return (

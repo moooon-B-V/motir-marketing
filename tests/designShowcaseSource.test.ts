@@ -84,9 +84,9 @@ describe('the showcase invents nothing', () => {
   it('mounts no persisting ThemeProvider, and touches no storage or <html> itself (MOTIR-7724)', () => {
     // The package provider seeds from localStorage with the APP's defaults and
     // persists every pick; `/design` is a sandbox over motir.co's own look, and
-    // the one attribute writer is `lib/useAppearanceSandbox.ts`.
+    // the one attribute writer is `lib/useVisitAppearance.ts`.
     expect(code(SHOWCASE)).not.toMatch(/ThemeProvider|useTheme\b/)
-    expect(code(SHOWCASE)).toMatch(/useAppearanceSandbox\(\)/)
+    expect(code(SHOWCASE)).toMatch(/useVisitAppearance\(\)/)
     expect(code(SHOWCASE)).not.toMatch(
       /localStorage|documentElement|setAttribute/,
     )

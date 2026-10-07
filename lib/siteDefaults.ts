@@ -11,7 +11,7 @@ import {
  * motir.co's own appearance (MOTIR-7724) — the ONE look every page is served:
  *
  *   - THEME: light. Never resolved from `prefers-color-scheme`; a visitor sees
- *     dark only by picking it on `/design`, and only while they stay there.
+ *     dark only by picking it on `/design`, and only for that visit.
  *   - STYLE: Hand-Drawn / Indie (the 2026-10 redesign).
  *   - PALETTE: the design system's default.
  *   - TYPE: the Grotesk pairing. Hand-drawn's own default type is the serif
@@ -23,8 +23,9 @@ import {
  * these four as attributes on `<html>`, server-side, so they are right on the
  * first byte with no init script. The site used to run the package's
  * `themeInitScript`, which followed the OS into dark mode and replayed every
- * `/design` choice from `localStorage` on every page; `/design` is now a
- * sandbox (`lib/useAppearanceSandbox.ts`) that writes no storage.
+ * `/design` choice from `localStorage` on every page and every later visit;
+ * a `/design` pick now lasts for the visit only (`lib/useVisitAppearance.ts`)
+ * and writes no storage.
  */
 export const SITE_DEFAULT_STYLE: StyleId = 'hand-drawn-indie'
 export const SITE_DEFAULT_TYPE: TypeId = 'grotesk'
