@@ -1,11 +1,16 @@
 import type { Metadata } from 'next'
 import { ArrowRight } from 'lucide-react'
 import { copy, format } from '@/lib/copy'
-import { IMPORT_DOOR } from '@/lib/destinations'
+import {
+  IMPORT_DOOR,
+  MOTIR_PROJECT_BOARD,
+  MOTIR_PROJECT_ROADMAP,
+} from '@/lib/destinations'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '../../_components/SiteShell'
 import { productOf } from '../../_components/products'
 import {
+  OutLink,
   PointGrid,
   ProductClose,
   ProductHero,
@@ -58,7 +63,13 @@ export default function ProjectManagementPage() {
         headline={p.board.headline}
         body={p.board.body}
       >
-        <BoardUi />
+        <div className="grid gap-5">
+          <BoardUi />
+          {/* Motir's real board, in the visitor view (sign-in and consent). */}
+          <OutLink href={MOTIR_PROJECT_BOARD} className="justify-self-start">
+            {p.board.motirBoard}
+          </OutLink>
+        </div>
       </ProductSection>
       <ProductSection
         id="roadmap"
@@ -66,7 +77,13 @@ export default function ProjectManagementPage() {
         headline={p.roadmap.headline}
         body={p.roadmap.body}
       >
-        <RoadmapUi />
+        <div className="grid gap-5">
+          <RoadmapUi />
+          {/* Motir's real roadmap, in the visitor view (sign-in and consent). */}
+          <OutLink href={MOTIR_PROJECT_ROADMAP} className="justify-self-start">
+            {p.roadmap.motirRoadmap}
+          </OutLink>
+        </div>
       </ProductSection>
       <ProductSection
         id="holds"

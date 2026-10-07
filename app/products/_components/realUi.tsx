@@ -1,4 +1,13 @@
-import { BookOpen, Bug, ListChecks, SquareCheckBig, Zap } from 'lucide-react'
+import {
+  BookOpen,
+  Bug,
+  ChevronLeft,
+  ChevronRight,
+  Hand,
+  ListChecks,
+  SquareCheckBig,
+  Zap,
+} from 'lucide-react'
 import { cn } from '@motir/design-system'
 
 /*
@@ -49,5 +58,54 @@ export function Frame({
     >
       {children}
     </div>
+  )
+}
+
+/**
+ * The roadmap's breadcrumb row when a canvas is drilled into one work item
+ * (`ProjectRoadmapCanvas`): Back, the Roadmap root, then that item — here an
+ * epic — as the active crumb.
+ */
+export function LevelCrumbs({
+  root,
+  epic,
+  back,
+}: Readonly<{ root: string; epic: string; back: string }>) {
+  const EpicIcon = KIND_ICON.epic
+  return (
+    <div className="flex h-10 shrink-0 items-center gap-1 border-b border-(--el-border-soft) bg-(--el-surface) px-2 text-sm">
+      <span
+        aria-hidden="true"
+        className="inline-flex size-(--height-control) items-center justify-center rounded-(--radius-control) text-(--el-text-secondary)"
+      >
+        <ChevronLeft className="size-4" />
+      </span>
+      <span className="sr-only">{back}</span>
+      <span className="text-(--el-text-secondary)">{root}</span>
+      <ChevronRight
+        aria-hidden="true"
+        className="size-3.5 shrink-0 text-(--el-text-faint)"
+      />
+      <span className="flex min-w-0 items-center gap-1.5 font-semibold text-(--el-text)">
+        <EpicIcon
+          aria-hidden="true"
+          className={cn('size-4 shrink-0', KIND_ICON_COLOR.epic)}
+        />
+        <span className="truncate">{epic}</span>
+      </span>
+    </div>
+  )
+}
+
+/**
+ * `WorkItemNode`'s Manual chip, on a node's id line: a person does this work
+ * (a decision defaults to a human).
+ */
+export function ManualChip({ label }: Readonly<{ label: string }>) {
+  return (
+    <span className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-(--radius-badge) border border-(--el-border) bg-[color-mix(in_srgb,var(--el-type-manual)_18%,var(--el-page-bg))] px-1.5 text-[10.5px] font-medium text-(--el-text-strong)">
+      <Hand className="size-3 text-(--el-type-manual)" />
+      {label}
+    </span>
   )
 }

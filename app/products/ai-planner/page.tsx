@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { copy, format } from '@/lib/copy'
+import { MOTIR_PROJECT_PLANS } from '@/lib/destinations'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '../../_components/SiteShell'
 import { productOf } from '../../_components/products'
 import {
+  OutLink,
   PointGrid,
   ProductClose,
   ProductHero,
@@ -55,7 +57,13 @@ export default function AiPlannerPage() {
         headline={p.gate.headline}
         body={p.gate.body}
       >
-        <PlannerWorkspaceUi />
+        <div className="grid gap-5">
+          <PlannerWorkspaceUi />
+          {/* Motir's real plans, in the visitor view (sign-in and consent). */}
+          <OutLink href={MOTIR_PROJECT_PLANS} className="justify-self-start">
+            {p.gate.motirPlans}
+          </OutLink>
+        </div>
       </ProductSection>
       <ProductSection
         id="holds"
