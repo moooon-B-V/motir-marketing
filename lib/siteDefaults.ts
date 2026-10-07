@@ -34,7 +34,10 @@ const SCRIPT_UNSAFE_CHAR_MAP: Record<string, string> = {
 }
 
 const escapeUnsafeScriptChars = (value: string): string =>
-  value.replace(/[<>/\\\b\f\n\r\t\0\u2028\u2029]/g, char => SCRIPT_UNSAFE_CHAR_MAP[char] ?? char)
+  value.replace(
+    /[<>/\\\b\f\n\r\t\0\u2028\u2029]/g,
+    (char) => SCRIPT_UNSAFE_CHAR_MAP[char] ?? char,
+  )
 
 export const siteDefaultsScript = `(function(){try{var ls=window.localStorage,d=document.documentElement;var style=ls.getItem(${escapeUnsafeScriptChars(
   JSON.stringify(THEME_STORAGE_KEYS.style),
