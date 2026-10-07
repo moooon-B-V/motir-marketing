@@ -7,12 +7,11 @@ import {
   Source_Serif_4,
   Space_Grotesk,
 } from 'next/font/google'
+import { HandDrawnFilter, ImmersiveTilt } from '@motir/design-system'
 import {
-  HandDrawnFilter,
-  ImmersiveTilt,
-  themeInitScript,
-} from '@motir/design-system'
-import { siteDefaultsScript } from '@/lib/siteDefaults'
+  clearStoredAppearanceScript,
+  siteAppearanceAttributes,
+} from '@/lib/siteDefaults'
 import { copy } from '@/lib/copy'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 import { RootJsonLd } from './_components/RootJsonLd'
@@ -159,25 +158,19 @@ export default function RootLayout({
         ibmPlexMono.variable,
         'antialiased',
       ].join(' ')}
+      /*
+       * motir.co's ONE look — light, Hand-Drawn / Indie, Grotesk — rendered
+       * on the first byte (MOTIR-7724). No init script, no `system` theme and
+       * no stored choice: dark exists only while a visitor has picked it on
+       * `/design`, whose sandbox writes these attributes live and puts them
+       * back on leaving. `suppressHydrationWarning` stays for the attributes
+       * that sandbox (and browser extensions) change on the client.
+       */
+      {...siteAppearanceAttributes}
     >
       <head>
-        {/*
-         * The design-system's own init script, not a local re-derivation of it.
-         * It stamps `data-theme` / `-style` / `-palette` / `-type` on <html>
-         * BEFORE first paint, resolving the `system` default through
-         * `prefers-color-scheme` — which is what makes the dark theme the
-         * design's Panel 4 draws actually reachable here. It must run blocking
-         * in <head>: resolving after hydration is a visible light flash on a
-         * dark-mode visitor's first paint. `suppressHydrationWarning` above is
-         * the standard companion — the server cannot know the attribute this
-         * writes.
-         */}
         <script
-          dangerouslySetInnerHTML={{ __html: themeInitScript }}
-          suppressHydrationWarning
-        />
-        <script
-          dangerouslySetInnerHTML={{ __html: siteDefaultsScript }}
+          dangerouslySetInnerHTML={{ __html: clearStoredAppearanceScript }}
           suppressHydrationWarning
         />
       </head>

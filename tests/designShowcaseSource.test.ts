@@ -34,8 +34,6 @@ describe('the showcase invents nothing', () => {
       .map((s) => s.trim())
       .filter(Boolean)
     for (const required of [
-      'ThemeProvider',
-      'useTheme',
       'StylePicker',
       'PalettePicker',
       'TypePicker',
@@ -43,7 +41,6 @@ describe('the showcase invents nothing', () => {
       'AxisField',
       'AxisNote',
       'TokensSpecimen',
-      'THEME_DEFAULTS',
       'STYLE_REGISTRY',
       'PALETTE_REGISTRY',
       'TYPE_REGISTRY',
@@ -84,8 +81,12 @@ describe('the showcase invents nothing', () => {
     expect(raw ?? []).toEqual([])
   })
 
-  it('mounts ONE ThemeProvider — the attribute writer is not re-derived here', () => {
-    expect(code(SHOWCASE).match(/<ThemeProvider/g)).toHaveLength(1)
+  it('mounts no persisting ThemeProvider, and touches no storage or <html> itself (MOTIR-7724)', () => {
+    // The package provider seeds from localStorage with the APP's defaults and
+    // persists every pick; `/design` is a sandbox over motir.co's own look, and
+    // the one attribute writer is `lib/useAppearanceSandbox.ts`.
+    expect(code(SHOWCASE)).not.toMatch(/ThemeProvider|useTheme\b/)
+    expect(code(SHOWCASE)).toMatch(/useAppearanceSandbox\(\)/)
     expect(code(SHOWCASE)).not.toMatch(
       /localStorage|documentElement|setAttribute/,
     )
