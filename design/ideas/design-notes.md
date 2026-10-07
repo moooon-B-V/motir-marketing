@@ -1,9 +1,15 @@
 # design/ideas — motir.co/ideas, read live from the idea store
 
 **Card:** MOTIR-7686 (Story MOTIR-7665). **Asset:** `design/ideas/ideas.mock.html` (panels A–I).
-**Built by:** MOTIR-7687 (the list, the controls, the band, the sections, the empty / error /
+**Built by:** MOTIR-7687 (the list, the controls, the band, the directions, the empty / error /
 pending states) and MOTIR-7688 (the idea open in place). The allocation is per element in
 § _Who builds what_.
+
+**Revision 2 (2026-10-07).** The first version (`2e7bfa5`) grouped the directions into one section
+per category. The owner sent it back: _"Ideas can be put together, don't need to show them by
+category. If the user is interested in one category, the user will search it."_ So the directions
+are now **one list**, each card names its own category, and the category chips in the controls
+are how a visitor narrows to one. Nothing else changed.
 
 ## What this draws on
 
@@ -33,7 +39,7 @@ needs no change here.
 | 4   | Rules (`PointGrid`)                          | unchanged                                                                                                                                                                                                                                                                                    | —       |
 | 5   | **Controls** (new)                           | § _The controls_                                                                                                                                                                                                                                                                             | 7687    |
 | 6   | **The Motir would buy band**                 | the shipped tone cards, from the store                                                                                                                                                                                                                                                       | 7687    |
-| 7   | **The directions**, one section per category | the shipped direction card, grouped                                                                                                                                                                                                                                                          | 7687    |
+| 7   | **The directions**, one list                 | the shipped direction card, each naming its category                                                                                                                                                                                                                                         | 7687    |
 | 8   | `ProductClose`                               | unchanged                                                                                                                                                                                                                                                                                    | —       |
 | —   | **The idea open in place** (`?idea=`)        | § _The idea open in place_                                                                                                                                                                                                                                                                   | 7688    |
 
@@ -65,7 +71,7 @@ response omits has no match — it is not drawn (panel B).
 heading. Everything else wraps.
 
 `kind` is part of the URL model (`?kind=motir_buys|direction`) but has **no control** on this page:
-the band and the sections already separate the two kinds. A `kind` in the URL is honoured — the
+the band and the directions list already separate the two kinds. A `kind` in the URL is honoured — the
 other kind's block simply has nothing to show — and shows as no pill.
 
 ## The Motir would buy band (panel A)
@@ -83,23 +89,22 @@ other kind's block simply has nothing to show — and shows as no pill.
 - **Not rendered at all** when no `motir_buys` idea matches the filters — no empty band, no
   heading.
 
-## The directions — one section per category (panel A)
+## The directions — one list (panel A)
 
 - The block keeps its shipped heading: eyebrow **"More directions · N"**, `h2` **"Good products
   to build, beyond what Motir needs"** and its body paragraph.
-- **One `section` per category that has a direction**, in the order of the list response's
-  `categories` (motir-core's enum order: business functions, verticals, consumer, platform). A
-  category with no direction under the current filters is **not drawn**. Each section: an `h3`
-  with the category's colour mark and label, a mono count **"N idea(s)"**, and — when no category
-  is pressed — a link **"Only <label>"** to `{ category: <slug>, idea: null }`.
+- **Every matching direction together in ONE list**, in the order the list response returns them
+  (motir-core sorts `motir_buys` first, then newest `addedAt` first). **No section per category**
+  and no category headings: a visitor who wants one category presses its chip in the controls.
 - **The card** is the shipped "more" card (`data-surface="card"`, `--el-card`, `--el-border`),
-  three columns at desktop, one below 768 px: title (`h4`, the stretched link), pitch, **tags**
+  three columns at desktop, one below 768 px. Top to bottom: a mono eyebrow with the category's
+  colour mark and **its category label** (`--el-text-secondary`; the card now carries the
+  category itself, since no heading does), the title (`h4`, the stretched link), pitch, **tags**
   (new: `--el-surface` mono chips, `--el-text-secondary`), then the `dl` **"The evidence"** — the
   FIRST evidence row's claim followed by its source name as a link (`--el-accent-on-surface`,
   new tab, `rel="noopener noreferrer"`, raised above the stretched link) — and **"The gap"**. When
   an idea carries more than one evidence row, a mono line **"+N more sources"** follows; the
   rest are in the detail. Foot: **"Open the idea →"**.
-- The category label no longer sits in each card's eyebrow — the section heading carries it.
 
 ### The category → colour mark (derived, never stored)
 
@@ -174,10 +179,10 @@ still behaves. A slug that is not slug-shaped is dropped by `parseIdeasParams` b
 ## States
 
 - **Populated** — panel A.
-- **Filtered** — panel B. No `motir_buys` match ⇒ no band; categories without a direction ⇒ no
-  section.
+- **Filtered** — panel B. No `motir_buys` match ⇒ no band; no direction match ⇒ no directions
+  block.
 - **No match** (panel E) — the controls stay (search shows what was asked, the pills show the
-  filters); in place of the band and the sections, one empty state: `h2` **"No idea matches
+  filters); in place of the band and the list, one empty state: `h2` **"No idea matches
   these filters"**, body **"Try fewer tags, another category, or different words. Every idea is
   still here."**, and a ghost button **"Clear all filters"** → `/ideas`. Dashed border,
   `--el-surface-soft` — not a warning.
@@ -219,7 +224,7 @@ products Motir would buy today" to **"Products Motir would buy today"**.
 | count                           | {n} ideas · {n} ideas match · 1 idea matches · No ideas match · Updating…                                                                                                           |
 | band eyebrow                    | Motir would buy · {n}                                                                                                                                                               |
 | directions eyebrow              | More directions · {n}                                                                                                                                                               |
-| section count · link            | {n} ideas / 1 idea · Only {label}                                                                                                                                                   |
+| card category eyebrow           | {category label}                                                                                                                                                                    |
 | card foot · extra sources       | Open the idea · +{n} more sources                                                                                                                                                   |
 | detail eyebrow kinds            | Motir would buy · A direction                                                                                                                                                       |
 | detail headings                 | What it would do · The evidence · The gap · Why now · Why Motir needs it · Who else buys it                                                                                         |
@@ -230,8 +235,8 @@ products Motir would buy today" to **"Products Motir would buy today"**.
 ## Who builds what
 
 - **MOTIR-7687 (the list):** elements 3, 5, 6 and 7 above — the promise card's jump list, the
-  controls with their URL behaviour, the count and pending state, the band, the category sections
-  with their colour marks, the cards with their stretched links to `?idea=`, the empty state and
+  controls with their URL behaviour, the count and pending state, the band, the one directions list
+  with each card's category mark, the cards with their stretched links to `?idea=`, the empty state and
   the error state; and the copy move out of `messages/en.json`.
 - **MOTIR-7688 (the detail):** everything in § _The idea open in place_ — the sheet at both
   widths, its content and field rules, open / close / Escape / Back / scrim, the focus rules, the

@@ -810,35 +810,16 @@
         height: 13px;
       }
 
-      /* ═══ directions — one section per category, the shipped card ═══ */
-      .catsec {
-        display: grid;
-        gap: 14px;
-        padding-top: 14px;
-      }
-      .cathead {
-        display: flex;
-        align-items: baseline;
-        gap: 12px;
-        border-bottom: 1px solid var(--el-border);
-        padding-bottom: 10px;
-      }
-      .cathead h3 {
+      /* ═══ directions — one list, the shipped card; each card names its category ═══ */
+      .dcat {
         margin: 0;
-        font: 700 22px var(--font-sans);
-        letter-spacing: -0.015em;
         display: flex;
         align-items: center;
-        gap: 10px;
-      }
-      .ccount {
-        font: 500 12px var(--font-mono);
+        gap: 8px;
+        font: 500 11px var(--font-mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
         color: var(--el-text-secondary);
-      }
-      .catlink {
-        margin-left: auto;
-        font: 600 13px var(--font-sans);
-        color: var(--el-link);
       }
       .dgrid {
         margin: 0;
@@ -1110,9 +1091,11 @@
           <span class="note"
             >The whole store: hero (its promise card now lists the
             Motir-would-buy ideas from the store, each an in-page jump), the
-            rules (unchanged), the controls, the Motir would buy band, then the
-            directions as one section per category in the category order the API
-            returns. Footer and the closing call are unchanged and not
+            rules (unchanged), the controls, the Motir would buy band, then
+            every direction together in ONE list, in the order the API returns
+            them (newest first). No category sections: each card names its own
+            category, and a visitor who wants one category picks it in the
+            controls. Footer and the closing call are unchanged and not
             drawn.</span
           >
         </div>
@@ -1750,249 +1733,332 @@
                   and a reason it can be built now and not five years ago. The
                   evidence is linked under each one.
                 </p>
-                <section class="catsec" aria-labelledby="cat-ecommerce">
-                  <header class="cathead">
-                    <h3 id="cat-ecommerce">
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
                       <i class="sq tone-decision"></i>E-commerce
-                    </h3>
-                    <span class="ccount">2 ideas</span
-                    ><a class="catlink" href="/ideas?category=ecommerce"
-                      >Only E-commerce</a
-                    >
-                  </header>
-                  <ul class="dgrid">
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=make-a-store-visible-to-ai-shoppers"
-                          >Make a store visible to AI shoppers</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        Gets a small store&#x27;s products found and recommended
-                        by the AI assistants people now shop through, and shows
-                        how often each product is picked.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Small businesses</li>
-                        <li>Vertical software</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            Traffic from AI assistants to US retail sites rose
-                            693% in the 2025 holiday season and converted 31%
-                            better than other traffic.
-                            <a
-                              class="src"
-                              href="https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >Adobe Analytics, via Digital Commerce 360,
-                              January 2026</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            The funded players sell to large brands and big
-                            catalogs. Millions of small stores have nothing yet,
-                            and the window is short.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=stop-returns-before-they-happen"
-                          >Stop returns before they happen</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        Spots the order bought in three sizes to send two back,
-                        answers the fit question before checkout, and scores
-                        each return for fraud.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Small businesses</li>
-                        <li>Vertical software</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            Shoppers were expected to return $849.9 billion of
-                            goods in 2025, 19.3% of online sales, and 9% of
-                            returns are fraudulent.
-                            <a
-                              class="src"
-                              href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >National Retail Federation and Happy Returns,
-                              October 2025</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            Return platforms handle the return once it starts.
-                            Preventing it, for stores below enterprise size, is
-                            barely served.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                  </ul>
-                </section>
-                <section class="catsec" aria-labelledby="cat-pets">
-                  <header class="cathead">
-                    <h3 id="cat-pets"><i class="sq tone-decision"></i>Pets</h3>
-                    <span class="ccount">1 idea</span
-                    ><a class="catlink" href="/ideas?category=pets"
-                      >Only Pets</a
-                    >
-                  </header>
-                  <ul class="dgrid">
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=treatment-options-for-vet-clinics"
-                          >Treatment options for vet clinics</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        During the exam, turns one diagnosis into two or three
-                        priced treatment plans with a payment plan attached, so
-                        the pet gets care the owner can afford.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Healthcare</li>
-                        <li>Pricing and billing</li>
-                        <li>Small businesses</li>
-                        <li>Vertical software</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            94% of vets say cost stops recommended care, and 81%
-                            say they offer alternatives, yet 73% of pet owners
-                            say they were never offered a cheaper plan.
-                            <a
-                              class="src"
-                              href="https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >Gallup and PetSmart Charities, survey of 933
-                              vets, 2025</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            Vet AI tools write the visit notes and practice
-                            software books the visits. None turns a case into
-                            priced options.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                  </ul>
-                </section>
-                <section class="catsec" aria-labelledby="cat-family_care">
-                  <header class="cathead">
-                    <h3 id="cat-family_care">
-                      <i class="sq tone-decision"></i>Family care
-                    </h3>
-                    <span class="ccount">1 idea</span
-                    ><a class="catlink" href="/ideas?category=family_care"
-                      >Only Family care</a
-                    >
-                  </header>
-                  <ul class="dgrid">
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=a-care-team-app-for-families"
-                          >A care team app for families</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        Shares medicines, tasks and appointments across the
-                        family looking after a parent, and explains each care
-                        task in plain words.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Caregiving</li>
-                        <li>Consumers</li>
-                        <li>Healthcare</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            63 million Americans are family caregivers, about
-                            45% more than in 2015. More than half do medical or
-                            nursing tasks, and only 20% have been trained.
-                            <a
-                              class="src"
-                              href="https://www.aarp.org/press/releases/2025-07-24-new-report-reveals-crisis-point-for-americas-63-million-family-caregivers.html"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >AARP and the National Alliance for Caregiving,
-                              July 2025</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            Care coordination is sold to employers as a benefit,
-                            or comes with paid carers. The free apps families
-                            use are basic.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                  </ul>
-                </section>
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=make-a-store-visible-to-ai-shoppers"
+                        >Make a store visible to AI shoppers</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Gets a small store&#x27;s products found and recommended
+                      by the AI assistants people now shop through, and shows
+                      how often each product is picked.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Traffic from AI assistants to US retail sites rose
+                          693% in the 2025 holiday season and converted 31%
+                          better than other traffic.
+                          <a
+                            class="src"
+                            href="https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Adobe Analytics, via Digital Commerce 360, January
+                            2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          The funded players sell to large brands and big
+                          catalogs. Millions of small stores have nothing yet,
+                          and the window is short.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-ground"></i>AI infrastructure
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=apis-that-update-their-customers-code"
+                        >APIs that update their customers&#x27; code</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      When an API makes a breaking change, the provider opens
+                      the pull request that migrates each customer&#x27;s code,
+                      instead of sending an email.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>AI agents</li>
+                      <li>Developer tools</li>
+                      <li>On YC&#x27;s request list</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          On Y Combinator&#x27;s Fall 2026 Requests for
+                          Startups: API providers shouldn&#x27;t just announce
+                          changes; they should apply them.
+                          <a
+                            class="src"
+                            href="https://www.ycombinator.com/rfs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Y Combinator, Requests for Startups, Fall 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Dependency bots only bump version numbers, and SDK
+                          generators don&#x27;t touch customer code. Agents can
+                          now edit unfamiliar code well enough to open the pull
+                          request.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-ground"></i>AI infrastructure
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=ai-cost-by-feature-and-by-customer"
+                        >AI cost by feature and by customer</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Splits the AI bill by feature and by customer, sets
+                      budgets, and shows finance and engineering the margin of
+                      every plan in one view.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Developer tools</li>
+                      <li>Pricing and billing</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          79% of finance leaders report AI cost overruns, and
+                          only 15% can calculate the return on AI spend without
+                          significant bottlenecks.
+                          <a
+                            class="src"
+                            href="https://www.doit.com/blog/ai-spending-survey"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >DoiT and Sapio Research, survey of 500 finance
+                            leaders, February 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Cloud cost tools are built around the cloud bill, and
+                          AI observability tools are built for developers.
+                          Neither gives finance a margin per feature.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-ground"></i>AI infrastructure
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=the-ai-transparency-kit"
+                        >The AI transparency kit</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      A drop-in kit that tells users they&#x27;re talking to an
+                      AI, marks generated content in a machine-readable way and
+                      labels deepfakes, as the EU now requires.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Compliance</li>
+                      <li>Developer tools</li>
+                      <li>EU AI Act</li>
+                      <li>Small businesses</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          The EU AI Act&#x27;s Article 50 transparency duties
+                          apply from 2 August 2026, with systems already on the
+                          market given until 2 December 2026, and fines of up to
+                          €15 million or 3% of worldwide turnover.
+                          <a
+                            class="src"
+                            href="https://www.joneswalker.com/en/insights/blogs/ai-law-blog/yes-august-2-still-matters-the-eu-approved-a-high-risk-ai-delay-but-most-trans.html?id=102nbon"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Jones Walker, AI Law Blog, July 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Content-marking vendors serve enterprises or one
+                          platform. A small app maker has no simple way to
+                          comply before the deadline.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-record"></i>Personal growth
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=a-first-tutor-for-young-children"
+                        >A first tutor for young children</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      A voice tutor at home that teaches four-to-eight-year-olds
+                      to read, write and count, one child at a time, at the
+                      child&#x27;s own pace.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Consumers</li>
+                      <li>Education</li>
+                      <li>On YC&#x27;s request list</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          On Y Combinator&#x27;s Fall 2026 Requests for Startups
+                          as &quot;The Primer&quot;, noting the cost of the AI
+                          per child is falling about ten times a year.
+                          <a
+                            class="src"
+                            href="https://www.ycombinator.com/rfs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Y Combinator, Requests for Startups, Fall 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Ello, the funded AI tutor for this age, teaches
+                          reading only, and the best-known AI tutors are built
+                          for schools, not homes.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
                 <p class="elided">
-                  …then Personal growth and AI infrastructure, each its own
-                  section in the same shape — nine directions in five sections.
+                  …and three more directions, the same card, in the same one
+                  list.
                 </p>
               </section>
             </main>
@@ -2291,69 +2357,61 @@
                   and a reason it can be built now and not five years ago. The
                   evidence is linked under each one.
                 </p>
-                <section class="catsec" aria-labelledby="cat-ecommerce">
-                  <header class="cathead">
-                    <h3 id="cat-ecommerce">
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
                       <i class="sq tone-decision"></i>E-commerce
-                    </h3>
-                    <span class="ccount">1 idea</span
-                    ><a class="catlink" href="/ideas?category=ecommerce"
-                      >Only E-commerce</a
-                    >
-                  </header>
-                  <ul class="dgrid">
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=stop-returns-before-they-happen"
-                          >Stop returns before they happen</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        Spots the order bought in three sizes to send two back,
-                        answers the fit question before checkout, and scores
-                        each return for fraud.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Small businesses</li>
-                        <li>Vertical software</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            Shoppers were expected to return $849.9 billion of
-                            goods in 2025, 19.3% of online sales, and 9% of
-                            returns are fraudulent.
-                            <a
-                              class="src"
-                              href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >National Retail Federation and Happy Returns,
-                              October 2025</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            Return platforms handle the return once it starts.
-                            Preventing it, for stores below enterprise size, is
-                            barely served.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                  </ul>
-                </section>
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
               </section>
             </main>
           </div>
@@ -2651,69 +2709,61 @@
                   and a reason it can be built now and not five years ago. The
                   evidence is linked under each one.
                 </p>
-                <section class="catsec" aria-labelledby="cat-ecommerce">
-                  <header class="cathead">
-                    <h3 id="cat-ecommerce">
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
                       <i class="sq tone-decision"></i>E-commerce
-                    </h3>
-                    <span class="ccount">1 idea</span
-                    ><a class="catlink" href="/ideas?category=ecommerce"
-                      >Only E-commerce</a
-                    >
-                  </header>
-                  <ul class="dgrid">
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=stop-returns-before-they-happen"
-                          >Stop returns before they happen</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        Spots the order bought in three sizes to send two back,
-                        answers the fit question before checkout, and scores
-                        each return for fraud.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Small businesses</li>
-                        <li>Vertical software</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            Shoppers were expected to return $849.9 billion of
-                            goods in 2025, 19.3% of online sales, and 9% of
-                            returns are fraudulent.
-                            <a
-                              class="src"
-                              href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >National Retail Federation and Happy Returns,
-                              October 2025</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            Return platforms handle the return once it starts.
-                            Preventing it, for stores below enterprise size, is
-                            barely served.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                  </ul>
-                </section>
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
               </section>
               <div class="sheet-wrap">
                 <div class="scrim" aria-hidden="true"></div>
@@ -2938,8 +2988,8 @@
           <h2>/ideas?q=zzzz — no idea matches</h2>
           <span class="note"
             >The controls stay, with the search showing what was asked. In place
-            of the band and the sections: one empty state with the way out. Not
-            an error, so no warning colour.</span
+            of the band and the list: one empty state with the way out. Not an
+            error, so no warning colour.</span
           >
         </div>
         <div class="frame desk">
@@ -3497,7 +3547,9 @@
       <section class="panel">
         <div class="panel-cap">
           <span class="n">H</span>
-          <h2>/ideas at 390px — controls and a category section</h2>
+          <h2>
+            /ideas at 390px — controls and the list, narrowed to one category
+          </h2>
           <span class="note"
             >One column. The category chips scroll sideways in one row (no
             wrap); the Tags disclosure and the active pills wrap. The band cards
@@ -3715,119 +3767,114 @@
                   and a reason it can be built now and not five years ago. The
                   evidence is linked under each one.
                 </p>
-                <section class="catsec" aria-labelledby="cat-ecommerce">
-                  <header class="cathead">
-                    <h3 id="cat-ecommerce">
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
                       <i class="sq tone-decision"></i>E-commerce
-                    </h3>
-                    <span class="ccount">2 ideas</span
-                    ><a class="catlink" href="/ideas?category=ecommerce"
-                      >Only E-commerce</a
-                    >
-                  </header>
-                  <ul class="dgrid">
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=make-a-store-visible-to-ai-shoppers"
-                          >Make a store visible to AI shoppers</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        Gets a small store&#x27;s products found and recommended
-                        by the AI assistants people now shop through, and shows
-                        how often each product is picked.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Small businesses</li>
-                        <li>Vertical software</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            Traffic from AI assistants to US retail sites rose
-                            693% in the 2025 holiday season and converted 31%
-                            better than other traffic.
-                            <a
-                              class="src"
-                              href="https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >Adobe Analytics, via Digital Commerce 360,
-                              January 2026</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            The funded players sell to large brands and big
-                            catalogs. Millions of small stores have nothing yet,
-                            and the window is short.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                    <li class="dcard" data-surface="card">
-                      <h4>
-                        <a
-                          class="stretch"
-                          href="/ideas?idea=stop-returns-before-they-happen"
-                          >Stop returns before they happen</a
-                        >
-                      </h4>
-                      <p class="pitch">
-                        Spots the order bought in three sizes to send two back,
-                        answers the fit question before checkout, and scores
-                        each return for fraud.
-                      </p>
-                      <ul class="dtags" aria-label="Tags">
-                        <li>Small businesses</li>
-                        <li>Vertical software</li>
-                      </ul>
-                      <dl class="ddl">
-                        <div>
-                          <dt class="mono">The evidence</dt>
-                          <dd>
-                            Shoppers were expected to return $849.9 billion of
-                            goods in 2025, 19.3% of online sales, and 9% of
-                            returns are fraudulent.
-                            <a
-                              class="src"
-                              href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              >National Retail Federation and Happy Returns,
-                              October 2025</a
-                            >
-                          </dd>
-                        </div>
-                        <div>
-                          <dt class="mono">The gap</dt>
-                          <dd>
-                            Return platforms handle the return once it starts.
-                            Preventing it, for stores below enterprise size, is
-                            barely served.
-                          </dd>
-                        </div>
-                      </dl>
-                      <span class="open mono"
-                        >Open the idea
-                        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" /></svg
-                      ></span>
-                    </li>
-                  </ul>
-                </section>
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=make-a-store-visible-to-ai-shoppers"
+                        >Make a store visible to AI shoppers</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Gets a small store&#x27;s products found and recommended
+                      by the AI assistants people now shop through, and shows
+                      how often each product is picked.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Traffic from AI assistants to US retail sites rose
+                          693% in the 2025 holiday season and converted 31%
+                          better than other traffic.
+                          <a
+                            class="src"
+                            href="https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Adobe Analytics, via Digital Commerce 360, January
+                            2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          The funded players sell to large brands and big
+                          catalogs. Millions of small stores have nothing yet,
+                          and the window is short.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
               </section>
             </main>
           </div>
