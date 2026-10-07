@@ -4,6 +4,7 @@ import {
   DOCS,
   EXPLORE,
   IDEAS,
+  MOTIR_BUILDS_ITSELF,
   HOW_IT_WORKS,
   FREE_DOOR,
   LEGAL_INDEX,
@@ -60,6 +61,11 @@ const columns = [
     items: [
       { href: EXPLORE, label: copy.footer.explore, site: true },
       { href: IDEAS, label: copy.footer.ideas, site: true },
+      {
+        href: MOTIR_BUILDS_ITSELF,
+        label: copy.footer.buildsItself,
+        site: true,
+      },
       { href: DOCS, label: copy.footer.docs, site: true },
       { href: SOURCE_REPO, label: copy.footer.github },
     ],

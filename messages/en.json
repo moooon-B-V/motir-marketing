@@ -10,6 +10,7 @@
     "menu": "Menu",
     "explore": "Build in public",
     "ideas": "Ideas to build",
+    "buildsItself": "Motir builds itself",
     "docs": "Docs",
     "design": "Design",
     "signIn": "Sign in",
@@ -153,7 +154,8 @@
       "watch": "Watch Motir build itself",
       "runs": "Create an account to watch its agent runs",
       "start": "Start your project",
-      "note": "The Motir project, live on app.motir.co"
+      "note": "The Motir project, live on app.motir.co",
+      "story": "How Motir builds itself"
     },
     "moreThanCode": {
       "headline": "A project is more than code",
@@ -362,7 +364,8 @@
     "entity": "Motir is a product of moooon B.V.",
     "copyright": "© {year} moooon B.V.",
     "howItWorks": "How Motir works",
-    "ideas": "Ideas to build"
+    "ideas": "Ideas to build",
+    "buildsItself": "Motir builds itself"
   },
   "legal": {
     "metaTitle": "Legal",
@@ -1954,5 +1957,115 @@
     "failed": "Couldn't copy. Select the prompt below instead",
     "menuLabel": "Copy a setup prompt for your agent",
     "show": "Show the prompt"
+  },
+  "builtByMotirPage": {
+    "metaTitle": "Motir builds itself · Motir",
+    "metaDescription": "How Motir builds Motir: it started as a folder of prompts, a task list and a store of mistakes, and every feature it shipped became the tool for building the next one.",
+    "eyebrow": "Motir builds itself",
+    "headline": "How Motir builds Motir.",
+    "lede": "It sounds like a chicken-and-egg problem. It isn't. Motir started as a folder of prompts, and every feature it shipped became a tool for building the next one.",
+    "watch": "Watch Motir build itself",
+    "runs": "Create an account to watch its agent runs",
+    "lost": {
+      "eyebrow": "Where it started",
+      "headline": "We vibe coded. The project fell apart.",
+      "body": "Vibe coding made the code fast. But the further we got, the more of the project we lost — because a project is not only code.",
+      "items": [
+        {
+          "title": "A bug found, never tracked",
+          "body": "Spotted in the middle of a session, forgotten by the end of it."
+        },
+        {
+          "title": "Too much at once",
+          "body": "Five features in flight, and no way to tell which one to start next."
+        },
+        {
+          "title": "Tests that weren't there",
+          "body": "Missing, or not up to the standard the rest of the code needed."
+        },
+        {
+          "title": "Decisions lost in a chat",
+          "body": "Why something was built that way ended when the coding session did."
+        }
+      ]
+    },
+    "missing": {
+      "eyebrow": "What we needed",
+      "headline": "Jira and Linear track work. We needed more.",
+      "body": "We plugged our process into the project tools we knew. They held the tasks, but not the thing we were missing.",
+      "items": [
+        {
+          "title": "A plan before the code",
+          "body": "An agent should start from a plan a person approved, not from a prompt.",
+          "product": "ai-planner"
+        },
+        {
+          "title": "Ready, or blocked by what",
+          "body": "See which work can start now, and which waits — on exactly which other work."
+        },
+        {
+          "title": "Someone running the whole project",
+          "body": "A project manager that oversees everything and puts it together, without being asked.",
+          "product": "project-manager"
+        }
+      ],
+      "after": "So we built it."
+    },
+    "bootstrap": {
+      "eyebrow": "The bootstrap",
+      "headline": "Every feature becomes the tool for the next.",
+      "body": "Motir didn't wait to be finished before it was used. Each feature it shipped replaced the scaffolding it was built with.",
+      "steps": [
+        {
+          "tag": "Day 0",
+          "title": "motir-meta",
+          "body": "An internal project: a set of prompts, a task list and a store of mistakes. It prompted a model to build Motir's first features.",
+          "uses": "Prompts and a task file"
+        },
+        {
+          "tag": "Then",
+          "title": "Work items",
+          "body": "With work items shipped, Motir asked itself what to build next, not an outside tool.",
+          "uses": "Its own work items"
+        },
+        {
+          "tag": "Then",
+          "title": "The MCP server",
+          "body": "With the MCP shipped, those lookups became MCP calls, and status kept itself in sync.",
+          "uses": "Its own MCP server"
+        },
+        {
+          "tag": "Then",
+          "title": "AI planning",
+          "body": "With planning shipped, Motir planned its next features with its own planner.",
+          "uses": "Its own planner"
+        },
+        {
+          "tag": "Now",
+          "title": "Agents and approvals",
+          "body": "Agents build Motir's work items; a person approves every plan and every merge.",
+          "uses": "All of it"
+        }
+      ],
+      "loop": ["Build a feature", "Use it", "Build the next one with it"]
+    },
+    "live": {
+      "eyebrow": "Still building",
+      "headline": "It hasn't stopped.",
+      "body": "Motir is still adding features to itself, in public. These numbers are live from Motir's own project.",
+      "stats": {
+        "shipped": "shipped",
+        "planned": "planned",
+        "requests": "feature requests",
+        "upvotes": "upvotes"
+      },
+      "recent": "Shipped lately",
+      "unavailable": "The live numbers couldn't be loaded just now. Motir's project page has them."
+    },
+    "close": {
+      "headline": "Build yours the same way.",
+      "body": "Start with an idea. Motir plans it, builds it and keeps the whole project together.",
+      "cta": "Start free"
+    }
   }
 }

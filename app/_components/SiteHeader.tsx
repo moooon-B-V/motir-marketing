@@ -12,6 +12,7 @@ import {
   DOCS,
   EXPLORE,
   IDEAS,
+  MOTIR_BUILDS_ITSELF,
   FREE_DOOR,
   SIGN_IN,
   SITE_ROOT,
@@ -83,6 +84,7 @@ import { SetupPromptButton } from './SetupPromptButton'
 const navItems = [
   { path: EXPLORE, label: copy.nav.explore },
   { path: IDEAS, label: copy.nav.ideas },
+  { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself },
   { path: DOCS, label: copy.nav.docs },
   { path: DESIGN, label: copy.nav.design },
 ] as const

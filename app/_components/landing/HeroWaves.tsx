@@ -28,14 +28,24 @@ const LINES = 46
 const DRIFT = 0.012
 /** How fast the colour band slides across the field, in bands per second. */
 const BAND_SPEED = 0.035
+/** The glow under the lines: its stroke width and blur, in CSS pixels. */
+const GLOW_WIDTH = 6
+const GLOW_BLUR = 4
+/** How strongly the decision and highlight lines show beside the focus. */
+const TOUCH_ALPHA = 0.35
 /** Frames are drawn at most this often; the motion is slow enough for it. */
 const FRAME_MS = 1000 / 30
 
-/** The mark's top edge: a rise, a crest, a dip and a second rise. */
+/**
+ * The mark's top edge, one period per screen width: the deep dip, then the
+ * high crest, the way the Motir wave reads left to right (`WAVE_BAND_PATH`).
+ * The second harmonic skews it like the logo — the dip comes early and the
+ * crest late — and keeps it periodic, so the drift never shows a seam.
+ */
 function wave(t: number): number {
+  // Canvas y grows DOWN, so positive is the dip: down first, then up.
   return (
-    Math.sin(t * Math.PI * 2 - 0.6) * 0.75 +
-    Math.sin(t * Math.PI * 4 + 0.4) * 0.25
+    Math.sin(t * Math.PI * 2) * 0.8 + Math.sin(t * Math.PI * 4 - 0.5) * 0.22
   )
 }
 
@@ -174,7 +184,7 @@ export function HeroWaves({
         return {
           u,
           base: fy + Math.sign(u) * Math.pow(Math.abs(u), 1.7) * H * 0.95,
-          amp: 34 + 46 * (1 - Math.abs(u)),
+          amp: 70 + 110 * (1 - Math.abs(u)),
           phase: u * 0.18,
         }
       })
@@ -223,6 +233,26 @@ export function HeroWaves({
       const cycle = [...hues, ...hues, hues[0]]
       cycle.forEach((hue, i) => band.addColorStop(i / (cycle.length - 1), hue))
 
+      // THE GLOW: every line once more as one wide, blurred stroke in the same
+      // band, under the thin lines — a soft light around them rather than a
+      // second set of lines. `ctx.filter` is skipped where unsupported, and
+      // the wide low-alpha stroke alone still reads as a halo.
+      const glow = new Path2D()
+      for (const l of lines) {
+        for (let x = -10; x <= W + 10; x += 6) {
+          const y = yAt(l, x, W, t)
+          if (x === -10) glow.moveTo(x, y)
+          else glow.lineTo(x, y)
+        }
+      }
+      ctx.save()
+      ctx.strokeStyle = band
+      ctx.lineWidth = GLOW_WIDTH
+      ctx.globalAlpha = dark ? 0.06 : 0.035
+      if ('filter' in ctx) ctx.filter = `blur(${GLOW_BLUR}px)`
+      ctx.stroke(glow)
+      ctx.restore()
+
       ctx.lineWidth = 1
       ctx.strokeStyle = band
       for (const l of lines) {
@@ -234,8 +264,8 @@ export function HeroWaves({
         }
         const nearness = 1 - Math.abs(l.u)
         ctx.globalAlpha = dark
-          ? 0.28 + 0.5 * nearness * nearness
-          : 0.16 + 0.42 * nearness * nearness
+          ? 0.06 + 0.13 * nearness * nearness
+          : 0.03 + 0.1 * nearness * nearness
         ctx.stroke()
       }
 
@@ -260,7 +290,7 @@ export function HeroWaves({
           if (x === from) ctx.moveTo(x, y)
           else ctx.lineTo(x, y)
         }
-        ctx.globalAlpha = 1
+        ctx.globalAlpha = TOUCH_ALPHA
         ctx.lineWidth = 2.2
         ctx.strokeStyle = g
         ctx.stroke()

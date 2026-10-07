@@ -166,6 +166,9 @@ export const MOTIR_PROJECT_RUNS = `${APP_ORIGIN}/p/MOTIR/runs`
 /** The difficulty guide: the four levels, and the models suggested for each. */
 export const DOCS_DIFFICULTY = '/docs/difficulty'
 
+/** "Motir builds itself" — how Motir bootstrapped itself (2026-10 redesign). */
+export const MOTIR_BUILDS_ITSELF = '/motir-builds-itself'
+
 /** The "How Motir works" page for developers. */
 export const HOW_IT_WORKS = '/how-it-works'
 

@@ -371,14 +371,15 @@ function edgePath(from: string, to: string) {
   return `M${sx} ${sy} C${sx + 48} ${sy}, ${tx - 48} ${ty}, ${tx} ${ty}`
 }
 
-export function RoadmapUi() {
+/** `zoom` scales the canvas world to the column it sits in. */
+export function RoadmapUi({ zoom = 0.8 }: Readonly<{ zoom?: number }>) {
   const doneKeys = new Set(
     u.roadmap.filter((n) => n.status === 'done').map((n) => n.key),
   )
   return (
     <Frame>
       <div className="flex items-center justify-center overflow-hidden bg-(--el-canvas) px-6 py-10">
-        <div style={{ zoom: 0.8 }}>
+        <div style={{ zoom }}>
           <div className="relative" style={{ width: WORLD_W, height: WORLD_H }}>
             <svg
               className="absolute inset-0 overflow-visible"
