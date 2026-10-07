@@ -18,12 +18,30 @@ import { THEME_STORAGE_KEYS } from '@motir/design-system'
 export const SITE_DEFAULT_STYLE = 'hand-drawn-indie'
 export const SITE_DEFAULT_TYPE = 'grotesk'
 
-export const siteDefaultsScript = `(function(){try{var ls=window.localStorage,d=document.documentElement;var style=ls.getItem(${JSON.stringify(
-  THEME_STORAGE_KEYS.style,
-)}),type=ls.getItem(${JSON.stringify(
-  THEME_STORAGE_KEYS.type,
-)});if(!style){d.setAttribute('data-style',${JSON.stringify(
-  SITE_DEFAULT_STYLE,
-)});}if(!style&&!type){d.setAttribute('data-type',${JSON.stringify(
-  SITE_DEFAULT_TYPE,
+const SCRIPT_UNSAFE_CHAR_MAP: Record<string, string> = {
+  '<': '\\u003C',
+  '>': '\\u003E',
+  '/': '\\u002F',
+  '\\': '\\\\',
+  '\b': '\\b',
+  '\f': '\\f',
+  '\n': '\\n',
+  '\r': '\\r',
+  '\t': '\\t',
+  '\0': '\\0',
+  '\u2028': '\\u2028',
+  '\u2029': '\\u2029',
+}
+
+const escapeUnsafeScriptChars = (value: string): string =>
+  value.replace(/[<>/\\\b\f\n\r\t\0\u2028\u2029]/g, char => SCRIPT_UNSAFE_CHAR_MAP[char] ?? char)
+
+export const siteDefaultsScript = `(function(){try{var ls=window.localStorage,d=document.documentElement;var style=ls.getItem(${escapeUnsafeScriptChars(
+  JSON.stringify(THEME_STORAGE_KEYS.style),
+)}),type=ls.getItem(${escapeUnsafeScriptChars(
+  JSON.stringify(THEME_STORAGE_KEYS.type),
+)});if(!style){d.setAttribute('data-style',${escapeUnsafeScriptChars(
+  JSON.stringify(SITE_DEFAULT_STYLE),
+)});}if(!style&&!type){d.setAttribute('data-type',${escapeUnsafeScriptChars(
+  JSON.stringify(SITE_DEFAULT_TYPE),
 )});}}catch(e){}})();`
