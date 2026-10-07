@@ -312,3 +312,85 @@ export async function fetchIdea(slug: string): Promise<PublicIdeaDto | null> {
   if (res.status === 404) return null
   return json<PublicIdeaDto>(path, res)
 }
+
+/* ── presentation helpers the page and the detail share ────────────────────
+ *
+ * Both are DERIVED, never stored (`design/ideas/design-notes.md`): the mark
+ * follows the category's group in motir-core's enum, so a palette swap
+ * re-tints every mark and a category added to a group inherits its mark. */
+
+/** The showcase fill a category's colour mark takes. */
+export type IdeaMark = 'field' | 'decision' | 'record' | 'ground'
+
+const MARK_BY_CATEGORY: Record<IdeaCategory, IdeaMark> = {
+  // business functions
+  legal: 'field',
+  finance: 'field',
+  security_compliance: 'field',
+  customer_support: 'field',
+  localization: 'field',
+  growth_marketing: 'field',
+  sales: 'field',
+  people_hr: 'field',
+  operations: 'field',
+  engineering: 'field',
+  // verticals
+  ecommerce: 'decision',
+  healthcare: 'decision',
+  education: 'decision',
+  financial_services: 'decision',
+  real_estate: 'decision',
+  logistics: 'decision',
+  construction: 'decision',
+  agriculture: 'decision',
+  pets: 'decision',
+  family_care: 'decision',
+  public_sector: 'decision',
+  // consumer
+  personal_growth: 'record',
+  personal_finance: 'record',
+  health_wellness: 'record',
+  // platform
+  ai_infrastructure: 'ground',
+}
+
+/**
+ * A category's mark. Total over every category the contract lists, and a
+ * category this file does not know yet (motir-core added one first) takes the
+ * platform mark rather than none.
+ */
+export function ideaCategoryMark(slug: string): IdeaMark {
+  return (MARK_BY_CATEGORY as Record<string, IdeaMark>)[slug] ?? 'ground'
+}
+
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
+
+/**
+ * A source date as "October 2025". The store records the 1st when a source
+ * gives only a month, so the day is never shown. Anything that is not
+ * `YYYY-MM-DD` gives `null` and the date is simply not drawn.
+ */
+export function sourceMonth(date: string | null): string | null {
+  const match = date?.match(/^(\d{4})-(\d{2})-\d{2}$/)
+  if (!match) return null
+  const month = MONTHS[Number(match[2]) - 1]
+  return month ? `${month} ${match[1]}` : null
+}
+
+/** Whether an optional text field has anything to draw (`""` does not). */
+export function hasText(value: string | null | undefined): value is string {
+  return typeof value === 'string' && value.trim() !== ''
+}
