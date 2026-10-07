@@ -1,0 +1,4015 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="hand-drawn-indie"
+  data-type="grotesk"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/ideas read live from the idea store — category, tag and text
+      filters in the URL, categories as sections, the Motir would buy band, and
+      an idea opening in place · MOTIR-7686
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of the tokens this page uses, read
+         from motir.co/ideas as it ships (2026-10 redesign: `hand-drawn-indie`
+         style, `grotesk` type, the site's default palette, light theme),
+         copied from `@motir/design-system` via the computed style. Standalone,
+         as every asset in `design/` is. Re-defines no semantics: every rule
+         below names a token, never a hue. The only raw values outside this
+         block are the doc-annotation scaffold's own backdrop.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-card: #ffffff;
+        --el-surface: #eef0f3;
+        --el-surface-soft: #f8f9fa;
+        --el-muted: #eef0f3;
+        --el-text: #16191d;
+        --el-text-strong: #20242a;
+        --el-text-secondary: #565c64;
+        --el-text-muted: #5d636b;
+        --el-text-eyebrow: #5d636b;
+        --el-text-faint: #8a8f98;
+        --el-text-inverted: #ffffff;
+        --el-border: #e2e4e9;
+        --el-border-soft: #ebedf0;
+        --el-border-strong: #c8ccd3;
+        --el-input-border: #c8ccd3;
+        --el-accent: #1a1d21;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #155bc4;
+        --el-link: #155bc4;
+        --el-link-pressed: #114a9e;
+        --el-overlay-scrim: #0006;
+        --el-tint-lavender: #e4e6f3;
+        --el-tint-sky: #dde9f6;
+        --el-tint-mint: #d9efe1;
+        --el-tint-peach: #fde0c8;
+        --el-showcase-field: #155bc4;
+        --el-showcase-field-text: #ffffff;
+        --el-showcase-field-ink: #155bc4;
+        --el-showcase-ground: #16191d;
+        --el-showcase-ground-text: #ffffff;
+        --el-showcase-ground-muted: color-mix(in srgb, #ffffff 68%, #16191d);
+        --el-showcase-ground-rule: color-mix(in srgb, #16191d 74%, #ffffff);
+        --el-showcase-highlight: #ffd02f;
+        --el-showcase-decision: #d66000;
+        --el-showcase-record: color-mix(in srgb, #0e8f86 72%, #16191d);
+        --el-showcase-wash: #dde9f6;
+        --el-showcase-text: #16191d;
+        --el-showcase-rule: #e2e4e9;
+        --radius-badge: 9px 26px 11px 22px / 22px 11px 24px 9px;
+        --radius-btn: 14px 40px 12px 36px / 36px 14px 38px 16px;
+        --radius-card: 18px 58px 22px 48px / 48px 20px 54px 24px;
+        --radius-control: 10px 26px 12px 22px / 22px 12px 24px 10px;
+        --radius-input: 16px 48px 14px 42px / 42px 16px 46px 18px;
+        --radius-kbd: 6px 18px 8px 15px / 15px 8px 16px 6px;
+        --radius-modal: 22px 66px 20px 56px / 56px 22px 60px 26px;
+        --spacing-card-padding: 26px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 12px;
+        --spacing-control-y: 8px;
+        --spacing-icon-btn: 4px;
+        --spacing-input-x: 16px;
+        --spacing-btn-x: 20px;
+        --spacing-kbd-x: 6px;
+        --spacing-kbd-y: 2px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-input: 44px;
+        --height-control: 38px;
+        --shadow-subtle: 1px 2px 4px -1px #261e161a;
+        --shadow-card: 2px 4px 9px -3px #261e1624;
+        --shadow-elevated: 3px 6px 16px -4px #261e162b;
+        --shadow-modal: 5px 9px 30px -8px #261e1638;
+        --font-sans:
+          'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+        --font-serif: var(--font-sans);
+        --font-mono:
+          'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-sans);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0 0 6px;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 92ch;
+      }
+      .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-text-strong);
+        background: var(--el-tint-lavender);
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .panel {
+        margin-top: 44px;
+      }
+      .panel-cap {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 4px 10px;
+        margin-bottom: 12px;
+        align-items: baseline;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: var(--el-accent-text);
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        grid-column: 2;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+        max-width: 110ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border-strong);
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--el-page-bg);
+        box-shadow: var(--shadow-elevated);
+      }
+      .frame.desk {
+        width: 1224px;
+      }
+      .frame.mob {
+        width: 390px;
+      }
+      .unchanged,
+      .elided {
+        margin: 6px 0 0;
+        font: 500 12px/1.5 var(--font-mono);
+        color: var(--el-text-secondary);
+        border: 1px dashed var(--el-border-strong);
+        border-radius: 6px;
+        padding: 8px 12px;
+        background: var(--el-surface-soft);
+      }
+      .sheet-only {
+        position: relative;
+        height: 980px;
+        background: var(--el-surface-soft);
+      }
+
+      /* ═══ the page — mirrors app/ideas/page.tsx + ProductPage primitives ═══ */
+      .site {
+        position: relative;
+        background: var(--el-page-bg);
+        color: var(--el-text);
+      }
+      .site main {
+        padding: 0 40px 56px;
+      }
+      .site.mobile main {
+        padding: 0 16px 40px;
+      }
+      .ic {
+        width: 16px;
+        height: 16px;
+        flex: none;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .mono {
+        font-family: var(--font-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .mono.tiny {
+        font-size: 10px;
+        color: var(--el-text-secondary);
+      }
+      .sq {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        flex: none;
+      }
+      .sq.hl {
+        background: var(--el-showcase-highlight);
+      }
+      .tone-field {
+        background: var(--el-showcase-field);
+      }
+      .tone-decision {
+        background: var(--el-showcase-decision);
+      }
+      .tone-record {
+        background: var(--el-showcase-record);
+      }
+      .tone-ground {
+        background: var(--el-showcase-ground);
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+
+      /* header — SiteHeader, overlay variant */
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        padding: 14px 40px;
+        border-bottom: 1px solid var(--el-border-soft);
+      }
+      .topbar.m {
+        padding: 12px 16px;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--el-text);
+        text-decoration: none;
+      }
+      .brand-glyph {
+        color: var(--el-showcase-field);
+      }
+      .nav {
+        display: flex;
+        gap: 22px;
+        font-size: 14px;
+      }
+      .nav a,
+      .navitem {
+        color: var(--el-text);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .nav a.on {
+        color: var(--el-link);
+        font-weight: 600;
+      }
+      .bar-cta {
+        margin-left: auto;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: var(--height-btn-md);
+        padding: 0 var(--spacing-btn-x);
+        border-radius: var(--radius-btn);
+        font: 600 14px var(--font-sans);
+        text-decoration: none;
+        border: 1px solid var(--el-border-strong);
+        color: var(--el-text);
+        background: var(--el-page-bg);
+        cursor: pointer;
+      }
+      .btn.sm {
+        height: var(--height-btn-sm);
+        padding: 0 14px;
+        font-size: 13px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+        border-color: var(--el-accent);
+      }
+      .btn.ghost {
+        background: var(--el-page-bg);
+      }
+      .iconbtn {
+        display: inline-grid;
+        place-items: center;
+        padding: var(--spacing-icon-btn);
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-control);
+        border: 1px solid var(--el-border);
+        background: var(--el-page-bg);
+        color: var(--el-text);
+      }
+      .iconbtn.sm {
+        width: 26px;
+        height: 26px;
+        border: 0;
+      }
+
+      /* hero — unchanged, except the promise card's list comes from the store */
+      .hero {
+        padding: 48px 0 40px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+        gap: 48px;
+        align-items: center;
+      }
+      .hero.compact .hero-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      }
+      .hero.compact .lede,
+      .hero.compact .brief {
+        display: none;
+      }
+      .hero-copy {
+        display: grid;
+        gap: 20px;
+      }
+      .display {
+        margin: 0;
+        font: 700 72px/0.92 var(--font-serif);
+        letter-spacing: -0.045em;
+      }
+      .hero.compact .display {
+        font-size: 48px;
+      }
+      .lede {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+        max-width: 56ch;
+      }
+      .brief {
+        border: 1px solid var(--el-border-strong);
+        border-radius: var(--radius-card);
+        padding: 18px 20px;
+        display: grid;
+        gap: 10px;
+        background: var(--el-page-bg);
+      }
+      .brief .ph {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 15px;
+      }
+      .brief-foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+      }
+      .promise {
+        display: grid;
+        gap: 18px;
+        border-radius: var(--radius-card);
+        border: 1px solid var(--el-border);
+        background: var(--el-showcase-ground);
+        color: var(--el-showcase-ground-text);
+        padding: calc(var(--spacing-card-padding) * 1.5);
+        box-shadow: var(--shadow-elevated);
+      }
+      .promise .pb {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.3;
+        max-width: 36ch;
+      }
+      .jump {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+      }
+      .jump a {
+        display: grid;
+        grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid var(--el-showcase-ground-rule);
+        border-radius: var(--radius-control);
+        padding: var(--spacing-control-y) var(--spacing-control-x);
+        color: var(--el-showcase-ground-text);
+        text-decoration: none;
+        font-size: 15px;
+      }
+      .jump .num {
+        font: 11px var(--font-mono);
+        color: var(--el-showcase-ground-muted);
+      }
+
+      /* blocks — Eyebrow / H2 / PointGrid */
+      .block {
+        padding: 40px 0 8px;
+        display: grid;
+        gap: 18px;
+      }
+      .eyebrow {
+        color: var(--el-text-eyebrow);
+      }
+      .h2 {
+        margin: 0;
+        font: 700 48px/1 var(--font-serif);
+        letter-spacing: -0.035em;
+      }
+      .mobile .h2 {
+        font-size: 32px;
+      }
+      .h3 {
+        margin: 0;
+        font: 700 24px/1.15 var(--font-sans);
+        letter-spacing: -0.02em;
+      }
+      .body {
+        margin: 0;
+        max-width: 60ch;
+        font-size: 17px;
+        color: var(--el-text-secondary);
+      }
+      .points {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .point {
+        border: 1px solid var(--el-border-strong);
+        border-radius: var(--radius-card);
+        padding: var(--spacing-card-padding);
+      }
+      .point h3 {
+        margin: 0 0 6px;
+        font-size: 17px;
+      }
+      .point p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ═══ NEW — the controls ═══ */
+      .controls {
+        margin-top: 40px;
+        display: grid;
+        gap: 14px;
+        padding: calc(var(--spacing-card-padding) * 1.25);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-card);
+        box-shadow: var(--shadow-card);
+      }
+      .controls.m {
+        padding: var(--spacing-card-padding) 16px;
+        margin-top: 24px;
+        min-width: 0;
+      }
+      .controls > * {
+        min-width: 0;
+      }
+      .controls.m .controls-head {
+        flex-direction: column;
+        gap: 4px;
+      }
+      .controls.m .search .btn {
+        padding: 0 10px;
+      }
+      .controls-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .count {
+        margin: 0;
+        font: 500 13px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: var(--height-input);
+        padding: 0 6px 0 var(--spacing-input-x);
+        border: 1px solid var(--el-input-border);
+        border-radius: var(--radius-input);
+        background: var(--el-page-bg);
+        color: var(--el-text-secondary);
+      }
+      .search input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        font: 15px var(--font-sans);
+        color: var(--el-text);
+        outline: none;
+      }
+      .search input::placeholder {
+        color: var(--el-text-secondary);
+      }
+      .cats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .cats.scroll {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        min-height: 30px;
+        border-radius: var(--radius-badge);
+        border: 1px solid var(--el-border-soft);
+        background: var(--el-surface);
+        color: var(--el-text-secondary);
+        font: 500 13px var(--font-sans);
+        text-decoration: none;
+      }
+      .chip .ic {
+        width: 12px;
+        height: 12px;
+      }
+      .chip .cnt {
+        font: 500 11px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .chip.on {
+        background: var(--el-tint-lavender);
+        color: var(--el-text-strong);
+        border-color: var(--el-border);
+      }
+      .chip.on .cnt {
+        color: var(--el-text-strong);
+      }
+      .chip:hover {
+        border-color: var(--el-border-strong);
+      }
+      .chip.sm {
+        min-height: 26px;
+        font-size: 12px;
+      }
+      .tags summary {
+        list-style: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font: 600 13px var(--font-sans);
+        color: var(--el-text);
+        padding: var(--spacing-control-y) var(--spacing-control-x);
+        border-radius: var(--radius-control);
+        border: 1px solid var(--el-border);
+      }
+      .tags summary::-webkit-details-marker {
+        display: none;
+      }
+      .tagchips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .active {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        padding-top: 12px;
+        border-top: 1px solid var(--el-border-soft);
+      }
+      .active .lbl {
+        font: 600 12px var(--font-sans);
+        color: var(--el-text-secondary);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        border-radius: var(--radius-badge);
+        font: 500 12px var(--font-sans);
+        color: var(--el-text-strong);
+        text-decoration: none;
+      }
+      .pill .ic {
+        width: 12px;
+        height: 12px;
+      }
+      .pill.sky {
+        background: var(--el-tint-sky);
+      }
+      .pill.lav {
+        background: var(--el-tint-lavender);
+      }
+      .pill.mint {
+        background: var(--el-tint-mint);
+      }
+      .clear {
+        font: 600 12px var(--font-sans);
+        color: var(--el-link);
+      }
+
+      /* ═══ the Motir would buy band — the shipped tone cards ═══ */
+      .buys {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .mobile .buys,
+      .mobile .dgrid {
+        grid-template-columns: 1fr;
+      }
+      .buy {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border-radius: var(--radius-card);
+        border: 1px solid var(--el-border);
+        padding: calc(var(--spacing-card-padding) * 1.5);
+        box-shadow: var(--shadow-card);
+      }
+      .buy.field {
+        background-color: var(--el-showcase-field);
+        background-image: radial-gradient(
+          color-mix(in srgb, var(--el-showcase-field-text) 14%, transparent) 1px,
+          transparent 1.3px
+        );
+        background-size: 7px 7px;
+        color: var(--el-showcase-field-text);
+      }
+      .buy.ground {
+        background: var(--el-showcase-ground);
+        color: var(--el-showcase-ground-text);
+      }
+      .buy.wash {
+        background: var(--el-showcase-wash);
+        color: var(--el-showcase-text);
+      }
+      .buy .mk {
+        background: currentColor;
+      }
+      .buy.ground .mk {
+        background: var(--el-showcase-highlight);
+      }
+      .buy.wash .mk {
+        background: var(--el-showcase-field-ink);
+      }
+      .buy-t {
+        margin: 0;
+        font: 700 30px/1.04 var(--font-serif);
+        letter-spacing: -0.025em;
+      }
+      .buy-t a,
+      .dcard h4 a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .stretch::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+      }
+      .buy .big {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      .buy.ground .soft {
+        color: var(--el-showcase-ground-muted);
+      }
+      .caps,
+      .caps2 {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+        font-size: 14.5px;
+        line-height: 1.45;
+      }
+      .caps li,
+      .caps2 li {
+        display: grid;
+        grid-template-columns: 14px minmax(0, 1fr);
+        gap: 10px;
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+        margin-top: 7px;
+        background: currentColor;
+      }
+      .buy.ground .dot {
+        background: var(--el-showcase-highlight);
+      }
+      .buy.wash .dot,
+      .caps2 .dot {
+        background: var(--el-showcase-field-ink);
+      }
+      .btags,
+      .dtags {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        font: 500 11px var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .btags li {
+        border: 1px solid currentColor;
+        border-radius: var(--radius-badge);
+        padding: 1px 8px;
+      }
+      .buy .rule {
+        margin: auto 0 0;
+        display: grid;
+        gap: 10px;
+        border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+        padding-top: 16px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .buy.ground .rule {
+        border-color: var(--el-showcase-ground-rule);
+      }
+      .buy dt,
+      .ddl dt {
+        font-size: 11px;
+      }
+      .buy dd,
+      .ddl dd {
+        margin: 4px 0 0;
+      }
+      .open {
+        font-size: 11px;
+        justify-content: flex-end;
+      }
+      .open .ic {
+        width: 13px;
+        height: 13px;
+      }
+
+      /* ═══ directions — one list, the shipped card; each card names its category ═══ */
+      .dcat {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font: 500 11px var(--font-mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .dgrid {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .dcard {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-card);
+        padding: calc(var(--spacing-card-padding) * 1.25);
+        box-shadow: var(--shadow-card);
+      }
+      .dcard:hover {
+        border-color: var(--el-border-strong);
+      }
+      .dcard h4 {
+        margin: 0;
+        font: 600 20px/1.2 var(--font-sans);
+        letter-spacing: -0.01em;
+      }
+      .dcard .pitch {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+      }
+      .dtags li {
+        background: var(--el-surface);
+        color: var(--el-text-secondary);
+        border-radius: var(--radius-badge);
+        padding: 2px 8px;
+      }
+      .ddl {
+        margin: auto 0 0;
+        display: grid;
+        gap: 12px;
+        border-top: 1px solid var(--el-border);
+        padding-top: 14px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .ddl dd {
+        color: var(--el-text-secondary);
+      }
+      .src {
+        position: relative;
+        z-index: 1;
+        color: var(--el-accent-on-surface);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .more {
+        font: 500 12px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .dcard .open {
+        color: var(--el-text);
+      }
+
+      /* ═══ empty + error ═══ */
+      .state {
+        margin: 32px 0 8px;
+        display: grid;
+        justify-items: start;
+        gap: 12px;
+        padding: calc(var(--spacing-card-padding) * 1.5);
+        border: 1px dashed var(--el-border-strong);
+        border-radius: var(--radius-card);
+        background: var(--el-surface-soft);
+      }
+      .state p {
+        margin: 0;
+        max-width: 56ch;
+        color: var(--el-text-secondary);
+        font-size: 15px;
+      }
+      .state .mono {
+        color: var(--el-text);
+        font-size: 11px;
+      }
+      .state.err {
+        border-style: solid;
+        background: var(--el-card);
+      }
+
+      /* ═══ NEW — the idea open in place: a side sheet over the list ═══ */
+      .sheet-wrap {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+      }
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: var(--el-overlay-scrim);
+      }
+      .dsheet {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 640px;
+        overflow: auto;
+        background: var(--el-card);
+        color: var(--el-text);
+        border-left: 1px solid var(--el-border);
+        border-radius: var(--radius-modal) 0 0 var(--radius-modal);
+        box-shadow: var(--shadow-modal);
+        padding: calc(var(--spacing-card-padding) * 1.5);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .sheet-wrap.m {
+        position: relative;
+        min-height: 844px;
+      }
+      .sheet-wrap.m .scrim {
+        display: none;
+      }
+      .sheet-wrap.m .dsheet {
+        position: relative;
+        width: auto;
+        border-radius: 0;
+        border-left: 0;
+        box-shadow: none;
+        padding: 20px 16px 40px;
+      }
+      .dtop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .dtop .mono {
+        font-size: 11px;
+        color: var(--el-text);
+      }
+      .dtitle {
+        margin: 0;
+        font: 700 40px/1.02 var(--font-serif);
+        letter-spacing: -0.03em;
+        outline: none;
+      }
+      .m .dtitle {
+        font-size: 32px;
+      }
+      .dpitch {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+      }
+      .dtagrow {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .drow {
+        display: grid;
+        gap: 10px;
+        border-top: 1px solid var(--el-border);
+        padding-top: 16px;
+      }
+      .drow h3 {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .drow p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--el-text-secondary);
+      }
+      .evs {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 12px;
+      }
+      .ev {
+        border-left: 3px solid var(--el-showcase-field);
+        padding: 4px 0 4px 14px;
+        display: grid;
+        gap: 6px;
+      }
+      .drow .ev .claim {
+        color: var(--el-text);
+        font-size: 16px;
+      }
+      .srcline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 12px;
+        font-size: 13px;
+      }
+      .srcline .src {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .srcline .ic {
+        width: 13px;
+        height: 13px;
+      }
+      .date {
+        font: 500 12px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .dfoot {
+        margin: auto 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      kbd {
+        font: 600 11px var(--font-mono);
+        border: 1px solid var(--el-border-strong);
+        border-radius: var(--radius-kbd);
+        padding: var(--spacing-kbd-y) var(--spacing-kbd-x);
+        color: var(--el-text);
+        background: var(--el-surface-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <header class="doc-head">
+        <h1>motir.co/ideas, read live from the idea store — MOTIR-7686</h1>
+        <p>
+          The redesigned /ideas: the page that shipped with the 2026-10 redesign
+          (motir-marketing#81, <code>app/ideas/page.tsx</code>) keeps its hero,
+          its rules and its card language, and gains three filters held in the
+          URL, the Motir-would-buy band built from the store, the directions as
+          one section per category, and the idea’s full record opening in place
+          at <code>?idea=&lt;slug&gt;</code>. Every idea and count on this board
+          is the production store as served on 2026-10-07
+          (<code>e2e/fixtures/ideas.json</code>). Spec, copy, URL behaviour and
+          the allocation to the two build cards: <code>design-notes.md</code>.
+        </p>
+        <p>
+          The page keeps <code>robots: noindex</code> exactly as #81 leaves it;
+          lifting it is not this story’s.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-7686</span
+          ><span class="ref">design/ideas/</span
+          ><span class="ref">list → MOTIR-7687</span
+          ><span class="ref">detail → MOTIR-7688</span>
+        </div>
+      </header>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">A</span>
+          <h2>/ideas — populated, no filter (desktop)</h2>
+          <span class="note"
+            >The whole store: hero (its promise card now lists the
+            Motir-would-buy ideas from the store, each an in-page jump), the
+            rules (unchanged), the controls, the Motir would buy band, then
+            every direction together in ONE list, in the order the API returns
+            them (newest first). No category sections: each card names its own
+            category, and a visitor who wants one category picks it in the
+            controls. Footer and the closing call are unchanged and not
+            drawn.</span
+          >
+        </div>
+        <div class="frame desk">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <nav class="nav" aria-label="Main">
+                <span class="navitem"
+                  >Products
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" /></svg></span
+                ><a href="/explore">Build in public</a
+                ><a href="/ideas" aria-current="page" class="on"
+                  >Ideas to build</a
+                ><a href="/motir-builds-itself">Motir builds itself</a
+                ><a href="/docs">Docs</a><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <span class="btn ghost sm">Copy setup prompt</span
+                ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Start free
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <main>
+              <section class="hero">
+                <div class="hero-grid">
+                  <div class="hero-copy">
+                    <p class="mono eyebrow-lg">
+                      <i class="sq hl"></i>Ideas to build
+                    </p>
+                    <h1 class="display">Build what Motir would buy.</h1>
+                    <p class="lede">
+                      A software company runs on more than code. It needs a
+                      lawyer, an accountant, a security team and people who know
+                      other markets, and Motir is no different. …
+                    </p>
+                    <div class="brief">
+                      <p class="mono tiny">What are you building?</p>
+                      <p class="ph">
+                        An AI finance team for startups: it prices the plans,
+                        files sales tax and pays the vendors…
+                      </p>
+                      <div class="brief-foot">
+                        <span
+                          >A few sentences is enough. Motir asks about the
+                          rest.</span
+                        ><span class="btn primary sm"
+                          >Start
+                          <svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" /></svg
+                        ></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="promise" data-showcase="ground">
+                    <p class="mono">
+                      <i class="sq hl"></i>Motir is your first customer
+                    </p>
+                    <p class="pb">
+                      Build one of these on Motir, in public, and we will use
+                      it, pay for it and tell you what is missing.
+                    </p>
+                    <ul class="jump">
+                      <li>
+                        <a href="#idea-an-ai-legal-team-for-software-companies"
+                          ><span class="num">01</span
+                          ><span class="t">Legal</span
+                          ><svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 5v14" />
+                            <path d="m19 12-7 7-7-7" /></svg
+                        ></a>
+                      </li>
+                      <li>
+                        <a href="#idea-an-ai-finance-team-for-startups"
+                          ><span class="num">02</span
+                          ><span class="t">Finance</span
+                          ><svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 5v14" />
+                            <path d="m19 12-7 7-7-7" /></svg
+                        ></a>
+                      </li>
+                      <li>
+                        <a
+                          href="#idea-ai-security-and-compliance-from-the-evidence"
+                          ><span class="num">03</span
+                          ><span class="t">Security &amp; compliance</span
+                          ><svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 5v14" />
+                            <path d="m19 12-7 7-7-7" /></svg
+                        ></a>
+                      </li>
+                      <li>
+                        <a href="#idea-ai-support-that-knows-the-product"
+                          ><span class="num">04</span
+                          ><span class="t">Customer support</span
+                          ><svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 5v14" />
+                            <path d="m19 12-7 7-7-7" /></svg
+                        ></a>
+                      </li>
+                      <li>
+                        <a
+                          href="#idea-ai-localization-that-keeps-up-with-the-product"
+                          ><span class="num">05</span
+                          ><span class="t">Localization</span
+                          ><svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 5v14" />
+                            <path d="m19 12-7 7-7-7" /></svg
+                        ></a>
+                      </li>
+                      <li>
+                        <a href="#idea-ai-growth-for-b2b-software"
+                          ><span class="num">06</span
+                          ><span class="t">Growth &amp; marketing</span
+                          ><svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 5v14" />
+                            <path d="m19 12-7 7-7-7" /></svg
+                        ></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+              <section class="block">
+                <p class="mono eyebrow">What makes a good idea here</p>
+                <h2 class="h2">Products that scale, not tools for one team</h2>
+                <div class="points">
+                  <div class="point">
+                    <h3>Many customers, one product</h3>
+                    <p>
+                      Every idea serves thousands of companies with the same
+                      problem, not one company&#x27;s own process.
+                    </p>
+                  </div>
+                  <div class="point">
+                    <h3>Expertise you can&#x27;t hire cheaply</h3>
+                    <p>
+                      Law, tax, security, languages: work that needs a
+                      specialist, made affordable by AI and kept honest by
+                      people.
+                    </p>
+                  </div>
+                  <div class="point">
+                    <h3>A person still signs</h3>
+                    <p>
+                      The AI drafts, checks and files the work. A qualified
+                      person approves what carries risk, the same way Motir puts
+                      a person at every gate.
+                    </p>
+                  </div>
+                </div>
+                <p class="unchanged">
+                  Unchanged from what ships — drawn here only so the controls
+                  below sit in their real place.
+                </p>
+              </section>
+              <section class="controls" aria-labelledby="find-h">
+                <div class="controls-head">
+                  <h2 id="find-h" class="h3">Find an idea</h2>
+                  <p class="count" aria-live="polite">15 ideas</p>
+                </div>
+                <form class="search" role="search" action="/ideas" method="get">
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" /></svg
+                  ><input
+                    name="q"
+                    value=""
+                    placeholder="Search ideas, evidence and gaps"
+                    aria-label="Search the ideas"
+                  /><button class="btn primary sm" type="submit">Search</button>
+                </form>
+                <div class="cats" role="group" aria-label="Category">
+                  <a class="chip on" href="#" aria-pressed="true"
+                    >All categories</a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Legal<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Finance<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Security &amp; compliance<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Customer support<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Localization<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Growth &amp; marketing<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >E-commerce<span class="cnt">2</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Pets<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Family care<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Personal growth<span class="cnt">2</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >AI infrastructure<span class="cnt">3</span></a
+                  >
+                </div>
+                <details class="tags">
+                  <summary>
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                      />
+                      <circle cx="7.5" cy="7.5" r=".5" /></svg
+                    >Tags<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div class="tagchips" role="group" aria-label="Tags">
+                    <a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >AI agents<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >B2B software<span class="cnt">6</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Caregiving<span class="cnt">1</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Compliance<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Consumers<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Developer tools<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Education<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >EU AI Act<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Healthcare<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Pricing and billing<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Small businesses<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Startups<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Vertical software<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >On YC&#x27;s request list<span class="cnt">2</span></a
+                    >
+                  </div>
+                </details>
+              </section>
+              <section class="block" aria-labelledby="buy-h">
+                <p class="mono eyebrow">
+                  <i class="sq hl"></i>Motir would buy · 6
+                </p>
+                <h2 id="buy-h" class="h2">Products Motir would buy today</h2>
+                <ol class="buys">
+                  <li
+                    class="buy field"
+                    id="idea-an-ai-legal-team-for-software-companies"
+                    data-showcase="field"
+                  >
+                    <p class="mono"><i class="sq mk"></i>01 · Legal</p>
+                    <h3 class="buy-t">
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=an-ai-legal-team-for-software-companies"
+                        >An AI legal team for software companies</a
+                      >
+                    </h3>
+                    <p class="soft big">
+                      Terms, privacy policies, data processing agreements and
+                      the record of every vendor that touches customer data,
+                      drafted, kept current and reviewed by a lawyer.
+                    </p>
+                    <ul class="caps">
+                      <li>
+                        <i class="dot"></i>Drafts and updates terms, privacy
+                        policies and data processing agreements as the product
+                        changes
+                      </li>
+                      <li>
+                        <i class="dot"></i>Reviews vendor and customer contracts
+                        and flags what needs a lawyer
+                      </li>
+                      <li>
+                        <i class="dot"></i>Tracks new rules, like the EU AI Act,
+                        and says what each one changes for you
+                      </li>
+                    </ul>
+                    <ul class="btags" aria-label="Tags">
+                      <li>AI agents</li>
+                      <li>B2B software</li>
+                      <li>Compliance</li>
+                      <li>EU AI Act</li>
+                    </ul>
+                    <dl class="rule">
+                      <div>
+                        <dt class="mono">Why Motir needs it</dt>
+                        <dd class="soft">
+                          Every model provider Motir adds needs a data
+                          processing agreement and a recorded legal basis for
+                          sending customer data to it. Today that is slow,
+                          manual work.
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">Who else buys it</dt>
+                        <dd class="soft">
+                          Every software company that handles customer data,
+                          which is all of them.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li
+                    class="buy ground"
+                    id="idea-an-ai-finance-team-for-startups"
+                    data-showcase="ground"
+                  >
+                    <p class="mono"><i class="sq mk"></i>02 · Finance</p>
+                    <h3 class="buy-t">
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=an-ai-finance-team-for-startups"
+                        >An AI finance team for startups</a
+                      >
+                    </h3>
+                    <p class="soft big">
+                      Price the plans, bill for usage, file the taxes and pay
+                      the vendors, from one place that understands what each
+                      customer actually costs.
+                    </p>
+                    <ul class="caps">
+                      <li>
+                        <i class="dot"></i>Sets plan prices from real costs:
+                        model calls, machine time, storage
+                      </li>
+                      <li>
+                        <i class="dot"></i>Reconciles usage billing and files
+                        sales tax and VAT in every country you sell to
+                      </li>
+                      <li>
+                        <i class="dot"></i>Pays vendors, tracks runway and
+                        closes the books each month
+                      </li>
+                    </ul>
+                    <ul class="btags" aria-label="Tags">
+                      <li>B2B software</li>
+                      <li>Pricing and billing</li>
+                      <li>Startups</li>
+                    </ul>
+                    <dl class="rule">
+                      <div>
+                        <dt class="mono">Why Motir needs it</dt>
+                        <dd class="soft">
+                          Motir resells model calls and machine minutes at a
+                          margin. Pricing a plan means knowing the cost of every
+                          credit, in every currency, after tax.
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">Who else buys it</dt>
+                        <dd class="soft">
+                          Every usage-priced software startup, from its first
+                          invoice to its first audit.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li
+                    class="buy wash"
+                    id="idea-ai-security-and-compliance-from-the-evidence"
+                    data-showcase="wash"
+                  >
+                    <p class="mono">
+                      <i class="sq mk"></i>03 · Security &amp; compliance
+                    </p>
+                    <h3 class="buy-t">
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=ai-security-and-compliance-from-the-evidence"
+                        >AI security and compliance, from the evidence</a
+                      >
+                    </h3>
+                    <p class="soft big">
+                      SOC 2 and ISO 27001 evidence collected from the code, the
+                      cloud and the project itself, and security questionnaires
+                      answered from it.
+                    </p>
+                    <ul class="caps">
+                      <li>
+                        <i class="dot"></i>Collects evidence from repositories,
+                        cloud accounts and the project&#x27;s history
+                      </li>
+                      <li>
+                        <i class="dot"></i>Answers customer security
+                        questionnaires from that evidence, with sources
+                      </li>
+                      <li>
+                        <i class="dot"></i>Watches for drift and opens a work
+                        item when a control slips
+                      </li>
+                    </ul>
+                    <ul class="btags" aria-label="Tags">
+                      <li>B2B software</li>
+                      <li>Compliance</li>
+                    </ul>
+                    <dl class="rule">
+                      <div>
+                        <dt class="mono">Why Motir needs it</dt>
+                        <dd class="soft">
+                          A business customer asks for a security review before
+                          it signs. Every answer is somewhere in Motir&#x27;s
+                          code and records, and finding it takes days we would
+                          rather spend building.
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">Who else buys it</dt>
+                        <dd class="soft">
+                          Every software company selling to a business big
+                          enough to ask.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li
+                    class="buy field"
+                    id="idea-ai-support-that-knows-the-product"
+                    data-showcase="field"
+                  >
+                    <p class="mono">
+                      <i class="sq mk"></i>04 · Customer support
+                    </p>
+                    <h3 class="buy-t">
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=ai-support-that-knows-the-product"
+                        >AI support that knows the product</a
+                      >
+                    </h3>
+                    <p class="soft big">
+                      Answers customers from the docs, the code and the live
+                      state of the product, and turns a real bug into a planned
+                      work item instead of a reply.
+                    </p>
+                    <ul class="caps">
+                      <li>
+                        <i class="dot"></i>Answers from documentation, code and
+                        the customer&#x27;s own account
+                      </li>
+                      <li>
+                        <i class="dot"></i>Hands a real defect to the
+                        engineering team as a planned work item, with the
+                        evidence
+                      </li>
+                      <li>
+                        <i class="dot"></i>Learns from every answer a person
+                        corrects
+                      </li>
+                    </ul>
+                    <ul class="btags" aria-label="Tags">
+                      <li>AI agents</li>
+                      <li>B2B software</li>
+                      <li>Developer tools</li>
+                    </ul>
+                    <dl class="rule">
+                      <div>
+                        <dt class="mono">Why Motir needs it</dt>
+                        <dd class="soft">
+                          Motir&#x27;s users ask about agents, models, credits
+                          and repositories. A good answer needs the code and the
+                          account, not a help-center search.
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">Who else buys it</dt>
+                        <dd class="soft">
+                          Every developer-tool and B2B software company with
+                          more customers than support staff.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ol>
+                <p class="elided">
+                  …and 2 more Motir-would-buy ideas, the same card, tones
+                  cycling field → ground → wash.
+                </p>
+              </section>
+              <section class="block" aria-labelledby="more-h">
+                <p class="mono eyebrow">More directions · 9</p>
+                <h2 id="more-h" class="h2">
+                  Good products to build, beyond what Motir needs
+                </h2>
+                <p class="body">
+                  Motir won't be your first customer for these. Each is a market
+                  with documented demand, a gap the current players leave open,
+                  and a reason it can be built now and not five years ago. The
+                  evidence is linked under each one.
+                </p>
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=make-a-store-visible-to-ai-shoppers"
+                        >Make a store visible to AI shoppers</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Gets a small store&#x27;s products found and recommended
+                      by the AI assistants people now shop through, and shows
+                      how often each product is picked.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Traffic from AI assistants to US retail sites rose
+                          693% in the 2025 holiday season and converted 31%
+                          better than other traffic.
+                          <a
+                            class="src"
+                            href="https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Adobe Analytics, via Digital Commerce 360, January
+                            2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          The funded players sell to large brands and big
+                          catalogs. Millions of small stores have nothing yet,
+                          and the window is short.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-ground"></i>AI infrastructure
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=apis-that-update-their-customers-code"
+                        >APIs that update their customers&#x27; code</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      When an API makes a breaking change, the provider opens
+                      the pull request that migrates each customer&#x27;s code,
+                      instead of sending an email.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>AI agents</li>
+                      <li>Developer tools</li>
+                      <li>On YC&#x27;s request list</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          On Y Combinator&#x27;s Fall 2026 Requests for
+                          Startups: API providers shouldn&#x27;t just announce
+                          changes; they should apply them.
+                          <a
+                            class="src"
+                            href="https://www.ycombinator.com/rfs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Y Combinator, Requests for Startups, Fall 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Dependency bots only bump version numbers, and SDK
+                          generators don&#x27;t touch customer code. Agents can
+                          now edit unfamiliar code well enough to open the pull
+                          request.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-ground"></i>AI infrastructure
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=ai-cost-by-feature-and-by-customer"
+                        >AI cost by feature and by customer</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Splits the AI bill by feature and by customer, sets
+                      budgets, and shows finance and engineering the margin of
+                      every plan in one view.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Developer tools</li>
+                      <li>Pricing and billing</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          79% of finance leaders report AI cost overruns, and
+                          only 15% can calculate the return on AI spend without
+                          significant bottlenecks.
+                          <a
+                            class="src"
+                            href="https://www.doit.com/blog/ai-spending-survey"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >DoiT and Sapio Research, survey of 500 finance
+                            leaders, February 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Cloud cost tools are built around the cloud bill, and
+                          AI observability tools are built for developers.
+                          Neither gives finance a margin per feature.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-ground"></i>AI infrastructure
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=the-ai-transparency-kit"
+                        >The AI transparency kit</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      A drop-in kit that tells users they&#x27;re talking to an
+                      AI, marks generated content in a machine-readable way and
+                      labels deepfakes, as the EU now requires.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Compliance</li>
+                      <li>Developer tools</li>
+                      <li>EU AI Act</li>
+                      <li>Small businesses</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          The EU AI Act&#x27;s Article 50 transparency duties
+                          apply from 2 August 2026, with systems already on the
+                          market given until 2 December 2026, and fines of up to
+                          €15 million or 3% of worldwide turnover.
+                          <a
+                            class="src"
+                            href="https://www.joneswalker.com/en/insights/blogs/ai-law-blog/yes-august-2-still-matters-the-eu-approved-a-high-risk-ai-delay-but-most-trans.html?id=102nbon"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Jones Walker, AI Law Blog, July 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Content-marking vendors serve enterprises or one
+                          platform. A small app maker has no simple way to
+                          comply before the deadline.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-record"></i>Personal growth
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=a-first-tutor-for-young-children"
+                        >A first tutor for young children</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      A voice tutor at home that teaches four-to-eight-year-olds
+                      to read, write and count, one child at a time, at the
+                      child&#x27;s own pace.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Consumers</li>
+                      <li>Education</li>
+                      <li>On YC&#x27;s request list</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          On Y Combinator&#x27;s Fall 2026 Requests for Startups
+                          as &quot;The Primer&quot;, noting the cost of the AI
+                          per child is falling about ten times a year.
+                          <a
+                            class="src"
+                            href="https://www.ycombinator.com/rfs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Y Combinator, Requests for Startups, Fall 2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Ello, the funded AI tutor for this age, teaches
+                          reading only, and the best-known AI tutors are built
+                          for schools, not homes.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
+                <p class="elided">
+                  …and three more directions, the same card, in the same one
+                  list.
+                </p>
+              </section>
+            </main>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">B</span>
+          <h2>
+            /ideas?category=ecommerce&tag=smb&q=returns — filtered (desktop)
+          </h2>
+          <span class="note"
+            >The verification walk’s third step: category E-commerce pressed,
+            the Tags disclosure open with Small businesses pressed, “returns” in
+            the search, the active filters as removable pills with Clear all,
+            and the count. No Motir-would-buy idea matches, so the band is not
+            rendered at all (no empty band). Category chip counts are over every
+            filter EXCEPT the category, as the API returns them, so other
+            categories stay choosable.</span
+          >
+        </div>
+        <div class="frame desk">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <nav class="nav" aria-label="Main">
+                <span class="navitem"
+                  >Products
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" /></svg></span
+                ><a href="/explore">Build in public</a
+                ><a href="/ideas" aria-current="page" class="on"
+                  >Ideas to build</a
+                ><a href="/motir-builds-itself">Motir builds itself</a
+                ><a href="/docs">Docs</a><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <span class="btn ghost sm">Copy setup prompt</span
+                ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Start free
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <main>
+              <section class="hero compact">
+                <div class="hero-grid">
+                  <div class="hero-copy">
+                    <p class="mono eyebrow-lg">
+                      <i class="sq hl"></i>Ideas to build
+                    </p>
+                    <h1 class="display">Build what Motir would buy.</h1>
+                    <p class="lede">
+                      A software company runs on more than code. It needs a
+                      lawyer, an accountant, a security team and people who know
+                      other markets, and Motir is no different. …
+                    </p>
+                    <div class="brief">
+                      <p class="mono tiny">What are you building?</p>
+                      <p class="ph">
+                        An AI finance team for startups: it prices the plans,
+                        files sales tax and pays the vendors…
+                      </p>
+                      <div class="brief-foot">
+                        <span
+                          >A few sentences is enough. Motir asks about the
+                          rest.</span
+                        ><span class="btn primary sm"
+                          >Start
+                          <svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" /></svg
+                        ></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="promise" data-showcase="ground">
+                    <p class="mono">
+                      <i class="sq hl"></i>Motir is your first customer
+                    </p>
+                    <p class="pb">
+                      Build one of these on Motir, in public, and we will use
+                      it, pay for it and tell you what is missing.
+                    </p>
+                  </div>
+                </div>
+              </section>
+              <section class="controls" aria-labelledby="find-h">
+                <div class="controls-head">
+                  <h2 id="find-h" class="h3">Find an idea</h2>
+                  <p class="count" aria-live="polite">1 idea matches</p>
+                </div>
+                <form class="search" role="search" action="/ideas" method="get">
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" /></svg
+                  ><input
+                    name="q"
+                    value="returns"
+                    placeholder="Search ideas, evidence and gaps"
+                    aria-label="Search the ideas"
+                  /><button
+                    type="button"
+                    class="iconbtn sm"
+                    aria-label="Clear the search"
+                  >
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg></button
+                  ><button class="btn primary sm" type="submit">Search</button>
+                </form>
+                <div class="cats" role="group" aria-label="Category">
+                  <a class="chip" href="#" aria-pressed="false"
+                    >All categories</a
+                  ><a class="chip on" href="#" aria-pressed="true"
+                    >E-commerce<span class="cnt">1</span
+                    ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                  ></a>
+                </div>
+                <details class="tags" open>
+                  <summary>
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                      />
+                      <circle cx="7.5" cy="7.5" r=".5" /></svg
+                    >Tags · 1 selected<svg
+                      class="ic"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div class="tagchips" role="group" aria-label="Tags">
+                    <a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >AI agents<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >B2B software<span class="cnt">6</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Caregiving<span class="cnt">1</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Compliance<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Consumers<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Developer tools<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Education<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >EU AI Act<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Healthcare<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Pricing and billing<span class="cnt">3</span></a
+                    ><a class="chip on" href="#" aria-pressed="true"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Small businesses<span class="cnt">4</span
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" /></svg></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Startups<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Vertical software<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >On YC&#x27;s request list<span class="cnt">2</span></a
+                    >
+                  </div>
+                </details>
+                <div class="active">
+                  <span class="lbl">Filtered by</span
+                  ><a class="pill sky" href="#"
+                    >Category: E-commerce
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="pill lav" href="#"
+                    >Tag: Small businesses
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="pill mint" href="#"
+                    >“returns”
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="clear" href="/ideas">Clear all</a>
+                </div>
+              </section>
+              <section class="block" aria-labelledby="more-h">
+                <p class="mono eyebrow">More directions · 1</p>
+                <h2 id="more-h" class="h2">
+                  Good products to build, beyond what Motir needs
+                </h2>
+                <p class="body">
+                  Motir won't be your first customer for these. Each is a market
+                  with documented demand, a gap the current players leave open,
+                  and a reason it can be built now and not five years ago. The
+                  evidence is linked under each one.
+                </p>
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
+              </section>
+            </main>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">C</span>
+          <h2>
+            /ideas?category=ecommerce&tag=smb&q=returns&idea=stop-returns-before-they-happen
+            — the idea open in place (desktop)
+          </h2>
+          <span class="note"
+            >A side sheet over the filtered list, which stays rendered and
+            filtered behind the scrim. Every field the contract carries, in this
+            order; a field that is null or empty is not drawn (this direction
+            has no capabilities, no why-now and no why-Motir). Source links open
+            in a new tab. Close, Escape and Back all return to the URL without
+            idea=, keeping the filters.</span
+          >
+        </div>
+        <div class="frame desk">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <nav class="nav" aria-label="Main">
+                <span class="navitem"
+                  >Products
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" /></svg></span
+                ><a href="/explore">Build in public</a
+                ><a href="/ideas" aria-current="page" class="on"
+                  >Ideas to build</a
+                ><a href="/motir-builds-itself">Motir builds itself</a
+                ><a href="/docs">Docs</a><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <span class="btn ghost sm">Copy setup prompt</span
+                ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Start free
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <main>
+              <section class="hero compact">
+                <div class="hero-grid">
+                  <div class="hero-copy">
+                    <p class="mono eyebrow-lg">
+                      <i class="sq hl"></i>Ideas to build
+                    </p>
+                    <h1 class="display">Build what Motir would buy.</h1>
+                    <p class="lede">
+                      A software company runs on more than code. It needs a
+                      lawyer, an accountant, a security team and people who know
+                      other markets, and Motir is no different. …
+                    </p>
+                    <div class="brief">
+                      <p class="mono tiny">What are you building?</p>
+                      <p class="ph">
+                        An AI finance team for startups: it prices the plans,
+                        files sales tax and pays the vendors…
+                      </p>
+                      <div class="brief-foot">
+                        <span
+                          >A few sentences is enough. Motir asks about the
+                          rest.</span
+                        ><span class="btn primary sm"
+                          >Start
+                          <svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" /></svg
+                        ></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="promise" data-showcase="ground">
+                    <p class="mono">
+                      <i class="sq hl"></i>Motir is your first customer
+                    </p>
+                    <p class="pb">
+                      Build one of these on Motir, in public, and we will use
+                      it, pay for it and tell you what is missing.
+                    </p>
+                  </div>
+                </div>
+              </section>
+              <section class="controls" aria-labelledby="find-h">
+                <div class="controls-head">
+                  <h2 id="find-h" class="h3">Find an idea</h2>
+                  <p class="count" aria-live="polite">1 idea matches</p>
+                </div>
+                <form class="search" role="search" action="/ideas" method="get">
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" /></svg
+                  ><input
+                    name="q"
+                    value="returns"
+                    placeholder="Search ideas, evidence and gaps"
+                    aria-label="Search the ideas"
+                  /><button
+                    type="button"
+                    class="iconbtn sm"
+                    aria-label="Clear the search"
+                  >
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg></button
+                  ><button class="btn primary sm" type="submit">Search</button>
+                </form>
+                <div class="cats" role="group" aria-label="Category">
+                  <a class="chip" href="#" aria-pressed="false"
+                    >All categories</a
+                  ><a class="chip on" href="#" aria-pressed="true"
+                    >E-commerce<span class="cnt">1</span
+                    ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                  ></a>
+                </div>
+                <details class="tags">
+                  <summary>
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                      />
+                      <circle cx="7.5" cy="7.5" r=".5" /></svg
+                    >Tags · 1 selected<svg
+                      class="ic"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div class="tagchips" role="group" aria-label="Tags">
+                    <a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >AI agents<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >B2B software<span class="cnt">6</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Caregiving<span class="cnt">1</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Compliance<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Consumers<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Developer tools<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Education<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >EU AI Act<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Healthcare<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Pricing and billing<span class="cnt">3</span></a
+                    ><a class="chip on" href="#" aria-pressed="true"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Small businesses<span class="cnt">4</span
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" /></svg></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Startups<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Vertical software<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >On YC&#x27;s request list<span class="cnt">2</span></a
+                    >
+                  </div>
+                </details>
+                <div class="active">
+                  <span class="lbl">Filtered by</span
+                  ><a class="pill sky" href="#"
+                    >Category: E-commerce
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="pill lav" href="#"
+                    >Tag: Small businesses
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="pill mint" href="#"
+                    >“returns”
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="clear" href="/ideas">Clear all</a>
+                </div>
+              </section>
+              <section class="block" aria-labelledby="more-h">
+                <p class="mono eyebrow">More directions · 1</p>
+                <h2 id="more-h" class="h2">
+                  Good products to build, beyond what Motir needs
+                </h2>
+                <p class="body">
+                  Motir won't be your first customer for these. Each is a market
+                  with documented demand, a gap the current players leave open,
+                  and a reason it can be built now and not five years ago. The
+                  evidence is linked under each one.
+                </p>
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
+              </section>
+              <div class="sheet-wrap">
+                <div class="scrim" aria-hidden="true"></div>
+                <aside
+                  class="dsheet"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="d-stop-returns-before-they-happen"
+                  data-surface="modal"
+                >
+                  <div class="dtop">
+                    <p class="mono">
+                      <i class="sq tone-decision"></i>E-commerce · A direction
+                    </p>
+                    <a class="iconbtn close" href="#" aria-label="Close"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" /></svg
+                    ></a>
+                  </div>
+                  <h2
+                    id="d-stop-returns-before-they-happen"
+                    class="dtitle"
+                    tabindex="-1"
+                  >
+                    Stop returns before they happen
+                  </h2>
+                  <p class="dpitch">
+                    Spots the order bought in three sizes to send two back,
+                    answers the fit question before checkout, and scores each
+                    return for fraud.
+                  </p>
+                  <ul class="dtagrow" aria-label="Tags">
+                    <li>
+                      <a class="chip sm" href="/ideas?tag=smb"
+                        ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                          />
+                          <circle cx="7.5" cy="7.5" r=".5" /></svg
+                        >Small businesses</a
+                      >
+                    </li>
+                    <li>
+                      <a class="chip sm" href="/ideas?tag=vertical-saas"
+                        ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                          />
+                          <circle cx="7.5" cy="7.5" r=".5" /></svg
+                        >Vertical software</a
+                      >
+                    </li>
+                  </ul>
+                  <section class="drow">
+                    <h3 class="mono">The evidence</h3>
+                    <ol class="evs">
+                      <li class="ev">
+                        <p class="claim">
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                        </p>
+                        <p class="srcline">
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025
+                            <svg
+                              class="ic"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path d="M7 17 17 7" />
+                              <path d="M7 7h10v10" /></svg></a
+                          ><span class="date">October 2025</span>
+                        </p>
+                      </li>
+                    </ol>
+                  </section>
+                  <section class="drow">
+                    <h3 class="mono">The gap</h3>
+                    <p>
+                      Return platforms handle the return once it starts.
+                      Preventing it, for stores below enterprise size, is barely
+                      served.
+                    </p>
+                  </section>
+                  <p class="dfoot">
+                    Press <kbd>Esc</kbd> or Back to return to the list.
+                  </p>
+                </aside>
+              </div>
+            </main>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">D</span>
+          <h2>
+            A Motir-would-buy idea open — the fields only that kind carries
+          </h2>
+          <span class="note"
+            >The same sheet for kind motir_buys: “What it would do”, “Why Motir
+            needs it” and “Who else buys it”; no evidence rows today (the seeded
+            six carry none — when one does, the evidence block draws as in
+            C).</span
+          >
+        </div>
+        <div class="frame desk">
+          <div class="sheet-only">
+            <div class="sheet-wrap">
+              <div class="scrim" aria-hidden="true"></div>
+              <aside
+                class="dsheet"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="d-an-ai-finance-team-for-startups"
+                data-surface="modal"
+              >
+                <div class="dtop">
+                  <p class="mono">
+                    <i class="sq tone-field"></i>Finance · Motir would buy
+                  </p>
+                  <a class="iconbtn close" href="#" aria-label="Close"
+                    ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                  ></a>
+                </div>
+                <h2
+                  id="d-an-ai-finance-team-for-startups"
+                  class="dtitle"
+                  tabindex="-1"
+                >
+                  An AI finance team for startups
+                </h2>
+                <p class="dpitch">
+                  Price the plans, bill for usage, file the taxes and pay the
+                  vendors, from one place that understands what each customer
+                  actually costs.
+                </p>
+                <ul class="dtagrow" aria-label="Tags">
+                  <li>
+                    <a class="chip sm" href="/ideas?tag=b2b-saas"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >B2B software</a
+                    >
+                  </li>
+                  <li>
+                    <a class="chip sm" href="/ideas?tag=pricing-and-billing"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Pricing and billing</a
+                    >
+                  </li>
+                  <li>
+                    <a class="chip sm" href="/ideas?tag=startups"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Startups</a
+                    >
+                  </li>
+                </ul>
+                <section class="drow">
+                  <h3 class="mono">What it would do</h3>
+                  <ul class="caps2">
+                    <li>
+                      <i class="dot"></i>Sets plan prices from real costs: model
+                      calls, machine time, storage
+                    </li>
+                    <li>
+                      <i class="dot"></i>Reconciles usage billing and files
+                      sales tax and VAT in every country you sell to
+                    </li>
+                    <li>
+                      <i class="dot"></i>Pays vendors, tracks runway and closes
+                      the books each month
+                    </li>
+                  </ul>
+                </section>
+                <section class="drow">
+                  <h3 class="mono">Why Motir needs it</h3>
+                  <p>
+                    Motir resells model calls and machine minutes at a margin.
+                    Pricing a plan means knowing the cost of every credit, in
+                    every currency, after tax.
+                  </p>
+                </section>
+                <section class="drow">
+                  <h3 class="mono">Who else buys it</h3>
+                  <p>
+                    Every usage-priced software startup, from its first invoice
+                    to its first audit.
+                  </p>
+                </section>
+                <p class="dfoot">
+                  Press <kbd>Esc</kbd> or Back to return to the list.
+                </p>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">E</span>
+          <h2>/ideas?q=zzzz — no idea matches</h2>
+          <span class="note"
+            >The controls stay, with the search showing what was asked. In place
+            of the band and the list: one empty state with the way out. Not an
+            error, so no warning colour.</span
+          >
+        </div>
+        <div class="frame desk">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <nav class="nav" aria-label="Main">
+                <span class="navitem"
+                  >Products
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" /></svg></span
+                ><a href="/explore">Build in public</a
+                ><a href="/ideas" aria-current="page" class="on"
+                  >Ideas to build</a
+                ><a href="/motir-builds-itself">Motir builds itself</a
+                ><a href="/docs">Docs</a><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <span class="btn ghost sm">Copy setup prompt</span
+                ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Start free
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <main>
+              <section class="controls" aria-labelledby="find-h">
+                <div class="controls-head">
+                  <h2 id="find-h" class="h3">Find an idea</h2>
+                  <p class="count" aria-live="polite">No ideas match</p>
+                </div>
+                <form class="search" role="search" action="/ideas" method="get">
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" /></svg
+                  ><input
+                    name="q"
+                    value="zzzz"
+                    placeholder="Search ideas, evidence and gaps"
+                    aria-label="Search the ideas"
+                  /><button
+                    type="button"
+                    class="iconbtn sm"
+                    aria-label="Clear the search"
+                  >
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg></button
+                  ><button class="btn primary sm" type="submit">Search</button>
+                </form>
+                <div class="cats" role="group" aria-label="Category">
+                  <a class="chip on" href="#" aria-pressed="true"
+                    >All categories</a
+                  >
+                </div>
+                <details class="tags">
+                  <summary>
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                      />
+                      <circle cx="7.5" cy="7.5" r=".5" /></svg
+                    >Tags<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div class="tagchips" role="group" aria-label="Tags">
+                    <a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >AI agents<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >B2B software<span class="cnt">6</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Caregiving<span class="cnt">1</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Compliance<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Consumers<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Developer tools<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Education<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >EU AI Act<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Healthcare<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Pricing and billing<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Small businesses<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Startups<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Vertical software<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >On YC&#x27;s request list<span class="cnt">2</span></a
+                    >
+                  </div>
+                </details>
+                <div class="active">
+                  <span class="lbl">Filtered by</span
+                  ><a class="pill mint" href="#"
+                    >“zzzz”
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="clear" href="/ideas">Clear all</a>
+                </div>
+              </section>
+              <section class="state" aria-labelledby="empty-h">
+                <h2 id="empty-h" class="h3">No idea matches these filters</h2>
+                <p>
+                  Try fewer tags, another category, or different words. Every
+                  idea is still here.
+                </p>
+                <a class="btn ghost" href="/ideas">Clear all filters</a>
+              </section>
+            </main>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">F</span>
+          <h2>/ideas while motir-core’s public API is unreachable</h2>
+          <span class="note"
+            >The hero and the rules render (they are copy, not data); the
+            controls do not, because there is nothing to filter. One error state
+            in their place with a retry that reloads the same URL. The static
+            copy is gone, so this is the real outage face.</span
+          >
+        </div>
+        <div class="frame desk">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <nav class="nav" aria-label="Main">
+                <span class="navitem"
+                  >Products
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" /></svg></span
+                ><a href="/explore">Build in public</a
+                ><a href="/ideas" aria-current="page" class="on"
+                  >Ideas to build</a
+                ><a href="/motir-builds-itself">Motir builds itself</a
+                ><a href="/docs">Docs</a><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <span class="btn ghost sm">Copy setup prompt</span
+                ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Start free
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <main>
+              <section class="hero compact">
+                <div class="hero-grid">
+                  <div class="hero-copy">
+                    <p class="mono eyebrow-lg">
+                      <i class="sq hl"></i>Ideas to build
+                    </p>
+                    <h1 class="display">Build what Motir would buy.</h1>
+                    <p class="lede">
+                      A software company runs on more than code. It needs a
+                      lawyer, an accountant, a security team and people who know
+                      other markets, and Motir is no different. …
+                    </p>
+                    <div class="brief">
+                      <p class="mono tiny">What are you building?</p>
+                      <p class="ph">
+                        An AI finance team for startups: it prices the plans,
+                        files sales tax and pays the vendors…
+                      </p>
+                      <div class="brief-foot">
+                        <span
+                          >A few sentences is enough. Motir asks about the
+                          rest.</span
+                        ><span class="btn primary sm"
+                          >Start
+                          <svg
+                            class="ic"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" /></svg
+                        ></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="promise" data-showcase="ground">
+                    <p class="mono">
+                      <i class="sq hl"></i>Motir is your first customer
+                    </p>
+                    <p class="pb">
+                      Build one of these on Motir, in public, and we will use
+                      it, pay for it and tell you what is missing.
+                    </p>
+                  </div>
+                </div>
+              </section>
+              <section class="state err" role="status" aria-labelledby="err-h">
+                <p class="mono">
+                  <i class="sq tone-decision"></i>Temporarily unavailable
+                </p>
+                <h2 id="err-h" class="h3">
+                  The ideas could not be loaded right now
+                </h2>
+                <p>
+                  The list is read live from Motir, and Motir did not answer.
+                  Nothing is lost; try again in a moment.
+                </p>
+                <a class="btn ghost" href="/ideas"
+                  ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+                    <path d="M21 3v5h-5" />
+                    <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+                    <path d="M3 21v-5h5" /></svg
+                  >Try again</a
+                >
+              </section>
+            </main>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">G</span>
+          <h2>Pending — a filter was clicked and the server is answering</h2>
+          <span class="note"
+            >Filters change data the browser does not have, so each one is a
+            server navigation. While it is in flight the count reads “Updating…”
+            and the results region carries aria-busy; the current list stays as
+            it is (no skeleton, no dim, no spinner). Nothing streams: the page
+            is server-rendered on first paint.</span
+          >
+        </div>
+        <div class="frame desk">
+          <div class="site">
+            <header class="topbar">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <nav class="nav" aria-label="Main">
+                <span class="navitem"
+                  >Products
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" /></svg></span
+                ><a href="/explore">Build in public</a
+                ><a href="/ideas" aria-current="page" class="on"
+                  >Ideas to build</a
+                ><a href="/motir-builds-itself">Motir builds itself</a
+                ><a href="/docs">Docs</a><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <span class="btn ghost sm">Copy setup prompt</span
+                ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Sign in</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Start free
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <main>
+              <section class="controls" aria-labelledby="find-h">
+                <div class="controls-head">
+                  <h2 id="find-h" class="h3">Find an idea</h2>
+                  <p class="count" aria-live="polite" aria-busy="true">
+                    Updating…
+                  </p>
+                </div>
+                <form class="search" role="search" action="/ideas" method="get">
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" /></svg
+                  ><input
+                    name="q"
+                    value=""
+                    placeholder="Search ideas, evidence and gaps"
+                    aria-label="Search the ideas"
+                  /><button class="btn primary sm" type="submit">Search</button>
+                </form>
+                <div class="cats" role="group" aria-label="Category">
+                  <a class="chip" href="#" aria-pressed="false"
+                    >All categories</a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Legal<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Finance<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Security &amp; compliance<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Customer support<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Localization<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Growth &amp; marketing<span class="cnt">1</span></a
+                  ><a class="chip on" href="#" aria-pressed="true"
+                    >E-commerce<span class="cnt">2</span
+                    ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Pets<span class="cnt">1</span></a
+                  >
+                </div>
+                <details class="tags">
+                  <summary>
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                      />
+                      <circle cx="7.5" cy="7.5" r=".5" /></svg
+                    >Tags<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div class="tagchips" role="group" aria-label="Tags">
+                    <a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >AI agents<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >B2B software<span class="cnt">6</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Caregiving<span class="cnt">1</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Compliance<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Consumers<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Developer tools<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Education<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >EU AI Act<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Healthcare<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Pricing and billing<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Small businesses<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Startups<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Vertical software<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >On YC&#x27;s request list<span class="cnt">2</span></a
+                    >
+                  </div>
+                </details>
+                <div class="active">
+                  <span class="lbl">Filtered by</span
+                  ><a class="pill sky" href="#"
+                    >Category: E-commerce
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="clear" href="/ideas">Clear all</a>
+                </div>
+              </section>
+            </main>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">H</span>
+          <h2>
+            /ideas at 390px — controls and the list, narrowed to one category
+          </h2>
+          <span class="note"
+            >One column. The category chips scroll sideways in one row (no
+            wrap); the Tags disclosure and the active pills wrap. The band cards
+            and the direction cards are full width.</span
+          >
+        </div>
+        <div class="frame mob">
+          <div class="site mobile">
+            <header class="topbar m">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <button class="iconbtn" type="button" aria-label="Menu">
+                <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16M4 12h16M4 17h16" />
+                </svg>
+              </button>
+            </header>
+            <main>
+              <section class="controls m" aria-labelledby="find-h">
+                <div class="controls-head">
+                  <h2 id="find-h" class="h3">Find an idea</h2>
+                  <p class="count" aria-live="polite">2 ideas match</p>
+                </div>
+                <form class="search" role="search" action="/ideas" method="get">
+                  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" /></svg
+                  ><input
+                    name="q"
+                    value=""
+                    placeholder="Search ideas, evidence and gaps"
+                    aria-label="Search the ideas"
+                  /><button class="btn primary sm" type="submit">
+                    <span class="sr">Search</span
+                    ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m20 20-3.5-3.5" />
+                    </svg>
+                  </button>
+                </form>
+                <div class="cats scroll" role="group" aria-label="Category">
+                  <a class="chip" href="#" aria-pressed="false"
+                    >All categories</a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Legal<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Finance<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Security &amp; compliance<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Customer support<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Localization<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Growth &amp; marketing<span class="cnt">1</span></a
+                  ><a class="chip on" href="#" aria-pressed="true"
+                    >E-commerce<span class="cnt">2</span
+                    ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Pets<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Family care<span class="cnt">1</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >Personal growth<span class="cnt">2</span></a
+                  ><a class="chip" href="#" aria-pressed="false"
+                    >AI infrastructure<span class="cnt">3</span></a
+                  >
+                </div>
+                <details class="tags">
+                  <summary>
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                      />
+                      <circle cx="7.5" cy="7.5" r=".5" /></svg
+                    >Tags<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div class="tagchips" role="group" aria-label="Tags">
+                    <a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >AI agents<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >B2B software<span class="cnt">6</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Caregiving<span class="cnt">1</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Compliance<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Consumers<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Developer tools<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Education<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >EU AI Act<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Healthcare<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Pricing and billing<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Small businesses<span class="cnt">4</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Startups<span class="cnt">2</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >Vertical software<span class="cnt">3</span></a
+                    ><a class="chip" href="#" aria-pressed="false"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                        />
+                        <circle cx="7.5" cy="7.5" r=".5" /></svg
+                      >On YC&#x27;s request list<span class="cnt">2</span></a
+                    >
+                  </div>
+                </details>
+                <div class="active">
+                  <span class="lbl">Filtered by</span
+                  ><a class="pill sky" href="#"
+                    >Category: E-commerce
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" /></svg
+                    ><span class="sr">Remove</span></a
+                  ><a class="clear" href="/ideas">Clear all</a>
+                </div>
+              </section>
+              <section class="block" aria-labelledby="more-h">
+                <p class="mono eyebrow">More directions · 2</p>
+                <h2 id="more-h" class="h2">
+                  Good products to build, beyond what Motir needs
+                </h2>
+                <p class="body">
+                  Motir won't be your first customer for these. Each is a market
+                  with documented demand, a gap the current players leave open,
+                  and a reason it can be built now and not five years ago. The
+                  evidence is linked under each one.
+                </p>
+                <ul class="dgrid">
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=make-a-store-visible-to-ai-shoppers"
+                        >Make a store visible to AI shoppers</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Gets a small store&#x27;s products found and recommended
+                      by the AI assistants people now shop through, and shows
+                      how often each product is picked.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Traffic from AI assistants to US retail sites rose
+                          693% in the 2025 holiday season and converted 31%
+                          better than other traffic.
+                          <a
+                            class="src"
+                            href="https://www.digitalcommerce360.com/2026/01/13/generative-ai-online-holiday-shopping-traffic-2025/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Adobe Analytics, via Digital Commerce 360, January
+                            2026</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          The funded players sell to large brands and big
+                          catalogs. Millions of small stores have nothing yet,
+                          and the window is short.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                  <li class="dcard" data-surface="card">
+                    <p class="mono dcat">
+                      <i class="sq tone-decision"></i>E-commerce
+                    </p>
+                    <h4>
+                      <a
+                        class="stretch"
+                        href="/ideas?idea=stop-returns-before-they-happen"
+                        >Stop returns before they happen</a
+                      >
+                    </h4>
+                    <p class="pitch">
+                      Spots the order bought in three sizes to send two back,
+                      answers the fit question before checkout, and scores each
+                      return for fraud.
+                    </p>
+                    <ul class="dtags" aria-label="Tags">
+                      <li>Small businesses</li>
+                      <li>Vertical software</li>
+                    </ul>
+                    <dl class="ddl">
+                      <div>
+                        <dt class="mono">The evidence</dt>
+                        <dd>
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025</a
+                          >
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="mono">The gap</dt>
+                        <dd>
+                          Return platforms handle the return once it starts.
+                          Preventing it, for stores below enterprise size, is
+                          barely served.
+                        </dd>
+                      </div>
+                    </dl>
+                    <span class="open mono"
+                      >Open the idea
+                      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></span>
+                  </li>
+                </ul>
+              </section>
+            </main>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-cap">
+          <span class="n">I</span>
+          <h2>?idea=… at 390px — the sheet is the whole screen</h2>
+          <span class="note"
+            >Below 768px the sheet fills the viewport; the close control stays
+            in reach at the top right, and the page behind does not
+            scroll.</span
+          >
+        </div>
+        <div class="frame mob">
+          <div class="site mobile">
+            <header class="topbar m">
+              <a class="brand" href="/"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span>Motir</span></a
+              >
+              <button class="iconbtn" type="button" aria-label="Menu">
+                <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16M4 12h16M4 17h16" />
+                </svg>
+              </button>
+            </header>
+            <main>
+              <div class="sheet-wrap m">
+                <div class="scrim" aria-hidden="true"></div>
+                <aside
+                  class="dsheet"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="d-stop-returns-before-they-happen"
+                  data-surface="modal"
+                >
+                  <div class="dtop">
+                    <p class="mono">
+                      <i class="sq tone-decision"></i>E-commerce · A direction
+                    </p>
+                    <a class="iconbtn close" href="#" aria-label="Close"
+                      ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" /></svg
+                    ></a>
+                  </div>
+                  <h2
+                    id="d-stop-returns-before-they-happen"
+                    class="dtitle"
+                    tabindex="-1"
+                  >
+                    Stop returns before they happen
+                  </h2>
+                  <p class="dpitch">
+                    Spots the order bought in three sizes to send two back,
+                    answers the fit question before checkout, and scores each
+                    return for fraud.
+                  </p>
+                  <ul class="dtagrow" aria-label="Tags">
+                    <li>
+                      <a class="chip sm" href="/ideas?tag=smb"
+                        ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                          />
+                          <circle cx="7.5" cy="7.5" r=".5" /></svg
+                        >Small businesses</a
+                      >
+                    </li>
+                    <li>
+                      <a class="chip sm" href="/ideas?tag=vertical-saas"
+                        ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"
+                          />
+                          <circle cx="7.5" cy="7.5" r=".5" /></svg
+                        >Vertical software</a
+                      >
+                    </li>
+                  </ul>
+                  <section class="drow">
+                    <h3 class="mono">The evidence</h3>
+                    <ol class="evs">
+                      <li class="ev">
+                        <p class="claim">
+                          Shoppers were expected to return $849.9 billion of
+                          goods in 2025, 19.3% of online sales, and 9% of
+                          returns are fraudulent.
+                        </p>
+                        <p class="srcline">
+                          <a
+                            class="src"
+                            href="https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >National Retail Federation and Happy Returns,
+                            October 2025
+                            <svg
+                              class="ic"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path d="M7 17 17 7" />
+                              <path d="M7 7h10v10" /></svg></a
+                          ><span class="date">October 2025</span>
+                        </p>
+                      </li>
+                    </ol>
+                  </section>
+                  <section class="drow">
+                    <h3 class="mono">The gap</h3>
+                    <p>
+                      Return platforms handle the return once it starts.
+                      Preventing it, for stores below enterprise size, is barely
+                      served.
+                    </p>
+                  </section>
+                </aside>
+              </div>
+            </main>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

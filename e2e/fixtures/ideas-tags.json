@@ -1,0 +1,74 @@
+{
+  "tags": [
+    {
+      "slug": "ai-agents",
+      "label": "AI agents",
+      "count": 4
+    },
+    {
+      "slug": "b2b-saas",
+      "label": "B2B software",
+      "count": 6
+    },
+    {
+      "slug": "caregiving",
+      "label": "Caregiving",
+      "count": 1
+    },
+    {
+      "slug": "compliance",
+      "label": "Compliance",
+      "count": 3
+    },
+    {
+      "slug": "consumer",
+      "label": "Consumers",
+      "count": 3
+    },
+    {
+      "slug": "developer-tools",
+      "label": "Developer tools",
+      "count": 4
+    },
+    {
+      "slug": "education",
+      "label": "Education",
+      "count": 2
+    },
+    {
+      "slug": "eu-ai-act",
+      "label": "EU AI Act",
+      "count": 2
+    },
+    {
+      "slug": "healthcare",
+      "label": "Healthcare",
+      "count": 2
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "count": 3
+    },
+    {
+      "slug": "smb",
+      "label": "Small businesses",
+      "count": 4
+    },
+    {
+      "slug": "startups",
+      "label": "Startups",
+      "count": 2
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "Vertical software",
+      "count": 3
+    },
+    {
+      "slug": "yc-rfs",
+      "label": "On YC's request list",
+      "count": 2
+    }
+  ]
+}

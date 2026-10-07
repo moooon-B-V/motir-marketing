@@ -99,6 +99,13 @@ export default defineConfig({
         'lib/docs.ts',
         'lib/skillsGuide.ts',
         'lib/mcpWiring.ts',
+        // MOTIR-7685 — the ideas data layer, added WITH the file.
+        'lib/ideas.ts',
+        // MOTIR-7689 — the store-backed /ideas page and its components
+        // (MOTIR-7687, MOTIR-7688). The page IS measured, unlike `app/p`'s:
+        // `tests/ideas/ideasPage.test.tsx` awaits it against the recorded
+        // contract, which is the integration gate the story asked for.
+        'app/ideas/**/*.tsx',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -158,6 +165,12 @@ export default defineConfig({
         'lib/docs.ts': { lines: 90, functions: 90, branches: 90 },
         'lib/skillsGuide.ts': { lines: 90, functions: 90, branches: 90 },
         'lib/mcpWiring.ts': { lines: 90, functions: 90, branches: 90 },
+        // MOTIR-7685 — measured first under `tests/ideas.test.ts`.
+        'lib/ideas.ts': { lines: 90, functions: 90, branches: 90 },
+        // MOTIR-7689 — MEASURED FIRST under `tests/ideas/`: the page 95.7
+        // lines / 96.7 branches / 91.7 functions, every component 100 lines
+        // and ≥ 90.9 branches. Pinned at the story's floor.
+        'app/ideas/**/*.tsx': { lines: 90, functions: 90, branches: 90 },
       },
     },
   },
