@@ -1,16 +1,18 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { THEME_DEFAULTS } from '@motir/design-system'
+import { THEME_STORAGE_KEYS } from '@motir/design-system'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { DesignShowcase } from '@/app/_components/DesignShowcase'
 import { copy } from '@/lib/copy'
+import { siteAppearanceAttributes } from '@/lib/siteDefaults'
+import { forgetVisitAppearance } from '@/lib/useVisitAppearance'
 
 /*
  * `/design` — the showcase island (MOTIR-1043 · 8.3.16).
  *
  * ⚠️ THE ASSERTION IS ON `<html>`, NOT ON THE CONTROL. The page's claim is
  * that the WHOLE document restyles — bar and footer included — and the whole
- * of that mechanism is `ThemeProvider` writing `data-style` / `data-palette` /
+ * of that mechanism is `useVisitAppearance` writing `data-style` / `data-palette` /
  * `data-type` / `data-theme` onto `document.documentElement`, which
  * `theme.css`'s 23 `[data-palette]`, 112 `[data-style]` and 9 `[data-type]`
  * blocks then re-resolve for every element on the page. A test that asserted
@@ -21,10 +23,8 @@ import { copy } from '@/lib/copy'
 const html = () => document.documentElement
 
 /*
- * ⚠️ jsdom SHIPS NO `matchMedia`, and `ThemeProvider` reads it through
- * `useSyncExternalStore` to resolve the `system` pattern — so without this
- * every test in this file dies inside the provider rather than in an
- * assertion. `stubColorScheme` is also how the `system` arm below is driven:
+ * ⚠️ jsdom SHIPS NO `matchMedia`, and the visit store reads it through
+ * `useSyncExternalStore` to resolve the `system` pattern. `stubColorScheme` is also how the `system` arm below is driven:
  * the default answer is "not dark", which is precisely what makes a BROKEN
  * `system` arm indistinguishable from a working one.
  */
@@ -42,21 +42,30 @@ function stubColorScheme(prefersDark: boolean) {
     }) as unknown as MediaQueryList) as typeof window.matchMedia
 }
 
-function clearTheme() {
+/** The <html> every page is served with — what `app/layout.tsx` renders. */
+function serveSitePage() {
   stubColorScheme(false)
-  for (const attr of [
-    'data-theme',
-    'data-style',
-    'data-palette',
-    'data-type',
-  ]) {
-    html().removeAttribute(attr)
+  for (const [name, value] of Object.entries(siteAppearanceAttributes)) {
+    html().setAttribute(name, value)
   }
   window.localStorage.clear()
 }
 
-beforeEach(clearTheme)
-afterEach(clearTheme)
+const htmlAppearance = () =>
+  Object.fromEntries(
+    Object.keys(siteAppearanceAttributes).map((name) => [
+      name,
+      html().getAttribute(name),
+    ]),
+  )
+
+function freshVisit() {
+  forgetVisitAppearance()
+  serveSitePage()
+}
+
+beforeEach(freshVisit)
+afterEach(freshVisit)
 
 describe('the axis rail', () => {
   it('labels every axis region, so the rail is navigable by role', () => {
@@ -166,19 +175,10 @@ describe('each control restyles the WHOLE document', () => {
     expect(html()).toHaveAttribute('data-theme', 'light')
   })
 
-  it('resolves `system` through prefers-color-scheme rather than defaulting to light', async () => {
-    /*
-     * `system` is the DEFAULT pattern, so this is the arm a first-time visitor
-     * actually meets. jsdom answers `matches: false` for every media query
-     * unless it is told otherwise, which is exactly how a broken `system` arm
-     * looks indistinguishable from a working one.
-     */
+  it('stays light on a dark-mode OS, and follows the OS only once `system` is picked', async () => {
     stubColorScheme(true)
     const user = userEvent.setup()
     render(<DesignShowcase />)
-    await user.click(
-      screen.getByRole('radio', { name: copy.designShowcase.theme.light }),
-    )
     expect(html()).toHaveAttribute('data-theme', 'light')
     await user.click(
       screen.getByRole('radio', { name: copy.designShowcase.theme.system }),
@@ -225,7 +225,7 @@ describe('Reset to default', () => {
     ).toBeInTheDocument()
   })
 
-  it('returns all four axes to THEME_DEFAULTS and disappears again', async () => {
+  it("returns all four axes to motir.co's own look and disappears again", async () => {
     const user = userEvent.setup()
     render(<DesignShowcase />)
     await user.click(screen.getByRole('radio', { name: /Neo-Brutalism/ }))
@@ -236,9 +236,124 @@ describe('Reset to default', () => {
     await user.click(
       screen.getByRole('button', { name: copy.designShowcase.reset }),
     )
-    expect(html()).toHaveAttribute('data-style', THEME_DEFAULTS.style)
-    expect(html()).toHaveAttribute('data-palette', THEME_DEFAULTS.palette)
-    expect(html()).toHaveAttribute('data-type', THEME_DEFAULTS.type)
+    expect(htmlAppearance()).toEqual(siteAppearanceAttributes)
+    expect(
+      screen.queryByRole('button', { name: copy.designShowcase.reset }),
+    ).toBeNull()
+  })
+})
+
+describe('a choice for the visit, never stored (MOTIR-7724)', () => {
+  it('changes nothing on arrival — style, palette, type and theme stay the site look', () => {
+    stubColorScheme(true)
+    render(<DesignShowcase />)
+    expect(htmlAppearance()).toEqual(siteAppearanceAttributes)
+  })
+
+  it('stays light when the OS switches to dark while the visitor is on the page', () => {
+    // A live media query: the package's specimen runs its own provider, which
+    // re-stamps `data-theme` from the OS when it changes.
+    let dark = false
+    const listeners = new Set<() => void>()
+    window.matchMedia = ((query: string) =>
+      ({
+        get matches() {
+          return dark && query.includes('dark')
+        },
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: (_: string, fn: () => void) => listeners.add(fn),
+        removeEventListener: (_: string, fn: () => void) =>
+          listeners.delete(fn),
+        dispatchEvent: () => false,
+      }) as unknown as MediaQueryList) as typeof window.matchMedia
+    render(<DesignShowcase />)
+    act(() => {
+      dark = true
+      for (const fn of listeners) fn()
+    })
+    expect(html()).toHaveAttribute('data-theme', 'light')
+  })
+
+  it('selects the site look in every picker on arrival', () => {
+    render(<DesignShowcase />)
+    const checked = (name: string) =>
+      within(screen.getByRole('radiogroup', { name }))
+        .getAllByRole('radio')
+        .find((el) => el.getAttribute('aria-checked') === 'true')
+    expect(checked(copy.designShowcase.theme.name)).toHaveAccessibleName(
+      copy.designShowcase.theme.light,
+    )
+    expect(checked(copy.designShowcase.style.name)?.textContent).toMatch(
+      /Hand-Drawn/,
+    )
+    expect(checked(copy.designShowcase.type.name)?.textContent).toMatch(
+      /Grotesk/,
+    )
+  })
+
+  it('writes nothing to storage, whatever is picked', async () => {
+    const user = userEvent.setup()
+    render(<DesignShowcase />)
+    await user.click(
+      screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
+    )
+    await user.click(screen.getByRole('radio', { name: /Neo-Brutalism/ }))
+    await user.click(screen.getByRole('radio', { name: /Amethyst/ }))
+    await user.click(screen.getByRole('radio', { name: /Mono-Technical/ }))
+    for (const key of Object.values(THEME_STORAGE_KEYS)) {
+      expect(window.localStorage.getItem(key)).toBeNull()
+    }
+  })
+
+  it('keeps the choice on the whole site after the visitor leaves /design', async () => {
+    // motir.co has one root layout, so <html> outlives the /design route on a
+    // client-side navigation; nothing may put the site look back on unmount.
+    const user = userEvent.setup()
+    const { unmount } = render(<DesignShowcase />)
+    await user.click(
+      screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
+    )
+    await user.click(screen.getByRole('radio', { name: /Neo-Brutalism/ }))
+    unmount()
+    expect(html()).toHaveAttribute('data-theme', 'dark')
+    expect(html()).toHaveAttribute('data-style', 'neo-brutalism')
+  })
+
+  it('shows the same choice on coming back to /design in the same visit', async () => {
+    const user = userEvent.setup()
+    const first = render(<DesignShowcase />)
+    await user.click(
+      screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
+    )
+    await user.click(screen.getByRole('radio', { name: /Neo-Brutalism/ }))
+    first.unmount()
+    render(<DesignShowcase />)
+    expect(html()).toHaveAttribute('data-theme', 'dark')
+    expect(html()).toHaveAttribute('data-style', 'neo-brutalism')
+    expect(
+      screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
+    ).toHaveAttribute('aria-checked', 'true')
+    expect(
+      screen.getByRole('button', { name: copy.designShowcase.reset }),
+    ).toBeInTheDocument()
+  })
+
+  it('starts a fresh visit from the site look', async () => {
+    const user = userEvent.setup()
+    const first = render(<DesignShowcase />)
+    await user.click(
+      screen.getByRole('radio', { name: copy.designShowcase.theme.dark }),
+    )
+    first.unmount()
+    // A fresh page load: a new JS realm (no in-memory choice) and the
+    // server-rendered <html> of app/layout.tsx.
+    forgetVisitAppearance()
+    serveSitePage()
+    render(<DesignShowcase />)
+    expect(htmlAppearance()).toEqual(siteAppearanceAttributes)
     expect(
       screen.queryByRole('button', { name: copy.designShowcase.reset }),
     ).toBeNull()

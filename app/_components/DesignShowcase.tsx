@@ -22,17 +22,15 @@ import {
   StylePicker,
   Switch,
   TYPE_REGISTRY,
-  THEME_DEFAULTS,
   Textarea,
-  ThemeProvider,
   ThemeSegmentedControl,
   TokensSpecimen,
   Tooltip,
   TypePicker,
-  useTheme,
 } from '@motir/design-system'
 import { RotateCcw } from 'lucide-react'
 import { copy } from '@/lib/copy'
+import { useVisitAppearance } from '@/lib/useVisitAppearance'
 
 /*
  * motir.co/design — the public design showcase (MOTIR-1043 · 8.3.16).
@@ -53,24 +51,35 @@ import { copy } from '@/lib/copy'
  * imported from the package.
  *
  * ⚠️ HOW THE WHOLE DOCUMENT RESTYLES, INCLUDING THE CHROME THIS COMPONENT DOES
- * NOT RENDER. `ThemeProvider` writes `data-theme` / `-style` / `-palette` /
- * `-type` onto `document.documentElement` and persists each to localStorage;
- * `theme.css`'s 23 `[data-palette]`, 112 `[data-style]` and 9 `[data-type]`
- * blocks then re-resolve the token layer for the entire document. So the bar
- * and the footer change with the specimen even though they are rendered by
- * `app/layout.tsx`'s tree, and the choice PERSISTS across motir.co — a
- * visitor who picks Neo-Brutalism here meets the landing in Neo-Brutalism.
- * That is decided, not incidental (`design-notes.md` § *a visitor's choice
- * PERSISTS*): a demo that forgets itself on navigation is a preview. **Reset
- * to default** is what discharges it, and it is present exactly while any axis
- * is off its default.
+ * NOT RENDER. `useVisitAppearance` writes `data-theme` / `-style` /
+ * `-palette` / `-type` onto `document.documentElement`; `theme.css`'s 23
+ * `[data-palette]`, 112 `[data-style]` and 9 `[data-type]` blocks then
+ * re-resolve the token layer for the entire document. So the bar and the
+ * footer change with the specimen even though they are rendered by
+ * `app/layout.tsx`'s tree.
+ *
+ * ⚠️ FOR THE VISIT, AND NO LONGER (MOTIR-7724, narrowing MOTIR-3861's *a
+ * visitor's choice PERSISTS*). The page opens on exactly the look the visitor
+ * is already on, so arriving changes nothing. A pick restyles all of motir.co
+ * for the rest of the visit — a visitor who picks Neo-Brutalism here meets the
+ * landing in Neo-Brutalism — but nothing is written to storage, so the next
+ * fresh load is light Hand-Drawn / Grotesk again. **Reset to default** returns
+ * to that site look, and it is present exactly while any axis is off it.
  */
 export function DesignShowcase() {
+  /*
+   * ⚠️ HELD HERE, ON THE PARENT, NOT IN THE RAIL: the package's
+   * `TokensSpecimen` mounts its own `ThemeProvider`, which stamps the APP's
+   * defaults onto `<html>` when it mounts. React runs a parent's effects after
+   * its children's, so the visit's choice is the write that lands and arriving
+   * on the page still changes nothing.
+   */
+  const theme = useVisitAppearance()
   return (
-    <ThemeProvider>
-      <AxisRail />
+    <>
+      <AxisRail theme={theme} />
       <Specimen />
-    </ThemeProvider>
+    </>
   )
 }
 
@@ -101,20 +110,8 @@ export function DesignShowcase() {
  * the band the asset's layout is built on. `tests/aaMatrix.test.ts` measures
  * it over all ten palettes in both themes rather than taking this on trust.
  */
-function AxisRail() {
-  const theme = useTheme()
-  const offDefault =
-    theme.pattern !== THEME_DEFAULTS.pattern ||
-    theme.styleId !== THEME_DEFAULTS.style ||
-    theme.palette !== THEME_DEFAULTS.palette ||
-    theme.type !== THEME_DEFAULTS.type
-
-  function reset() {
-    theme.setPattern(THEME_DEFAULTS.pattern)
-    theme.setStyleId(THEME_DEFAULTS.style)
-    theme.setPalette(THEME_DEFAULTS.palette)
-    theme.setType(THEME_DEFAULTS.type)
-  }
+function AxisRail({ theme }: { theme: ReturnType<typeof useVisitAppearance> }) {
+  const { offDefault, reset } = theme
 
   return (
     <section
