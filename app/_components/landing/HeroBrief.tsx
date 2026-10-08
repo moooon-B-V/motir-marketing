@@ -141,8 +141,9 @@ const GAP_MS = 450
  * The text typed so far, or `null` while nothing is being typed — no examples,
  * reduced motion, or `running` false (the box is focused or holds text), and
  * on the server, so the first paint is the plain placeholder. Each example is
- * typed a character at a time, held, erased, and the next one begins; the
- * order starts at a random idea so a returning visitor sees a different one.
+ * typed a character at a time, held, erased, and the next one begins. The
+ * order is random: the list is shuffled, every idea shows once, then it is
+ * shuffled again — never repeating the idea just shown.
  */
 function useTypedExample(
   examples: readonly string[],
@@ -157,13 +158,14 @@ function useTypedExample(
       '(prefers-reduced-motion: reduce)',
     ).matches
     if (!running || list.length === 0 || still) return
-    let index = Math.floor(Math.random() * list.length)
+    let order = shuffled(list)
+    let index = 0
     let length = 0
     let erasing = false
     let timer: ReturnType<typeof setTimeout>
 
     const tick = () => {
-      const target = list[index]
+      const target = order[index]
       if (!erasing) {
         length += 1
         setText(target.slice(0, length))
@@ -180,7 +182,16 @@ function useTypedExample(
       setText(target.slice(0, length))
       if (length <= 0) {
         erasing = false
-        index = (index + 1) % list.length
+        index += 1
+        if (index >= order.length) {
+          const last = order[order.length - 1]
+          order = shuffled(list)
+          // A new round never opens on the idea that closed the last one.
+          if (order.length > 1 && order[0] === last) {
+            ;[order[0], order[1]] = [order[1], order[0]]
+          }
+          index = 0
+        }
         timer = setTimeout(tick, GAP_MS)
         return
       }
@@ -195,6 +206,16 @@ function useTypedExample(
   }, [key, running])
 
   return running ? text : null
+}
+
+/** A Fisher–Yates shuffle into a new array. */
+function shuffled<T>(items: readonly T[]): T[] {
+  const out = [...items]
+  for (let i = out.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[out[i], out[j]] = [out[j], out[i]]
+  }
+  return out
 }
 
 function SubmitFailed() {

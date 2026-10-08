@@ -209,3 +209,20 @@ describe('HeroBrief — typed examples', () => {
     expect(screen.queryByTestId('hero-brief-typed')).toBeNull()
   })
 })
+
+describe('HeroBrief — typed examples come in a random order', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
+
+  it('shuffles the list rather than walking it in order', () => {
+    vi.useFakeTimers()
+    // Fisher–Yates with random() ≡ 0 swaps every item with the first, so
+    // [A, B, C] comes out [B, C, A]: B is typed first, not A.
+    vi.spyOn(Math, 'random').mockReturnValue(0)
+    render(<HeroBrief examples={['A', 'B', 'C']} />)
+    act(() => vi.advanceTimersByTime(1000))
+    expect(screen.getByTestId('hero-brief-typed')).toHaveTextContent(/^B$/)
+  })
+})
