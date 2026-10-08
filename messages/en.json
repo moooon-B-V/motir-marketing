@@ -1970,8 +1970,13 @@
           "uses": "All of it"
         }
       ],
-      "loop": ["Build a feature", "Use it", "Build the next one with it"],
-      "howItWorks": "See how Motir works"
+      "loop": ["Build a feature", "Use it", "Build the next one with it"]
+    },
+    "howItWorks": {
+      "eyebrow": "Under the hood",
+      "headline": "The machine it built itself with is the one you get.",
+      "body": "AI planning, the plan gate, agent runs, the merge gate, repair and the learning loop: every Motir project runs through the same workflow, this one included.",
+      "cta": "See how Motir works"
     },
     "live": {
       "eyebrow": "Still building",

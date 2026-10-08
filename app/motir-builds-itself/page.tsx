@@ -186,11 +186,19 @@ export default async function MotirBuildsItselfPage() {
         body={b.bootstrap.body}
       >
         <Staircase />
+      </Section>
+
+      <Section
+        id="how-it-works"
+        eyebrow={b.howItWorks.eyebrow}
+        headline={b.howItWorks.headline}
+        body={b.howItWorks.body}
+      >
         <a
           href={HOW_IT_WORKS}
-          className="inline-flex items-center gap-2 justify-self-start text-[16px] font-medium text-(--el-text) underline underline-offset-4 hover:text-(--el-accent-on-surface) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
+          className="inline-flex h-(--height-btn-lg) items-center gap-2 justify-self-start rounded-(--radius-btn) bg-(--el-showcase-ground) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-ground-text) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
         >
-          {b.bootstrap.howItWorks}
+          {b.howItWorks.cta}
           <ArrowRight aria-hidden="true" className="size-4" />
         </a>
       </Section>
