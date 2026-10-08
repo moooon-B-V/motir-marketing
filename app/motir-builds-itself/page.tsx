@@ -188,20 +188,38 @@ export default async function MotirBuildsItselfPage() {
         <Staircase />
       </Section>
 
-      <Section
-        id="how-it-works"
-        eyebrow={b.howItWorks.eyebrow}
-        headline={b.howItWorks.headline}
-        body={b.howItWorks.body}
-      >
-        <a
-          href={HOW_IT_WORKS}
-          className="inline-flex h-(--height-btn-lg) items-center gap-2 justify-self-start rounded-(--radius-btn) bg-(--el-showcase-ground) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-ground-text) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
+      <div className={cn('py-[clamp(24px,3vw,48px)]', GUTTER)}>
+        <section
+          aria-labelledby="mbi-hiw-h"
+          data-showcase="field"
+          className="landing-art mk-halftone mx-auto grid max-w-[1400px] gap-6 overflow-hidden rounded-(--radius-card) border border-(--el-border) bg-(--el-showcase-field) p-[calc(var(--spacing-card-padding)*2)] text-(--el-showcase-field-text) shadow-(--shadow-card) md:grid-cols-[minmax(0,1fr)_auto] md:items-end"
         >
-          {b.howItWorks.cta}
-          <ArrowRight aria-hidden="true" className="size-4" />
-        </a>
-      </Section>
+          <div className="grid gap-3">
+            <p className={cn(MONO, 'm-0 text-[12px]')}>
+              {b.howItWorks.eyebrow}
+            </p>
+            <h2
+              id="mbi-hiw-h"
+              className="m-0 max-w-[20ch] font-(family-name:--font-serif) text-[clamp(32px,4vw,60px)] leading-[0.98] font-bold tracking-[-0.03em]"
+            >
+              {b.howItWorks.headline}
+            </h2>
+            <p className="m-0 max-w-[56ch] text-[18px]">{b.howItWorks.body}</p>
+          </div>
+          {/* The palette's warm decision fill — the same door the landing
+              gives developers — so it reads as the colourful way in. */}
+          <a
+            href={HOW_IT_WORKS}
+            className="group inline-flex h-(--height-btn-lg) items-center gap-2 justify-self-start rounded-(--radius-btn) bg-(--el-showcase-decision) px-(--spacing-btn-x) text-[16px] font-semibold text-(--el-showcase-decision-text) no-underline shadow-(--shadow-card) transition hover:-translate-y-0.5 hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text) motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+          >
+            {b.howItWorks.cta}
+            <ArrowRight
+              aria-hidden="true"
+              className="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+            />
+          </a>
+        </section>
+      </div>
 
       <Section
         id="live"
