@@ -1,4 +1,3 @@
-import { createElement } from 'react'
 import { cleanup, render } from '@testing-library/react'
 import {
   PALETTE_IDS,
@@ -26,6 +25,13 @@ import {
  */
 const pathname = vi.hoisted(() => ({ value: '/' }))
 vi.mock('next/navigation', () => ({ usePathname: () => pathname.value }))
+// The landing reads live idea titles for the hero brief; no network here.
+vi.mock('@/lib/ideas', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/ideas')>()),
+  fetchIdeas: vi
+    .fn()
+    .mockResolvedValue({ items: [], categories: [], total: 0 }),
+}))
 
 function stubMatchMedia() {
   window.matchMedia = ((query: string) =>
@@ -482,17 +488,21 @@ describe('what the site actually paints, read off the rendered pages', () => {
   })
   afterEach(cleanup)
 
-  it.each(pages)('%s paints no pair that is below AA', (_route, Component) => {
-    const { container } = render(createElement(Component))
-    const painted = paintedPairs(container.firstElementChild as Element)
-    expect(painted.length).toBeGreaterThan(20)
+  it.each(pages)(
+    '%s paints no pair that is below AA',
+    async (_route, Component) => {
+      // Called, not mounted: the landing is an async server component.
+      const { container } = render(await Component())
+      const painted = paintedPairs(container.firstElementChild as Element)
+      expect(painted.length).toBeGreaterThan(20)
 
-    const banned = new Set(BELOW.map((p) => `${p.ink} on ${p.surface}`))
-    const hits = painted
-      .filter((p) => banned.has(`${p.ink} on ${p.surface}`))
-      .map((p) => `${p.ink} on ${p.surface} — ${p.where} — "${p.text}"`)
-    expect(hits).toEqual([])
-  })
+      const banned = new Set(BELOW.map((p) => `${p.ink} on ${p.surface}`))
+      const hits = painted
+        .filter((p) => banned.has(`${p.ink} on ${p.surface}`))
+        .map((p) => `${p.ink} on ${p.surface} — ${p.where} — "${p.text}"`)
+      expect(hits).toEqual([])
+    },
+  )
 
   /*
    * The stronger form, and the one that does not consult the list at all: every
@@ -503,8 +513,8 @@ describe('what the site actually paints, read off the rendered pages', () => {
    */
   it.each(pages)(
     '%s — every rendered pair clears AA on all 20 cells',
-    (_route, Component) => {
-      const { container } = render(createElement(Component))
+    async (_route, Component) => {
+      const { container } = render(await Component())
       const failures: string[] = []
       for (const pair of distinctPairs(
         paintedPairs(container.firstElementChild as Element),

@@ -1,8 +1,8 @@
 'use client'
 
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowRight, CircleAlert, LoaderCircle } from 'lucide-react'
-import { Button } from '@motir/design-system'
+import { Button, cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
 import { SIGN_UP } from '@/lib/destinations'
 import { MAX_IDEA_LENGTH, handOffIdea } from '@/lib/ideaHandoff'
@@ -20,19 +20,33 @@ import { MAX_IDEA_LENGTH, handOffIdea } from '@/lib/ideaHandoff'
  *
  * The box carries `id="hero-brief"`: the wave lines behind the hero gather
  * towards it.
+ *
+ * Given `examples` (the landing passes the titles of live ideas from the
+ * ideas store), the empty box types them in one after another, as if someone
+ * were writing them. The typing is a picture, not the placeholder: it is drawn
+ * over the field `aria-hidden`, while the real placeholder stays in the
+ * attribute for screen readers and is only made transparent. It stops the
+ * moment the box is focused or holds text, and under `prefers-reduced-motion`
+ * it never starts — the static placeholder shows instead.
  */
 
 type Status = 'idle' | 'submitting' | 'failed'
 
-/** `placeholder` replaces the landing's example idea on a page that wants its own. */
+/**
+ * `placeholder` replaces the landing's example idea on a page that wants its
+ * own; `examples`, when non-empty, are typed into the empty box in turn.
+ */
 export function HeroBrief({
   placeholder = copy.landing.hero.placeholder,
-}: Readonly<{ placeholder?: string }> = {}) {
+  examples = [],
+}: Readonly<{ placeholder?: string; examples?: readonly string[] }> = {}) {
   const fieldId = useId()
   const [idea, setIdea] = useState('')
+  const [focused, setFocused] = useState(false)
   const [status, setStatus] = useState<Status>('idle')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const submitting = status === 'submitting'
+  const typed = useTypedExample(examples, idea === '' && !focused)
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault()
@@ -60,17 +74,34 @@ export function HeroBrief({
       >
         {copy.landing.hero.ideaLabel}
       </label>
-      <textarea
-        ref={textareaRef}
-        id={fieldId}
-        rows={3}
-        maxLength={MAX_IDEA_LENGTH}
-        disabled={submitting}
-        value={idea}
-        onChange={(event) => setIdea(event.target.value)}
-        placeholder={placeholder}
-        className="min-h-[92px] w-full resize-y border-0 bg-transparent p-0 text-[18px] leading-normal text-(--el-text) outline-none placeholder:text-(--el-text-muted) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--el-accent-on-surface) disabled:opacity-70 sm:text-[19px]"
-      />
+      <div className="relative grid">
+        <textarea
+          ref={textareaRef}
+          id={fieldId}
+          rows={3}
+          maxLength={MAX_IDEA_LENGTH}
+          disabled={submitting}
+          value={idea}
+          onChange={(event) => setIdea(event.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder={placeholder}
+          className={cn(
+            'min-h-[92px] w-full resize-y border-0 bg-transparent p-0 text-[18px] leading-normal text-(--el-text) outline-none placeholder:text-(--el-text-muted) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--el-accent-on-surface) disabled:opacity-70 sm:text-[19px]',
+            typed !== null && 'placeholder:text-transparent',
+          )}
+        />
+        {typed !== null ? (
+          <span
+            aria-hidden="true"
+            data-testid="hero-brief-typed"
+            className="pointer-events-none absolute inset-0 overflow-hidden text-[18px] leading-normal break-words whitespace-pre-wrap text-(--el-text-muted) sm:text-[19px]"
+          >
+            {typed}
+            <span className="mk-caret ml-px inline-block h-[1.1em] w-[2px] translate-y-[0.2em] bg-(--el-accent-on-surface)" />
+          </span>
+        ) : null}
+      </div>
 
       {status === 'failed' ? <SubmitFailed /> : null}
 
@@ -99,6 +130,71 @@ export function HeroBrief({
       </span>
     </form>
   )
+}
+
+const TYPE_MS = 55
+const ERASE_MS = 22
+const HOLD_MS = 2200
+const GAP_MS = 450
+
+/**
+ * The text typed so far, or `null` while nothing is being typed — no examples,
+ * reduced motion, or `running` false (the box is focused or holds text), and
+ * on the server, so the first paint is the plain placeholder. Each example is
+ * typed a character at a time, held, erased, and the next one begins; the
+ * order starts at a random idea so a returning visitor sees a different one.
+ */
+function useTypedExample(
+  examples: readonly string[],
+  running: boolean,
+): string | null {
+  const [text, setText] = useState<string | null>(null)
+  const key = examples.join('\n')
+
+  useEffect(() => {
+    const list = key ? key.split('\n') : []
+    const still = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+    if (!running || list.length === 0 || still) return
+    let index = Math.floor(Math.random() * list.length)
+    let length = 0
+    let erasing = false
+    let timer: ReturnType<typeof setTimeout>
+
+    const tick = () => {
+      const target = list[index]
+      if (!erasing) {
+        length += 1
+        setText(target.slice(0, length))
+        if (length >= target.length) {
+          erasing = true
+          timer = setTimeout(tick, HOLD_MS)
+          return
+        }
+        // A little unevenness, so it reads as a person and not a ticker.
+        timer = setTimeout(tick, TYPE_MS + Math.random() * 60)
+        return
+      }
+      length -= 1
+      setText(target.slice(0, length))
+      if (length <= 0) {
+        erasing = false
+        index = (index + 1) % list.length
+        timer = setTimeout(tick, GAP_MS)
+        return
+      }
+      timer = setTimeout(tick, ERASE_MS)
+    }
+
+    timer = setTimeout(tick, GAP_MS)
+    return () => {
+      clearTimeout(timer)
+      setText(null)
+    }
+  }, [key, running])
+
+  return running ? text : null
 }
 
 function SubmitFailed() {
