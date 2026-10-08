@@ -27,7 +27,9 @@ import { MAX_IDEA_LENGTH, handOffIdea } from '@/lib/ideaHandoff'
  * over the field `aria-hidden`, while the real placeholder stays in the
  * attribute for screen readers and is only made transparent. It stops the
  * moment the box is focused or holds text, and under `prefers-reduced-motion`
- * it never starts — the static placeholder shows instead.
+ * it never starts — the static placeholder shows instead. Once the box is
+ * focused the placeholder is not shown either: the typed ideas already made the
+ * suggestion, and a focused box is for the visitor's own words.
  */
 
 type Status = 'idle' | 'submitting' | 'failed'
@@ -88,7 +90,8 @@ export function HeroBrief({
           placeholder={placeholder}
           className={cn(
             'min-h-[92px] w-full resize-y border-0 bg-transparent p-0 text-[18px] leading-normal text-(--el-text) outline-none placeholder:text-(--el-text-muted) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--el-accent-on-surface) disabled:opacity-70 sm:text-[19px]',
-            typed !== null && 'placeholder:text-transparent',
+            (typed !== null || (focused && examples.length > 0)) &&
+              'placeholder:text-transparent',
           )}
         />
         {typed !== null ? (

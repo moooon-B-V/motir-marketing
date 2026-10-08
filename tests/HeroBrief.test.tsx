@@ -191,6 +191,23 @@ describe('HeroBrief — typed examples', () => {
     expect(screen.queryByTestId('hero-brief-typed')).toBeNull()
   })
 
+  it('hides the placeholder while the box is focused, keeping the attribute', () => {
+    render(<HeroBrief examples={examples} />)
+    const field = screen.getByLabelText('What are you building?')
+    act(() => field.focus())
+    expect(field).toHaveClass('placeholder:text-transparent')
+    expect(field).toHaveAttribute('placeholder')
+    act(() => field.blur())
+    expect(field).not.toHaveClass('placeholder:text-transparent')
+  })
+
+  it('keeps the placeholder on focus without examples, as the product pages use it', () => {
+    render(<HeroBrief />)
+    const field = screen.getByLabelText('What are you building?')
+    act(() => field.focus())
+    expect(field).not.toHaveClass('placeholder:text-transparent')
+  })
+
   it('never starts under prefers-reduced-motion', () => {
     vi.useFakeTimers()
     vi.stubGlobal(
