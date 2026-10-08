@@ -1970,7 +1970,8 @@
           "uses": "All of it"
         }
       ],
-      "loop": ["Build a feature", "Use it", "Build the next one with it"]
+      "loop": ["Build a feature", "Use it", "Build the next one with it"],
+      "howItWorks": "See how Motir works"
     },
     "live": {
       "eyebrow": "Still building",

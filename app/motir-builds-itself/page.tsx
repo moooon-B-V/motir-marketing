@@ -4,6 +4,7 @@ import { cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
 import {
   FREE_DOOR,
+  HOW_IT_WORKS,
   MOTIR_PROJECT,
   MOTIR_PROJECT_RUNS,
 } from '@/lib/destinations'
@@ -185,6 +186,13 @@ export default async function MotirBuildsItselfPage() {
         body={b.bootstrap.body}
       >
         <Staircase />
+        <a
+          href={HOW_IT_WORKS}
+          className="inline-flex items-center gap-2 justify-self-start text-[16px] font-medium text-(--el-text) underline underline-offset-4 hover:text-(--el-accent-on-surface) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
+        >
+          {b.bootstrap.howItWorks}
+          <ArrowRight aria-hidden="true" className="size-4" />
+        </a>
       </Section>
 
       <Section
