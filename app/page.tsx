@@ -7,6 +7,7 @@ import {
   IMPORT_DOOR,
   SOURCE_REPO,
 } from '@/lib/destinations'
+import { fetchIdeas } from '@/lib/ideas'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from './_components/SiteShell'
 import {
@@ -56,8 +57,23 @@ const GUTTER = 'px-[clamp(16px,3vw,48px)]'
 const H2 =
   'm-0 font-(family-name:--font-serif) text-[clamp(40px,5.4vw,88px)] leading-[0.94] font-bold tracking-[-0.035em] text-balance'
 
-export default function Page() {
+/**
+ * The titles the hero brief types in: live ideas from the ideas store, read
+ * through the public API like `/ideas` reads them (revalidated hourly). An
+ * unreachable store leaves the box with its static placeholder.
+ */
+async function loadExamples(): Promise<string[]> {
+  try {
+    const { items } = await fetchIdeas({ tags: [] })
+    return items.map((idea) => idea.title)
+  } catch {
+    return []
+  }
+}
+
+export default async function Page() {
   const l = copy.landing
+  const examples = await loadExamples()
   return (
     <>
       <SiteShell host={SITE_HOST} className="bg-(--el-surface)" overlayHeader>
@@ -79,7 +95,7 @@ export default function Page() {
             {l.hero.lede}
           </p>
           <div className="mt-[18px] flex w-full justify-center">
-            <HeroBrief />
+            <HeroBrief examples={examples} />
           </div>
         </section>
 

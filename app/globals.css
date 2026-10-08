@@ -61,6 +61,22 @@ body {
   }
 }
 
+/* The hero brief's typing caret. The typing itself never starts under
+   reduced motion (`HeroBrief`), so the caret is never seen still-blinking. */
+@keyframes mk-caret {
+  50% {
+    opacity: 0;
+  }
+}
+.mk-caret {
+  animation: mk-caret 1s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-caret {
+    animation: none;
+  }
+}
+
 /*
  * THE LANDING'S PICTURES — "Vibe the project" (2026-10 redesign).
  *

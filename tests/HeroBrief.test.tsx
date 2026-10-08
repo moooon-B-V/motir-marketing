@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { HeroBrief } from '@/app/_components/landing/HeroBrief'
@@ -159,5 +159,53 @@ describe('HeroBrief — state D, submit failed', () => {
       expect(assign).toHaveBeenCalledWith('https://app.test.motir.co/sign-in'),
     )
     expect(fetch).not.toHaveBeenCalled()
+  })
+})
+
+describe('HeroBrief — typed examples', () => {
+  const examples = ['An AI legal team']
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('types an example into the empty box as a picture, keeping the real placeholder', () => {
+    vi.useFakeTimers()
+    render(<HeroBrief examples={examples} />)
+    // Fully typed, and still held before it is erased.
+    act(() => vi.advanceTimersByTime(3000))
+    const typed = screen.getByTestId('hero-brief-typed')
+    expect(typed).toHaveAttribute('aria-hidden', 'true')
+    expect(typed).toHaveTextContent('An AI legal team')
+    expect(screen.getByLabelText('What are you building?')).toHaveAttribute(
+      'placeholder',
+      'An AI personal assistant that helps people reach their goals…',
+    )
+  })
+
+  it('stops typing once the box is focused', () => {
+    vi.useFakeTimers()
+    render(<HeroBrief examples={examples} />)
+    act(() => vi.advanceTimersByTime(1000))
+    act(() => screen.getByLabelText('What are you building?').focus())
+    expect(screen.queryByTestId('hero-brief-typed')).toBeNull()
+  })
+
+  it('never starts under prefers-reduced-motion', () => {
+    vi.useFakeTimers()
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn().mockReturnValue({ matches: true } as MediaQueryList),
+    )
+    render(<HeroBrief examples={examples} />)
+    act(() => vi.advanceTimersByTime(5000))
+    expect(screen.queryByTestId('hero-brief-typed')).toBeNull()
+  })
+
+  it('types nothing without examples, as the product pages use it', () => {
+    vi.useFakeTimers()
+    render(<HeroBrief />)
+    act(() => vi.advanceTimersByTime(5000))
+    expect(screen.queryByTestId('hero-brief-typed')).toBeNull()
   })
 })
