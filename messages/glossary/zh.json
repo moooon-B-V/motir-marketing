@@ -181,6 +181,24 @@
     "acceptance video": {
       "translation": "验收视频",
       "source": "messages/zh.json approvalGate.acceptanceResult.kindLabel"
+    },
+    "Vibe the project": {
+      "translation": "Vibe the project",
+      "doNotTranslate": true,
+      "source": "Yue, 2026-10-09: the slogan is kept in English, like \"vibe coding\"",
+      "note": "Never translated, in a headline, a call to action or quoted in a sentence."
+    },
+    "vibe the project": {
+      "translation": "vibe the project",
+      "doNotTranslate": true,
+      "source": "Yue, 2026-10-09: the slogan is kept in English, like \"vibe coding\"",
+      "note": "Never translated, in a headline, a call to action or quoted in a sentence."
+    },
+    "Vibe a project": {
+      "translation": "Vibe a project",
+      "doNotTranslate": true,
+      "source": "Yue, 2026-10-09: the slogan is kept in English, like \"vibe coding\"",
+      "note": "Never translated, in a headline, a call to action or quoted in a sentence."
     }
   }
 }

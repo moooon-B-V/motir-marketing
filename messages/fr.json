@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Vibez le projet",
+      "headline": "Vibe the project",
       "lede": "Vous apportez l’idée. Motir livre le projet entier : le plan, le design, la réalisation, les documents et toute l’histoire de sa construction.",
       "ideaLabel": "Que construisez-vous ?",
       "placeholder": "Un assistant personnel IA qui aide chacun à atteindre ses objectifs…",
@@ -337,7 +337,7 @@
       "body": "Revenez demain ou dans six mois, ou confiez-le à quelqu’un de nouveau. Le projet se souvient de tout : personne ne repart de zéro ni ne réexplique quoi que ce soit."
     },
     "close": {
-      "headline": "Vibez le projet",
+      "headline": "Vibe the project",
       "body": "Commencez avec quelques phrases, ou confiez un projet existant à Motir Project Manager.",
       "start": "Démarrer un projet",
       "import": "Importer un projet",
@@ -1773,8 +1773,8 @@
   },
   "howItWorks": {
     "metaTitle": "Comment fonctionne Motir",
-    "metaDescription": "Le workflow derrière « vibez le projet » : la planification IA, la validation du plan, les exécutions d’agents, la validation avant fusion, la réparation, la boucle d’apprentissage et la mémoire du projet.",
-    "eyebrow": "Pour les développeurs · la machine derrière « vibez le projet »",
+    "metaDescription": "Le workflow derrière « vibe the project » : la planification IA, la validation du plan, les exécutions d’agents, la validation avant fusion, la réparation, la boucle d’apprentissage et la mémoire du projet.",
+    "eyebrow": "Pour les développeurs · la machine derrière « vibe the project »",
     "headline": "Comment fonctionne Motir",
     "lede": "Chaque projet Motir passe par le même instrument. Les modules sont Motir et ses agents. Les boutons et les interrupteurs sont à vous : rien n’avance tant qu’une personne ne les a pas actionnés.",
     "legendMotir": "Motir et les agents",
@@ -2078,7 +2078,7 @@
     },
     "closeHeadline": "Ouvert au cœur",
     "closeBody": "Le cœur de gestion de projet est open source, sous licence GPL-3.0. Auto-hébergez-le, ou utilisez-le sur motir.co.",
-    "closeStart": "Vibez un projet",
+    "closeStart": "Vibe a project",
     "closeDocs": "Lire la documentation",
     "closeMcp": "Connecter votre agent"
   },

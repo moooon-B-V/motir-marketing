@@ -219,6 +219,24 @@
       "translation": "Acceptatievideo",
       "source": "Atlassian Jira Software / GitHub, Dutch UI",
       "note": "Not fetched in this session (no reference was reachable from the run); chosen from the translator's knowledge of that product's localized UI. Re-check against the live product before changing it."
+    },
+    "Vibe the project": {
+      "translation": "Vibe the project",
+      "doNotTranslate": true,
+      "source": "Yue, 2026-10-09: the slogan is kept in English, like \"vibe coding\"",
+      "note": "Never translated, in a headline, a call to action or quoted in a sentence."
+    },
+    "vibe the project": {
+      "translation": "vibe the project",
+      "doNotTranslate": true,
+      "source": "Yue, 2026-10-09: the slogan is kept in English, like \"vibe coding\"",
+      "note": "Never translated, in a headline, a call to action or quoted in a sentence."
+    },
+    "Vibe a project": {
+      "translation": "Vibe a project",
+      "doNotTranslate": true,
+      "source": "Yue, 2026-10-09: the slogan is kept in English, like \"vibe coding\"",
+      "note": "Never translated, in a headline, a call to action or quoted in a sentence."
     }
   }
 }

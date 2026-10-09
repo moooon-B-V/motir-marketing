@@ -470,3 +470,30 @@ describe('every catalogue', () => {
     })
   })
 })
+
+describe('the slogan', () => {
+  // Yue, 2026-10-09: "Vibe the project" is kept in English, the way "vibe
+  // coding" is, wherever the English says it. The glossaries mark it
+  // doNotTranslate so `i18n:merge` refuses a translation; this holds the
+  // catalogues as they stand.
+  it.each(['Vibe the project', 'vibe the project', 'Vibe a project'])(
+    'every catalogue keeps "%s" wherever the English has it',
+    (slogan) => {
+      const dir = join(process.cwd(), 'messages')
+      const english = leafStrings(copy).filter(([, text]) =>
+        text.includes(slogan),
+      )
+      expect(english.length).toBeGreaterThan(0)
+      const translated = catalogues(dir).filter(([locale]) => locale !== 'en')
+      const lost = translated.flatMap(([locale, catalogue]) =>
+        english
+          .filter(([key]) => {
+            const value = leafOf(catalogue, key)
+            return typeof value === 'string' && !value.includes(slogan)
+          })
+          .map(([key]) => `${locale}:${key}`),
+      )
+      expect(lost).toEqual([])
+    },
+  )
+})

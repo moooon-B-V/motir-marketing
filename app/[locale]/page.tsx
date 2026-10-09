@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { localizedPath } from '@/i18n/localizedPath'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
@@ -249,12 +250,12 @@ export default async function Page({ params }: LocalePageProps) {
               <a href={IMPORT_DOOR} className={CLOSE_BTN.plain}>
                 {l.close.import}
               </a>
-              <a
+              <Link
                 href={localizedPath(locale, HOW_IT_WORKS)}
                 className={CLOSE_BTN.warm}
               >
                 {l.close.developers}
-              </a>
+              </Link>
             </div>
             <p className="m-0 text-[14px] text-(--el-showcase-field-text)/85">
               {l.close.free.lead}{' '}

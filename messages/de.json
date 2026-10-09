@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Das ganze Projekt viben",
+      "headline": "Vibe the project",
       "lede": "Sie bringen die Idee. Motir liefert das ganze Projekt: den Plan, das Design, die Umsetzung, die Dokumente und die vollständige Geschichte, wie es dazu kam.",
       "ideaLabel": "Was bauen Sie?",
       "placeholder": "Ein persönlicher KI-Assistent, der Menschen hilft, ihre Ziele zu erreichen…",
@@ -337,7 +337,7 @@
       "body": "Kommen Sie morgen oder in sechs Monaten zurück, oder übergeben Sie es an jemand Neues. Das Projekt merkt sich alles, sodass niemand bei null anfängt oder es noch einmal erklären muss."
     },
     "close": {
-      "headline": "Das ganze Projekt viben",
+      "headline": "Vibe the project",
       "body": "Beginnen Sie mit ein paar Sätzen, oder übergeben Sie ein bestehendes Projekt an Motir Project Manager.",
       "start": "Projekt starten",
       "import": "Projekt importieren",
@@ -1761,8 +1761,8 @@
   },
   "howItWorks": {
     "metaTitle": "So funktioniert Motir",
-    "metaDescription": "Der Workflow hinter „das ganze Projekt viben“: KI-Planung, das Plan-Gate, Agentenläufe, das Merge-Gate, Reparatur, die Lernschleife und das Gedächtnis des Projekts.",
-    "eyebrow": "Für Entwickler · die Maschine hinter „das ganze Projekt viben“",
+    "metaDescription": "Der Workflow hinter „vibe the project“: KI-Planung, das Plan-Gate, Agentenläufe, das Merge-Gate, Reparatur, die Lernschleife und das Gedächtnis des Projekts.",
+    "eyebrow": "Für Entwickler · die Maschine hinter „vibe the project“",
     "headline": "So funktioniert Motir",
     "lede": "Jedes Motir-Projekt läuft durch dasselbe Instrument. Die Module sind Motir und seine Agenten. Die Regler und Schalter gehören Ihnen: Nichts geht weiter, bis ein Mensch sie betätigt.",
     "legendMotir": "Motir und Agenten",
@@ -2058,7 +2058,7 @@
     },
     "closeHeadline": "Offen im Kern",
     "closeBody": "Der Projektmanagement-Kern ist Open Source unter GPL-3.0. Hosten Sie ihn selbst, oder nutzen Sie ihn auf motir.co.",
-    "closeStart": "Ein Projekt viben",
+    "closeStart": "Vibe a project",
     "closeDocs": "Doku lesen",
     "closeMcp": "Ihren Agenten verbinden"
   },

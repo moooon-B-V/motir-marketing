@@ -15,7 +15,9 @@ import {
  * nothing a reader of that language reads. Those pages offer their own fonts
  * instead, named directly: every face the installed font set lists for that
  * language. One pick draws all of that language's text, headings and body
- * alike, in the face. Nothing picked is the set's default sans, everywhere.
+ * alike, in the face. Nothing picked is the language's site default, on every
+ * page: LXGW WenKai for Chinese (Yue, 2026-10-09), the set's default sans for
+ * Japanese and Korean.
  *
  * `app/globals.css` draws each pick from the `data-cjk-<lang>` attribute that
  * `lib/useVisitAppearance.ts` writes on `<html>`, and
@@ -65,10 +67,17 @@ export function cjkFaces(lang: CjkLang): CjkFace[] {
   )
 }
 
-/** The face drawn when nothing is picked: the set's default sans. */
+/** Where motir.co departs from the font set's own default sans. */
+const SITE_DEFAULT_FACE: Partial<Record<CjkLang, string>> = {
+  zh: 'lxgw-wenkai-tc',
+}
+
+/** The face drawn when nothing is picked, on every page of that language. */
 export function defaultCjkFace(lang: CjkLang): string {
-  return FONT_SET_REGISTRY[resolveFontSet(lang).id as FontSetId].roles.sans
-    .default
+  return (
+    SITE_DEFAULT_FACE[lang] ??
+    FONT_SET_REGISTRY[resolveFontSet(lang).id as FontSetId].roles.sans.default
+  )
 }
 
 /*

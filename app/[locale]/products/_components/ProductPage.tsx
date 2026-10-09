@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { localizedPath } from '@/i18n/localizedPath'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
@@ -222,7 +223,7 @@ export function WorksWith({ slugs }: Readonly<{ slugs: ProductSlug[] }>) {
             const product = productOf(slug, copy)
             return (
               <li key={slug}>
-                <a
+                <Link
                   href={localizedPath(locale, productPath(slug))}
                   className="grid h-full grid-cols-[12px_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 rounded-(--radius-card) border border-(--el-border) bg-(--el-card) p-(--spacing-card-padding) no-underline shadow-(--shadow-card) hover:border-(--el-border-strong) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
                 >
@@ -240,7 +241,7 @@ export function WorksWith({ slugs }: Readonly<{ slugs: ProductSlug[] }>) {
                   <span className="col-start-2 text-[14px] text-(--el-text-secondary)">
                     {product.blurb}
                   </span>
-                </a>
+                </Link>
               </li>
             )
           })}

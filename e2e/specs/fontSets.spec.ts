@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { t } from '../support/catalogue'
 import {
   CJK_FAMILIES,
+  DEFAULT_FAMILY,
   fetchedFamilies,
   SET_FAMILIES,
   settleFonts,
@@ -65,8 +66,8 @@ for (const locale of ['zh', 'ja', 'ko'] as const) {
     await expect(page.locator('html')).toHaveAttribute('lang', locale)
     await renderProbe(page)
 
-    const own = SET_FAMILIES[locale][0]
-    // The positive signal first: the set's default sans face actually loaded.
+    const own = DEFAULT_FAMILY[locale]
+    // The positive signal first: the language's default face actually loaded.
     await expect
       .poll(() =>
         page.evaluate(

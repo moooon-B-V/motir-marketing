@@ -5,6 +5,7 @@ import { SITE_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
 import { catalogue, leaves, t } from '../support/catalogue'
 import {
   CJK_FAMILIES,
+  DEFAULT_FAMILY,
   fetchedFamilies,
   SET_FAMILIES,
   settleFonts,
@@ -79,7 +80,9 @@ const ORDER = ['en', 'zh', 'ja', 'ko', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'pt']
 const HAN = '直 化 骨 誤'
 
 const html = (page: Page) => page.locator('html')
-const hero = (page: Page) => page.getByRole('heading', { level: 1 }).first()
+/** The landing's lede — the line that proves the language, now that the
+ *  headline, "Vibe the project", is English in every catalogue. */
+const lede = (page: Page) => page.locator('[data-hero-lede]')
 
 /** Open the globe and choose a language, by its `lang`; waits on the page. */
 async function choose(page: Page, locale: string) {
@@ -161,7 +164,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   await page.goto('/')
   await expect(page).toHaveURL(`${SITE_ORIGIN}/ja`)
   await expect(html(page)).toHaveAttribute('lang', 'ja')
-  await expect(hero(page)).toContainText(t('ja', 'landing.hero.headline'))
+  await expect(lede(page)).toContainText(t('ja', 'landing.hero.lede'))
   await expect(page.locator('body')).toContainText('Motir')
   await beat(page, 1600)
 
@@ -171,7 +174,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   await page.goto('/')
   await expect(page).toHaveURL(`${SITE_ORIGIN}/`)
   await expect(html(page)).toHaveAttribute('lang', 'en')
-  await expect(hero(page)).toContainText(t('en', 'landing.hero.headline'))
+  await expect(lede(page)).toContainText(t('en', 'landing.hero.lede'))
   await beat(page, 1400)
 
   // ── 3 · SWITCH TO FRENCH ────────────────────────────────────────────────
@@ -334,7 +337,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   expect(hop, 'the bare address was not moved').toBeTruthy()
   expect((await hop!.response())?.status()).toBe(307)
   await expect(page).toHaveURL(`${SITE_ORIGIN}/fr`)
-  await expect(hero(page)).toContainText(t('fr', 'landing.hero.headline'))
+  await expect(lede(page)).toContainText(t('fr', 'landing.hero.lede'))
   await beat(page, 1400)
 
   // ── 9 · THREE HAN SCRIPTS ───────────────────────────────────────────────
@@ -352,7 +355,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   for (const locale of ['zh', 'ja', 'ko'] as const) {
     await choose(page, locale)
     await expect(page).toHaveURL(`${SITE_ORIGIN}/${locale}`)
-    await expect(hero(page)).toContainText(t(locale, 'landing.hero.headline'))
+    await expect(lede(page)).toContainText(t(locale, 'landing.hero.lede'))
     // ⚠️ INJECTED UNTIL IT STAYS. The landing may still be hydrating when its
     // heading reads right, and hydration drops a node React did not render —
     // measured: one run in two lost the span before its screenshot. So the
@@ -383,7 +386,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
       .map(({ path }) => path)
     const fetched = await fetchedFamilies(page, requested)
     expect(fetched, `/${locale} fetched its own face`).toContain(
-      SET_FAMILIES[locale][0],
+      DEFAULT_FAMILY[locale],
     )
     const siblings: readonly string[] = Object.entries(SET_FAMILIES)
       .filter(([other]) => other !== locale)
@@ -402,7 +405,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   expect(german?.request().redirectedFrom()).toBeNull()
   await expect(page).toHaveURL(`${SITE_ORIGIN}/de`)
   await expect(html(page)).toHaveAttribute('lang', 'de')
-  await expect(hero(page)).toContainText(t('de', 'landing.hero.headline'))
+  await expect(lede(page)).toContainText(t('de', 'landing.hero.lede'))
   await beat(page, 1400)
 
   // ── 11 · CRAWL DATA ON THE JAPANESE LANDING ─────────────────────────────

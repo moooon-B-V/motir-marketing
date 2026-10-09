@@ -48,6 +48,12 @@ describe('a CJK page offers its own fonts', () => {
     ])
   })
 
+  it('draws Chinese in LXGW WenKai by default, Japanese and Korean in Noto Sans', () => {
+    expect(defaultCjkFace('zh')).toBe('lxgw-wenkai-tc')
+    expect(defaultCjkFace('ja')).toBe('noto-sans-jp')
+    expect(defaultCjkFace('ko')).toBe('noto-sans-kr')
+  })
+
   it('only zh, ja and ko pages get the row', () => {
     expect(cjkLangOf('zh')).toBe('zh')
     expect(cjkLangOf('ja')).toBe('ja')
@@ -69,7 +75,7 @@ describe('a CJK page offers its own fonts', () => {
     }
   })
 
-  it('globals.css draws every pick, headings and body alike, and the default sans when none', () => {
+  it('globals.css draws every pick, headings and body alike, and the site default when none', () => {
     for (const lang of CJK_LANGS) {
       for (const face of cjkFaces(lang)) {
         const generic = face.role === 'serif' ? 'serif' : 'sans-serif'
@@ -82,6 +88,9 @@ describe('a CJK page offers its own fonts', () => {
         )
         expect(body).toContain(
           `--font-script-serif: var(${face.variable}, ${generic});`,
+        )
+        expect(body).toContain(
+          `--font-script-mono: var(${face.variable}, ${generic});`,
         )
         if (face.id === defaultCjkFace(lang)) {
           expect(GLOBALS).toContain(

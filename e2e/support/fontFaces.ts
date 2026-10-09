@@ -16,6 +16,13 @@ export const SET_FAMILIES = {
   ko: ['Noto Sans KR', 'Nanum Gothic', 'Noto Serif KR'],
 } as const
 
+/** The face each language draws in with nothing picked (`lib/cjkFaces.ts`). */
+export const DEFAULT_FAMILY = {
+  zh: 'LXGW WenKai TC',
+  ja: 'Noto Sans JP',
+  ko: 'Noto Sans KR',
+} as const
+
 export const CJK_FAMILIES: readonly string[] =
   Object.values(SET_FAMILIES).flat()
 

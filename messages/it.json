@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Fai il progetto a vibe",
+      "headline": "Vibe the project",
       "lede": "Tu porti l’idea. Motir consegna l’intero progetto: il piano, il design, la realizzazione, i documenti e tutta la storia di come ci si è arrivati.",
       "ideaLabel": "Cosa stai creando?",
       "placeholder": "Un assistente personale AI che aiuta le persone a raggiungere i propri obiettivi…",
@@ -337,7 +337,7 @@
       "body": "Torna domani o tra sei mesi, oppure passalo a qualcuno di nuovo. Il progetto ricorda tutto, così nessuno riparte da zero o deve rispiegarlo."
     },
     "close": {
-      "headline": "Fai il progetto a vibe",
+      "headline": "Vibe the project",
       "body": "Inizia con poche frasi, oppure affida un progetto esistente a Motir Project Manager.",
       "start": "Avvia un progetto",
       "import": "Importa un progetto",
@@ -1756,8 +1756,8 @@
   },
   "howItWorks": {
     "metaTitle": "Come funziona Motir",
-    "metaDescription": "Il flusso di lavoro dietro «Fai il progetto a vibe»: pianificazione con l’AI, il cancello del piano, le esecuzioni degli agenti, il cancello del merge, la riparazione, il ciclo di apprendimento e la memoria del progetto.",
-    "eyebrow": "Per sviluppatori · la macchina dietro «Fai il progetto a vibe»",
+    "metaDescription": "Il flusso di lavoro dietro «vibe the project»: pianificazione con l’AI, il cancello del piano, le esecuzioni degli agenti, il cancello del merge, la riparazione, il ciclo di apprendimento e la memoria del progetto.",
+    "eyebrow": "Per sviluppatori · la macchina dietro «vibe the project»",
     "headline": "Come funziona Motir",
     "lede": "Ogni progetto Motir passa per lo stesso strumento. I moduli sono Motir e i suoi agenti. Manopole e interruttori sono tuoi: nulla va avanti finché una persona non li gira.",
     "legendMotir": "Motir e agenti",
@@ -2057,7 +2057,7 @@
     },
     "closeHeadline": "Aperto nel nucleo",
     "closeBody": "Il nucleo di gestione dei progetti è open source, con licenza GPL-3.0. Ospitalo tu, oppure usalo su motir.co.",
-    "closeStart": "Fai un progetto a vibe",
+    "closeStart": "Vibe a project",
     "closeDocs": "Leggi la documentazione",
     "closeMcp": "Collega il tuo agente"
   },

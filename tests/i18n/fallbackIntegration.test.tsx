@@ -52,7 +52,9 @@ function lossy(locale: string) {
     readFileSync(`messages/${locale}.json`, 'utf8'),
   ) as Copy
   const kept = {
-    headline: catalogue.landing.hero.headline,
+    // Not the headline: "Vibe the project" is kept in English in every
+    // catalogue (Yue, 2026-10-09), so it cannot tell a fallback from a kept key.
+    lede: catalogue.landing.hero.lede,
     overview: catalogue.publicProject.tabs.overview,
   }
   const partial = structuredClone(catalogue) as unknown as {
@@ -86,11 +88,11 @@ function expectNoRawText() {
 }
 
 describe.each(TRANSLATED)('%s', (locale) => {
-  it('the landing: the lost CTA reads English, the kept headline its own', async () => {
+  it('the landing: the lost CTA reads English, the kept lede its own', async () => {
     const { copy, kept } = lossy(locale)
     // The removed key really was translated, so English is the fallback
     // showing rather than a value that happened to match.
-    expect(kept.headline).not.toBe(englishCopy.landing.hero.headline)
+    expect(kept.lede).not.toBe(englishCopy.landing.hero.lede)
     pageCopy = copy
     const page = await Page({ params: Promise.resolve({ locale }) })
     render(page, { locale, messages: copy })
@@ -100,9 +102,11 @@ describe.each(TRANSLATED)('%s', (locale) => {
         name: new RegExp(englishCopy.landing.hero.cta),
       }),
     ).toBeInTheDocument()
-    expect(
-      screen.getByRole('heading', { level: 1, name: kept.headline }),
-    ).toBeInTheDocument()
+    // Read off the element rather than matched as text: French's narrow
+    // no-break spaces do not survive the text matcher's normalising.
+    expect(document.querySelector('[data-hero-lede]')?.textContent).toBe(
+      kept.lede,
+    )
     expectNoRawText()
   })
 

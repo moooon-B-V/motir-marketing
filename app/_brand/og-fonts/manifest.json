@@ -6,81 +6,81 @@
       "locale": "zh",
       "family": "Noto Sans SC",
       "weight": 400,
-      "text": "AIMVbeiort—、。与个体出划台平排整智理目管编能规项",
+      "text": "AIMVbcehijoprt—、。与体划台平排智理目管编能规项",
       "catalogue": "messages/zh.json",
-      "catalogueBlob": "63fcf3d625de5cb1854347f359b4046439de5039"
+      "catalogueBlob": "1a5c91d7dc03b606fb652d1d2f7481bbefce906a"
     },
     {
       "file": "zh-700.ttf",
       "locale": "zh",
       "family": "Noto Sans SC",
       "weight": 700,
-      "text": "AIMVbeiort—、。与个体出划台平排整智理目管编能规项",
+      "text": "AIMVbcehijoprt—、。与体划台平排智理目管编能规项",
       "catalogue": "messages/zh.json",
-      "catalogueBlob": "63fcf3d625de5cb1854347f359b4046439de5039"
+      "catalogueBlob": "1a5c91d7dc03b606fb652d1d2f7481bbefce906a"
     },
     {
       "file": "zh-800.ttf",
       "locale": "zh",
       "family": "Noto Sans SC",
       "weight": 800,
-      "text": "AIMVbeiort—、。与个体出划台平排整智理目管编能规项",
+      "text": "AIMVbcehijoprt—、。与体划台平排智理目管编能规项",
       "catalogue": "messages/zh.json",
-      "catalogueBlob": "63fcf3d625de5cb1854347f359b4046439de5039"
+      "catalogueBlob": "1a5c91d7dc03b606fb652d1d2f7481bbefce906a"
     },
     {
       "file": "ja-400.ttf",
       "locale": "ja",
       "family": "Noto Sans JP",
       "weight": 400,
-      "text": "AIMiort—、。でにのよるをイェエォオクケシジスットバフブプムョラレロンー理画管計",
+      "text": "AIMVbcehijoprt—、。にのよるェエォオクケシジスットフプムョラレロンー理画管計",
       "catalogue": "messages/ja.json",
-      "catalogueBlob": "a187daef685769c59c670ffc950f28646e284187"
+      "catalogueBlob": "053c3651212edddc64b4bdd63ce87515a0a776af"
     },
     {
       "file": "ja-700.ttf",
       "locale": "ja",
       "family": "Noto Sans JP",
       "weight": 700,
-      "text": "AIMiort—、。でにのよるをイェエォオクケシジスットバフブプムョラレロンー理画管計",
+      "text": "AIMVbcehijoprt—、。にのよるェエォオクケシジスットフプムョラレロンー理画管計",
       "catalogue": "messages/ja.json",
-      "catalogueBlob": "a187daef685769c59c670ffc950f28646e284187"
+      "catalogueBlob": "053c3651212edddc64b4bdd63ce87515a0a776af"
     },
     {
       "file": "ja-800.ttf",
       "locale": "ja",
       "family": "Noto Sans JP",
       "weight": 800,
-      "text": "AIMiort—、。でにのよるをイェエォオクケシジスットバフブプムョラレロンー理画管計",
+      "text": "AIMVbcehijoprt—、。にのよるェエォオクケシジスットフプムョラレロンー理画管計",
       "catalogue": "messages/ja.json",
-      "catalogueBlob": "a187daef685769c59c670ffc950f28646e284187"
+      "catalogueBlob": "053c3651212edddc64b4bdd63ce87515a0a776af"
     },
     {
       "file": "ko-400.ttf",
       "locale": "ko",
       "family": "Noto Sans KR",
       "weight": 400,
-      "text": ",.AIMiort—계관랫레로를리바브세션스에오요이전젝케트폼프플하획",
+      "text": ",.AIMVbcehijoprt—계관랫레로리션스에오이전젝케트폼프플획",
       "catalogue": "messages/ko.json",
-      "catalogueBlob": "e4ca5b889730f1faf1d15db11d689947c4540329"
+      "catalogueBlob": "cbc2dfe81d94ea0eb98261b564b0efe384ae8e9c"
     },
     {
       "file": "ko-700.ttf",
       "locale": "ko",
       "family": "Noto Sans KR",
       "weight": 700,
-      "text": ",.AIMiort—계관랫레로를리바브세션스에오요이전젝케트폼프플하획",
+      "text": ",.AIMVbcehijoprt—계관랫레로리션스에오이전젝케트폼프플획",
       "catalogue": "messages/ko.json",
-      "catalogueBlob": "e4ca5b889730f1faf1d15db11d689947c4540329"
+      "catalogueBlob": "cbc2dfe81d94ea0eb98261b564b0efe384ae8e9c"
     },
     {
       "file": "ko-800.ttf",
       "locale": "ko",
       "family": "Noto Sans KR",
       "weight": 800,
-      "text": ",.AIMiort—계관랫레로를리바브세션스에오요이전젝케트폼프플하획",
+      "text": ",.AIMVbcehijoprt—계관랫레로리션스에오이전젝케트폼프플획",
       "catalogue": "messages/ko.json",
-      "catalogueBlob": "e4ca5b889730f1faf1d15db11d689947c4540329"
+      "catalogueBlob": "cbc2dfe81d94ea0eb98261b564b0efe384ae8e9c"
     }
   ]
 }

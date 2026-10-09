@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Vibe’uj cały projekt",
+      "headline": "Vibe the project",
       "lede": "Masz pomysł. Motir dostarcza cały projekt: plan, design, wykonanie, dokumenty i pełną historię tego, jak powstał.",
       "ideaLabel": "Co budujesz?",
       "placeholder": "Osobisty asystent AI, który pomaga ludziom osiągać cele…",
@@ -337,7 +337,7 @@
       "body": "Wróć jutro albo za pół roku, albo przekaż projekt komuś nowemu. Projekt pamięta wszystko, więc nikt nie zaczyna od zera ani nie tłumaczy wszystkiego od nowa."
     },
     "close": {
-      "headline": "Vibe’uj cały projekt",
+      "headline": "Vibe the project",
       "body": "Zacznij od kilku zdań albo przekaż istniejący projekt Motir Project Manager.",
       "start": "Zacznij projekt",
       "import": "Zaimportuj projekt",
@@ -1755,8 +1755,8 @@
   },
   "howItWorks": {
     "metaTitle": "Jak działa Motir",
-    "metaDescription": "Proces stojący za hasłem „vibe’uj cały projekt”: planowanie z AI, bramka planu, uruchomienia agentów, bramka scalania, naprawy, pętla uczenia się i pamięć projektu.",
-    "eyebrow": "Dla programistów · maszyna stojąca za hasłem „vibe’uj cały projekt”",
+    "metaDescription": "Proces stojący za hasłem „vibe the project”: planowanie z AI, bramka planu, uruchomienia agentów, bramka scalania, naprawy, pętla uczenia się i pamięć projektu.",
+    "eyebrow": "Dla programistów · maszyna stojąca za hasłem „vibe the project”",
     "headline": "Jak działa Motir",
     "lede": "Każdy projekt w aplikacji Motir przechodzi przez ten sam instrument. Moduły to Motir i jego agenci. Pokrętła i przełączniki należą do Ciebie: nic nie idzie dalej, dopóki człowiek ich nie przestawi.",
     "legendMotir": "Motir i agenci",
@@ -2062,7 +2062,7 @@
     },
     "closeHeadline": "Otwarty rdzeń",
     "closeBody": "Rdzeń do zarządzania projektami jest open source na licencji GPL-3.0. Hostuj go samodzielnie albo korzystaj z niego na motir.co.",
-    "closeStart": "Vibe’uj projekt",
+    "closeStart": "Vibe a project",
     "closeDocs": "Przeczytaj dokumentację",
     "closeMcp": "Podłącz swojego agenta"
   },

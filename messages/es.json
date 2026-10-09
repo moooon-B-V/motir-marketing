@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Haz vibe del proyecto",
+      "headline": "Vibe the project",
       "lede": "Tú pones la idea. Motir entrega el proyecto entero: el plan, el diseño, la construcción, los documentos y la historia completa de cómo se llegó hasta ahí.",
       "ideaLabel": "¿Qué estás construyendo?",
       "placeholder": "Un asistente personal con IA que ayuda a las personas a alcanzar sus metas…",
@@ -337,7 +337,7 @@
       "body": "Vuelve mañana o dentro de seis meses, o pásaselo a alguien nuevo. El proyecto lo recuerda todo, así que nadie empieza de cero ni tiene que volver a explicarlo."
     },
     "close": {
-      "headline": "Haz vibe del proyecto",
+      "headline": "Vibe the project",
       "body": "Empieza con unas pocas frases o pasa un proyecto existente a Motir Project Manager.",
       "start": "Empezar un proyecto",
       "import": "Importar un proyecto",
@@ -1768,8 +1768,8 @@
   },
   "howItWorks": {
     "metaTitle": "Cómo funciona Motir",
-    "metaDescription": "El flujo de trabajo detrás de “haz vibe del proyecto”: planificación con IA, la puerta del plan, las ejecuciones de agentes, la puerta de fusión, la reparación, el ciclo de aprendizaje y la memoria del proyecto.",
-    "eyebrow": "Para desarrolladores · la máquina detrás de “haz vibe del proyecto”",
+    "metaDescription": "El flujo de trabajo detrás de “vibe the project”: planificación con IA, la puerta del plan, las ejecuciones de agentes, la puerta de fusión, la reparación, el ciclo de aprendizaje y la memoria del proyecto.",
+    "eyebrow": "Para desarrolladores · la máquina detrás de “vibe the project”",
     "headline": "Cómo funciona Motir",
     "lede": "Cada proyecto de Motir pasa por el mismo instrumento. Los módulos son Motir y sus agentes. Los mandos e interruptores son tuyos: nada avanza hasta que una persona los gira.",
     "legendMotir": "Motir y los agentes",
@@ -2075,7 +2075,7 @@
     },
     "closeHeadline": "Abierto en el núcleo",
     "closeBody": "El núcleo de gestión de proyectos es de código abierto bajo GPL-3.0. Alójalo tú mismo o úsalo en motir.co.",
-    "closeStart": "Haz vibe de un proyecto",
+    "closeStart": "Vibe a project",
     "closeDocs": "Leer la documentación",
     "closeMcp": "Conectar tu agente"
   },

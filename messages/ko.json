@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "프로젝트를 바이브하세요",
+      "headline": "Vibe the project",
       "lede": "아이디어만 가져오세요. 계획, 디자인, 빌드, 문서, 그리고 그 모든 과정의 기록까지, Motir가 프로젝트 전체를 완성합니다.",
       "ideaLabel": "무엇을 만들고 계신가요?",
       "placeholder": "사람들이 목표를 이루도록 돕는 AI 개인 비서…",
@@ -337,7 +337,7 @@
       "body": "내일 돌아오든 6개월 뒤에 돌아오든, 새로운 사람에게 넘기든 괜찮습니다. 프로젝트가 모든 것을 기억하므로 누구도 처음부터 시작하거나 다시 설명할 필요가 없습니다."
     },
     "close": {
-      "headline": "프로젝트를 바이브하세요",
+      "headline": "Vibe the project",
       "body": "몇 문장으로 시작하거나, 기존 프로젝트를 Motir Project Manager에게 맡기세요.",
       "start": "프로젝트 시작하기",
       "import": "프로젝트 가져오기",
@@ -1727,8 +1727,8 @@
   },
   "howItWorks": {
     "metaTitle": "Motir 작동 방식",
-    "metaDescription": "“프로젝트를 바이브하세요” 뒤에 있는 워크플로: AI 계획, 계획 게이트, 에이전트 실행, 병합 게이트, 복구, 학습 루프, 그리고 프로젝트의 기억.",
-    "eyebrow": "개발자를 위해 · “프로젝트를 바이브하세요” 뒤에 있는 기계",
+    "metaDescription": "“vibe the project” 뒤에 있는 워크플로: AI 계획, 계획 게이트, 에이전트 실행, 병합 게이트, 복구, 학습 루프, 그리고 프로젝트의 기억.",
+    "eyebrow": "개발자를 위해 · “vibe the project” 뒤에 있는 기계",
     "headline": "Motir 작동 방식",
     "lede": "모든 Motir 프로젝트는 같은 장치를 거칩니다. 모듈은 Motir와 에이전트입니다. 노브와 스위치는 당신의 것입니다: 사람이 돌리기 전에는 아무것도 진행되지 않습니다.",
     "legendMotir": "Motir와 에이전트",
@@ -2024,7 +2024,7 @@
     },
     "closeHeadline": "핵심은 오픈 소스",
     "closeBody": "프로젝트 관리 핵심은 GPL-3.0 오픈 소스입니다. 직접 호스팅하거나 motir.co에서 사용하세요.",
-    "closeStart": "프로젝트 바이브하기",
+    "closeStart": "Vibe a project",
     "closeDocs": "문서 읽기",
     "closeMcp": "에이전트 연결하기"
   },

@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Vibe het project",
+      "headline": "Vibe the project",
       "lede": "Jij brengt het idee. Motir levert het hele project: het plan, het ontwerp, de bouw, de documenten en het volledige verhaal van hoe het zover kwam.",
       "ideaLabel": "Wat ga je bouwen?",
       "placeholder": "Een persoonlijke AI-assistent die mensen helpt hun doelen te bereiken…",
@@ -337,7 +337,7 @@
       "body": "Kom morgen terug of over zes maanden, of geef het aan iemand nieuw. Het project onthoudt alles, zodat niemand opnieuw hoeft te beginnen of alles opnieuw hoeft uit te leggen."
     },
     "close": {
-      "headline": "Vibe het project",
+      "headline": "Vibe the project",
       "body": "Begin met een paar zinnen, of geef een bestaand project aan Motir Project Manager.",
       "start": "Een project starten",
       "import": "Een project importeren",
@@ -1753,8 +1753,8 @@
   },
   "howItWorks": {
     "metaTitle": "Hoe Motir werkt",
-    "metaDescription": "De workflow achter ‘vibe het project’: AI-planning, de plangoedkeuring, agent-runs, de merge-goedkeuring, reparatie, de leerlus en het geheugen van het project.",
-    "eyebrow": "Voor developers · de machine achter ‘vibe het project’",
+    "metaDescription": "De workflow achter ‘vibe the project’: AI-planning, de plangoedkeuring, agent-runs, de merge-goedkeuring, reparatie, de leerlus en het geheugen van het project.",
+    "eyebrow": "Voor developers · de machine achter ‘vibe the project’",
     "headline": "Hoe Motir werkt",
     "lede": "Elk Motir-project loopt door hetzelfde instrument. De modules zijn Motir en zijn agents. De knoppen en schakelaars zijn van jou: er gaat niets verder voordat een mens eraan draait.",
     "legendMotir": "Motir en agents",
@@ -2054,7 +2054,7 @@
     },
     "closeHeadline": "Open in de kern",
     "closeBody": "De projectmanagementkern is open source onder GPL-3.0. Host hem zelf, of gebruik hem op motir.co.",
-    "closeStart": "Een project viben",
+    "closeStart": "Vibe a project",
     "closeDocs": "De docs lezen",
     "closeMcp": "Je agent koppelen"
   },

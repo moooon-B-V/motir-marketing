@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Crie o projeto na vibe",
+      "headline": "Vibe the project",
       "lede": "Você traz a ideia. O Motir entrega o projeto inteiro: o plano, o design, a construção, os documentos e a história completa de como se chegou lá.",
       "ideaLabel": "O que você está construindo?",
       "placeholder": "Um assistente pessoal com IA que ajuda as pessoas a alcançar seus objetivos…",
@@ -337,7 +337,7 @@
       "body": "Volte amanhã ou daqui a seis meses, ou passe para alguém novo. O projeto lembra de tudo, então ninguém começa do zero nem precisa explicar de novo."
     },
     "close": {
-      "headline": "Crie o projeto na vibe",
+      "headline": "Vibe the project",
       "body": "Comece com algumas frases ou entregue um projeto existente ao Motir Project Manager.",
       "start": "Começar um projeto",
       "import": "Importar um projeto",
@@ -1768,8 +1768,8 @@
   },
   "howItWorks": {
     "metaTitle": "Como o Motir funciona",
-    "metaDescription": "O fluxo de trabalho por trás de “crie o projeto na vibe”: planejamento com IA, o portão do plano, as execuções de agentes, o portão do merge, o reparo, o ciclo de aprendizado e a memória do projeto.",
-    "eyebrow": "Para desenvolvedores · a máquina por trás de “crie o projeto na vibe”",
+    "metaDescription": "O fluxo de trabalho por trás de “vibe the project”: planejamento com IA, o portão do plano, as execuções de agentes, o portão do merge, o reparo, o ciclo de aprendizado e a memória do projeto.",
+    "eyebrow": "Para desenvolvedores · a máquina por trás de “vibe the project”",
     "headline": "Como o Motir funciona",
     "lede": "Todo projeto do Motir passa pelo mesmo instrumento. Os módulos são o Motir e seus agentes. Os botões e chaves são seus: nada avança até que uma pessoa os acione.",
     "legendMotir": "Motir e agentes",
@@ -2069,7 +2069,7 @@
     },
     "closeHeadline": "Aberto no núcleo",
     "closeBody": "O núcleo de gestão de projetos é código aberto sob a GPL-3.0. Hospede você mesmo ou use em motir.co.",
-    "closeStart": "Crie um projeto na vibe",
+    "closeStart": "Vibe a project",
     "closeDocs": "Ler a documentação",
     "closeMcp": "Conectar seu agente"
   },

@@ -192,7 +192,7 @@
   },
   "landing": {
     "hero": {
-      "headline": "Vibe 出整个项目",
+      "headline": "Vibe the project",
       "lede": "你带来想法，Motir 交付整个项目：计划、设计、构建、文档，以及它如何一步步成形的完整经过。",
       "ideaLabel": "你在构建什么？",
       "placeholder": "一个帮助人们实现目标的 AI 私人助理…",
@@ -337,7 +337,7 @@
       "body": "明天回来也好，六个月后回来也好，或者交给新人接手。项目记得一切，没有人需要从头开始，也没有人需要再解释一遍。"
     },
     "close": {
-      "headline": "Vibe 出整个项目",
+      "headline": "Vibe the project",
       "body": "从几句话开始，或者把现有项目交给 Motir Project Manager。",
       "start": "开始一个项目",
       "import": "导入一个项目",
@@ -1721,8 +1721,8 @@
   },
   "howItWorks": {
     "metaTitle": "Motir 的工作方式",
-    "metaDescription": "“Vibe 出整个项目”背后的工作流程：AI 规划、计划关口、智能体运行、合并关口、修复、学习循环，以及项目的记忆。",
-    "eyebrow": "面向开发者 · “Vibe 出整个项目”背后的机器",
+    "metaDescription": "“vibe the project”背后的工作流程：AI 规划、计划关口、智能体运行、合并关口、修复、学习循环，以及项目的记忆。",
+    "eyebrow": "面向开发者 · “vibe the project”背后的机器",
     "headline": "Motir 的工作方式",
     "lede": "每个 Motir 项目都运行在同一台“仪器”上。模块是 Motir 和它的智能体，旋钮和开关属于你：在有人拨动它们之前，什么都不会往前走。",
     "legendMotir": "Motir 与智能体",
@@ -2014,7 +2014,7 @@
     },
     "closeHeadline": "核心开源",
     "closeBody": "项目管理核心以 GPL-3.0 协议开源。你可以自行托管，也可以在 motir.co 上使用。",
-    "closeStart": "Vibe 一个项目",
+    "closeStart": "Vibe a project",
     "closeDocs": "阅读文档",
     "closeMcp": "连接你的智能体"
   },

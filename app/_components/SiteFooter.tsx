@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ChromeLink } from './ChromeLink'
 import { type Copy, format, useCopy, usePageLocale } from '@/lib/copy'
 import {
   DOCS,
@@ -129,16 +130,22 @@ export function SiteFooter({ host }: { host: PublicHost }) {
           <ul className="flex list-none flex-col gap-1.5 p-0">
             {column.items.map((item) => (
               <li key={item.href}>
-                <a
+                {/* A page of this site is a client navigation, so the look a
+                    visitor picked on /design stays on for the visit; a
+                    full-page load would start it over (Yue, 2026-10-09). */}
+                <ChromeLink
                   href={
                     'site' in item && item.site
                       ? siteLinkFor(host, item.href, locale)
                       : item.href
                   }
+                  internal={
+                    'site' in item && !!item.site && host.kind === 'site'
+                  }
                   className="text-[13px] text-(--el-text-secondary) hover:text-(--el-link) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
                 >
                   {item.label}
-                </a>
+                </ChromeLink>
               </li>
             ))}
           </ul>
