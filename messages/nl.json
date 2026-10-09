@@ -841,7 +841,17 @@
       "copyCopilot": "De installatieopdrachten voor GitHub Copilot kopiëren",
       "copyOpenCode": "De installatieopdrachten voor OpenCode kopiëren",
       "copyMcpServerUrl": "De URL van de Motir MCP-server kopiëren",
-      "copyClaudeCodeCommand": "De Claude Code-opdracht kopiëren"
+      "copyClaudeCodeCommand": "De Claude Code-opdracht kopiëren",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "je computer — in de map die je koppelt",
+      "captionInContainer": "in de container",
+      "captionSandboxGrant": "de rechten die een via een apparaat uitgegeven token heeft",
+      "copySandboxDevcontainer": "De opdracht voor de dev-containerconfiguratie kopiëren",
+      "copySandboxSignIn": "De inlogopdracht kopiëren",
+      "copySandboxLink": "De koppelopdracht kopiëren",
+      "copySandboxCheck": "De controleopdracht kopiëren",
+      "sandboxAgentProfile": "Agentprofiel"
     }
   },
   "notFound": {

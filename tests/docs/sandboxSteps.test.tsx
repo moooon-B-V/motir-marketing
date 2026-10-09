@@ -3,6 +3,8 @@ import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import SandboxPage from '@/app/[locale]/docs/(guides)/sandbox/page'
+import { readFileSync } from 'node:fs'
+import { splitParts } from '@/lib/docsDocuments'
 import {
   SANDBOX_PICKER_OPTIONS,
   SANDBOX_PROFILES,
@@ -207,18 +209,38 @@ describe('the profile selector drives EVERY profile to a complete command', () =
   })
 
   it('the profiles with a CAVEAT say so on step 2, and the others do not', async () => {
+    // MOTIR-8056: a caveat is no longer a field of the profile. It is the
+    // document's part `note-<profile id>`, so the set of profiles with one is
+    // read from the document, and each is checked against its own opening words.
+    const notes = new Map(
+      splitParts(readFileSync('content/docs/sandbox/en.md', 'utf8'))
+        .filter((part) => part.name.startsWith('note-'))
+        .map((part) => [
+          part.name.slice('note-'.length),
+          part.text.trim().slice(0, 40),
+        ]),
+    )
     const { container } = render(await SandboxPage(EN_PAGE))
     for (const profile of SANDBOX_PICKER_OPTIONS) {
       await userEvent.click(screen.getByRole('radio', { name: profile.label }))
       const text = await waitFor(() => container.textContent ?? '')
-      if (profile.note) {
-        expect(text).toContain(profile.note.slice(0, 40))
+      for (const [id, opening] of notes) {
+        if (id === profile.id) expect(text).toContain(opening)
+        // Another profile's caveat never rides along.
+        else expect(text).not.toContain(opening)
       }
     }
     // A note that appeared on every profile would be prose, not a caveat.
-    const withNote = SANDBOX_PICKER_OPTIONS.filter((p) => p.note)
-    expect(withNote.length).toBeGreaterThan(0)
-    expect(withNote.length).toBeLessThan(SANDBOX_PICKER_OPTIONS.length)
+    expect([...notes.keys()].sort()).toEqual([
+      'aider',
+      'antigravity',
+      'base',
+      'opencode',
+    ])
+    for (const id of notes.keys()) {
+      expect(SANDBOX_PICKER_OPTIONS.map((p) => p.id)).toContain(id)
+    }
+    expect(notes.size).toBeLessThan(SANDBOX_PICKER_OPTIONS.length)
   })
 
   it('the devcontainer heredoc and its listing agree for EVERY profile', async () => {

@@ -834,7 +834,17 @@
       "copyCopilot": "GitHub Copilot 설치 명령 복사",
       "copyOpenCode": "OpenCode 설치 명령 복사",
       "copyMcpServerUrl": "Motir MCP 서버 URL 복사",
-      "copyClaudeCodeCommand": "Claude Code 명령 복사"
+      "copyClaudeCodeCommand": "Claude Code 명령 복사",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "내 컴퓨터 — 마운트하는 폴더에서",
+      "captionInContainer": "컨테이너 안에서",
+      "captionSandboxGrant": "기기에서 발급한 토큰이 갖는 권한",
+      "copySandboxDevcontainer": "Dev Container 구성 명령 복사",
+      "copySandboxSignIn": "로그인 명령 복사",
+      "copySandboxLink": "연결 명령 복사",
+      "copySandboxCheck": "확인 명령 복사",
+      "sandboxAgentProfile": "에이전트 프로필"
     }
   },
   "notFound": {

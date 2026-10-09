@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
 import { CodeBlock } from '../../_components/DocSchema'
 import {
   SANDBOX_PICKER_OPTIONS,
   SANDBOX_PROFILES,
-  type SandboxOption,
   findProfile,
   sandboxDevcontainerJson,
   sandboxDevcontainerWriteCommand,
@@ -58,22 +57,97 @@ import {
 
 type StepKind = 'command' | 'ui'
 
-const KIND_CHIP: Record<StepKind, string> = {
-  command: 'Command',
-  ui: 'In your editor',
+/** The step ids, in page order. A numeral or a letter, never a word. */
+export const STEP_IDS = ['1', '2', '2a', '2b', '2c', '3', '4', '5'] as const
+export type StepId = (typeof STEP_IDS)[number]
+
+/**
+ * ⚠️ EVERY HUMAN STRING IS HERE AS A PROP (MOTIR-8056). The words of this
+ * sequence live in `content/docs/sandbox/<locale>.md`; the page renders the
+ * document's parts on the server and hands them in, so this component holds its
+ * state and its picker logic and no sentence. The nodes are rendered Markdown
+ * (a paragraph wrapper, inline code, emphasis); the strings are the few places
+ * a plain value is needed — an accessible name and a code block's caption.
+ */
+export interface SetupStepsText {
+  /** The radio group's accessible name. */
+  agentProfile: string
+  picker: {
+    /** The question above the chips. */
+    label: ReactNode
+    /** The label before the second tier. */
+    alsoSupported: ReactNode
+    /** The label before the agent-less image. */
+    or: ReactNode
+    /** The agent-less image's chip. The agents' own names are vendor names and stay data. */
+    base: ReactNode
+    /** The sentence under the chips; it places `<ProfileLabel />`. */
+    summary: ReactNode
+  }
+  /** The two kind chips. */
+  chips: Record<StepKind, ReactNode>
+  /** The heading and one-line introduction of the sequence. */
+  intro: ReactNode
+  steps: Record<
+    StepId,
+    {
+      intent: ReactNode
+      body: ReactNode
+      /** Step 2's pointer to the VS Code route; step 2b's warning. */
+      extra?: ReactNode
+    }
+  >
+  /** A profile's own caveat on step 2, by profile id. A profile with none has no entry. */
+  notes: Record<string, ReactNode>
+  /** The heading and paragraph above the dev container listing. */
+  devcontainerFile: ReactNode
+  /** What a code block's caption and copy button read; the payloads are not here. */
+  captions: {
+    pull: string
+    run: string
+    devcontainerCommand: string
+    inContainer: string
+    copyDevcontainer: string
+    copySignIn: string
+    copyLink: string
+    copyCheck: string
+  }
+}
+
+const ProfileContext = createContext('')
+
+/**
+ * The selected agent's name, for a document's `{{value:profileLabel}}`. The
+ * server cannot know it, so the page passes this component as the value and the
+ * picker's provider below supplies the name; the sentence around it, and where
+ * in the sentence it falls, stay the translation's.
+ */
+export function ProfileLabel() {
+  return <>{useContext(ProfileContext)}</>
+}
+
+/** A short label from the document, set inline: the renderer wraps a part in a paragraph. */
+function Inline({ children }: { children: ReactNode }) {
+  return (
+    <span className="[&_p]:mt-0 [&_p]:inline [&_p]:max-w-none [&_p]:text-[length:inherit] [&_p]:leading-[inherit] [&_p]:text-inherit">
+      {children}
+    </span>
+  )
 }
 
 function Step({
   kind,
   label,
   intent,
+  chip,
   children,
 }: {
   kind: StepKind
   /** Overrides the ordinal — `2a`/`2b`/`2c` REPLACE step 2 rather than following it. */
-  label?: string
-  intent: string
-  children?: React.ReactNode
+  label: string
+  intent: ReactNode
+  chip: ReactNode
+  children?: ReactNode
 }) {
   return (
     <li className="grid grid-cols-[30px_minmax(0,1fr)] gap-3.5 border-t border-(--el-border-soft) py-4 first:border-t-0 first:pt-1.5">
@@ -85,71 +159,65 @@ function Step({
             : 'bg-(--el-muted) text-(--el-text)'
         }`}
       >
-        {label ?? ''}
+        {label}
       </span>
       <div className="min-w-0">
-        <p className="mt-1 flex flex-wrap items-baseline gap-2.5 text-[15px] leading-snug font-semibold text-(--el-text)">
-          {intent}
+        <div className="mt-1 flex flex-wrap items-baseline gap-2.5 text-[15px] leading-snug font-semibold text-(--el-text)">
+          <Inline>{intent}</Inline>
           <span
             className={`rounded-(--radius-badge) px-(--spacing-chip-x) py-(--spacing-chip-y) text-[10px] font-semibold tracking-wide text-(--el-text-strong) uppercase ${
               kind === 'ui' ? 'bg-(--el-tint-lavender)' : 'bg-(--el-tint-sky)'
             }`}
           >
-            {KIND_CHIP[kind]}
+            <Inline>{chip}</Inline>
           </span>
-        </p>
+        </div>
         {children}
       </div>
     </li>
   )
 }
 
-function Say({ children }: { children: React.ReactNode }) {
+/** A step's own paragraph: the document's paragraph, at this sequence's measure and ink. */
+function Say({ children }: { children: ReactNode }) {
   return (
-    <p className="mt-1.5 max-w-[62ch] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
+    <div className="[&_p]:mt-1.5 [&_p]:max-w-[62ch] [&_p]:text-[13.5px] [&_p]:leading-relaxed [&_p]:text-(--el-text-secondary)">
       {children}
-    </p>
+    </div>
   )
 }
 
-/** A profile's own caveat on step 2 — three of the eight have one. */
-function ProfileNote({ note }: { note?: string }) {
-  if (!note) return null
+/** A caveat on the yellow tint: a profile's note on step 2, or step 2b's warning. */
+function Callout({ children }: { children: ReactNode }) {
   return (
-    <p className="mt-2.5 rounded-(--radius-control) bg-(--el-tint-yellow) px-2.5 py-2 text-[12.5px] leading-snug text-(--el-text-strong)">
-      {note}
-    </p>
-  )
-}
-
-function WarningNote({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mt-2.5 rounded-(--radius-control) bg-(--el-tint-yellow) px-2.5 py-2 text-[12.5px] leading-snug text-(--el-text-strong)">
+    <div className="mt-2.5 rounded-(--radius-control) bg-(--el-tint-yellow) px-2.5 py-2 text-[12.5px] leading-snug text-(--el-text-strong) [&_p]:mt-0 [&_p]:max-w-none [&_p]:text-[length:inherit] [&_p]:leading-[inherit] [&_p]:text-inherit [&_strong]:text-inherit">
       {children}
-    </p>
+    </div>
   )
 }
 
-export function SetupSteps() {
+export function SetupSteps({ text }: { text: SetupStepsText }) {
   const [profileId, setProfileId] = useState(SANDBOX_PROFILES[0]!.id)
   const profile = findProfile(profileId)
+  const { picker, chips, steps, captions } = text
+  const note = text.notes[profile.id]
 
   return (
-    <>
+    <ProfileContext.Provider value={profile.label}>
       {/* ── THE PROFILE PICKER — a control, not a step ────────────────── */}
       <div className="mt-6 max-w-[68ch] rounded-(--radius-card) border border-(--el-border) bg-(--el-surface-soft) px-4.5 py-4">
-        <p className="mb-2.5 text-[14px] font-semibold text-(--el-text)">
-          Which agent do you use?
-        </p>
+        <div className="mb-2.5 text-[14px] font-semibold text-(--el-text) [&_p]:mt-0 [&_p]:max-w-none [&_p]:text-[length:inherit] [&_p]:text-inherit">
+          {picker.label}
+        </div>
         <div
           role="radiogroup"
-          aria-label="Agent profile"
+          aria-label={text.agentProfile}
           className="flex flex-wrap items-center gap-1.5"
         >
           {SANDBOX_PICKER_OPTIONS.map((option, index) => (
             <Chip
               key={option.id}
-              option={option}
+              name={option.id === 'base' ? picker.base : option.label}
               selected={option.id === profileId}
               onSelect={() => setProfileId(option.id)}
               /* The tier break and the `or` are LABELS, not controls: both
@@ -157,153 +225,108 @@ export function SetupSteps() {
                  is not choosing a tier. */
               before={
                 index === SANDBOX_PROFILES.findIndex((p) => p.tier === 2)
-                  ? 'also supported'
+                  ? picker.alsoSupported
                   : option.id === 'base'
-                    ? 'or'
+                    ? picker.or
                     : undefined
               }
             />
           ))}
         </div>
-        <p className="mt-3 text-[13px] leading-snug text-(--el-text-secondary)">
-          Every command below is for{' '}
-          <b className="text-(--el-text)">{profile.label}</b>. Switching
-          rewrites the tag and the credential mount in{' '}
-          <b className="text-(--el-text)">steps 1, 2 and 2b</b> — the three
-          places they appear.
-        </p>
+        <div className="mt-3 text-[13px] leading-snug text-(--el-text-secondary) [&_p]:mt-0 [&_p]:max-w-none [&_p]:text-[length:inherit] [&_p]:leading-[inherit] [&_p]:text-inherit">
+          {picker.summary}
+        </div>
       </div>
 
-      <h2 className="mt-7 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)">
-        Set it up
-      </h2>
-      <Say>Five steps. Each one is a single thing to do.</Say>
+      {text.intro}
 
       <ol className="mt-5 max-w-[68ch] list-none p-0">
-        <Step kind="command" label="1" intent="Pull the image for your agent">
-          <Say>
-            There is no build step — the image is published per agent profile.
-          </Say>
+        <Step
+          kind="command"
+          label="1"
+          intent={steps['1'].intent}
+          chip={chips.command}
+        >
+          <Say>{steps['1'].body}</Say>
           <div className="mt-2.5">
-            <CodeBlock caption="pull" code={sandboxPullCommand(profile.id)} />
+            <CodeBlock
+              caption={captions.pull}
+              code={sandboxPullCommand(profile.id)}
+            />
           </div>
         </Step>
 
         <Step
           kind="command"
           label="2"
-          intent="Start the container from your workspace root"
+          intent={steps['2'].intent}
+          chip={chips.command}
         >
-          <Say>
-            Run it from the folder that <b>contains</b> your checkouts, not from
-            any one of them.
-          </Say>
+          <Say>{steps['2'].body}</Say>
           <div className="mt-2.5">
-            <CodeBlock caption="run" code={sandboxRunCommand(profile.id)} />
+            <CodeBlock
+              caption={captions.run}
+              code={sandboxRunCommand(profile.id)}
+            />
           </div>
-          <ProfileNote note={profile.note} />
-          <div className="mt-2.5 border-l-2 border-(--el-border-strong) py-0.5 pl-3">
-            <p className="text-[13px] text-(--el-text-secondary)">
-              <b className="text-(--el-text)">Using VS Code instead?</b> Steps
-              2a–2c below replace this one. Everything after is the same either
-              way.
-            </p>
+          {note ? <Callout>{note}</Callout> : null}
+          <div className="mt-2.5 border-l-2 border-(--el-border-strong) py-0.5 pl-3 text-[13px] text-(--el-text-secondary) [&_p]:mt-0 [&_p]:max-w-none [&_p]:text-[length:inherit] [&_p]:leading-[inherit] [&_p]:text-inherit">
+            {steps['2'].extra}
           </div>
         </Step>
 
-        <Step
-          kind="ui"
-          label="2a"
-          intent="Install the Dev Containers extension"
-        >
-          <Say>
-            From the Extensions view, or the command palette — ⇧⌘P on macOS,
-            Ctrl+Shift+P elsewhere, F1 on all three — then{' '}
-            <em>Extensions: Install Extensions</em>. Two of these three steps
-            happen in the palette, so it is worth pinning now.
-          </Say>
+        <Step kind="ui" label="2a" intent={steps['2a'].intent} chip={chips.ui}>
+          <Say>{steps['2a'].body}</Say>
         </Step>
 
         <Step
           kind="command"
           label="2b"
-          intent="Create the dev container config"
+          intent={steps['2b'].intent}
+          chip={chips.command}
         >
-          <Say>
-            Run this in the folder you are mounting. One paste: it makes the{' '}
-            <code className="font-(family-name:--font-mono)">
-              .devcontainer
-            </code>{' '}
-            folder and writes the file into it. Do not try to create them from a
-            file picker — Finder and most GUI pickers refuse a name beginning
-            with a dot, and refuse it without saying why.
-          </Say>
+          <Say>{steps['2b'].body}</Say>
           <div className="mt-2.5">
             <CodeBlock
-              caption="your machine — in the folder you are mounting"
-              copyLabel="Copy the dev container config command"
+              caption={captions.devcontainerCommand}
+              copyLabel={captions.copyDevcontainer}
               code={sandboxDevcontainerWriteCommand(profile.id)}
             />
           </div>
-          <WarningNote>
-            <b>A dev container keeps the image it was created from.</b>{' '}
-            <code className="font-(family-name:--font-mono)">
-              --pull=always
-            </code>{' '}
-            belongs to the run command in step 2, not to this route. To move to
-            the current image and{' '}
-            <code className="font-(family-name:--font-mono)">motir</code> CLI:{' '}
-            <b>1.</b> run step 1&apos;s{' '}
-            <code className="font-(family-name:--font-mono)">docker pull</code>{' '}
-            in a terminal on your machine; <b>2.</b>{' '}
-            <em>Dev Containers: Open Folder in Container…</em> on this folder,
-            which attaches the window; <b>3.</b>{' '}
-            <em>Dev Containers: Rebuild Container</em>, which recreates the
-            container from the image you just pulled. Rebuild Container only
-            appears in a window attached to the container, which is why step 2
-            comes first. A rebuild keeps your Motir sign-in (it lives on the{' '}
-            <code className="font-(family-name:--font-mono)">motir-auth</code>{' '}
-            volume) but not a Claude Code sign-in made inside the container —
-            run <code className="font-(family-name:--font-mono)">claude</code>{' '}
-            and sign in again.
-          </WarningNote>
+          <Callout>{steps['2b'].extra}</Callout>
         </Step>
 
-        <Step kind="ui" label="2c" intent="Open the folder in the container">
-          <Say>
-            Command palette → <em>Dev Containers: Open Folder in Container…</em>
-            , and pick the folder you just wrote the file into. Its terminal is
-            the same shell step 2 would have dropped you into — carry on at step
-            3.
-          </Say>
+        <Step kind="ui" label="2c" intent={steps['2c'].intent} chip={chips.ui}>
+          <Say>{steps['2c'].body}</Say>
         </Step>
 
-        <Step kind="command" label="3" intent="Sign in, inside the container">
-          <Say>
-            A code and a URL are printed; approve it in any browser. The sign-in
-            lands on the{' '}
-            <code className="font-(family-name:--font-mono)">motir-auth</code>{' '}
-            volume, so you do this once.
-          </Say>
+        <Step
+          kind="command"
+          label="3"
+          intent={steps['3'].intent}
+          chip={chips.command}
+        >
+          <Say>{steps['3'].body}</Say>
           <div className="mt-2.5">
             <CodeBlock
-              caption="in the container"
-              copyLabel="Copy the sign-in command"
+              caption={captions.inContainer}
+              copyLabel={captions.copySignIn}
               code="motir login"
             />
           </div>
         </Step>
 
-        <Step kind="command" label="4" intent="Link the folder to your project">
-          <Say>
-            Swap <code className="font-(family-name:--font-mono)">ACME</code>{' '}
-            for your project key. If your workspace has exactly one project,
-            drop the flag — that is the whole step.
-          </Say>
+        <Step
+          kind="command"
+          label="4"
+          intent={steps['4'].intent}
+          chip={chips.command}
+        >
+          <Say>{steps['4'].body}</Say>
           <div className="mt-2.5">
             <CodeBlock
-              caption="in the container"
-              copyLabel="Copy the link command"
+              caption={captions.inContainer}
+              copyLabel={captions.copyLink}
               code="motir link --project ACME"
             />
           </div>
@@ -312,16 +335,14 @@ export function SetupSteps() {
         <Step
           kind="command"
           label="5"
-          intent="Check it — all green is the end of this page"
+          intent={steps['5'].intent}
+          chip={chips.command}
         >
-          <Say>
-            Auth, link, the agent binary and its credential. This is the only
-            thing that tells you the container actually got what you passed it.
-          </Say>
+          <Say>{steps['5'].body}</Say>
           <div className="mt-2.5">
             <CodeBlock
-              caption="in the container"
-              copyLabel="Copy the check command"
+              caption={captions.inContainer}
+              copyLabel={captions.copyCheck}
               code="motir doctor"
             />
           </div>
@@ -341,50 +362,34 @@ export function SetupSteps() {
           two different configs. Both blocks read the same
           `sandboxDevcontainerJson(profile.id)` now, so they cannot disagree for
           any profile. */}
-      <h3 className="mt-8 text-[15px] font-semibold text-(--el-text)">
-        The file that command writes
-      </h3>
-      <p className="mt-2 max-w-[68ch] text-[13.5px] leading-relaxed text-(--el-text-secondary)">
-        Reference, not a step — 2b already wrote it. It is here for the reader
-        who would rather create the file by hand, and because the quotes around{' '}
-        <code className="font-(family-name:--font-mono)">&lt;&lt;’JSON’</code>{' '}
-        are load-bearing: they stop your shell expanding{' '}
-        <code className="font-(family-name:--font-mono)">
-          ${'{'}localWorkspaceFolder{'}'}
-        </code>{' '}
-        and{' '}
-        <code className="font-(family-name:--font-mono)">
-          ${'{'}localEnv:HOME{'}'}
-        </code>{' '}
-        before they reach the file. Those are Dev Containers substitutions and
-        the editor is what resolves them.
-      </p>
+      {text.devcontainerFile}
       <div className="mt-3">
         <CodeBlock
           caption=".devcontainer/devcontainer.json"
           code={sandboxDevcontainerJson(profile.id)}
         />
       </div>
-    </>
+    </ProfileContext.Provider>
   )
 }
 
 function Chip({
-  option,
+  name,
   selected,
   onSelect,
   before,
 }: {
-  option: SandboxOption
+  /** The visible name: the agent's own, or the document's for the agent-less image. */
+  name: ReactNode
   selected: boolean
   onSelect: () => void
-  before?: string
+  before?: ReactNode
 }) {
   return (
     <>
       {before ? (
         <span className="ml-1 text-[11px] font-medium tracking-wide text-(--el-text-secondary)">
-          {before}
+          <Inline>{before}</Inline>
         </span>
       ) : null}
       <button
@@ -398,7 +403,7 @@ function Chip({
             : 'border-(--el-border) bg-(--el-page-bg) font-medium text-(--el-text-secondary) hover:bg-(--el-muted) hover:text-(--el-text)'
         }`}
       >
-        {option.label}
+        <Inline>{name}</Inline>
       </button>
     </>
   )

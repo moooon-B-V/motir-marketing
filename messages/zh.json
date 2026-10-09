@@ -831,7 +831,17 @@
       "copyCopilot": "复制 GitHub Copilot 安装命令",
       "copyOpenCode": "复制 OpenCode 安装命令",
       "copyMcpServerUrl": "复制 Motir MCP 服务器 URL",
-      "copyClaudeCodeCommand": "复制 Claude Code 命令"
+      "copyClaudeCodeCommand": "复制 Claude Code 命令",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "你的机器 — 在你挂载的文件夹中",
+      "captionInContainer": "在容器中",
+      "captionSandboxGrant": "通过设备签发的令牌所带有的授权",
+      "copySandboxDevcontainer": "复制开发容器配置命令",
+      "copySandboxSignIn": "复制登录命令",
+      "copySandboxLink": "复制关联命令",
+      "copySandboxCheck": "复制检查命令",
+      "sandboxAgentProfile": "智能体配置文件"
     }
   },
   "notFound": {

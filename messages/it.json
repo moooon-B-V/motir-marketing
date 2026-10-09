@@ -841,7 +841,17 @@
       "copyCopilot": "Copia i comandi di installazione di GitHub Copilot",
       "copyOpenCode": "Copia i comandi di installazione di OpenCode",
       "copyMcpServerUrl": "Copia l’URL del server Motir MCP",
-      "copyClaudeCodeCommand": "Copia il comando di Claude Code"
+      "copyClaudeCodeCommand": "Copia il comando di Claude Code",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "la tua macchina — nella cartella che monti",
+      "captionInContainer": "nel container",
+      "captionSandboxGrant": "i permessi che porta un token emesso da un dispositivo",
+      "copySandboxDevcontainer": "Copia il comando di configurazione del dev container",
+      "copySandboxSignIn": "Copia il comando di accesso",
+      "copySandboxLink": "Copia il comando di collegamento",
+      "copySandboxCheck": "Copia il comando di verifica",
+      "sandboxAgentProfile": "Profilo dell’agente"
     }
   },
   "notFound": {

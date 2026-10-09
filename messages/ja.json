@@ -846,7 +846,17 @@
       "copyCopilot": "GitHub Copilot のインストールコマンドをコピー",
       "copyOpenCode": "OpenCode のインストールコマンドをコピー",
       "copyMcpServerUrl": "Motir MCP サーバーの URL をコピー",
-      "copyClaudeCodeCommand": "Claude Code のコマンドをコピー"
+      "copyClaudeCodeCommand": "Claude Code のコマンドをコピー",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "お使いのマシン — マウントするフォルダー内",
+      "captionInContainer": "コンテナー内",
+      "captionSandboxGrant": "デバイス経由で発行されたトークンが持つ権限",
+      "copySandboxDevcontainer": "Dev Container 設定コマンドをコピー",
+      "copySandboxSignIn": "サインインコマンドをコピー",
+      "copySandboxLink": "リンクコマンドをコピー",
+      "copySandboxCheck": "確認コマンドをコピー",
+      "sandboxAgentProfile": "エージェントのプロファイル"
     }
   },
   "notFound": {
