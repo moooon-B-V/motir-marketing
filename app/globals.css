@@ -78,41 +78,40 @@ body {
 }
 
 /* "Motir builds itself" in the header is LIVE: its square and its words walk
-   the palette's wave hues, the same band that slides across the hero. The
-   words take each hue mixed 60/40 with the text ink: the raw teal and warm
-   hues fall below AA as text in most light palettes (down to 2.4:1), and at
-   60% every hue clears 5:1 on the page and the hero in every palette and
-   theme. Under reduced motion both hold the first hue. */
+   the palette's wave hues (`--el-live-mark-*` / `--el-live-text-*`, the
+   design system's live-link roles — the text inks are the hues mixed with the
+   primary ink so every step clears AA). Under reduced motion both hold the
+   first hue. */
 @keyframes mk-live {
   0%,
   100% {
-    background-color: var(--el-showcase-wave-1);
+    background-color: var(--el-live-mark-1);
   }
   33% {
-    background-color: var(--el-showcase-wave-2);
+    background-color: var(--el-live-mark-2);
   }
   66% {
-    background-color: var(--el-showcase-wave-3);
+    background-color: var(--el-live-mark-3);
   }
 }
 @keyframes mk-live-text {
   0%,
   100% {
-    color: color-mix(in srgb, var(--el-showcase-wave-1) 60%, var(--el-text));
+    color: var(--el-live-text-1);
   }
   33% {
-    color: color-mix(in srgb, var(--el-showcase-wave-2) 60%, var(--el-text));
+    color: var(--el-live-text-2);
   }
   66% {
-    color: color-mix(in srgb, var(--el-showcase-wave-3) 60%, var(--el-text));
+    color: var(--el-live-text-3);
   }
 }
 .mk-live {
-  background-color: var(--el-showcase-wave-1);
+  background-color: var(--el-live-mark-1);
   animation: mk-live 6s ease-in-out infinite;
 }
 .mk-live-text {
-  color: color-mix(in srgb, var(--el-showcase-wave-1) 60%, var(--el-text));
+  color: var(--el-live-text-1);
   animation: mk-live-text 6s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {

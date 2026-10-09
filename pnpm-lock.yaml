@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@motir/brand':
-        specifier: 0.4.1
-        version: 0.4.1(@motir/design-system@0.10.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)
+        specifier: 0.4.4
+        version: 0.4.4(@motir/design-system@0.13.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)
       '@motir/design-system':
-        specifier: 0.10.0
-        version: 0.10.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)
+        specifier: 0.13.0
+        version: 0.13.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)
       '@tailwindcss/postcss':
         specifier: ^4.3.3
         version: 4.3.3
@@ -489,15 +489,15 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@motir/brand@0.4.1':
-    resolution: {integrity: sha512-ei+k2YnnCPEB4M/3IVWrD0pFu3ECdUhfqZJ5Ea3r4J3aUmZUeACmA/6plSCvzDr133K7aFrV1RX8mWTTAkgwWw==}
+  '@motir/brand@0.4.4':
+    resolution: {integrity: sha512-gix1zt8bnCR5WGclJlvsr4U1vO3Ow5tRvRX53zGm6OAf2xfDzELe3PGjEf+ZDyTgbsR2nHPOTkagRNmU+QyVJw==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@motir/design-system': ^0.10.0
+      '@motir/design-system': ^0.13.0
       react: ^19
 
-  '@motir/design-system@0.10.0':
-    resolution: {integrity: sha512-DH7+T1yh7s/NGeL0PSm6Jgx73ny2zuf9koKPV+WKneGuiN94Ff0zqzJ2POoiHmqAVgybLJtrTSZYspSlQbZgDg==}
+  '@motir/design-system@0.13.0':
+    resolution: {integrity: sha512-Ynobqx/osUsC3A4QIO+3zubSiNPfk5hOpOXn7ZjX9HJMcU4EMxrhtZJoHZqp+ehvoenup80C+D587t1mywhD7w==}
     engines: {node: '>=22'}
     peerDependencies:
       next: ^16
@@ -3780,12 +3780,12 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@motir/brand@0.4.1(@motir/design-system@0.10.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)':
+  '@motir/brand@0.4.4(@motir/design-system@0.13.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3))(react@19.2.4)':
     dependencies:
-      '@motir/design-system': 0.10.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)
+      '@motir/design-system': 0.13.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)
       react: 19.2.4
 
-  '@motir/design-system@0.10.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)':
+  '@motir/design-system@0.13.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.3.3)':
     dependencies:
       '@radix-ui/react-dialog': 1.1.23(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-popover': 1.1.23(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
