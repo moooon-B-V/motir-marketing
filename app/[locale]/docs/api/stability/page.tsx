@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { POLICY_ADDITIVE, POLICY_FORBIDDEN } from './policy'
 
 /*
  * The stability & deprecation policy (MOTIR-4046, RESTORED by MOTIR-4429).
@@ -48,30 +49,6 @@ export function generateMetadata({
 /** Where the promise is DECIDED, as against this page, where it is published. */
 const ADR_URL =
   'https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md'
-
-/**
- * Allowed inside `v1`, without notice — the published list, in the deleted
- * page's own order and wording.
- */
-export const POLICY_ADDITIVE: readonly string[] = [
-  'A new endpoint.',
-  'A new OPTIONAL query parameter.',
-  'A new field on a response object.',
-  'A new response header.',
-  'A new value on a field documented as open-ended.',
-  'A raised rate-limit budget.',
-]
-
-/** Forbidden inside `v1` — each of these needs a new major. */
-export const POLICY_FORBIDDEN: readonly string[] = [
-  'Removing a field.',
-  'Renaming a field.',
-  'Changing a field’s type or nullability.',
-  'Removing or re-purposing an error `code`.',
-  'Changing an existing status for an existing condition.',
-  'Tightening a limit.',
-  'Making an optional parameter required.',
-]
 
 function H2({ children, id }: { children: React.ReactNode; id?: string }) {
   return (

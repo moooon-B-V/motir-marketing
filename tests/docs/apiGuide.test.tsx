@@ -3,10 +3,11 @@ import { render } from '@/tests/helpers/withCopy'
 import { EN_PAGE } from '@/tests/helpers/locale'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import GettingStartedPage from '@/app/[locale]/docs/api/getting-started/page'
-import StabilityPage, {
+import StabilityPage from '@/app/[locale]/docs/api/stability/page'
+import {
   POLICY_ADDITIVE,
   POLICY_FORBIDDEN,
-} from '@/app/[locale]/docs/api/stability/page'
+} from '@/app/[locale]/docs/api/stability/policy'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 
 /*
