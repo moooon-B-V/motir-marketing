@@ -47,13 +47,23 @@ const METADATA_FILES = new Set([
   'robots.ts',
 ])
 
+/** The segment every localised page lives under (MOTIR-7948). */
+const LOCALE_SEGMENT = '[locale]'
+
 /** Every address `app/**` serves, as a segment pattern (`['p', '[identifier]']`). */
 function appRoutePatterns(): string[][] {
   const seen = new Set<string>()
   for (const file of filesUnder(join(ROOT, 'app'))) {
     const parts = file.split('/').slice(1)
+    // Every page sits under the locale segment since MOTIR-7948, and English —
+    // the address every asset names — is unprefixed, so a route's address is
+    // its path below `[locale]`.
+    if (parts[0] === LOCALE_SEGMENT) parts.shift()
     const leaf = parts.pop()
     if (!leaf) continue
+    // The locale catch-all serves only the 404 room (MOTIR-7955): it would
+    // otherwise "serve" every address the guard exists to call dead.
+    if (parts.some((segment) => segment.startsWith('[...'))) continue
     if (METADATA_FILES.has(leaf)) parts.push(leaf.replace(/\.[a-z]+$/, ''))
     else if (!PAGE_FILES.has(leaf)) continue
     // Route groups — `(guides)` — organise the tree without appearing in the URL.
@@ -531,6 +541,12 @@ const CITED_EXTENSIONS = [
 
 export function resolvesInRepo(path: string): boolean {
   if (existsSync(join(ROOT, path))) return true
+  // MOTIR-7948 moved every page one segment down, under `app/[locale]/`. An
+  // asset that cites `app/legal/[slug]/page.tsx` names the same file, so the
+  // citation still resolves; rewriting every asset to the new spelling would
+  // edit records (the delta-mock rule) for a move that changed no surface.
+  if (path.startsWith('app/') && !path.startsWith(`app/${LOCALE_SEGMENT}/`))
+    return resolvesInRepo(`app/${LOCALE_SEGMENT}/${path.slice('app/'.length)}`)
   if (/\.[a-z0-9]+$/i.test(path.split('/').pop()!)) return false
   return CITED_EXTENSIONS.some((extension) =>
     existsSync(join(ROOT, path + extension)),
