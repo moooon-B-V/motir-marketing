@@ -97,6 +97,17 @@ export default async function Page() {
           <div className="mt-[18px] flex w-full justify-center">
             <HeroBrief examples={examples} />
           </div>
+          {/* The way down to Motir Project Manager, for a visitor who arrives
+              with a project rather than an idea. */}
+          <p className="m-0 text-[15px] text-(--el-text-secondary)">
+            {l.hero.existingProject}{' '}
+            <a
+              href="#project-manager"
+              className="font-semibold text-(--el-accent-on-surface) underline underline-offset-2 hover:no-underline"
+            >
+              {l.hero.existingProjectLink}
+            </a>
+          </p>
         </section>
 
         <div className={GUTTER}>
