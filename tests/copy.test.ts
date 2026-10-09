@@ -136,21 +136,26 @@ describe('the copy catalogue', () => {
 
   it('carries the /design showcase, in the shape the pickers read', () => {
     // MOTIR-3862. The axis keys are `name` + `help` because that is what
-    // `AxisField` takes; `AxisNote` renders the ACTIVE selection from the
-    // registry and is never authored here. A rename is a code change in
-    // MOTIR-1043, so it surfaces here first.
+    // `AxisField` takes. A rename is a code change in MOTIR-1043, so it
+    // surfaces here first.
     expect(Object.keys(copy.designShowcase).sort()).toEqual([
       'closing',
       'heading',
       'palette',
+      // Each style, palette and pairing's name and tagline, which the chips and
+      // `AxisNote` read so the rail translates (Yue, 2026-10-09). Their English
+      // is the registries', held there by `tests/cjkFaces.test.ts`.
+      'palettes',
       'reset',
       // MOTIR-7970 — the composed specimen's labels, moved out of the JSX so
       // they translate with the page.
       'specimen',
       'style',
+      'styles',
       'subline',
       'theme',
       'type',
+      'types',
     ])
     for (const axis of ['style', 'palette', 'type'] as const) {
       expect(Object.keys(copy.designShowcase[axis]).sort()).toEqual([

@@ -519,7 +519,121 @@
       "help": "Zestaw czcionek dla nagłówków i tekstu."
     },
     "reset": "Przywróć domyślne",
-    "closing": "Trzy osie tutaj to te same trzy, które wybierasz dla projektu, zakładając go w aplikacji Motir — i ten sam system projektowania pod spodem. Ta strona nie pokazuje jego wersji demonstracyjnej; jest z niego zbudowana."
+    "closing": "Trzy osie tutaj to te same trzy, które wybierasz dla projektu, zakładając go w aplikacji Motir — i ten sam system projektowania pod spodem. Ta strona nie pokazuje jego wersji demonstracyjnej; jest z niego zbudowana.",
+    "styles": {
+      "warm-editorial": {
+        "name": "Ciepły redakcyjny",
+        "tagline": "Przemyślany, ciepły, techniczny, ale nie chłodny, lekko redakcyjny."
+      },
+      "soft-playful": {
+        "name": "Miękki / Zabawny",
+        "tagline": "Więcej energii — zaokrąglony, przestronny, delikatnie animowany."
+      },
+      "swiss-minimal-flat": {
+        "name": "Szwajcarski / Minimalistyczny-płaski",
+        "tagline": "Międzynarodowy styl typograficzny, strukturalny, spokojny — płaski, ostry, oparty na siatce."
+      },
+      "neo-brutalism": {
+        "name": "Neobrutalizm",
+        "tagline": "Surowy, wyrazisty, użytkowy — narożniki 0px, grube obramowania, twarde przesunięte cienie."
+      },
+      "glassmorphism": {
+        "name": "Glassmorfizm",
+        "tagline": "Półprzezroczyste matowe szkło unoszące się nad miękkim, żywym gradientem."
+      },
+      "cybercore-y2k": {
+        "name": "Cybercore / Y2K",
+        "tagline": "Retrotechnologia w neonach na ciemnym tle — świecące panele HUD, techniczna siatka, nagłówki o stałej szerokości."
+      },
+      "aurora": {
+        "name": "Zorza",
+        "tagline": "Miękkie, falujące światło zorzy za płynnymi, delikatnie świecącymi powierzchniami."
+      },
+      "3d-immersive": {
+        "name": "3D / Immersyjny",
+        "tagline": "Głębia i perspektywa — przestrzenne panele unoszące się nad stroną."
+      },
+      "neumorphism": {
+        "name": "Neumorfizm",
+        "tagline": "Miękkie, wytłoczone powierzchnie wyrastające z jednolitego, monochromatycznego tła."
+      },
+      "hand-drawn-indie": {
+        "name": "Ręcznie rysowany / Indie",
+        "tagline": "Szkicowy i przyjazny — szorstkie, ręcznie tuszowane krawędzie, krzywe narożniki, miękkie przesunięte cienie, zabawne odbicie."
+      },
+      "retrofuturism": {
+        "name": "Retrofuturyzm",
+        "tagline": "Chrom, gradientowe smugi i horyzont synthwave — science fiction lat 70. i 80."
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Surowa i redakcyjna — chłodne szare powierzchnie + atrament, atramentowe CTA, stonowany chłodnoniebieski akcent i kilka ciepłych akcentów."
+      },
+      "amethyst": {
+        "name": "Ametyst",
+        "tagline": "Ciepła i redakcyjna — kremowe powierzchnie, grafitowy atrament, fiolet jako kolor główny, pastelowe odcienie."
+      },
+      "cobalt": {
+        "name": "Kobalt",
+        "tagline": "Chłodna i instytucjonalna — chłodne łupkowe powierzchnie, zdecydowany kobalt jako kolor główny, schłodzone odcienie."
+      },
+      "evergreen": {
+        "name": "Wiecznie zielona",
+        "tagline": "Świeża i techniczna — szmaragd jako kolor główny na chłodnych leśnych neutralach, interfejs w zielonej tonacji."
+      },
+      "spectrum": {
+        "name": "Spektrum",
+        "tagline": "Żywa i zabawna — wyraziste chłodne powierzchnie, jaskrawy fiolet jako kolor główny, cukierkowo jaskrawy, wielobarwny zestaw akcentów i odcieni."
+      },
+      "amber": {
+        "name": "Bursztyn",
+        "tagline": "Ciepła i elektryzująca — złoto parkietu Binance na grafitowych, niemal czarnych tonach giełdy; ciemne etykiety na złocie."
+      },
+      "sienna": {
+        "name": "Sjena",
+        "tagline": "Ciepła i żywa — płomienny pomarańcz Mistral na śródziemnomorskich, ciepłych kremowych powierzchniach; ciemne etykiety na płomieniu."
+      },
+      "garnet": {
+        "name": "Granat",
+        "tagline": "Bogata i odważna — czerwień Pinterest Pushpin na neutralnych szarościach marki; białe etykiety na czerwieni."
+      },
+      "citrine": {
+        "name": "Cytryn",
+        "tagline": "Jasna i sprzyjająca współpracy — żółć Sunglow od Miro na szarościach tablicy, z niebieskim akcentem akcji Miro."
+      },
+      "candy": {
+        "name": "Cukierek",
+        "tagline": "Słodka i zabawna — jasny gumowo-różowy kolor główny na cukierkowych różach, z pełną pastelową tęczą."
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Redakcyjne nagłówki szeryfowe nad czystym bezszeryfowym tekstem — firmowe zestawienie."
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "W całości bezszeryfowe — Inter w nagłówkach i tekście; strukturalne, bez szeryfów."
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "Wszędzie krój o stałej szerokości — interfejs w duchu kodu, nagłówki, tekst i cała reszta."
+      },
+      "grotesk": {
+        "name": "Grotesk",
+        "tagline": "Geometryczny neogrotesk w całym interfejsie — zwarty, pewny siebie, produktowy."
+      },
+      "editorial": {
+        "name": "Redakcyjne",
+        "tagline": "Wyrazisty szeryfowy krój display nad humanistycznym bezszeryfowym — magazynowe, przemyślane."
+      },
+      "mono-technical": {
+        "name": "Mono-techniczne",
+        "tagline": "Wszędzie IBM Plex Mono — precyzyjny interfejs na poziomie programisty."
+      }
+    }
   },
   "footer": {
     "ariaLabel": "Stopka",

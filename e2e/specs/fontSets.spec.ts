@@ -90,28 +90,40 @@ for (const locale of ['zh', 'ja', 'ko'] as const) {
   })
 }
 
-test('/ja/design keeps the ja set behind every one of the six pairings', async ({
+test('/ja/design offers the three Japanese fonts by name, and each draws headings and body', async ({
   page,
 }) => {
   await page.goto('/ja/design')
-  const pairings = page
+  const fonts = page
     // The group's name is the catalogue's, so it reads in Japanese here.
     .getByRole('radiogroup', { name: t('ja', 'designShowcase.type.name') })
     .getByRole('radio')
-  await expect(pairings).toHaveCount(6)
+  // Japanese fonts named directly, in place of the six Latin pairings
+  // (Yue, 2026-10-09).
+  await expect(fonts).toHaveText([
+    /Noto Sans JP/,
+    /M PLUS Rounded 1c/,
+    /Noto Serif JP/,
+  ])
 
-  const paragraph = page.getByRole('main').locator('p').first()
-  for (let index = 0; index < 6; index += 1) {
-    const pairing = pairings.nth(index)
-    await pairing.click()
-    await expect(pairing).toHaveAttribute('aria-checked', 'true')
-    // The composed stack: the pairing's Latin face, then the ja set's face —
-    // never the pairing alone over a system fallback.
-    await expect
-      .poll(() =>
-        paragraph.evaluate((element) => getComputedStyle(element).fontFamily),
-      )
-      .toMatch(/Noto (Sans|Serif) JP/)
+  const main = page.getByRole('main')
+  const familyOf = (selector: string) =>
+    main
+      .locator(selector)
+      .first()
+      .evaluate((element) => getComputedStyle(element).fontFamily)
+  for (const [index, family] of [
+    'Noto Sans JP',
+    'M PLUS Rounded 1c',
+    'Noto Serif JP',
+  ].entries()) {
+    const font = fonts.nth(index)
+    await font.click()
+    await expect(font).toHaveAttribute('aria-checked', 'true')
+    // The pick is the script face of BOTH roles, so the heading and the body
+    // are drawn in it alike.
+    await expect.poll(() => familyOf('h1')).toContain(family)
+    await expect.poll(() => familyOf('p')).toContain(family)
   }
 })
 

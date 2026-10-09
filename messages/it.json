@@ -514,7 +514,121 @@
       "help": "L’abbinamento di caratteri per titoli e testo."
     },
     "reset": "Ripristina predefinito",
-    "closing": "I tre assi qui sono gli stessi tre che il tuo progetto sceglie quando lo avvii in Motir, con lo stesso design system alla base. Questo sito non te ne mostra una demo: è costruito con esso."
+    "closing": "I tre assi qui sono gli stessi tre che il tuo progetto sceglie quando lo avvii in Motir, con lo stesso design system alla base. Questo sito non te ne mostra una demo: è costruito con esso.",
+    "styles": {
+      "warm-editorial": {
+        "name": "Editoriale caldo",
+        "tagline": "Riflessivo, caldo, tecnico ma non freddo, leggermente editoriale."
+      },
+      "soft-playful": {
+        "name": "Morbido / Giocoso",
+        "tagline": "Più energia — arrotondato, generoso, delicatamente animato."
+      },
+      "swiss-minimal-flat": {
+        "name": "Svizzero / Minimale piatto",
+        "tagline": "Tipografia internazionale, strutturale, calmo — piatto, netto, a griglia."
+      },
+      "neo-brutalism": {
+        "name": "Neo-brutalismo",
+        "tagline": "Crudo, incisivo, funzionale — angoli a 0px, bordi spessi, ombre sfalsate nette."
+      },
+      "glassmorphism": {
+        "name": "Glassmorfismo",
+        "tagline": "Vetro smerigliato traslucido sospeso su un gradiente morbido e vibrante."
+      },
+      "cybercore-y2k": {
+        "name": "Cybercore / Y2K",
+        "tagline": "Retro-tech al neon su scuro — pannelli HUD luminosi, una griglia tecnica, titoli mono."
+      },
+      "aurora": {
+        "name": "Aurora",
+        "tagline": "Luce d’aurora morbida e fluttuante dietro superfici fluide e lievemente luminose."
+      },
+      "3d-immersive": {
+        "name": "3D / Immersivo",
+        "tagline": "Profondità e prospettiva — pannelli tridimensionali sospesi sopra la pagina."
+      },
+      "neumorphism": {
+        "name": "Neumorfismo",
+        "tagline": "Superfici morbide in rilievo che emergono da un unico campo monocromatico."
+      },
+      "hand-drawn-indie": {
+        "name": "Disegnato a mano / Indie",
+        "tagline": "Abbozzato e amichevole — bordi grezzi inchiostrati a mano, angoli storti, ombre sfalsate morbide, un rimbalzo giocoso."
+      },
+      "retrofuturism": {
+        "name": "Retrofuturismo",
+        "tagline": "Cromature, sfumature a gradiente e un orizzonte synthwave — fantascienza anni ’70/’80."
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Essenziale ed editoriale — superfici in scala di grigi fredde + inchiostro, una CTA inchiostro, un accento blu freddo misurato e qualche tocco caldo."
+      },
+      "amethyst": {
+        "name": "Ametista",
+        "tagline": "Caldo ed editoriale — superfici crema, inchiostro antracite, un primario viola, tinte pastello."
+      },
+      "cobalt": {
+        "name": "Cobalto",
+        "tagline": "Freddo e istituzionale — superfici ardesia fredde, un primario cobalto deciso, tinte raffreddate."
+      },
+      "evergreen": {
+        "name": "Sempreverde",
+        "tagline": "Fresco e tecnico — un primario smeraldo su neutri di foresta raffreddati, un’interfaccia tendente al verde."
+      },
+      "spectrum": {
+        "name": "Spettro",
+        "tagline": "Vivace e giocoso — superfici fredde e nitide, un primario viola brillante, un set di accenti e tinte multicolore color caramella."
+      },
+      "amber": {
+        "name": "Ambra",
+        "tagline": "Caldo ed elettrico — l’oro della sala contrattazioni di Binance sui quasi-neri grafite dell’exchange; etichette scure sull’oro."
+      },
+      "sienna": {
+        "name": "Terra di Siena",
+        "tagline": "Caldo e vivido — l’arancione fiamma di Mistral su calde superfici crema mediterranee; etichette scure sulla fiamma."
+      },
+      "garnet": {
+        "name": "Granato",
+        "tagline": "Ricco e deciso — il rosso Pushpin di Pinterest sui grigi neutri del brand; etichette bianche sul rosso."
+      },
+      "citrine": {
+        "name": "Citrino",
+        "tagline": "Luminoso e collaborativo — il giallo Sunglow di Miro sui grigi della lavagna, con l’accento blu d’azione di Miro."
+      },
+      "candy": {
+        "name": "Caramella",
+        "tagline": "Dolce e giocoso — un primario rosa gomma da masticare chiaro su rosa carta di caramella, con un arcobaleno pastello completo."
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Titoli serif editoriali su un corpo sans pulito — l’abbinamento della casa."
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "Tutto sans — Inter per titoli e corpo; strutturale, senza grazie."
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "Monospazio ovunque — un’interfaccia nativa del codice, titoli, corpo e tutto il resto."
+      },
+      "grotesk": {
+        "name": "Grotesk",
+        "tagline": "Neo-grotesk geometrico in tutta l’interfaccia — compatto, sicuro, da prodotto."
+      },
+      "editorial": {
+        "name": "Editoriale",
+        "tagline": "Un serif display di carattere su un sans umanista — da rivista, ponderato."
+      },
+      "mono-technical": {
+        "name": "Mono-tecnico",
+        "tagline": "IBM Plex Mono ovunque — un’interfaccia precisa, di livello sviluppatore."
+      }
+    }
   },
   "footer": {
     "ariaLabel": "Piè di pagina",

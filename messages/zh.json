@@ -504,7 +504,121 @@
       "help": "标题与正文的字体搭配。"
     },
     "reset": "重置为默认",
-    "closing": "这里的三个维度，正是你在 Motir 中新建项目时选择的那三个——底层也是同一套设计系统。这个网站展示的不是它的演示，而是用它构建出来的。"
+    "closing": "这里的三个维度，正是你在 Motir 中新建项目时选择的那三个——底层也是同一套设计系统。这个网站展示的不是它的演示，而是用它构建出来的。",
+    "styles": {
+      "warm-editorial": {
+        "name": "温暖编辑风",
+        "tagline": "深思、温暖，有技术感却不冰冷，略带编辑风。"
+      },
+      "soft-playful": {
+        "name": "柔和 / 活泼",
+        "tagline": "更有活力——圆润、舒展、动效轻柔。"
+      },
+      "swiss-minimal-flat": {
+        "name": "瑞士 / 极简扁平",
+        "tagline": "国际主义排版风格，结构清晰、沉稳——扁平、锐利、网格化。"
+      },
+      "neo-brutalism": {
+        "name": "新粗野主义",
+        "tagline": "粗犷、有力、实用至上——0px 圆角、粗边框、硬朗的偏移阴影。"
+      },
+      "glassmorphism": {
+        "name": "玻璃拟态",
+        "tagline": "半透明的磨砂玻璃，悬浮在柔和而鲜明的渐变之上。"
+      },
+      "cybercore-y2k": {
+        "name": "赛博核 / Y2K",
+        "tagline": "暗底霓虹的复古科技风——发光的 HUD 面板、科技网格、等宽标题。"
+      },
+      "aurora": {
+        "name": "极光",
+        "tagline": "柔和流动的极光，映在流畅、微微发光的界面之后。"
+      },
+      "3d-immersive": {
+        "name": "3D / 沉浸式",
+        "tagline": "纵深与透视——立体面板悬浮于页面之上。"
+      },
+      "neumorphism": {
+        "name": "新拟态",
+        "tagline": "从单色底面中隆起的柔和凸起表面。"
+      },
+      "hand-drawn-indie": {
+        "name": "手绘 / 独立风",
+        "tagline": "随性又亲切——粗糙的手绘墨线、歪斜的边角、柔和的偏移阴影、俏皮的弹跳。"
+      },
+      "retrofuturism": {
+        "name": "复古未来主义",
+        "tagline": "铬金属、流动渐变与合成波地平线——七八十年代的科幻。"
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "冷峻而具编辑感——冷灰阶表面加墨色、墨色 CTA、克制的冷蓝强调色，外加几处暖色点缀。"
+      },
+      "amethyst": {
+        "name": "紫水晶",
+        "tagline": "温暖而具编辑感——奶油色表面、炭黑墨色、紫色主色、粉彩色调。"
+      },
+      "cobalt": {
+        "name": "钴蓝",
+        "tagline": "冷静而稳重——石板冷色表面、自信的钴蓝主色、偏冷的色调。"
+      },
+      "evergreen": {
+        "name": "常青",
+        "tagline": "清新而专业——祖母绿主色搭配偏冷的森林中性色，整体偏绿的界面。"
+      },
+      "spectrum": {
+        "name": "光谱",
+        "tagline": "鲜明而活泼——清爽的冷色表面、明亮的紫罗兰主色、糖果般明艳的多彩强调色与色调组合。"
+      },
+      "amber": {
+        "name": "琥珀",
+        "tagline": "温暖而充满电力——Binance 交易大厅的金色，配交易所的石墨近黑色；金色上用深色标签。"
+      },
+      "sienna": {
+        "name": "赭石",
+        "tagline": "温暖而鲜明——Mistral 的火焰橙，配地中海式暖奶油色表面；火焰色上用深色标签。"
+      },
+      "garnet": {
+        "name": "石榴石",
+        "tagline": "浓郁而大胆——Pinterest 的 Pushpin 红，配品牌的中性灰；红色上用白色标签。"
+      },
+      "citrine": {
+        "name": "黄水晶",
+        "tagline": "明亮而富协作感——Miro 的 Sunglow 黄，配白板灰，并以 Miro 的操作蓝作强调色。"
+      },
+      "candy": {
+        "name": "糖果",
+        "tagline": "甜美而活泼——浅泡泡糖粉主色，配糖纸般的粉色，再加一整套粉彩糖果彩虹。"
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "编辑风衬线标题配简洁无衬线正文——Motir 的招牌搭配。"
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "全无衬线——标题与正文均用 Inter；结构感强，不用衬线。"
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "通篇等宽——标题、正文全部如此的代码原生界面。"
+      },
+      "grotesk": {
+        "name": "怪诞体",
+        "tagline": "整个界面采用几何新怪诞体——紧凑、自信、富有产品感。"
+      },
+      "editorial": {
+        "name": "编辑风",
+        "tagline": "个性鲜明的展示衬线体配人文无衬线体——杂志般考究。"
+      },
+      "mono-technical": {
+        "name": "等宽技术风",
+        "tagline": "通篇使用 IBM Plex Mono——精准、开发者级的界面。"
+      }
+    }
   },
   "footer": {
     "ariaLabel": "页脚",

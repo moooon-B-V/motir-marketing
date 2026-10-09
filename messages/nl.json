@@ -514,7 +514,121 @@
       "help": "De lettertypecombinatie voor koppen en tekst."
     },
     "reset": "Standaard herstellen",
-    "closing": "De drie assen hier zijn dezelfde drie die je project kiest wanneer je er een start in Motir — met hetzelfde designsysteem eronder. Deze site laat je geen demo ervan zien; hij is ermee gebouwd."
+    "closing": "De drie assen hier zijn dezelfde drie die je project kiest wanneer je er een start in Motir — met hetzelfde designsysteem eronder. Deze site laat je geen demo ervan zien; hij is ermee gebouwd.",
+    "styles": {
+      "warm-editorial": {
+        "name": "Warm redactioneel",
+        "tagline": "Bedachtzaam, warm, technisch maar niet kil, licht redactioneel."
+      },
+      "soft-playful": {
+        "name": "Zacht / Speels",
+        "tagline": "Meer energie — afgerond, royaal, subtiel geanimeerd."
+      },
+      "swiss-minimal-flat": {
+        "name": "Zwitsers / Minimaal-plat",
+        "tagline": "Internationaal-typografisch, structureel, rustig — plat, scherp, op een raster."
+      },
+      "neo-brutalism": {
+        "name": "Neobrutalisme",
+        "tagline": "Rauw, krachtig, functioneel — hoeken van 0px, dikke randen, harde verschoven schaduwen."
+      },
+      "glassmorphism": {
+        "name": "Glasmorfisme",
+        "tagline": "Doorschijnend matglas dat zweeft boven een zacht, levendig verloop."
+      },
+      "cybercore-y2k": {
+        "name": "Cybercore / Y2K",
+        "tagline": "Neon-op-donker retrotech — gloeiende HUD-panelen, een techraster, monokoppen."
+      },
+      "aurora": {
+        "name": "Aurora",
+        "tagline": "Zacht, deinend noorderlicht achter vloeiende, zacht gloeiende oppervlakken."
+      },
+      "3d-immersive": {
+        "name": "3D / Meeslepend",
+        "tagline": "Diepte en perspectief — ruimtelijke panelen die boven de pagina zweven."
+      },
+      "neumorphism": {
+        "name": "Neumorfisme",
+        "tagline": "Zachte, uitgeperste oppervlakken die opbollen uit één monochroom vlak."
+      },
+      "hand-drawn-indie": {
+        "name": "Handgetekend / Indie",
+        "tagline": "Schetsmatig en vriendelijk — ruwe, met de hand geïnkte randen, scheve hoeken, zachte verschoven schaduwen, een speelse stuiter."
+      },
+      "retrofuturism": {
+        "name": "Retrofuturisme",
+        "tagline": "Chroom, verloopbanen en een synthwave-horizon — sciencefiction uit de jaren 70/80."
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Strak en redactioneel — koele grijstinten + inkt, een inktkleurige CTA, een ingetogen koelblauw accent en een paar warme toetsen."
+      },
+      "amethyst": {
+        "name": "Amethist",
+        "tagline": "Warm en redactioneel — crèmekleurige oppervlakken, antraciet inkt, paars als primaire kleur, pasteltinten."
+      },
+      "cobalt": {
+        "name": "Kobalt",
+        "tagline": "Koel en institutioneel — leikoele oppervlakken, zelfverzekerd kobalt als primaire kleur, verkoelde tinten."
+      },
+      "evergreen": {
+        "name": "Groenblijvend",
+        "tagline": "Fris en technisch — smaragd als primaire kleur over koele bosneutralen, een UI die naar groen neigt."
+      },
+      "spectrum": {
+        "name": "Spectrum",
+        "tagline": "Levendig en speels — heldere koele oppervlakken, felviolet als primaire kleur, een snoepkleurige set accenten en tinten in vele kleuren."
+      },
+      "amber": {
+        "name": "Amber",
+        "tagline": "Warm en elektrisch — het goud van de Binance-handelsvloer over de grafietzwarte tinten van de beurs; donkere labels op het goud."
+      },
+      "sienna": {
+        "name": "Sienna",
+        "tagline": "Warm en levendig — Mistral-vlamoranje over mediterrane warme crèmetinten; donkere labels op de vlam."
+      },
+      "garnet": {
+        "name": "Granaat",
+        "tagline": "Rijk en gedurfd — Pinterest Pushpin-rood over de neutrale grijstinten van het merk; witte labels op het rood."
+      },
+      "citrine": {
+        "name": "Citrien",
+        "tagline": "Helder en collaboratief — Miro’s Sunglow-geel over whiteboardgrijs, met het actieblauwe accent van Miro."
+      },
+      "candy": {
+        "name": "Snoep",
+        "tagline": "Zoet en speels — lichtroze kauwgom als primaire kleur over snoeppapierroze, met een complete pastelregenboog."
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Redactionele serifkoppen boven een strakke schreefloze tekst — de huiscombinatie."
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "Volledig schreefloos — Inter voor koppen en tekst; structureel, geen schreef."
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "Overal monospace — een code-eigen UI, koppen, tekst en alles."
+      },
+      "grotesk": {
+        "name": "Grotesk",
+        "tagline": "Geometrische neogrotesk door de hele UI — strak, zelfverzekerd, productgericht."
+      },
+      "editorial": {
+        "name": "Redactioneel",
+        "tagline": "Een karaktervolle display-serif boven een humanistische schreefloze letter — tijdschriftachtig, doordacht."
+      },
+      "mono-technical": {
+        "name": "Mono-technisch",
+        "tagline": "Overal IBM Plex Mono — een precieze UI op ontwikkelaarsniveau."
+      }
+    }
   },
   "footer": {
     "ariaLabel": "Voettekst",

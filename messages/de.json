@@ -519,7 +519,121 @@
       "help": "Die Schriftkombination für Überschriften und Fließtext."
     },
     "reset": "Auf Standard zurücksetzen",
-    "closing": "Die drei Achsen hier sind dieselben drei, die Ihr Projekt wählt, wenn Sie es in Motir anlegen – und darunter liegt dasselbe Designsystem. Diese Website zeigt Ihnen keine Demo davon; sie ist daraus gebaut."
+    "closing": "Die drei Achsen hier sind dieselben drei, die Ihr Projekt wählt, wenn Sie es in Motir anlegen – und darunter liegt dasselbe Designsystem. Diese Website zeigt Ihnen keine Demo davon; sie ist daraus gebaut.",
+    "styles": {
+      "warm-editorial": {
+        "name": "Warmes Editorial",
+        "tagline": "Durchdacht, warm, technisch, aber nicht kalt, leicht redaktionell."
+      },
+      "soft-playful": {
+        "name": "Sanft / Verspielt",
+        "tagline": "Mehr Energie – abgerundet, großzügig, sanft animiert."
+      },
+      "swiss-minimal-flat": {
+        "name": "Schweizer Stil / Minimal-Flach",
+        "tagline": "International-typografisch, strukturell, ruhig – flach, scharf, im Raster."
+      },
+      "neo-brutalism": {
+        "name": "Neo-Brutalismus",
+        "tagline": "Roh, kraftvoll, zweckmäßig – 0px-Ecken, dicke Rahmen, harte versetzte Schatten."
+      },
+      "glassmorphism": {
+        "name": "Glassmorphismus",
+        "tagline": "Durchscheinendes Milchglas, schwebend über einem weichen, lebendigen Farbverlauf."
+      },
+      "cybercore-y2k": {
+        "name": "Cybercore / Y2K",
+        "tagline": "Retro-Tech in Neon auf Dunkel – leuchtende HUD-Panels, ein Tech-Raster, Mono-Überschriften."
+      },
+      "aurora": {
+        "name": "Aurora",
+        "tagline": "Sanftes, schwebendes Polarlicht hinter fließenden, sanft leuchtenden Flächen."
+      },
+      "3d-immersive": {
+        "name": "3D / Immersiv",
+        "tagline": "Tiefe und Perspektive – dimensionale Kacheln, die über der Seite schweben."
+      },
+      "neumorphism": {
+        "name": "Neumorphismus",
+        "tagline": "Weiche, plastisch herausgeprägte Flächen, die aus einem einzigen monochromen Feld hervortreten."
+      },
+      "hand-drawn-indie": {
+        "name": "Handgezeichnet / Indie",
+        "tagline": "Skizzenhaft und freundlich – raue, von Hand getuschte Kanten, schiefe Ecken, weiche versetzte Schatten, ein verspieltes Federn."
+      },
+      "retrofuturism": {
+        "name": "Retrofuturismus",
+        "tagline": "Chrom, schwungvolle Farbverläufe und ein Synthwave-Horizont – Sci-Fi der 70er/80er."
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Klar und redaktionell – kühle Graustufenflächen + Tinte, ein Tinten-CTA, ein zurückhaltender kühlblauer Akzent und einige warme Details."
+      },
+      "amethyst": {
+        "name": "Amethyst",
+        "tagline": "Warm und redaktionell – cremefarbene Flächen, anthrazitfarbene Tinte, eine violette Primärfarbe, Pastelltöne."
+      },
+      "cobalt": {
+        "name": "Kobalt",
+        "tagline": "Kühl und institutionell – schieferkühle Flächen, eine selbstbewusste kobaltblaue Primärfarbe, gekühlte Töne."
+      },
+      "evergreen": {
+        "name": "Immergrün",
+        "tagline": "Frisch und technisch – eine smaragdgrüne Primärfarbe über kühlen Waldneutraltönen, eine grün geprägte UI."
+      },
+      "spectrum": {
+        "name": "Spektrum",
+        "tagline": "Lebendig und verspielt – klare, kühle Flächen, eine leuchtend violette Primärfarbe, ein bonbonbunter, mehrfarbiger Satz aus Akzenten und Tönen."
+      },
+      "amber": {
+        "name": "Bernstein",
+        "tagline": "Warm und elektrisierend – Binance-Gold vom Handelsparkett über den graphitfarbenen Beinahe-Schwarztönen der Börse; dunkle Beschriftung auf dem Gold."
+      },
+      "sienna": {
+        "name": "Siena",
+        "tagline": "Warm und lebhaft – Mistral-Flammenorange über warmen, mediterranen Cremeflächen; dunkle Beschriftung auf der Flamme."
+      },
+      "garnet": {
+        "name": "Granat",
+        "tagline": "Satt und kräftig – Pinterest-Pushpin-Rot über den neutralen Grautönen der Marke; weiße Beschriftung auf dem Rot."
+      },
+      "citrine": {
+        "name": "Citrin",
+        "tagline": "Hell und kollaborativ – Miros Sunglow-Gelb über Whiteboard-Grautönen, mit Miros Aktionsblau als Akzent."
+      },
+      "candy": {
+        "name": "Bonbon",
+        "tagline": "Süß und verspielt – ein helles Kaugummirosa als Primärfarbe über Bonbonpapier-Rosatönen, mit einem vollen Pastell-Bonbon-Regenbogen."
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Redaktionelle Serifen-Überschriften über klarem serifenlosem Fließtext – die hauseigene Kombination."
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "Durchgehend serifenlos – Inter für Überschriften und Fließtext; strukturell, ohne Serifen."
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "Durchgehend Monospace – eine codenahe UI, Überschriften, Fließtext und alles andere."
+      },
+      "grotesk": {
+        "name": "Grotesk",
+        "tagline": "Geometrische Neo-Grotesk in der gesamten UI – kompakt, selbstbewusst, produktnah."
+      },
+      "editorial": {
+        "name": "Redaktionell",
+        "tagline": "Eine charaktervolle Display-Serif über einer humanistischen Sans – magazinhaft, durchdacht."
+      },
+      "mono-technical": {
+        "name": "Mono-Technisch",
+        "tagline": "Durchgehend IBM Plex Mono – eine präzise UI auf Entwicklerniveau."
+      }
+    }
   },
   "footer": {
     "ariaLabel": "Fußzeile",

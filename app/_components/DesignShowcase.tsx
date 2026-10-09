@@ -11,26 +11,27 @@ import {
   ErrorState,
   Input,
   Modal,
-  PALETTE_REGISTRY,
-  PalettePicker,
   Pill,
   Popover,
-  STYLE_REGISTRY,
   SectionLabel,
   Segmented,
   Spinner,
-  StylePicker,
   Switch,
-  TYPE_REGISTRY,
   Textarea,
   ThemeSegmentedControl,
   TokensSpecimen,
   Tooltip,
-  TypePicker,
 } from '@motir/design-system'
 import { RotateCcw } from 'lucide-react'
-import { useCopy } from '@/lib/copy'
+import { usePageLocale, useCopy } from '@/lib/copy'
+import { cjkLangOf, defaultCjkFace } from '@/lib/cjkFaces'
 import { useVisitAppearance } from '@/lib/useVisitAppearance'
+import {
+  CjkFaceChips,
+  PaletteChips,
+  StyleChips,
+  TypeChips,
+} from './AppearancePickers'
 
 /*
  * motir.co/design — the public design showcase (MOTIR-1043 · 8.3.16).
@@ -112,6 +113,7 @@ export function DesignShowcase() {
  */
 function AxisRail({ theme }: { theme: ReturnType<typeof useVisitAppearance> }) {
   const copy = useCopy()
+  const cjkLang = cjkLangOf(usePageLocale())
   const { offDefault, reset } = theme
 
   return (
@@ -177,12 +179,12 @@ function AxisRail({ theme }: { theme: ReturnType<typeof useVisitAppearance> }) {
               help={copy.designShowcase.style.help}
               note={
                 <AxisNote
-                  name={STYLE_REGISTRY[theme.styleId].name}
-                  tagline={STYLE_REGISTRY[theme.styleId].tagline}
+                  name={copy.designShowcase.styles[theme.styleId].name}
+                  tagline={copy.designShowcase.styles[theme.styleId].tagline}
                 />
               }
             >
-              <StylePicker
+              <StyleChips
                 value={theme.styleId}
                 onChange={theme.setStyleId}
                 label={copy.designShowcase.style.name}
@@ -196,12 +198,12 @@ function AxisRail({ theme }: { theme: ReturnType<typeof useVisitAppearance> }) {
               help={copy.designShowcase.palette.help}
               note={
                 <AxisNote
-                  name={PALETTE_REGISTRY[theme.palette].name}
-                  tagline={PALETTE_REGISTRY[theme.palette].tagline}
+                  name={copy.designShowcase.palettes[theme.palette].name}
+                  tagline={copy.designShowcase.palettes[theme.palette].tagline}
                 />
               }
             >
-              <PalettePicker
+              <PaletteChips
                 value={theme.palette}
                 onChange={theme.setPalette}
                 label={copy.designShowcase.palette.name}
@@ -210,22 +212,41 @@ function AxisRail({ theme }: { theme: ReturnType<typeof useVisitAppearance> }) {
           </AxisRow>
 
           <AxisRow>
-            <AxisField
-              name={copy.designShowcase.type.name}
-              help={copy.designShowcase.type.help}
-              note={
-                <AxisNote
-                  name={TYPE_REGISTRY[theme.type].name}
-                  tagline={TYPE_REGISTRY[theme.type].tagline}
+            {cjkLang ? (
+              /*
+               * A zh, ja or ko page offers its own fonts by name instead of
+               * the six pairings, which change only Latin letters and so
+               * nothing a reader of the page sees (Yue, 2026-10-09).
+               */
+              <AxisField
+                name={copy.designShowcase.type.name}
+                help={copy.designShowcase.type.help}
+              >
+                <CjkFaceChips
+                  lang={cjkLang}
+                  value={theme.cjkFaces[cjkLang] ?? defaultCjkFace(cjkLang)}
+                  onChange={(face) => theme.setCjkFace(cjkLang, face)}
+                  label={copy.designShowcase.type.name}
                 />
-              }
-            >
-              <TypePicker
-                value={theme.type}
-                onChange={theme.setType}
-                label={copy.designShowcase.type.name}
-              />
-            </AxisField>
+              </AxisField>
+            ) : (
+              <AxisField
+                name={copy.designShowcase.type.name}
+                help={copy.designShowcase.type.help}
+                note={
+                  <AxisNote
+                    name={copy.designShowcase.types[theme.type].name}
+                    tagline={copy.designShowcase.types[theme.type].tagline}
+                  />
+                }
+              >
+                <TypeChips
+                  value={theme.type}
+                  onChange={theme.setType}
+                  label={copy.designShowcase.type.name}
+                />
+              </AxisField>
+            )}
           </AxisRow>
         </Card>
       </div>

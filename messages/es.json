@@ -523,7 +523,121 @@
       "help": "La combinación de tipos de letra para títulos y texto."
     },
     "reset": "Restablecer valores predeterminados",
-    "closing": "Los tres ejes de aquí son los mismos tres que tu proyecto elige cuando lo empiezas en Motir, con el mismo sistema de diseño debajo. Este sitio no te muestra una demo de él: está hecho con él."
+    "closing": "Los tres ejes de aquí son los mismos tres que tu proyecto elige cuando lo empiezas en Motir, con el mismo sistema de diseño debajo. Este sitio no te muestra una demo de él: está hecho con él.",
+    "styles": {
+      "warm-editorial": {
+        "name": "Editorial cálido",
+        "tagline": "Reflexivo, cálido, técnico pero no frío, ligeramente editorial."
+      },
+      "soft-playful": {
+        "name": "Suave / Lúdico",
+        "tagline": "Más energía — redondeado, generoso, con animaciones sutiles."
+      },
+      "swiss-minimal-flat": {
+        "name": "Suizo / Minimalista plano",
+        "tagline": "Tipografía internacional, estructural, sereno — plano, nítido, en retícula."
+      },
+      "neo-brutalism": {
+        "name": "Neobrutalismo",
+        "tagline": "Crudo, contundente, utilitario — esquinas de 0px, bordes gruesos, sombras desplazadas y duras."
+      },
+      "glassmorphism": {
+        "name": "Glassmorfismo",
+        "tagline": "Vidrio esmerilado translúcido flotando sobre un degradado suave y vibrante."
+      },
+      "cybercore-y2k": {
+        "name": "Cybercore / Y2K",
+        "tagline": "Retrotecnología de neón sobre oscuro — paneles HUD luminosos, una cuadrícula técnica, titulares monoespaciados."
+      },
+      "aurora": {
+        "name": "Aurora",
+        "tagline": "Suave luz de aurora a la deriva tras superficies fluidas con un brillo sutil."
+      },
+      "3d-immersive": {
+        "name": "3D / Inmersivo",
+        "tagline": "Profundidad y perspectiva — paneles tridimensionales flotando sobre la página."
+      },
+      "neumorphism": {
+        "name": "Neumorfismo",
+        "tagline": "Superficies suaves en relieve que emergen de un único campo monocromo."
+      },
+      "hand-drawn-indie": {
+        "name": "Dibujado a mano / Indie",
+        "tagline": "Esbozado y amable — bordes ásperos entintados a mano, esquinas torcidas, sombras suaves desplazadas, un rebote juguetón."
+      },
+      "retrofuturism": {
+        "name": "Retrofuturismo",
+        "tagline": "Cromo, barridos de degradado y un horizonte synthwave — ciencia ficción de los 70/80."
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Sobrio y editorial — superficies en escala de grises fríos + tinta, un CTA en tinta, un acento azul frío contenido y algunos toques cálidos."
+      },
+      "amethyst": {
+        "name": "Amatista",
+        "tagline": "Cálido y editorial — superficies crema, tinta carbón, un primario morado, tintes pastel."
+      },
+      "cobalt": {
+        "name": "Cobalto",
+        "tagline": "Frío e institucional — superficies frías de pizarra, un primario cobalto seguro, tintes enfriados."
+      },
+      "evergreen": {
+        "name": "Siempreverde",
+        "tagline": "Fresco y técnico — un primario esmeralda sobre neutros de bosque fríos, una interfaz con tendencia al verde."
+      },
+      "spectrum": {
+        "name": "Espectro",
+        "tagline": "Vibrante y lúdico — superficies frías y nítidas, un primario violeta brillante, un conjunto de acentos y tintes multicolor de caramelo."
+      },
+      "amber": {
+        "name": "Ámbar",
+        "tagline": "Cálido y eléctrico — el dorado del parqué bursátil de Binance sobre los casi negros grafito del exchange; etiquetas oscuras sobre el dorado."
+      },
+      "sienna": {
+        "name": "Siena",
+        "tagline": "Cálido y vivo — el naranja llama de Mistral sobre cálidas superficies crema mediterráneas; etiquetas oscuras sobre la llama."
+      },
+      "garnet": {
+        "name": "Granate",
+        "tagline": "Intenso y audaz — el rojo Pushpin de Pinterest sobre los grises neutros de la marca; etiquetas blancas sobre el rojo."
+      },
+      "citrine": {
+        "name": "Citrino",
+        "tagline": "Luminoso y colaborativo — el amarillo Sunglow de Miro sobre los grises de pizarra blanca, con el acento azul de acción de Miro."
+      },
+      "candy": {
+        "name": "Caramelo",
+        "tagline": "Dulce y lúdico — un primario rosa chicle claro sobre rosas de papel de caramelo, con un arcoíris pastel completo."
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Titulares serif editoriales sobre un cuerpo sans limpio — la combinación de la casa."
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "Todo sans — Inter para titulares y cuerpo; estructural, sin serif."
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "Monoespaciado de principio a fin — una interfaz nativa del código: titulares, cuerpo y todo lo demás."
+      },
+      "grotesk": {
+        "name": "Grotesk",
+        "tagline": "Neogrotesca geométrica en toda la interfaz — compacta, segura, de producto."
+      },
+      "editorial": {
+        "name": "Editorial",
+        "tagline": "Una serif display con carácter sobre una sans humanista — de revista, cuidada."
+      },
+      "mono-technical": {
+        "name": "Mono-técnico",
+        "tagline": "IBM Plex Mono de principio a fin — una interfaz precisa, de nivel desarrollador."
+      }
+    }
   },
   "footer": {
     "ariaLabel": "Pie de página",

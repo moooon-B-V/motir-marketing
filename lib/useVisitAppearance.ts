@@ -6,6 +6,12 @@ import type {
   TypeId,
 } from '@motir/design-system'
 import { SITE_APPEARANCE, siteTypeForStyle } from '@/lib/siteDefaults'
+import {
+  CJK_LANGS,
+  cjkAttribute,
+  defaultCjkFace,
+  type CjkLang,
+} from '@/lib/cjkFaces'
 
 /*
  * The appearance a visitor picks on `/design` — for THIS VISIT (MOTIR-7724).
@@ -33,6 +39,8 @@ interface VisitChoice {
   palette: PaletteId
   /** A pinned pairing outranks the style's own; null follows the style. */
   pinnedType: TypeId | null
+  /** The CJK font picked per language (`lib/cjkFaces.ts`); absent is the default. */
+  cjkFaces: Partial<Record<CjkLang, string>>
 }
 
 const SITE_CHOICE: VisitChoice = {
@@ -40,6 +48,7 @@ const SITE_CHOICE: VisitChoice = {
   styleId: SITE_APPEARANCE.style,
   palette: SITE_APPEARANCE.palette,
   pinnedType: null,
+  cjkFaces: {},
 }
 
 let choice = SITE_CHOICE
@@ -86,7 +95,7 @@ export function useVisitAppearance() {
     () => false,
   )
 
-  const { pattern, styleId, palette, pinnedType } = current
+  const { pattern, styleId, palette, pinnedType, cjkFaces } = current
   const type = pinnedType ?? siteTypeForStyle(styleId)
   const resolvedPattern =
     pattern === 'system' ? (osDark ? 'dark' : 'light') : pattern
@@ -101,24 +110,39 @@ export function useVisitAppearance() {
     html.setAttribute('data-style', styleId)
     html.setAttribute('data-palette', palette)
     html.setAttribute('data-type', type)
-  }, [resolvedPattern, styleId, palette, type, osDark])
+    for (const lang of CJK_LANGS) {
+      const face = cjkFaces[lang]
+      if (face) html.setAttribute(cjkAttribute(lang), face)
+      else html.removeAttribute(cjkAttribute(lang))
+    }
+  }, [resolvedPattern, styleId, palette, type, cjkFaces, osDark])
 
   const offDefault =
     pattern !== SITE_APPEARANCE.pattern ||
     styleId !== SITE_APPEARANCE.style ||
     palette !== SITE_APPEARANCE.palette ||
-    type !== SITE_APPEARANCE.type
+    type !== SITE_APPEARANCE.type ||
+    Object.keys(cjkFaces).length > 0
 
   return {
     pattern,
     styleId,
     palette,
     type,
+    cjkFaces,
     offDefault,
     setPattern: (next: ThemePattern) => updateChoice({ pattern: next }),
     setStyleId: (next: StyleId) => updateChoice({ styleId: next }),
     setPalette: (next: PaletteId) => updateChoice({ palette: next }),
     setType: (next: TypeId) => updateChoice({ pinnedType: next }),
+    // Picking the default face forgets the pick, so Reset shows only while a
+    // language is genuinely off its default.
+    setCjkFace: (lang: CjkLang, face: string) => {
+      const next = { ...cjkFaces }
+      if (face === defaultCjkFace(lang)) delete next[lang]
+      else next[lang] = face
+      updateChoice({ cjkFaces: next })
+    },
     reset: forgetVisitAppearance,
   }
 }
