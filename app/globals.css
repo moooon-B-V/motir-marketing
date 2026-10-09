@@ -77,6 +77,51 @@ body {
   }
 }
 
+/* "Motir builds itself" in the header is LIVE: its square and its words walk
+   the palette's wave hues, the same band that slides across the hero. The
+   words take each hue mixed 60/40 with the text ink: the raw teal and warm
+   hues fall below AA as text in most light palettes (down to 2.4:1), and at
+   60% every hue clears 5:1 on the page and the hero in every palette and
+   theme. Under reduced motion both hold the first hue. */
+@keyframes mk-live {
+  0%,
+  100% {
+    background-color: var(--el-showcase-wave-1);
+  }
+  33% {
+    background-color: var(--el-showcase-wave-2);
+  }
+  66% {
+    background-color: var(--el-showcase-wave-3);
+  }
+}
+@keyframes mk-live-text {
+  0%,
+  100% {
+    color: color-mix(in srgb, var(--el-showcase-wave-1) 60%, var(--el-text));
+  }
+  33% {
+    color: color-mix(in srgb, var(--el-showcase-wave-2) 60%, var(--el-text));
+  }
+  66% {
+    color: color-mix(in srgb, var(--el-showcase-wave-3) 60%, var(--el-text));
+  }
+}
+.mk-live {
+  background-color: var(--el-showcase-wave-1);
+  animation: mk-live 6s ease-in-out infinite;
+}
+.mk-live-text {
+  color: color-mix(in srgb, var(--el-showcase-wave-1) 60%, var(--el-text));
+  animation: mk-live-text 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-live,
+  .mk-live-text {
+    animation: none;
+  }
+}
+
 /*
  * THE LANDING'S PICTURES — "Vibe the project" (2026-10 redesign).
  *
