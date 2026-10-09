@@ -195,6 +195,7 @@ export function HeroWaves({
         boxOf(document.querySelector('header')),
         boxOf(hero.querySelector('h1')),
         boxOf(hero.querySelector('[data-hero-lede]')),
+        boxOf(hero.querySelector('[data-hero-existing]')),
         focus,
       ].filter((b): b is Box => b !== null)
       const rand = seeded(7)

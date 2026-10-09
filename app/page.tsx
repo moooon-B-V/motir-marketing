@@ -99,7 +99,10 @@ export default async function Page() {
           </div>
           {/* The way down to Motir Project Manager, for a visitor who arrives
               with a project rather than an idea. */}
-          <p className="m-0 text-[17px] text-(--el-text-secondary)">
+          <p
+            data-hero-existing
+            className="m-0 text-[17px] text-(--el-text-secondary)"
+          >
             <strong className="font-semibold text-(--el-text-strong)">
               {l.hero.existingProject}
             </strong>{' '}
