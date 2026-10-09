@@ -84,7 +84,7 @@ import { SetupPromptButton } from './SetupPromptButton'
 const navItems = [
   { path: EXPLORE, label: copy.nav.explore },
   { path: IDEAS, label: copy.nav.ideas },
-  { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself },
+  { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself, feature: true },
   { path: DOCS, label: copy.nav.docs },
   { path: DESIGN, label: copy.nav.design },
 ] as const
@@ -211,9 +211,15 @@ const isCurrent = (host: PublicHost, path: string, pathname: string) =>
       ? pathname === path || pathname.startsWith(`${path}/`)
       : pathname === path
 
-const NAV_ITEM = 'text-[15px] font-medium'
+const NAV_ITEM = 'text-[17px] font-medium'
 const NAV_REST = 'text-(--el-text) hover:text-(--el-accent-on-surface)'
 const NAV_CURRENT = 'font-semibold text-(--el-accent-on-surface)'
+/** "Motir builds itself" is live: square and words walk the wave hues (`.mk-live`, globals.css). */
+const LIVE_ITEM =
+  'mk-live-text inline-flex items-center gap-2 hover:underline underline-offset-4'
+const LIVE_SQUARE = (
+  <i aria-hidden="true" className="mk-live size-2 flex-none" />
+)
 
 export function SiteHeader({
   host,
@@ -264,8 +270,13 @@ export function SiteHeader({
                   href={siteLinkFor(host, item.path)}
                   internal={onSite}
                   aria-current={current ? 'page' : undefined}
-                  className={cn(NAV_ITEM, current ? NAV_CURRENT : NAV_REST)}
+                  className={cn(
+                    NAV_ITEM,
+                    current ? NAV_CURRENT : NAV_REST,
+                    'feature' in item && LIVE_ITEM,
+                  )}
                 >
+                  {'feature' in item && LIVE_SQUARE}
                   {item.label}
                 </ChromeLink>
               )
@@ -348,6 +359,7 @@ export function SiteHeader({
               label: item.label,
               internal: onSite,
               current: isCurrent(host, item.path, pathname),
+              feature: 'feature' in item,
             })),
             {
               href: SIGN_IN,
@@ -362,8 +374,13 @@ export function SiteHeader({
               internal={item.internal}
               aria-current={item.current ? 'page' : undefined}
               {...('newTab' in item && item.newTab ? NEW_TAB : {})}
-              className={cn(NAV_ITEM, item.current ? NAV_CURRENT : NAV_REST)}
+              className={cn(
+                NAV_ITEM,
+                item.current ? NAV_CURRENT : NAV_REST,
+                'feature' in item && item.feature && LIVE_ITEM,
+              )}
             >
+              {'feature' in item && item.feature && LIVE_SQUARE}
               {item.label}
             </ChromeLink>
           ))}

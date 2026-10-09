@@ -82,7 +82,9 @@
       "errorTitle": "We couldn't save your idea just now.",
       "errorBody": "Nothing you typed has been lost. Try again, or continue to Motir and bring your idea with you.",
       "errorRetry": "Try again",
-      "errorFallback": "Continue to Motir"
+      "errorFallback": "Continue to Motir",
+      "existingProject": "Already have a project?",
+      "existingProjectLink": "We can vibe it too"
     },
     "projectManager": {
       "eyebrow": "Motir Project Manager",
