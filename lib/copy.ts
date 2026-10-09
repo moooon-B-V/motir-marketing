@@ -1,6 +1,8 @@
+import * as React from 'react'
 import { createElement, Fragment, type ReactNode } from 'react'
-import { useMessages } from 'next-intl'
-import type { Locale } from '@/i18n/routing'
+import { hasLocale, useLocale, useMessages } from 'next-intl'
+import { claimedLocale } from '@/i18n/claim'
+import { DEFAULT_LOCALE, LOCALES, type Locale } from '@/i18n/routing'
 import en from '@/messages/en.json'
 
 /**
@@ -168,15 +170,67 @@ export function clientCopy(
   )
 }
 
-/**
- * The page's catalogue in a component that is not `async` — server or client.
- * It is next-intl's `useMessages()`, which `i18n/request.ts` fills with
- * `getCopy(locale)` and the locale layout hands to the client through
- * `NextIntlClientProvider`, so both halves read the same merged object.
+/*
+ * ⚠️ A SERVER COMPONENT AND A CLIENT COMPONENT READ THE CATALOGUE DIFFERENTLY
+ * (MOTIR-7955).
+ *
+ * A client component reads `useMessages()` — the provider the locale layout
+ * mounts, which names its locale and catalogue outright.
+ *
+ * A server component does NOT go through next-intl. Its server `useMessages()`
+ * and `useLocale()` read `getConfig()`, which React-caches its FIRST answer for
+ * the whole request — and the global `app/not-found.tsx`, rendered into every
+ * page's payload, answers first, in English. Measured on `next dev`: on
+ * `/fr/no-such-page` the locale layout and the page both claimed `fr` before
+ * the 404 room rendered, and the room's `useLocale()` still said `en`. So the
+ * server half reads the locale the tree claimed (`i18n/claim.ts`) at the
+ * moment of the read, and the catalogue for it from `getCopy`.
+ *
+ * The React build tells the two apart: the server-components build has no
+ * `useState`. Each half is chosen once, at module load, so neither calls a
+ * hook conditionally.
  */
-export function useCopy(): Copy {
+const IN_SERVER_COMPONENT = !('useState' in React)
+
+/** The locale a server component renders in: the claimed one, else English. */
+function serverLocale(): Locale {
+  return claimedLocale() ?? DEFAULT_LOCALE
+}
+
+function useServerCopy(): Copy {
+  const locale = serverLocale()
+  // English is the object itself; any other locale is `getCopy`'s memoised
+  // promise, which `use` unwraps — the same promise on every render.
+  return locale === DEFAULT_LOCALE ? englishCopy : React.use(getCopy(locale))
+}
+
+function useClientCopy(): Copy {
   return useMessages() as unknown as Copy
 }
+
+function useClientLocale(): Locale {
+  const locale = useLocale()
+  return hasLocale(LOCALES, locale) ? locale : DEFAULT_LOCALE
+}
+
+/**
+ * The page's catalogue in a component that is not `async` — server or client.
+ * On the client it is next-intl's `useMessages()`, which the locale layout's
+ * `NextIntlClientProvider` fills; on the server, the claimed locale's
+ * `getCopy` (see the note above). Both are the same merged object.
+ */
+export const useCopy: () => Copy = IN_SERVER_COMPONENT
+  ? useServerCopy
+  : useClientCopy
+
+/**
+ * The page's locale in a component that is not `async` — server or client —
+ * for `Intl` formatting and locale-keeping links. Read it through this rather
+ * than next-intl's `useLocale()`, for the reason the note above gives.
+ */
+export const usePageLocale: () => Locale = IN_SERVER_COMPONENT
+  ? serverLocale
+  : useClientLocale
 
 /**
  * Fill `{name}` placeholders. Two strings carry them — the character counter

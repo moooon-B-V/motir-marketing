@@ -7,8 +7,7 @@ import {
   type VisitorView,
 } from '@/lib/publicProject'
 import { SITE_HOST, type PublicHost } from '@/lib/publicHost'
-import { useCopy } from '@/lib/copy'
-import { useLocale } from 'next-intl'
+import { useCopy, usePageLocale } from '@/lib/copy'
 import { ActRail } from './ActRail'
 import { WatchLive } from './WatchLive'
 
@@ -173,7 +172,7 @@ export function ProjectHeader({
 }
 
 function Stat({ n, k }: { n: number; k: string }) {
-  const locale = useLocale()
+  const locale = usePageLocale()
   return (
     <div className="text-right">
       <dd className="font-(family-name:--font-serif) text-[clamp(28px,2.6vw,40px)] leading-[1] font-bold tracking-[-0.02em] text-(--el-text)">

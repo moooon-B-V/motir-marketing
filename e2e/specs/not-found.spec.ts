@@ -153,3 +153,56 @@ test('the chrome is there, and no nav item claims to be the current page', async
   // later edit does not "fix" it by marking one.
   await expect(page.locator('[aria-current="page"]')).toHaveCount(0)
 })
+
+/*
+ * THE ROOM IN THE PAGE'S LANGUAGE (MOTIR-7955).
+ *
+ * The same four arrivals under `/fr`. Each must still be a REAL 404 with one
+ * landmark, and now inside `<html lang="fr">` — the locale boundary
+ * (`app/[locale]/not-found.tsx`) rather than the global English one. No French
+ * catalogue exists yet, so the room's WORDS are English through the fallback
+ * and are asserted in `tests/notFoundRoom.test.tsx` against its own fixture
+ * catalogue; here the assertions are the language attribute and the doors.
+ */
+for (const arrival of ARRIVALS) {
+  const url = `/fr${arrival.url}`
+  test(`${url} — the French room for ${arrival.what}`, async ({ page }) => {
+    const response = await page.goto(url)
+
+    expect(response?.status(), `${url} did not answer 404`).toBe(404)
+    await expect(page.locator('html')).toHaveAttribute('lang', 'fr')
+    await expect(page.getByRole('main')).toBeVisible()
+    await expect(page.locator('main')).toHaveCount(1)
+  })
+}
+
+test('the English room still says lang="en" — the unprefixed miss reaches the en tree', async ({
+  page,
+}) => {
+  const response = await page.goto('/no-such-page')
+  expect(response?.status()).toBe(404)
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+})
+
+test('the French room’s doors stay in French — /fr/explore, then /fr', async ({
+  page,
+}) => {
+  const response = await page.goto('/fr/no-such-page')
+  expect(response?.status()).toBe(404)
+
+  const doors = page.getByRole('main').getByRole('link')
+  await expect(doors).toHaveCount(2)
+  const [exploreHref, homeHref] = await Promise.all([
+    doors.nth(0).getAttribute('href'),
+    doors.nth(1).getAttribute('href'),
+  ])
+  expect(new URL(exploreHref!).pathname).toBe('/fr/explore')
+  expect(new URL(homeHref!).pathname).toBe('/fr')
+  expect(new URL(exploreHref!).origin).toBe(new URL(homeHref!).origin)
+
+  // Walked on this server, not followed to the href's production origin — the
+  // reason is the English door test's, above.
+  const destination = await page.goto('/fr/explore')
+  expect(destination?.status()).toBe(200)
+  await expect(page.locator('html')).toHaveAttribute('lang', 'fr')
+})

@@ -1,6 +1,34 @@
 import { hasLocale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
+import { claimedLocale, setClaimedLocale } from './claim'
 import { routing, type Locale } from './routing'
+
+/*
+ * ⚠️ ONE REQUEST, TWO LANGUAGES (MOTIR-7955).
+ *
+ * Two trees render in every page's request and want different locales: the
+ * page's own (`fr` under `/fr`) and the GLOBAL `app/not-found.tsx`, which Next
+ * renders into EVERY page's payload and which must say `en` — with no locale
+ * set, next-intl reads the request, and a request read turns a static page
+ * dynamic. When that boundary wrote `en` unconditionally, it overwrote `/fr`'s
+ * locale for whatever read after it: measured on `next dev`, `/fr/design`'s
+ * provider said `en` and the French 404 room's doors led to `/explore`.
+ *
+ * So the locale tree CLAIMS the request ({@link claimLocale}, into
+ * `i18n/claim.ts`, which the catalogue readers read) and the global boundary
+ * only writes English when nothing has claimed ({@link defaultLocaleUnlessClaimed}).
+ */
+
+/** The locale tree's write: this request renders in `locale`. */
+export function claimLocale(locale: Locale): void {
+  setClaimedLocale(locale)
+  setRequestLocale(locale)
+}
+
+/** The global 404's write: English, unless a locale tree already claimed. */
+export function defaultLocaleUnlessClaimed(): void {
+  if (claimedLocale() === undefined) setRequestLocale(routing.defaultLocale)
+}
 
 /** The `params` every route under `app/[locale]` receives. */
 export type LocaleParams = Promise<{ locale: string }>
@@ -32,6 +60,6 @@ export async function enterLocale(
   const known = hasLocale(routing.locales, locale)
     ? locale
     : routing.defaultLocale
-  setRequestLocale(known)
+  claimLocale(known)
   return known
 }

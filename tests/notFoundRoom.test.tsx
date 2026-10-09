@@ -2,9 +2,10 @@ import { screen, within } from '@testing-library/react'
 import { render } from '@/tests/helpers/withCopy'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import NotFound from '@/app/not-found'
+import LocaleNotFound from '@/app/[locale]/not-found'
 import HostUnavailablePage from '@/app/[locale]/host-unavailable/page'
 import { NotFoundRoom } from '@/app/_components/NotFoundRoom'
-import { englishCopy as copy } from '@/lib/copy'
+import { englishCopy as copy, resolveCopy } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
 import { EN_PAGE } from '@/tests/helpers/locale'
 import {
@@ -256,5 +257,50 @@ describe('the host-unavailable page', () => {
     expect(hrefs.length).toBeGreaterThan(8)
     expect(hrefs.filter((h) => h.startsWith('/'))).toEqual([])
     expect(hrefs).toContain(siteUrl(EXPLORE))
+  })
+})
+
+/*
+ * THE ROOM UNDER A LOCALE (MOTIR-7955) — `app/[locale]/not-found.tsx`, the
+ * boundary every `notFound()` inside a locale's tree reaches. The catalogue is
+ * a TEST catalogue (no `messages/fr.json` exists yet): it translates the title
+ * and leaves the lede out, which is the case the English fallback is for.
+ */
+describe('the room in French', () => {
+  const FRENCH = resolveCopy({
+    notFound: { title: 'Cette page n’existe pas' },
+  })
+  const renderFrench = () =>
+    render(<LocaleNotFound />, { locale: 'fr', messages: FRENCH })
+
+  it('reads the locale’s catalogue, with English where it has no key', () => {
+    const { container } = renderFrench()
+
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Cette page n’existe pas',
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByText(copy.notFound.lede)).toBeInTheDocument()
+    // No dotted catalogue path stands in for a missing string.
+    expect(container.textContent).not.toMatch(/\bnotFound\.[a-zA-Z]+/)
+  })
+
+  it('keeps its two doors in French, on the site origin', () => {
+    renderFrench()
+
+    const doors = within(screen.getByRole('main')).getAllByRole('link')
+    expect(doors).toHaveLength(2)
+    expect(doors[0]).toHaveAttribute('href', siteUrl('/fr/explore'))
+    expect(doors[1]).toHaveAttribute('href', siteUrl('/fr'))
+  })
+
+  it('and in English the locale boundary is the global room, door for door', () => {
+    render(<LocaleNotFound />)
+
+    const doors = within(screen.getByRole('main')).getAllByRole('link')
+    expect(doors[0]).toHaveAttribute('href', siteUrl(EXPLORE))
+    expect(doors[1]).toHaveAttribute('href', siteUrl(SITE_ROOT))
   })
 })

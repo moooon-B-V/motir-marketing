@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { defaultLocaleUnlessClaimed } from '@/i18n/locale'
 import { clientCopy, englishCopy } from '@/lib/copy'
 import { NotFoundRoom } from './_components/NotFoundRoom'
 import { SiteDocument } from './_components/SiteDocument'
@@ -142,8 +142,12 @@ export default function NotFound() {
   // read through next-intl now, and next-intl with no locale set asks the
   // REQUEST which one is in use — the read the paragraph above forbids. So the
   // locale is set here, and the provider hands the client chrome the English
-  // catalogue. The room in each language is MOTIR-7955's.
-  setRequestLocale('en')
+  // catalogue.
+  // ⚠️ BUT ONLY WHEN NO LOCALE TREE HAS CLAIMED THE REQUEST (MOTIR-7955). Next
+  // renders this boundary into every page's payload, so an unconditional
+  // `setRequestLocale('en')` here overwrote `/fr`'s locale for whatever read
+  // after it — the French 404 room among them. `i18n/locale.ts` has the race.
+  defaultLocaleUnlessClaimed()
   return (
     <SiteDocument lang="en">
       <NextIntlClientProvider locale="en" messages={clientCopy(englishCopy)}>

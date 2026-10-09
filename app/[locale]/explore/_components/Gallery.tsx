@@ -10,8 +10,7 @@ import {
   WifiOff,
 } from 'lucide-react'
 import { EmptyState, buttonVariants } from '@motir/design-system'
-import { useLocale } from 'next-intl'
-import { format, useCopy } from '@/lib/copy'
+import { format, useCopy, usePageLocale } from '@/lib/copy'
 import {
   buildExploreHref,
   hasActiveFilters,
@@ -49,7 +48,7 @@ function relativeAge(iso: string, locale: string): string {
 
 function ProjectCard({ card }: { card: ProjectSquareCardDto }) {
   const copy = useCopy()
-  const locale = useLocale()
+  const locale = usePageLocale()
   const age = card.stats.lastActivityAt
     ? relativeAge(card.stats.lastActivityAt, locale)
     : null
