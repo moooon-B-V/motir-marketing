@@ -1927,3 +1927,69 @@ own endonym, and the Latin endonyms fall back to the grotesk.
 - The locale routing, detection, fonts, catalogues and hreflang are their own cards (MOTIR-7948,
   7951, 7952, 7949/7950, 7956). This asset draws the control and where its entries point.
 - No footer switcher. One control, in one place, keeps one current-language truth on the page.
+
+## The language switcher, revision 2 — a globe at the right edge
+
+**Subtask:** MOTIR-7947 (`type: design`), second revision · **Builds it:** MOTIR-7953.
+**Amends:** § _The language switcher in the site header_ above and its mock
+[`site-header--language-switcher.mock.html`](site-header--language-switcher.mock.html).
+**Delta mock:**
+[`site-header--language-switcher--globe.mock.html`](site-header--language-switcher--globe.mock.html).
+It holds only the panels that change.
+
+**Why it changed.** The first version was sent back with _"is it a good design to put the language
+in the middle?"_ and _"use the global icon, don't need to show the language once it's selected"_
+(Yue, 2026-10-09). The trigger sat between Copy setup prompt and Sign in, in the middle of the bar's
+button cluster, and it spelled out the current language.
+
+### What changes
+
+| element                     | revision 1 (amended)                                | revision 2                                                                                                                                                                                        |
+| --------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| place on the bar            | before Sign in, in the middle of the right cluster  | **the last control on the bar, after Start free**. Sign in and Start free stay together as the bar's account pair                                                                                 |
+| the trigger                 | ghost button: `Languages` glyph + endonym + chevron | **icon-only square ghost button**: `buttonVariants({ variant: 'ghost', size: 'md' })` + `w-(--height-btn-md) shrink-0 px-0 text-(--el-text)`, holding lucide `Globe` `size-[18px]`, `aria-hidden` |
+| the current language        | the trigger's label                                 | **not shown on the bar.** It stays in the accessible name and is marked in the open list                                                                                                          |
+| accessible name and tooltip | `aria-label` = `nav.language.label`                 | unchanged (**"Language: {language}"**, so a screen reader still hears the current language), plus `title` = `nav.language.heading` (**"Language"**) as the pointer tooltip                        |
+| narrow bar (rung D)         | the control folds into the Menu panel as a section  | **the globe stays on the bar**: Brand · Start free · globe · Menu. It is one 40px square, and fits at 390px in all three measured languages                                                       |
+| Menu panel                  | a Language section after Sign in                    | **no Language section.** One control in one place, at every width                                                                                                                                 |
+
+**Unchanged from revision 1:**
+
+- **The open list** (§ _The open list_): the container, row, order, `lang` / `hreflang` and current
+  mark. It is end-aligned to the globe, which now sits at the bar's right edge. On a phone (panel 4)
+  it hangs from the globe and stays inside a 390px viewport.
+- **Where each entry points**, and the cookie it writes (§ _Where each entry points_).
+- **The states**: open and hover take `bg-(--el-surface-soft)`, focus-visible is the bar's outline,
+  and the open/close behaviour is ProductsMenu's.
+- **Fonts**: § _Script and fonts_.
+
+### The give-way ladder, re-measured (panel 1)
+
+The ladder has the same order. Rung D no longer folds the language control, because the globe never
+leaves the bar.
+
+| rung  | what the bar shows                                                              |
+| ----- | ------------------------------------------------------------------------------- |
+| **A** | brand · nav · Copy setup prompt · Sign in · Start free · globe                  |
+| **B** | Copy setup prompt leaves                                                        |
+| **D** | brand · Start free · globe · Menu. The nav and Sign in fold into the Menu panel |
+
+**Measured** the same way as revision 1 (Playwright chromium on the mock, the mock fonts loaded).
+Each number is the narrowest viewport at which the rung fits:
+
+| locale                    | A from | B from | D below |
+| ------------------------- | ------ | ------ | ------- |
+| English                   | 1364px | 1148px | 1148px  |
+| Deutsch                   | 1560px | 1314px | 1314px  |
+| 日本語 (placeholder copy) | 1488px | 1173px | 1173px  |
+
+The icon-only trigger frees 78–86px against revision 1 in every locale. MOTIR-7953 stores these as
+its starting widths, under the same mechanism and test that revision 1 describes.
+
+### Copy
+
+| key (`messages/<locale>.json`) | English              | used by                      |
+| ------------------------------ | -------------------- | ---------------------------- |
+| `nav.language.label`           | Language: {language} | the globe's `aria-label`     |
+| `nav.language.menuLabel`       | Choose a language    | the open list's `aria-label` |
+| `nav.language.heading`         | Language             | the globe's `title` tooltip  |
