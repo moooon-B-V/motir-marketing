@@ -816,7 +816,29 @@
     "thStatus": "ステータス",
     "thCondition": "条件",
     "filterOperations": "オペレーションを絞り込む",
-    "filterEmpty": "その条件に一致するオペレーションはありません。"
+    "filterEmpty": "その条件に一致するオペレーションはありません。",
+    "guideLabels": {
+      "candidateModel": "モデル",
+      "candidatePrice": "100万トークンあたりの価格",
+      "candidateCost": "タスクあたりのコスト",
+      "costBasisPrice": "価格換算",
+      "costBasisSamePrice": "同価格",
+      "captionInClaudeCode": "Claude Code で",
+      "captionCopySkillsOnly": "またはスキルだけをターミナルでコピー",
+      "captionInTerminal": "ターミナルで",
+      "captionYourTerminal": "お使いのターミナル",
+      "captionMcpServerUrl": "リモート MCP サーバーの URL",
+      "copyClaudeCodePlugin": "Claude Code プラグインのコマンドをコピー",
+      "copyClaudeCodeCopy": "Claude Code のコピーインストールのコマンドをコピー",
+      "copyClaudeCodeUpdate": "Claude Code のアップデートのコマンドをコピー",
+      "copyCodex": "Codex のインストールコマンドをコピー",
+      "copyCursor": "Cursor のインストールコマンドをコピー",
+      "copyGeminiCli": "Gemini CLI のインストールコマンドをコピー",
+      "copyCopilot": "GitHub Copilot のインストールコマンドをコピー",
+      "copyOpenCode": "OpenCode のインストールコマンドをコピー",
+      "copyMcpServerUrl": "Motir MCP サーバーの URL をコピー",
+      "copyClaudeCodeCommand": "Claude Code のコマンドをコピー"
+    }
   },
   "notFound": {
     "eyebrow": "404",

@@ -78,8 +78,8 @@ export function docsIndexFor(copy: Copy): Omit<DocsPage, 'description'> {
  * the `docs` keys instead, and `docsSurfacesFor(copy)` reads them from the
  * caller's catalogue. The ROUTES need no words and stay a constant.
  */
-// The string-valued keys: `notes` is a nested object (the document notes, MOTIR-8032).
-type DocsKey = Exclude<keyof Copy['docs'], 'notes'>
+// The string-valued keys: `notes` and `guideLabels` are nested objects (the document notes, MOTIR-8032; the guide slot labels, MOTIR-8036).
+type DocsKey = Exclude<keyof Copy['docs'], 'notes' | 'guideLabels'>
 type PageKeys = { href: string; label: DocsKey; description: DocsKey }
 type SurfaceKeys = PageKeys & { pages: PageKeys[] }
 

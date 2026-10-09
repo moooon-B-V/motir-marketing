@@ -801,7 +801,29 @@
     "thStatus": "状态码",
     "thCondition": "条件",
     "filterOperations": "筛选操作",
-    "filterEmpty": "没有符合该筛选条件的操作。"
+    "filterEmpty": "没有符合该筛选条件的操作。",
+    "guideLabels": {
+      "candidateModel": "模型",
+      "candidatePrice": "每百万 token 价格",
+      "candidateCost": "每个任务的成本",
+      "costBasisPrice": "按价格折算",
+      "costBasisSamePrice": "同价",
+      "captionInClaudeCode": "在 Claude Code 中",
+      "captionCopySkillsOnly": "或仅复制技能，在终端中",
+      "captionInTerminal": "在终端中",
+      "captionYourTerminal": "你的终端",
+      "captionMcpServerUrl": "远程 MCP 服务器 URL",
+      "copyClaudeCodePlugin": "复制 Claude Code 插件命令",
+      "copyClaudeCodeCopy": "复制 Claude Code 复制安装命令",
+      "copyClaudeCodeUpdate": "复制 Claude Code 更新命令",
+      "copyCodex": "复制 Codex 安装命令",
+      "copyCursor": "复制 Cursor 安装命令",
+      "copyGeminiCli": "复制 Gemini CLI 安装命令",
+      "copyCopilot": "复制 GitHub Copilot 安装命令",
+      "copyOpenCode": "复制 OpenCode 安装命令",
+      "copyMcpServerUrl": "复制 Motir MCP 服务器 URL",
+      "copyClaudeCodeCommand": "复制 Claude Code 命令"
+    }
   },
   "notFound": {
     "eyebrow": "404",

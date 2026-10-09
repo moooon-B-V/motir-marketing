@@ -1,4 +1,5 @@
 import { render } from '@/tests/helpers/withCopy'
+import { resolveAsync } from '@/tests/helpers/resolveAsync'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import DocsIndexPage from '@/app/[locale]/docs/(guides)/page'
 import CliPage from '@/app/[locale]/docs/(guides)/cli/page'
@@ -148,19 +149,37 @@ describe('no /docs page runs a word into the element before it', async () => {
       '/docs/public-address',
       async () => render(await PublicAddressPage(EN_PAGE)).container,
     ],
-    ['/docs/sentry', async () => render(await SentryPage(EN_PAGE)).container],
+    [
+      '/docs/sentry',
+      async () =>
+        render((await resolveAsync(await SentryPage(EN_PAGE))) as never)
+          .container,
+    ],
     [
       '/docs/difficulty',
-      async () => render(await DifficultyPage(EN_PAGE)).container,
+      async () =>
+        render((await resolveAsync(await DifficultyPage(EN_PAGE))) as never)
+          .container,
     ],
-    ['/docs/skills', async () => render(await SkillsPage(EN_PAGE)).container],
+    [
+      '/docs/skills',
+      async () =>
+        render((await resolveAsync(await SkillsPage(EN_PAGE))) as never)
+          .container,
+    ],
     [
       '/docs/claude-code-plugin',
-      async () => render(await ClaudeCodePluginPage(EN_PAGE)).container,
+      async () =>
+        render(
+          (await resolveAsync(await ClaudeCodePluginPage(EN_PAGE))) as never,
+        ).container,
     ],
     [
       '/docs/claude-code-connector',
-      async () => render(await ClaudeCodeConnectorPage(EN_PAGE)).container,
+      async () =>
+        render(
+          (await resolveAsync(await ClaudeCodeConnectorPage(EN_PAGE))) as never,
+        ).container,
     ],
     [
       '/docs/api/getting-started',

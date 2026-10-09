@@ -804,7 +804,29 @@
     "thStatus": "상태",
     "thCondition": "조건",
     "filterOperations": "작업 필터링",
-    "filterEmpty": "해당 필터와 일치하는 작업이 없습니다."
+    "filterEmpty": "해당 필터와 일치하는 작업이 없습니다.",
+    "guideLabels": {
+      "candidateModel": "모델",
+      "candidatePrice": "100만 토큰당 가격",
+      "candidateCost": "작업당 비용",
+      "costBasisPrice": "가격 기준",
+      "costBasisSamePrice": "동일 가격",
+      "captionInClaudeCode": "Claude Code에서",
+      "captionCopySkillsOnly": "또는 스킬만 터미널에서 복사",
+      "captionInTerminal": "터미널에서",
+      "captionYourTerminal": "사용 중인 터미널",
+      "captionMcpServerUrl": "원격 MCP 서버 URL",
+      "copyClaudeCodePlugin": "Claude Code 플러그인 명령 복사",
+      "copyClaudeCodeCopy": "Claude Code 복사 설치 명령 복사",
+      "copyClaudeCodeUpdate": "Claude Code 업데이트 명령 복사",
+      "copyCodex": "Codex 설치 명령 복사",
+      "copyCursor": "Cursor 설치 명령 복사",
+      "copyGeminiCli": "Gemini CLI 설치 명령 복사",
+      "copyCopilot": "GitHub Copilot 설치 명령 복사",
+      "copyOpenCode": "OpenCode 설치 명령 복사",
+      "copyMcpServerUrl": "Motir MCP 서버 URL 복사",
+      "copyClaudeCodeCommand": "Claude Code 명령 복사"
+    }
   },
   "notFound": {
     "eyebrow": "404",

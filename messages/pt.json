@@ -820,7 +820,29 @@
     "thStatus": "Status",
     "thCondition": "Condição",
     "filterOperations": "Filtrar operações",
-    "filterEmpty": "Nenhuma operação corresponde a esse filtro."
+    "filterEmpty": "Nenhuma operação corresponde a esse filtro.",
+    "guideLabels": {
+      "candidateModel": "Modelo",
+      "candidatePrice": "Preço por 1 milhão de tokens",
+      "candidateCost": "Custo por tarefa",
+      "costBasisPrice": "pelo preço",
+      "costBasisSamePrice": "mesmo preço",
+      "captionInClaudeCode": "no Claude Code",
+      "captionCopySkillsOnly": "ou copie apenas as skills, em um terminal",
+      "captionInTerminal": "em um terminal",
+      "captionYourTerminal": "seu terminal",
+      "captionMcpServerUrl": "URL do servidor MCP remoto",
+      "copyClaudeCodePlugin": "Copiar os comandos do plugin do Claude Code",
+      "copyClaudeCodeCopy": "Copiar os comandos da instalação por cópia do Claude Code",
+      "copyClaudeCodeUpdate": "Copiar os comandos de atualização do Claude Code",
+      "copyCodex": "Copiar os comandos de instalação do Codex",
+      "copyCursor": "Copiar os comandos de instalação do Cursor",
+      "copyGeminiCli": "Copiar os comandos de instalação do Gemini CLI",
+      "copyCopilot": "Copiar os comandos de instalação do GitHub Copilot",
+      "copyOpenCode": "Copiar os comandos de instalação do OpenCode",
+      "copyMcpServerUrl": "Copiar a URL do servidor Motir MCP",
+      "copyClaudeCodeCommand": "Copiar o comando do Claude Code"
+    }
   },
   "notFound": {
     "eyebrow": "404",

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { render } from '@/tests/helpers/withCopy'
+import { resolveAsync } from '@/tests/helpers/resolveAsync'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import McpToolsPage from '@/app/[locale]/docs/(guides)/mcp/tools/page'
 import SkillsDocsPage from '@/app/[locale]/docs/(guides)/skills/page'
@@ -182,7 +183,9 @@ describe('GUARD: a write is never shown as a read', () => {
 
 describe('GUARD: every install command names the current release', () => {
   it('every rendered marketplace and skill-folder command names SKILLS_RELEASE_TAG', async () => {
-    const { container } = render(await SkillsDocsPage(EN_PAGE))
+    const { container } = render(
+      (await resolveAsync(await SkillsDocsPage(EN_PAGE))) as never,
+    )
     const commands = [...container.querySelectorAll('pre')]
       .map((pre) => pre.textContent ?? '')
       .flatMap((pane) => pane.split('\n'))
