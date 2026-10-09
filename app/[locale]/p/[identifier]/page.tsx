@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { deriveDescription, loadProject } from '@/lib/publicProject'
+import { englishCopy, getCopy } from '@/lib/copy'
+import { enterLocale } from '@/i18n/locale'
 import {
   publicUrlFor,
   redirectIfNotPrimary,
@@ -30,8 +32,9 @@ export const dynamic = 'force-dynamic'
 // MOTIR-6745 — no longer a promise of reading without an account: the live board, items
 // and roadmap are in the app now, behind a Motir account (MOTIR-6743). What this
 // page offers without one is the overview, the changelog and requesting a feature.
-const FALLBACK_DESCRIPTION =
-  'A project built in public on Motir — its overview, changelog and feature requests, and the live board in the Motir app.'
+// The sentence is `publicProject.meta.overviewFallback` (MOTIR-7954), English
+// until MOTIR-7956 localises metadata.
+const FALLBACK_DESCRIPTION = englishCopy.publicProject.meta.overviewFallback
 
 export async function generateMetadata({
   params,
@@ -72,9 +75,10 @@ export async function generateMetadata({
 export default async function PublicProjectOverviewPage({
   params,
 }: {
-  params: Promise<{ identifier: string }>
+  params: Promise<{ locale?: string; identifier: string }>
 }) {
   const { identifier } = await params
+  const copy = (await getCopy(await enterLocale(params))).publicProject
   const host = await requestPublicHost()
   const read = await loadProject(identifier)
 
@@ -91,7 +95,7 @@ export default async function PublicProjectOverviewPage({
     // way forward the visitor has (design MOTIR-6742 panel E).
     return (
       <>
-        <ErrorState what="this project" host={host} />
+        <ErrorState title={copy.states.error.project} host={host} />
         <div className="mt-5 max-w-[40rem]">
           <WatchLive identifier={identifier} name={null} />
         </div>
@@ -114,9 +118,8 @@ export default async function PublicProjectOverviewPage({
           {project.publicOverviewMd ? (
             <MarkdownBody value={project.publicOverviewMd} />
           ) : (
-            <EmptyState title="This project has not written an overview yet">
-              Its live board, work items and roadmap are in the Motir app —
-              watch it being built, beside this.
+            <EmptyState title={copy.overview.empty.title}>
+              {copy.overview.empty.body}
             </EmptyState>
           )}
         </div>

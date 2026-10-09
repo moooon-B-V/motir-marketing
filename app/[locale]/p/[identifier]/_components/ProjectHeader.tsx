@@ -7,6 +7,8 @@ import {
   type VisitorView,
 } from '@/lib/publicProject'
 import { SITE_HOST, type PublicHost } from '@/lib/publicHost'
+import { useCopy } from '@/lib/copy'
+import { useLocale } from 'next-intl'
 import { ActRail } from './ActRail'
 import { WatchLive } from './WatchLive'
 
@@ -60,6 +62,7 @@ export function ProjectHeader({
   )
   const { identifier, name, workspaceName, publicTagline, publicTags, stats } =
     project
+  const copy = useCopy().publicProject
 
   return (
     <header>
@@ -97,10 +100,10 @@ export function ProjectHeader({
         {/* The four stat figures the design puts opposite the name. `dl` rather
             than a list of divs: each is a term and its value. */}
         <dl className="flex gap-[clamp(20px,2.4vw,40px)] self-end">
-          <Stat n={stats.publicRequests} k="requests" />
-          <Stat n={stats.upvotes} k="upvotes" />
-          <Stat n={stats.planned} k="planned" />
-          <Stat n={stats.shipped} k="shipped" />
+          <Stat n={stats.publicRequests} k={copy.stats.requests} />
+          <Stat n={stats.upvotes} k={copy.stats.upvotes} />
+          <Stat n={stats.planned} k={copy.stats.planned} />
+          <Stat n={stats.shipped} k={copy.stats.shipped} />
         </dl>
       </div>
 
@@ -124,7 +127,7 @@ export function ProjectHeader({
           is RSC-prefetched on render (MOTIR-4372), and a relative one would be
           prefetched into a redirect off this host. SCROLLS, never wraps. */}
       <nav
-        aria-label="Project"
+        aria-label={copy.header.navAria}
         className="mt-8 flex items-center gap-0.5 overflow-x-auto border-b border-(--el-border)"
       >
         {PROJECT_TABS.filter((tab) => tab.served === 'site').map((tab) => {
@@ -140,7 +143,7 @@ export function ProjectHeader({
                   : 'border-b-2 border-transparent px-3 py-3 text-[15px] font-medium whitespace-nowrap text-(--el-text-secondary) hover:text-(--el-text)'
               }
             >
-              {tab.label}
+              {copy.tabs[tab.labelKey]}
             </Link>
           )
         })}
@@ -152,7 +155,7 @@ export function ProjectHeader({
           aria-hidden
           className="flex-none px-1 text-[12px] whitespace-nowrap text-(--el-text-secondary)"
         >
-          In the app
+          {copy.header.inTheApp}
         </span>
         {PROJECT_TABS.filter((tab) => tab.served === 'app').map((tab) => (
           <a
@@ -160,11 +163,8 @@ export function ProjectHeader({
             href={visitorViewUrl(identifier, tab.segment as VisitorView)}
             className="border-b-2 border-transparent px-3 py-3 text-[15px] font-medium whitespace-nowrap text-(--el-text-secondary) hover:text-(--el-text)"
           >
-            {tab.label}&nbsp;<span aria-hidden>↗</span>
-            <span className="sr-only">
-              {' '}
-              — opens in the Motir app; needs an account
-            </span>
+            {copy.tabs[tab.labelKey]}&nbsp;<span aria-hidden>↗</span>
+            <span className="sr-only"> {copy.header.opensInApp}</span>
           </a>
         ))}
       </nav>
@@ -173,10 +173,11 @@ export function ProjectHeader({
 }
 
 function Stat({ n, k }: { n: number; k: string }) {
+  const locale = useLocale()
   return (
     <div className="text-right">
       <dd className="font-(family-name:--font-serif) text-[clamp(28px,2.6vw,40px)] leading-[1] font-bold tracking-[-0.02em] text-(--el-text)">
-        {n.toLocaleString('en')}
+        {n.toLocaleString(locale)}
       </dd>
       <dt className="mt-1.5 font-(family-name:--font-mono) text-[11px] tracking-[0.1em] text-(--el-text-secondary) uppercase">
         {k}

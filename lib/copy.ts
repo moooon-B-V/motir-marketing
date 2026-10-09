@@ -1,3 +1,4 @@
+import { createElement, Fragment, type ReactNode } from 'react'
 import { useMessages } from 'next-intl'
 import type { Locale } from '@/i18n/routing'
 import en from '@/messages/en.json'
@@ -154,6 +155,8 @@ export const CLIENT_COPY_NAMESPACES = [
   'designShowcase',
   'docs',
   'howItWorks',
+  // MOTIR-7954 — `SubscribeForm` is the public-project tree's one client module.
+  'publicProject',
 ] as const satisfies readonly (keyof Copy)[]
 
 /** The part of a catalogue the browser receives: `CLIENT_COPY_NAMESPACES`. */
@@ -188,4 +191,26 @@ export function format(
   return template.replace(/\{(\w+)\}/g, (whole, key: string) =>
     key in values ? String(values[key]) : whole,
   )
+}
+
+/**
+ * `format()` for a sentence with an ELEMENT in it — a link, a `<strong>`, a
+ * `<time>` (MOTIR-7954). The sentence stays one key, so a translator can move
+ * the element to wherever their grammar puts it; the element is passed in as a
+ * value and lands where its `{name}` is. A placeholder with no value is left
+ * as written, exactly as `format()` leaves it.
+ */
+export function formatRich(
+  template: string,
+  values: Record<string, ReactNode>,
+): ReactNode[] {
+  return template
+    .split(/(\{\w+\})/)
+    .filter((part) => part !== '')
+    .map((part, index) => {
+      const key = /^\{(\w+)\}$/.exec(part)?.[1]
+      return key !== undefined && key in values
+        ? createElement(Fragment, { key: index }, values[key])
+        : part
+    })
 }

@@ -3,10 +3,13 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
   actHref,
+  dateLocaleFor,
   deriveDescription,
   loadProject,
   loadRequest,
 } from '@/lib/publicProject'
+import { formatRich, getCopy } from '@/lib/copy'
+import { enterLocale } from '@/i18n/locale'
 import {
   publicPathFor,
   publicUrlFor,
@@ -21,12 +24,15 @@ import { StatusPill } from '../../_components/Rows'
 
 export const dynamic = 'force-dynamic'
 
-const DATE = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'UTC',
-})
+/** A request's and a comment's date, in the page's locale — `9 October 2026` in English. */
+function dateFormat(locale: string): Intl.DateTimeFormat {
+  return new Intl.DateTimeFormat(dateLocaleFor(locale), {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+}
 
 export async function generateMetadata({
   params,
@@ -73,9 +79,13 @@ export async function generateMetadata({
 export default async function PublicRequestPage({
   params,
 }: {
-  params: Promise<{ identifier: string; requestKey: string }>
+  params: Promise<{ locale?: string; identifier: string; requestKey: string }>
 }) {
   const { identifier, requestKey } = await params
+  const locale = await enterLocale(params)
+  const copy = (await getCopy(locale)).publicProject
+  const page = copy.request
+  const DATE = dateFormat(locale)
   const host = await requestPublicHost()
   const [project, request] = await Promise.all([
     loadProject(identifier),
@@ -85,7 +95,7 @@ export default async function PublicRequestPage({
   if (project.status === 'not-found' || request.status === 'not-found')
     notFound()
   if (project.status === 'failed')
-    return <ErrorState what="this project" host={host} />
+    return <ErrorState title={copy.states.error.project} host={host} />
 
   await redirectIfNotPrimary(
     project.data,
@@ -111,7 +121,7 @@ export default async function PublicRequestPage({
 
       {request.status === 'failed' ? (
         <ErrorState
-          what="this feature request"
+          title={copy.states.error.request}
           identifier={identifier}
           host={host}
         />
@@ -142,10 +152,14 @@ export default async function PublicRequestPage({
               {request.data.title}
             </h2>
             <p className="mt-2 text-[13px] text-(--el-text-secondary)">
-              Opened by {request.data.openedByName} ·{' '}
-              <time dateTime={request.data.createdAt}>
-                {DATE.format(new Date(request.data.createdAt))}
-              </time>
+              {formatRich(page.openedBy, {
+                author: request.data.openedByName,
+                date: (
+                  <time dateTime={request.data.createdAt}>
+                    {DATE.format(new Date(request.data.createdAt))}
+                  </time>
+                ),
+              })}
             </p>
 
             {request.data.descriptionMd ? (
@@ -155,11 +169,11 @@ export default async function PublicRequestPage({
             ) : null}
 
             <h3 className="mt-8 text-[12px] font-bold tracking-wider text-(--el-text-secondary) uppercase">
-              Discussion
+              {page.discussion}
             </h3>
             {request.data.comments.length === 0 ? (
               <p className="mt-3 text-[13px] text-(--el-text-secondary)">
-                No comments yet.
+                {page.noComments}
               </p>
             ) : (
               <ul className="mt-3">
@@ -198,16 +212,18 @@ export default async function PublicRequestPage({
             {/* Row 5 — the COMMENT hand-off (MOTIR-4119). */}
             <div className="mt-5 rounded-(--radius-card) border border-dashed border-(--el-border-strong) bg-(--el-surface-soft) p-4">
               <p className="text-[13px] text-(--el-text-secondary)">
-                Adding to this discussion signs you in on{' '}
-                <strong className="text-(--el-text)">app.motir.co</strong> and
-                brings you back to this request.
+                {formatRich(page.commentHandoff, {
+                  host: (
+                    <strong className="text-(--el-text)">{copy.appHost}</strong>
+                  ),
+                })}
               </p>
               <p className="mt-2.5">
                 <Link
                   href={actHref('comment', identifier, returnPath)}
                   className="inline-flex h-(--height-btn-sm) items-center rounded-(--radius-btn) border border-(--el-border-strong) bg-(--el-page-bg) px-3 text-[13px] font-medium text-(--el-text) hover:bg-(--el-surface)"
                 >
-                  Add a comment&nbsp;<span aria-hidden>↗</span>
+                  {page.addComment}&nbsp;<span aria-hidden>↗</span>
                 </Link>
               </p>
             </div>
@@ -216,10 +232,11 @@ export default async function PublicRequestPage({
           <aside className="text-[13px] text-(--el-text-secondary)">
             <div>
               <h3 className="mb-2 text-[12px] font-bold tracking-wider uppercase">
-                Demand
+                {page.demand}
               </h3>
               <p className="text-[14px] text-(--el-text)">
-                {request.data.voteCount.toLocaleString('en')} upvotes
+                {request.data.voteCount.toLocaleString(locale)}{' '}
+                {copy.stats.upvotes}
               </p>
               {/* Row 4 — the UPVOTE hand-off (MOTIR-4119). */}
               <p className="mt-2">
@@ -230,23 +247,21 @@ export default async function PublicRequestPage({
                   <span aria-hidden className="text-[10px]">
                     ▲
                   </span>
-                  Upvote&nbsp;<span aria-hidden>↗</span>
+                  {page.upvote}&nbsp;<span aria-hidden>↗</span>
                 </Link>
               </p>
-              <p className="mt-1.5 text-[12px]">
-                Upvoting happens on app.motir.co and returns you here.
-              </p>
+              <p className="mt-1.5 text-[12px]">{page.upvoteNote}</p>
             </div>
             <div className="mt-5">
               <h3 className="mb-2 text-[12px] font-bold tracking-wider uppercase">
-                Ask for something
+                {page.askHeading}
               </h3>
               <p>
                 <Link
                   href={actHref('request', identifier, returnPath)}
                   className="text-(--el-link) hover:underline"
                 >
-                  Request a feature ↗
+                  {page.requestFeature}
                 </Link>
               </p>
             </div>

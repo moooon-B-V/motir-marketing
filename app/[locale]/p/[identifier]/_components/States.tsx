@@ -1,4 +1,5 @@
 import { publicPathFor, SITE_HOST, type PublicHost } from '@/lib/publicHost'
+import { formatRich, useCopy } from '@/lib/copy'
 
 /**
  * The three states every `/p/*` screen can be in (MOTIR-4115) — panels 10, 11
@@ -36,12 +37,16 @@ export function EmptyState({
 }
 
 export function ErrorState({
-  what,
+  title,
   identifier,
   host = SITE_HOST,
 }: {
-  /** What could not be loaded, in the visitor's terms — "this project's board". */
-  what: string
+  /**
+   * The WHOLE sentence — a `publicProject.states.error.*` key, "We could not
+   * load this project's changelog" (MOTIR-7954). It took an English `what` that
+   * was spliced into an English sentence, which no translation can reach.
+   */
+  title: string
   identifier?: string
   /**
    * The address this request arrived on, for the feed link below.
@@ -54,23 +59,18 @@ export function ErrorState({
    */
   host?: PublicHost
 }) {
+  const error = useCopy().publicProject.states.error
+  const appHost = useCopy().publicProject.appHost
   return (
     <div
       role="alert"
       className="mt-6 rounded-(--radius-card) bg-(--el-tint-peach) px-6 py-8 text-center"
     >
-      <h3 className="text-[15px] font-medium text-(--el-text)">
-        We could not load {what}
-      </h3>
+      <h3 className="text-[15px] font-medium text-(--el-text)">{title}</h3>
       <p className="mx-auto mt-1.5 max-w-[34rem] text-[13px] leading-[1.6] text-(--el-text-secondary)">
-        The Motir application is not answering right now. The page you are on is
-        fine — this reads from <strong>app.motir.co</strong>, which is a
-        separate deployment. Try again in a moment
-        {identifier ? (
-          <>, or read the changelog, which is served from a feed.</>
-        ) : (
-          '.'
-        )}
+        {formatRich(identifier ? error.bodyWithFeed : error.body, {
+          host: <strong>{appHost}</strong>,
+        })}
       </p>
       {identifier ? (
         <p className="mt-3.5 text-[13px]">
@@ -81,7 +81,7 @@ export function ErrorState({
             href={publicPathFor(host, identifier, 'changelog.xml')}
             className="text-(--el-link) underline underline-offset-2"
           >
-            Changelog feed
+            {error.feed}
           </a>
         </p>
       ) : null}

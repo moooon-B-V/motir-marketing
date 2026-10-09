@@ -72,7 +72,7 @@ describe.each(PRIMARIES)(
         const meta = await tabMetadata({
           identifier: 'PROD',
           segment: 'board',
-          label: 'Board',
+          labelKey: 'board',
         })
 
         expect(meta.alternates?.canonical).toBe(boardUrl)

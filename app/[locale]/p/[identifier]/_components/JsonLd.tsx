@@ -4,6 +4,7 @@ import {
   type PublicProjectOverviewDto,
 } from '@/lib/publicProject'
 import { publicUrlFor } from '@/lib/publicHost'
+import { englishCopy, format } from '@/lib/copy'
 
 /**
  * Structured data for a public project page (MOTIR-4115), in the shape
@@ -44,7 +45,10 @@ export function ProjectJsonLd({
     applicationCategory: 'DeveloperApplication',
     description: deriveDescription(
       project.publicTagline ?? project.publicOverviewMd,
-      `${project.name} — a public project plan on Motir.`,
+      // English until MOTIR-7956 localises structured data with metadata.
+      format(englishCopy.publicProject.meta.jsonLdFallback, {
+        name: project.name,
+      }),
     ),
     author: { '@type': 'Organization', name: project.workspaceName },
     isPartOf: {

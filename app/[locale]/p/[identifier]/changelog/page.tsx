@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import {
+  dateLocaleFor,
   loadChangelog,
   pagedTabHref,
   visitorViewUrl,
 } from '@/lib/publicProject'
+import { getCopy } from '@/lib/copy'
+import { enterLocale } from '@/i18n/locale'
 import { publicPathFor } from '@/lib/publicHost'
 import { renderTabPage, tabMetadata } from '../_components/tabPage'
 import { EmptyState, ErrorState } from '../_components/States'
@@ -17,15 +20,22 @@ export async function generateMetadata({
   params: Promise<{ identifier: string }>
 }): Promise<Metadata> {
   const { identifier } = await params
-  return tabMetadata({ identifier, segment: 'changelog', label: 'Changelog' })
+  return tabMetadata({
+    identifier,
+    segment: 'changelog',
+    labelKey: 'changelog',
+  })
 }
 
-const DATE = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-})
+/** The entry date, in the page's locale — `9 Oct 2026` in English. */
+function dateFormat(locale: string): Intl.DateTimeFormat {
+  return new Intl.DateTimeFormat(dateLocaleFor(locale), {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+}
 
 /**
  * The CHANGELOG tab (MOTIR-4116) — what shipped, newest first, cursor-paged.
@@ -38,30 +48,36 @@ export default async function ChangelogTab({
   params,
   searchParams,
 }: {
-  params: Promise<{ identifier: string }>
+  params: Promise<{ locale?: string; identifier: string }>
   searchParams: Promise<{ cursor?: string | string[] }>
 }) {
   const { identifier } = await params
+  const locale = await enterLocale(params)
+  const copy = (await getCopy(locale)).publicProject
+  const DATE = dateFormat(locale)
   const raw = (await searchParams).cursor
   const cursor = Array.isArray(raw) ? raw[0] : raw
 
   return renderTabPage({
     identifier,
+    locale,
     current: 'changelog',
     body: async (_project, host) => {
       const read = await loadChangelog(identifier, cursor)
       if (read.status !== 'ok') {
         return (
-          <ErrorState what="this project's changelog" identifier={identifier} />
+          <ErrorState
+            title={copy.states.error.changelog}
+            identifier={identifier}
+          />
         )
       }
 
       const page = read.data
       if (page.entries.length === 0) {
         return (
-          <EmptyState title="Nothing shipped yet">
-            When this project completes public work, it is logged here — and in
-            the feed.
+          <EmptyState title={copy.changelog.empty.title}>
+            {copy.changelog.empty.body}
           </EmptyState>
         )
       }
@@ -105,7 +121,7 @@ export default async function ChangelogTab({
               href={pagedTabHref(host, identifier, 'changelog', {
                 cursor: page.nextCursor,
               })}
-              label="Older"
+              label={copy.changelog.older}
             />
           ) : null}
 
@@ -117,7 +133,7 @@ export default async function ChangelogTab({
               href={publicPathFor(host, identifier, 'changelog.xml')}
               className="text-(--el-link) underline underline-offset-2"
             >
-              Subscribe by Atom
+              {copy.changelog.subscribeAtom}
             </a>
           </p>
         </>

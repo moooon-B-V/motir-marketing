@@ -7,6 +7,8 @@ import {
   requestPublicHost,
   type PublicHost,
 } from '@/lib/publicHost'
+import { englishCopy, format, getCopy } from '@/lib/copy'
+import type { Locale } from '@/i18n/routing'
 import { ProjectHeader } from './ProjectHeader'
 import { ErrorState } from './States'
 
@@ -33,10 +35,13 @@ import { ErrorState } from './States'
 
 export async function renderTabPage({
   identifier,
+  locale,
   current,
   body,
 }: {
   identifier: string
+  /** The page's locale, for the shell's own words (MOTIR-7954). */
+  locale: Locale
   current: string
   body: (
     project: PublicProjectOverviewDto,
@@ -46,8 +51,10 @@ export async function renderTabPage({
   const host = await requestPublicHost()
   const read = await loadProject(identifier)
   if (read.status === 'not-found') notFound()
-  if (read.status === 'failed')
-    return <ErrorState what="this project" host={host} />
+  if (read.status === 'failed') {
+    const copy = (await getCopy(locale)).publicProject
+    return <ErrorState title={copy.states.error.project} host={host} />
+  }
 
   const project = read.data
 
@@ -72,12 +79,15 @@ export async function renderTabPage({
 export async function tabMetadata({
   identifier,
   segment,
-  label,
+  labelKey,
 }: {
   identifier: string
   segment: string
-  label: string
+  /** A `publicProject.tabs` key — English until MOTIR-7956 localises metadata. */
+  labelKey: keyof typeof englishCopy.publicProject.tabs
 }): Promise<Metadata> {
+  const meta = englishCopy.publicProject.meta
+  const label = englishCopy.publicProject.tabs[labelKey]
   const read = await loadProject(identifier)
   if (read.status !== 'ok') return {}
   const project = read.data
@@ -89,8 +99,8 @@ export async function tabMetadata({
   // at three hosts can name one address.
   const url = publicUrlFor(project, segment)
   return {
-    title: `${label} · ${project.name}`,
-    description: `${label} for ${project.name} — public on Motir.`,
+    title: format(meta.tabTitle, { label, name: project.name }),
+    description: format(meta.tabDescription, { label, name: project.name }),
     alternates: { canonical: url },
     openGraph: { type: 'website', url, siteName: 'Motir' },
   }

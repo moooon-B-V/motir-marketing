@@ -6,6 +6,7 @@ import HostUnavailablePage from '@/app/[locale]/host-unavailable/page'
 import { NotFoundRoom } from '@/app/_components/NotFoundRoom'
 import { englishCopy as copy } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
+import { EN_PAGE } from '@/tests/helpers/locale'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
   PUBLIC_HOST_HEADER,
@@ -224,7 +225,7 @@ describe('the room, given a host', () => {
  */
 describe('the host-unavailable page', () => {
   it('renders the error state in the chrome, with no link of its own', async () => {
-    render(await HostUnavailablePage())
+    render(await HostUnavailablePage(EN_PAGE))
 
     // `ErrorState` with no `identifier` draws no link, so every href on this
     // page is the chrome's — which is what makes the counts below exact.
@@ -236,7 +237,7 @@ describe('the host-unavailable page', () => {
   it('keeps motir.co’s own chrome relative when no router header arrived', async () => {
     // A request the router did not handle carries neither header and reads as
     // `SITE_HOST` — the correct answer for somebody who typed the URL.
-    const { container } = render(await HostUnavailablePage())
+    const { container } = render(await HostUnavailablePage(EN_PAGE))
 
     const hrefs = [...container.querySelectorAll('a[href]')].map((a) =>
       a.getAttribute('href')!,
@@ -247,7 +248,7 @@ describe('the host-unavailable page', () => {
 
   it('spells every site path absolutely on an UNRESOLVED host', async () => {
     arriveOn('unresolved', 'roadmap.acme.com')
-    const { container } = render(await HostUnavailablePage())
+    const { container } = render(await HostUnavailablePage(EN_PAGE))
 
     const hrefs = [...container.querySelectorAll('a[href]')].map((a) =>
       a.getAttribute('href')!,

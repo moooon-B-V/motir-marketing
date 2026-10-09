@@ -1,4 +1,5 @@
 import { visitorViewUrl } from '@/lib/publicProject'
+import { format, formatRich, useCopy } from '@/lib/copy'
 
 /**
  * "WATCH IT BEING BUILT" (MOTIR-6745; design MOTIR-6742 panel A, the
@@ -11,7 +12,9 @@ import { visitorViewUrl } from '@/lib/publicProject'
  * `visitor.consent.body` reads "If you continue, your name and email will be
  * visible to this project’s workspace Managers, along with when you visit." —
  * repeated here word for word, so motir.co promises exactly what the consent
- * screen then asks and nothing it doesn't. Change one, change both.
+ * screen then asks and nothing it doesn't. Change one, change both — it lives
+ * in `publicProject.watchLive.cost` now (MOTIR-7954), and app.motir.co's
+ * catalogues carry the same clause in every language.
  *
  * ⚠️ A PLAIN `<a>`, NOT `next/link`: the destination is another origin, and a
  * `next/link` would be RSC-prefetched on render (MOTIR-4372). It targets the
@@ -28,6 +31,7 @@ export function WatchLive({
   name: string | null
 }) {
   const titleId = `watch-${identifier}`
+  const watch = useCopy().publicProject.watchLive
   return (
     <section
       aria-labelledby={titleId}
@@ -52,28 +56,30 @@ export function WatchLive({
           id={titleId}
           className="font-(family-name:--font-serif) text-[clamp(24px,2.2vw,32px)] leading-[1.05] font-bold tracking-[-0.02em]"
         >
-          Watch {name ?? 'this project'} being built
+          {name === null
+            ? watch.titleUnnamed
+            : format(watch.titleNamed, { name })}
         </h2>
-        <p className="mt-3 text-[15px] leading-[1.55]">
-          The live board, the plans as they are drafted and the agent runs as
-          they happen — in the Motir app.
-        </p>
+        <p className="mt-3 text-[15px] leading-[1.55]">{watch.lede}</p>
         <p className="mt-3 text-[13.5px] leading-[1.55]">
-          You’ll need a Motir account. If you continue, your{' '}
-          <strong className="font-semibold">name and email</strong> will be
-          visible to{' '}
-          <strong className="font-semibold">
-            this project’s workspace Managers
-          </strong>
-          , along with when you visit.
+          {formatRich(watch.cost, {
+            nameAndEmail: (
+              <strong className="font-semibold">
+                {watch.costNameAndEmail}
+              </strong>
+            ),
+            managers: (
+              <strong className="font-semibold">{watch.costManagers}</strong>
+            ),
+          })}
         </p>
       </div>
       <a
         href={visitorViewUrl(identifier, 'board')}
         className="inline-flex h-(--height-btn-lg) items-center justify-center self-start rounded-(--radius-btn) bg-(--el-showcase-field-text) px-(--spacing-btn-x) text-[15px] font-medium text-(--el-showcase-field) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-field-text)"
       >
-        Watch live&nbsp;<span aria-hidden>↗</span>
-        <span className="sr-only"> — opens in the Motir app</span>
+        {watch.cta}&nbsp;<span aria-hidden>↗</span>
+        <span className="sr-only"> {watch.ctaSr}</span>
       </a>
     </section>
   )

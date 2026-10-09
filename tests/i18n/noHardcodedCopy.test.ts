@@ -45,23 +45,19 @@ const EXCLUDED: readonly { path: string; owner: string }[] = [
     owner:
       'the share image, drawn with satori from metadata — Crawl data per language (MOTIR-7956)',
   },
+  {
+    path: 'app/[locale]/p/[identifier]/opengraph-image.tsx',
+    owner:
+      'a project’s share image, drawn with satori — Crawl data per language (MOTIR-7956)',
+  },
 ]
 
-/** The public-project tree, swept by its own card, which empties this list. */
-const NOT_YET_SWEPT: readonly { path: string; owner: string }[] = [
-  {
-    path: 'app/[locale]/p/',
-    owner: 'the public-project card’s (MOTIR-7954)',
-  },
-  {
-    path: 'app/[locale]/w/page.tsx',
-    owner: 'the public-project card’s (MOTIR-7954)',
-  },
-  {
-    path: 'app/[locale]/host-unavailable/page.tsx',
-    owner: 'the public-project card’s (MOTIR-7954)',
-  },
-]
+/**
+ * Paths not yet swept, each with the card that owns the sweep. EMPTY since
+ * MOTIR-7954 swept the public-project tree, `/w` and `/host-unavailable`, and
+ * asserted empty below: a new entry is a decision to park copy, made in a diff.
+ */
+const NOT_YET_SWEPT: readonly { path: string; owner: string }[] = []
 
 /**
  * Literals that are copy-shaped and are not copy. The only admissible reasons
@@ -120,6 +116,8 @@ describe('the covered pages hold no hard-coded copy', () => {
     expect(COVERED.length).toBeGreaterThanOrEqual(60)
     expect(COVERED).toContain('app/_components/NotFoundRoom.tsx')
     expect(COVERED).toContain('app/[locale]/docs/_components/DocsRail.tsx')
+    expect(COVERED).toContain('app/[locale]/p/[identifier]/page.tsx')
+    expect(COVERED).toContain('app/[locale]/w/page.tsx')
   })
 
   it('finds no literal outside the catalogue', () => {
@@ -141,12 +139,8 @@ describe('every list entry still describes the tree', () => {
     }
   })
 
-  it('NOT_YET_SWEPT is exactly the public-project tree', () => {
-    expect(NOT_YET_SWEPT.map(({ path }) => path)).toEqual([
-      'app/[locale]/p/',
-      'app/[locale]/w/page.tsx',
-      'app/[locale]/host-unavailable/page.tsx',
-    ])
+  it('NOT_YET_SWEPT is empty — every covered page is swept', () => {
+    expect(NOT_YET_SWEPT).toEqual([])
   })
 
   it('each ALLOWED literal is still found, and carries a reason', () => {

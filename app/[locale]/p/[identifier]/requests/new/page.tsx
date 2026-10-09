@@ -11,6 +11,8 @@ import {
 } from '@/lib/publicHost'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
+import { englishCopy, format, formatRich, getCopy } from '@/lib/copy'
+import { enterLocale } from '@/i18n/locale'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,9 +25,10 @@ export async function generateMetadata({
   const read = await loadProject(identifier)
   if (read.status !== 'ok') return {}
   const url = publicUrlFor(read.data, 'requests/new')
+  const meta = englishCopy.publicProject.meta
   return {
-    title: `Request a feature · ${read.data.name}`,
-    description: `Ask the ${read.data.name} team for something. Requests are public.`,
+    title: format(meta.requestNewTitle, { name: read.data.name }),
+    description: format(meta.requestNewDescription, { name: read.data.name }),
     alternates: { canonical: url },
     // ⚠️ NOT INDEXED. This page is a doorway with no content of its own; a
     // crawler that indexed it would rank a hand-off above the roadmap it hands
@@ -61,15 +64,17 @@ export async function generateMetadata({
 export default async function RequestIntakePage({
   params,
 }: {
-  params: Promise<{ identifier: string }>
+  params: Promise<{ locale?: string; identifier: string }>
 }) {
   const { identifier } = await params
+  const copy = (await getCopy(await enterLocale(params))).publicProject
+  const intake = copy.requestNew
   const host = await requestPublicHost()
   const read = await loadProject(identifier)
 
   if (read.status === 'not-found') notFound()
   if (read.status === 'failed')
-    return <ErrorState what="this project" host={host} />
+    return <ErrorState title={copy.states.error.project} host={host} />
 
   const project = read.data
   await redirectIfNotPrimary(project, host, 'requests/new')
@@ -104,29 +109,29 @@ export default async function RequestIntakePage({
         </p>
 
         <h2 className="font-(family-name:--font-serif) text-[24px] leading-tight font-bold text-(--el-text)">
-          Request a feature
+          {intake.heading}
         </h2>
         <p className="mt-2.5 text-[14px] leading-[1.6] text-(--el-text-secondary)">
-          Tell the {project.name} team what you need. Requests are public:
-          anyone reading this project can see and upvote yours.
+          {format(intake.intro, { project: project.name })}
         </p>
 
         <div className="mt-6 rounded-(--radius-card) border border-(--el-border) bg-(--el-surface-soft) p-5">
           <h3 className="text-[14px] font-semibold text-(--el-text)">
-            You will sign in first
+            {intake.signInTitle}
           </h3>
           <p className="mt-1.5 text-[13px] leading-[1.6] text-(--el-text-secondary)">
-            Submitting a request needs an account, so the form lives on{' '}
-            <strong className="text-(--el-text)">app.motir.co</strong>. You will
-            be signed in, shown anything similar that has already been asked for
-            — so you can upvote it instead — and brought back to this project.
+            {formatRich(intake.signInBody, {
+              host: (
+                <strong className="text-(--el-text)">{copy.appHost}</strong>
+              ),
+            })}
           </p>
           <p className="mt-4">
             <Link
               href={actHref('request', identifier, returnPath)}
               className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) bg-(--el-accent) px-4 text-[13px] font-medium text-(--el-accent-text) hover:bg-(--el-accent-pressed)"
             >
-              Continue to Motir ↗
+              {intake.continue}
             </Link>
           </p>
         </div>
@@ -134,11 +139,16 @@ export default async function RequestIntakePage({
         {/* Redrawn TRUE (design MOTIR-6742 panel B): the read tabs need an
             account now, so this names only what still does not. */}
         <p className="mt-5 text-[13px] text-(--el-text-secondary)">
-          Anyone can read{' '}
-          <Link href={projectHref} className="text-(--el-link) hover:underline">
-            the project page
-          </Link>
-          , its changelog and every request’s own page without an account.
+          {formatRich(intake.closing, {
+            projectPage: (
+              <Link
+                href={projectHref}
+                className="text-(--el-link) hover:underline"
+              >
+                {intake.projectPage}
+              </Link>
+            ),
+          })}
         </p>
       </div>
     </>

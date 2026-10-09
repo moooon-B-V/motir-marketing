@@ -1,4 +1,120 @@
 {
+  "publicProject": {
+    "appHost": "app.motir.co",
+    "tabs": {
+      "overview": "Overview",
+      "board": "Board",
+      "items": "Items",
+      "tree": "Tree",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog"
+    },
+    "stats": {
+      "requests": "requests",
+      "upvotes": "upvotes",
+      "planned": "planned",
+      "shipped": "shipped"
+    },
+    "header": {
+      "navAria": "Project",
+      "inTheApp": "In the app",
+      "opensInApp": "— opens in the Motir app; needs an account"
+    },
+    "actRail": {
+      "follow": "Follow",
+      "followSr": "— continues on app.motir.co",
+      "requestFeature": "Request a feature",
+      "atomFeed": "Atom feed"
+    },
+    "subscribe": {
+      "label": "Email for changelog updates",
+      "placeholder": "you@example.com",
+      "submit": "Subscribe",
+      "submitting": "Subscribing…",
+      "messages": {
+        "sent": "Check your inbox to confirm.",
+        "invalid": "That does not look like an email address.",
+        "unavailable": "This project has changelog emails turned off.",
+        "limited": "Too many attempts just now — try again in a few minutes.",
+        "failed": "We could not reach Motir. Try again in a moment."
+      }
+    },
+    "watchLive": {
+      "titleNamed": "Watch {name} being built",
+      "titleUnnamed": "Watch this project being built",
+      "lede": "The live board, the plans as they are drafted and the agent runs as they happen — in the Motir app.",
+      "cost": "You’ll need a Motir account. If you continue, your {nameAndEmail} will be visible to {managers}, along with when you visit.",
+      "costNameAndEmail": "name and email",
+      "costManagers": "this project’s workspace Managers",
+      "cta": "Watch live",
+      "ctaSr": "— opens in the Motir app"
+    },
+    "states": {
+      "error": {
+        "project": "We could not load this project",
+        "changelog": "We could not load this project's changelog",
+        "request": "We could not load this feature request",
+        "workspaceProjects": "We could not load this workspace’s projects",
+        "address": "We could not load this address",
+        "body": "The Motir application is not answering right now. The page you are on is fine — this reads from {host}, which is a separate deployment. Try again in a moment.",
+        "bodyWithFeed": "The Motir application is not answering right now. The page you are on is fine — this reads from {host}, which is a separate deployment. Try again in a moment, or read the changelog, which is served from a feed.",
+        "feed": "Changelog feed"
+      }
+    },
+    "overview": {
+      "empty": {
+        "title": "This project has not written an overview yet",
+        "body": "Its live board, work items and roadmap are in the Motir app — watch it being built, beside this."
+      }
+    },
+    "changelog": {
+      "empty": {
+        "title": "Nothing shipped yet",
+        "body": "When this project completes public work, it is logged here — and in the feed."
+      },
+      "older": "Older",
+      "subscribeAtom": "Subscribe by Atom"
+    },
+    "requestNew": {
+      "heading": "Request a feature",
+      "intro": "Tell the {project} team what you need. Requests are public: anyone reading this project can see and upvote yours.",
+      "signInTitle": "You will sign in first",
+      "signInBody": "Submitting a request needs an account, so the form lives on {host}. You will be signed in, shown anything similar that has already been asked for — so you can upvote it instead — and brought back to this project.",
+      "continue": "Continue to Motir ↗",
+      "closing": "Anyone can read {projectPage}, its changelog and every request’s own page without an account.",
+      "projectPage": "the project page"
+    },
+    "request": {
+      "openedBy": "Opened by {author} · {date}",
+      "discussion": "Discussion",
+      "noComments": "No comments yet.",
+      "commentHandoff": "Adding to this discussion signs you in on {host} and brings you back to this request.",
+      "addComment": "Add a comment",
+      "demand": "Demand",
+      "upvote": "Upvote",
+      "upvoteNote": "Upvoting happens on app.motir.co and returns you here.",
+      "askHeading": "Ask for something",
+      "requestFeature": "Request a feature ↗"
+    },
+    "workspaceRoot": {
+      "heading": "Public projects",
+      "empty": {
+        "title": "Nothing is public here yet",
+        "body": "This workspace has claimed its address but has not made a project public. When it does, the project appears here."
+      }
+    },
+    "meta": {
+      "overviewFallback": "A project built in public on Motir — its overview, changelog and feature requests, and the live board in the Motir app.",
+      "jsonLdFallback": "{name} — a public project plan on Motir.",
+      "tabTitle": "{label} · {name}",
+      "tabDescription": "{label} for {name} — public on Motir.",
+      "requestNewTitle": "Request a feature · {name}",
+      "requestNewDescription": "Ask the {name} team for something. Requests are public.",
+      "workspaceTitle": "Public projects",
+      "workspaceDescription": "The public projects this workspace publishes on Motir.",
+      "hostUnavailableTitle": "Temporarily unavailable"
+    }
+  },
   "meta": {
     "title": "Motir — AI planning, project management and agent orchestration",
     "description": "The AI planning, project-management and agent orchestration platform. Describe what you want to build — Motir drafts the plan, then agents take over the work."

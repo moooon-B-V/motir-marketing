@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { requestPublicHost } from '@/lib/publicHost'
 import { ErrorState } from '@/app/[locale]/p/[identifier]/_components/States'
+import { englishCopy, getCopy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /**
  * WHERE AN UNREACHABLE CONTRACT LANDS (Story MOTIR-3878 · MOTIR-4220).
@@ -30,7 +32,7 @@ import { ErrorState } from '@/app/[locale]/p/[identifier]/_components/States'
  */
 
 export const metadata: Metadata = {
-  title: 'Temporarily unavailable',
+  title: englishCopy.publicProject.meta.hostUnavailableTitle,
   robots: { index: false, follow: false },
 }
 
@@ -63,7 +65,8 @@ export const metadata: Metadata = {
  * renders only during an outage, and it is the one document whose whole job is
  * to be honest about a request rather than fast.
  */
-export default async function HostUnavailablePage() {
+export default async function HostUnavailablePage({ params }: LocalePageProps) {
+  const copy = (await getCopy(await enterLocale(params))).publicProject
   const host = await requestPublicHost()
 
   return (
@@ -71,7 +74,7 @@ export default async function HostUnavailablePage() {
       host={host}
       contentClassName="mx-auto flex w-full max-w-[46rem] flex-col justify-center px-(--spacing-card-padding) py-16"
     >
-      <ErrorState what="this address" />
+      <ErrorState title={copy.states.error.address} />
     </SiteShell>
   )
 }

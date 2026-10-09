@@ -50,6 +50,14 @@ const ENGLISH_ON_PURPOSE: Record<string, string> = {
   'app/[locale]/products/ai-debugging/page.tsx': METADATA,
   'app/[locale]/products/ai-planner/page.tsx': METADATA,
   'app/[locale]/products/project-management/page.tsx': METADATA,
+  // MOTIR-7954 — the public-project tree's metadata and structured data.
+  'app/[locale]/p/[identifier]/page.tsx': METADATA,
+  'app/[locale]/p/[identifier]/_components/tabPage.tsx': METADATA,
+  'app/[locale]/p/[identifier]/_components/JsonLd.tsx':
+    'a project’s JSON-LD fallback description — MOTIR-7956',
+  'app/[locale]/p/[identifier]/requests/new/page.tsx': METADATA,
+  'app/[locale]/w/page.tsx': METADATA,
+  'app/[locale]/host-unavailable/page.tsx': METADATA,
   'app/_components/siteMetadata.ts':
     'the site-wide <title>, description and share card — MOTIR-7956 localises metadata',
   'app/_components/RootJsonLd.tsx':

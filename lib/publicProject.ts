@@ -177,7 +177,11 @@ export function loadProject(
 export interface ProjectTab {
   /** The path segment under `/p/<identifier>`; '' is the Overview itself. */
   segment: string
-  label: string
+  /**
+   * The tab's name, as a key of `publicProject.tabs` in the catalogue
+   * (MOTIR-7954) — so it renders in the page's language, not always English.
+   */
+  labelKey: 'overview' | 'board' | 'items' | 'tree' | 'roadmap' | 'changelog'
   /**
    * WHO SERVES IT (MOTIR-6743). `site` — this host renders it (the Overview and
    * the Changelog, which stay public and anonymous here). `app` — the page moved
@@ -196,13 +200,24 @@ export interface ProjectTab {
  * route tree and forgotten in the navigation, or vice versa.
  */
 export const PROJECT_TABS: readonly ProjectTab[] = [
-  { segment: '', label: 'Overview', served: 'site' },
-  { segment: 'board', label: 'Board', served: 'app' },
-  { segment: 'items', label: 'Items', served: 'app' },
-  { segment: 'tree', label: 'Tree', served: 'app' },
-  { segment: 'roadmap', label: 'Roadmap', served: 'app' },
-  { segment: 'changelog', label: 'Changelog', served: 'site' },
+  { segment: '', labelKey: 'overview', served: 'site' },
+  { segment: 'board', labelKey: 'board', served: 'app' },
+  { segment: 'items', labelKey: 'items', served: 'app' },
+  { segment: 'tree', labelKey: 'tree', served: 'app' },
+  { segment: 'roadmap', labelKey: 'roadmap', served: 'app' },
+  { segment: 'changelog', labelKey: 'changelog', served: 'site' },
 ] as const
+
+/**
+ * The locale a public project page formats its DATES in (MOTIR-7954).
+ *
+ * English keeps the day-month-year order these pages have always shown
+ * (`9 Oct 2026`), so `en` formats as `en-GB`; every other locale formats as
+ * itself. The one place that mapping lives.
+ */
+export function dateLocaleFor(locale: string): string {
+  return locale === 'en' ? 'en-GB' : locale
+}
 
 /** The read views this host no longer renders — each one lives in the app. */
 export type VisitorView = 'board' | 'items' | 'tree' | 'roadmap'

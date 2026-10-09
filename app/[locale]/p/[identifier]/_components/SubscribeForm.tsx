@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { PUBLIC_API_BASE } from '@/lib/publicProject'
+import { useCopy } from '@/lib/copy'
 
 /**
  * SUBSCRIBE BY EMAIL (MOTIR-4119) — AMENDMENT 4 row 3, the one act that stays
@@ -33,15 +34,15 @@ type State =
   | { kind: 'limited' }
   | { kind: 'failed' }
 
-const MESSAGE: Record<Exclude<State['kind'], 'idle' | 'sending'>, string> = {
-  sent: 'Check your inbox to confirm.',
-  invalid: 'That does not look like an email address.',
-  unavailable: 'This project has changelog emails turned off.',
-  limited: 'Too many attempts just now — try again in a few minutes.',
-  failed: 'We could not reach Motir. Try again in a moment.',
-}
+/*
+ * The five result messages are `publicProject.subscribe.messages.*`, keyed by
+ * the state that shows them (MOTIR-7954). The `sent` one stays the single,
+ * deliberately vague success line the note above requires.
+ */
 
 export function SubscribeForm({ identifier }: { identifier: string }) {
+  const copy = useCopy()
+  const subscribe = copy.publicProject.subscribe
   const [email, setEmail] = useState('')
   const [state, setState] = useState<State>({ kind: 'idle' })
 
@@ -79,7 +80,7 @@ export function SubscribeForm({ identifier }: { identifier: string }) {
   return (
     <form onSubmit={submit} className="flex items-center gap-1.5">
       <label className="sr-only" htmlFor={`sub-${identifier}`}>
-        Email for changelog updates
+        {subscribe.label}
       </label>
       <input
         id={`sub-${identifier}`}
@@ -87,7 +88,7 @@ export function SubscribeForm({ identifier }: { identifier: string }) {
         required
         value={email}
         onChange={(event) => setEmail(event.target.value)}
-        placeholder="you@example.com"
+        placeholder={subscribe.placeholder}
         className="h-(--height-btn-md) min-w-[16rem] rounded-(--radius-input) border border-(--el-border-strong) bg-(--el-page-bg) px-(--spacing-input-x) text-[14px] text-(--el-text) placeholder:text-(--el-text-secondary)"
       />
       <button
@@ -95,11 +96,11 @@ export function SubscribeForm({ identifier }: { identifier: string }) {
         disabled={state.kind === 'sending'}
         className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-(--spacing-btn-x) text-[14px] font-medium text-(--el-text) hover:bg-(--el-surface-soft) disabled:opacity-60"
       >
-        {state.kind === 'sending' ? 'Subscribing…' : 'Subscribe'}
+        {state.kind === 'sending' ? subscribe.submitting : subscribe.submit}
       </button>
       {state.kind !== 'idle' && state.kind !== 'sending' ? (
         <p role="status" className="text-[12px] text-(--el-text-secondary)">
-          {MESSAGE[state.kind]}
+          {subscribe.messages[state.kind]}
         </p>
       ) : null}
     </form>

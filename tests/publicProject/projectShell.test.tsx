@@ -203,7 +203,12 @@ describe('the three states', () => {
     // "Something went wrong" on a page that otherwise looks fine is the least
     // actionable message a visitor can be given. §8 cost 1 is why this state
     // exists at all, and naming the separate deployment is what makes it honest.
-    render(<ErrorState what="this project's board" identifier="MOTIR" />)
+    render(
+      <ErrorState
+        title="We could not load this project's board"
+        identifier="MOTIR"
+      />,
+    )
 
     const alert = screen.getByRole('alert')
     expect(alert).toHaveTextContent('app.motir.co')
@@ -211,7 +216,12 @@ describe('the three states', () => {
   })
 
   it('the ERROR state offers the one route that does NOT depend on the failing hop', () => {
-    render(<ErrorState what="this project's board" identifier="MOTIR" />)
+    render(
+      <ErrorState
+        title="We could not load this project's board"
+        identifier="MOTIR"
+      />,
+    )
 
     expect(
       screen.getByRole('link', { name: /changelog feed/i }),
@@ -221,7 +231,7 @@ describe('the three states', () => {
   it('the ERROR state does NOT claim the project is missing', () => {
     // The failure this split exists to prevent: telling a visitor the project
     // was deleted every time motir-core restarts.
-    render(<ErrorState what="this project" />)
+    render(<ErrorState title="We could not load this project" />)
 
     expect(screen.getByRole('alert').textContent).not.toMatch(
       /not found|does not exist|deleted/i,

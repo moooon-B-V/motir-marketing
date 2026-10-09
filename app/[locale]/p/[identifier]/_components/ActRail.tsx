@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { actHref } from '@/lib/publicProject'
 import { publicPathFor, type PublicHost } from '@/lib/publicHost'
+import { useCopy } from '@/lib/copy'
 import { SubscribeForm } from './SubscribeForm'
 
 /**
@@ -33,6 +34,7 @@ export function ActRail({
   returnPath: string
   host: PublicHost
 }) {
+  const rail = useCopy().publicProject.actRail
   return (
     <div className="mt-5 flex flex-wrap items-center gap-2">
       {/* Row 2 — FOLLOW, a hand-off. */}
@@ -40,8 +42,8 @@ export function ActRail({
         href={actHref('follow', identifier, returnPath)}
         className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) bg-(--el-accent) px-(--spacing-btn-x) text-[14px] font-medium text-(--el-accent-text) hover:bg-(--el-accent-pressed)"
       >
-        Follow&nbsp;<span aria-hidden>↗</span>
-        <span className="sr-only"> — continues on app.motir.co</span>
+        {rail.follow}&nbsp;<span aria-hidden>↗</span>
+        <span className="sr-only"> {rail.followSr}</span>
       </Link>
 
       {/* Row 3 — SUBSCRIBE, the one write that stays on this host. */}
@@ -52,7 +54,7 @@ export function ActRail({
         href={publicPathFor(host, identifier, 'requests/new')}
         className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-(--spacing-btn-x) text-[14px] font-medium text-(--el-text) hover:bg-(--el-surface-soft)"
       >
-        Request a feature
+        {rail.requestFeature}
       </Link>
 
       {/* ⚠️ A PLAIN `<a>`, NOT `next/link` (MOTIR-4372). `changelog.xml` is a
@@ -66,7 +68,7 @@ export function ActRail({
         href={publicPathFor(host, identifier, 'changelog.xml')}
         className="inline-flex h-(--height-btn-md) items-center px-2 text-[14px] text-(--el-text-secondary) hover:text-(--el-link)"
       >
-        Atom feed
+        {rail.atomFeed}
       </a>
     </div>
   )

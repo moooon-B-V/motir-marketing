@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { englishCopy as copy, format } from '@/lib/copy'
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { englishCopy as copy, format, formatRich } from '@/lib/copy'
 
 /*
  * ⚠️ THE TERMINOLOGY CHECK, MECHANISED. Yue's 2026-08-28 note on MOTIR-1152
@@ -188,5 +190,31 @@ describe('format', () => {
 
   it('leaves an unknown placeholder alone rather than printing "undefined"', () => {
     expect(format('a {b} c', {})).toBe('a {b} c')
+  })
+})
+
+describe('formatRich', () => {
+  it('puts each element where its placeholder sits, keeping the words around it', () => {
+    const parts = formatRich(copy.publicProject.request.openedBy, {
+      author: createElement('strong', null, 'Dana Okoye'),
+      date: createElement('time', null, '14 Aug 2026'),
+    })
+    expect(renderToStaticMarkup(createElement('p', null, parts))).toBe(
+      '<p>Opened by <strong>Dana Okoye</strong> · <time>14 Aug 2026</time></p>',
+    )
+  })
+
+  it('lets a translation move the element — the sentence stays one key', () => {
+    const parts = formatRich('{date} geöffnet von {author}', {
+      author: 'Dana',
+      date: createElement('time', null, '14. Aug. 2026'),
+    })
+    expect(renderToStaticMarkup(createElement('p', null, parts))).toBe(
+      '<p><time>14. Aug. 2026</time> geöffnet von Dana</p>',
+    )
+  })
+
+  it('leaves an unknown placeholder as written, as `format` does', () => {
+    expect(formatRich('a {b} c', {})).toEqual(['a ', '{b}', ' c'])
   })
 })

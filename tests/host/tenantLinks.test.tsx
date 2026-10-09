@@ -112,7 +112,11 @@ describe.each([
 
   it('the ERROR state’s feed link points at this host', () => {
     const { container } = render(
-      <ErrorState what="the board" identifier="PROD" host={host} />,
+      <ErrorState
+        title="We could not load the board"
+        identifier="PROD"
+        host={host}
+      />,
     )
     expect(hrefs(container)).toEqual([
       host.kind === 'site'

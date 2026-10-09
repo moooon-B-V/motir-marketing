@@ -25,7 +25,9 @@ export interface LocalePageProps {
  * `dynamicParams = false` answers 404 first — so the fallback is a type
  * narrowing, not a behaviour.
  */
-export async function enterLocale(params: LocaleParams): Promise<Locale> {
+export async function enterLocale(
+  params: Promise<{ locale?: string }>,
+): Promise<Locale> {
   const { locale } = await params
   const known = hasLocale(routing.locales, locale)
     ? locale

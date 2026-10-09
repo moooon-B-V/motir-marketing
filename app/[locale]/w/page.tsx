@@ -9,6 +9,8 @@ import {
 } from '@/app/[locale]/p/[identifier]/_components/States'
 import { resolveHost } from '@/lib/hostResolution'
 import { publicPathFor, requestPublicHost } from '@/lib/publicHost'
+import { englishCopy, getCopy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /**
  * THE WORKSPACE ROOT (Story MOTIR-3878 · MOTIR-4220) — what `acme.motir.site/`
@@ -47,11 +49,12 @@ import { publicPathFor, requestPublicHost } from '@/lib/publicHost'
  */
 
 export const metadata: Metadata = {
-  title: 'Public projects',
-  description: 'The public projects this workspace publishes on Motir.',
+  title: englishCopy.publicProject.meta.workspaceTitle,
+  description: englishCopy.publicProject.meta.workspaceDescription,
 }
 
-export default async function WorkspaceRootPage() {
+export default async function WorkspaceRootPage({ params }: LocalePageProps) {
+  const copy = (await getCopy(await enterLocale(params))).publicProject
   const host = await requestPublicHost()
 
   // Not routed here by the proxy — `motir.co/w` is not a workspace.
@@ -65,7 +68,7 @@ export default async function WorkspaceRootPage() {
         host={host}
         contentClassName="mx-auto w-full max-w-[72rem] px-6 py-10"
       >
-        <ErrorState what="this workspace’s projects" />
+        <ErrorState title={copy.states.error.workspaceProjects} />
       </SiteShell>
     )
   }
@@ -87,14 +90,13 @@ export default async function WorkspaceRootPage() {
           {workspace.name}
         </p>
         <h1 className="mt-1 font-(family-name:--font-serif) text-[30px] leading-tight font-bold tracking-[-0.01em] text-(--el-text)">
-          Public projects
+          {copy.workspaceRoot.heading}
         </h1>
       </header>
 
       {projects.length === 0 ? (
-        <EmptyState title="Nothing is public here yet">
-          This workspace has claimed its address but has not made a project
-          public. When it does, the project appears here.
+        <EmptyState title={copy.workspaceRoot.empty.title}>
+          {copy.workspaceRoot.empty.body}
         </EmptyState>
       ) : (
         <ul className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
