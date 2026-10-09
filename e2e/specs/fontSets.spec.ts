@@ -62,9 +62,10 @@ async function fontFaceFamilies(page: Page): Promise<Record<string, string>> {
           .replace(/["']/g, '')
           .trim()
         const src = rule.style.getPropertyValue('src')
-        // ⚠️ AGAINST THE STYLESHEET, NOT THE PAGE. A Turbopack build (CI's
-        // `next build`) writes `url(../media/….woff2)`, relative to the CSS
-        // file; resolved against the page it names a path nothing fetched.
+        // ⚠️ AGAINST THE STYLESHEET, NOT THE PAGE. A Turbopack build writes
+        // `url(../media/….woff2)`, relative to the CSS file; resolved against
+        // the page it names a path nothing fetched. Webpack (what `pnpm build`
+        // runs) writes absolute urls, which resolve the same either way.
         const base = sheet.href ?? location.href
         for (const [, href] of src.matchAll(/url\("?([^")]+)"?\)/g)) {
           map[new URL(href!, base).pathname] = family
