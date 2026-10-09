@@ -1,0 +1,2190 @@
+{
+  "publicProject": {
+    "appHost": "app.motir.co",
+    "tabs": {
+      "overview": "Przegląd",
+      "board": "Tablica",
+      "items": "Elementy",
+      "tree": "Drzewo",
+      "roadmap": "Roadmapa",
+      "changelog": "Lista zmian"
+    },
+    "stats": {
+      "requests": "prośby",
+      "upvotes": "głosy",
+      "planned": "zaplanowane",
+      "shipped": "wydane"
+    },
+    "header": {
+      "navAria": "Projekt",
+      "inTheApp": "W aplikacji",
+      "opensInApp": "— otwiera się w aplikacji Motir; wymaga konta"
+    },
+    "actRail": {
+      "follow": "Obserwuj",
+      "followSr": "— kontynuacja na app.motir.co",
+      "requestFeature": "Poproś o funkcję",
+      "atomFeed": "Kanał Atom"
+    },
+    "subscribe": {
+      "label": "E-mail do powiadomień o zmianach",
+      "placeholder": "ty@example.com",
+      "submit": "Subskrybuj",
+      "submitting": "Subskrybowanie…",
+      "messages": {
+        "sent": "Sprawdź skrzynkę i potwierdź subskrypcję.",
+        "invalid": "To nie wygląda na adres e-mail.",
+        "unavailable": "Ten projekt ma wyłączone e-maile z listą zmian.",
+        "limited": "Zbyt wiele prób naraz — spróbuj ponownie za kilka minut.",
+        "failed": "Nie udało się połączyć z aplikacją Motir. Spróbuj ponownie za chwilę."
+      }
+    },
+    "watchLive": {
+      "titleNamed": "Zobacz, jak powstaje {name}",
+      "titleUnnamed": "Zobacz, jak powstaje ten projekt",
+      "lede": "Tablica na żywo, plany w trakcie tworzenia i uruchomienia agentów na bieżąco — w aplikacji Motir.",
+      "cost": "Potrzebujesz konta Motir. Jeśli przejdziesz dalej, {nameAndEmail} będą widoczne dla {managers}, wraz z czasem Twoich wizyt.",
+      "costNameAndEmail": "Twoje imię i nazwisko oraz e-mail",
+      "costManagers": "Menedżerów obszaru roboczego tego projektu",
+      "cta": "Oglądaj na żywo",
+      "ctaSr": "— otwiera się w aplikacji Motir"
+    },
+    "states": {
+      "error": {
+        "project": "Nie udało się wczytać tego projektu",
+        "changelog": "Nie udało się wczytać listy zmian tego projektu",
+        "request": "Nie udało się wczytać tej prośby o funkcję",
+        "workspaceProjects": "Nie udało się wczytać projektów tego obszaru roboczego",
+        "address": "Nie udało się wczytać tego adresu",
+        "body": "Aplikacja Motir w tej chwili nie odpowiada. Strona, na której jesteś, działa — te dane pochodzą z {host}, który jest osobnym wdrożeniem. Spróbuj ponownie za chwilę.",
+        "bodyWithFeed": "Aplikacja Motir w tej chwili nie odpowiada. Strona, na której jesteś, działa — te dane pochodzą z {host}, który jest osobnym wdrożeniem. Spróbuj ponownie za chwilę albo przeczytaj listę zmian, którą serwuje kanał.",
+        "feed": "Kanał listy zmian"
+      }
+    },
+    "overview": {
+      "empty": {
+        "title": "Ten projekt nie ma jeszcze przeglądu",
+        "body": "Jego tablica na żywo, elementy robocze i roadmapa są w aplikacji Motir — zobacz, jak powstaje, obok tej strony."
+      }
+    },
+    "changelog": {
+      "empty": {
+        "title": "Jeszcze nic nie wydano",
+        "body": "Gdy ten projekt ukończy publiczną pracę, trafi ona tutaj — i do kanału."
+      },
+      "older": "Starsze",
+      "subscribeAtom": "Subskrybuj przez Atom"
+    },
+    "requestNew": {
+      "heading": "Poproś o funkcję",
+      "intro": "Powiedz zespołowi {project}, czego potrzebujesz. Prośby są publiczne: każdy, kto czyta ten projekt, może zobaczyć Twoją i na nią zagłosować.",
+      "signInTitle": "Najpierw się zalogujesz",
+      "signInBody": "Wysłanie prośby wymaga konta, więc formularz jest na {host}. Zalogujesz się, zobaczysz podobne prośby, które już ktoś zgłosił — żeby zamiast tego na nie zagłosować — i wrócisz do tego projektu.",
+      "continue": "Przejdź do aplikacji Motir ↗",
+      "closing": "Każdy może bez konta czytać {projectPage}, jego listę zmian i stronę każdej prośby.",
+      "projectPage": "stronę projektu"
+    },
+    "request": {
+      "openedBy": "Otworzył(a) {author} · {date}",
+      "discussion": "Dyskusja",
+      "noComments": "Brak komentarzy.",
+      "commentHandoff": "Aby dołączyć do dyskusji, zalogujesz się na {host} i wrócisz do tej prośby.",
+      "addComment": "Dodaj komentarz",
+      "demand": "Zainteresowanie",
+      "upvote": "Zagłosuj",
+      "upvoteNote": "Głosowanie odbywa się na app.motir.co, a potem wracasz tutaj.",
+      "askHeading": "Poproś o coś",
+      "requestFeature": "Poproś o funkcję ↗"
+    },
+    "workspaceRoot": {
+      "heading": "Projekty publiczne",
+      "empty": {
+        "title": "Nic tu jeszcze nie jest publiczne",
+        "body": "Ten obszar roboczy zajął już swój adres, ale nie upublicznił jeszcze żadnego projektu. Gdy to zrobi, projekt pojawi się tutaj."
+      }
+    },
+    "meta": {
+      "overviewFallback": "Projekt budowany publicznie w aplikacji Motir — jego przegląd, lista zmian i prośby o funkcje oraz tablica na żywo w aplikacji Motir.",
+      "jsonLdFallback": "{name} — publiczny plan projektu w aplikacji Motir.",
+      "tabTitle": "{label} · {name}",
+      "tabDescription": "{label} projektu {name} — publicznie w aplikacji Motir.",
+      "requestNewTitle": "Poproś o funkcję · {name}",
+      "requestNewDescription": "Poproś o coś zespół {name}. Prośby są publiczne.",
+      "workspaceTitle": "Projekty publiczne",
+      "workspaceDescription": "Projekty publiczne, które ten obszar roboczy udostępnia w aplikacji Motir.",
+      "hostUnavailableTitle": "Chwilowo niedostępne"
+    }
+  },
+  "meta": {
+    "title": "Motir — planowanie z AI, zarządzanie projektami i orkiestracja agentów",
+    "description": "Platforma do planowania z AI, zarządzania projektami i orkiestracji agentów. Opisz, co chcesz zbudować — Motir przygotuje plan, a potem agenci przejmą pracę."
+  },
+  "nav": {
+    "ariaLabel": "Główna",
+    "brandAriaLabel": "Motir — strona główna",
+    "skipToContent": "Przejdź do treści",
+    "menu": "Menu",
+    "explore": "Budowane publicznie",
+    "ideas": "Pomysły do zbudowania",
+    "buildsItself": "Motir buduje sam siebie",
+    "docs": "Dokumentacja",
+    "design": "Design",
+    "signIn": "Zaloguj się",
+    "startFree": "Zacznij za darmo",
+    "language": {
+      "label": "Język: {language}",
+      "menuLabel": "Wybierz język",
+      "heading": "Język"
+    },
+    "products": "Produkty",
+    "productsMenuLabel": "Produkty Motir",
+    "productGroups": {
+      "ai": "Produkty AI",
+      "tooling": "Narzędzia",
+      "infrastructure": "Infrastruktura"
+    },
+    "productItems": {
+      "aiPlanner": {
+        "name": "Motir AI Planner",
+        "blurb": "Zamienia pomysł w plan, który zatwierdzasz"
+      },
+      "projectManagement": {
+        "name": "Motir Project Management",
+        "blurb": "Tablice, sprinty, backlog i roadmapa"
+      },
+      "projectManager": {
+        "name": "Motir Project Manager",
+        "blurb": "Prowadzi cały projekt i raportuje do Ciebie"
+      },
+      "aiDebugging": {
+        "name": "Motir AI Debugging",
+        "blurb": "Każdy błąd prześledzony do kodu i zaplanowany"
+      },
+      "mcp": {
+        "name": "Motir MCP",
+        "blurb": "Twój projekt w każdym asystencie AI, który obsługuje MCP"
+      },
+      "cli": {
+        "name": "Motir CLI",
+        "blurb": "Przekaż pracę własnemu agentowi z terminala"
+      },
+      "claudeCodeConnector": {
+        "name": "Motir Claude Code connector",
+        "blurb": "Połącz raz na claude.ai i używaj Motir w Claude Code"
+      },
+      "claudeCodePlugin": {
+        "name": "Motir Claude Code plugin",
+        "blurb": "Umiejętności, serwer MCP i CLI w jednej instalacji"
+      },
+      "agentFleet": {
+        "name": "Motir Agent Fleet",
+        "blurb": "Hostowani agenci, którzy równolegle realizują Twój plan"
+      },
+      "agentHosting": {
+        "name": "Motir Agent Hosting",
+        "blurb": "Twoi własni agenci na maszynach Motir"
+      },
+      "sandbox": {
+        "name": "Motir Sandbox",
+        "blurb": "Szczelny kontener dla agentów na Twojej maszynie"
+      }
+    }
+  },
+  "landing": {
+    "hero": {
+      "headline": "Vibe’uj cały projekt",
+      "lede": "Masz pomysł. Motir dostarcza cały projekt: plan, design, wykonanie, dokumenty i pełną historię tego, jak powstał.",
+      "ideaLabel": "Co budujesz?",
+      "placeholder": "Osobisty asystent AI, który pomaga ludziom osiągać cele…",
+      "hint": "Wystarczy kilka zdań. O resztę Motir zapyta.",
+      "cta": "Zacznij",
+      "ctaSubmitting": "Zaczynamy…",
+      "statusSubmitting": "Zapisujemy Twój pomysł i przenosimy Cię do aplikacji Motir…",
+      "errorTitle": "Nie udało się teraz zapisać Twojego pomysłu.",
+      "errorBody": "Nic z tego, co wpisano, nie zginęło. Spróbuj ponownie albo przejdź do aplikacji Motir i zabierz pomysł ze sobą.",
+      "errorRetry": "Spróbuj ponownie",
+      "errorFallback": "Przejdź do aplikacji Motir",
+      "existingProject": "Masz już projekt?",
+      "existingProjectLink": "Jego też zvibe’ujemy"
+    },
+    "projectManager": {
+      "eyebrow": "Motir Project Manager",
+      "headline": "Masz już projekt? Przekaż go Motir Project Manager.",
+      "lede": "Masz rolę właściciela produktu. Motir Project Manager czyta projekt, który już masz, planuje kolejne kroki, zleca pracę agentom i składa raporty. Prowadzi projekt. Decyzja, co trafia do wydania, należy do Ciebie.",
+      "points": [
+        "Czyta Twój kod, zadania i historię, zanim cokolwiek zmieni",
+        "Planuje kolejne kroki i dba o aktualność planu",
+        "Zleca pracę agentom przez całą dobę",
+        "Przedstawia Ci każdą decyzję i każde wydanie"
+      ],
+      "importLabel": "Importuj z",
+      "sources": {
+        "codebase": "Repozytorium kodu",
+        "jira": "Jira",
+        "linear": "Linear",
+        "plane": "Plane"
+      },
+      "report": {
+        "ariaLabel": "Przykładowy raport tygodniowy od Motir Project Manager",
+        "title": "Raport tygodniowy · Osobisty asystent AI",
+        "range": "6–12 paź",
+        "done": "gotowe w tym tygodniu",
+        "inProgress": "w toku",
+        "waiting": "czeka na Ciebie",
+        "log": [
+          {
+            "day": "Pn",
+            "what": "Połączenie z kalendarzem wydane",
+            "state": "Gotowe",
+            "tone": "plain"
+          },
+          {
+            "day": "Wt",
+            "what": "Plan zaktualizowany: podsumowania e-mail podzielone na dwa",
+            "state": "Zaplanowane",
+            "tone": "cool"
+          },
+          {
+            "day": "Śr",
+            "what": "Zatwierdź limit kosztów AI na użytkownika",
+            "state": "Twoja decyzja",
+            "tone": "you"
+          },
+          {
+            "day": "Cz",
+            "what": "Błąd logowania na Androidzie znaleziony i naprawiony",
+            "state": "Naprawione",
+            "tone": "plain"
+          },
+          {
+            "day": "Pt",
+            "what": "Poranne podsumowanie gotowe do wypróbowania",
+            "state": "Do przeglądu",
+            "tone": "you"
+          }
+        ]
+      }
+    },
+    "builtByMotir": {
+      "eyebrow": "Zbudowane z Motir",
+      "headline": "Motir buduje sam siebie.",
+      "body": "Motir jest planowany, budowany, testowany i wydawany przez Motir. Jego agenci realizują jego własną roadmapę, a człowiek zatwierdza każdy plan i każde wydanie. Twój projekt może prowadzić tak samo.",
+      "points": [
+        "Każdy plan, uruchomienie i decyzję można śledzić",
+        "Patrz, jak praca dzieje się na bieżąco",
+        "Ten sam Project Manager, którego użyjesz u siebie"
+      ],
+      "watch": "Zobacz, jak Motir buduje sam siebie",
+      "runs": "Załóż konto, by oglądać uruchomienia jego agentów",
+      "start": "Zacznij swój projekt",
+      "note": "Projekt Motir na żywo na app.motir.co",
+      "story": "Jak Motir buduje sam siebie"
+    },
+    "moreThanCode": {
+      "headline": "Projekt to więcej niż kod",
+      "lede": "Vibe coding daje Ci kod, a resztę zostawia Tobie. Motir dostarcza wszystko, czego prawdziwy produkt potrzebuje, by wystartować i dalej rosnąć.",
+      "items": {
+        "plan": {
+          "tab": "Plan",
+          "title": "Plan",
+          "body": "Co powstaje, w jakiej kolejności i dlaczego. Motir zadaje najpierw te pytania, które zadałby dobry partner."
+        },
+        "design": {
+          "tab": "Design",
+          "title": "Design",
+          "body": "Jak to wygląda i jak się z tego korzysta, zanim cokolwiek powstanie. Kierunek należy do Ciebie."
+        },
+        "product": {
+          "tab": "Produkt",
+          "title": "Produkt",
+          "body": "Sama rzecz — działająca i przetestowana, zbudowana tak, by urosnąć od pierwszego użytkownika do stutysięcznego."
+        },
+        "docs": {
+          "tab": "Dokumenty",
+          "title": "Dokumenty",
+          "body": "Decyzje, przewodniki i notatki trzymane przy pracy, więc nikt nie musi ich spisywać później."
+        },
+        "history": {
+          "tab": "Historia",
+          "title": "Historia",
+          "body": "Każda decyzja z uzasadnieniem i datą, więc kontekst nigdy nie ginie."
+        }
+      }
+    },
+    "calls": {
+      "headline": "AI wykonuje pracę. Decyzje należą do Ciebie.",
+      "lede": "Motir działa szybko i zatrzymuje się wszędzie tam, gdzie wybór należy do Ciebie. Nic nie idzie dalej bez Twojego „tak”.",
+      "items": {
+        "say": {
+          "tab": "Powiedz",
+          "title": "Powiedz, czego chcesz",
+          "body": "Kilka zdań albo chaotyczny strumień myśli. Motir dopytuje, aż zrozumie."
+        },
+        "watch": {
+          "tab": "Patrz",
+          "title": "Patrz, jak nabiera kształtu",
+          "body": "Plan, projekty graficzne, produkt i dokumenty powstają krok po kroku, na widoku."
+        },
+        "decide": {
+          "tab": "Decyduj",
+          "title": "Decyduj",
+          "body": "Każdy element wraca do Ciebie, by go obejrzeć, wypróbować i zatwierdzić. Decyzja o tym, co trafia do wydania, zawsze należy do Ciebie."
+        }
+      }
+    },
+    "resume": {
+      "headline": "Wróć do miejsca, w którym przerwano",
+      "body": "Wróć jutro albo za pół roku, albo przekaż projekt komuś nowemu. Projekt pamięta wszystko, więc nikt nie zaczyna od zera ani nie tłumaczy wszystkiego od nowa."
+    },
+    "close": {
+      "headline": "Vibe’uj cały projekt",
+      "body": "Zacznij od kilku zdań albo przekaż istniejący projekt Motir Project Manager.",
+      "start": "Zacznij projekt",
+      "import": "Zaimportuj projekt",
+      "developers": "Jak działa Motir — dla programistów",
+      "openCore": "Rdzeń open source · Twój projekt zawsze należy do Ciebie",
+      "free": {
+        "lead": "Chcesz tylko zarządzać projektem?",
+        "cta": "Zacznij za darmo",
+        "tail": "— tablice, sprinty i backlog, bez AI, która wchodzi w drogę."
+      }
+    },
+    "art": {
+      "plan": {
+        "title": "Osobisty asystent AI",
+        "rows": [
+          ["Konta i logowanie", "Gotowe"],
+          ["Kalendarz i e-mail", "3 z 5"],
+          ["Koszt AI na użytkownika", "Twoja decyzja"],
+          ["Aplikacja mobilna", "Później"]
+        ]
+      },
+      "design": {
+        "screen": "Twoje poranne podsumowanie",
+        "time": "07:30",
+        "items": [
+          ["09:00", "Przegląd przeniesiony na 10:00"],
+          ["Poczta", "3 odpowiedzi czekają"],
+          ["Do zrobienia", "Wyślij umowę"]
+        ],
+        "optionA": "Wariant A",
+        "optionB": "Wariant B"
+      },
+      "product": {
+        "greeting": "Dzień dobry",
+        "needs": "3 sprawy czekają na Ciebie",
+        "rows": [
+          ["Odpowiedz w sprawie umowy", "Najpierw pyta"],
+          ["Przenieś siłownię na 18:00", "Kalendarz"]
+        ],
+        "edit": "Edytuj",
+        "send": "Wyślij",
+        "count": "64",
+        "countLabel": "testy zaliczone",
+        "checks": [
+          "Nigdy nie wysyła bez pytania",
+          "Dane każdego użytkownika oddzielone",
+          "Szybki przy 100 000 użytkowników"
+        ]
+      },
+      "docs": {
+        "title": "Spisywane na bieżąco",
+        "page": "Co asystent może czytać",
+        "decisionLabel": "Decyzja · Twoja",
+        "decision": "Użytkownicy wybierają, co może widzieć",
+        "chips": ["Przewodnik konfiguracji", "Prywatność", "Limity kosztów AI"]
+      },
+      "history": {
+        "title": "Kto co zdecydował",
+        "events": [
+          ["1 paź", "Pomysł opisany przez Ciebie", "jeden akapit", "you"],
+          ["2 paź", "Plan zatwierdzony przez Ciebie", "po 3 rundach", "you"],
+          [
+            "3 paź",
+            "Wybrany przez Ciebie design B",
+            "najpierw podsumowanie",
+            "you"
+          ],
+          ["9 paź", "Kalendarz zbudowany i przetestowany", "64 testy", "motir"]
+        ]
+      },
+      "say": {
+        "idea": "Osobisty asystent AI, który pomaga ludziom osiągać cele.",
+        "qa": [
+          [
+            "Ma działać sam czy pytać, zanim cokolwiek wyśle?",
+            "Zawsze najpierw pytać."
+          ],
+          [
+            "Dla pojedynczych osób czy też dla zespołów?",
+            "Najpierw dla osób, zespoły w przyszłym roku."
+          ]
+        ]
+      },
+      "watch": {
+        "lanes": [
+          ["Plan", "done"],
+          ["Design", "done"],
+          ["Budowa", "running"],
+          ["Testy", "waiting"],
+          ["Dokumenty", "ready"]
+        ],
+        "states": {
+          "done": "Gotowe",
+          "running": "Agent pracuje",
+          "ready": "Gotowe do startu",
+          "waiting": "Czeka na budowę"
+        },
+        "live": "pricing-page.tsx"
+      },
+      "decide": {
+        "stamp": "Gotowe dla Ciebie",
+        "title": "Połączenie z kalendarzem gotowe",
+        "body": "Obejrzyj nagranie, a potem wypróbuj je samodzielnie.",
+        "changes": "Poproś o zmiany",
+        "approve": "Zatwierdź",
+        "video": {
+          "chapterCount": "Rozdziały: {count}",
+          "label": "Wideo akceptacyjne",
+          "length": "0:48",
+          "chapters": [
+            "Podłącz kalendarz",
+            "Przenieś spotkanie",
+            "Podsumowanie się aktualizuje"
+          ]
+        }
+      },
+      "resume": {
+        "tab": "Powrót po 3 tygodniach",
+        "hello": "Witaj z powrotem. Oto stan osobistego asystenta AI.",
+        "cells": [
+          ["Ostatnio", "Połączenie z kalendarzem wydane"],
+          ["W toku", "Podsumowania e-mail"],
+          ["Czeka na Ciebie", "2 decyzje"]
+        ]
+      }
+    }
+  },
+  "designShowcase": {
+    "specimen": {
+      "sectionLabel": "Złożony interfejs",
+      "primary": "Główny",
+      "secondary": "Dodatkowy",
+      "ghost": "Ghost",
+      "danger": "Destrukcyjny",
+      "badge": "Plakietka",
+      "done": "Gotowe",
+      "inProgress": "W toku",
+      "tooltip": "Podpowiedź zbudowana z tych samych tokenów.",
+      "hoverMe": "Najedź na mnie",
+      "titleLabel": "Tytuł elementu roboczego",
+      "titleValue": "Wydaj proces płatności",
+      "assigneeLabel": "Osoba odpowiedzialna",
+      "assigneePlaceholder": "Wybierz…",
+      "unassigned": "Nieprzypisane",
+      "viewLabel": "Widok",
+      "board": "Tablica",
+      "list": "Lista",
+      "liveUpdates": "Aktualizacje na żywo",
+      "notesLabel": "Notatki",
+      "notesValue": "Każda kontrolka na tej karcie to wydany komponent bazowy.",
+      "popover": "Popover",
+      "popoverBody": "Nakładka zbudowana z tych samych tokenów. Jej zaokrąglenie, obramowanie i cień zmieniają się ze stylem, a kolory z paletą.",
+      "modal": "Okno modalne",
+      "modalDescription": "Okna dialogowe też zmieniają kształt razem z osią stylu.",
+      "emptyTitle": "Na razie nic tu nie ma",
+      "emptyDescription": "EmptyState — wydany komponent bazowy.",
+      "errorTitle": "Coś się zepsuło",
+      "errorDescription": "ErrorState — wydany komponent bazowy."
+    },
+    "heading": "Wybierz wygląd. Zmienia się cała strona.",
+    "subline": "To system projektowania, od którego zaczyna się każdy projekt w aplikacji Motir. Jest tutaj, a nie w przewodniku stylu, bo najszybciej pokażemy, jak może wyglądać Twój produkt, pozwalając zmienić wygląd naszego.",
+    "theme": {
+      "name": "Motyw",
+      "help": "Jasny, ciemny lub zgodny z urządzeniem.",
+      "light": "Jasny",
+      "dark": "Ciemny",
+      "system": "Systemowy"
+    },
+    "style": {
+      "name": "Styl",
+      "help": "Kształt i charakter — sylwetka, cienie, gęstość."
+    },
+    "palette": {
+      "name": "Paleta",
+      "help": "Schemat kolorów interfejsu."
+    },
+    "type": {
+      "name": "Krój",
+      "help": "Zestaw czcionek dla nagłówków i tekstu."
+    },
+    "reset": "Przywróć domyślne",
+    "closing": "Trzy osie tutaj to te same trzy, które wybierasz dla projektu, zakładając go w aplikacji Motir — i ten sam system projektowania pod spodem. Ta strona nie pokazuje jego wersji demonstracyjnej; jest z niego zbudowana."
+  },
+  "footer": {
+    "ariaLabel": "Stopka",
+    "tagline": "Platforma do planowania z AI, zarządzania projektami i orkiestracji agentów.",
+    "productHeading": "Produkt",
+    "resourcesHeading": "Zasoby",
+    "legalHeading": "Informacje prawne",
+    "explore": "Projekty budowane publicznie",
+    "docs": "Dokumentacja",
+    "signIn": "Zaloguj się",
+    "startFree": "Zacznij za darmo",
+    "github": "GitHub",
+    "openSource": "Rdzeń do zarządzania projektami jest open source, na licencji GPL-3.0.",
+    "terms": "Warunki korzystania z usługi",
+    "privacy": "Polityka prywatności",
+    "legalIndex": "Wszystkie dokumenty prawne",
+    "entity": "Motir to produkt firmy moooon B.V.",
+    "copyright": "© {year} moooon B.V.",
+    "howItWorks": "Jak działa Motir",
+    "ideas": "Pomysły do zbudowania",
+    "buildsItself": "Motir buduje sam siebie"
+  },
+  "legal": {
+    "metaTitle": "Informacje prawne",
+    "metaDescription": "Warunki, zasady i informacje dotyczące hostowanej usługi Motir, prowadzonej przez moooon B.V.",
+    "metaDocDescription": "{title} — wersja {version}. Opublikowane przez moooon B.V. dla hostowanej usługi Motir.",
+    "breadcrumbAria": "Dokumenty prawne",
+    "allDocuments": "← Wszystkie dokumenty prawne",
+    "versionAndEffective": "Wersja {version} · obowiązuje od {date}",
+    "versionNotYetEffective": "Wersja {version} · jeszcze nie obowiązuje",
+    "indexTitle": "Informacje prawne",
+    "indexIntro": "Wszystko, co moooon B.V. publikuje o hostowanej usłudze Motir — na co się zgadzasz, co robimy z Twoimi danymi i do kogo jeszcze trafiają. Jeśli uruchamiasz Motir samodzielnie, jesteś własnym administratorem danych, a te dokumenty opisują naszą usługę, nie Twoją.",
+    "indexContact": "Pytania dotyczące tych dokumentów: legal@motir.co"
+  },
+  "explore": {
+    "topicNavAria": "Plac projektów",
+    "topicHeading": "Projekty: {topic}",
+    "metaTitle": "Budowane publicznie · Projekty w aplikacji Motir",
+    "metaDescription": "Projekty, które zespoły budują publicznie w aplikacji Motir: ich roadmapy, tablice, plany i uruchomienia agentów. Przeczytaj przegląd dowolnego projektu i śledź pracę na żywo z darmowym kontem.",
+    "metaTitleTopic": "Projekty budowane publicznie: {topic} · Motir",
+    "metaDescriptionTopic": "Projekty publiczne z tagiem {topic}: prawdziwe roadmapy, tablice i sprinty zespołów, które publicznie budują {topic} w aplikacji Motir.",
+    "heroEyebrow": "Budowane publicznie",
+    "heroTitle": "Projekty budowane publicznie w aplikacji Motir",
+    "heroLede": "Zespoły budują publicznie w aplikacji Motir. Przeczytaj przegląd i listę zmian dowolnego projektu, a z darmowym kontem śledź jego tablicę na żywo, roadmapę, plany i uruchomienia agentów.",
+    "trustCrawlable": "Otwarty przegląd i lista zmian",
+    "trustNoSignup": "Darmowe konto, by śledzić pracę na żywo",
+    "trustUpdated": "Aktualizowane codziennie",
+    "searchAria": "Szukaj projektów publicznych",
+    "searchPlaceholder": "Szukaj projektów publicznych po nazwie lub temacie…",
+    "searchSubmit": "Szukaj",
+    "sortAria": "Sortuj projekty publiczne",
+    "rankTrending": "Na fali",
+    "rankPopular": "Popularne",
+    "rankNew": "Nowe",
+    "windowDay": "Dziś",
+    "windowWeek": "W tym tygodniu",
+    "windowMonth": "W tym miesiącu",
+    "topicFilterAria": "Filtruj projekty publiczne według tematu",
+    "allTopics": "Wszystkie tematy",
+    "activeLabel": "Aktywne",
+    "summarySearch": "„{query}”",
+    "summaryRankTrending": "Na fali · {window}",
+    "summaryRankPopular": "Popularne",
+    "summaryRankNew": "Nowe",
+    "galleryHeadingSearch": "Wyniki dla „{query}”",
+    "galleryHeadingPopular": "Popularne projekty publiczne",
+    "galleryHeadingNew": "Ostatnio opublikowane projekty publiczne",
+    "galleryHeadingTrending": "Projekty publiczne na fali",
+    "noResultsTitle": "Żaden projekt nie pasuje do filtrów",
+    "noResultsBody": "Spróbuj innego wyszukiwania lub tematu — albo wyczyść filtry, by przeglądać cały plac.",
+    "emptyTitle": "Na razie brak projektów publicznych",
+    "emptyBody": "Gdy zespół upubliczni projekt, pojawi się on tutaj, by każdy mógł go odkryć. Zajrzyj wkrótce.",
+    "clearFilters": "Wyczyść filtry",
+    "loadMore": "Wczytaj więcej projektów",
+    "browseTitle": "Przeglądaj według tematu",
+    "browseSubtitle": "Tematy uporządkowane według liczby projektów publicznych — każdy ma własną stronę, którą indeksują wyszukiwarki.",
+    "browseCountAria": "Projekty publiczne: {count}",
+    "faqHeading": "Czym jest budowanie publicznie?",
+    "faqLede": "Budowanie publicznie zamienia projekt w aplikacji Motir w stronę, którą każdy może znaleźć w sieci: jego przegląd i lista zmian są otwarte dla wszystkich, a każdy z darmowym kontem Motir może śledzić jego tablicę na żywo, roadmapę i elementy robocze. Ta strona zawiera wszystkie projekty budowane publicznie.",
+    "faqQ1": "Co staje się publiczne, a co pozostaje prywatne?",
+    "faqA1": "Tablica, roadmapa i elementy robocze — z tytułami, typami i opisami. Osoby odpowiedzialne, oszacowania i komentarze wewnętrzne nigdy nie są pokazywane. Gdy po raz pierwszy otworzysz widoki projektu na żywo, Motir poinformuje Cię, że Twoje imię i nazwisko oraz e-mail będą widoczne dla zespołu projektu.",
+    "faqQ2": "Czy potrzebuję konta?",
+    "faqA2": "Nie, by przeczytać przegląd i listę zmian projektu. Aby śledzić jego tablicę na żywo, roadmapę, plany i uruchomienia agentów, zaloguj się darmowym kontem Motir. Nie ma żadnej płatnej bariery.",
+    "faqQ3": "Jak projekty są szeregowane?",
+    "faqA3": "„Na fali” wyróżnia projekty z niedawnymi głosami i aktywnością, „Popularne” szereguje według wszystkich głosów, a „Nowe” pokazuje ostatnio opublikowane — każdy widok ma własny adres URL do udostępniania i indeksowania.",
+    "cardViewAria": "{name} — projekt publiczny",
+    "statUpvotesAria": "Głosy: {count}",
+    "statActivityAria": "Ostatnia aktywność: {time}",
+    "statActivityNone": "Brak aktywności",
+    "errorTitle": "Nie udało się wczytać placu projektów",
+    "errorBody": "Katalog jest chwilowo niedostępny. Spróbuj ponownie za chwilę.",
+    "featured": {
+      "eyebrow": "Budowany publicznie przez Motir",
+      "title": "Motir buduje sam siebie.",
+      "body": "Motir jest planowany, budowany i wydawany przez Motir, publicznie. Każdy plan, uruchomienie i decyzję można śledzić.",
+      "cta": "Zobacz, jak Motir buduje sam siebie"
+    },
+    "close": {
+      "headline": "Buduj swój projekt publicznie.",
+      "body": "Zamień dowolny projekt w aplikacji Motir w publiczną stronę jednym przełącznikiem. Pokaż, co budujesz, zbieraj prośby o funkcje i głosy, a szczegóły wewnętrzne zachowaj dla siebie.",
+      "cta": "Zacznij za darmo"
+    }
+  },
+  "docs": {
+    "operationCount": "Operacje: {count}",
+    "metaTitle": "Dokumentacja · Motir",
+    "metaDescription": "Dokumentacja API i serwera MCP Motir — publiczny kontrakt odczytu, serwer, który wywołują agenci, oraz CLI.",
+    "metaTitleReference": "Dokumentacja API · Motir",
+    "metaDescriptionReference": "Każda operacja publicznego REST API Motir — z zakresami, parametrami, odpowiedziami i uwierzytelnionym przykładem do skopiowania.",
+    "metaTitleGuide": "Pierwsze kroki · Dokumentacja API · Motir",
+    "metaDescriptionGuide": "Od konta do działającego wywołania REST API Motir w pięciu krokach — token, pierwsze żądanie i znaczenie błędów.",
+    "metaTitleStability": "Stabilność i wycofywanie · Dokumentacja API · Motir",
+    "metaDescriptionStability": "Czego REST API Motir w wersji v1 obiecuje nie zmieniać, co może się zmienić bez uprzedzenia i jak cokolwiek jest wycofywane.",
+    "metaTitleMcp": "Serwer MCP · Dokumentacja Motir",
+    "metaDescriptionMcp": "Skieruj dowolnego klienta Model Context Protocol na Motir z osobistym tokenem dostępu i dowiedz się, kiedy używać serwera MCP, a kiedy REST API.",
+    "metaTitleMcpTools": "Narzędzia · Serwer MCP · Dokumentacja Motir",
+    "metaDescriptionMcpTools": "Każde narzędzie udostępniane przez serwer MCP Motir, co robi i jaki zakres tokenu je odblokowuje.",
+    "metaTitleCli": "Motir CLI · Dokumentacja Motir",
+    "metaDescriptionCli": "Zainstaluj Motir CLI, zaloguj się, wskaż swój projekt i przekaż element roboczy własnemu agentowi — bez klonowania czegokolwiek.",
+    "metaTitleSandbox": "Piaskownica agenta · Dokumentacja Motir",
+    "metaDescriptionSandbox": "Skonfiguruj opublikowany kontener, w którym nienadzorowany agent pracuje na drzewie Twojego obszaru roboczego i na niczym innym na Twojej maszynie.",
+    "metaTitlePublicAddress": "Adres publiczny · Dokumentacja Motir",
+    "metaDescriptionPublicAddress": "Nadaj projektowi publicznemu wybrany adres — subdomenę Motir dla obszaru roboczego albo domenę, którą już masz — wraz z rekordami DNS potrzebnymi w każdym przypadku.",
+    "metaTitleSentry": "Sentry · Dokumentacja Motir",
+    "metaDescriptionSentry": "Połącz Sentry z projektem w aplikacji Motir, by nowe błędy trafiały jako elementy robocze typu Błąd, a naprawienie błędu rozwiązywało go w Sentry.",
+    "metaTitleDifficulty": "Poziomy trudności · Dokumentacja Motir",
+    "metaDescriptionDifficulty": "Cztery poziomy trudności, jakie może mieć element roboczy, modele, które proponujemy dla każdego poziomu, i koszt jednego zadania.",
+    "metaTitleSkills": "Umiejętności · Dokumentacja Motir",
+    "metaTitleClaudeCodeConnector": "Claude Code connector · Dokumentacja Motir",
+    "metaTitleClaudeCodePlugin": "Claude Code plugin · Dokumentacja Motir",
+    "metaDescriptionSkills": "Zainstaluj umiejętności Motir w Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot lub OpenCode i prowadź swój projekt Motir z agenta, którego już używasz.",
+    "metaDescriptionClaudeCodeConnector": "Połącz Motir z Claude Code jako zdalny konektor MCP: dodaj go raz na claude.ai lub jednym poleceniem, zaloguj się kontem Motir i zatwierdź, co Claude może robić.",
+    "metaDescriptionClaudeCodePlugin": "Zainstaluj plugin Motir do Claude Code: jedna instalacja daje umiejętności, serwer MCP Motir i program uruchamiający CLI oraz łączy Motir bez tokenu.",
+    "indexTitle": "Dokumentacja",
+    "indexIntro": "Wszystko, czego potrzebujesz, by budować na Motir: publiczne API odczytu, serwer MCP wywoływany przez agentów i CLI.",
+    "api": "Dokumentacja API",
+    "apiGettingStarted": "Pierwsze kroki",
+    "apiStability": "Stabilność i wycofywanie",
+    "mcp": "Serwer MCP",
+    "mcpTools": "Narzędzia MCP",
+    "mcpHintReads": "Odczyt",
+    "mcpHintWrites": "Zapis",
+    "mcpHintDestructive": "Destrukcyjne",
+    "mcpHintsUnpublished": "Ta wersja Motir nie publikuje wskazówek o zachowaniu tego narzędzia.",
+    "mcpHintLedeIntro": "Każde narzędzie mówi, co robi z Twoimi danymi:",
+    "mcpHintReadsMeans": "niczego nie zmienia,",
+    "mcpHintWritesMeans": "tylko dodaje, a",
+    "mcpHintDestructiveMeans": "może zmienić lub usunąć to, co już istnieje.",
+    "mcpHintLedeClaude": "Claude czyta te wskazówki i pyta, zanim użyje narzędzia, które nie służy tylko do odczytu, chyba że na to zezwolisz.",
+    "cli": "CLI",
+    "sandbox": "Piaskownica",
+    "publicAddress": "Adres publiczny",
+    "sentry": "Sentry",
+    "difficulty": "Poziomy trudności",
+    "skills": "Umiejętności",
+    "claudeCodeConnector": "Claude Code connector",
+    "claudeCodePlugin": "Claude Code plugin",
+    "descApi": "Publiczne API odczytu — każdy endpoint, parametr i status, wygenerowane z udostępnianego dokumentu OpenAPI.",
+    "descApiGettingStarted": "Pięć kroków od tokenu do pierwszego żądania.",
+    "descApiStability": "Wersjonowanie, wycofywanie i to, czym jest zmiana niezgodna wstecz.",
+    "descMcp": "Serwer Model Context Protocol, który wywołują agenci i CLI.",
+    "descMcpTools": "Każde narzędzie udostępniane przez serwer, z zakresem i uprawnieniem.",
+    "descCli": "Klient wiersza poleceń i to, co automatyzuje.",
+    "descSandbox": "Hostowana piaskownica, w której agent wykonuje pracę.",
+    "descPublicAddress": "Subdomena Twojego obszaru roboczego, domena, którą już masz, i rekordy DNS potrzebne w każdym przypadku.",
+    "descSentry": "Zamieniaj błędy z Sentry w elementy robocze typu Błąd i rozwiązuj je w Sentry, gdy błąd jest gotowy.",
+    "descDifficulty": "Co oznacza każdy poziom trudności, na jakich modelach go uruchamiać i ile kosztuje zadanie.",
+    "descSkills": "Zainstaluj umiejętności Motir w swoim agencie i dowiedz się, co powiedzieć, by użyć każdej z nich.",
+    "descClaudeCodeConnector": "Połącz Motir z Claude Code kontem Motir, bez tokenu — z claude.ai lub jednym poleceniem.",
+    "descClaudeCodePlugin": "Jedna instalacja w Claude Code daje umiejętności Motir, jego serwer MCP i CLI, zalogowane bez tokenu.",
+    "apiIntro": "Każda operacja obsługiwana przez API, wygenerowana z dokumentu OpenAPI publikowanego przez Motir i pobierana przy żądaniu tej strony — więc to dokładnie to, co serwer udostępnia w tej chwili. Przy każdej znajdziesz parametry, przyjmowaną treść, żądanie do skopiowania i każdy status, którym może odpowiedzieć.",
+    "sectionRequest": "Żądanie",
+    "sectionBody": "Treść żądania",
+    "sectionExample": "Przykład",
+    "sectionResponses": "Odpowiedzi",
+    "sectionResponseSchema": "Schemat odpowiedzi",
+    "thStatus": "Status",
+    "thCondition": "Warunek",
+    "filterOperations": "Filtruj operacje",
+    "filterEmpty": "Żadna operacja nie pasuje do tego filtra."
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "Tej strony tu nie ma",
+    "lede": "Adres mógł zostać źle wpisany — albo strona, na którą wskazywał, nie jest już publiczna.",
+    "exploreDoor": "Zobacz projekty budowane publicznie",
+    "homeDoor": "Przejdź na stronę główną"
+  },
+  "products": {
+    "eyebrow": "Produkty Motir",
+    "comingSoon": "Ta strona jest w drodze. Do tego czasu najszybciej zobaczysz to, wypróbowując Motir.",
+    "start": "Zacznij projekt",
+    "back": "Wróć do motir.co",
+    "metaTitle": "{name} — Motir",
+    "worksWith": "Działa z",
+    "aiPlanner": {
+      "metaDescription": "Motir AI Planner dopytuje, aż będzie jasne, co budujesz, a potem przygotowuje cały plan: każdą część pracy, po kolei, wraz z tym, kto ją wykona. Nic się nie zaczyna, dopóki go nie zatwierdzisz.",
+      "headline": "Najpierw co. Potem cały plan.",
+      "lede": "Opisz, co chcesz zbudować. Planer dopytuje, aż będzie jasne, o co Ci chodzi, bo nie planuje na podstawie domysłów. Potem czyta to, co już istnieje, i przygotowuje cały plan: każdą część pracy, w kolejności, w jakiej musi się wydarzyć, wraz z tym, kto ją wykona. Nic się nie zaczyna, dopóki go nie zatwierdzisz.",
+      "steps": {
+        "eyebrow": "Jak planuje",
+        "headline": "Przemyśla wszystko razem z Tobą",
+        "items": [
+          {
+            "title": "Dopytuje, aż będzie jasne",
+            "body": "Jeśli nie jest jeszcze jasne, co budujesz, pyta. Nie zacznie planować, dopóki nie będzie wiedział."
+          },
+          {
+            "title": "Czyta to, co istnieje",
+            "body": "Twoje repozytoria, dokumenty i tablicę albo projekt przeniesiony z Jira, Linear lub Plane. Planuje od miejsca, w którym jesteś, a nie od zera."
+          },
+          {
+            "title": "Przygotowuje cały plan",
+            "body": "Każdą część pracy, od dużych celów po małe kroki — przy każdej, kto ją wykona i na co czeka."
+          },
+          {
+            "title": "Sprawdza własną pracę",
+            "body": "Każdy plan jest sprawdzany, zanim go zobaczysz, więc trafia do Ciebie plan, który da się zbudować."
+          }
+        ]
+      },
+      "gate": {
+        "eyebrow": "Twoja decyzja",
+        "headline": "Zatwierdzasz plan",
+        "body": "Nic nie trafia na tablicę, dopóki się nie zgodzisz. Proś o zmiany zwykłymi słowami: przesuń to na później, podziel tamto, wyrzuć eksport. Każda runda to nowa tura, a plan zachowuje każdą wersję i powód zmiany.",
+        "motirPlans": "Załóż konto, by zobaczyć, co Motir zaplanował dla siebie"
+      },
+      "holds": {
+        "eyebrow": "Co zawiera plan",
+        "headline": "Wszystko, czego potrzebuje praca",
+        "items": [
+          {
+            "title": "Całe drzewo",
+            "body": "Epiki, historie, zadania i podzadania — od celu aż po pojedynczy krok."
+          },
+          {
+            "title": "Kto to wykona",
+            "body": "Każdy element roboczy trafia do agenta lub do człowieka. Praca, którą może wykonać tylko człowiek, to zadanie ręczne."
+          },
+          {
+            "title": "Kolejność",
+            "body": "Co na co czeka, więc każda część startuje, gdy tylko może."
+          },
+          {
+            "title": "Trudność",
+            "body": "Poziom przy każdym elemencie roboczym, by działał na pasującym do niego modelu."
+          },
+          {
+            "title": "Rodzaj pracy",
+            "body": "Kod, design, testy, dokumenty, badania, przegląd: każdy rodzaj jest oznaczony."
+          },
+          {
+            "title": "Harmonogram",
+            "body": "Po zatwierdzeniu: sprinty, backlog i roadmapa."
+          }
+        ]
+      },
+      "learns": {
+        "eyebrow": "Staje się lepszy",
+        "headline": "Uczy się na każdym błędzie",
+        "body": "Gdy agent nie może zbudować tego, czego wymagał plan, Motir najpierw sprawdza, czy plan był błędny, czy został zmieniony po Twoim zatwierdzeniu. Prawdziwy błąd planowania staje się lekcją albo ją wzmacnia. Każdy nowy plan najpierw czyta lekcje, a lekcja niepotrzebna przez 90 dni przechodzi na emeryturę.",
+        "library": "Lekcje",
+        "lessons": [
+          ["Logowanie przed wszystkim, co wymaga użytkownika", "Użyta 14×"],
+          ["Wybór dostawcy e-mail zostaw jako zadanie ręczne", "Użyta 6×"],
+          ["Podziel historię, która wymaga dwóch rodzajów pracy", "Użyta 9×"],
+          ["Planuj pusty stan razem z ekranem", "Nowa"]
+        ]
+      },
+      "close": {
+        "headline": "Przynieś pomysł.",
+        "body": "Resztę planer przemyśli razem z Tobą."
+      },
+      "ui": {
+        "railLabel": "Motir AI",
+        "modeFirstPlan": "pierwszy plan",
+        "asking": "pyta",
+        "close": "Zamknij",
+        "esc": "Esc",
+        "composer": "Odpowiedz lub doprecyzuj…",
+        "chat": [
+          {
+            "role": "user",
+            "text": "Osobisty asystent AI, który pomaga ludziom osiągać cele."
+          },
+          {
+            "role": "assistant",
+            "tone": "asking",
+            "text": "Kto wyznacza cele: każdy sam dla siebie czy coach dla swoich klientów?"
+          },
+          {
+            "role": "user",
+            "text": "Każdy sam dla siebie. Coachowie mogą dojść później."
+          },
+          {
+            "role": "assistant",
+            "text": "Jasne. Przeczytam to, co masz, i przygotuję pierwszy plan."
+          }
+        ],
+        "newItem": "Nowy",
+        "opAdd": "dodaj",
+        "cards": [
+          {
+            "kind": "story",
+            "title": "Ustal cel z datą docelową",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "Podziel cel na tygodniowe kamienie milowe",
+            "children": true
+          },
+          {
+            "kind": "task",
+            "title": "Zdecyduj, który kalendarz obsługiwać",
+            "difficulty": "Niski",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "title": "Podłącz kalendarz, by znaleźć wolny czas",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "Rozplanuj sesje tygodnia w wolnym czasie",
+            "children": true
+          }
+        ],
+        "project": "Osobisty asystent AI",
+        "list": "Lista",
+        "canvas": "Kanwa",
+        "changeTurns": [
+          {
+            "role": "user",
+            "text": "Na razie wyrzuć historię z przypomnieniami. Ludzie mogą sami się meldować."
+          },
+          {
+            "role": "assistant",
+            "text": "Wyrzucona. Rozplanowanie sesji tygodnia nadal czeka na kamienie milowe i kalendarz."
+          }
+        ],
+        "barCounts": "17 dodanych",
+        "consequence": "Zatwierdzenie doda je do backlogu. Odrzucenie zakończy plan i niczego nie zmieni.",
+        "approve": "Zatwierdź",
+        "decline": "Odrzuć",
+        "roadmap": "Roadmapa",
+        "epic": "Osobisty harmonogram i planer celów",
+        "back": "Wstecz",
+        "modeInContext": "w kontekście",
+        "manual": "Ręczne"
+      }
+    },
+    "importExisting": "Przenieś projekt z Jira, Linear lub Plane",
+    "projectManagement": {
+      "metaDescription": "Tablice, sprinty, backlog i roadmapa, w których agenci i ludzie realizują ten sam plan, a każda decyzja czeka na człowieka.",
+      "headline": "Agenci i ludzie realizują ten sam plan.",
+      "lede": "Tablice, sprinty, backlog i roadmapa — tak, jak Twój zespół już pracuje. Agenci i ludzie biorą pracę z tej samej tablicy, a wszystko, co wymaga decyzji, czeka na człowieka.",
+      "board": {
+        "eyebrow": "Tablica",
+        "headline": "Tablica, która wie, co robią agenci",
+        "body": "Praca agenta przechodzi przez te same kolumny co praca wszystkich innych, z dwiema, które mówią o niej prawdę. Zaimplementowane oznacza, że agent otworzył pull request, którego nikt jeszcze nie sprawdził. Zatwierdzone oznacza, że człowiek powiedział „tak”, ale zmiana nie została jeszcze wydana. Nieudane testy widać na samym elemencie roboczym.",
+        "motirBoard": "Załóż konto, by zobaczyć tablicę samego Motir"
+      },
+      "roadmap": {
+        "eyebrow": "Roadmapa",
+        "headline": "Zobacz, co jest gotowe do startu",
+        "body": "Roadmapa pokazuje każdy element roboczy wraz z tym, na co czeka. Praca, którą można zacząć teraz, jest oznaczona jako gotowa, więc zawsze wiadomo — Tobie, zespołowi i agentom — co wziąć następne.",
+        "motirRoadmap": "Załóż konto, by zobaczyć roadmapę samego Motir"
+      },
+      "holds": {
+        "eyebrow": "Wszystko, czego oczekuje zespół",
+        "headline": "Narzędzia, które już znasz",
+        "items": [
+          {
+            "title": "Sprinty i backlog",
+            "body": "Planuj sprinty z backlogu, wyznaczaj cel i śledź wykres spalania."
+          },
+          {
+            "title": "Tablice po Twojemu",
+            "body": "Kilka tablic na projekt, tory, limity pracy w toku i filtry."
+          },
+          {
+            "title": "Przenieś swój projekt",
+            "body": "Importuj z Jira, Linear, Plane, GitHub lub pliku CSV."
+          },
+          {
+            "title": "Otwarte dla wszystkich",
+            "body": "Upublicznij projekt i zbieraj prośby o funkcje — z głosami i komentarzami."
+          },
+          {
+            "title": "Zadania ręczne",
+            "body": "Praca, którą może wykonać tylko człowiek, to osobny rodzaj elementu roboczego, przeprowadzany krok po kroku."
+          },
+          {
+            "title": "Open source",
+            "body": "Rdzeń do zarządzania projektami jest open source na licencji GPL-3.0."
+          }
+        ]
+      },
+      "ui": {
+        "boardsHeading": "Tablice",
+        "boardsSubtitle": "Tablica Kanban projektu Osobisty asystent AI",
+        "newItem": "Nowy element roboczy",
+        "columns": [
+          {
+            "name": "Do zrobienia",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-23",
+                "title": "Rozplanuj sesje tygodnia w wolnym czasie",
+                "pill": "blocked",
+                "points": 5,
+                "who": "–"
+              },
+              {
+                "kind": "task",
+                "key": "PA-24",
+                "title": "Zdecyduj, który kalendarz obsługiwać",
+                "pill": "high",
+                "points": 1,
+                "who": "Y"
+              }
+            ]
+          },
+          {
+            "name": "W toku",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-28",
+                "title": "Kamienie milowe na stronie celu",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "Zaimplementowane",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-27",
+                "title": "Podziel cel na tygodnie",
+                "pill": "medium",
+                "points": 5,
+                "who": "A",
+                "ci": "failing"
+              }
+            ]
+          },
+          {
+            "name": "W przeglądzie",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-26",
+                "title": "Zapisuj kamienie milowe razem z celem",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "Gotowe",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-21",
+                "title": "Ustal cel z datą docelową",
+                "pill": "low",
+                "points": 3,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "pill": {
+          "blocked": "Zablokowane",
+          "high": "Wysoki",
+          "medium": "Średni",
+          "low": "Niski",
+          "awaiting": "Czeka na Ciebie",
+          "running": "Testy w toku",
+          "failing": "Testy nieudane"
+        },
+        "waitingOnYou": "Czeka na Ciebie",
+        "waitedHeader": ["Czeka na", "Czeka od"],
+        "rows": [
+          {
+            "kind": "plan",
+            "title": "Osobisty asystent AI",
+            "sentence": "Plan: {title}",
+            "key": "",
+            "waited": "2 godziny",
+            "action": "Przejrzyj"
+          },
+          {
+            "kind": "pr",
+            "title": "E-mail z resetem hasła",
+            "sentence": "Gotowe: {title}",
+            "key": "PA-7",
+            "waited": "1 dzień",
+            "action": "Przejrzyj"
+          },
+          {
+            "kind": "design",
+            "title": "Ekran logowania",
+            "sentence": "Design: {title}",
+            "key": "PA-8",
+            "waited": "3 godziny",
+            "action": "Przejrzyj"
+          },
+          {
+            "kind": "video",
+            "title": "Konta i logowanie",
+            "sentence": "Wideo akceptacyjne historii {title}",
+            "key": "PA-2",
+            "waited": "40 min",
+            "action": "Przejrzyj"
+          },
+          {
+            "kind": "manual",
+            "title": "Wybierz dostawcę e-mail",
+            "sentence": "Czeka na Ciebie: {title}",
+            "key": "PA-19",
+            "waited": "1 dzień",
+            "action": "Oznacz jako gotowe"
+          }
+        ],
+        "roadmap": [
+          {
+            "kind": "story",
+            "key": "PA-21",
+            "title": "Ustal cel z datą docelową",
+            "status": "done",
+            "label": "Gotowe"
+          },
+          {
+            "kind": "task",
+            "key": "PA-24",
+            "title": "Zdecyduj, który kalendarz obsługiwać",
+            "status": "ready",
+            "label": "Gotowe do startu",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "key": "PA-22",
+            "title": "Podziel cel na tygodniowe kamienie milowe",
+            "status": "in_progress",
+            "label": "W toku",
+            "progress": "2 / 5"
+          },
+          {
+            "kind": "story",
+            "key": "PA-25",
+            "title": "Podłącz kalendarz, by znaleźć wolny czas",
+            "status": "todo",
+            "label": "Do zrobienia"
+          },
+          {
+            "kind": "story",
+            "key": "PA-23",
+            "title": "Rozplanuj sesje tygodnia w wolnym czasie",
+            "status": "todo",
+            "label": "Do zrobienia"
+          }
+        ],
+        "roadmapRoot": "Roadmapa",
+        "roadmapEpic": "Osobisty harmonogram i planer celów",
+        "back": "Wstecz",
+        "manual": "Ręczne"
+      },
+      "close": {
+        "headline": "Przynieś projekt.",
+        "body": "Zacznij od pomysłu albo przenieś projekt, który już masz."
+      }
+    },
+    "aiDebugging": {
+      "metaDescription": "Błędy z produkcji, od Twojego zespołu i od agentów w trakcie pracy trafiają prześledzone do kodu i zaplanowane. Motir AI wskazuje prawdopodobną przyczynę, sprawdza, czy istnieje już element roboczy, który ją obejmuje, i rozwiązuje błąd w Sentry, gdy błąd jest gotowy.",
+      "headline": "Każdy błąd trafia prześledzony do kodu i zaplanowany.",
+      "lede": "Z produkcji, od kogoś z zespołu albo od agenta w trakcie uruchomienia: każdy błąd przychodzi z opisem, jak wygląda „gotowe”, miejscem w kodzie, od którego zacząć, i tym, co może być nie tak. Decyzja, kto go naprawi, należy do Ciebie.",
+      "plan": {
+        "eyebrow": "AI planuje każdy błąd",
+        "headline": "Możliwe przyczyny, nigdy domysł podany jako odpowiedź",
+        "body": "Planer porównuje stos wywołań z Twoimi repozytoriami i opisuje błąd tak, jak zrobiłby to ktoś z zespołu: jak wygląda „gotowe”, od którego miejsca w kodzie zacząć i dlaczego to ważne. Prawdopodobne przyczyny są wymienione jako możliwości do potwierdzenia lub wykluczenia, a gdy stosu nie da się dopasować do Twojego kodu, błąd mówi o tym wprost."
+      },
+      "fix": {
+        "eyebrow": "Wybierasz sposób naprawy",
+        "headline": "Napraw go ręcznie albo przekaż agentowi",
+        "body": "Zaplanowany błąd to zwykły element roboczy. Napraw go samodzielnie albo pozwól agentowi wziąć folder Błędy i otworzyć pull request dla każdego z nich. Przeglądasz i scalasz, błąd jest gotowy, a błąd w Sentry zostaje rozwiązany."
+      },
+      "setup": {
+        "eyebrow": "Konfiguracja w dwóch krokach",
+        "headline": "Połącz raz, wybierz, co się liczy",
+        "body": "Połącz organizację w Sentry, a potem wybierz, które z jej projektów wysyłają błędy na tę tablicę. Dla każdego ustaw najniższy poziom, który się liczy, oraz czy ukończenie błędu rozwiązuje go w Sentry i czy osoba odpowiedzialna z Sentry jest przenoszona."
+      },
+      "ui": {
+        "errorsTitle": "Błędy",
+        "errorsGloss": "— Powiązane błędy z Sentry · liczby z ostatniego sprawdzenia",
+        "linkError": "Powiąż błąd",
+        "error": {
+          "title": "TypeError: Cannot read properties of undefined (reading 'goalId')",
+          "where": "acme / web-frontend · production · 2.14.0",
+          "level": "error",
+          "seenPre": "Wystąpił ",
+          "count": "1284",
+          "seenPost": " razy",
+          "lastSeen": "ostatnio 6 minut temu",
+          "hideEvidence": "Ukryj dowody",
+          "summary": "· TypeError · POST /api/check-ins · ostatnie zdarzenie 6 minut temu",
+          "exception": "Wyjątek",
+          "exceptionType": "TypeError",
+          "exceptionMessage": ": Cannot read properties of undefined (reading 'goalId')",
+          "stack": "Stos wywołań",
+          "stackGloss": "· 2 w Twoim kodzie · 14 we frameworku · najnowsze wywołanie najpierw",
+          "frames": [
+            ["app/api/check-ins/route.ts:42", "w saveCheckIn"],
+            ["lib/goals/progress.ts:18", "w currentGoalFor"]
+          ],
+          "showFramework": "Pokaż 14 ramek frameworka"
+        },
+        "aiDrafted": "Szkic AI",
+        "explanation": "Wyjaśnienie",
+        "explanationGloss": "— dlaczego to ważne",
+        "explanationBody": "Każde codzienne meldowanie osoby bez aktywnego celu kończy się niepowodzeniem, więc traci ona serię, dla której wróciła. Zaczęło się od wydania 2.14.0.",
+        "description": "Opis",
+        "descriptionGloss": "— co zrobić",
+        "sections": [
+          {
+            "heading": "Kryteria akceptacji",
+            "items": [
+              "Meldowanie zapisuje się dla osoby bez aktywnego celu",
+              "Endpoint meldowań odpowiada 422, a nie 500, gdy brakuje celu"
+            ]
+          },
+          {
+            "heading": "Odnośniki do kontekstu",
+            "items": ["app/api/check-ins/route.ts", "lib/goals/progress.ts"]
+          },
+          {
+            "heading": "Możliwe mechanizmy",
+            "note": "Żaden z nich nie jest potwierdzony. Każdy to hipoteza zgodna ze stosem wywołań, wymieniona po to, by pierwsza osoba, która się temu przyjrzy, mogła ją potwierdzić lub wykluczyć — a nie diagnoza.",
+            "items": [
+              "currentGoalFor zwraca undefined, gdy ostatni cel został zarchiwizowany",
+              "Klient wysyła meldowanie, zanim lista celów się wczyta"
+            ]
+          }
+        ],
+        "monitoring": "Monitorowanie",
+        "monitoringBody": "Połącz monitor błędów, do którego Twoje usługi już raportują, a Motir zamieni jego błędy w elementy robocze na tablicy tego projektu.",
+        "sentry": "Sentry",
+        "connected": "Połączono",
+        "org": "acme",
+        "checked": "sprawdzono 4 minuty temu",
+        "recheck": "Sprawdź ponownie",
+        "monitored": "Monitorowane projekty",
+        "monitoredBody": "Błędy z tych projektów Sentry stają się elementami roboczymi typu Błąd na tej tablicy.",
+        "project": "web-frontend",
+        "bound": "Powiązano 3 dni temu",
+        "poll": "Nowe błędy sprawdzono 2 minuty temu · ",
+        "filed": "Zapisane błędy: 3",
+        "minLevel": "Minimalny poziom",
+        "everyLevel": "Każdy poziom",
+        "sync": "Synchronizacja z Sentry",
+        "toggles": [
+          [
+            "Rozwiązuj w Sentry, gdy błąd jest gotowy",
+            "Wyłącz, by zostawiać błędy w Sentry bez zmian, gdy ich elementy robocze są gotowe."
+          ],
+          [
+            "Przejmuj osobę odpowiedzialną z Sentry",
+            "Wyłącz, by ignorować przypisania z Sentry."
+          ]
+        ],
+        "add": "Dodaj monitorowany projekt",
+        "board": [
+          {
+            "name": "Do zrobienia",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-41",
+                "title": "TypeError w saveCheckIn u osoby bez celu",
+                "pill": "high",
+                "points": 2,
+                "who": "–"
+              }
+            ]
+          },
+          {
+            "name": "W toku",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-38",
+                "title": "E-mail z przypomnieniem wysyłany dwa razy o północy",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "W przeglądzie",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-35",
+                "title": "Seria zeruje się po zmianie strefy czasowej",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "Gotowe",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-31",
+                "title": "Lista celów wywraca się przy pustym tytule",
+                "pill": "low",
+                "points": 1,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "debug": {
+          "mode": "plan",
+          "turnLabel": "Tura 1",
+          "user": "Codzienne meldowania nie działają u osób, które zarchiwizowały swój ostatni cel. Seria się zeruje, a meldowanie przepada.",
+          "acts": [
+            ["Czytanie", "Czytam Twoją prośbę…"],
+            ["Przekazanie", "Śledzę błąd…"],
+            ["Pobieranie", "Przeczytano graf kodu"],
+            ["Pobieranie", "Przeczytano drzewo planu"],
+            [
+              "Dopasowanie",
+              "Sprawdzono, czy obejmuje go już jakiś element roboczy"
+            ]
+          ],
+          "causeLabel": "Prawdopodobna przyczyna:",
+          "cause": "currentGoalFor zwraca undefined po zarchiwizowaniu ostatniego celu, a saveCheckIn odczytuje z niego goalId bez sprawdzenia.",
+          "cause2": "Żaden element roboczy jeszcze tego nie obejmuje.",
+          "outcomePre": "Zapisano ",
+          "outcomeKey": "PA-44",
+          "outcomeTitle": "Meldowanie nie działa po zarchiwizowaniu ostatniego celu",
+          "outcomePost": " w Triage z diagnozą. Nic więcej się nie zmieniło."
+        },
+        "run": {
+          "title": "PA-8 · Ekran logowania",
+          "status": "W toku",
+          "findings": "Co dało to uruchomienie",
+          "bugFiled": "Zapisano błąd",
+          "key": "PA-45",
+          "open": "Otwórz →",
+          "found": "Znaleziono podczas: uruchomienia PA-8",
+          "bugTitle": "Link do resetu hasła wygasa, zanim dotrze e-mail"
+        }
+      },
+      "close": {
+        "headline": "Niech błędy planują się same.",
+        "body": "Opisz jeden, połącz Sentry albo pozwól agentom zgłaszać, co znajdą."
+      },
+      "sources": {
+        "eyebrow": "Skąd biorą się błędy",
+        "headline": "Trzy wejścia, jeden rodzaj błędu",
+        "items": [
+          {
+            "title": "Opisz go Motir AI",
+            "body": "Powiedz, co nie działa. Czyta kod, wskazuje prawdopodobną przyczynę, sprawdza, czy obejmuje ją już jakiś element roboczy, a potem zapisuje dokładnie jedno: nowy błąd albo notatkę przy istniejącym."
+          },
+          {
+            "title": "Z produkcji",
+            "body": "Połącz Sentry, a każdy nowy błąd stanie się elementem roboczym ze stosem wywołań. Gdy wystąpi ponownie, rośnie licznik, a nie sterta."
+          },
+          {
+            "title": "Z uruchomienia agenta",
+            "body": "Agent, który znajdzie błąd poza swoją pracą, zapisuje go — z tym, co zobaczył i gdzie — i pracuje dalej."
+          }
+        ]
+      },
+      "describe": {
+        "eyebrow": "Opisz go",
+        "headline": "Powiedz, co nie działa. Motir AI to prześledzi.",
+        "body": "Opisz błąd własnymi słowami albo zgłoś go i przekaż dalej. Motir AI czyta Twój kod i plan, wskazuje prawdopodobną przyczynę i sprawdza, czy obejmuje ją już jakiś element roboczy. Zapisuje jedną rzecz i mówi dokładnie jaką: nowy błąd w Triage z diagnozą albo diagnozę dodaną do elementu roboczego, który już go dotyczy. Jeśli nie potrafi prześledzić błędu do kodu, nie zapisuje niczego."
+      },
+      "production": {
+        "eyebrow": "Z produkcji",
+        "headline": "Błędy trafiają jako elementy robocze, z dowodami",
+        "body": "Każdy nowy błąd z Sentry staje się jednym elementem roboczym typu Błąd, z wyjątkiem, stosem wywołań i linkiem zwrotnym. Gdy element jest gotowy, Motir rozwiązuje błąd w Sentry. Jeśli błąd wróci, powstaje nowy element, powiązany ze starym."
+      },
+      "runs": {
+        "eyebrow": "Z uruchomień agentów",
+        "headline": "Agenci raportują, co znajdą",
+        "body": "Agent budujący jeden element roboczy, który trafi na błąd gdzie indziej, nie zatrzymuje się i go nie ukrywa. Zapisuje błąd z tym, co zobaczył, notuje uruchomienie, w którym go znalazł, i kontynuuje własną pracę. Uruchomienie wymienia każdy zapisany błąd."
+      }
+    },
+    "agentFleet": {
+      "metaDescription": "Hostowani agenci Motir realizują jednocześnie każdy gotowy element Twojego planu, każdy na własnej maszynie, z modelem dopasowanym do zadania. Uruchamiaj ich samodzielnie albo pozwól, by Motir Project Manager zapewniał im pracę.",
+      "headline": "Cały Twój plan, realizowany równolegle.",
+      "lede": "Hostowani agenci Motir biorą każdy gotowy element roboczy i realizują je jednocześnie, każdy na świeżej maszynie, z własną gałęzią i własnym pull requestem. Uruchamiaj ich samodzielnie albo pozwól, by Motir Project Manager zapewniał im pracę, a projekt posuwa się naprzód na wszystkich frontach naraz.",
+      "parallel": {
+        "eyebrow": "Skala",
+        "headline": "Jedna maszyna na każdy gotowy element roboczy",
+        "body": "Wszystko, co może wystartować, startuje. Każde uruchomienie rezerwuje swój element roboczy, więc dwóch agentów nigdy nie weźmie tego samego, i pracuje nad nim na własnej maszynie. Historia realizuje swoje części w kolejności wynikającej z zależności między nimi. Im więcej pracy jest gotowe, tym więcej uruchomień działa naraz."
+      },
+      "pm": {
+        "eyebrow": "Bez Twojego udziału",
+        "headline": "Motir Project Manager zapewnia flocie pracę",
+        "body": "Przekaż projekt Motir Project Manager, a uruchomi pracę w chwili, gdy element roboczy jest gotowy, dobierze model i przyniesie Ci tylko to, co wymaga Twojej decyzji: pull requesty, projekty graficzne, plany."
+      },
+      "models": {
+        "eyebrow": "Właściwy model do każdego zadania",
+        "headline": "Każdy element roboczy ma trudność. Ona wybiera model.",
+        "body": "Planer nadaje każdemu zadaniu, podzadaniu i błędowi trudność: jak trudno wykonać pracę dobrze, a nie jak jest duża. Jednolinijkowa zmiana kolejności blokad może mieć wysoką trudność, a duża zmiana nazwy — trywialną. Flota czyta ją, by wybrać model, więc zmiana nazwy nie płaci za najmocniejszy model, a migracja danych nigdy nie działa na najtańszym.",
+        "items": [
+          {
+            "title": "Trywialna",
+            "body": "Mechaniczna praca z jednoznaczną specyfikacją: zmiana nazwy, zmiana tekstu, przełączenie konfiguracji. Działa na szybszym, tańszym modelu."
+          },
+          {
+            "title": "Niska",
+            "body": "Rutynowa praca według wzorca, który kod już zawiera, np. nowe pole w istniejącym formularzu. Działa na szybszym, tańszym modelu."
+          },
+          {
+            "title": "Średnia",
+            "body": "Prawdziwe decyzje projektowe w kilku plikach lub usługach albo błąd o jeszcze nieznanej przyczynie. Działa na najmocniejszym modelu."
+          },
+          {
+            "title": "Wysoka",
+            "body": "Praca, w której subtelny błąd drogo kosztuje: współbieżność, bezpieczeństwo, migracja na żywych danych. Działa na najmocniejszym modelu."
+          },
+          {
+            "title": "Twój wybór",
+            "body": "Ustaw własny model dla dowolnego poziomu w projekcie albo wybierz go dla pojedynczego uruchomienia — spośród Claude, DeepSeek, GLM i Qwen."
+          },
+          {
+            "title": "Płacisz za to, co działa",
+            "body": "Rozliczane w kredytach za wywołania modeli i czas maszyny. Nic nie działa — nic nie jest naliczane."
+          }
+        ],
+        "docsLink": "Jak działają poziomy trudności i ile kosztuje zadanie na każdym modelu"
+      },
+      "care": {
+        "eyebrow": "Uruchomienia, które dbają o siebie",
+        "headline": "Problemy rozwiązane bez Ciebie",
+        "items": [
+          {
+            "title": "Nieudane testy",
+            "body": "Uruchomienie naprawia swój pull request na tej samej gałęzi, w maksymalnie pięciu próbach."
+          },
+          {
+            "title": "Przerwane uruchomienie",
+            "body": "Praca zostaje na swojej gałęzi, a nowe uruchomienie ją kontynuuje, nie zaczynając od nowa."
+          },
+          {
+            "title": "Zawieszony agent",
+            "body": "Uruchomienie, które milknie na 15 minut, zostaje zatrzymane, więc zablokowany agent nigdy nie przepala kredytów."
+          },
+          {
+            "title": "Błąd po drodze",
+            "body": "Agent, który znajdzie błąd poza swoją pracą, zapisuje go i pracuje dalej."
+          }
+        ]
+      },
+      "record": {
+        "eyebrow": "Wszystko zapisane",
+        "headline": "Każde uruchomienie, krok po kroku",
+        "body": "Każde uruchomienie zapisuje swój model, każdy krok, koszt i to, jak zakończył się każdy element roboczy: zaimplementowany, nieudany, ponownie zaplanowany lub pominięty."
+      },
+      "ui": {
+        "runsHeading": "Uruchomienia",
+        "runsSubtitle": "Wszystkie uruchomienia projektu Osobisty asystent AI — bieżące i minione.",
+        "runningNow": "Działają teraz",
+        "pastRuns": "Minione uruchomienia",
+        "columns": [
+          "Polecenie",
+          "Zakres",
+          "Agent",
+          "Start",
+          "Status",
+          "Elementy robocze"
+        ],
+        "live": [
+          {
+            "command": "Uruchomienie",
+            "scope": "PA-8 · Ekran logowania",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:42",
+            "status": "W toku",
+            "tone": "running",
+            "summary": "0 z 1 gotowe"
+          },
+          {
+            "command": "Uruchomienie",
+            "scope": "PA-21 · Przypomnienia o celach",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:42",
+            "status": "W toku",
+            "tone": "running",
+            "summary": "0 z 1 gotowe"
+          },
+          {
+            "command": "Uruchomienie",
+            "scope": "PA-22 · Wybór godziny przypomnienia",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:41",
+            "status": "W toku",
+            "tone": "running",
+            "summary": "0 z 1 gotowe"
+          },
+          {
+            "command": "Uruchomienie",
+            "scope": "Historia PA-2 · Konta i logowanie",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:38",
+            "status": "W toku",
+            "tone": "running",
+            "summary": "2 z 5 gotowe"
+          },
+          {
+            "command": "Uruchomienie",
+            "scope": "PA-17 · Strona ustawień",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:35",
+            "status": "W toku",
+            "tone": "running",
+            "summary": "0 z 1 gotowe"
+          },
+          {
+            "command": "Uruchomienie",
+            "scope": "PA-30 · Podsumowanie tygodnia",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:31",
+            "status": "W toku",
+            "tone": "running",
+            "summary": "0 z 1 gotowe"
+          }
+        ],
+        "past": [
+          {
+            "command": "Uruchomienie",
+            "scope": "Historia PA-6 · Cele",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Wczoraj 18:04",
+            "status": "Zakończone sukcesem",
+            "tone": "implemented",
+            "summary": "4 z 4 gotowe · 1 czeka na Ciebie"
+          },
+          {
+            "command": "motir fix",
+            "scope": "PA-9 · Usługa logowania",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "Wczoraj 16:20",
+            "status": "Zakończone sukcesem",
+            "tone": "implemented",
+            "summary": "1 z 1 gotowe"
+          },
+          {
+            "command": "Uruchomienie",
+            "scope": "PA-31 · Eksport do kalendarza",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Wczoraj 14:55",
+            "status": "Nieudane",
+            "tone": "failed",
+            "summary": "1 nieudane"
+          },
+          {
+            "command": "motir continue",
+            "scope": "PA-12 · Cele i codzienne meldowania",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Wczoraj 11:02",
+            "status": "Zakończone sukcesem",
+            "tone": "implemented",
+            "summary": "1 z 1 gotowe"
+          }
+        ],
+        "readyHeading": "Gotowe do startu",
+        "readyLane": "Gotowe do uruchomienia",
+        "ready": [
+          {
+            "kind": "task",
+            "key": "PA-19",
+            "title": "Wybierz dostawcę e-mail"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-22",
+            "title": "Wybór godziny przypomnienia"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-23",
+            "title": "Szablon e-maila z przypomnieniem"
+          },
+          {
+            "kind": "bug",
+            "key": "PA-44",
+            "title": "Meldowanie nie działa po zarchiwizowaniu ostatniego celu"
+          }
+        ]
+      },
+      "close": {
+        "headline": "Działaj na wszystkich frontach naraz.",
+        "body": "Przynieś pomysł albo projekt, który masz, i pozwól flocie zająć się wszystkim, co jest gotowe."
+      }
+    },
+    "agentHosting": {
+      "metaDescription": "Uruchom Claude Code, Codex lub agenta, którego już używasz, na jego własnej maszynie w chmurze Motir, zalogowanego Twoim własnym kontem. Wysyłaj mu pracę z aplikacji Motir; usypia, gdy skończysz, a płacisz tylko za czas jego maszyny.",
+      "headline": "Twoi własni agenci na maszynach Motir.",
+      "lede": "Uruchom Claude Code, Codex lub agenta, którego już używasz, w chmurze Motir — zalogowanego Twoim własnym kontem i przygotowanego z kodem Twojego projektu. Wyślij mu element roboczy i zamknij laptopa: pracuje dalej, a usypia, gdy skończysz.",
+      "setup": {
+        "eyebrow": "Konfiguracja raz",
+        "headline": "Trzy kroki do Twojego agenta w chmurze",
+        "items": [
+          {
+            "title": "Utwórz go",
+            "body": "Nadaj mu nazwę, wybierz projekt i agenta: Claude Code, Codex, OpenCode, Kimi Code, Aider lub Goose. Repozytoria Twojego projektu zostaną sklonowane do jego katalogu domowego."
+          },
+          {
+            "title": "Zaloguj się na swoje konto",
+            "body": "Zaloguj się z jego terminala własnym kontem, tak samo jak na swoim laptopie."
+          },
+          {
+            "title": "Wyślij mu pracę",
+            "body": "Naciśnij „Wyślij do mojego agenta” przy dowolnym gotowym elemencie roboczym. Agent go rezerwuje, buduje na własnej gałęzi i otwiera pull request."
+          }
+        ]
+      },
+      "away": {
+        "eyebrow": "Z dala od biurka",
+        "headline": "Pracuje dalej, gdy zamkniesz laptopa",
+        "items": [
+          {
+            "title": "Własna maszyna",
+            "body": "Nic nie działa na Twoim laptopie, więc zamknięta pokrywa czy zerwane połączenie nie zatrzymują pracy."
+          },
+          {
+            "title": "Obserwuj z dowolnego miejsca",
+            "body": "Jego uruchomienia widać w sekcji Uruchomienia obok uruchomień innych agentów, a jego terminal jest o jedno kliknięcie dalej w sekcji Moi agenci."
+          },
+          {
+            "title": "Kilku naraz",
+            "body": "Utrzymuj do dziesięciu agentów, z których każdy pracuje nad własnym elementem roboczym."
+          }
+        ]
+      },
+      "ui": {
+        "title": "Moi agenci",
+        "subtitle": "Twoi własni agenci, na Twoim logowaniu, w chmurze Motir — Osobisty asystent AI",
+        "newAgent": "Nowy agent",
+        "columns": [
+          "Nazwa",
+          "Agent",
+          "Stan",
+          "Czas maszyny w tym miesiącu",
+          "Kredyty"
+        ],
+        "rows": [
+          {
+            "name": "yue-claude",
+            "agent": "Claude Code",
+            "state": "Działa",
+            "tone": "implemented",
+            "time": "3 h 12 min",
+            "credits": "212"
+          },
+          {
+            "name": "yue-codex",
+            "agent": "Codex",
+            "state": "Uśpiony",
+            "tone": "cancelled",
+            "time": "1 h 05 min",
+            "credits": "95"
+          },
+          {
+            "name": "night-shift",
+            "agent": "OpenCode",
+            "state": "Wybudza się",
+            "tone": "running",
+            "time": "6 h 40 min",
+            "credits": "430"
+          }
+        ]
+      },
+      "close": {
+        "headline": "Daj swojemu agentowi biurko.",
+        "body": "Przyprowadź agenta, którego używasz, i pozwól mu pracować, kiedy odpoczywasz."
+      },
+      "terms": {
+        "eyebrow": "Twoje logowanie, nasza maszyna",
+        "headline": "Płacisz za maszynę i tylko wtedy, gdy pracuje",
+        "items": [
+          {
+            "title": "Twoje konto, Twój model",
+            "body": "Agent działa na Twoim własnym logowaniu, z wybranym przez Ciebie modelem i ustawieniami. Za użycie modelu rozlicza Cię jego dostawca, a Motir nigdy nie widzi Twoich danych logowania."
+          },
+          {
+            "title": "Jeden kredyt za minutę",
+            "body": "Motir nalicza tylko czas maszyny agenta — jeden kredyt za każdą minutę pracy."
+          },
+          {
+            "title": "Usypia, gdy skończysz",
+            "body": "Po 30 minutach bez użycia hibernuje się i kosztuje tylko odrobinę miejsca na dane. Budzi się, gdy wyślesz mu kolejny element roboczy."
+          }
+        ]
+      }
+    }
+  },
+  "howItWorks": {
+    "metaTitle": "Jak działa Motir",
+    "metaDescription": "Proces stojący za hasłem „vibe’uj cały projekt”: planowanie z AI, bramka planu, uruchomienia agentów, bramka scalania, naprawy, pętla uczenia się i pamięć projektu.",
+    "eyebrow": "Dla programistów · maszyna stojąca za hasłem „vibe’uj cały projekt”",
+    "headline": "Jak działa Motir",
+    "lede": "Każdy projekt w aplikacji Motir przechodzi przez ten sam instrument. Moduły to Motir i jego agenci. Pokrętła i przełączniki należą do Ciebie: nic nie idzie dalej, dopóki człowiek ich nie przestawi.",
+    "legendMotir": "Motir i agenci",
+    "legendYou": "Twoja decyzja",
+    "scrollHint": "Przewiń rysunek w bok →",
+    "rackTitle": "Proces Motir jako szafa modułów",
+    "rackDesc": "Twój pomysł trafia do planera, potem do pokrętła, którym zatwierdzasz plan, potem na tablicę, potem do uruchomienia agenta, potem do pokrętła, którym przeglądasz i scalasz, a na końcu do Gotowe. Zadania ręczne przechodzą z tablicy prosto do Gotowe. Uruchomienie agenta może zapisać znaleziony błąd w folderze Błędy i pracować dalej. Moduł naprawy zawraca nieudane uruchomienia z powrotem do uruchomienia agenta. Pętla uczenia się biegnie od uruchomienia agenta przez werdykt, ponowne planowanie i bibliotekę lekcji z powrotem do planera. Bank pamięci na dole przechowuje projekty graficzne, decyzje, dokumentację, lekcje, historię uruchomień, rewizje i to, kto co zdecydował.",
+    "rack": {
+      "engine": "Motir · silnik projektu",
+      "engineTitle": "Od pomysłu do gotowego.",
+      "engineSub": "Niebieskie moduły wykonują pracę. Pomarańczowe sterowanie należy do Ciebie.",
+      "signal": "Sygnał",
+      "signalMotir": "Motir i agenci",
+      "signalYou": "Twoja decyzja",
+      "idea": {
+        "label": "[01] Ty",
+        "title": "Twój pomysł",
+        "screen": ["> osobisty asystent", "  AI…_"],
+        "note": ["albo zaimportuj repo,", "Jira, Linear lub Plane"]
+      },
+      "planner": {
+        "label": "[01] Planowanie z AI",
+        "title": "Planer",
+        "screen": [
+          "? Pytania uzupełniające",
+          "Epik › historia › zadanie",
+          "blocked_by · rozmiar",
+          "validate_plan  OK"
+        ]
+      },
+      "approve": {
+        "label": "[02] Ty",
+        "title": "Zatwierdź",
+        "min": "Edytuj",
+        "max": "Start",
+        "screen": "Plan · wszystkie tury"
+      },
+      "board": {
+        "label": "[03] Elementy robocze",
+        "title": "Tablica",
+        "screen": ["Wykonawca agent|człowiek", "Sprint · backlog", "Roadmapa"],
+        "ready": "Gotowe 4/6"
+      },
+      "run": {
+        "label": "[04] Uruchomienie agenta",
+        "title": "Uruchomienie agenta",
+        "screen": [
+          "Rezerwacja › własna gałąź",
+          "1 PR na repozytorium",
+          "Środowisko · model",
+          "Kroki ▮▮▮▮▯"
+        ]
+      },
+      "review": {
+        "label": "[05] Ty",
+        "title": "Przegląd",
+        "min": "Popraw",
+        "max": "Scal",
+        "screen": "Test · wideo"
+      },
+      "done": {
+        "label": "[05]",
+        "title": "Gotowe",
+        "note": ["scalenie zamyka", "element roboczy"]
+      },
+      "manual": {
+        "label": "[03] Ty · zadanie ręczne",
+        "title": "Zadanie ręczne",
+        "screen": "motir guide · 3/7"
+      },
+      "learning": {
+        "label": "[07] Pętla uczenia",
+        "title": ["Planer", "się uczy"],
+        "note": ["każdy błąd sprawia,", "że kolejny plan jest lepszy"]
+      },
+      "lessons": {
+        "label": "[07] Lekcje",
+        "title": "Lekcje",
+        "screen": [
+          "Pomyłka › lekcja",
+          "Znowu › wzmocnij",
+          "Brak reguły › błąd planu",
+          "90 dni bez użycia › emerytura"
+        ]
+      },
+      "replan": {
+        "label": "[07] Ponowne planowanie",
+        "title": "Nowy plan",
+        "screen": [
+          "Zmiana sklasyfikowana",
+          "Powód zapisany",
+          "Historia planu +1"
+        ]
+      },
+      "verdict": {
+        "label": "[07] Werdykt",
+        "title": "Werdykt",
+        "screen": [
+          "Nadal to, co plan",
+          "zatwierdził?",
+          "Tak › przeoczył planer",
+          "Nie  › późniejsza edycja"
+        ]
+      },
+      "repair": {
+        "label": "[06] Naprawa",
+        "title": "Gdy uruchomienia się psują",
+        "rows": [
+          ["PR czerwony", "motir fix"],
+          ["Przerwane", "motir continue"]
+        ]
+      },
+      "memory": {
+        "label": "[08] Pamięć",
+        "title": "Projekt pamięta",
+        "keys": [
+          "Projekty graficzne",
+          "Decyzje",
+          "Dokumentacja",
+          "Lekcje",
+          "Historia uruchomień",
+          "Rewizje",
+          "Kto zdecydował"
+        ]
+      },
+      "bugs": {
+        "label": "[04] Znaleziony błąd",
+        "screen": "Zapisz błąd › folder Błędy",
+        "note": "uruchomienie trwa dalej"
+      }
+    },
+    "modulesHeadline": "Moduł po module",
+    "modulesLede": "Każdy moduł z powyższego rysunku z bliska. Najedź na jeden, by znaleźć go na rysunku.",
+    "modules": [
+      {
+        "step": "1",
+        "human": false,
+        "label": "[01] Planowanie z AI",
+        "title": "Od polecenia do planu",
+        "paras": [
+          "Zacznij od zdania, repozytorium albo importu z Jira, Linear lub Plane. Planer czyta to, co istnieje, w tym graf kodu Twoich repozytoriów, i zadaje pytania uzupełniające tam, gdzie prośba jest niejednoznaczna.",
+          "Przygotowuje epiki, historie, zadania i podzadania — każde z typem, wykonawcą, rozmiarem i krawędziami `blocked_by`. `validate_plan` sprawdza drzewo, zanim je zobaczysz."
+        ]
+      },
+      {
+        "step": "2",
+        "human": true,
+        "label": "[02] Ty · bramka planu",
+        "title": "Zatwierdzasz plan",
+        "paras": [
+          "Nic nie trafia na tablicę, dopóki człowiek nie zatwierdzi planu. Proś o zmiany zwykłymi słowami; każda runda to nowa tura, a historia planu zachowuje każdą wersję i powód zmiany."
+        ]
+      },
+      {
+        "step": "3",
+        "human": false,
+        "label": "[03] Elementy robocze",
+        "title": "Tablica",
+        "paras": [
+          "Zatwierdzony plan staje się elementami roboczymi ze sprintami, backlogiem i roadmapą. Wykonawcą każdego elementu roboczego jest `agent` lub `human`.",
+          "Przez zadania ręczne (konto, sekret, rekord DNS, akceptacja wydania) `motir guide` prowadzi krok po kroku."
+        ]
+      },
+      {
+        "step": "4",
+        "human": false,
+        "label": "[04] Uruchomienie agenta",
+        "title": "Agenci budują",
+        "paras": [
+          "Agent bierze kolejny gotowy element roboczy (`motir next` lub `motir run <KEY>`), rezerwuje go, buduje na własnej gałęzi i otwiera jeden pull request na repozytorium, powiązany z elementem roboczym.",
+          "Błąd znaleziony poza własnym elementem roboczym nie zatrzymuje uruchomienia: agent ustala jego przyczynę, zapisuje go poleceniem `motir log bug` w folderze Błędy jako osobny element roboczy i pracuje dalej.",
+          "Każde uruchomienie zapisuje środowisko agenta, model, każdy krok i wynik. Agenci łączą się przez MCP — na Twojej maszynie albo jako hostowani agenci Motir."
+        ]
+      },
+      {
+        "step": "5",
+        "human": true,
+        "label": "[05] Ty · bramka scalania",
+        "title": "Przeglądasz i scalasz",
+        "paras": [
+          "Element roboczy przechodzi do `Implemented`, a agent publikuje instrukcję testowania. Historie dostają wideo akceptacyjne nagrane w CI. Przeglądasz, zatwierdzasz i scalasz; scalenie zamyka element roboczy. Nic nie trafia do `Done` bez człowieka."
+        ]
+      },
+      {
+        "step": "6",
+        "human": false,
+        "label": "[06] Naprawa",
+        "title": "Gdy uruchomienia się psują",
+        "paras": [
+          "Czerwony lub konfliktowy pull request jest naprawiany na własnej gałęzi poleceniem `motir fix`, w maksymalnie pięciu próbach. Przerwane uruchomienie (zamknięty laptop, utracona piaskownica) jest wznawiane poleceniem `motir continue` na gałęzi, którą zostawiło.",
+          "Błędy zapisane po drodze czekają w folderze Błędy; `motir fix bugs` przerabia je po kolei, od najstarszego."
+        ]
+      },
+      {
+        "step": "7",
+        "human": false,
+        "label": "[07] Pętla uczenia",
+        "title": "Planer się uczy",
+        "paras": [
+          "Agent, który nie może zbudować elementu roboczego, najpierw sprawdza, czy to nadal to, co zatwierdzono w planie (`get_approved_shape_verdict`), żeby późniejszej edycji nie zrzucić na planer. Jeśli plan był błędny, zostaje zaplanowany ponownie, a zmiana jest zapisywana wraz z powodem.",
+          "Pomyłka staje się lekcją albo wzmacnia istniejącą; jeśli żadna reguła jej nie obejmuje, zapisywany jest błąd planowania. Kolejny plan najpierw czyta lekcje. Lekcje, które nie powracają przez 90 dni, przechodzą na emeryturę."
+        ]
+      },
+      {
+        "step": "8",
+        "human": false,
+        "label": "[08] Pamięć",
+        "title": "Projekt pamięta",
+        "paras": [
+          "Projekty graficzne, strony decyzji, dokumentacja, lekcje, rewizje planu i historia każdego uruchomienia są przy elementach roboczych. Każdy — od Ciebie, przez nową osobę w zespole, po kolejnego agenta — może podjąć projekt po miesiącach, bez niczyich wyjaśnień."
+        ]
+      }
+    ],
+    "art": {
+      "plan": {
+        "prompt": "osobisty asystent AI, który pomaga ludziom osiągać cele",
+        "question": "Działać samodzielnie czy pytać przed wysłaniem?",
+        "answers": ["Samodzielnie", "Najpierw pytać"],
+        "tree": [
+          ["0", "Epik · Połączenia", ""],
+          ["1", "Historia · Synchronizacja kalendarza", ""],
+          ["2", "Zadanie · Odczyt wydarzeń", "blocked_by 2"],
+          ["1", "Historia · Poranne podsumowanie", ""],
+          ["2m", "Zadanie ręczne · Konto u dostawcy e-mail", ""]
+        ]
+      },
+      "approve": {
+        "title": "Plan · tura 3",
+        "turns": [
+          ["Tura 1", "Szkic na podstawie Twojego polecenia"],
+          ["Tura 2", "„Podziel e-mail na dwie historie”"],
+          ["Tura 3", "Czeka na Twoją decyzję"]
+        ],
+        "min": "Popraw",
+        "max": "Zatwierdź",
+        "cta": "Zatwierdź plan"
+      },
+      "board": {
+        "title": "Elementy robocze",
+        "sub": "Sprint 1 · połączenia",
+        "count": "24",
+        "columns": ["Do zrobienia", "W toku", "Zaimplementowane", "Gotowe"],
+        "agent": "agent",
+        "manual": "zadanie ręczne"
+      },
+      "run": {
+        "run": "Uruchomienie ·",
+        "key": "PA-12",
+        "agent": "Twój agent",
+        "title": "Synchronizacja kalendarza",
+        "faders": ["Rezerwacja", "Gałąź", "Budowa", "Test", "PR"],
+        "stats": [
+          ["kroki", "9 / 14"],
+          ["zapisane błędy", "1"],
+          ["gałąź", "pa-12"]
+        ]
+      },
+      "review": {
+        "title": "Jak testować",
+        "checks": [
+          "Podłącz testowy kalendarz",
+          "Przenieś spotkanie i zobacz, jak zmienia się podsumowanie",
+          "Cofnij dostęp i zobacz, że odczyt się zatrzymuje"
+        ],
+        "video": "acceptance.mp4",
+        "length": "0:42",
+        "merge": "Scal"
+      },
+      "repair": {
+        "title": "Gdy uruchomienia się psują",
+        "rows": [
+          ["Czerwony pull request", "motir fix"],
+          ["Przerwane uruchomienie", "motir continue"],
+          ["Folder Błędy", "motir fix bugs"]
+        ],
+        "attempt": "Próba 2 z 5"
+      },
+      "learning": {
+        "loop": ["Czytane", "przed", "planowaniem"],
+        "title": "Biblioteka lekcji",
+        "lessons": [
+          ["Jedna bramka testów na repozytorium", "Wzmocniona ×3", 80],
+          [
+            "Nie powielaj istniejącej gałęzi",
+            "Nowa · wygasa po 90 dniach bez użycia",
+            25
+          ]
+        ]
+      },
+      "memory": {
+        "title": ":: Historia",
+        "span": "PA · 41 dni",
+        "tip": "Pytaj przed wysłaniem · Ty · 3 paź",
+        "axis": ["Dzień 1", "Dzień 20", "Dzień 41"],
+        "tabs": [
+          "Projekty graficzne",
+          "Decyzje",
+          "Dokumentacja",
+          "Lekcje",
+          "Uruchomienia"
+        ]
+      }
+    },
+    "closeHeadline": "Otwarty rdzeń",
+    "closeBody": "Rdzeń do zarządzania projektami jest open source na licencji GPL-3.0. Hostuj go samodzielnie albo korzystaj z niego na motir.co.",
+    "closeStart": "Vibe’uj projekt",
+    "closeDocs": "Przeczytaj dokumentację",
+    "closeMcp": "Podłącz swojego agenta"
+  },
+  "ideas": {
+    "metaTitle": "Pomysły do zbudowania · Motir",
+    "metaDescription": "Produkty, które kupiłby Motir: platformy AI do pracy, której firma programistyczna nie wykona samym kodem. Zbuduj taki, który się skaluje, a Motir zostanie Twoim pierwszym klientem.",
+    "eyebrow": "Pomysły do zbudowania",
+    "headline": "Zbuduj to, co kupiłby Motir.",
+    "lede": "Firma programistyczna to coś więcej niż kod. Potrzebuje prawnika, księgowego, zespołu bezpieczeństwa i ludzi, którzy znają inne rynki — i Motir nie jest wyjątkiem. Wolimy kupić tę pracę od produktu zbudowanego w aplikacji Motir. Oto te, których potrzebujemy. Zbuduj taki, który się skaluje, a Motir zostanie Twoim pierwszym klientem.",
+    "promiseTitle": "Motir jest Twoim pierwszym klientem",
+    "promiseBody": "Zbuduj jeden z nich w aplikacji Motir, publicznie, a my będziemy go używać, zapłacimy za niego i powiemy Ci, czego brakuje.",
+    "rulesEyebrow": "Co tu czyni pomysł dobrym",
+    "rulesHeadline": "Produkty, które się skalują, a nie narzędzia dla jednego zespołu",
+    "rules": [
+      {
+        "title": "Wielu klientów, jeden produkt",
+        "body": "Każdy pomysł służy tysiącom firm z tym samym problemem, a nie wewnętrznemu procesowi jednej firmy."
+      },
+      {
+        "title": "Wiedza, której nie zatrudnisz tanio",
+        "body": "Prawo, podatki, bezpieczeństwo, języki: praca wymagająca specjalisty, przystępna cenowo dzięki AI i rzetelna dzięki ludziom."
+      },
+      {
+        "title": "Człowiek nadal podpisuje",
+        "body": "AI przygotowuje, sprawdza i składa pracę. Wykwalifikowana osoba zatwierdza to, co niesie ryzyko — tak samo, jak Motir stawia człowieka przy każdej bramce."
+      }
+    ],
+    "listEyebrow": "Motir by kupił · {n}",
+    "listHeadline": "Produkty, które Motir kupiłby już dziś",
+    "needLabel": "Dlaczego Motir tego potrzebuje",
+    "whoLabel": "Kto jeszcze to kupuje",
+    "close": {
+      "headline": "Zbuduj jeden. Będziemy Twoim pierwszym klientem.",
+      "body": "Zacznij od pomysłu, zaplanuj go w aplikacji Motir i zbuduj publicznie. Wybierz jeden z tych pomysłów albo przynieś własny."
+    },
+    "placeholder": "Zespół finansowy AI dla startupów: wycenia plany, rozlicza podatek od sprzedaży i płaci dostawcom…",
+    "more": {
+      "eyebrow": "Więcej kierunków · {n}",
+      "headline": "Dobre produkty do zbudowania, poza tym, czego potrzebuje Motir",
+      "body": "Przy tych pomysłach Motir nie będzie Twoim pierwszym klientem. Każdy to rynek z udokumentowanym popytem, lukę, którą obecni gracze zostawiają otwartą, i powód, dla którego można go zbudować teraz, a nie pięć lat temu. Dowody są podlinkowane pod każdym z nich.",
+      "evidenceLabel": "Dowody",
+      "gapLabel": "Luka"
+    },
+    "find": {
+      "heading": "Znajdź pomysł",
+      "searchPlaceholder": "Szukaj pomysłów, dowodów i luk",
+      "searchAria": "Przeszukaj pomysły",
+      "searchSubmit": "Szukaj",
+      "searchClear": "Wyczyść wyszukiwanie",
+      "categoryGroup": "Kategoria",
+      "allCategories": "Wszystkie kategorie",
+      "tags": "Tagi",
+      "tagsSelected": "Tagi · wybrane: {n}",
+      "activeLabel": "Filtry",
+      "pillCategory": "Kategoria: {label}",
+      "pillTag": "Tag: {label}",
+      "pillSearch": "„{q}”",
+      "remove": "Usuń",
+      "clearAll": "Wyczyść wszystko",
+      "countAll": "Pomysły: {n}",
+      "countMatch": "Pasujące pomysły: {n}",
+      "countMatchOne": "Pasuje 1 pomysł",
+      "countNone": "Brak pasujących pomysłów",
+      "updating": "Aktualizowanie…"
+    },
+    "card": {
+      "open": "Otwórz pomysł",
+      "moreSources": "Więcej źródeł: +{n}",
+      "tagsAria": "Tagi"
+    },
+    "detail": {
+      "kindBuys": "Motir by kupił",
+      "kindDirection": "Kierunek",
+      "capabilities": "Co by robił",
+      "evidence": "Dowody",
+      "gap": "Luka",
+      "whyNow": "Dlaczego teraz",
+      "whyMotir": "Dlaczego Motir tego potrzebuje",
+      "whoElse": "Kto jeszcze to kupuje",
+      "close": "Zamknij",
+      "foot": "Naciśnij {key} lub Wstecz, by wrócić do listy.",
+      "opensInNewTab": "(otwiera się w nowej zakładce)"
+    },
+    "empty": {
+      "title": "Żaden pomysł nie pasuje do tych filtrów",
+      "body": "Spróbuj mniejszej liczby tagów, innej kategorii albo innych słów. Wszystkie pomysły nadal tu są.",
+      "action": "Wyczyść wszystkie filtry"
+    },
+    "error": {
+      "eyebrow": "Chwilowo niedostępne",
+      "title": "Nie udało się teraz wczytać pomysłów",
+      "body": "Lista jest czytana na żywo z aplikacji Motir, która nie odpowiedziała. Nic nie zginęło; spróbuj ponownie za chwilę.",
+      "action": "Spróbuj ponownie"
+    }
+  },
+  "setupPrompt": {
+    "title": "Skonfiguruj Motir w swoim agencie",
+    "body": "Skopiuj jedno polecenie i wklej je do Claude Code, Codex, Cursor lub dowolnego innego agenta. Podłącza serwer MCP Motir, instaluje CLI i umiejętności oraz sprawdza, czy działają. W Claude Code instaluje plugin Motir.",
+    "button": "Skopiuj polecenie konfiguracji",
+    "copied": "Skopiowano. Wklej je do swojego agenta",
+    "failed": "Nie udało się skopiować. Zaznacz polecenie poniżej",
+    "menuLabel": "Skopiuj polecenie konfiguracji dla swojego agenta",
+    "show": "Pokaż polecenie",
+    "menuHint": "Wklej je do dowolnego agenta — skonfiguruje w nim Motir.",
+    "headerLabel": "Skopiuj polecenie konfiguracji",
+    "headerCopied": "Skopiowano",
+    "headerFailed": "Nie skopiowano"
+  },
+  "builtByMotirPage": {
+    "metaTitle": "Motir buduje sam siebie · Motir",
+    "metaDescription": "Jak Motir buduje Motir: zaczął jako folder poleceń, lista zadań i magazyn pomyłek, a każda wydana funkcja stawała się narzędziem do budowy kolejnej.",
+    "eyebrow": "Motir buduje sam siebie",
+    "headline": "Jak Motir buduje Motir.",
+    "lede": "Brzmi jak problem jajka i kury. Ale nim nie jest. Motir zaczął jako folder poleceń, a każda wydana funkcja stawała się narzędziem do budowy kolejnej.",
+    "watch": "Zobacz, jak Motir buduje sam siebie",
+    "runs": "Załóż konto, by oglądać uruchomienia jego agentów",
+    "lost": {
+      "scenes": {
+        "fixLater": "naprawić później",
+        "features": [
+          "Kalendarz",
+          "Przypomnienia",
+          "Płatności",
+          "Eksport",
+          "Wyszukiwanie"
+        ],
+        "inProgress": "w toku",
+        "question": "czemu tak?",
+        "answer": "bo…",
+        "sessionEnded": "sesja zakończona"
+      },
+      "eyebrow": "Jak to się zaczęło",
+      "headline": "Robiliśmy vibe coding. Projekt się rozsypał.",
+      "body": "Vibe coding przyspieszył pisanie kodu. Ale im dalej szliśmy, tym więcej projektu gubiliśmy — bo projekt to nie tylko kod.",
+      "items": [
+        {
+          "title": "Błąd znaleziony, nigdy nie zapisany",
+          "body": "Zauważony w trakcie sesji, zapomniany przed jej końcem."
+        },
+        {
+          "title": "Za dużo naraz",
+          "body": "Pięć funkcji w toku i żadnego sposobu, by ustalić, którą zacząć następną."
+        },
+        {
+          "title": "Testy, których nie było",
+          "body": "Brakujące albo niespełniające standardu, którego wymagała reszta kodu."
+        },
+        {
+          "title": "Decyzje zgubione w czacie",
+          "body": "Wiedza, dlaczego coś zbudowano właśnie tak, kończyła się razem z sesją programowania."
+        }
+      ]
+    },
+    "missing": {
+      "eyebrow": "Czego potrzebowaliśmy",
+      "headline": "Jira i Linear śledzą pracę. Potrzebowaliśmy więcej.",
+      "body": "Wpięliśmy nasz proces w narzędzia projektowe, które znaliśmy. Mieściły zadania, ale nie to, czego nam brakowało.",
+      "items": [
+        {
+          "title": "Plan przed kodem",
+          "body": "Agent powinien zaczynać od planu zatwierdzonego przez człowieka, a nie od polecenia.",
+          "product": "ai-planner"
+        },
+        {
+          "title": "Gotowe czy zablokowane — przez co",
+          "body": "Zobacz, która praca może zacząć się teraz, a która czeka — i na jaką dokładnie inną pracę."
+        },
+        {
+          "title": "Ktoś, kto prowadzi cały projekt",
+          "body": "Kierownik projektu, który nadzoruje wszystko i składa to w całość — bez proszenia.",
+          "product": "project-manager"
+        }
+      ],
+      "after": "Więc to zbudowaliśmy."
+    },
+    "bootstrap": {
+      "eyebrow": "Rozruch",
+      "headline": "Każda funkcja staje się narzędziem do budowy kolejnej.",
+      "body": "Motir nie czekał na ukończenie, zanim zaczęto go używać. Każda wydana funkcja zastępowała rusztowanie, na którym ją zbudowano.",
+      "steps": [
+        {
+          "tag": "Dzień 0",
+          "title": "motir-meta",
+          "body": "Wewnętrzny projekt: zestaw poleceń, lista zadań i magazyn pomyłek. Na jego poleceniach model budował pierwsze funkcje Motir.",
+          "uses": "Polecenia i plik zadań"
+        },
+        {
+          "tag": "Potem",
+          "title": "Elementy robocze",
+          "body": "Gdy wydano elementy robocze, o to, co zbudować dalej, Motir pytał już sam siebie, a nie zewnętrzne narzędzie.",
+          "uses": "Własne elementy robocze"
+        },
+        {
+          "tag": "Potem",
+          "title": "Serwer MCP",
+          "body": "Gdy wydano MCP, te zapytania stały się wywołaniami MCP, a statusy same się synchronizowały.",
+          "uses": "Własny serwer MCP"
+        },
+        {
+          "tag": "Potem",
+          "title": "Planowanie z AI",
+          "body": "Gdy wydano planowanie, Motir planował kolejne funkcje własnym planerem.",
+          "uses": "Własny planer"
+        },
+        {
+          "tag": "Teraz",
+          "title": "Agenci i zatwierdzenia",
+          "body": "Agenci budują elementy robocze Motir; człowiek zatwierdza każdy plan i każde scalenie.",
+          "uses": "Wszystko naraz"
+        }
+      ],
+      "loop": ["Zbuduj funkcję", "Używaj jej", "Zbuduj nią następną"]
+    },
+    "howItWorks": {
+      "eyebrow": "Pod maską",
+      "headline": "Proces, który buduje Motir, to ten sam, który dostajesz.",
+      "body": "Planowanie z AI, bramka planu, uruchomienia agentów, bramka scalania, naprawy i pętla uczenia się: każdy projekt w aplikacji Motir przechodzi przez ten sam proces, ten także.",
+      "cta": "Zobacz, jak działa Motir"
+    },
+    "live": {
+      "eyebrow": "Wciąż w budowie",
+      "headline": "To się nie zatrzymało.",
+      "body": "Motir wciąż dodaje sobie funkcje, publicznie. Te liczby pochodzą na żywo z własnego projektu Motir.",
+      "stats": {
+        "shipped": "wydane",
+        "planned": "zaplanowane",
+        "requests": "prośby o funkcje",
+        "upvotes": "głosy"
+      },
+      "recent": "Ostatnio wydane",
+      "unavailable": "Nie udało się teraz wczytać liczb na żywo. Znajdziesz je na stronie projektu Motir."
+    },
+    "close": {
+      "headline": "Zbuduj swój projekt w ten sam sposób.",
+      "body": "Zacznij od pomysłu. Motir go zaplanuje, zbuduje i utrzyma cały projekt w ryzach.",
+      "cta": "Zacznij za darmo"
+    }
+  }
+}
