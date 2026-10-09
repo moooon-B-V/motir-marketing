@@ -171,8 +171,10 @@ describe.each([
       expect.stringContaining('/sign-in'),
     )
     expect(
-      [...container.querySelectorAll('a[href]')].filter((a) =>
-        a.getAttribute('href')!.includes('github.com'),
+      [...container.querySelectorAll('a[href]')].filter(
+        (a) =>
+          new URL(a.getAttribute('href')!, 'https://motir.co').hostname ===
+          'github.com',
       ),
     ).toHaveLength(1)
   })
