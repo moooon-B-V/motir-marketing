@@ -2,8 +2,10 @@ import Link from 'next/link'
 import { getCopy } from '@/lib/copy'
 import { setupPrompt } from '@/lib/setupPrompt'
 import { SetupPromptButton } from '@/app/_components/SetupPromptButton'
-import { docsSurfacesFor } from '@/lib/docsSurfaces'
+import { DOCS_INDEX_HREF, docsSurfacesFor } from '@/lib/docsSurfaces'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 
 /*
  * The docs index (MOTIR-4046) — where the top bar's `Docs` item lands, and the
@@ -16,6 +18,15 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * also the rail's first tier — so a page added to that file arrives here with
  * no edit to this one, and there is no number in this comment to go stale.
  */
+
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, DOCS_INDEX_HREF, (copy) => ({
+    title: copy.docs.metaTitle,
+    description: copy.docs.metaDescription,
+  }))
+}
 
 export default async function DocsIndexPage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)

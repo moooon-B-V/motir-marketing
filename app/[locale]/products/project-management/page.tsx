@@ -1,6 +1,7 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import { ArrowRight } from 'lucide-react'
-import { englishCopy, format, getCopy } from '@/lib/copy'
+import { format, getCopy } from '@/lib/copy'
 import {
   IMPORT_DOOR,
   MOTIR_PROJECT_BOARD,
@@ -31,12 +32,16 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * review, like the placeholders.
  */
 
-export const metadata: Metadata = {
-  title: format(englishCopy.products.metaTitle, {
-    name: productOf('project-management', englishCopy).name,
-  }),
-  description: englishCopy.products.projectManagement.metaDescription,
-  robots: { index: false, follow: true },
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/products/project-management', (copy) => ({
+    title: format(copy.products.metaTitle, {
+      name: productOf('project-management', copy).name,
+    }),
+    description: copy.products.projectManagement.metaDescription,
+    robots: { index: false, follow: true },
+  }))
 }
 
 export default async function ProjectManagementPage({

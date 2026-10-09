@@ -1,5 +1,7 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -35,9 +37,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * send a customer looking for a state their screen does not have.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitlePublicAddress,
-  description: englishCopy.docs.metaDescriptionPublicAddress,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/public-address', (copy) => ({
+    title: copy.docs.metaTitlePublicAddress,
+    description: copy.docs.metaDescriptionPublicAddress,
+  }))
 }
 
 const STATUSES: { label: string; meaning: string; action: string }[] = [

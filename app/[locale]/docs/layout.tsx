@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { englishCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { SITE_HOST } from '@/lib/publicHost'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
@@ -37,10 +37,20 @@ import { enterLocale, type LocaleParams } from '@/i18n/locale'
  * breakpoint is the wrong one at the other, so the rule carries the breakpoint.
  */
 
-export async function generateMetadata(): Promise<Metadata> {
+/*
+ * The words only, in the page's locale. The canonical and the `hreflang` set
+ * are each page's own (MOTIR-7956): a layout's would be inherited by every
+ * page under it that names none, and point them all at `/docs`.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: LocaleParams
+}): Promise<Metadata> {
+  const copy = await getCopy(await enterLocale(params))
   return {
-    title: englishCopy.docs.metaTitle,
-    description: englishCopy.docs.metaDescription,
+    title: copy.docs.metaTitle,
+    description: copy.docs.metaDescription,
   }
 }
 

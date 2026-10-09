@@ -18,54 +18,13 @@ import { CLIENT_COPY_NAMESPACES } from '@/lib/copy'
  * decision a reviewer sees in the diff. A card that localises one of these
  * removes its line; the second test fails if a line outlives its import.
  */
-const METADATA = 'its <title> and description — MOTIR-7956 localises metadata'
-
 const ENGLISH_ON_PURPOSE: Record<string, string> = {
-  'app/[locale]/design/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/claude-code-connector/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/claude-code-plugin/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/cli/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/difficulty/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/mcp/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/mcp/tools/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/public-address/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/sandbox/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/sentry/page.tsx': METADATA,
-  'app/[locale]/docs/(guides)/skills/page.tsx': METADATA,
-  'app/[locale]/docs/api/getting-started/page.tsx': METADATA,
-  'app/[locale]/docs/api/page.tsx': METADATA,
-  'app/[locale]/docs/api/stability/page.tsx': METADATA,
-  'app/[locale]/docs/layout.tsx': METADATA,
-  'app/[locale]/explore/layout.tsx': METADATA,
-  'app/[locale]/explore/page.tsx': METADATA,
-  'app/[locale]/explore/topic/[slug]/page.tsx': METADATA,
-  'app/[locale]/how-it-works/page.tsx': METADATA,
-  'app/[locale]/ideas/page.tsx': METADATA,
-  'app/[locale]/legal/[slug]/page.tsx': METADATA,
-  'app/[locale]/legal/layout.tsx': METADATA,
-  'app/[locale]/motir-builds-itself/page.tsx': METADATA,
-  'app/[locale]/products/[slug]/page.tsx': METADATA,
-  'app/[locale]/products/agent-fleet/page.tsx': METADATA,
-  'app/[locale]/products/agent-hosting/page.tsx': METADATA,
-  'app/[locale]/products/ai-debugging/page.tsx': METADATA,
-  'app/[locale]/products/ai-planner/page.tsx': METADATA,
-  'app/[locale]/products/project-management/page.tsx': METADATA,
-  // MOTIR-7954 — the public-project tree's metadata and structured data.
-  'app/[locale]/p/[identifier]/page.tsx': METADATA,
-  'app/[locale]/p/[identifier]/_components/tabPage.tsx': METADATA,
-  'app/[locale]/p/[identifier]/_components/JsonLd.tsx':
-    'a project’s JSON-LD fallback description — MOTIR-7956',
-  'app/[locale]/p/[identifier]/requests/new/page.tsx': METADATA,
-  'app/[locale]/w/page.tsx': METADATA,
-  'app/[locale]/host-unavailable/page.tsx': METADATA,
-  'app/_components/siteMetadata.ts':
-    'the site-wide <title>, description and share card — MOTIR-7956 localises metadata',
-  'app/_components/RootJsonLd.tsx':
-    'the Organization / WebSite JSON-LD — MOTIR-7956',
+  // MOTIR-7956 localised every page's metadata, the JSON-LD and the sitemap;
+  // these two are what remains, each for a reason that is not "not yet".
   'app/opengraph-image.tsx':
-    'the share image is rendered once, not per locale — MOTIR-7956',
+    'the share image is rendered once, not per locale — a per-locale image needs CJK faces in the renderer (MOTIR-7972)',
   'app/not-found.tsx':
-    'the global 404 reads no request, so it cannot know the locale — MOTIR-7955',
+    'the global 404 reads no request, so it cannot know the locale; each locale’s room is `app/[locale]/not-found.tsx` (MOTIR-7955)',
 }
 
 const ROOT = process.cwd()

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { requestPublicHost } from '@/lib/publicHost'
 import { ErrorState } from '@/app/[locale]/p/[identifier]/_components/States'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /**
@@ -31,9 +31,15 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * value the router's own landing pad cannot do without.
  */
 
-export const metadata: Metadata = {
-  title: englishCopy.publicProject.meta.hostUnavailableTitle,
-  robots: { index: false, follow: false },
+/* In the page's locale; no `hreflang` — a host that resolves to nothing has no versions to list (MOTIR-7956). */
+export async function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  const { meta } = (await getCopy(await enterLocale(params))).publicProject
+  return {
+    title: meta.hostUnavailableTitle,
+    robots: { index: false, follow: false },
+  }
 }
 
 /*

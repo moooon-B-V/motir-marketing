@@ -106,7 +106,9 @@ describe('a recorded workspace resolution, driven to a rendered tab page', () =>
     // 3. the RENDERED page — links and canonical together, which is the join
     const subject = project('https://acme.motir.site/ACME')
     render(<ProjectHeader project={subject} current="changelog" host={host} />)
-    const { container } = render(<ProjectJsonLd project={subject} />)
+    const { container } = render(
+      <ProjectJsonLd project={subject} fallbackDescription="" />,
+    )
 
     const nav = screen.getAllByRole('navigation', { name: 'Project' })[0]!
     expect(within(nav).getByRole('link', { name: 'Overview' })).toHaveAttribute(

@@ -23,8 +23,14 @@ import '../globals.css'
 
 export function SiteDocument({
   lang,
+  description,
   children,
-}: Readonly<{ lang: Locale; children: ReactNode }>) {
+}: Readonly<{
+  lang: Locale
+  /** The locale catalogue's `meta.description`, for the entity graph. */
+  description: string
+  children: ReactNode
+}>) {
   return (
     <html
       lang={lang}
@@ -62,7 +68,7 @@ export function SiteDocument({
          * above it should wait on it. Site-wide because the entity is the
          * SITE's, not any one page's — a second page inherits it from here.
          */}
-        <RootJsonLd />
+        <RootJsonLd locale={lang} description={description} />
       </body>
     </html>
   )

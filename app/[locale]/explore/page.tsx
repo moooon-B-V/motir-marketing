@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import { englishCopy, format, getCopy, type Copy } from '@/lib/copy'
-import { enterLocale, type LocaleParams } from '@/i18n/locale'
+import { format, getCopy, type Copy } from '@/lib/copy'
+import { localePageMetadata, localizedPath } from '@/lib/localeMetadata'
 import { siteUrl } from '@/lib/siteOrigin'
+import { enterLocale, type LocaleParams } from '@/i18n/locale'
 import {
   buildExploreHref,
   categoryLabel,
@@ -35,23 +36,23 @@ export const dynamic = 'force-dynamic'
 
 const BASE = '/explore'
 
-/** Absolute canonical URL (cursor dropped — deep pages consolidate). */
-function canonicalUrl(query: ExploreQuery): string {
-  return siteUrl(buildExploreHref(BASE, { ...query, cursor: undefined }))
+/** The canonical path in English (cursor dropped — deep pages consolidate). */
+function canonicalPath(query: ExploreQuery): string {
+  return buildExploreHref(BASE, { ...query, cursor: undefined })
 }
 
 export async function generateMetadata({
+  params,
   searchParams,
 }: {
+  params: LocaleParams
   searchParams: Promise<RawSearchParams>
 }): Promise<Metadata> {
   const query = parseExploreSearchParams(await searchParams)
-  const url = canonicalUrl(query)
-  return {
-    title: englishCopy.explore.metaTitle,
-    description: englishCopy.explore.metaDescription,
-    alternates: { canonical: url },
-  }
+  return localePageMetadata(params, canonicalPath(query), (copy) => ({
+    title: copy.explore.metaTitle,
+    description: copy.explore.metaDescription,
+  }))
 }
 
 function galleryHeading(query: ExploreQuery, copy: Copy): string {
@@ -115,7 +116,7 @@ export default async function ExplorePage({
         </div>
       </div>
       <ExploreJsonLd
-        pageUrl={canonicalUrl(query)}
+        pageUrl={siteUrl(localizedPath(locale, canonicalPath(query)))}
         name={copy.explore.metaTitle}
         description={copy.explore.metaDescription}
         cards={page?.items ?? []}

@@ -27,6 +27,8 @@ import { HeroBrief } from '../_components/landing/HeroBrief'
 import { HeroWaves } from '../_components/landing/HeroWaves'
 import { ProjectManagerSection } from '../_components/landing/ProjectManagerSection'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 
 /*
  * motir.co — the public landing: "Vibe the project" (2026-10 redesign).
@@ -70,6 +72,15 @@ async function loadExamples(): Promise<string[]> {
   } catch {
     return []
   }
+}
+
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/', (copy) => ({
+    title: copy.meta.title,
+    description: copy.meta.description,
+  }))
 }
 
 export default async function Page({ params }: LocalePageProps) {

@@ -42,11 +42,12 @@ import { englishCopy as copy } from '@/lib/copy'
 const DOCS_ROOT = join(process.cwd(), 'app', '[locale]', 'docs')
 
 /**
- * ⚠️ THE ONE EXEMPT ROUTE, by name and with its reason. `/docs` INHERITS the
- * layout's metadata deliberately: `docs.metaTitle` is the AREA's identity and
- * that page IS the area. Every other page inheriting it is the defect.
+ * The docs index, which names the AREA's title (`docs.metaTitle`) — that page
+ * IS the area. It used to inherit the layout's; since MOTIR-7956 it exports its
+ * own, because the canonical and the `hreflang` set are each page's and a
+ * layout's would be inherited by every page under it.
  */
-const INHERITS = new Set([join(DOCS_ROOT, '(guides)', 'page.tsx')])
+const INDEX = join(DOCS_ROOT, '(guides)', 'page.tsx')
 
 /** Every `page.tsx` under `app/[locale]/docs`, found rather than listed. */
 function docsPages(dir: string = DOCS_ROOT): string[] {
@@ -66,25 +67,28 @@ describe('every /docs page publishes its own title and description', () => {
     expect(pages.length).toBeGreaterThanOrEqual(9)
   })
 
-  for (const page of pages.filter((path) => !INHERITS.has(path))) {
+  for (const page of pages) {
     const relative = page.slice(process.cwd().length + 1)
 
-    it(`${relative} exports its own metadata`, () => {
+    it(`${relative} exports its own metadata, in the page's locale`, () => {
       const source = readFileSync(page, 'utf8')
-      expect(source).toMatch(/export const metadata\s*=/)
-      // Read from the catalogue, not typed into the page — the same rule every
-      // rendered string in this repository follows. English by name until
-      // MOTIR-7956 localises metadata (MOTIR-7950).
-      expect(source).toMatch(/title:\s*englishCopy\.docs\.metaTitle/)
+      // Through the one helper (MOTIR-7956), so its canonical and alternates
+      // are its own address in its own language.
+      expect(source).toMatch(/export function generateMetadata\(/)
       expect(source).toMatch(
-        /description:\s*englishCopy\.docs\.metaDescription/,
+        /localePageMetadata\(params, ('\/docs|DOCS_INDEX_HREF)/,
       )
+      // Read from the page's catalogue, not typed into the page and not the
+      // English object — the same rule every rendered string follows.
+      expect(source).toMatch(/title:\s*copy\.docs\.metaTitle/)
+      expect(source).toMatch(/description:\s*copy\.docs\.metaDescription/)
+      expect(source).not.toMatch(/englishCopy/)
     })
   }
 
-  it('the index INHERITS, deliberately — and it is the only one', () => {
-    const source = readFileSync([...INHERITS][0]!, 'utf8')
-    expect(source).not.toMatch(/export const metadata/)
+  it('the index names the AREA — the only page whose title is docs.metaTitle', () => {
+    const source = readFileSync(INDEX, 'utf8')
+    expect(source).toMatch(/title:\s*copy\.docs\.metaTitle,/)
   })
 })
 

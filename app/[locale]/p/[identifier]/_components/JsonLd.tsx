@@ -4,7 +4,6 @@ import {
   type PublicProjectOverviewDto,
 } from '@/lib/publicProject'
 import { publicUrlFor } from '@/lib/publicHost'
-import { englishCopy, format } from '@/lib/copy'
 
 /**
  * Structured data for a public project page (MOTIR-4115), in the shape
@@ -32,8 +31,11 @@ import { englishCopy, format } from '@/lib/copy'
  */
 export function ProjectJsonLd({
   project,
+  fallbackDescription,
 }: {
   project: PublicProjectOverviewDto
+  /** `publicProject.meta.jsonLdFallback`, in the page's locale (MOTIR-7956). */
+  fallbackDescription: string
 }) {
   const url = publicUrlFor(project)
   const graph = {
@@ -45,10 +47,7 @@ export function ProjectJsonLd({
     applicationCategory: 'DeveloperApplication',
     description: deriveDescription(
       project.publicTagline ?? project.publicOverviewMd,
-      // English until MOTIR-7956 localises structured data with metadata.
-      format(englishCopy.publicProject.meta.jsonLdFallback, {
-        name: project.name,
-      }),
+      fallbackDescription,
     ),
     author: { '@type': 'Organization', name: project.workspaceName },
     isPartOf: {

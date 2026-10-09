@@ -39,7 +39,7 @@ export async function generateMetadata({
 }: Omit<Props, 'children'>): Promise<Metadata> {
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) notFound()
-  return siteMetadata(locale)
+  return siteMetadata(locale, await getCopy(locale))
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
@@ -53,9 +53,10 @@ export default async function LocaleLayout({ children, params }: Props) {
   // ⚠️ The locale and catalogue are NAMED, not read back from next-intl's
   // request slot: another tree in the same render can write that slot between
   // the claim above and a read after an `await` (`i18n/locale.ts`, MOTIR-7955).
-  const clientMessages = clientCopy(await getCopy(locale))
+  const copy = await getCopy(locale)
+  const clientMessages = clientCopy(copy)
   return (
-    <SiteDocument lang={locale}>
+    <SiteDocument lang={locale} description={copy.meta.description}>
       <NextIntlClientProvider locale={locale} messages={clientMessages}>
         {children}
       </NextIntlClientProvider>

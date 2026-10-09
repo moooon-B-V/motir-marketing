@@ -1,4 +1,6 @@
-import { englishCopy, getCopy } from '@/lib/copy'
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -23,9 +25,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * not how often.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleSentry,
-  description: englishCopy.docs.metaDescriptionSentry,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/sentry', (copy) => ({
+    title: copy.docs.metaTitleSentry,
+    description: copy.docs.metaDescriptionSentry,
+  }))
 }
 
 const SCOPES: { scope: string; why: string }[] = [

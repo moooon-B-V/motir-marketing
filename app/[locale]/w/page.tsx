@@ -9,7 +9,7 @@ import {
 } from '@/app/[locale]/p/[identifier]/_components/States'
 import { resolveHost } from '@/lib/hostResolution'
 import { publicPathFor, requestPublicHost } from '@/lib/publicHost'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /**
@@ -48,9 +48,15 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * numbers go, and a stat that is always `—` is worse than no stat.
  */
 
-export const metadata: Metadata = {
-  title: englishCopy.publicProject.meta.workspaceTitle,
-  description: englishCopy.publicProject.meta.workspaceDescription,
+/*
+ * In the page's locale, and with NO `hreflang` set (MOTIR-7956): this page
+ * lives on a tenant host, whose language versions are not motir.co's to list.
+ */
+export async function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  const { meta } = (await getCopy(await enterLocale(params))).publicProject
+  return { title: meta.workspaceTitle, description: meta.workspaceDescription }
 }
 
 export default async function WorkspaceRootPage({ params }: LocalePageProps) {

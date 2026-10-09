@@ -1,5 +1,6 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
-import { englishCopy, format, getCopy } from '@/lib/copy'
+import { format, getCopy } from '@/lib/copy'
 import { DOCS_DIFFICULTY } from '@/lib/destinations'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '../../../_components/SiteShell'
@@ -29,12 +30,16 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * review, like the placeholders.
  */
 
-export const metadata: Metadata = {
-  title: format(englishCopy.products.metaTitle, {
-    name: productOf('agent-fleet', englishCopy).name,
-  }),
-  description: englishCopy.products.agentFleet.metaDescription,
-  robots: { index: false, follow: true },
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/products/agent-fleet', (copy) => ({
+    title: format(copy.products.metaTitle, {
+      name: productOf('agent-fleet', copy).name,
+    }),
+    description: copy.products.agentFleet.metaDescription,
+    robots: { index: false, follow: true },
+  }))
 }
 
 export default async function AgentFleetPage({ params }: LocalePageProps) {

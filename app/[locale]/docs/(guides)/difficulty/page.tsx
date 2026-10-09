@@ -1,6 +1,8 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -29,9 +31,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * says that rather than implying a router that has not shipped.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleDifficulty,
-  description: englishCopy.docs.metaDescriptionDifficulty,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/difficulty', (copy) => ({
+    title: copy.docs.metaTitleDifficulty,
+    description: copy.docs.metaDescriptionDifficulty,
+  }))
 }
 
 const AS_OF = '23 September 2026'

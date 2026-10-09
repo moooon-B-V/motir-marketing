@@ -1,6 +1,8 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import {
   CONNECTED_APPS_PATH,
   claudeRoutes,
@@ -23,9 +25,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * Claude Code inherits, and Claude Code's own command) and arranges them.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleClaudeCodeConnector,
-  description: englishCopy.docs.metaDescriptionClaudeCodeConnector,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/claude-code-connector', (copy) => ({
+    title: copy.docs.metaTitleClaudeCodeConnector,
+    description: copy.docs.metaDescriptionClaudeCodeConnector,
+  }))
 }
 
 const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'

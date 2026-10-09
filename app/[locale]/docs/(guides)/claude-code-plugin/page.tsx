@@ -1,6 +1,8 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import {
   AGENT_INSTALLS,
   CLAUDE_CODE_UPDATE,
@@ -25,9 +27,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * page lists what to say and leaves the detail to the skills guide.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleClaudeCodePlugin,
-  description: englishCopy.docs.metaDescriptionClaudeCodePlugin,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/claude-code-plugin', (copy) => ({
+    title: copy.docs.metaTitleClaudeCodePlugin,
+    description: copy.docs.metaDescriptionClaudeCodePlugin,
+  }))
 }
 
 const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'

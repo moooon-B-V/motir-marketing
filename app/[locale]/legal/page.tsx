@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { getCopy, format } from '@/lib/copy'
 import { listLegalDocuments } from '@/lib/legal/documents'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 
 /**
  * `/legal` — the index of the published legal set (MOTIR-4009), built to
@@ -13,6 +15,15 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * index does: seven links have no natural home in a four-column footer, and a
  * reader sent a link to one document deserves a way to find the rest.
  */
+
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/legal', (copy) => ({
+    title: copy.legal.metaTitle,
+    description: copy.legal.metaDescription,
+  }))
+}
 
 export default async function LegalIndexPage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)

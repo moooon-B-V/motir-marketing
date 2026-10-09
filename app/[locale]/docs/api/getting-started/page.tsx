@@ -1,6 +1,8 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { APP_ORIGIN } from '@/lib/appOrigin'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { fetchOpenApiSpec } from '@/lib/docs'
 import { CodeBlock } from '../../_components/DocSchema'
@@ -44,9 +46,13 @@ import { CodeBlock } from '../../_components/DocSchema'
  * says how to read the real one; it never shows a number that might be wrong.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleGuide,
-  description: englishCopy.docs.metaDescriptionGuide,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/api/getting-started', (copy) => ({
+    title: copy.docs.metaTitleGuide,
+    description: copy.docs.metaDescriptionGuide,
+  }))
 }
 
 function H2({ children, id }: { children: React.ReactNode; id?: string }) {

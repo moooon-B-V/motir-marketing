@@ -9,6 +9,7 @@ import {
   loadRequest,
 } from '@/lib/publicProject'
 import { formatRich, getCopy } from '@/lib/copy'
+import { projectAlternates } from '@/lib/localeMetadata'
 import { enterLocale } from '@/i18n/locale'
 import {
   publicPathFor,
@@ -37,9 +38,10 @@ function dateFormat(locale: string): Intl.DateTimeFormat {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ identifier: string; requestKey: string }>
+  params: Promise<{ locale?: string; identifier: string; requestKey: string }>
 }): Promise<Metadata> {
   const { identifier, requestKey } = await params
+  const locale = await enterLocale(params)
   // The canonical is the PROJECT's primary address — see the same note on the
   // work-item detail page.
   const [project, read] = await Promise.all([
@@ -49,14 +51,18 @@ export async function generateMetadata({
   if (read.status !== 'ok' || project.status !== 'ok') return {}
 
   const request = read.data
-  const url = publicUrlFor(
-    project.data,
-    `requests/${encodeURIComponent(request.identifier)}`,
+  const alternates = projectAlternates(
+    locale,
+    publicUrlFor(
+      project.data,
+      `requests/${encodeURIComponent(request.identifier)}`,
+    ),
   )
+  const url = alternates.canonical as string
   return {
     title: `${request.title} · ${identifier}`,
     description: deriveDescription(request.descriptionMd, request.title),
-    alternates: { canonical: url },
+    alternates,
     openGraph: { type: 'article', url, siteName: 'Motir' },
   }
 }

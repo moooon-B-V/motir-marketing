@@ -7,7 +7,8 @@ import {
   requestPublicHost,
   type PublicHost,
 } from '@/lib/publicHost'
-import { englishCopy, format, getCopy } from '@/lib/copy'
+import { format, getCopy, type Copy } from '@/lib/copy'
+import { projectAlternates } from '@/lib/localeMetadata'
 import type { Locale } from '@/i18n/routing'
 import { ProjectHeader } from './ProjectHeader'
 import { ErrorState } from './States'
@@ -77,17 +78,19 @@ export async function renderTabPage({
  * paging cursor (MOTIR-4222; it named `SITE_ORIGIN` before).
  */
 export async function tabMetadata({
+  locale,
   identifier,
   segment,
   labelKey,
 }: {
+  locale: Locale
   identifier: string
   segment: string
-  /** A `publicProject.tabs` key — English until MOTIR-7956 localises metadata. */
-  labelKey: keyof typeof englishCopy.publicProject.tabs
+  /** A `publicProject.tabs` key, read in the page's locale (MOTIR-7956). */
+  labelKey: keyof Copy['publicProject']['tabs']
 }): Promise<Metadata> {
-  const meta = englishCopy.publicProject.meta
-  const label = englishCopy.publicProject.tabs[labelKey]
+  const { meta, tabs } = (await getCopy(locale)).publicProject
+  const label = tabs[labelKey]
   const read = await loadProject(identifier)
   if (read.status !== 'ok') return {}
   const project = read.data
@@ -97,11 +100,12 @@ export async function tabMetadata({
   // ⚠️ `metadataBase` stays `SITE_ORIGIN` and is not consulted here: an
   // ABSOLUTE canonical overrides it, which is the only way one document served
   // at three hosts can name one address.
-  const url = publicUrlFor(project, segment)
+  const alternates = projectAlternates(locale, publicUrlFor(project, segment))
+  const url = alternates.canonical as string
   return {
     title: format(meta.tabTitle, { label, name: project.name }),
     description: format(meta.tabDescription, { label, name: project.name }),
-    alternates: { canonical: url },
+    alternates,
     openGraph: { type: 'website', url, siteName: 'Motir' },
   }
 }

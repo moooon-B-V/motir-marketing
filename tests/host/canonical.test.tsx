@@ -70,6 +70,7 @@ describe.each(PRIMARIES)(
         const { tabMetadata } =
           await import('@/app/[locale]/p/[identifier]/_components/tabPage')
         const meta = await tabMetadata({
+          locale: 'en',
           identifier: 'PROD',
           segment: 'board',
           labelKey: 'board',
@@ -84,7 +85,9 @@ describe.each(PRIMARIES)(
     })
 
     it('names it in every JSON-LD `@id` and `url`', () => {
-      const { container } = render(<ProjectJsonLd project={project(primary)} />)
+      const { container } = render(
+        <ProjectJsonLd project={project(primary)} fallbackDescription="" />,
+      )
       const graph = JSON.parse(
         container.querySelector('script')!.innerHTML,
       ) as Record<string, unknown>

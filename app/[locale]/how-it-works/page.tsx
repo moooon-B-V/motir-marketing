@@ -1,7 +1,8 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { DOCS, SIGN_UP } from '@/lib/destinations'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '../../_components/SiteShell'
@@ -25,10 +26,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * instrument, then each module up close with what it does.
  */
 
-export const metadata: Metadata = {
-  title: englishCopy.howItWorks.metaTitle,
-  description: englishCopy.howItWorks.metaDescription,
-  alternates: { canonical: '/how-it-works' },
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/how-it-works', (copy) => ({
+    title: copy.howItWorks.metaTitle,
+    description: copy.howItWorks.metaDescription,
+  }))
 }
 
 const GUTTER = 'px-[clamp(16px,3vw,48px)]'

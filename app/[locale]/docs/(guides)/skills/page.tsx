@@ -1,7 +1,9 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Fragment } from 'react'
 
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import {
   AGENT_INSTALLS,
   CHECKED_ON,
@@ -36,9 +38,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * component of its own.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleSkills,
-  description: englishCopy.docs.metaDescriptionSkills,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/skills', (copy) => ({
+    title: copy.docs.metaTitleSkills,
+    description: copy.docs.metaDescriptionSkills,
+  }))
 }
 
 const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'

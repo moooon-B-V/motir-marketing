@@ -1,10 +1,12 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
   fetchCliCommands,
   groupCliCommands,
   type CliCommandsDocument,
 } from '@/lib/docs'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { CodeBlock } from '../../_components/DocSchema'
 
@@ -70,9 +72,13 @@ import { CodeBlock } from '../../_components/DocSchema'
  */
 export const dynamic = 'force-dynamic'
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleCli,
-  description: englishCopy.docs.metaDescriptionCli,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/cli', (copy) => ({
+    title: copy.docs.metaTitleCli,
+    description: copy.docs.metaDescriptionCli,
+  }))
 }
 
 /** motir-core's own CLI reference — the authority beyond this page. */

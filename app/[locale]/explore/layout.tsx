@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { englishCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
+import { enterLocale, type LocaleParams } from '@/i18n/locale'
 
 /**
  * The project-square shell (MOTIR-4045). Composes the same chrome every
@@ -7,10 +8,16 @@ import { englishCopy } from '@/lib/copy'
  * the ONE nav item that now resolves on this host.
  */
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: LocaleParams
+}): Promise<Metadata> {
+  // The words only; each page names its own canonical (MOTIR-7956).
+  const copy = await getCopy(await enterLocale(params))
   return {
-    title: englishCopy.explore.metaTitle,
-    description: englishCopy.explore.metaDescription,
+    title: copy.explore.metaTitle,
+    description: copy.explore.metaDescription,
   }
 }
 

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { ArrowDown } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { englishCopy, format, getCopy } from '@/lib/copy'
+import { format, getCopy } from '@/lib/copy'
+import { localePageMetadata } from '@/lib/localeMetadata'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
 import { SITE_HOST } from '@/lib/publicHost'
-import { siteUrl } from '@/lib/siteOrigin'
 import {
   fetchIdea,
   fetchIdeas,
@@ -78,23 +78,23 @@ async function loadOpenIdea(
 }
 
 export async function generateMetadata({
+  params: localeParams,
   searchParams,
 }: {
+  params: LocaleParams
   searchParams: Promise<RawSearchParams>
 }): Promise<Metadata> {
   const params = parseIdeasParams(await searchParams)
   const open = await loadOpenIdea(params.idea, null)
-  const i = englishCopy.ideas
-  return {
-    title: open ? `${open.title} · ${i.metaTitle}` : i.metaTitle,
-    description: open ? open.pitch : i.metaDescription,
-    alternates: {
-      canonical: siteUrl(
-        ideasHref(open ? params : { ...params, idea: undefined }),
-      ),
-    },
-    robots: { index: false, follow: true },
-  }
+  return localePageMetadata(
+    localeParams,
+    ideasHref(open ? params : { ...params, idea: undefined }),
+    ({ ideas: i }) => ({
+      title: open ? `${open.title} · ${i.metaTitle}` : i.metaTitle,
+      description: open ? open.pitch : i.metaDescription,
+      robots: { index: false, follow: true },
+    }),
+  )
 }
 
 export default async function IdeasPage({

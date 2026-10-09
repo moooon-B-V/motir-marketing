@@ -1,5 +1,7 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { CodeBlock } from '../../_components/DocSchema'
 import { SetupSteps } from './SetupSteps'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
@@ -97,9 +99,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * has line-wrapped, as this one was.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleSandbox,
-  description: englishCopy.docs.metaDescriptionSandbox,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/sandbox', (copy) => ({
+    title: copy.docs.metaTitleSandbox,
+    description: copy.docs.metaDescriptionSandbox,
+  }))
 }
 
 export default async function SandboxPage({ params }: LocalePageProps) {

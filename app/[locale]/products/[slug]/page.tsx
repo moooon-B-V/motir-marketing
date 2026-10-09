@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { buttonVariants } from '@motir/design-system'
-import { englishCopy, format, getCopy, type Copy } from '@/lib/copy'
+import { format, getCopy, type Copy } from '@/lib/copy'
+import { localePageMetadata } from '@/lib/localeMetadata'
 import {
   PRODUCT_DOCS,
   PRODUCT_SLUGS,
@@ -64,15 +65,17 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
 }): Promise<Metadata> {
-  const product = productFor((await params).slug, englishCopy)
+  const { slug } = await params
+  const copy = await getCopy(await enterLocale(params))
+  const product = productFor(slug, copy)
   if (!product) return {}
-  return {
-    title: format(englishCopy.products.metaTitle, { name: product.name }),
+  return localePageMetadata(params, `/products/${slug}`, () => ({
+    title: format(copy.products.metaTitle, { name: product.name }),
     description: product.blurb,
     robots: { index: false, follow: true },
-  }
+  }))
 }
 
 export default async function ProductPage({

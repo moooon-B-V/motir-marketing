@@ -1,4 +1,6 @@
+import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
+import { getCopy } from '@/lib/copy'
 import { siteMetadata } from './_components/siteMetadata'
 
 /**
@@ -15,7 +17,9 @@ import { siteMetadata } from './_components/siteMetadata'
  * no other — keeps today's English tags. The locale layout overrides it per
  * locale.
  */
-export const metadata = siteMetadata('en')
+export async function generateMetadata(): Promise<Metadata> {
+  return siteMetadata('en', await getCopy('en'))
+}
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return children

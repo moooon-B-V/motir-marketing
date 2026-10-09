@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
+import { languageAlternates, localizedPath } from '@/lib/localeMetadata'
+import { LOCALES } from '@/i18n/routing'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
 import { DOCS_INDEX_HREF, DOCS_ROUTES } from '@/lib/docsSurfaces'
 import { PROJECT_TABS, loadAllPublicProjects } from '@/lib/publicProject'
@@ -63,7 +65,35 @@ import {
  * budget goes with it. The project pages are also reachable from `/explore`,
  * which is itself in this list, so a short sitemap is a delay rather than a hole.
  */
+/*
+ * ⚠️ EVERY motir.co PAGE APPEARS ELEVEN TIMES (MOTIR-7956). The site is
+ * served in eleven languages, each at its own address (English unprefixed, the
+ * rest under `/<locale>/`), and a crawler is told about a language version the
+ * same two ways it is told about a page: by the page's own `hreflang` set and
+ * by this file. So each motir.co page — the static ones below, and a project
+ * whose primary address is motir.co — is one entry per locale, and every one of
+ * those entries carries the same twelve alternates (the eleven plus
+ * `x-default`) the page's `<head>` does, spelled by the same helper
+ * (`lib/localeMetadata.ts`), so the two cannot disagree. A tenant host is not
+ * multiplied: one URL there serves every language by cookie and
+ * `Accept-Language`, and an alternate can only name a distinct URL.
+ */
 export const dynamic = 'force-dynamic'
+
+type Entry = MetadataRoute.Sitemap[number]
+
+/** One entry per locale for a motir.co path, each carrying the alternates. */
+function everyLanguage(
+  path: string,
+  rest: Omit<Entry, 'url' | 'alternates'>,
+): MetadataRoute.Sitemap {
+  const languages = languageAlternates(path)
+  return LOCALES.map((locale) => ({
+    url: siteUrl(localizedPath(locale, path)),
+    ...rest,
+    alternates: { languages },
+  }))
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const host = await requestPublicHost()
@@ -83,18 +113,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // changelog. The board, items, tree and roadmap are permanent redirects
       // into the app now, and a sitemap that listed a redirect would ask a
       // crawler to index an address that is not a page.
-      return PROJECT_TABS.filter((tab) => tab.served === 'site').map((tab) => ({
-        // ⚠️ ONE EXPRESSION FOR ALL THREE HOST KINDS. `publicPathFor` is the
-        // same helper every rendered link goes through, so a sitemap entry and
-        // the page's own navigation cannot spell the address differently —
-        // which is the way a sitemap normally goes stale.
-        url: `${origin}${publicPathFor(host, project.identifier, tab.segment)}`,
-        lastModified,
-        changeFrequency: 'daily' as const,
-        // The project's own page outranks its tabs — it is the one a shared link
-        // and /explore's cards point at.
-        priority: tab.segment ? 0.5 : 0.8,
-      }))
+      return PROJECT_TABS.filter((tab) => tab.served === 'site').flatMap(
+        (tab) => {
+          // ⚠️ ONE EXPRESSION FOR ALL THREE HOST KINDS. `publicPathFor` is the
+          // same helper every rendered link goes through, so a sitemap entry
+          // and the page's own navigation cannot spell the address differently
+          // — which is the way a sitemap normally goes stale.
+          const path = publicPathFor(host, project.identifier, tab.segment)
+          const rest = {
+            lastModified,
+            changeFrequency: 'daily' as const,
+            // The project's own page outranks its tabs — it is the one a shared
+            // link and /explore's cards point at.
+            priority: tab.segment ? 0.5 : 0.8,
+          }
+          // On motir.co a project page has eleven language addresses; on a
+          // tenant host, one (the note above `dynamic`).
+          return host.kind === 'site'
+            ? everyLanguage(path, rest)
+            : [{ url: `${origin}${path}`, ...rest }]
+        },
+      )
     })
 
   // A tenant host's sitemap ENDS here: the static entries below are this
@@ -103,59 +142,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...projectEntries,
-    {
-      url: siteUrl('/'),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: siteUrl('/how-it-works'),
+    ...everyLanguage('/', { changeFrequency: 'weekly', priority: 1 }),
+    ...everyLanguage('/how-it-works', {
       changeFrequency: 'monthly',
       priority: 0.8,
-    },
-    {
-      url: siteUrl('/design'),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      // The square (MOTIR-4045). Its per-topic landing pages are dynamic (read
-      // from the public API) and are reached through the square's own crawlable
-      // `/explore/topic/<slug>` links, so they are not enumerated here.
-      url: siteUrl('/explore'),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      // The docs surfaces (MOTIR-4046). The API reference is dynamic (fetches
-      // the served OpenAPI document) but is still a stable, crawlable URL.
-      url: siteUrl(DOCS_INDEX_HREF),
+    }),
+    ...everyLanguage('/design', { changeFrequency: 'monthly', priority: 0.8 }),
+    // The square (MOTIR-4045). Its per-topic landing pages are dynamic (read
+    // from the public API) and are reached through the square's own crawlable
+    // `/explore/topic/<slug>` links, so they are not enumerated here.
+    ...everyLanguage('/explore', { changeFrequency: 'daily', priority: 0.9 }),
+    // The docs surfaces (MOTIR-4046). The API reference is dynamic (fetches
+    // the served OpenAPI document) but is still a stable, crawlable URL.
+    ...everyLanguage(DOCS_INDEX_HREF, {
       changeFrequency: 'monthly',
       priority: 0.7,
-    },
+    }),
     // ⚠️ THE SAME LIST THE RAIL AND THE INDEX READ (MOTIR-4507), for the reason
     // the legal entries below are a glob: a documentation page ships by being
     // in `lib/docsSurfaces.ts`, so it reaches the sitemap without an edit here.
     // This file carried the third hand-maintained copy of the nine routes, and
     // it happened to be the one MOTIR-4227 remembered.
-    ...DOCS_ROUTES.filter((path) => path !== DOCS_INDEX_HREF).map((path) => ({
-      url: siteUrl(path),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    })),
-    {
-      url: siteUrl('/legal'),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
+    ...DOCS_ROUTES.filter((path) => path !== DOCS_INDEX_HREF).flatMap((path) =>
+      everyLanguage(path, { changeFrequency: 'monthly', priority: 0.5 }),
+    ),
+    ...everyLanguage('/legal', { changeFrequency: 'monthly', priority: 0.6 }),
     // A legal document ships by EXISTING in `content/legal/`, so the sitemap
     // reads the same directory the routes do rather than carrying a second list
     // that could drift from it. `legalDocumentSlugs()` is the glob the routes
     // use, so a document added later reaches the sitemap without an edit here.
-    ...legalDocumentSlugs().map((slug) => ({
-      url: siteUrl(`/legal/${slug}`),
-      changeFrequency: 'monthly' as const,
-      priority: 0.4,
-    })),
+    ...legalDocumentSlugs().flatMap((slug) =>
+      everyLanguage(`/legal/${slug}`, {
+        changeFrequency: 'monthly',
+        priority: 0.4,
+      }),
+    ),
   ]
 }

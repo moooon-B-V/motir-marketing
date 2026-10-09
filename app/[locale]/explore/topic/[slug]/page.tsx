@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
-import { englishCopy, format, getCopy, type Copy } from '@/lib/copy'
+import { format, getCopy, type Copy } from '@/lib/copy'
+import { localePageMetadata, localizedPath } from '@/lib/localeMetadata'
 import { enterLocale } from '@/i18n/locale'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '@/app/_components/SiteShell'
@@ -39,14 +40,13 @@ function topicQuery(slug: string, raw: RawSearchParams): ExploreQuery {
   return parseExploreSearchParams(raw, { category: slug })
 }
 
-function canonicalUrl(slug: string, query: ExploreQuery): string {
-  return siteUrl(
-    buildExploreHref(basePathFor(slug), {
-      ...query,
-      category: undefined,
-      cursor: undefined,
-    }),
-  )
+/** The canonical path in English (cursor and the implied category dropped). */
+function canonicalPath(slug: string, query: ExploreQuery): string {
+  return buildExploreHref(basePathFor(slug), {
+    ...query,
+    category: undefined,
+    cursor: undefined,
+  })
 }
 
 function galleryHeading(
@@ -145,7 +145,7 @@ export default async function TopicPage({
       </div>
 
       <ExploreJsonLd
-        pageUrl={canonicalUrl(slug, query)}
+        pageUrl={siteUrl(localizedPath(locale, canonicalPath(slug, query)))}
         name={`${label} projects`}
         description={format(copy.explore.metaDescriptionTopic, {
           topic: label,
@@ -154,7 +154,7 @@ export default async function TopicPage({
         faq={exploreFaqItems(copy)}
         breadcrumb={{
           topicLabel: label,
-          topicUrl: siteUrl(basePathFor(slug)),
+          topicUrl: siteUrl(localizedPath(locale, basePathFor(slug))),
           squareLabel: copy.explore.heroEyebrow,
         }}
       />
@@ -166,18 +166,17 @@ export async function generateMetadata({
   params,
   searchParams,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ locale: string; slug: string }>
   searchParams: Promise<RawSearchParams>
 }): Promise<Metadata> {
   const { slug } = await params
   const query = topicQuery(slug, await searchParams)
   const { categories, failed } = await loadSquare(query)
   const label = (failed ? undefined : categoryLabel(categories, slug)) ?? slug
-  return {
-    title: format(englishCopy.explore.metaTitleTopic, { topic: label }),
-    description: format(englishCopy.explore.metaDescriptionTopic, {
+  return localePageMetadata(params, canonicalPath(slug, query), (copy) => ({
+    title: format(copy.explore.metaTitleTopic, { topic: label }),
+    description: format(copy.explore.metaDescriptionTopic, {
       topic: label,
     }),
-    alternates: { canonical: canonicalUrl(slug, query) },
-  }
+  }))
 }

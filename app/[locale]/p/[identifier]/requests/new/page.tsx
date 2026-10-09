@@ -11,7 +11,8 @@ import {
 } from '@/lib/publicHost'
 import { ProjectHeader } from '../../_components/ProjectHeader'
 import { ErrorState } from '../../_components/States'
-import { englishCopy, format, formatRich, getCopy } from '@/lib/copy'
+import { format, formatRich, getCopy } from '@/lib/copy'
+import { projectAlternates } from '@/lib/localeMetadata'
 import { enterLocale } from '@/i18n/locale'
 
 export const dynamic = 'force-dynamic'
@@ -19,17 +20,20 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ identifier: string }>
+  params: Promise<{ locale?: string; identifier: string }>
 }): Promise<Metadata> {
   const { identifier } = await params
+  const locale = await enterLocale(params)
   const read = await loadProject(identifier)
   if (read.status !== 'ok') return {}
-  const url = publicUrlFor(read.data, 'requests/new')
-  const meta = englishCopy.publicProject.meta
+  const meta = (await getCopy(locale)).publicProject.meta
   return {
     title: format(meta.requestNewTitle, { name: read.data.name }),
     description: format(meta.requestNewDescription, { name: read.data.name }),
-    alternates: { canonical: url },
+    alternates: projectAlternates(
+      locale,
+      publicUrlFor(read.data, 'requests/new'),
+    ),
     // ⚠️ NOT INDEXED. This page is a doorway with no content of its own; a
     // crawler that indexed it would rank a hand-off above the roadmap it hands
     // off from.

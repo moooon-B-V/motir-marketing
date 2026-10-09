@@ -149,7 +149,7 @@ export default function NotFound() {
   // after it — the French 404 room among them. `i18n/locale.ts` has the race.
   defaultLocaleUnlessClaimed()
   return (
-    <SiteDocument lang="en">
+    <SiteDocument lang="en" description={englishCopy.meta.description}>
       <NextIntlClientProvider locale="en" messages={clientCopy(englishCopy)}>
         <NotFoundRoom host={UNKNOWN_HOST} />
       </NextIntlClientProvider>

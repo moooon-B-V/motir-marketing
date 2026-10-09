@@ -1,7 +1,8 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import {
   FREE_DOOR,
   HOW_IT_WORKS,
@@ -32,10 +33,14 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: englishCopy.builtByMotirPage.metaTitle,
-  description: englishCopy.builtByMotirPage.metaDescription,
-  robots: { index: false, follow: true },
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/motir-builds-itself', (copy) => ({
+    title: copy.builtByMotirPage.metaTitle,
+    description: copy.builtByMotirPage.metaDescription,
+    robots: { index: false, follow: true },
+  }))
 }
 
 const MONO = 'font-(family-name:--font-mono) tracking-[0.1em] uppercase'

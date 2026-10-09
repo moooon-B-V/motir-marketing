@@ -1,3 +1,5 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
   countCatalogueTools,
@@ -8,7 +10,7 @@ import {
   type McpToolEntry,
   type McpToolHint,
 } from '@/lib/docs'
-import { englishCopy, getCopy, useCopy, type Copy } from '@/lib/copy'
+import { getCopy, useCopy, type Copy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { SchemaTable } from '../../../_components/DocSchema'
 
@@ -69,9 +71,13 @@ import { SchemaTable } from '../../../_components/DocSchema'
  */
 export const dynamic = 'force-dynamic'
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleMcpTools,
-  description: englishCopy.docs.metaDescriptionMcpTools,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/mcp/tools', (copy) => ({
+    title: copy.docs.metaTitleMcpTools,
+    description: copy.docs.metaDescriptionMcpTools,
+  }))
 }
 
 /** How deep the argument tables render — stated, as the producer states what it emits. */

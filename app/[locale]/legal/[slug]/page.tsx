@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { englishCopy, getCopy, format } from '@/lib/copy'
+import { getCopy, format } from '@/lib/copy'
+import { localePageMetadata } from '@/lib/localeMetadata'
 import { getLegalDocument, legalDocumentSlugs } from '@/lib/legal/documents'
 import { MarkdownBody } from '../_components/MarkdownBody'
 import { enterLocale } from '@/i18n/locale'
@@ -24,21 +25,21 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
 }): Promise<Metadata> {
   const { slug } = await params
   const doc = getLegalDocument(slug)
   if (!doc) return {}
 
-  return {
+  return localePageMetadata(params, `/legal/${slug}`, (copy) => ({
     title: doc.title,
     // The version rides the description so a search result distinguishes two
     // revisions of the same policy.
-    description: format(englishCopy.legal.metaDocDescription, {
+    description: format(copy.legal.metaDocDescription, {
       title: doc.title,
       version: doc.version,
     }),
-  }
+  }))
 }
 
 export default async function LegalDocumentPage({

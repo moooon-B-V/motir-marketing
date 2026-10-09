@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import { englishCopy as copy } from '@/lib/copy'
+import type { Copy } from '@/lib/copy'
+import { openGraphLocales, siteCard } from '@/lib/localeMetadata'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
-import { OG_LOCALE, type Locale } from '@/i18n/routing'
+import type { Locale } from '@/i18n/routing'
 
 /*
  * The root metadata. MOTIR-1152 shipped the title and description and left the
@@ -38,20 +39,18 @@ import { OG_LOCALE, type Locale } from '@/i18n/routing'
  * `og:image` at all on `/en`, `/en/docs` or `/en/legal/terms`. So the image is
  * named here, at the root route the file serves, in both tag sets.
  */
-const SITE_CARD = {
-  url: '/opengraph-image',
-  width: 1200,
-  height: 630,
-  type: 'image/png',
-  alt: copy.meta.title,
-}
-
-export function siteMetadata(locale: Locale): Metadata {
+/*
+ * ⚠️ NO CANONICAL HERE ANY MORE (MOTIR-7956). This was `alternates: { canonical:
+ * '/' }`, and every page that set none inherited it — so a docs page told a
+ * crawler that its canonical was the LANDING. Each page now names its own
+ * through `localeMetadata`; a 404 names none, which is right for a 404.
+ */
+export function siteMetadata(locale: Locale, copy: Copy): Metadata {
+  const SITE_CARD = siteCard(copy.meta.title)
   return {
     metadataBase: new URL(SITE_ORIGIN),
     title: copy.meta.title,
     description: copy.meta.description,
-    alternates: { canonical: '/' },
     openGraph: {
       type: 'website',
       url: siteUrl('/'),
@@ -59,8 +58,9 @@ export function siteMetadata(locale: Locale): Metadata {
       title: copy.meta.title,
       description: copy.meta.description,
       // `og:locale` names the page's locale (MOTIR-7948), as a language_TERRITORY
-      // pair — the form the protocol defines.
-      locale: OG_LOCALE[locale],
+      // pair — the form the protocol defines — and the other ten ride as
+      // `og:locale:alternate` (MOTIR-7956).
+      ...openGraphLocales(locale),
       images: [SITE_CARD],
     },
     // `summary_large_image` is what makes the 1200 × 630 card render at full

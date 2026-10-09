@@ -1,3 +1,5 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import {
   exampleRequest,
   fetchOpenApiSpec,
@@ -6,7 +8,7 @@ import {
   type ApiOperation,
 } from '@/lib/docs'
 import { APP_ORIGIN } from '@/lib/appOrigin'
-import { englishCopy, getCopy, useCopy } from '@/lib/copy'
+import { getCopy, useCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import {
   CodeBlock,
@@ -65,9 +67,13 @@ import {
  */
 export const dynamic = 'force-dynamic'
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleReference,
-  description: englishCopy.docs.metaDescriptionReference,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/api', (copy) => ({
+    title: copy.docs.metaTitleReference,
+    description: copy.docs.metaDescriptionReference,
+  }))
 }
 
 function Operation({ operation }: { operation: ApiOperation }) {

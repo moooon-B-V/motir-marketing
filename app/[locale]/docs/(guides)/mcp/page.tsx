@@ -1,5 +1,7 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { fetchMcpToolCatalogue, type McpToolCatalogue } from '@/lib/docs'
 import {
@@ -62,9 +64,13 @@ import { CodeBlock } from '../../_components/DocSchema'
  */
 export const dynamic = 'force-dynamic'
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleMcp,
-  description: englishCopy.docs.metaDescriptionMcp,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/mcp', (copy) => ({
+    title: copy.docs.metaTitleMcp,
+    description: copy.docs.metaDescriptionMcp,
+  }))
 }
 
 function H2({ children, id }: { children: React.ReactNode; id?: string }) {

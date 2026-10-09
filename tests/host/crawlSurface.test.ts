@@ -105,6 +105,23 @@ describe('the sitemap on motir.co', () => {
     expect(urls).toContain('https://motir.co/explore')
     expect(urls).toContain('https://motir.co/legal')
   })
+
+  it('lists a motir.co project once per locale per served tab, with the alternates (MOTIR-7956)', async () => {
+    const { entries } = await crawlSurfaceAs({})
+    const project = entries.filter((e) => /\/p\/MOTIR(\/|$)/.test(e.url))
+
+    // Two served tabs (the page and its changelog) × eleven locales.
+    expect(project).toHaveLength(2 * 11)
+    expect(project.map((e) => e.url)).toContain('https://motir.co/fr/p/MOTIR')
+    expect(project.map((e) => e.url)).toContain(
+      'https://motir.co/ja/p/MOTIR/changelog',
+    )
+    for (const entry of project) {
+      const languages = entry.alternates?.languages as Record<string, string>
+      expect(Object.keys(languages), entry.url).toHaveLength(12)
+      expect(Object.values(languages)).toContain(entry.url)
+    }
+  })
 })
 
 describe('the sitemap on a workspace subdomain', () => {
@@ -125,6 +142,15 @@ describe('the sitemap on a workspace subdomain', () => {
     // which is the way a sitemap normally goes stale.
     expect(urls.join(' ')).not.toContain('/p/PROD')
     expect(urls.join(' ')).not.toContain('MOTIR')
+  })
+
+  it('lists each URL ONCE, with no alternates — one URL serves every language there (MOTIR-7956)', async () => {
+    const { entries } = await crawlSurfaceAs(asWorkspace)
+    const urls = entries.map((e) => e.url)
+
+    expect(new Set(urls).size).toBe(urls.length)
+    expect(entries.every((e) => e.alternates === undefined)).toBe(true)
+    expect(urls.join(' ')).not.toMatch(/acme\.motir\.site\/(fr|ja|de)\//)
   })
 
   it('carries NONE of the marketing site’s pages', async () => {

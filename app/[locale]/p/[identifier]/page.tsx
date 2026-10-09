@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { deriveDescription, loadProject } from '@/lib/publicProject'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { format, getCopy } from '@/lib/copy'
+import { projectAlternates } from '@/lib/localeMetadata'
 import { enterLocale } from '@/i18n/locale'
 import {
   publicUrlFor,
@@ -29,29 +30,28 @@ import { ProjectJsonLd } from './_components/JsonLd'
  */
 export const dynamic = 'force-dynamic'
 
-// MOTIR-6745 — no longer a promise of reading without an account: the live board, items
-// and roadmap are in the app now, behind a Motir account (MOTIR-6743). What this
-// page offers without one is the overview, the changelog and requesting a feature.
-// The sentence is `publicProject.meta.overviewFallback` (MOTIR-7954), English
-// until MOTIR-7956 localises metadata.
-const FALLBACK_DESCRIPTION = englishCopy.publicProject.meta.overviewFallback
-
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ identifier: string }>
+  params: Promise<{ locale?: string; identifier: string }>
 }): Promise<Metadata> {
   const { identifier } = await params
+  const locale = await enterLocale(params)
   const read = await loadProject(identifier)
   // No metadata for a project that is not there, and none invented for one we
   // could not reach: a canonical emitted during an outage would be indexed.
   if (read.status !== 'ok') return {}
 
   const project = read.data
-  const url = publicUrlFor(project)
+  const alternates = projectAlternates(locale, publicUrlFor(project))
+  const url = alternates.canonical as string
+  // MOTIR-6745 — no longer a promise of reading without an account: the live
+  // board, items and roadmap are in the app now, behind a Motir account
+  // (MOTIR-6743). What this page offers without one is the overview, the
+  // changelog and requesting a feature — in the page's locale (MOTIR-7956).
   const description = deriveDescription(
     project.publicTagline ?? project.publicOverviewMd,
-    FALLBACK_DESCRIPTION,
+    (await getCopy(locale)).publicProject.meta.overviewFallback,
   )
 
   return {
@@ -61,7 +61,7 @@ export async function generateMetadata({
     // whole point of the move — and `lib/siteOrigin.ts` is the one module that
     // answers "where is the public site?". Getting this backwards is silent in
     // production and asserted against in the suite.
-    alternates: { canonical: url },
+    alternates,
     openGraph: {
       type: 'website',
       url,
@@ -108,7 +108,12 @@ export default async function PublicProjectOverviewPage({
 
   return (
     <>
-      <ProjectJsonLd project={project} />
+      <ProjectJsonLd
+        project={project}
+        fallbackDescription={format(copy.meta.jsonLdFallback, {
+          name: project.name,
+        })}
+      />
       <ProjectHeader project={project} current="" host={host} />
 
       {/* The overview reads in its own column; "Watch it being built" stands

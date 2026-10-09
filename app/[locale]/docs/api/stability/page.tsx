@@ -1,5 +1,7 @@
+import { localePageMetadata } from '@/lib/localeMetadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { englishCopy, getCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -33,9 +35,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * somebody rediscovers.
  */
 
-export const metadata = {
-  title: englishCopy.docs.metaTitleStability,
-  description: englishCopy.docs.metaDescriptionStability,
+export function generateMetadata({
+  params,
+}: LocalePageProps): Promise<Metadata> {
+  return localePageMetadata(params, '/docs/api/stability', (copy) => ({
+    title: copy.docs.metaTitleStability,
+    description: copy.docs.metaDescriptionStability,
+  }))
 }
 
 /** Where the promise is DECIDED, as against this page, where it is published. */

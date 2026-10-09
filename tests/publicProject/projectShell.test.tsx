@@ -158,7 +158,9 @@ describe('the tab bar', () => {
 
 describe('the entity signal', () => {
   const graphOf = () => {
-    const { container } = render(<ProjectJsonLd project={project} />)
+    const { container } = render(
+      <ProjectJsonLd project={project} fallbackDescription="" />,
+    )
     const script = container.querySelector('script[type="application/ld+json"]')
     return JSON.parse(script?.textContent ?? '{}') as Record<string, unknown>
   }

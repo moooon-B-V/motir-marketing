@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { englishCopy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { SITE_HOST } from '@/lib/publicHost'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
@@ -32,11 +32,20 @@ import { enterLocale, type LocaleParams } from '@/i18n/locale'
  * `zh` variants), so a non-English page wraps an English document.
  */
 
-export async function generateMetadata(): Promise<Metadata> {
+/*
+ * The words only, in the page's locale. This used to set `canonical: '/legal'`,
+ * which every document under it inherited — so `/legal/privacy` told a crawler
+ * its canonical was the index. Each page names its own now (MOTIR-7956).
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: LocaleParams
+}): Promise<Metadata> {
+  const copy = await getCopy(await enterLocale(params))
   return {
-    title: englishCopy.legal.metaTitle,
-    description: englishCopy.legal.metaDescription,
-    alternates: { canonical: '/legal' },
+    title: copy.legal.metaTitle,
+    description: copy.legal.metaDescription,
   }
 }
 

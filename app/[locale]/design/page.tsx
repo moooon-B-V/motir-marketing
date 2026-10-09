@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
-import { englishCopy } from '@/lib/copy'
-import { siteUrl } from '@/lib/siteOrigin'
+import { localePageMetadata } from '@/lib/localeMetadata'
 import { DesignShowcase } from '../../_components/DesignShowcase'
 import { SiteShell } from '../../_components/SiteShell'
 import { SITE_HOST } from '@/lib/publicHost'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
-import { OG_LOCALE } from '@/i18n/routing'
 
 /*
  * motir.co/design — the public design showcase (MOTIR-1043 · 8.3.16).
@@ -26,24 +24,13 @@ import { OG_LOCALE } from '@/i18n/routing'
  * is no gate to remove here. Server-rendered chrome around ONE client island
  * (the showcase), the same shape as the landing.
  */
-export async function generateMetadata({
+export function generateMetadata({
   params,
 }: LocalePageProps): Promise<Metadata> {
-  const locale = await enterLocale(params)
-  return {
-    title: englishCopy.designShowcase.heading,
-    description: englishCopy.designShowcase.subline,
-    alternates: { canonical: '/design' },
-    openGraph: {
-      type: 'website',
-      url: siteUrl('/design'),
-      siteName: 'Motir',
-      title: englishCopy.designShowcase.heading,
-      description: englishCopy.designShowcase.subline,
-      // The page's own locale (MOTIR-7948), as the root layout's `og:locale` is.
-      locale: OG_LOCALE[locale],
-    },
-  }
+  return localePageMetadata(params, '/design', (copy) => ({
+    title: copy.designShowcase.heading,
+    description: copy.designShowcase.subline,
+  }))
 }
 
 export default async function DesignPage({ params }: LocalePageProps) {

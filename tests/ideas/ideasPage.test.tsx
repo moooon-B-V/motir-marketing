@@ -228,6 +228,7 @@ describe('the idea open in place', () => {
 
   it('the metadata names the open idea and keeps the idea in the canonical', async () => {
     const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en' }),
       searchParams: Promise.resolve({ tag: 'smb', idea: ONE.slug }),
     })
     expect(meta.title).toBe(`${ONE.title} · ${copy.ideas.metaTitle}`)
@@ -241,6 +242,7 @@ describe('the idea open in place', () => {
   it('with no idea, or an unknown one, the metadata is the page’s own', async () => {
     for (const idea of [undefined, 'no-such-idea']) {
       const meta = await generateMetadata({
+        params: Promise.resolve({ locale: 'en' }),
         searchParams: Promise.resolve({
           tag: 'smb',
           ...(idea ? { idea } : {}),

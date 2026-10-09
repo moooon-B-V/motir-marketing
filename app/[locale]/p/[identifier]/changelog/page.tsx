@@ -17,10 +17,11 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ identifier: string }>
+  params: Promise<{ locale?: string; identifier: string }>
 }): Promise<Metadata> {
   const { identifier } = await params
   return tabMetadata({
+    locale: await enterLocale(params),
     identifier,
     segment: 'changelog',
     labelKey: 'changelog',
