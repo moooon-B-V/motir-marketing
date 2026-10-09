@@ -5,6 +5,8 @@ import { format, useCopy, usePageLocale } from '@/lib/copy'
 import {
   hasText,
   ideaCategoryMark,
+  ideaFieldLang,
+  ideaTextLang,
   ideasHref,
   type IdeaMark,
   type IdeasParams,
@@ -18,6 +20,10 @@ import { OpenIdeaLink } from './IdeasNav'
  * from the store. A card's title is a link to the same view with `idea=<slug>`
  * whose `::after` stretches over the whole card, so the card opens the idea in
  * place; a source link inside sits above that stretch.
+ *
+ * Every piece of the idea's own text takes `lang="en"` when the store served it
+ * in English on a page in another language (`ideaFieldLang` / `ideaTextLang`,
+ * Story MOTIR-7772 · MOTIR-7777), on the element that holds that text alone.
  */
 
 export const MONO = 'font-(family-name:--font-mono) tracking-[0.1em] uppercase'
@@ -120,7 +126,10 @@ export function BuyCard({
         <i aria-hidden="true" className={cn('size-[9px]', tone.mark)} />
         {String(index + 1).padStart(2, '0')} · {idea.category.label}
       </p>
-      <h3 className="m-0 font-(family-name:--font-serif) text-[clamp(26px,2.4vw,32px)] leading-[1.04] font-bold tracking-[-0.025em]">
+      <h3
+        lang={ideaFieldLang(locale, idea, 'title')}
+        className="m-0 font-(family-name:--font-serif) text-[clamp(26px,2.4vw,32px)] leading-[1.04] font-bold tracking-[-0.025em]"
+      >
         <OpenIdeaLink
           href={localizedPath(locale, ideasHref(params, { idea: idea.slug }))}
           slug={idea.slug}
@@ -129,7 +138,10 @@ export function BuyCard({
           {idea.title}
         </OpenIdeaLink>
       </h3>
-      <p className={cn('m-0 text-[16px] leading-[1.5]', tone.soft)}>
+      <p
+        lang={ideaFieldLang(locale, idea, 'pitch')}
+        className={cn('m-0 text-[16px] leading-[1.5]', tone.soft)}
+      >
         {idea.pitch}
       </p>
       {idea.capabilities.length > 0 ? (
@@ -137,6 +149,7 @@ export function BuyCard({
           {idea.capabilities.map((line) => (
             <li
               key={line}
+              lang={ideaFieldLang(locale, idea, 'capabilities')}
               className="grid grid-cols-[14px_minmax(0,1fr)] gap-2.5"
             >
               <i
@@ -159,6 +172,7 @@ export function BuyCard({
           {idea.tags.map((t) => (
             <li
               key={t.slug}
+              lang={ideaTextLang(locale, idea.locale, t.labelFallback)}
               className="rounded-(--radius-badge) border border-current px-2 py-px"
             >
               {t.label}
@@ -176,13 +190,23 @@ export function BuyCard({
           {hasText(idea.whyMotir) ? (
             <div>
               <dt className={cn(MONO, 'text-[11px]')}>{i.needLabel}</dt>
-              <dd className={cn('m-0 mt-1', tone.soft)}>{idea.whyMotir}</dd>
+              <dd
+                lang={ideaFieldLang(locale, idea, 'whyMotir')}
+                className={cn('m-0 mt-1', tone.soft)}
+              >
+                {idea.whyMotir}
+              </dd>
             </div>
           ) : null}
           {hasText(idea.whoElse) ? (
             <div>
               <dt className={cn(MONO, 'text-[11px]')}>{i.whoLabel}</dt>
-              <dd className={cn('m-0 mt-1', tone.soft)}>{idea.whoElse}</dd>
+              <dd
+                lang={ideaFieldLang(locale, idea, 'whoElse')}
+                className={cn('m-0 mt-1', tone.soft)}
+              >
+                {idea.whoElse}
+              </dd>
             </div>
           ) : null}
         </dl>
@@ -218,7 +242,10 @@ export function DirectionCard({
         <CategoryMark slug={idea.category.slug} />
         {idea.category.label}
       </p>
-      <h3 className="m-0 text-[20px] leading-[1.2] font-semibold tracking-[-0.01em] text-(--el-text)">
+      <h3
+        lang={ideaFieldLang(locale, idea, 'title')}
+        className="m-0 text-[20px] leading-[1.2] font-semibold tracking-[-0.01em] text-(--el-text)"
+      >
         <OpenIdeaLink
           href={localizedPath(locale, ideasHref(params, { idea: idea.slug }))}
           slug={idea.slug}
@@ -227,7 +254,10 @@ export function DirectionCard({
           {idea.title}
         </OpenIdeaLink>
       </h3>
-      <p className="m-0 text-[15px] leading-[1.5] text-(--el-text-secondary)">
+      <p
+        lang={ideaFieldLang(locale, idea, 'pitch')}
+        className="m-0 text-[15px] leading-[1.5] text-(--el-text-secondary)"
+      >
         {idea.pitch}
       </p>
       {idea.tags.length > 0 ? (
@@ -241,6 +271,7 @@ export function DirectionCard({
           {idea.tags.map((t) => (
             <li
               key={t.slug}
+              lang={ideaTextLang(locale, idea.locale, t.labelFallback)}
               className="rounded-(--radius-badge) bg-(--el-surface) px-2 py-0.5"
             >
               {t.label}
@@ -256,7 +287,11 @@ export function DirectionCard({
                 {i.more.evidenceLabel}
               </dt>
               <dd className="m-0 mt-1 text-(--el-text-secondary)">
-                {first.claim}{' '}
+                <span
+                  lang={ideaTextLang(locale, idea.locale, first.claimFallback)}
+                >
+                  {first.claim}
+                </span>{' '}
                 <a
                   href={first.url}
                   target="_blank"
@@ -273,7 +308,10 @@ export function DirectionCard({
               <dt className={cn(MONO, 'text-[11px] text-(--el-text)')}>
                 {i.more.gapLabel}
               </dt>
-              <dd className="m-0 mt-1 text-(--el-text-secondary)">
+              <dd
+                lang={ideaFieldLang(locale, idea, 'gap')}
+                className="m-0 mt-1 text-(--el-text-secondary)"
+              >
                 {idea.gap}
               </dd>
             </div>

@@ -11,12 +11,19 @@ import {
   fetchIdeaTags,
   fetchIdeas,
   hasIdeaFilters,
+  ideaFieldLang,
   ideasHref,
+  ideaTextLang,
   parseIdeasParams,
+  toPublicIdea,
+  toPublicIdeaList,
+  toPublicIdeaTagList,
   type IdeasParams,
   type PublicIdeaDto,
   type PublicIdeaListDto,
   type PublicIdeaTagDto,
+  type PublicIdeaTagListDto,
+  type PublicIdeaWire,
 } from '@/lib/ideas'
 import ideasFixture from '../e2e/fixtures/ideas.json'
 import tagsFixture from '../e2e/fixtures/ideas-tags.json'
@@ -30,6 +37,21 @@ import ideaFixture from '../e2e/fixtures/idea-stop-returns-before-they-happen.js
 
 const ORIGIN = 'https://app.test.motir.co' // vitest.config.mts sets it
 const EMPTY: IdeasParams = { tags: [] }
+
+/** A response as a motir-core without the locale fields would send it. */
+function preLocale(idea: PublicIdeaWire): PublicIdeaWire {
+  const LOCALE_KEYS = [
+    'locale',
+    'fallbackFields',
+    'claimFallback',
+    'labelFallback',
+  ]
+  return JSON.parse(
+    JSON.stringify(idea, (key, value: unknown) =>
+      LOCALE_KEYS.includes(key) ? undefined : value,
+    ),
+  ) as PublicIdeaWire
+}
 
 describe('parseIdeasParams', () => {
   it('reads every field from a Next searchParams record', () => {
@@ -219,16 +241,19 @@ describe('the reads', () => {
 
   it('fetchIdeas asks the API with the filters, never the open idea, hourly', async () => {
     const fetchMock = stubFetch(ok(ideasFixture))
-    const list = await fetchIdeas({
-      category: 'ecommerce',
-      tags: ['smb', 'retail'],
-      q: 'returns',
-      kind: 'direction',
-      idea: 'stop-returns-before-they-happen',
-    })
+    const list = await fetchIdeas(
+      {
+        category: 'ecommerce',
+        tags: ['smb', 'retail'],
+        q: 'returns',
+        kind: 'direction',
+        idea: 'stop-returns-before-they-happen',
+      },
+      'en',
+    )
     expect(list.total).toBe(ideasFixture.total)
     expect(fetchMock).toHaveBeenCalledWith(
-      `${ORIGIN}/api/public/ideas?category=ecommerce&tag=smb&tag=retail&q=returns&kind=direction`,
+      `${ORIGIN}/api/public/ideas?category=ecommerce&tag=smb&tag=retail&q=returns&kind=direction&locale=en`,
       { next: { revalidate: IDEAS_REVALIDATE_SECONDS } },
     )
     expect(IDEAS_REVALIDATE_SECONDS).toBe(3600)
@@ -236,75 +261,79 @@ describe('the reads', () => {
 
   it('fetchIdeas with no filters asks for the whole store', async () => {
     const fetchMock = stubFetch(ok(ideasFixture))
-    await fetchIdeas(EMPTY)
-    expect(fetchMock).toHaveBeenCalledWith(`${ORIGIN}/api/public/ideas`, {
-      next: { revalidate: 3600 },
-    })
+    await fetchIdeas(EMPTY, 'en')
+    expect(fetchMock).toHaveBeenCalledWith(
+      `${ORIGIN}/api/public/ideas?locale=en`,
+      { next: { revalidate: 3600 } },
+    )
   })
 
-  it('fetchIdeaTags unwraps the tag list', async () => {
+  it('fetchIdeaTags reads the tag list with its locale', async () => {
     const fetchMock = stubFetch(ok(tagsFixture))
-    const tags = await fetchIdeaTags()
-    expect(tags).toEqual(tagsFixture.tags)
-    expect(fetchMock).toHaveBeenCalledWith(`${ORIGIN}/api/public/ideas/tags`, {
-      next: { revalidate: 3600 },
-    })
+    const tags = await fetchIdeaTags('en')
+    expect(tags).toEqual(tagsFixture)
+    expect(fetchMock).toHaveBeenCalledWith(
+      `${ORIGIN}/api/public/ideas/tags?locale=en`,
+      { next: { revalidate: 3600 } },
+    )
   })
 
   it('fetchIdea reads one idea by its encoded slug', async () => {
     const fetchMock = vi.fn(async () => ok(ideaFixture))
     vi.stubGlobal('fetch', fetchMock)
-    const idea = await fetchIdea('stop-returns-before-they-happen')
+    const idea = await fetchIdea('stop-returns-before-they-happen', 'en')
     expect(idea?.slug).toBe('stop-returns-before-they-happen')
     expect(fetchMock).toHaveBeenCalledWith(
-      `${ORIGIN}/api/public/ideas/stop-returns-before-they-happen`,
+      `${ORIGIN}/api/public/ideas/stop-returns-before-they-happen?locale=en`,
       { next: { revalidate: 3600 } },
     )
-    await fetchIdea('a/b?c')
+    await fetchIdea('a/b?c', 'en')
     expect(fetchMock).toHaveBeenLastCalledWith(
-      `${ORIGIN}/api/public/ideas/a%2Fb%3Fc`,
+      `${ORIGIN}/api/public/ideas/a%2Fb%3Fc?locale=en`,
       { next: { revalidate: 3600 } },
     )
   })
 
   it('fetchIdea answers null on a 404 — unknown and retired alike', async () => {
     stubFetch(new Response('{"code":"IDEA_NOT_FOUND"}', { status: 404 }))
-    await expect(fetchIdea('retired-one')).resolves.toBeNull()
+    await expect(fetchIdea('retired-one', 'ja')).resolves.toBeNull()
   })
 
   it('a 5xx is IdeasUnavailableError carrying the path and status', async () => {
     stubFetch(new Response('boom', { status: 503 }))
-    const err = await fetchIdeas(EMPTY).catch((e: unknown) => e)
+    const err = await fetchIdeas(EMPTY, 'en').catch((e: unknown) => e)
     expect(err).toBeInstanceOf(IdeasUnavailableError)
-    expect(err).toMatchObject({ path: '', status: 503 })
+    expect(err).toMatchObject({ path: '?locale=en', status: 503 })
     expect((err as Error).message).toContain('HTTP 503')
   })
 
   it('a refused filter (400) is unavailable too, not an empty list', async () => {
     stubFetch(new Response('{"code":"INVALID_IDEA_FILTER"}', { status: 400 }))
-    await expect(fetchIdeas({ tags: [], q: 'x' })).rejects.toMatchObject({
+    await expect(fetchIdeas({ tags: [], q: 'x' }, 'en')).rejects.toMatchObject({
       name: 'IdeasUnavailableError',
-      path: '?q=x',
+      path: '?q=x&locale=en',
       status: 400,
     })
   })
 
   it('an unreachable API is IdeasUnavailableError with no status', async () => {
     stubFetch(new TypeError('fetch failed'))
-    const err = await fetchIdeaTags().catch((e: unknown) => e)
+    const err = await fetchIdeaTags('en').catch((e: unknown) => e)
     expect(err).toBeInstanceOf(IdeasUnavailableError)
-    expect(err).toMatchObject({ path: '/tags', status: null })
+    expect(err).toMatchObject({ path: '/tags?locale=en', status: null })
     expect((err as Error).cause).toBeInstanceOf(TypeError)
   })
 
   it('a body that is not JSON is IdeasUnavailableError', async () => {
     stubFetch(new Response('<html>', { status: 200 }))
-    await expect(fetchIdea('x')).rejects.toBeInstanceOf(IdeasUnavailableError)
+    await expect(fetchIdea('x', 'en')).rejects.toBeInstanceOf(
+      IdeasUnavailableError,
+    )
   })
 
   it('a 5xx on the detail read is unavailable, never a silent null', async () => {
     stubFetch(new Response('boom', { status: 500 }))
-    await expect(fetchIdea('x')).rejects.toMatchObject({ status: 500 })
+    await expect(fetchIdea('x', 'en')).rejects.toMatchObject({ status: 500 })
   })
 })
 
@@ -316,8 +345,7 @@ describe('the reads', () => {
  */
 describe('the E2E fixtures match the contract', () => {
   const list: PublicIdeaListDto = ideasFixture as PublicIdeaListDto
-  const tags: PublicIdeaTagDto[] = (tagsFixture as { tags: PublicIdeaTagDto[] })
-    .tags
+  const tags: PublicIdeaTagDto[] = (tagsFixture as PublicIdeaTagListDto).tags
   const one: PublicIdeaDto = ideaFixture as PublicIdeaDto
 
   const IDEA_KEYS = [
@@ -325,9 +353,11 @@ describe('the E2E fixtures match the contract', () => {
     'capabilities',
     'category',
     'evidence',
+    'fallbackFields',
     'gap',
     'kind',
     'lastReviewedAt',
+    'locale',
     'pitch',
     'slug',
     'tags',
@@ -344,6 +374,7 @@ describe('the E2E fixtures match the contract', () => {
     for (const e of idea.evidence) {
       expect(Object.keys(e).sort()).toEqual([
         'claim',
+        'claimFallback',
         'sourceDate',
         'sourceName',
         'url',
@@ -367,7 +398,12 @@ describe('the E2E fixtures match the contract', () => {
   it('the tags: slug, label and count', () => {
     expect(tags.length).toBeGreaterThan(0)
     for (const t of tags) {
-      expect(Object.keys(t).sort()).toEqual(['count', 'label', 'slug'])
+      expect(Object.keys(t).sort()).toEqual([
+        'count',
+        'label',
+        'labelFallback',
+        'slug',
+      ])
       expect(t.count).toBeGreaterThan(0)
     }
   })
@@ -375,6 +411,164 @@ describe('the E2E fixtures match the contract', () => {
   it('the detail: one idea, and the same one the list carries', () => {
     checkIdea(one)
     expect(list.items.find((i) => i.slug === one.slug)).toEqual(one)
+  })
+})
+
+/*
+ * The per-locale reads (Story MOTIR-7772 · MOTIR-7777): every read carries the
+ * page's locale on the STORE's URL, never on the visitor's; the coercers keep
+ * the locale fields and give an older server's response its pre-locale
+ * meaning; `ideaTextLang` marks exactly the English on a non-English page.
+ */
+describe('the locale on every read', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  const ok = (body: unknown) =>
+    new Response(JSON.stringify(body), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    })
+
+  function stub(body: unknown) {
+    const fn = vi.fn(async () => ok(body))
+    vi.stubGlobal('fetch', fn)
+    return fn
+  }
+
+  it('the list, a search, the tags and one idea ask for locale=ja, hourly', async () => {
+    const fn = stub(ideasFixture)
+    await fetchIdeas(EMPTY, 'ja')
+    await fetchIdeas({ tags: [], q: '再生' }, 'ja')
+    expect(fn.mock.calls.map((c) => c as unknown[])).toEqual([
+      [`${ORIGIN}/api/public/ideas?locale=ja`, { next: { revalidate: 3600 } }],
+      [
+        `${ORIGIN}/api/public/ideas?q=%E5%86%8D%E7%94%9F&locale=ja`,
+        { next: { revalidate: 3600 } },
+      ],
+    ])
+    const tagsFn = stub(tagsFixture)
+    await fetchIdeaTags('ja')
+    expect(tagsFn).toHaveBeenCalledWith(
+      `${ORIGIN}/api/public/ideas/tags?locale=ja`,
+      { next: { revalidate: 3600 } },
+    )
+    const oneFn = stub(ideaFixture)
+    await fetchIdea('stop-returns-before-they-happen', 'ja')
+    expect(oneFn).toHaveBeenCalledWith(
+      `${ORIGIN}/api/public/ideas/stop-returns-before-they-happen?locale=ja`,
+      { next: { revalidate: 3600 } },
+    )
+  })
+
+  it('the visitor URL never carries a locale', () => {
+    for (const query of [
+      '',
+      'locale=ja',
+      'q=x&locale=de&tag=smb',
+      'category=pets&idea=a-b&locale=ko',
+    ]) {
+      const href = ideasHref(parseIdeasParams(new URLSearchParams(query)))
+      expect(href).not.toContain('locale')
+    }
+  })
+})
+
+describe('the coercers', () => {
+  const localized: PublicIdeaWire = {
+    ...(ideaFixture as PublicIdeaWire),
+    title: '返品を未然に防ぐ',
+    locale: 'ja',
+    fallbackFields: ['pitch'],
+    evidence: (ideaFixture as PublicIdeaWire).evidence.map((e, n) => ({
+      ...e,
+      claimFallback: n === 0,
+    })),
+    tags: (ideaFixture as PublicIdeaWire).tags.map((t, n) => ({
+      ...t,
+      labelFallback: n === 0,
+    })),
+  }
+
+  it('keep locale, fallbackFields, claimFallback and labelFallback', () => {
+    const idea = toPublicIdea(localized)
+    expect(idea.locale).toBe('ja')
+    expect(idea.fallbackFields).toEqual(['pitch'])
+    expect(idea.evidence.map((e) => e.claimFallback)).toEqual(
+      localized.evidence.map((_, n) => n === 0),
+    )
+    expect(idea.tags.map((t) => t.labelFallback)).toEqual(
+      localized.tags.map((_, n) => n === 0),
+    )
+    const list = toPublicIdeaList({
+      items: [localized],
+      categories: [],
+      total: 1,
+      locale: 'ja',
+    })
+    expect(list.locale).toBe('ja')
+    expect(list.items[0]).toEqual(idea)
+    const tags = toPublicIdeaTagList({
+      tags: [{ slug: 'smb', label: 'SMB', count: 1, labelFallback: true }],
+      locale: 'ja',
+    })
+    expect(tags).toEqual({
+      tags: [{ slug: 'smb', label: 'SMB', count: 1, labelFallback: true }],
+      locale: 'ja',
+    })
+  })
+
+  it('give a pre-locale response its old meaning: English, nothing listed, every flag false', () => {
+    const old = preLocale(ideaFixture as PublicIdeaWire)
+    const idea = toPublicIdea(old)
+    expect(idea.locale).toBe('en')
+    expect(idea.fallbackFields).toEqual([])
+    expect(idea.evidence.every((e) => e.claimFallback === false)).toBe(true)
+    expect(idea.tags.every((t) => t.labelFallback === false)).toBe(true)
+    expect(
+      toPublicIdeaList({ items: [old], categories: [], total: 1 }).locale,
+    ).toBe('en')
+    const tags = toPublicIdeaTagList({
+      tags: [{ slug: 'smb', label: 'SMB', count: 1 }],
+    })
+    expect(tags).toEqual({
+      tags: [{ slug: 'smb', label: 'SMB', count: 1, labelFallback: false }],
+      locale: 'en',
+    })
+  })
+
+  it('a fetch passes the response through them', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify(localized))),
+    )
+    const idea = await fetchIdea('stop-returns-before-they-happen', 'ja')
+    expect(idea).toEqual(toPublicIdea(localized))
+    vi.unstubAllGlobals()
+  })
+})
+
+describe('ideaTextLang', () => {
+  it('an English page marks nothing', () => {
+    expect(ideaTextLang('en', 'en', false)).toBeUndefined()
+    expect(ideaTextLang('en', 'en', true)).toBeUndefined()
+  })
+
+  it('a Japanese page: Japanese text is unmarked, a fallback is English', () => {
+    expect(ideaTextLang('ja', 'ja', false)).toBeUndefined()
+    expect(ideaTextLang('ja', 'ja', true)).toBe('en')
+  })
+
+  it('a response served in English on a Japanese page is English throughout', () => {
+    expect(ideaTextLang('ja', 'en', false)).toBe('en')
+  })
+
+  it('ideaFieldLang reads the field from fallbackFields', () => {
+    const idea = { locale: 'ja' as const, fallbackFields: ['pitch' as const] }
+    expect(ideaFieldLang('ja', idea, 'pitch')).toBe('en')
+    expect(ideaFieldLang('ja', idea, 'title')).toBeUndefined()
+    expect(ideaFieldLang('en', idea, 'pitch')).toBeUndefined()
   })
 })
 

@@ -3,72 +3,87 @@
     {
       "slug": "ai-agents",
       "label": "AI agents",
-      "count": 4
+      "count": 4,
+      "labelFallback": false
     },
     {
       "slug": "b2b-saas",
       "label": "B2B software",
-      "count": 6
+      "count": 6,
+      "labelFallback": false
     },
     {
       "slug": "caregiving",
       "label": "Caregiving",
-      "count": 1
+      "count": 1,
+      "labelFallback": false
     },
     {
       "slug": "compliance",
       "label": "Compliance",
-      "count": 3
+      "count": 3,
+      "labelFallback": false
     },
     {
       "slug": "consumer",
       "label": "Consumers",
-      "count": 3
+      "count": 3,
+      "labelFallback": false
     },
     {
       "slug": "developer-tools",
       "label": "Developer tools",
-      "count": 4
+      "count": 4,
+      "labelFallback": false
     },
     {
       "slug": "education",
       "label": "Education",
-      "count": 2
+      "count": 2,
+      "labelFallback": false
     },
     {
       "slug": "eu-ai-act",
       "label": "EU AI Act",
-      "count": 2
+      "count": 2,
+      "labelFallback": false
     },
     {
       "slug": "healthcare",
       "label": "Healthcare",
-      "count": 2
+      "count": 2,
+      "labelFallback": false
     },
     {
       "slug": "pricing-and-billing",
       "label": "Pricing and billing",
-      "count": 3
+      "count": 3,
+      "labelFallback": false
     },
     {
       "slug": "smb",
       "label": "Small businesses",
-      "count": 4
+      "count": 4,
+      "labelFallback": false
     },
     {
       "slug": "startups",
       "label": "Startups",
-      "count": 2
+      "count": 2,
+      "labelFallback": false
     },
     {
       "slug": "vertical-saas",
       "label": "Vertical software",
-      "count": 3
+      "count": 3,
+      "labelFallback": false
     },
     {
       "slug": "yc-rfs",
       "label": "On YC's request list",
-      "count": 2
+      "count": 2,
+      "labelFallback": false
     }
-  ]
+  ],
+  "locale": "en"
 }
