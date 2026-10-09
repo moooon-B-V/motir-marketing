@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { fireEvent, render, screen, within } from '@testing-library/react'
-import { copy, format } from '@/lib/copy'
+import { fireEvent, screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { englishCopy as copy, format } from '@/lib/copy'
 import {
   IDEA_CATEGORY_SLUGS,
   hasText,
@@ -13,21 +14,24 @@ import {
   type PublicIdeaListDto,
   type PublicIdeaTagDto,
 } from '@/lib/ideas'
-import { IdeaControls, countLine } from '@/app/ideas/_components/IdeaControls'
+import {
+  IdeaControls,
+  countLine,
+} from '@/app/[locale]/ideas/_components/IdeaControls'
 import {
   BuyCard,
   CategoryMark,
   DirectionCard,
-} from '@/app/ideas/_components/IdeaCards'
+} from '@/app/[locale]/ideas/_components/IdeaCards'
 import {
   IdeasEmpty,
   IdeasUnavailable,
-} from '@/app/ideas/_components/IdeaStates'
+} from '@/app/[locale]/ideas/_components/IdeaStates'
 import {
   IdeasNavProvider,
   ResultsRegion,
   takeOpenedFromList,
-} from '@/app/ideas/_components/IdeasNav'
+} from '@/app/[locale]/ideas/_components/IdeasNav'
 import ideasFixture from '../../e2e/fixtures/ideas.json'
 import tagsFixture from '../../e2e/fixtures/ideas-tags.json'
 
@@ -71,10 +75,10 @@ function controls(
 
 describe('countLine', () => {
   it('reads by how many ideas the view holds', () => {
-    expect(countLine(15, false)).toBe(format(f.countAll, { n: 15 }))
-    expect(countLine(0, true)).toBe(f.countNone)
-    expect(countLine(1, true)).toBe(f.countMatchOne)
-    expect(countLine(3, true)).toBe(format(f.countMatch, { n: 3 }))
+    expect(countLine(15, false, f)).toBe(format(f.countAll, { n: 15 }))
+    expect(countLine(0, true, f)).toBe(f.countNone)
+    expect(countLine(1, true, f)).toBe(f.countMatchOne)
+    expect(countLine(3, true, f)).toBe(format(f.countMatch, { n: 3 }))
   })
 })
 

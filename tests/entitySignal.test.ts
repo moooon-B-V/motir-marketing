@@ -10,7 +10,10 @@ import {
   SAME_AS,
   WEBSITE_ID,
 } from '@/app/_components/RootJsonLd'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
+import { DOCS_ROUTES } from '@/lib/docsSurfaces'
+import { legalDocumentSlugs } from '@/lib/legal/documents'
+import { LOCALES } from '@/i18n/routing'
 
 // `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
 // and `next/headers` throws outside a request scope. Empty headers read as
@@ -70,10 +73,18 @@ describe('sitemap', () => {
     entries = await sitemap()
   })
 
+  /** The English entry of each page — the one its own `en` alternate names. */
+  const english = () =>
+    entries.filter(
+      (entry) =>
+        (entry.alternates?.languages as Record<string, string> | undefined)
+          ?.en === entry.url,
+    )
+
   it('lists every page the site serves, absolutely', () => {
     // `/design` joined the root in MOTIR-1043; `/legal` and the seven documents
     // joined in MOTIR-4009, read from the same directory the routes glob.
-    expect(entries.map((entry) => entry.url)).toEqual([
+    expect(english().map((entry) => entry.url)).toEqual([
       'https://motir.co/',
       // 2026-10 redesign — "How Motir works", the developer page.
       'https://motir.co/how-it-works',
@@ -107,6 +118,30 @@ describe('sitemap', () => {
     ])
   })
 
+  it('lists each of them once per locale, every entry with the twelve alternates (MOTIR-7956)', () => {
+    // The static count is computed from the same sources the sitemap reads,
+    // so the assertion moves with them: the fixed pages, the docs routes and
+    // the legal glob.
+    const staticPaths =
+      ['/', '/how-it-works', '/design', '/explore', '/legal'].length +
+      DOCS_ROUTES.length +
+      legalDocumentSlugs().length
+    expect(entries).toHaveLength(staticPaths * LOCALES.length)
+    expect(english()).toHaveLength(staticPaths)
+    for (const entry of entries) {
+      const languages = entry.alternates?.languages as Record<string, string>
+      expect(Object.keys(languages).sort(), entry.url).toEqual(
+        [...LOCALES, 'x-default'].sort(),
+      )
+      expect(Object.values(languages)).toContain(entry.url)
+      expect(languages['x-default']).toBe(languages.en)
+    }
+    expect(entries.map((entry) => entry.url)).toContain('https://motir.co/ja')
+    expect(entries.map((entry) => entry.url)).toContain(
+      'https://motir.co/fr/legal/privacy',
+    )
+  })
+
   it('lists no URL the site does not serve', () => {
     // The footer omits Product / Pricing / Blog / About because those pages do
     // not exist; a sitemap that names them would hand a crawler four 404s.
@@ -128,7 +163,10 @@ describe('sitemap', () => {
 })
 
 describe('the root JSON-LD graph', () => {
-  const graph = buildRootJsonLd()
+  const graph = buildRootJsonLd({
+    locale: 'en',
+    description: copy.meta.description,
+  })
   const nodes = graph['@graph'] as Record<string, unknown>[]
   const org = nodes.find((node) => node['@type'] === 'Organization')!
   const site = nodes.find((node) => node['@type'] === 'WebSite')!

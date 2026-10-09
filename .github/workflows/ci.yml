@@ -114,6 +114,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      # MOTIR-7967 — every page prerendered in every one of the eleven
+      # languages, and no route static before the story turned dynamic. Only
+      # the build's own manifests know, so it runs here, after `next build`.
+      - run: pnpm i18n:check-prerender
 
   # ── The unit / component suite (MOTIR-1152) ───────────────────────────────
   #

@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { OG_FONT_FAMILY } from '@motir/brand'
+import manifest from './og-fonts/manifest.json'
 
 // Inter, for the root `next/og` card (MOTIR-1154 · motir-core
 // `design/brand/design-notes.md` §6 "OG template").
@@ -40,8 +41,25 @@ import { OG_FONT_FAMILY } from '@motir/brand'
 // `tests/ogFonts.test.ts` pins these literals against the package's.
 //
 // Verify by grepping the built
-// `.next/server/app/opengraph-image*/route.js.nft.json` for the file names,
-// never by reading the config.
+// `.next/server/app/[locale]/opengraph-image*/route.js.nft.json` for the file
+// names, never by reading the config.
+//
+// ── THE CJK FACES (MOTIR-7972) ─────────────────────────────────────────────
+// Inter has no Han, kana or Hangul, so a `zh` / `ja` / `ko` card would draw
+// tofu — or `next/og` would fetch a fallback face this site never chose. Each
+// of those locales gets the DEFAULT sans member of its font set
+// (`@motir/design-system`'s `FONT_SET_REGISTRY`: Noto Sans SC / JP / KR) at the
+// three weights, as SUBSETS committed in `og-fonts/`: a full Noto Sans JP is
+// several MB per weight, the subset a few KB. They are cut by
+// `pnpm brand:og-fonts` from exactly the three strings the card draws, and
+// `og-fonts/manifest.json` records what each was cut from.
+// `tests/ogFonts.test.ts` checks every drawn character against the faces'
+// cmaps, so a catalogue edit that outgrows a subset fails CI instead of
+// drawing tofu.
+//
+// ⚠️ ONE EXPLICIT BRANCH PER LOCALE, EACH PATH A LITERAL — the same tracer rule
+// as `FONT_DIR` above. A template string over the locale is not statically
+// analysable.
 
 const FONT_DIR = path.join(
   process.cwd(),
@@ -64,8 +82,55 @@ export { OG_FONT_FAMILY }
 export interface OgFont {
   name: string
   data: Buffer
-  weight: 400 | 700 | 800
+  weight: Weight
   style: 'normal'
+}
+
+const OG_CJK_DIR = path.join(process.cwd(), 'app', '_brand', 'og-fonts')
+
+type Weight = 400 | 700 | 800
+
+/** A CJK locale's subset faces, as literal paths, or none for a Latin one. */
+function cjkFaces(locale: string): { path: string; weight: Weight }[] {
+  switch (locale) {
+    case 'zh':
+      return [
+        { path: path.join(OG_CJK_DIR, 'zh-400.ttf'), weight: 400 },
+        { path: path.join(OG_CJK_DIR, 'zh-700.ttf'), weight: 700 },
+        { path: path.join(OG_CJK_DIR, 'zh-800.ttf'), weight: 800 },
+      ]
+    case 'ja':
+      return [
+        { path: path.join(OG_CJK_DIR, 'ja-400.ttf'), weight: 400 },
+        { path: path.join(OG_CJK_DIR, 'ja-700.ttf'), weight: 700 },
+        { path: path.join(OG_CJK_DIR, 'ja-800.ttf'), weight: 800 },
+      ]
+    case 'ko':
+      return [
+        { path: path.join(OG_CJK_DIR, 'ko-400.ttf'), weight: 400 },
+        { path: path.join(OG_CJK_DIR, 'ko-700.ttf'), weight: 700 },
+        { path: path.join(OG_CJK_DIR, 'ko-800.ttf'), weight: 800 },
+      ]
+    default:
+      return []
+  }
+}
+
+/** The family a CJK locale's subset faces are registered under, from the
+ *  manifest `pnpm brand:og-fonts` wrote; `undefined` for a Latin locale. */
+export function ogCjkFamily(locale: string): string | undefined {
+  const files: readonly { locale: string; family: string }[] = manifest.files
+  return files.find((file) => file.locale === locale)?.family
+}
+
+/**
+ * The card's `fontFamily`: Inter first, then the locale's CJK face. Satori
+ * draws each glyph from the first listed face that has it, so Latin text stays
+ * Inter on every card.
+ */
+export function ogFontFamily(locale = 'en'): string {
+  const cjk = ogCjkFamily(locale)
+  return cjk ? `${OG_FONT_FAMILY}, '${cjk}'` : OG_FONT_FAMILY
 }
 
 /**
@@ -76,13 +141,21 @@ export interface OgFont {
  * buys nothing and would pin ~1 MB in every warm instance of a route that also
  * serves nothing else.
  */
-export async function loadOgFonts(): Promise<OgFont[]> {
-  return Promise.all(
-    OG_FONT_FACES.map(async ({ file, weight }) => ({
-      name: OG_FONT_FAMILY,
-      data: await readFile(path.join(FONT_DIR, file)),
-      weight,
-      style: 'normal' as const,
-    })),
-  )
+export async function loadOgFonts(locale = 'en'): Promise<OgFont[]> {
+  const inter = OG_FONT_FACES.map(async ({ file, weight }) => ({
+    name: OG_FONT_FAMILY,
+    data: await readFile(path.join(FONT_DIR, file)),
+    weight,
+    style: 'normal' as const,
+  }))
+  const family = ogCjkFamily(locale)
+  const cjk = family
+    ? cjkFaces(locale).map(async ({ path: file, weight }) => ({
+        name: family,
+        data: await readFile(file),
+        weight,
+        style: 'normal' as const,
+      }))
+    : []
+  return Promise.all([...inter, ...cjk])
 }

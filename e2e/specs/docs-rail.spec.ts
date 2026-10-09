@@ -34,7 +34,7 @@ import { expect, test } from '@playwright/test'
  *
  * `/docs` is the page under test because it is the cheapest instance the defect
  * appears on: no operation tier, no upstream fetch (the guides route group
- * performs none — `app/docs/(guides)/layout.tsx`), and a reading column three
+ * performs none — `app/[locale]/docs/(guides)/layout.tsx`), and a reading column three
  * times the rail's own height.
  */
 

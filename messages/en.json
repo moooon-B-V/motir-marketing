@@ -1,4 +1,120 @@
 {
+  "publicProject": {
+    "appHost": "app.motir.co",
+    "tabs": {
+      "overview": "Overview",
+      "board": "Board",
+      "items": "Items",
+      "tree": "Tree",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog"
+    },
+    "stats": {
+      "requests": "requests",
+      "upvotes": "upvotes",
+      "planned": "planned",
+      "shipped": "shipped"
+    },
+    "header": {
+      "navAria": "Project",
+      "inTheApp": "In the app",
+      "opensInApp": "— opens in the Motir app; needs an account"
+    },
+    "actRail": {
+      "follow": "Follow",
+      "followSr": "— continues on app.motir.co",
+      "requestFeature": "Request a feature",
+      "atomFeed": "Atom feed"
+    },
+    "subscribe": {
+      "label": "Email for changelog updates",
+      "placeholder": "you@example.com",
+      "submit": "Subscribe",
+      "submitting": "Subscribing…",
+      "messages": {
+        "sent": "Check your inbox to confirm.",
+        "invalid": "That does not look like an email address.",
+        "unavailable": "This project has changelog emails turned off.",
+        "limited": "Too many attempts just now — try again in a few minutes.",
+        "failed": "We could not reach Motir. Try again in a moment."
+      }
+    },
+    "watchLive": {
+      "titleNamed": "Watch {name} being built",
+      "titleUnnamed": "Watch this project being built",
+      "lede": "The live board, the plans as they are drafted and the agent runs as they happen — in the Motir app.",
+      "cost": "You’ll need a Motir account. If you continue, your {nameAndEmail} will be visible to {managers}, along with when you visit.",
+      "costNameAndEmail": "name and email",
+      "costManagers": "this project’s workspace Managers",
+      "cta": "Watch live",
+      "ctaSr": "— opens in the Motir app"
+    },
+    "states": {
+      "error": {
+        "project": "We could not load this project",
+        "changelog": "We could not load this project's changelog",
+        "request": "We could not load this feature request",
+        "workspaceProjects": "We could not load this workspace’s projects",
+        "address": "We could not load this address",
+        "body": "The Motir application is not answering right now. The page you are on is fine — this reads from {host}, which is a separate deployment. Try again in a moment.",
+        "bodyWithFeed": "The Motir application is not answering right now. The page you are on is fine — this reads from {host}, which is a separate deployment. Try again in a moment, or read the changelog, which is served from a feed.",
+        "feed": "Changelog feed"
+      }
+    },
+    "overview": {
+      "empty": {
+        "title": "This project has not written an overview yet",
+        "body": "Its live board, work items and roadmap are in the Motir app — watch it being built, beside this."
+      }
+    },
+    "changelog": {
+      "empty": {
+        "title": "Nothing shipped yet",
+        "body": "When this project completes public work, it is logged here — and in the feed."
+      },
+      "older": "Older",
+      "subscribeAtom": "Subscribe by Atom"
+    },
+    "requestNew": {
+      "heading": "Request a feature",
+      "intro": "Tell the {project} team what you need. Requests are public: anyone reading this project can see and upvote yours.",
+      "signInTitle": "You will sign in first",
+      "signInBody": "Submitting a request needs an account, so the form lives on {host}. You will be signed in, shown anything similar that has already been asked for — so you can upvote it instead — and brought back to this project.",
+      "continue": "Continue to Motir ↗",
+      "closing": "Anyone can read {projectPage}, its changelog and every request’s own page without an account.",
+      "projectPage": "the project page"
+    },
+    "request": {
+      "openedBy": "Opened by {author} · {date}",
+      "discussion": "Discussion",
+      "noComments": "No comments yet.",
+      "commentHandoff": "Adding to this discussion signs you in on {host} and brings you back to this request.",
+      "addComment": "Add a comment",
+      "demand": "Demand",
+      "upvote": "Upvote",
+      "upvoteNote": "Upvoting happens on app.motir.co and returns you here.",
+      "askHeading": "Ask for something",
+      "requestFeature": "Request a feature ↗"
+    },
+    "workspaceRoot": {
+      "heading": "Public projects",
+      "empty": {
+        "title": "Nothing is public here yet",
+        "body": "This workspace has claimed its address but has not made a project public. When it does, the project appears here."
+      }
+    },
+    "meta": {
+      "overviewFallback": "A project built in public on Motir — its overview, changelog and feature requests, and the live board in the Motir app.",
+      "jsonLdFallback": "{name} — a public project plan on Motir.",
+      "tabTitle": "{label} · {name}",
+      "tabDescription": "{label} for {name} — public on Motir.",
+      "requestNewTitle": "Request a feature · {name}",
+      "requestNewDescription": "Ask the {name} team for something. Requests are public.",
+      "workspaceTitle": "Public projects",
+      "workspaceDescription": "The public projects this workspace publishes on Motir.",
+      "hostUnavailableTitle": "Temporarily unavailable"
+    }
+  },
   "meta": {
     "title": "Motir — AI planning, project management and agent orchestration",
     "description": "The AI planning, project-management and agent orchestration platform. Describe what you want to build — Motir drafts the plan, then agents take over the work."
@@ -15,6 +131,11 @@
     "design": "Design",
     "signIn": "Sign in",
     "startFree": "Start free",
+    "language": {
+      "label": "Language: {language}",
+      "menuLabel": "Choose a language",
+      "heading": "Language"
+    },
     "products": "Products",
     "productsMenuLabel": "Motir products",
     "productGroups": {
@@ -318,6 +439,7 @@
         "changes": "Ask for changes",
         "approve": "Approve",
         "video": {
+          "chapterCount": "{count} chapters",
           "label": "Acceptance video",
           "length": "0:48",
           "chapters": [
@@ -339,6 +461,37 @@
     }
   },
   "designShowcase": {
+    "specimen": {
+      "sectionLabel": "Composed UI",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "ghost": "Ghost",
+      "danger": "Danger",
+      "badge": "Badge",
+      "done": "Done",
+      "inProgress": "In progress",
+      "tooltip": "A tooltip, drawn from the same tokens.",
+      "hoverMe": "Hover me",
+      "titleLabel": "Work item title",
+      "titleValue": "Ship the billing flow",
+      "assigneeLabel": "Assignee",
+      "assigneePlaceholder": "Select…",
+      "unassigned": "Unassigned",
+      "viewLabel": "View",
+      "board": "Board",
+      "list": "List",
+      "liveUpdates": "Live updates",
+      "notesLabel": "Notes",
+      "notesValue": "Every control on this card is the shipped primitive.",
+      "popover": "Popover",
+      "popoverBody": "An overlay drawn from the same tokens. Its radius, border and shadow change with the style, its colours with the palette.",
+      "modal": "Modal",
+      "modalDescription": "Dialogs re-shape with the style axis too.",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "EmptyState — the shipped primitive.",
+      "errorTitle": "Something broke",
+      "errorDescription": "ErrorState — the shipped primitive."
+    },
     "heading": "Pick a look. The whole site changes.",
     "subline": "This is the design system every Motir project starts with. It is here rather than in a styleguide because the fastest way to show what your product could look like is to let you restyle ours.",
     "theme": {
@@ -361,7 +514,121 @@
       "help": "The typeface pairing for headings and body."
     },
     "reset": "Reset to default",
-    "closing": "The three axes here are the same three your project picks when you start one in Motir — and the same design system underneath. This site is not showing you a demo of it; it is built from it."
+    "closing": "The three axes here are the same three your project picks when you start one in Motir — and the same design system underneath. This site is not showing you a demo of it; it is built from it.",
+    "styles": {
+      "warm-editorial": {
+        "name": "Warm Editorial",
+        "tagline": "Thoughtful, warm, technical-but-not-cold, slightly editorial."
+      },
+      "soft-playful": {
+        "name": "Soft / Playful",
+        "tagline": "More energy — rounded, generous, gently animated."
+      },
+      "swiss-minimal-flat": {
+        "name": "Swiss / Minimal-Flat",
+        "tagline": "International-typographic, structural, calm — flat, sharp, gridded."
+      },
+      "neo-brutalism": {
+        "name": "Neo-Brutalism",
+        "tagline": "Raw, punchy, utilitarian — 0px corners, thick borders, hard-offset shadows."
+      },
+      "glassmorphism": {
+        "name": "Glassmorphism",
+        "tagline": "Translucent frosted glass floating over a soft, vibrant gradient."
+      },
+      "cybercore-y2k": {
+        "name": "Cybercore / Y2K",
+        "tagline": "Neon-on-dark retro-tech — glowing HUD panels, a tech grid, mono headlines."
+      },
+      "aurora": {
+        "name": "Aurora",
+        "tagline": "Soft, drifting aurora light behind fluid, gently-glowing surfaces."
+      },
+      "3d-immersive": {
+        "name": "3D / Immersive",
+        "tagline": "Depth and perspective — dimensional cards floating over the page."
+      },
+      "neumorphism": {
+        "name": "Neumorphism",
+        "tagline": "Soft extruded surfaces that swell out of a single monochrome field."
+      },
+      "hand-drawn-indie": {
+        "name": "Hand-Drawn / Indie",
+        "tagline": "Sketchy and friendly — rough hand-inked edges, wonky corners, soft offset shadows, a playful bounce."
+      },
+      "retrofuturism": {
+        "name": "Retrofuturism",
+        "tagline": "Chrome, gradient sweeps and a synthwave horizon — 70s/80s sci-fi."
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Stark and editorial — cool greyscale surfaces + ink, an ink CTA, a restrained cool-blue accent and a few warm touches."
+      },
+      "amethyst": {
+        "name": "Amethyst",
+        "tagline": "Warm and editorial — cream surfaces, charcoal ink, a purple primary, pastel tints."
+      },
+      "cobalt": {
+        "name": "Cobalt",
+        "tagline": "Cool and institutional — slate-cool surfaces, a confident cobalt primary, cooled tints."
+      },
+      "evergreen": {
+        "name": "Evergreen",
+        "tagline": "Fresh and technical — an emerald primary over cooled forest neutrals, a green-leaning UI."
+      },
+      "spectrum": {
+        "name": "Spectrum",
+        "tagline": "Vibrant and playful — crisp cool surfaces, a bright violet primary, a candy-bright multi-hue accent & tint set."
+      },
+      "amber": {
+        "name": "Amber",
+        "tagline": "Warm and electric — Binance trading-floor gold over the exchange’s graphite near-blacks; dark labels on the gold."
+      },
+      "sienna": {
+        "name": "Sienna",
+        "tagline": "Warm and vivid — Mistral flame-orange over the Mediterranean warm-cream surfaces; dark labels on the flame."
+      },
+      "garnet": {
+        "name": "Garnet",
+        "tagline": "Rich and bold — Pinterest Pushpin red over the brand’s neutral greys; white labels on the red."
+      },
+      "citrine": {
+        "name": "Citrine",
+        "tagline": "Bright and collaborative — Miro’s Sunglow yellow over the whiteboard greys, with the Miro action-blue accent."
+      },
+      "candy": {
+        "name": "Candy",
+        "tagline": "Sweet and playful — a light bubblegum-pink primary over candy-paper pinks, with a full pastel-candy rainbow."
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Editorial serif headlines over a clean sans body — the house pairing."
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "All-sans — Inter for headlines and body; structural, no serif."
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "Monospace throughout — a code-native UI, headlines, body and all."
+      },
+      "grotesk": {
+        "name": "Grotesk",
+        "tagline": "Geometric neo-grotesque across the whole UI — tight, confident, product-y."
+      },
+      "editorial": {
+        "name": "Editorial",
+        "tagline": "A characterful display serif over a humanist sans — magazine, considered."
+      },
+      "mono-technical": {
+        "name": "Mono-Technical",
+        "tagline": "IBM Plex Mono throughout — a precise, developer-grade UI."
+      }
+    }
   },
   "footer": {
     "ariaLabel": "Footer",
@@ -397,6 +664,8 @@
     "indexContact": "Questions about any of these: legal@motir.co"
   },
   "explore": {
+    "topicNavAria": "Project square",
+    "topicHeading": "{topic} projects",
     "metaTitle": "Build in public · Projects on Motir",
     "metaDescription": "Projects teams build in public on Motir: their roadmaps, boards, plans and agent runs. Read any project's overview, and follow the live work with a free account.",
     "metaTitleTopic": "{topic} projects built in public · Motir",
@@ -464,6 +733,7 @@
     }
   },
   "docs": {
+    "operationCount": "{count} operations",
     "metaTitle": "Docs · Motir",
     "metaDescription": "Documentation for the Motir API and MCP server — the public read contract, the server that agents call, and the CLI.",
     "metaTitleReference": "API reference · Motir docs",
@@ -1892,6 +2162,14 @@
     "watch": "Watch Motir build itself",
     "runs": "Create an account to watch its agent runs",
     "lost": {
+      "scenes": {
+        "fixLater": "fix later",
+        "features": ["Calendar", "Reminders", "Billing", "Export", "Search"],
+        "inProgress": "in progress",
+        "question": "why this way?",
+        "answer": "because the…",
+        "sessionEnded": "session ended"
+      },
       "eyebrow": "Where it started",
       "headline": "We vibe coded. The project fell apart.",
       "body": "Vibe coding made the code fast. But the further we got, the more of the project we lost — because a project is not only code.",

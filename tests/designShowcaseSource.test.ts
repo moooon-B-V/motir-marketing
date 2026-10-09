@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest'
  */
 
 const SHOWCASE = readFileSync('app/_components/DesignShowcase.tsx', 'utf8')
-const PAGE = readFileSync('app/design/page.tsx', 'utf8')
+const PAGE = readFileSync('app/[locale]/design/page.tsx', 'utf8')
 
 /** Source with comments removed — a rule quoted in a comment is not a declaration. */
 function code(source: string): string {
@@ -34,19 +34,42 @@ describe('the showcase invents nothing', () => {
       .map((s) => s.trim())
       .filter(Boolean)
     for (const required of [
-      'StylePicker',
-      'PalettePicker',
-      'TypePicker',
       'ThemeSegmentedControl',
       'AxisField',
       'AxisNote',
       'TokensSpecimen',
-      'STYLE_REGISTRY',
-      'PALETTE_REGISTRY',
-      'TYPE_REGISTRY',
     ]) {
       expect(names).toContain(required)
     }
+  })
+
+  it('builds the chip rows from the package’s AxisRadioGroup and id lists, in the catalogue’s words', () => {
+    // The package's StylePicker / PalettePicker / TypePicker label their chips
+    // in English only, so the rows are rebuilt from the same parts with
+    // translated labels (Yue, 2026-10-09) — still the package's own control.
+    const pickers = readFileSync(
+      'app/_components/AppearancePickers.tsx',
+      'utf8',
+    )
+    const imported = /import \{([^}]*)\} from '@motir\/design-system'/.exec(
+      pickers,
+    )
+    const names = (imported as RegExpExecArray)[1]
+      .split(',')
+      .map((s) => s.trim())
+    for (const required of [
+      'AxisRadioGroup',
+      'STYLE_IDS',
+      'PALETTE_IDS',
+      'TYPE_IDS',
+    ]) {
+      expect(names).toContain(required)
+    }
+    expect(code(SHOWCASE)).toMatch(/<StyleChips/)
+    expect(code(SHOWCASE)).toMatch(/<PaletteChips/)
+    expect(code(SHOWCASE)).toMatch(/<TypeChips/)
+    expect(code(pickers)).not.toMatch(/--(el|color)-[a-z0-9-]+\s*:/)
+    expect(code(pickers)).not.toMatch(/--color-[a-z0-9-]+/)
   })
 
   it('DECLARES no design token — every colour is read, never defined', () => {

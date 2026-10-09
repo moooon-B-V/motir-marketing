@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { WatchLive } from '@/app/p/[identifier]/_components/WatchLive'
+import { screen } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { WatchLive } from '@/app/[locale]/p/[identifier]/_components/WatchLive'
 
 /*
  * "WATCH IT BEING BUILT" (MOTIR-6745; design MOTIR-6742 panel A and E). The one

@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { cleanup, render } from '@testing-library/react'
+import { cleanup } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
   PUBLIC_HOST_HEADER,
@@ -44,18 +45,22 @@ const { proxy } = await import('@/proxy')
 const { NextRequest } = await import('next/server')
 const { resetHostResolutionCache, ROUTER_PATHS } =
   await import('@/lib/hostResolution')
-const boardRoute = await import('@/app/p/[identifier]/board/route')
-const itemsRoute = await import('@/app/p/[identifier]/items/route')
-const treeRoute = await import('@/app/p/[identifier]/tree/route')
-const roadmapRoute = await import('@/app/p/[identifier]/roadmap/route')
-const itemRoute = await import('@/app/p/[identifier]/items/[key]/route')
-const OverviewPage = (await import('@/app/p/[identifier]/page')).default
-const ChangelogPage = (await import('@/app/p/[identifier]/changelog/page'))
+const boardRoute = await import('@/app/[locale]/p/[identifier]/board/route')
+const itemsRoute = await import('@/app/[locale]/p/[identifier]/items/route')
+const treeRoute = await import('@/app/[locale]/p/[identifier]/tree/route')
+const roadmapRoute = await import('@/app/[locale]/p/[identifier]/roadmap/route')
+const itemRoute =
+  await import('@/app/[locale]/p/[identifier]/items/[key]/route')
+const OverviewPage = (await import('@/app/[locale]/p/[identifier]/page'))
   .default
-const IntakePage = (await import('@/app/p/[identifier]/requests/new/page'))
-  .default
+const ChangelogPage = (
+  await import('@/app/[locale]/p/[identifier]/changelog/page')
+).default
+const IntakePage = (
+  await import('@/app/[locale]/p/[identifier]/requests/new/page')
+).default
 const RequestPage = (
-  await import('@/app/p/[identifier]/requests/[requestKey]/page')
+  await import('@/app/[locale]/p/[identifier]/requests/[requestKey]/page')
 ).default
 
 const APP = 'https://app.test.motir.co'
@@ -190,7 +195,9 @@ async function route(url: string): Promise<string> {
   }
   const second = await proxy(request(`${origin}${rewritten}`))
   // The second pass recognises its own rewrite and steps aside. A rewrite here
-  // would mean the router re-routed `/p/ACME/…` as if a reader had typed it.
+  // would mean the router re-routed `/p/ACME/…` as if a reader had typed it —
+  // and on the site host, a redirect would mean `/en/…` bounced back to the
+  // unprefixed address it came from, forever (MOTIR-7948, measured).
   expect(rewriteOf(second), `second pass over ${rewritten}`).toBeNull()
   expect(second.headers.get('x-middleware-next'), rewritten).toBe('1')
   return rewritten
@@ -198,7 +205,9 @@ async function route(url: string): Promise<string> {
 
 /** Call the route handler Next would match for an app path. */
 async function handle(path: string): Promise<Response> {
-  const [, p, identifier, view, key] = path.split('/')
+  // Every page target is inside a locale's tree now (MOTIR-7948): `/en/p/…`.
+  const [, locale, p, identifier, view, key] = path.split('/')
+  expect(locale).toBe('en')
   expect(p).toBe('p')
   const req = new Request(`https://motir.co${path}`)
   if (view === 'items' && key) {
@@ -230,7 +239,7 @@ describe.each(HOSTS)('$label — every old read link lands in the app', (h) => {
     async (view) => {
       const url = `${h.origin}${h.path(view)}`
       const reached = await route(url)
-      expect(reached).toBe(`/p/ACME/${view}`)
+      expect(reached).toBe(`/en/p/ACME/${view}`)
 
       const res = await handle(reached)
       expect(res.status, url).toBe(308)
@@ -295,7 +304,7 @@ const READ_HREF = /\/(board|items|tree|roadmap)(\/|\?|$)/
 async function renderPage(h: HostCase, page: () => Promise<React.ReactNode>) {
   headerScope.current = new Headers(h.headers)
   stubContract(h.primary)
-  const { container } = render(await page())
+  const { container } = render(<>{await page()}</>)
   return [...container.querySelectorAll('a[href]')].map((a) =>
     a.getAttribute('href')!,
   )

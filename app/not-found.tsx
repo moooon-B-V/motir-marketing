@@ -1,4 +1,8 @@
+import { NextIntlClientProvider } from 'next-intl'
+import { defaultLocaleUnlessClaimed } from '@/i18n/locale'
+import { clientCopy, englishCopy } from '@/lib/copy'
 import { NotFoundRoom } from './_components/NotFoundRoom'
+import { SiteDocument } from './_components/SiteDocument'
 import { UNKNOWN_HOST } from '@/lib/publicHost'
 
 /**
@@ -125,6 +129,30 @@ import { UNKNOWN_HOST } from '@/lib/publicHost'
  * `draftMode()` from anything it renders. Nothing in the test suite catches it:
  * `pnpm build`'s route table is the only signal, and only if somebody reads it.
  */
+/*
+ * ⚠️ AND IT RENDERS ITS OWN DOCUMENT (MOTIR-7948). The root layout is a
+ * pass-through now — `<html lang>` belongs to `app/[locale]/layout.tsx`, which
+ * this global boundary does not sit under — so the room is wrapped here in the
+ * SAME `SiteDocument` that layout uses, in English. That component reads no
+ * request either, so the rule above still holds; the room in each language is
+ * the 404 card's, from a locale-scoped boundary, not a reason to read one here.
+ */
 export default function NotFound() {
-  return <NotFoundRoom host={UNKNOWN_HOST} />
+  // ⚠️ ENGLISH, NAMED RATHER THAN ASKED FOR (MOTIR-7950). The room's words are
+  // read through next-intl now, and next-intl with no locale set asks the
+  // REQUEST which one is in use — the read the paragraph above forbids. So the
+  // locale is set here, and the provider hands the client chrome the English
+  // catalogue.
+  // ⚠️ BUT ONLY WHEN NO LOCALE TREE HAS CLAIMED THE REQUEST (MOTIR-7955). Next
+  // renders this boundary into every page's payload, so an unconditional
+  // `setRequestLocale('en')` here overwrote `/fr`'s locale for whatever read
+  // after it — the French 404 room among them. `i18n/locale.ts` has the race.
+  defaultLocaleUnlessClaimed()
+  return (
+    <SiteDocument lang="en" description={englishCopy.meta.description}>
+      <NextIntlClientProvider locale="en" messages={clientCopy(englishCopy)}>
+        <NotFoundRoom host={UNKNOWN_HOST} />
+      </NextIntlClientProvider>
+    </SiteDocument>
+  )
 }

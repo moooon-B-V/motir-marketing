@@ -7,6 +7,12 @@ allowBuilds:
   # the prebuilt @img/sharp-linux-* binary for the platform rather than
   # compiling libvips, so allowing it costs nothing and skipping it would leave
   # `next/image` unoptimised in production.
+  # Both arrive with next-intl (MOTIR-7948) and serve only its optional message
+  # EXTRACTOR and its dev-time catalogue watcher, neither of which this site
+  # turns on — the catalogues are hand-kept JSON. Their install scripts only
+  # fetch prebuilt binaries for features we do not run, so they stay off.
+  '@parcel/watcher': false
+  '@swc/core': false
   sharp: true
   # The native resolver behind eslint-import-resolver-typescript, which
   # eslint-config-next pulls in. Its postinstall only selects the prebuilt

@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowRight, CircleAlert, LoaderCircle } from 'lucide-react'
 import { Button, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { SIGN_UP } from '@/lib/destinations'
 import { MAX_IDEA_LENGTH, handOffIdea } from '@/lib/ideaHandoff'
 
@@ -39,9 +39,11 @@ type Status = 'idle' | 'submitting' | 'failed'
  * own; `examples`, when non-empty, are typed into the empty box in turn.
  */
 export function HeroBrief({
-  placeholder = copy.landing.hero.placeholder,
+  placeholder: placeholderProp,
   examples = [],
 }: Readonly<{ placeholder?: string; examples?: readonly string[] }> = {}) {
+  const copy = useCopy()
+  const placeholder = placeholderProp ?? copy.landing.hero.placeholder
   const fieldId = useId()
   const [idea, setIdea] = useState('')
   const [focused, setFocused] = useState(false)
@@ -222,6 +224,7 @@ function shuffled<T>(items: readonly T[]): T[] {
 }
 
 function SubmitFailed() {
+  const copy = useCopy()
   return (
     <div
       role="alert"

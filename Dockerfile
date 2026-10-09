@@ -46,7 +46,7 @@ ENV NEXT_PUBLIC_MOTIR_APP_ORIGIN=${NEXT_PUBLIC_MOTIR_APP_ORIGIN}
 ARG NEXT_PUBLIC_MOTIR_TENANT_DOMAIN
 ENV NEXT_PUBLIC_MOTIR_TENANT_DOMAIN=${NEXT_PUBLIC_MOTIR_TENANT_DOMAIN}
 
-RUN pnpm next build
+RUN pnpm next build --webpack
 
 # ── runner ──────────────────────────────────────────────────────────────────
 FROM node:22-slim AS runner

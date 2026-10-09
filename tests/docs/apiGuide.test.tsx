@@ -1,11 +1,13 @@
 import { readFileSync } from 'node:fs'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { EN_PAGE } from '@/tests/helpers/locale'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import GettingStartedPage from '@/app/docs/api/getting-started/page'
-import StabilityPage, {
+import GettingStartedPage from '@/app/[locale]/docs/api/getting-started/page'
+import StabilityPage from '@/app/[locale]/docs/api/stability/page'
+import {
   POLICY_ADDITIVE,
   POLICY_FORBIDDEN,
-} from '@/app/docs/api/stability/page'
+} from '@/app/[locale]/docs/api/stability/policy'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 
 /*
@@ -46,7 +48,7 @@ afterEach(() => {
 
 /** Every `<pre>` the page renders, as text. */
 async function panes(): Promise<string[]> {
-  const { container } = render(await GettingStartedPage())
+  const { container } = render(await GettingStartedPage(EN_PAGE))
   return [...container.querySelectorAll('pre')].map(
     (pane) => pane.textContent ?? '',
   )
@@ -96,7 +98,7 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
     }
 
     const source = readFileSync(
-      'app/docs/api/getting-started/page.tsx',
+      'app/[locale]/docs/api/getting-started/page.tsx',
       'utf8',
     ).replace(/\/\*[\s\S]*?\*\//g, '')
     expect(source).not.toContain('https://app.motir.co')
@@ -114,7 +116,7 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
 
   it('UNREACHABLE shows a placeholder, never an invented version', async () => {
     stubSpec({}, 503)
-    const { container } = render(await GettingStartedPage())
+    const { container } = render(await GettingStartedPage(EN_PAGE))
     const all = [...container.querySelectorAll('pre')]
       .map((pane) => pane.textContent ?? '')
       .join('\n')
@@ -131,7 +133,7 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
     // The restore ADDS to the five-step spine rather than replacing it — the
     // page's structure was not the defect.
     stubSpec(catalogueFixture)
-    const { container } = render(await GettingStartedPage())
+    const { container } = render(await GettingStartedPage(EN_PAGE))
     const headings = [...container.querySelectorAll('h2')].map(
       (heading) => heading.textContent ?? '',
     )
@@ -147,16 +149,16 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
 })
 
 describe('/docs/api/stability publishes BOTH halves of the promise', () => {
-  it('states the client’s own obligations — the section that went missing', () => {
-    const { container } = render(<StabilityPage />)
+  it('states the client’s own obligations — the section that went missing', async () => {
+    const { container } = render(await StabilityPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('Your side of the promise')
     expect(text).toMatch(/MUST tolerate unknown fields/)
     expect(text).toMatch(/MUST NOT\s*parse the human/)
   })
 
-  it('states how a new major would arrive — `v2` appeared ZERO times before', () => {
-    const { container } = render(<StabilityPage />)
+  it('states how a new major would arrive — `v2` appeared ZERO times before', async () => {
+    const { container } = render(await StabilityPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('How a v2 would arrive')
     expect(text).toContain('served alongside v1')
@@ -164,8 +166,8 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
     expect((text.match(/\bv2\b/g) ?? []).length).toBeGreaterThanOrEqual(3)
   })
 
-  it('renders all four sections, in the deleted page’s order', () => {
-    const { container } = render(<StabilityPage />)
+  it('renders all four sections, in the deleted page’s order', async () => {
+    const { container } = render(await StabilityPage(EN_PAGE))
     expect(
       [...container.querySelectorAll('h2')].map((h) => h.textContent ?? ''),
     ).toEqual([
@@ -176,7 +178,7 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
     ])
   })
 
-  it('publishes the two policy lists by MEMBERSHIP, not by summary', () => {
+  it('publishes the two policy lists by MEMBERSHIP, not by summary', async () => {
     /*
      * ⚠️ WHAT THIS CAN AND CANNOT CHECK, said plainly. motir-core's ADR §8 is
      * the INTERNAL record of the same promise, and over there a test held each
@@ -189,7 +191,7 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
      * Silently adding a row to the additive list widens what may change under
      * a client without a version bump, and that is the edit worth failing on.
      */
-    const { container } = render(<StabilityPage />)
+    const { container } = render(await StabilityPage(EN_PAGE))
     const text = container.textContent ?? ''
 
     expect(POLICY_ADDITIVE).toEqual([

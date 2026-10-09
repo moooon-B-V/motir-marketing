@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import {
   isOnPrimaryHost,
   publicUrlFor,
@@ -10,8 +11,8 @@ import {
   PUBLIC_ORIGIN_HEADER,
 } from '@/lib/publicHost'
 import { resetHostResolutionCache, resolveHost } from '@/lib/hostResolution'
-import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
-import { ProjectJsonLd } from '@/app/p/[identifier]/_components/JsonLd'
+import { ProjectHeader } from '@/app/[locale]/p/[identifier]/_components/ProjectHeader'
+import { ProjectJsonLd } from '@/app/[locale]/p/[identifier]/_components/JsonLd'
 import type { PublicProjectOverviewDto } from '@/lib/publicProject'
 
 /*
@@ -91,7 +92,7 @@ describe('a recorded workspace resolution, driven to a rendered tab page', () =>
           })(),
       '/ACME/board',
     )
-    expect(route).toEqual({ action: 'rewrite', path: '/p/ACME/board' })
+    expect(route).toEqual({ action: 'rewrite', path: '/en/p/ACME/board' })
 
     // 2. the headers the router would then forward, read back as a page does
     const host = readPublicHost(
@@ -105,7 +106,9 @@ describe('a recorded workspace resolution, driven to a rendered tab page', () =>
     // 3. the RENDERED page — links and canonical together, which is the join
     const subject = project('https://acme.motir.site/ACME')
     render(<ProjectHeader project={subject} current="changelog" host={host} />)
-    const { container } = render(<ProjectJsonLd project={subject} />)
+    const { container } = render(
+      <ProjectJsonLd project={subject} fallbackDescription="" />,
+    )
 
     const nav = screen.getAllByRole('navigation', { name: 'Project' })[0]!
     expect(within(nav).getByRole('link', { name: 'Overview' })).toHaveAttribute(

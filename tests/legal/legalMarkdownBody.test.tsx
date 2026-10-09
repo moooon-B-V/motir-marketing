@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { describe, expect, it } from 'vitest'
-import { MarkdownBody } from '@/app/legal/_components/MarkdownBody'
+import { MarkdownBody } from '@/app/[locale]/legal/_components/MarkdownBody'
 import { listLegalDocuments } from '@/lib/legal/documents'
 
 /**

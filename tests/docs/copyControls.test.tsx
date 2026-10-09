@@ -1,13 +1,14 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { CodeBlock } from '@/app/docs/_components/DocSchema'
+import { CodeBlock } from '@/app/[locale]/docs/_components/DocSchema'
 import {
   COPIED_MS,
   COPY_FAILED_NOTE,
   COPY_LABELS,
   copyButtonLabel,
-} from '@/app/docs/_components/CopyControls'
+} from '@/app/[locale]/docs/_components/CopyControls'
 
 /*
  * THE COPY AFFORDANCE (MOTIR-4977) — built to `design/docs/design-notes.md`

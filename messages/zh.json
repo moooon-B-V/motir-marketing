@@ -1,0 +1,2250 @@
+{
+  "publicProject": {
+    "appHost": "app.motir.co",
+    "tabs": {
+      "overview": "概览",
+      "board": "面板",
+      "items": "工作项",
+      "tree": "树状视图",
+      "roadmap": "路线图",
+      "changelog": "更新日志"
+    },
+    "stats": {
+      "requests": "需求",
+      "upvotes": "赞同",
+      "planned": "已规划",
+      "shipped": "已发布"
+    },
+    "header": {
+      "navAria": "项目",
+      "inTheApp": "在应用中",
+      "opensInApp": "——在 Motir 应用中打开，需要账户"
+    },
+    "actRail": {
+      "follow": "关注",
+      "followSr": "——在 app.motir.co 上继续",
+      "requestFeature": "提出功能需求",
+      "atomFeed": "Atom 订阅源"
+    },
+    "subscribe": {
+      "label": "通过电子邮件接收更新日志",
+      "placeholder": "you@example.com",
+      "submit": "订阅",
+      "submitting": "正在订阅…",
+      "messages": {
+        "sent": "请查收邮件并完成确认。",
+        "invalid": "这看起来不是有效的电子邮件地址。",
+        "unavailable": "此项目已关闭更新日志邮件。",
+        "limited": "尝试次数过多，请几分钟后再试。",
+        "failed": "无法连接 Motir，请稍后再试。"
+      }
+    },
+    "watchLive": {
+      "titleNamed": "观看 {name} 的构建过程",
+      "titleUnnamed": "观看这个项目的构建过程",
+      "lede": "实时面板、正在起草的计划、正在进行的智能体运行——都在 Motir 应用中。",
+      "cost": "你需要一个 Motir 账户。如果继续，{managers}将能看到你的{nameAndEmail}，以及你访问的时间。",
+      "costNameAndEmail": "姓名和电子邮件",
+      "costManagers": "此项目所在工作区的管理者",
+      "cta": "实时观看",
+      "ctaSr": "——在 Motir 应用中打开"
+    },
+    "states": {
+      "error": {
+        "project": "无法加载此项目",
+        "changelog": "无法加载此项目的更新日志",
+        "request": "无法加载此功能需求",
+        "workspaceProjects": "无法加载此工作区的项目",
+        "address": "无法加载此地址",
+        "body": "Motir 应用暂时没有响应。你所在的页面没有异常——这部分内容读取自 {host}，那是一个独立的部署。请稍后再试。",
+        "bodyWithFeed": "Motir 应用暂时没有响应。你所在的页面没有异常——这部分内容读取自 {host}，那是一个独立的部署。请稍后再试，或者阅读通过订阅源提供的更新日志。",
+        "feed": "更新日志订阅源"
+      }
+    },
+    "overview": {
+      "empty": {
+        "title": "此项目还没有撰写概览",
+        "body": "它的实时面板、工作项和路线图都在 Motir 应用中——可以在旁边观看它的构建过程。"
+      }
+    },
+    "changelog": {
+      "empty": {
+        "title": "尚未发布任何内容",
+        "body": "此项目完成公开工作后，会记录在这里，也会出现在订阅源中。"
+      },
+      "older": "更早",
+      "subscribeAtom": "通过 Atom 订阅"
+    },
+    "requestNew": {
+      "heading": "提出功能需求",
+      "intro": "告诉 {project} 团队你需要什么。需求是公开的：任何阅读此项目的人都能看到并赞同你的需求。",
+      "signInTitle": "需要先登录",
+      "signInBody": "提交需求需要账户，因此表单位于 {host}。登录后，你会看到已有人提出过的类似需求（可以直接赞同它），然后回到此项目。",
+      "continue": "前往 Motir ↗",
+      "closing": "无需账户，任何人都可以阅读{projectPage}、它的更新日志以及每个需求的独立页面。",
+      "projectPage": "项目页面"
+    },
+    "request": {
+      "openedBy": "由 {author} 发起 · {date}",
+      "discussion": "讨论",
+      "noComments": "还没有评论。",
+      "commentHandoff": "参与讨论需要在 {host} 登录，之后会带你回到此需求。",
+      "addComment": "添加评论",
+      "demand": "需求热度",
+      "upvote": "赞同",
+      "upvoteNote": "赞同操作在 app.motir.co 上完成，之后会回到这里。",
+      "askHeading": "提出你的需要",
+      "requestFeature": "提出功能需求 ↗"
+    },
+    "workspaceRoot": {
+      "heading": "公开项目",
+      "empty": {
+        "title": "这里还没有公开内容",
+        "body": "此工作区已认领了地址，但尚未公开任何项目。公开后，项目会显示在这里。"
+      }
+    },
+    "meta": {
+      "overviewFallback": "一个在 Motir 上公开构建的项目——它的概览、更新日志和功能需求，以及 Motir 应用中的实时面板。",
+      "jsonLdFallback": "{name}——Motir 上的公开项目计划。",
+      "tabTitle": "{label} · {name}",
+      "tabDescription": "{name} 的{label}——在 Motir 上公开。",
+      "requestNewTitle": "提出功能需求 · {name}",
+      "requestNewDescription": "向 {name} 团队提出你的需要。需求是公开的。",
+      "workspaceTitle": "公开项目",
+      "workspaceDescription": "此工作区在 Motir 上发布的公开项目。",
+      "hostUnavailableTitle": "暂时无法访问"
+    }
+  },
+  "meta": {
+    "title": "Motir——AI 规划、项目管理与智能体编排",
+    "description": "AI 规划、项目管理与智能体编排平台。描述你想构建的东西——Motir 起草计划，随后由智能体接手工作。"
+  },
+  "nav": {
+    "ariaLabel": "主导航",
+    "brandAriaLabel": "Motir——首页",
+    "skipToContent": "跳到正文",
+    "menu": "菜单",
+    "explore": "公开构建",
+    "ideas": "值得构建的想法",
+    "buildsItself": "Motir 构建自身",
+    "docs": "文档",
+    "design": "设计",
+    "signIn": "登录",
+    "startFree": "免费开始",
+    "language": {
+      "label": "语言：{language}",
+      "menuLabel": "选择语言",
+      "heading": "语言"
+    },
+    "products": "产品",
+    "productsMenuLabel": "Motir 产品",
+    "productGroups": {
+      "ai": "AI 产品",
+      "tooling": "工具",
+      "infrastructure": "基础设施"
+    },
+    "productItems": {
+      "aiPlanner": {
+        "name": "Motir AI 规划器",
+        "blurb": "把想法变成由你批准的计划"
+      },
+      "projectManagement": {
+        "name": "Motir 项目管理",
+        "blurb": "面板、Sprint、待办列表与路线图"
+      },
+      "projectManager": {
+        "name": "Motir 项目经理",
+        "blurb": "负责整个项目，并向你汇报"
+      },
+      "aiDebugging": {
+        "name": "Motir AI 调试",
+        "blurb": "每个缺陷都追溯到代码并纳入计划"
+      },
+      "mcp": {
+        "name": "Motir MCP",
+        "blurb": "让你的项目进入任何支持 MCP 的 AI 助手"
+      },
+      "cli": {
+        "name": "Motir CLI",
+        "blurb": "在终端里把工作交给你自己的智能体"
+      },
+      "claudeCodeConnector": {
+        "name": "Motir Claude Code connector",
+        "blurb": "在 claude.ai 上连接一次，即可在 Claude Code 中使用 Motir"
+      },
+      "claudeCodePlugin": {
+        "name": "Motir Claude Code plugin",
+        "blurb": "技能、MCP 服务器和 CLI，一次安装"
+      },
+      "agentFleet": {
+        "name": "Motir 智能体集群",
+        "blurb": "托管智能体，并行推进你的计划"
+      },
+      "agentHosting": {
+        "name": "Motir 智能体托管",
+        "blurb": "你自己的智能体，运行在 Motir 的机器上"
+      },
+      "sandbox": {
+        "name": "Motir 沙箱",
+        "blurb": "在你自己的机器上为智能体提供一个密封容器"
+      }
+    }
+  },
+  "landing": {
+    "hero": {
+      "headline": "Vibe the project",
+      "lede": "你带来想法，Motir 交付整个项目：计划、设计、构建、文档，以及它如何一步步成形的完整经过。",
+      "ideaLabel": "你在构建什么？",
+      "placeholder": "一个帮助人们实现目标的 AI 私人助理…",
+      "hint": "几句话就够了，剩下的 Motir 会来问。",
+      "cta": "开始",
+      "ctaSubmitting": "正在开始…",
+      "statusSubmitting": "正在保存你的想法，并带你前往 Motir…",
+      "errorTitle": "暂时无法保存你的想法。",
+      "errorBody": "你输入的内容都没有丢失。请重试，或者带着你的想法继续前往 Motir。",
+      "errorRetry": "重试",
+      "errorFallback": "继续前往 Motir",
+      "existingProject": "已经有项目了？",
+      "existingProjectLink": "它同样可以 Vibe"
+    },
+    "projectManager": {
+      "eyebrow": "Motir 项目经理",
+      "headline": "已经有项目了？交给 Motir 项目经理。",
+      "lede": "你是产品负责人。Motir 项目经理会读取你已有的项目，规划下一步，安排智能体投入工作，再向你汇报。它负责运转项目，由你决定发布什么。",
+      "points": [
+        "在改动任何东西之前，先读懂你的代码、任务和历史",
+        "规划后续步骤，并让计划始终保持最新",
+        "全天候让智能体推进工作",
+        "把每一个决定、每一次发布都交给你"
+      ],
+      "importLabel": "导入自",
+      "sources": {
+        "codebase": "代码仓库",
+        "jira": "Jira",
+        "linear": "Linear",
+        "plane": "Plane"
+      },
+      "report": {
+        "ariaLabel": "Motir 项目经理的周报示例",
+        "title": "周报 · AI 私人助理",
+        "range": "10月6日 – 10月12日",
+        "done": "本周完成",
+        "inProgress": "进行中",
+        "waiting": "等你处理",
+        "log": [
+          {
+            "day": "周一",
+            "what": "日历连接已发布",
+            "state": "已完成",
+            "tone": "plain"
+          },
+          {
+            "day": "周二",
+            "what": "计划已更新：邮件摘要拆分为两部分",
+            "state": "已规划",
+            "tone": "cool"
+          },
+          {
+            "day": "周三",
+            "what": "批准每位用户的 AI 费用上限",
+            "state": "由你决定",
+            "tone": "you"
+          },
+          {
+            "day": "周四",
+            "what": "发现并修复了 Android 上的登录错误",
+            "state": "已修复",
+            "tone": "plain"
+          },
+          {
+            "day": "周五",
+            "what": "晨间简报可以试用了",
+            "state": "待审阅",
+            "tone": "you"
+          }
+        ]
+      }
+    },
+    "builtByMotir": {
+      "eyebrow": "用 Motir 构建",
+      "headline": "Motir 构建自身。",
+      "body": "Motir 由 Motir 规划、构建、测试和发布。它的智能体执行它自己的路线图，每一份计划、每一次发布都由人来批准。它也能以同样的方式运转你的项目。",
+      "points": [
+        "每一份计划、每一次运行、每一个决定都公开可见",
+        "工作进行时，实时观看",
+        "与你将使用的 Project Manager 完全相同"
+      ],
+      "watch": "观看 Motir 构建自身",
+      "runs": "创建账户，观看它的智能体运行",
+      "start": "开始你的项目",
+      "note": "Motir 项目，实时呈现在 app.motir.co",
+      "story": "Motir 如何构建自身"
+    },
+    "moreThanCode": {
+      "headline": "项目不只是代码",
+      "lede": "Vibe coding 只交给你代码，剩下的让你自己摸索。Motir 交付一个真正的产品上线和持续成长所需的一切。",
+      "items": {
+        "plan": {
+          "tab": "计划",
+          "title": "计划",
+          "body": "要做什么、按什么顺序、为什么这样做。Motir 会先提出一个好搭档会问的那些疑问。"
+        },
+        "design": {
+          "tab": "设计",
+          "title": "设计",
+          "body": "在动手构建之前，先确定它的外观和感觉。方向由你来选。"
+        },
+        "product": {
+          "tab": "产品",
+          "title": "产品",
+          "body": "产品本身：能运行、经过测试，从第一个用户到第十万个用户都能撑得住。"
+        },
+        "docs": {
+          "tab": "文档",
+          "title": "文档",
+          "body": "决策、指南和笔记，与工作放在一起，没人需要事后再补写。"
+        },
+        "history": {
+          "tab": "历史",
+          "title": "历史",
+          "body": "每一个决定都附有理由和日期，上下文永远不会丢失。"
+        }
+      }
+    },
+    "calls": {
+      "headline": "AI 做事，你拍板。",
+      "lede": "Motir 推进得很快，但只要遇到该由你做的选择，它就会停下。没有你的同意，什么都不会往前走。",
+      "items": {
+        "say": {
+          "tab": "说出来",
+          "title": "说出你想要什么",
+          "body": "几句话，或者一堆零散的想法都行。Motir 会一直问，直到弄明白为止。"
+        },
+        "watch": {
+          "tab": "看着它",
+          "title": "看着它逐步成形",
+          "body": "计划、设计、产品和文档一步步做出来，全程公开透明。"
+        },
+        "decide": {
+          "tab": "你来决定",
+          "title": "你来决定",
+          "body": "每一部分都会回到你手上，供你查看、试用和批准。发布什么，始终由你掌控。"
+        }
+      }
+    },
+    "resume": {
+      "headline": "从上次停下的地方继续",
+      "body": "明天回来也好，六个月后回来也好，或者交给新人接手。项目记得一切，没有人需要从头开始，也没有人需要再解释一遍。"
+    },
+    "close": {
+      "headline": "Vibe the project",
+      "body": "从几句话开始，或者把现有项目交给 Motir 项目经理。",
+      "start": "开始一个项目",
+      "import": "导入一个项目",
+      "developers": "面向开发者：Motir 的工作方式",
+      "openCore": "核心开源 · 你的项目永远属于你",
+      "free": {
+        "lead": "只想要项目管理？",
+        "cta": "免费开始",
+        "tail": "——面板、Sprint 和待办列表，没有 AI 来打扰。"
+      }
+    },
+    "art": {
+      "plan": {
+        "title": "AI 私人助理",
+        "rows": [
+          ["账户与登录", "已完成"],
+          ["日历与邮件", "3 / 5"],
+          ["每位用户的 AI 费用", "由你决定"],
+          ["移动应用", "稍后"]
+        ]
+      },
+      "design": {
+        "screen": "你的晨间简报",
+        "time": "07:30",
+        "items": [
+          ["09:00", "评审改到 10:00"],
+          ["邮件", "3 封回复待处理"],
+          ["待办", "发送合同"]
+        ],
+        "optionA": "方案 A",
+        "optionB": "方案 B"
+      },
+      "product": {
+        "greeting": "早上好",
+        "needs": "有 3 件事需要你处理",
+        "rows": [
+          ["回复合同相关邮件", "先询问"],
+          ["把健身改到 18:00", "日历"]
+        ],
+        "edit": "编辑",
+        "send": "发送",
+        "count": "64",
+        "countLabel": "项检查通过",
+        "checks": [
+          "未经询问绝不发送",
+          "每位用户的数据彼此隔离",
+          "10 万用户时依然快速"
+        ]
+      },
+      "docs": {
+        "title": "边做边写",
+        "page": "助理可以读取哪些内容",
+        "decisionLabel": "决定 · 你",
+        "decision": "由用户选择它能看到什么",
+        "chips": ["设置指南", "隐私", "AI 费用上限"]
+      },
+      "history": {
+        "title": "谁决定了什么",
+        "events": [
+          ["10月1日", "你描述了它", "一段话", "you"],
+          ["10月2日", "你批准了计划", "经过 3 轮", "you"],
+          ["10月3日", "你选择了设计 B", "简报优先", "you"],
+          ["10月9日", "日历已构建并测试", "64 项检查", "motir"]
+        ]
+      },
+      "say": {
+        "idea": "一个帮助人们实现目标的 AI 私人助理。",
+        "qa": [
+          ["它应该自主行动，还是在发送任何内容前先询问？", "始终先询问。"],
+          ["面向个人，还是也面向团队？", "先面向个人，明年再做团队版。"]
+        ]
+      },
+      "watch": {
+        "lanes": [
+          ["计划", "done"],
+          ["设计", "done"],
+          ["构建", "running"],
+          ["测试", "waiting"],
+          ["文档", "ready"]
+        ],
+        "states": {
+          "done": "已完成",
+          "running": "智能体运行中",
+          "ready": "就绪",
+          "waiting": "等待构建"
+        },
+        "live": "pricing-page.tsx"
+      },
+      "decide": {
+        "stamp": "等你查看",
+        "title": "日历连接已构建完成",
+        "body": "先看录像，再亲自试一试。",
+        "changes": "要求修改",
+        "approve": "批准",
+        "video": {
+          "chapterCount": "{count} 个章节",
+          "label": "验收视频",
+          "length": "0:48",
+          "chapters": ["连接日历", "调整一场会议", "简报随之更新"]
+        }
+      },
+      "resume": {
+        "tab": "3 周后回来",
+        "hello": "欢迎回来。这是 AI 私人助理目前的进展。",
+        "cells": [
+          ["上次", "日历连接已发布"],
+          ["进行中", "邮件摘要"],
+          ["等你处理", "2 个决定"]
+        ]
+      }
+    }
+  },
+  "designShowcase": {
+    "specimen": {
+      "sectionLabel": "组合界面",
+      "primary": "主要",
+      "secondary": "次要",
+      "ghost": "幽灵",
+      "danger": "危险",
+      "badge": "徽标",
+      "done": "已完成",
+      "inProgress": "进行中",
+      "tooltip": "一个提示框，取自同一套设计令牌。",
+      "hoverMe": "悬停在这里",
+      "titleLabel": "工作项标题",
+      "titleValue": "发布计费流程",
+      "assigneeLabel": "负责人",
+      "assigneePlaceholder": "选择…",
+      "unassigned": "未分配",
+      "viewLabel": "视图",
+      "board": "面板",
+      "list": "列表",
+      "liveUpdates": "实时更新",
+      "notesLabel": "备注",
+      "notesValue": "这块示例界面上的每个控件，都是已发布的基础组件。",
+      "popover": "弹出层",
+      "popoverBody": "一个取自同一套设计令牌的浮层。它的圆角、边框和阴影随风格变化，颜色随配色变化。",
+      "modal": "对话框",
+      "modalDescription": "对话框同样会随风格轴改变形态。",
+      "emptyTitle": "这里还没有内容",
+      "emptyDescription": "EmptyState——已发布的基础组件。",
+      "errorTitle": "出错了",
+      "errorDescription": "ErrorState——已发布的基础组件。"
+    },
+    "heading": "选一种外观，整个网站随之改变。",
+    "subline": "这是每个 Motir 项目起步时使用的设计系统。它放在这里而不是风格指南里，因为展示你的产品可能是什么样子，最快的方式就是让你给我们的网站换个样式。",
+    "theme": {
+      "name": "主题",
+      "help": "浅色、深色，或跟随设备设置。",
+      "light": "浅色",
+      "dark": "深色",
+      "system": "跟随系统"
+    },
+    "style": {
+      "name": "风格",
+      "help": "形状与质感——轮廓、层次与疏密。"
+    },
+    "palette": {
+      "name": "配色",
+      "help": "界面所采用的颜色方案。"
+    },
+    "type": {
+      "name": "字体",
+      "help": "标题与正文的字体搭配。"
+    },
+    "reset": "重置为默认",
+    "closing": "这里的三个维度，正是你在 Motir 中新建项目时选择的那三个——底层也是同一套设计系统。这个网站展示的不是它的演示，而是用它构建出来的。",
+    "styles": {
+      "warm-editorial": {
+        "name": "温暖编辑风",
+        "tagline": "深思、温暖，有技术感却不冰冷，略带编辑风。"
+      },
+      "soft-playful": {
+        "name": "柔和 / 活泼",
+        "tagline": "更有活力——圆润、舒展、动效轻柔。"
+      },
+      "swiss-minimal-flat": {
+        "name": "瑞士 / 极简扁平",
+        "tagline": "国际主义排版风格，结构清晰、沉稳——扁平、锐利、网格化。"
+      },
+      "neo-brutalism": {
+        "name": "新粗野主义",
+        "tagline": "粗犷、有力、实用至上——0px 圆角、粗边框、硬朗的偏移阴影。"
+      },
+      "glassmorphism": {
+        "name": "玻璃拟态",
+        "tagline": "半透明的磨砂玻璃，悬浮在柔和而鲜明的渐变之上。"
+      },
+      "cybercore-y2k": {
+        "name": "赛博核 / Y2K",
+        "tagline": "暗底霓虹的复古科技风——发光的 HUD 面板、科技网格、等宽标题。"
+      },
+      "aurora": {
+        "name": "极光",
+        "tagline": "柔和流动的极光，映在流畅、微微发光的界面之后。"
+      },
+      "3d-immersive": {
+        "name": "3D / 沉浸式",
+        "tagline": "纵深与透视——立体面板悬浮于页面之上。"
+      },
+      "neumorphism": {
+        "name": "新拟态",
+        "tagline": "从单色底面中隆起的柔和凸起表面。"
+      },
+      "hand-drawn-indie": {
+        "name": "手绘 / 独立风",
+        "tagline": "随性又亲切——粗糙的手绘墨线、歪斜的边角、柔和的偏移阴影、俏皮的弹跳。"
+      },
+      "retrofuturism": {
+        "name": "复古未来主义",
+        "tagline": "铬金属、流动渐变与合成波地平线——七八十年代的科幻。"
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "冷峻而具编辑感——冷灰阶表面加墨色、墨色 CTA、克制的冷蓝强调色，外加几处暖色点缀。"
+      },
+      "amethyst": {
+        "name": "紫水晶",
+        "tagline": "温暖而具编辑感——奶油色表面、炭黑墨色、紫色主色、粉彩色调。"
+      },
+      "cobalt": {
+        "name": "钴蓝",
+        "tagline": "冷静而稳重——石板冷色表面、自信的钴蓝主色、偏冷的色调。"
+      },
+      "evergreen": {
+        "name": "常青",
+        "tagline": "清新而专业——祖母绿主色搭配偏冷的森林中性色，整体偏绿的界面。"
+      },
+      "spectrum": {
+        "name": "光谱",
+        "tagline": "鲜明而活泼——清爽的冷色表面、明亮的紫罗兰主色、糖果般明艳的多彩强调色与色调组合。"
+      },
+      "amber": {
+        "name": "琥珀",
+        "tagline": "温暖而充满电力——Binance 交易大厅的金色，配交易所的石墨近黑色；金色上用深色标签。"
+      },
+      "sienna": {
+        "name": "赭石",
+        "tagline": "温暖而鲜明——Mistral 的火焰橙，配地中海式暖奶油色表面；火焰色上用深色标签。"
+      },
+      "garnet": {
+        "name": "石榴石",
+        "tagline": "浓郁而大胆——Pinterest 的 Pushpin 红，配品牌的中性灰；红色上用白色标签。"
+      },
+      "citrine": {
+        "name": "黄水晶",
+        "tagline": "明亮而富协作感——Miro 的 Sunglow 黄，配白板灰，并以 Miro 的操作蓝作强调色。"
+      },
+      "candy": {
+        "name": "糖果",
+        "tagline": "甜美而活泼——浅泡泡糖粉主色，配糖纸般的粉色，再加一整套粉彩糖果彩虹。"
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "编辑风衬线标题配简洁无衬线正文——Motir 的招牌搭配。"
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "全无衬线——标题与正文均用 Inter；结构感强，不用衬线。"
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "通篇等宽——标题、正文全部如此的代码原生界面。"
+      },
+      "grotesk": {
+        "name": "怪诞体",
+        "tagline": "整个界面采用几何新怪诞体——紧凑、自信、富有产品感。"
+      },
+      "editorial": {
+        "name": "编辑风",
+        "tagline": "个性鲜明的展示衬线体配人文无衬线体——杂志般考究。"
+      },
+      "mono-technical": {
+        "name": "等宽技术风",
+        "tagline": "通篇使用 IBM Plex Mono——精准、开发者级的界面。"
+      }
+    }
+  },
+  "footer": {
+    "ariaLabel": "页脚",
+    "tagline": "AI 规划、项目管理与智能体编排平台。",
+    "productHeading": "产品",
+    "resourcesHeading": "资源",
+    "legalHeading": "法律",
+    "explore": "公开构建的项目",
+    "docs": "文档",
+    "signIn": "登录",
+    "startFree": "免费开始",
+    "github": "GitHub",
+    "openSource": "项目管理核心以 GPL-3.0 协议开源。",
+    "terms": "服务条款",
+    "privacy": "隐私政策",
+    "legalIndex": "全部法律文件",
+    "entity": "Motir 是 moooon B.V. 旗下的产品。",
+    "copyright": "© {year} moooon B.V.",
+    "howItWorks": "Motir 的工作方式",
+    "ideas": "值得构建的想法",
+    "buildsItself": "Motir 构建自身"
+  },
+  "legal": {
+    "metaTitle": "法律",
+    "metaDescription": "由 moooon B.V. 运营的 Motir 托管服务的条款、政策与披露信息。",
+    "metaDocDescription": "{title}——版本 {version}。由 moooon B.V. 为 Motir 托管服务发布。",
+    "breadcrumbAria": "法律文件",
+    "allDocuments": "← 全部法律文件",
+    "versionAndEffective": "版本 {version} · 自 {date} 起生效",
+    "versionNotYetEffective": "版本 {version} · 尚未生效",
+    "indexTitle": "法律",
+    "indexIntro": "moooon B.V. 就 Motir 托管服务发布的全部内容——你同意的条款、我们如何处理你的数据，以及数据还会到达哪些地方。如果你自行运行 Motir，你就是自己的数据控制者，这些文件描述的是我们的服务，而不是你的。",
+    "indexContact": "对其中任何内容有疑问，请联系：legal@motir.co"
+  },
+  "explore": {
+    "topicNavAria": "项目广场",
+    "topicHeading": "{topic} 项目",
+    "metaTitle": "公开构建 · Motir 上的项目",
+    "metaDescription": "团队在 Motir 上公开构建的项目：它们的路线图、面板、计划和智能体运行。阅读任何项目的概览，并用免费账户关注实时工作。",
+    "metaTitleTopic": "公开构建的 {topic} 项目 · Motir",
+    "metaDescriptionTopic": "标记为 {topic} 的公开项目：来自在 Motir 上公开构建 {topic} 的团队的真实路线图、面板和 Sprint。",
+    "heroEyebrow": "公开构建",
+    "heroTitle": "在 Motir 上公开构建的项目",
+    "heroLede": "团队在 Motir 上公开构建。阅读任何项目的概览和更新日志，创建免费账户即可关注它的实时面板、路线图、计划和智能体运行。",
+    "trustCrawlable": "概览和更新日志公开可读",
+    "trustNoSignup": "免费账户即可关注实时工作",
+    "trustUpdated": "每日更新",
+    "searchAria": "搜索公开项目",
+    "searchPlaceholder": "按名称或主题搜索公开项目…",
+    "searchSubmit": "搜索",
+    "sortAria": "公开项目排序",
+    "rankTrending": "热门趋势",
+    "rankPopular": "最受欢迎",
+    "rankNew": "最新",
+    "windowDay": "今天",
+    "windowWeek": "本周",
+    "windowMonth": "本月",
+    "topicFilterAria": "按主题筛选公开项目",
+    "allTopics": "全部主题",
+    "activeLabel": "当前筛选",
+    "summarySearch": "“{query}”",
+    "summaryRankTrending": "热门趋势 · {window}",
+    "summaryRankPopular": "最受欢迎",
+    "summaryRankNew": "最新",
+    "galleryHeadingSearch": "“{query}”的搜索结果",
+    "galleryHeadingPopular": "最受欢迎的公开项目",
+    "galleryHeadingNew": "最近发布的公开项目",
+    "galleryHeadingTrending": "热门趋势公开项目",
+    "noResultsTitle": "没有符合筛选条件的项目",
+    "noResultsBody": "换个搜索词或主题试试，或者清除筛选条件，浏览整个广场。",
+    "emptyTitle": "还没有公开项目",
+    "emptyBody": "当有团队公开一个项目时，它会出现在这里供所有人发现。请稍后再来看看。",
+    "clearFilters": "清除筛选",
+    "loadMore": "加载更多项目",
+    "browseTitle": "按主题浏览",
+    "browseSubtitle": "主题按公开项目数量排序——每个主题都有自己可被搜索引擎收录的落地页。",
+    "browseCountAria": "{count} 个公开项目",
+    "faqHeading": "什么是公开构建？",
+    "faqLede": "公开构建会把一个 Motir 项目变成网上任何人都能找到的页面：它的概览和更新日志对所有人开放，任何拥有免费 Motir 账户的人都能关注它的实时面板、路线图和工作项。本页列出了所有公开构建的项目。",
+    "faqQ1": "哪些内容会公开，哪些保持私密？",
+    "faqA1": "面板、路线图和工作项，包括它们的标题、类型和描述。负责人、预估工时和内部评论永远不会显示。你第一次打开某个项目的实时视图时，Motir 会告诉你，你的姓名和电子邮件将对该项目的团队可见。",
+    "faqQ2": "需要账户吗？",
+    "faqA2": "阅读项目的概览和更新日志不需要。要关注它的实时面板、路线图、计划和智能体运行，需要用免费的 Motir 账户登录。没有付费墙。",
+    "faqQ3": "项目如何排名？",
+    "faqA3": "“热门趋势”呈现近期获得赞同和有动态的项目，“最受欢迎”按累计赞同数排名，“最新”列出最近发布的项目——每一种都有可分享、可被收录的网址。",
+    "cardViewAria": "{name}——公开项目",
+    "statUpvotesAria": "{count} 个赞同",
+    "statActivityAria": "最近活动于 {time}",
+    "statActivityNone": "暂无活动",
+    "errorTitle": "无法加载项目广场",
+    "errorBody": "目录暂时无法访问，请稍后再试。",
+    "featured": {
+      "eyebrow": "由 Motir 公开构建",
+      "title": "Motir 构建自身。",
+      "body": "Motir 由 Motir 公开规划、构建和发布。每一份计划、每一次运行、每一个决定都公开可见。",
+      "cta": "观看 Motir 构建自身"
+    },
+    "close": {
+      "headline": "公开构建你自己的项目。",
+      "body": "只需一个开关，就能把任何 Motir 项目变成公开页面。展示你正在构建的东西，收集功能需求和赞同，同时让内部细节保持私密。",
+      "cta": "免费开始"
+    }
+  },
+  "docs": {
+    "operationCount": "{count} 个操作",
+    "metaTitle": "文档 · Motir",
+    "metaDescription": "Motir API 与 MCP 服务器的文档——公开读取契约、智能体调用的服务器，以及 CLI。",
+    "metaTitleReference": "API 参考 · Motir 文档",
+    "metaDescriptionReference": "Motir 公开 REST API 的每一个操作，附带其权限范围、参数、响应，以及可直接复制的带认证示例。",
+    "metaTitleGuide": "快速开始 · API 参考 · Motir 文档",
+    "metaDescriptionGuide": "从注册账户到成功调用 Motir REST API，只需五步——一个令牌、第一个请求，以及各种错误的含义。",
+    "metaTitleStability": "稳定性与弃用 · API 参考 · Motir 文档",
+    "metaDescriptionStability": "Motir v1 REST API 承诺不变的内容、可能不经通知而变化的内容，以及任何功能如何被弃用。",
+    "metaTitleMcp": "MCP 服务器 · Motir 文档",
+    "metaDescriptionMcp": "用个人访问令牌把任何 Model Context Protocol 客户端接入 Motir，并了解何时该用 MCP 服务器、何时该用 REST API。",
+    "metaTitleMcpTools": "工具 · MCP 服务器 · Motir 文档",
+    "metaDescriptionMcpTools": "Motir MCP 服务器提供的每一个工具、各自的作用，以及控制它的令牌权限范围。",
+    "metaTitleCli": "Motir CLI · Motir 文档",
+    "metaDescriptionCli": "安装 Motir CLI，登录，指向你的项目，然后把一个工作项交给你自己的智能体——无需克隆任何东西。",
+    "metaTitleSandbox": "智能体沙箱 · Motir 文档",
+    "metaDescriptionSandbox": "设置已发布的容器：它让无人值守的智能体只针对你的工作区目录运行，不触碰你机器上的其他任何东西。",
+    "metaTitlePublicAddress": "公开地址 · Motir 文档",
+    "metaDescriptionPublicAddress": "为公开项目设置你选择的地址——工作区的 Motir 子域名，或你已拥有的域名，以及各自所需的 DNS 记录。",
+    "metaTitleSentry": "Sentry · Motir 文档",
+    "metaDescriptionSentry": "把 Sentry 连接到 Motir 项目，新错误会以缺陷工作项的形式出现，修复缺陷后错误会在 Sentry 中自动解决。",
+    "metaTitleDifficulty": "难度等级 · Motir 文档",
+    "metaDescriptionDifficulty": "工作项可以设置的四个难度等级、我们建议每个等级使用的模型，以及每个任务的成本。",
+    "metaTitleSkills": "技能 · Motir 文档",
+    "metaTitleClaudeCodeConnector": "Claude Code 连接器 · Motir 文档",
+    "metaTitleClaudeCodePlugin": "Claude Code 插件 · Motir 文档",
+    "metaDescriptionSkills": "在 Claude Code、Codex、Cursor、Gemini CLI、GitHub Copilot 或 OpenCode 中安装 Motir 的技能，用你已经在用的智能体运转你的 Motir 项目。",
+    "metaDescriptionClaudeCodeConnector": "把 Motir 作为远程 MCP 连接器接入 Claude Code：在 claude.ai 上添加一次，或用一条命令添加，用 Motir 账户登录，并批准 Claude 可以执行的操作。",
+    "metaDescriptionClaudeCodePlugin": "安装 Motir 的 Claude Code 插件：一次安装即可获得技能、Motir MCP 服务器和 CLI 运行器，无需令牌即可连接 Motir。",
+    "indexTitle": "文档",
+    "indexIntro": "基于 Motir 构建所需的一切：公开读取 API、智能体调用的 MCP 服务器，以及 CLI。",
+    "api": "API 参考",
+    "apiGettingStarted": "快速开始",
+    "apiStability": "稳定性与弃用",
+    "mcp": "MCP 服务器",
+    "mcpTools": "MCP 工具",
+    "mcpHintReads": "读取",
+    "mcpHintWrites": "写入",
+    "mcpHintDestructive": "破坏性",
+    "mcpHintsUnpublished": "此 Motir 版本未发布该工具的行为提示。",
+    "mcpHintLedeIntro": "每个工具都会说明它对你的数据做什么：",
+    "mcpHintReadsMeans": "不做任何更改，",
+    "mcpHintWritesMeans": "只做新增，",
+    "mcpHintDestructiveMeans": "可能更改或删除已有内容。",
+    "mcpHintLedeClaude": "Claude 会读取这些提示，在使用非只读工具前会先询问，除非你已允许。",
+    "cli": "CLI",
+    "sandbox": "沙箱",
+    "publicAddress": "公开地址",
+    "sentry": "Sentry",
+    "difficulty": "难度等级",
+    "skills": "技能",
+    "claudeCodeConnector": "Claude Code 连接器",
+    "claudeCodePlugin": "Claude Code 插件",
+    "descApi": "公开读取 API——每个端点、参数和状态码，均由线上提供的 OpenAPI 文档生成。",
+    "descApiGettingStarted": "从令牌到第一个请求的五步路径。",
+    "descApiStability": "版本管理、弃用，以及什么算破坏性变更。",
+    "descMcp": "智能体和 CLI 调用的 Model Context Protocol 服务器。",
+    "descMcpTools": "服务器提供的每一个工具，附带其权限范围和授权。",
+    "descCli": "命令行客户端，以及它能自动化的工作。",
+    "descSandbox": "智能体运行工作所在的托管沙箱。",
+    "descPublicAddress": "你的工作区子域名、你已拥有的域名，以及各自所需的 DNS 记录。",
+    "descSentry": "把 Sentry 错误变成缺陷工作项，并在缺陷完成后于 Sentry 中将其解决。",
+    "descDifficulty": "每个难度等级的含义、适合运行的模型，以及每个任务的成本。",
+    "descSkills": "在你的智能体中安装 Motir 的技能，以及使用每个技能时该说什么。",
+    "descClaudeCodeConnector": "用你的 Motir 账户、无需令牌，从 claude.ai 或通过一条命令把 Motir 连接到 Claude Code。",
+    "descClaudeCodePlugin": "在 Claude Code 中一次安装，即可获得 Motir 的技能、MCP 服务器和 CLI，无需令牌即已登录。",
+    "apiIntro": "API 提供的每一个操作，均由 Motir 发布的 OpenAPI 文档生成，并在请求本页时实时获取——因此与服务器当前提供的内容完全一致。每个操作都列出了它的参数、接受的请求体、一个可复制的请求，以及它可能返回的每一个状态码。",
+    "sectionRequest": "请求",
+    "sectionBody": "请求体",
+    "sectionExample": "示例",
+    "sectionResponses": "响应",
+    "sectionResponseSchema": "响应结构",
+    "thStatus": "状态码",
+    "thCondition": "条件",
+    "filterOperations": "筛选操作",
+    "filterEmpty": "没有符合该筛选条件的操作。"
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "这个页面不在这里",
+    "lede": "地址可能输错了，或者它指向的页面已不再公开。",
+    "exploreDoor": "查看公开构建的项目",
+    "homeDoor": "返回首页"
+  },
+  "products": {
+    "eyebrow": "Motir 产品",
+    "comingSoon": "这个页面即将上线。在此之前，了解它最快的方式就是试用 Motir。",
+    "start": "开始一个项目",
+    "back": "返回 motir.co",
+    "metaTitle": "{name}——Motir",
+    "worksWith": "兼容",
+    "aiPlanner": {
+      "metaDescription": "Motir AI 规划器会一直提问，直到弄清你要构建什么，然后起草完整的计划：每一项工作、先后顺序，以及由谁来做。在你批准之前，什么都不会开始。",
+      "headline": "先弄清做什么，再给出完整计划。",
+      "lede": "描述你想构建的东西。规划器会一直问到弄清你的意思为止，因为它不会基于猜测做计划。然后它读取已有的一切，起草完整的计划：每一项工作、必须遵循的先后顺序，以及由谁来做。在你批准之前，什么都不会开始。",
+      "steps": {
+        "eyebrow": "它如何规划",
+        "headline": "它和你一起把事情想清楚",
+        "items": [
+          {
+            "title": "问到清楚为止",
+            "body": "如果还不清楚你要构建什么，它就会问。弄明白之前，它不会开始规划。"
+          },
+          {
+            "title": "读取已有内容",
+            "body": "你的代码仓库、文档和面板，或者你从 Jira、Linear 或 Plane 带来的项目。它从你的现状出发规划，而不是从一张白纸开始。"
+          },
+          {
+            "title": "起草完整计划",
+            "body": "从大目标到小步骤的每一项工作，各自标明由谁来做、要等待什么。"
+          },
+          {
+            "title": "自我检查",
+            "body": "每份计划在你看到之前都会经过检查，所以到你手上的是一份能够落地构建的计划。"
+          }
+        ]
+      },
+      "gate": {
+        "eyebrow": "由你决定",
+        "headline": "计划由你批准",
+        "body": "在你点头之前，什么都不会进入面板。用平常的话提出修改：把这个往后放、把那个拆开、去掉导出功能。每一轮都是新的一次对话，计划会保留每一个版本以及修改的原因。",
+        "motirPlans": "创建账户，看看 Motir 为自己规划了什么"
+      },
+      "holds": {
+        "eyebrow": "计划包含什么",
+        "headline": "工作所需的一切",
+        "items": [
+          {
+            "title": "完整的树",
+            "body": "篇章、故事、任务和子任务，从目标一直细化到具体步骤。"
+          },
+          {
+            "title": "由谁来做",
+            "body": "每个工作项都会分配给智能体或某个人。只有人能完成的工作是手动任务。"
+          },
+          {
+            "title": "先后顺序",
+            "body": "什么要等待什么，让每一部分都能在条件具备时立即开始。"
+          },
+          {
+            "title": "难度",
+            "body": "每个工作项都有一个难度等级，以便在合适的模型上运行。"
+          },
+          {
+            "title": "工作类型",
+            "body": "代码、设计、测试、文档、调研、评审：每种类型都有标记。"
+          },
+          {
+            "title": "日程",
+            "body": "在你批准之后：Sprint、待办列表和路线图。"
+          }
+        ]
+      },
+      "learns": {
+        "eyebrow": "它会越来越好",
+        "headline": "它从每一次失误中学习",
+        "body": "当智能体无法构建计划要求的内容时，Motir 会先检查是计划本身有误，还是在你批准后被改动过。真正的规划失误会成为一条经验，或强化已有的经验。每份新计划都会先读取这些经验，而 90 天内未被用到的经验会自动退役。",
+        "library": "经验",
+        "lessons": [
+          ["把登录放在任何需要用户的功能之前", "已用 14 次"],
+          ["邮件服务商的选择保留为手动任务", "已用 6 次"],
+          ["拆分需要两类工作的故事", "已用 9 次"],
+          ["把空状态和界面一起规划", "新"]
+        ]
+      },
+      "close": {
+        "headline": "带上你的想法。",
+        "body": "剩下的思考，规划器会和你一起完成。"
+      },
+      "ui": {
+        "railLabel": "Motir AI",
+        "modeFirstPlan": "首个计划",
+        "asking": "提问中",
+        "close": "关闭",
+        "esc": "Esc",
+        "composer": "回复，或进一步完善…",
+        "chat": [
+          {
+            "role": "user",
+            "text": "一个帮助人们实现目标的 AI 私人助理。"
+          },
+          {
+            "role": "assistant",
+            "tone": "asking",
+            "text": "由谁设定目标：每个人为自己设定，还是教练为客户设定？"
+          },
+          {
+            "role": "user",
+            "text": "每个人为自己设定。教练功能以后再说。"
+          },
+          {
+            "role": "assistant",
+            "text": "明白了。我会读取你已有的内容，起草第一份计划。"
+          }
+        ],
+        "newItem": "新",
+        "opAdd": "新增",
+        "cards": [
+          {
+            "kind": "story",
+            "title": "设定带截止日期的目标",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "把目标拆分为每周里程碑",
+            "children": true
+          },
+          {
+            "kind": "task",
+            "title": "决定支持哪种日历",
+            "difficulty": "低",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "title": "连接日历以找出空闲时间",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "把本周的时段安排进空闲时间",
+            "children": true
+          }
+        ],
+        "project": "AI 私人助理",
+        "list": "列表",
+        "canvas": "画布",
+        "changeTurns": [
+          {
+            "role": "user",
+            "text": "提醒功能这个故事先去掉吧。大家可以自己打卡。"
+          },
+          {
+            "role": "assistant",
+            "text": "已去掉。安排本周时段仍然要等待里程碑和日历。"
+          }
+        ],
+        "barCounts": "新增 17 项",
+        "consequence": "批准后会把这些添加到你的待办列表。拒绝则结束本次计划，不做任何改动。",
+        "approve": "批准",
+        "decline": "拒绝",
+        "roadmap": "路线图",
+        "epic": "个人日程与目标规划器",
+        "back": "返回",
+        "modeInContext": "结合上下文",
+        "manual": "手动"
+      }
+    },
+    "importExisting": "从 Jira、Linear 或 Plane 带入项目",
+    "projectManagement": {
+      "metaDescription": "面板、Sprint、待办列表和路线图：智能体和人按同一份计划工作，每一个决定都等待人来做出。",
+      "headline": "智能体和人，按同一份计划工作。",
+      "lede": "面板、Sprint、待办列表和路线图，就像你的团队一直以来的工作方式。智能体和人从同一块面板领取工作，凡是需要决定的事都会等待人来拍板。",
+      "board": {
+        "eyebrow": "面板",
+        "headline": "一块懂得智能体在做什么的面板",
+        "body": "智能体的工作和其他人一样经过相同的列，另有两列如实反映它的状态。“已实现”表示智能体已经开了一个还没人检查的拉取请求。“已批准”表示有人同意了，但尚未发布。失败的检查会直接显示在工作项上。",
+        "motirBoard": "创建账户，查看 Motir 自己的面板"
+      },
+      "roadmap": {
+        "eyebrow": "路线图",
+        "headline": "看清哪些工作可以开始",
+        "body": "路线图会画出每个工作项以及它要等待的内容。现在就能开始的工作会标为就绪，因此你、你的队友或智能体总能知道下一步该做什么。",
+        "motirRoadmap": "创建账户，查看 Motir 自己的路线图"
+      },
+      "holds": {
+        "eyebrow": "团队期望的一切",
+        "headline": "你已经熟悉的工具",
+        "items": [
+          {
+            "title": "Sprint 与待办列表",
+            "body": "从待办列表规划 Sprint，设定目标并跟进燃尽图。"
+          },
+          {
+            "title": "随你配置的面板",
+            "body": "每个项目可以有多块面板，支持泳道、在制品限制和筛选。"
+          },
+          {
+            "title": "带入你的项目",
+            "body": "从 Jira、Linear、Plane、GitHub 或 CSV 文件导入。"
+          },
+          {
+            "title": "向公众开放",
+            "body": "公开一个项目，收集功能需求，支持赞同和评论。"
+          },
+          {
+            "title": "手动任务",
+            "body": "只有人能完成的工作是一类独立的工作项，会一步一步引导完成。"
+          },
+          {
+            "title": "开源",
+            "body": "项目管理核心以 GPL-3.0 协议开源。"
+          }
+        ]
+      },
+      "ui": {
+        "boardsHeading": "面板",
+        "boardsSubtitle": "AI 私人助理的看板",
+        "newItem": "新建工作项",
+        "columns": [
+          {
+            "name": "待办",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-23",
+                "title": "把本周的时段安排进空闲时间",
+                "pill": "blocked",
+                "points": 5,
+                "who": "–"
+              },
+              {
+                "kind": "task",
+                "key": "PA-24",
+                "title": "决定支持哪种日历",
+                "pill": "high",
+                "points": 1,
+                "who": "Y"
+              }
+            ]
+          },
+          {
+            "name": "进行中",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-28",
+                "title": "目标页上的里程碑",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "已实现",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-27",
+                "title": "把目标拆分到每周",
+                "pill": "medium",
+                "points": 5,
+                "who": "A",
+                "ci": "failing"
+              }
+            ]
+          },
+          {
+            "name": "评审中",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-26",
+                "title": "把里程碑与其目标一起保存",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "已完成",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-21",
+                "title": "设定带截止日期的目标",
+                "pill": "low",
+                "points": 3,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "pill": {
+          "blocked": "受阻",
+          "high": "高",
+          "medium": "中",
+          "low": "低",
+          "awaiting": "等你处理",
+          "running": "检查运行中",
+          "failing": "检查失败"
+        },
+        "waitingOnYou": "等你处理",
+        "waitedHeader": ["等待事项", "已等待"],
+        "rows": [
+          {
+            "kind": "plan",
+            "title": "AI 私人助理",
+            "sentence": "{title} 的计划",
+            "key": "",
+            "waited": "2 小时",
+            "action": "审阅"
+          },
+          {
+            "kind": "pr",
+            "title": "密码重置邮件",
+            "sentence": "{title}已完成",
+            "key": "PA-7",
+            "waited": "1 天",
+            "action": "审阅"
+          },
+          {
+            "kind": "design",
+            "title": "登录页面",
+            "sentence": "{title}的设计",
+            "key": "PA-8",
+            "waited": "3 小时",
+            "action": "审阅"
+          },
+          {
+            "kind": "video",
+            "title": "账户与登录",
+            "sentence": "故事“{title}”的验收视频",
+            "key": "PA-2",
+            "waited": "40 分钟",
+            "action": "审阅"
+          },
+          {
+            "kind": "manual",
+            "title": "选择邮件服务商",
+            "sentence": "{title}正在等你处理",
+            "key": "PA-19",
+            "waited": "1 天",
+            "action": "标记完成"
+          }
+        ],
+        "roadmap": [
+          {
+            "kind": "story",
+            "key": "PA-21",
+            "title": "设定带截止日期的目标",
+            "status": "done",
+            "label": "已完成"
+          },
+          {
+            "kind": "task",
+            "key": "PA-24",
+            "title": "决定支持哪种日历",
+            "status": "ready",
+            "label": "就绪",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "key": "PA-22",
+            "title": "把目标拆分为每周里程碑",
+            "status": "in_progress",
+            "label": "进行中",
+            "progress": "2 / 5"
+          },
+          {
+            "kind": "story",
+            "key": "PA-25",
+            "title": "连接日历以找出空闲时间",
+            "status": "todo",
+            "label": "待办"
+          },
+          {
+            "kind": "story",
+            "key": "PA-23",
+            "title": "把本周的时段安排进空闲时间",
+            "status": "todo",
+            "label": "待办"
+          }
+        ],
+        "roadmapRoot": "路线图",
+        "roadmapEpic": "个人日程与目标规划器",
+        "back": "返回",
+        "manual": "手动"
+      },
+      "close": {
+        "headline": "带上你的项目。",
+        "body": "从一个想法开始，或者带上你已有的项目。"
+      }
+    },
+    "aiDebugging": {
+      "metaDescription": "来自生产环境、团队成员以及运行中途的智能体的缺陷，到达时就已追溯到代码并纳入计划。Motir AI 指出可能的原因，检查是否已有工作项覆盖它，并在缺陷完成后解决 Sentry 中的错误。",
+      "headline": "每个缺陷到达时，都已追溯到代码并纳入计划。",
+      "lede": "无论来自生产环境、团队里的某个人，还是正在运行中的智能体：每个缺陷到达时都附带完成标准、该从代码的哪里入手，以及可能出了什么错。由你决定谁来修复。",
+      "plan": {
+        "eyebrow": "AI 为每个缺陷做计划",
+        "headline": "列出可能的原因，绝不把猜测当作答案",
+        "body": "规划器把堆栈跟踪与你的代码仓库对照阅读，像队友一样写出缺陷：完成标准是什么、该从代码的哪里入手、为什么重要。可能的原因以待确认或排除的假设列出；当堆栈跟踪无法与你的代码匹配时，缺陷里会如实说明。"
+      },
+      "fix": {
+        "eyebrow": "如何修复由你决定",
+        "headline": "亲手修复，或交给智能体",
+        "body": "规划好的缺陷就是一个普通的工作项。你可以自己修复，也可以让智能体接手缺陷文件夹，为每个缺陷开一个拉取请求。你审阅并合并，缺陷完成，Sentry 中的错误也随之解决。"
+      },
+      "setup": {
+        "eyebrow": "两步完成设置",
+        "headline": "连接一次，自定标准",
+        "body": "连接你的 Sentry 组织，然后选择其中哪些项目把错误发送到这块面板。为每个项目设定最低计入级别，以及完成缺陷时是否解决错误、是否沿用 Sentry 中的负责人。"
+      },
+      "ui": {
+        "errorsTitle": "错误",
+        "errorsGloss": "——已关联的 Sentry 错误 · 计数截至上次检查",
+        "linkError": "关联错误",
+        "error": {
+          "title": "TypeError: Cannot read properties of undefined (reading 'goalId')",
+          "where": "acme / web-frontend · 生产环境 · 2.14.0",
+          "level": "错误",
+          "seenPre": "出现 ",
+          "count": "1,284",
+          "seenPost": " 次",
+          "lastSeen": "最近一次在 6 分钟前",
+          "hideEvidence": "隐藏证据",
+          "summary": "· TypeError · POST /api/check-ins · 最新事件在 6 分钟前",
+          "exception": "异常",
+          "exceptionType": "TypeError",
+          "exceptionMessage": ": Cannot read properties of undefined (reading 'goalId')",
+          "stack": "堆栈跟踪",
+          "stackGloss": "· 2 个在你的代码中 · 14 个属于框架 · 最近的调用在前",
+          "frames": [
+            ["app/api/check-ins/route.ts:42", "位于 saveCheckIn"],
+            ["lib/goals/progress.ts:18", "位于 currentGoalFor"]
+          ],
+          "showFramework": "显示 14 个框架帧"
+        },
+        "aiDrafted": "AI 起草",
+        "explanation": "说明",
+        "explanationGloss": "——为什么重要",
+        "explanationBody": "对于没有进行中目标的人，每一次每日打卡都会失败，他们回来想保持的连续记录也就断了。这个情况始于 2.14.0 版本。",
+        "description": "描述",
+        "descriptionGloss": "——要做什么",
+        "sections": [
+          {
+            "heading": "验收标准",
+            "items": [
+              "没有进行中目标的人也能成功保存打卡",
+              "目标缺失时，打卡端点返回 422 而不是 500"
+            ]
+          },
+          {
+            "heading": "上下文引用",
+            "items": ["app/api/check-ins/route.ts", "lib/goals/progress.ts"]
+          },
+          {
+            "heading": "候选机制",
+            "note": "以下均未得到证实。每一条都是与堆栈跟踪相符的假设，列出来是为了让第一个查看的人去确认或排除——而不是诊断结论。",
+            "items": [
+              "最后一个目标被归档后，currentGoalFor 返回 undefined",
+              "客户端在目标列表加载完成前就发送了打卡"
+            ]
+          }
+        ],
+        "monitoring": "监控",
+        "monitoringBody": "连接你的服务已经在上报的错误监控工具，Motir 会把其中的错误变成此项目面板上的工作项。",
+        "sentry": "Sentry",
+        "connected": "已连接",
+        "org": "acme",
+        "checked": "4 分钟前检查过",
+        "recheck": "重新检查",
+        "monitored": "受监控的项目",
+        "monitoredBody": "来自这些 Sentry 项目的错误会成为此面板上的缺陷工作项。",
+        "project": "web-frontend",
+        "bound": "3 天前绑定",
+        "poll": "2 分钟前检查过新错误 · ",
+        "filed": "已登记 3 个缺陷",
+        "minLevel": "最低级别",
+        "everyLevel": "所有级别",
+        "sync": "与 Sentry 同步",
+        "toggles": [
+          [
+            "缺陷完成时在 Sentry 中解决错误",
+            "关闭后，缺陷完成时 Sentry 中的错误保持原样。"
+          ],
+          ["沿用 Sentry 中的负责人", "关闭后，忽略在 Sentry 中做出的分配。"]
+        ],
+        "add": "添加受监控的项目",
+        "board": [
+          {
+            "name": "待办",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-41",
+                "title": "没有目标的人在 saveCheckIn 中触发 TypeError",
+                "pill": "high",
+                "points": 2,
+                "who": "–"
+              }
+            ]
+          },
+          {
+            "name": "进行中",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-38",
+                "title": "提醒邮件在午夜被发送两次",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "评审中",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-35",
+                "title": "时区变化时连续记录被重置",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "已完成",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-31",
+                "title": "目标标题为空时目标列表崩溃",
+                "pill": "low",
+                "points": 1,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "debug": {
+          "mode": "计划",
+          "turnLabel": "第 1 轮",
+          "user": "归档了最后一个目标的人，每日打卡会失败。连续记录被重置，打卡也丢失了。",
+          "acts": [
+            ["阅读", "正在阅读你的请求…"],
+            ["移交", "正在追溯缺陷…"],
+            ["检索", "已读取代码图谱"],
+            ["检索", "已读取计划树"],
+            ["匹配", "已检查是否有工作项覆盖它"]
+          ],
+          "causeLabel": "可能的原因：",
+          "cause": "最后一个目标被归档后，currentGoalFor 返回 undefined，而 saveCheckIn 未做检查就从中读取 goalId。",
+          "cause2": "目前还没有工作项覆盖这一点。",
+          "outcomePre": "已在分诊中登记 ",
+          "outcomeKey": "PA-44",
+          "outcomeTitle": "最后一个目标被归档后打卡失败",
+          "outcomePost": "，并附上诊断。其他内容均未改动。"
+        },
+        "run": {
+          "title": "PA-8 · 登录页面",
+          "status": "运行中",
+          "findings": "本次运行的产出",
+          "bugFiled": "已登记缺陷",
+          "key": "PA-45",
+          "open": "打开 →",
+          "found": "发现于：运行 PA-8 时",
+          "bugTitle": "密码重置链接在邮件送达前就已过期"
+        }
+      },
+      "close": {
+        "headline": "让缺陷自己做计划。",
+        "body": "描述一个缺陷、连接 Sentry，或者让你的智能体报告它们的发现。"
+      },
+      "sources": {
+        "eyebrow": "缺陷从哪里来",
+        "headline": "三个入口，同一种缺陷",
+        "items": [
+          {
+            "title": "向 Motir AI 描述",
+            "body": "告诉它哪里坏了。它会阅读代码，指出可能的原因，检查是否已有工作项覆盖它，然后只写一条：一个新缺陷，或在已有工作项上补充一条说明。"
+          },
+          {
+            "title": "来自生产环境",
+            "body": "连接 Sentry 后，每个新错误都会成为一个附带堆栈跟踪的缺陷。同一错误再次发生时，增加的是计数，而不是堆积的条目。"
+          },
+          {
+            "title": "来自智能体运行",
+            "body": "智能体在自身工作之外发现缺陷时，会把它登记下来，写明看到了什么、在哪里看到，然后继续工作。"
+          }
+        ]
+      },
+      "describe": {
+        "eyebrow": "描述它",
+        "headline": "说出哪里坏了，Motir AI 来追溯。",
+        "body": "用你自己的话描述缺陷，或者报告后直接交给它。Motir AI 会阅读你的代码和计划，指出可能的原因，并检查是否已有工作项覆盖它。它只写一处，并明确告诉你写了什么：在分诊中新建一个附带诊断的缺陷，或者把诊断补充到已经跟进此事的工作项上。如果无法把缺陷追溯到代码，它什么都不写。"
+      },
+      "production": {
+        "eyebrow": "来自生产环境",
+        "headline": "错误以缺陷的形式到达，附带证据",
+        "body": "每个新的 Sentry 错误都会成为一个缺陷工作项，附带异常信息、堆栈跟踪和回链。缺陷完成后，Motir 会在 Sentry 中解决该错误。如果它再次出现，会登记一个新缺陷，并关联到旧的那个。"
+      },
+      "runs": {
+        "eyebrow": "来自智能体运行",
+        "headline": "智能体会报告它们的发现",
+        "body": "正在构建某个工作项的智能体，如果在别处碰到缺陷，既不会停下，也不会隐瞒。它会登记这个缺陷，写明看到了什么，注明是在哪次运行中发现的，然后继续自己的工作。运行会列出它登记的每一个缺陷。"
+      }
+    },
+    "agentFleet": {
+      "metaDescription": "Motir 的托管智能体同时处理你计划中每一个就绪的工作项，每个都在自己的机器上运行，并使用适合该工作的模型。你可以亲自启动它们，也可以让 Motir 项目经理让它们一直保持忙碌。",
+      "headline": "你的整个计划，并行推进。",
+      "lede": "Motir 的托管智能体会接手每一个就绪的工作项并同时处理，每个都在一台全新的机器上运行，拥有自己的分支和拉取请求。你可以亲自启动它们，也可以让 Motir 项目经理让它们一直保持忙碌，项目就会在所有方面同时推进。",
+      "parallel": {
+        "eyebrow": "规模",
+        "headline": "每个就绪的工作项，一台机器",
+        "body": "所有能开始的工作都会开始。每次运行都会认领自己的工作项，因此不会有两个智能体接手同一项，并在一台独占的机器上完成它。一个故事会按照各部分之间的依赖顺序运行。就绪的工作越多，同时进行的运行就越多。"
+      },
+      "pm": {
+        "eyebrow": "无需操心",
+        "headline": "Motir 项目经理让智能体集群一直保持忙碌",
+        "body": "把项目交给 Motir 项目经理，只要有工作项就绪，它就会立即启动一次运行、选好模型，只把需要你决定的事带给你：拉取请求、设计和计划。"
+      },
+      "models": {
+        "eyebrow": "每项工作用对的模型",
+        "headline": "每个工作项都有难度，由它决定模型。",
+        "body": "规划器为每个任务、子任务和缺陷设定难度：衡量的是把工作做对有多难，而不是工作量有多大。一行修改锁顺序的改动可能是高难度，而一次大规模重命名却可能很简单。智能体集群据此选择模型，因此重命名不必为最强的模型付费，而数据迁移也绝不会跑在最便宜的模型上。",
+        "items": [
+          {
+            "title": "简单",
+            "body": "规格明确的机械性工作：重命名、修改文案、切换配置。在更快、更便宜的模型上运行。"
+          },
+          {
+            "title": "低",
+            "body": "遵循代码中已有模式的常规工作，比如在现有表单中贯通一个新字段。在更快、更便宜的模型上运行。"
+          },
+          {
+            "title": "中",
+            "body": "跨越多个文件或服务的真正设计抉择，或者原因尚未查明的缺陷。在最强的模型上运行。"
+          },
+          {
+            "title": "高",
+            "body": "一个细微失误就会代价高昂的工作：并发、安全、线上数据迁移。在最强的模型上运行。"
+          },
+          {
+            "title": "由你选择",
+            "body": "为项目中的任意等级设定你自己的模型，或为单次运行挑选一个，可选 Claude、DeepSeek、GLM 和 Qwen。"
+          },
+          {
+            "title": "按运行付费",
+            "body": "模型调用和机器时长以积分计费。没有运行，就没有费用。"
+          }
+        ],
+        "docsLink": "难度等级如何运作，以及每个任务在各模型上的成本"
+      },
+      "care": {
+        "eyebrow": "自我照料的运行",
+        "headline": "难题无需你来处理",
+        "items": [
+          {
+            "title": "检查失败",
+            "body": "运行会在同一分支上修复它的拉取请求，最多尝试五次。"
+          },
+          {
+            "title": "运行中断",
+            "body": "工作保留在它的分支上，新的运行会接着继续，而不必从头开始。"
+          },
+          {
+            "title": "智能体停滞",
+            "body": "沉默 15 分钟的运行会被停止，因此卡住的智能体永远不会白白消耗积分。"
+          },
+          {
+            "title": "途中发现缺陷",
+            "body": "智能体在自身工作之外发现缺陷时，会把它登记下来并继续工作。"
+          }
+        ]
+      },
+      "record": {
+        "eyebrow": "全程留痕",
+        "headline": "每一次运行，每一个步骤",
+        "body": "每次运行都会记录所用的模型、每一个步骤、花费多少，以及每个工作项的结局：已实现、失败、重新规划或跳过。"
+      },
+      "ui": {
+        "runsHeading": "运行",
+        "runsSubtitle": "AI 私人助理的每一次运行——当前的和过去的。",
+        "runningNow": "正在运行",
+        "pastRuns": "过去的运行",
+        "columns": ["命令", "范围", "智能体", "开始时间", "状态", "工作项"],
+        "live": [
+          {
+            "command": "运行",
+            "scope": "PA-8 · 登录页面",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:42",
+            "status": "运行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "运行",
+            "scope": "PA-21 · 目标提醒",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:42",
+            "status": "运行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "运行",
+            "scope": "PA-22 · 提醒时间选择器",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:41",
+            "status": "运行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "运行",
+            "scope": "故事 PA-2 · 账户与登录",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:38",
+            "status": "运行中",
+            "tone": "running",
+            "summary": "已完成 2/5"
+          },
+          {
+            "command": "运行",
+            "scope": "PA-17 · 设置页面",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:35",
+            "status": "运行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "运行",
+            "scope": "PA-30 · 每周摘要",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:31",
+            "status": "运行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          }
+        ],
+        "past": [
+          {
+            "command": "运行",
+            "scope": "故事 PA-6 · 目标",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨天 18:04",
+            "status": "已成功",
+            "tone": "implemented",
+            "summary": "已完成 4/4 · 1 项等你处理"
+          },
+          {
+            "command": "motir fix",
+            "scope": "PA-9 · 登录服务",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "昨天 16:20",
+            "status": "已成功",
+            "tone": "implemented",
+            "summary": "已完成 1/1"
+          },
+          {
+            "command": "运行",
+            "scope": "PA-31 · 导出到日历",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨天 14:55",
+            "status": "已失败",
+            "tone": "failed",
+            "summary": "1 项失败"
+          },
+          {
+            "command": "motir continue",
+            "scope": "PA-12 · 目标与每日打卡",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨天 11:02",
+            "status": "已成功",
+            "tone": "implemented",
+            "summary": "已完成 1/1"
+          }
+        ],
+        "readyHeading": "可以开始",
+        "readyLane": "可以运行",
+        "ready": [
+          {
+            "kind": "task",
+            "key": "PA-19",
+            "title": "选择邮件服务商"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-22",
+            "title": "提醒时间选择器"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-23",
+            "title": "提醒邮件模板"
+          },
+          {
+            "kind": "bug",
+            "key": "PA-44",
+            "title": "最后一个目标被归档后打卡失败"
+          }
+        ]
+      },
+      "close": {
+        "headline": "所有方面，同时推进。",
+        "body": "带上你的想法或已有的项目，让智能体集群处理所有就绪的工作。"
+      }
+    },
+    "agentHosting": {
+      "metaDescription": "在 Motir 云端的独立机器上运行 Claude Code、Codex 或你已经在用的智能体，用你自己的账户登录。从 Motir 给它派发工作；你完成后它会休眠，你只需为它的机器时长付费。",
+      "headline": "你自己的智能体，运行在 Motir 的机器上。",
+      "lede": "在 Motir 云端运行 Claude Code、Codex 或你已经在用的智能体，用你自己的账户登录，并配置好你项目的代码。给它派一个工作项，然后合上笔记本：它会继续工作，在你完成后进入休眠。",
+      "setup": {
+        "eyebrow": "一次设置",
+        "headline": "三步把你的智能体搬上云端",
+        "items": [
+          {
+            "title": "创建",
+            "body": "为它命名，选择项目和智能体：Claude Code、Codex、OpenCode、Kimi Code、Aider 或 Goose。你项目的代码仓库会被克隆到它的主目录中。"
+          },
+          {
+            "title": "以你的身份登录",
+            "body": "在它的终端里用你自己的账户登录，就像在你的笔记本上一样。"
+          },
+          {
+            "title": "给它派发工作",
+            "body": "在任何就绪的工作项上点击“发送给我的智能体”。它会认领该工作项，在自己的分支上构建，并开一个拉取请求。"
+          }
+        ]
+      },
+      "away": {
+        "eyebrow": "离开工位时",
+        "headline": "合上笔记本，它依然在工作",
+        "items": [
+          {
+            "title": "独立的机器",
+            "body": "你的笔记本上什么都不运行，所以合上盖子或断开连接都不会让工作停下。"
+          },
+          {
+            "title": "随时随地观看",
+            "body": "它的运行和其他所有智能体的运行一起显示在“运行”中，在“我的智能体”里点一下就能打开它的终端。"
+          },
+          {
+            "title": "同时运行多个",
+            "body": "最多保留十个智能体，每个处理自己的工作项。"
+          }
+        ]
+      },
+      "ui": {
+        "title": "我的智能体",
+        "subtitle": "你自己的智能体，用你自己的登录，运行在 Motir 云端——AI 私人助理",
+        "newAgent": "新建智能体",
+        "columns": ["名称", "智能体", "状态", "本月机器时长", "积分"],
+        "rows": [
+          {
+            "name": "yue-claude",
+            "agent": "Claude Code",
+            "state": "运行中",
+            "tone": "implemented",
+            "time": "3 小时 12 分钟",
+            "credits": "212"
+          },
+          {
+            "name": "yue-codex",
+            "agent": "Codex",
+            "state": "已休眠",
+            "tone": "cancelled",
+            "time": "1 小时 05 分钟",
+            "credits": "95"
+          },
+          {
+            "name": "night-shift",
+            "agent": "OpenCode",
+            "state": "唤醒中",
+            "tone": "running",
+            "time": "6 小时 40 分钟",
+            "credits": "430"
+          }
+        ]
+      },
+      "close": {
+        "headline": "给你的智能体一张工位。",
+        "body": "带上你在用的智能体，你休息时让它继续工作。"
+      },
+      "terms": {
+        "eyebrow": "你的登录，我们的机器",
+        "headline": "你为机器付费，而且只在它工作时付费",
+        "items": [
+          {
+            "title": "你的账户，你的模型",
+            "body": "智能体使用你自己的登录运行，采用你选择的模型和设置。它的模型用量由其供应商向你计费，Motir 永远看不到你的登录信息。"
+          },
+          {
+            "title": "每分钟一个积分",
+            "body": "Motir 只收取智能体的机器时长费用：运行期间每分钟一个积分。"
+          },
+          {
+            "title": "你完成后它就休眠",
+            "body": "闲置 30 分钟后它会进入休眠，除了少量存储外不产生任何费用。你给它派发下一个工作项时，它就会醒来。"
+          }
+        ]
+      }
+    }
+  },
+  "howItWorks": {
+    "metaTitle": "Motir 的工作方式",
+    "metaDescription": "“vibe the project”背后的工作流程：AI 规划、计划关口、智能体运行、合并关口、修复、学习循环，以及项目的记忆。",
+    "eyebrow": "面向开发者 · “vibe the project”背后的机器",
+    "headline": "Motir 的工作方式",
+    "lede": "每个 Motir 项目都运行在同一台“仪器”上。模块是 Motir 和它的智能体，旋钮和开关属于你：在有人拨动它们之前，什么都不会往前走。",
+    "legendMotir": "Motir 与智能体",
+    "legendYou": "由你决定",
+    "scrollHint": "横向滚动查看图示 →",
+    "rackTitle": "以模块机架呈现的 Motir 工作流程",
+    "rackDesc": "你的想法接入规划器，然后接入一个旋钮，由你在那里批准计划，然后是面板，然后是一次智能体运行，然后是一个旋钮，由你在那里审阅和合并，最后是已完成。手动任务从面板直接走到已完成。智能体运行可以把它发现的缺陷登记到缺陷文件夹，然后继续工作。修复模块把失败的运行接回智能体运行。学习循环从智能体运行出发，经过裁定、重新规划和经验库，回到规划器。底部的记忆库保存设计、决策、文档、经验、运行历史、修订记录，以及谁做了什么决定。",
+    "rack": {
+      "engine": "Motir · 项目引擎",
+      "engineTitle": "从想法到完成。",
+      "engineSub": "蓝色模块负责干活，橙色控件归你掌控。",
+      "signal": "信号",
+      "signalMotir": "Motir 与智能体",
+      "signalYou": "由你决定",
+      "idea": {
+        "label": "[01] 你",
+        "title": "你的想法",
+        "screen": ["> 一个 AI 私人", "  助理…_"],
+        "note": ["或导入代码仓库、", "Jira、Linear 或 Plane"]
+      },
+      "planner": {
+        "label": "[01] AI 规划",
+        "title": "规划器",
+        "screen": [
+          "? 追问",
+          "篇章 › 故事 › 任务",
+          "blocked_by · 规模",
+          "validate_plan  OK"
+        ]
+      },
+      "approve": {
+        "label": "[02] 你",
+        "title": "批准",
+        "min": "修改",
+        "max": "通过",
+        "screen": "计划 · 全部轮次"
+      },
+      "board": {
+        "label": "[03] 工作项",
+        "title": "面板",
+        "screen": ["执行者 agent|human", "Sprint · 待办列表", "路线图"],
+        "ready": "就绪 4/6"
+      },
+      "run": {
+        "label": "[04] 智能体运行",
+        "title": "智能体运行",
+        "screen": [
+          "认领 › 独立分支",
+          "每个代码仓库 1 个 PR",
+          "运行框架 · 模型",
+          "步骤 ▮▮▮▮▯"
+        ]
+      },
+      "review": {
+        "label": "[05] 你",
+        "title": "审阅",
+        "min": "修复",
+        "max": "合并",
+        "screen": "测试 · 视频"
+      },
+      "done": {
+        "label": "[05]",
+        "title": "已完成",
+        "note": ["合并即关闭", "工作项"]
+      },
+      "manual": {
+        "label": "[03] 你 · 手动任务",
+        "title": "手动任务",
+        "screen": "motir guide · 3/7"
+      },
+      "learning": {
+        "label": "[07] 学习循环",
+        "title": ["规划器", "在学习"],
+        "note": ["每一次失误都让", "下一份计划更好"]
+      },
+      "lessons": {
+        "label": "[07] 经验",
+        "title": "经验",
+        "screen": [
+          "失误 › 经验",
+          "再犯 › 强化",
+          "无规则 › 规划缺陷",
+          "90 天未用 › 退役"
+        ]
+      },
+      "replan": {
+        "label": "[07] 重新规划",
+        "title": "重新规划",
+        "screen": ["变更已分类", "原因已记录", "计划历史 +1"]
+      },
+      "verdict": {
+        "label": "[07] 裁定",
+        "title": "裁定",
+        "screen": [
+          "仍是计划所",
+          "批准的内容？",
+          "是 › 规划器疏漏",
+          "否 › 后来的修改"
+        ]
+      },
+      "repair": {
+        "label": "[06] 修复",
+        "title": "当运行出错时",
+        "rows": [
+          ["PR 变红", "motir fix"],
+          ["运行中断", "motir continue"]
+        ]
+      },
+      "memory": {
+        "label": "[08] 记忆",
+        "title": "项目会记住一切",
+        "keys": [
+          "设计",
+          "决策",
+          "文档",
+          "经验",
+          "运行历史",
+          "修订记录",
+          "谁做的决定"
+        ]
+      },
+      "bugs": {
+        "label": "[04] 发现缺陷",
+        "screen": "登记缺陷 › 缺陷文件夹",
+        "note": "运行继续进行"
+      }
+    },
+    "modulesHeadline": "逐个模块看",
+    "modulesLede": "上图中的每个模块，近距离看。把鼠标悬停在某个模块上，即可在图中找到它。",
+    "modules": [
+      {
+        "step": "1",
+        "human": false,
+        "label": "[01] AI 规划",
+        "title": "从一句提示到一份计划",
+        "paras": [
+          "从一句话、一个代码仓库，或从 Jira、Linear 或 Plane 导入开始。规划器会读取已有的一切，包括你代码仓库的代码图谱，并在需求含糊的地方追问。",
+          "它会起草篇章、故事、任务和子任务，每一项都有类型、执行者、规模以及它的 `blocked_by` 依赖关系。在你看到之前，`validate_plan` 会先检查整棵树。"
+        ]
+      },
+      {
+        "step": "2",
+        "human": true,
+        "label": "[02] 你 · 计划关口",
+        "title": "计划由你批准",
+        "paras": [
+          "在有人批准计划之前，什么都不会进入面板。用平常的话提出修改；每一轮都是新的一次对话，计划的历史会保留每一个版本以及修改的原因。"
+        ]
+      },
+      {
+        "step": "3",
+        "human": false,
+        "label": "[03] 工作项",
+        "title": "面板",
+        "paras": [
+          "批准后的计划会变成工作项，配有 Sprint、待办列表和路线图。每个工作项的执行者是 `agent` 或 `human`。",
+          "手动任务（一个账户、一个密钥、一条 DNS 记录、一次发布签核）由 `motir guide` 一步一步地引导完成。"
+        ]
+      },
+      {
+        "step": "4",
+        "human": false,
+        "label": "[04] 智能体运行",
+        "title": "智能体负责构建",
+        "paras": [
+          "智能体领取下一个就绪的工作项（`motir next` 或 `motir run <KEY>`），认领它，在自己的分支上构建，并为每个代码仓库开一个拉取请求，关联到该工作项。",
+          "它在自身工作项之外发现的缺陷不会让运行停下：智能体会找出根本原因，用 `motir log bug` 把它作为一个独立的工作项登记到缺陷文件夹，然后继续工作。",
+          "每次运行都会记录智能体的运行框架、模型、每一个步骤和结果。智能体通过 MCP 连接，可以在你的机器上，也可以是 Motir 的托管智能体。"
+        ]
+      },
+      {
+        "step": "5",
+        "human": true,
+        "label": "[05] 你 · 合并关口",
+        "title": "由你审阅并合并",
+        "paras": [
+          "工作项进入 `Implemented`，智能体发布测试方法。故事会附带一段在 CI 中录制的验收视频。由你审阅、批准并合并；合并即关闭该工作项。没有人的参与，任何东西都不会进入 `Done`。"
+        ]
+      },
+      {
+        "step": "6",
+        "human": false,
+        "label": "[06] 修复",
+        "title": "当运行出错时",
+        "paras": [
+          "变红或存在冲突的拉取请求会用 `motir fix` 在它自己的分支上修复，最多尝试五次。中断的运行（笔记本合上了、沙箱丢失了）会用 `motir continue` 在它留下的分支上继续。",
+          "途中登记的缺陷会在缺陷文件夹中等待；`motir fix bugs` 会从最早的开始逐一处理。"
+        ]
+      },
+      {
+        "step": "7",
+        "human": false,
+        "label": "[07] 学习循环",
+        "title": "规划器在学习",
+        "paras": [
+          "无法构建某个工作项的智能体，会先确认它是否仍是已批准的计划所批准的内容（`get_approved_shape_verdict`），这样后来的修改就不会被归咎于规划器。如果是计划有误，它会被重新规划，变更连同原因一起被记录下来。",
+          "这次失误会成为一条经验，或强化已有的经验；如果没有规则可以覆盖，就登记一个规划缺陷。下一份计划会先读取这些经验。90 天内没有再出现的经验会退役。"
+        ]
+      },
+      {
+        "step": "8",
+        "human": false,
+        "label": "[08] 记忆",
+        "title": "项目会记住一切",
+        "paras": [
+          "设计、决策页面、文档、经验、计划修订以及每次运行的历史，都与工作项放在一起。你、新加入的队友或下一个智能体，即使几个月后接手项目，也无需任何人再解释一遍。"
+        ]
+      }
+    ],
+    "art": {
+      "plan": {
+        "prompt": "一个帮助人们实现目标的 AI 私人助理",
+        "question": "自主行动，还是发送前先询问？",
+        "answers": ["自主行动", "先询问"],
+        "tree": [
+          ["0", "篇章 · 连接", ""],
+          ["1", "故事 · 日历同步", ""],
+          ["2", "任务 · 读取日程", "blocked_by 2"],
+          ["1", "故事 · 晨间简报", ""],
+          ["2m", "手动任务 · 邮件服务商账户", ""]
+        ]
+      },
+      "approve": {
+        "title": "计划 · 第 3 轮",
+        "turns": [
+          ["第 1 轮", "根据你的提示起草"],
+          ["第 2 轮", "“把邮件拆成两个故事”"],
+          ["第 3 轮", "等你拍板"]
+        ],
+        "min": "修改",
+        "max": "批准",
+        "cta": "批准计划"
+      },
+      "board": {
+        "title": "工作项",
+        "sub": "Sprint 1 · 连接",
+        "count": "24",
+        "columns": ["待办", "进行中", "已实现", "已完成"],
+        "agent": "智能体",
+        "manual": "手动任务"
+      },
+      "run": {
+        "run": "运行 ·",
+        "key": "PA-12",
+        "agent": "你的智能体",
+        "title": "日历同步",
+        "faders": ["认领", "分支", "构建", "测试", "PR"],
+        "stats": [
+          ["步骤", "9 / 14"],
+          ["登记的缺陷", "1"],
+          ["分支", "pa-12"]
+        ]
+      },
+      "review": {
+        "title": "测试方法",
+        "checks": [
+          "连接一个测试日历",
+          "调整一场会议，查看简报随之更新",
+          "撤销访问权限，确认它停止读取"
+        ],
+        "video": "acceptance.mp4",
+        "length": "0:42",
+        "merge": "合并"
+      },
+      "repair": {
+        "title": "当运行出错时",
+        "rows": [
+          ["拉取请求变红", "motir fix"],
+          ["运行中断", "motir continue"],
+          ["缺陷文件夹", "motir fix bugs"]
+        ],
+        "attempt": "第 2 次尝试，共 5 次"
+      },
+      "learning": {
+        "loop": ["先读", "再", "规划"],
+        "title": "经验库",
+        "lessons": [
+          ["每个代码仓库一道测试关口", "已强化 ×3", 80],
+          ["不要重复创建已存在的分支", "新 · 90 天未用即退役", 25]
+        ]
+      },
+      "memory": {
+        "title": ":: 历史",
+        "span": "PA · 41 天",
+        "tip": "发送前先询问 · 你 · 10月3日",
+        "axis": ["第 1 天", "第 20 天", "第 41 天"],
+        "tabs": ["设计", "决策", "文档", "经验", "运行"]
+      }
+    },
+    "closeHeadline": "核心开源",
+    "closeBody": "项目管理核心以 GPL-3.0 协议开源。你可以自行托管，也可以在 motir.co 上使用。",
+    "closeStart": "Vibe a project",
+    "closeDocs": "阅读文档",
+    "closeMcp": "连接你的智能体"
+  },
+  "ideas": {
+    "metaTitle": "值得构建的想法 · Motir",
+    "metaDescription": "Motir 愿意购买的产品：为软件公司无法单靠代码完成的工作而打造的 AI 平台。做出一个能规模化的产品，Motir 就会成为你的第一个客户。",
+    "eyebrow": "值得构建的想法",
+    "headline": "构建 Motir 愿意购买的产品。",
+    "lede": "一家软件公司的运转不只靠代码。它需要律师、会计、安全团队，以及了解其他市场的人，Motir 也不例外。我们更愿意从基于 Motir 构建的产品那里购买这些工作。以下就是我们需要的。做出一个能规模化的产品，Motir 就会成为你的第一个客户。",
+    "promiseTitle": "Motir 是你的第一个客户",
+    "promiseBody": "在 Motir 上公开构建其中一个，我们就会使用它、为它付费，并告诉你还缺什么。",
+    "rulesEyebrow": "什么样的想法适合这里",
+    "rulesHeadline": "能规模化的产品，而不是只服务一个团队的工具",
+    "rules": [
+      {
+        "title": "众多客户，一个产品",
+        "body": "每个想法都服务于成千上万有着相同需求的公司，而不是某一家公司自己的流程。"
+      },
+      {
+        "title": "难以低成本雇到的专业能力",
+        "body": "法律、税务、安全、语言：需要专家的工作，由 AI 变得负担得起，由人来把关。"
+      },
+      {
+        "title": "仍然由人签字",
+        "body": "AI 起草、检查并提交工作。承担风险的部分由合格的专业人士批准，就像 Motir 在每一道关口都安排了人一样。"
+      }
+    ],
+    "listEyebrow": "Motir 愿意购买 · {n}",
+    "listHeadline": "Motir 今天就愿意购买的产品",
+    "needLabel": "Motir 为什么需要它",
+    "whoLabel": "还有谁会购买",
+    "close": {
+      "headline": "做出一个，我们就是你的第一个客户。",
+      "body": "从想法开始，用 Motir 规划，并公开构建。从这些里挑一个，或者带上你自己的想法。"
+    },
+    "placeholder": "一个面向初创公司的 AI 财务团队：为套餐定价、申报销售税并向供应商付款…",
+    "more": {
+      "eyebrow": "更多方向 · {n}",
+      "headline": "Motir 需要之外，同样值得构建的好产品",
+      "body": "对于这些，Motir 不会成为你的第一个客户。每一个都是有据可查的市场需求、现有参与者留下的空白，以及一个现在而不是五年前才能做出来的理由。证据链接列在每一项下方。",
+      "evidenceLabel": "证据",
+      "gapLabel": "空白"
+    },
+    "find": {
+      "heading": "查找想法",
+      "searchPlaceholder": "搜索想法、证据和空白",
+      "searchAria": "搜索想法",
+      "searchSubmit": "搜索",
+      "searchClear": "清除搜索",
+      "categoryGroup": "类别",
+      "allCategories": "全部类别",
+      "tags": "标签",
+      "tagsSelected": "标签 · 已选 {n} 个",
+      "activeLabel": "筛选条件",
+      "pillCategory": "类别：{label}",
+      "pillTag": "标签：{label}",
+      "pillSearch": "“{q}”",
+      "remove": "移除",
+      "clearAll": "全部清除",
+      "countAll": "{n} 个想法",
+      "countMatch": "{n} 个想法符合",
+      "countMatchOne": "1 个想法符合",
+      "countNone": "没有符合的想法",
+      "updating": "正在更新…"
+    },
+    "card": {
+      "open": "打开这个想法",
+      "moreSources": "还有 {n} 个来源",
+      "tagsAria": "标签"
+    },
+    "detail": {
+      "kindBuys": "Motir 愿意购买",
+      "kindDirection": "一个方向",
+      "capabilities": "它能做什么",
+      "evidence": "证据",
+      "gap": "空白",
+      "whyNow": "为什么是现在",
+      "whyMotir": "Motir 为什么需要它",
+      "whoElse": "还有谁会购买",
+      "close": "关闭",
+      "foot": "按 {key} 或“返回”回到列表。",
+      "opensInNewTab": "（在新标签页中打开）"
+    },
+    "empty": {
+      "title": "没有符合这些筛选条件的想法",
+      "body": "试试减少标签、换个类别或换些词。所有想法都还在。",
+      "action": "清除所有筛选"
+    },
+    "error": {
+      "eyebrow": "暂时无法访问",
+      "title": "暂时无法加载这些想法",
+      "body": "列表实时读取自 Motir，而 Motir 没有响应。没有任何内容丢失，请稍后再试。",
+      "action": "重试"
+    }
+  },
+  "setupPrompt": {
+    "title": "在你的智能体中设置 Motir",
+    "body": "复制一段提示词，粘贴到 Claude Code、Codex、Cursor 或任何其他智能体中。它会连接 Motir 的 MCP 服务器，安装 CLI 和技能，并检查它们能否正常工作。在 Claude Code 中，它会安装 Motir 插件。",
+    "button": "复制设置提示词",
+    "copied": "已复制，粘贴到你的智能体中即可",
+    "failed": "无法复制，请改为选中下方的提示词",
+    "menuLabel": "为你的智能体复制设置提示词",
+    "show": "显示提示词",
+    "menuHint": "粘贴到任何智能体中——它会在那里设置好 Motir。",
+    "headerLabel": "复制设置提示词",
+    "headerCopied": "已复制",
+    "headerFailed": "无法复制"
+  },
+  "builtByMotirPage": {
+    "metaTitle": "Motir 构建自身 · Motir",
+    "metaDescription": "Motir 如何构建 Motir：它最初只是一个装着提示词的文件夹、一份任务清单和一个失误记录库，而它发布的每一个功能，都成了构建下一个功能的工具。",
+    "eyebrow": "Motir 构建自身",
+    "headline": "Motir 如何构建 Motir。",
+    "lede": "这听起来像是先有鸡还是先有蛋的难题，其实不是。Motir 最初只是一个装着提示词的文件夹，而它发布的每一个功能，都成了构建下一个功能的工具。",
+    "watch": "观看 Motir 构建自身",
+    "runs": "创建账户，观看它的智能体运行",
+    "lost": {
+      "scenes": {
+        "fixLater": "以后再修",
+        "features": ["日历", "提醒", "计费", "导出", "搜索"],
+        "inProgress": "进行中",
+        "question": "为什么这样做？",
+        "answer": "因为那个…",
+        "sessionEnded": "会话已结束"
+      },
+      "eyebrow": "起点",
+      "headline": "我们 Vibe coding，结果项目散了架。",
+      "body": "Vibe coding 让写代码变快了。但我们走得越远，丢失的项目内容就越多——因为项目不只是代码。",
+      "items": [
+        {
+          "title": "发现了缺陷，却从未记录",
+          "body": "在会话中途被发现，到会话结束时就被忘了。"
+        },
+        {
+          "title": "同时铺开太多",
+          "body": "五个功能同时在做，却无从判断下一个该先做哪个。"
+        },
+        {
+          "title": "缺失的测试",
+          "body": "要么没有，要么达不到其余代码所需的标准。"
+        },
+        {
+          "title": "淹没在聊天里的决定",
+          "body": "某个东西为什么要这样构建，随着编码会话的结束而消失了。"
+        }
+      ]
+    },
+    "missing": {
+      "eyebrow": "我们需要的",
+      "headline": "Jira 和 Linear 能记录工作，但我们需要更多。",
+      "body": "我们把自己的流程接入熟悉的项目工具。它们装得下任务，却装不下我们缺少的东西。",
+      "items": [
+        {
+          "title": "先有计划，再写代码",
+          "body": "智能体应该从一份经人批准的计划出发，而不是从一句提示词出发。",
+          "product": "ai-planner"
+        },
+        {
+          "title": "已就绪，还是被什么阻塞",
+          "body": "看清哪些工作现在就能开始，哪些在等待——具体在等待哪些其他工作。"
+        },
+        {
+          "title": "有人统管整个项目",
+          "body": "一个项目经理，无需吩咐就能统筹全局、把一切整合起来。",
+          "product": "project-manager"
+        }
+      ],
+      "after": "于是我们自己做了。"
+    },
+    "bootstrap": {
+      "eyebrow": "自举",
+      "headline": "每一个功能，都成为下一个功能的工具。",
+      "body": "Motir 没有等到完工才开始使用自己。它发布的每一个功能，都替换掉了构建它时所用的脚手架。",
+      "steps": [
+        {
+          "tag": "第 0 天",
+          "title": "motir-meta",
+          "body": "一个内部项目：一组提示词、一份任务清单和一个失误记录库。它引导一个模型构建了 Motir 最早的功能。",
+          "uses": "提示词和一个任务文件"
+        },
+        {
+          "tag": "然后",
+          "title": "工作项",
+          "body": "工作项发布之后，Motir 开始问自己下一步该构建什么，而不再依赖外部工具。",
+          "uses": "它自己的工作项"
+        },
+        {
+          "tag": "然后",
+          "title": "MCP 服务器",
+          "body": "MCP 发布之后，那些查询变成了 MCP 调用，状态也自动保持同步。",
+          "uses": "它自己的 MCP 服务器"
+        },
+        {
+          "tag": "然后",
+          "title": "AI 规划",
+          "body": "规划功能发布之后，Motir 用它自己的规划器规划接下来的功能。",
+          "uses": "它自己的规划器"
+        },
+        {
+          "tag": "现在",
+          "title": "智能体与审批",
+          "body": "智能体构建 Motir 的工作项；每一份计划、每一次合并都由人来批准。",
+          "uses": "以上全部"
+        }
+      ],
+      "loop": ["构建一个功能", "使用它", "用它构建下一个"]
+    },
+    "howItWorks": {
+      "eyebrow": "幕后",
+      "headline": "构建 Motir 的工作流程，就是你将获得的那一套。",
+      "body": "AI 规划、计划关口、智能体运行、合并关口、修复和学习循环：每个 Motir 项目都运行在同一套工作流程上，Motir 自己也不例外。",
+      "cta": "了解 Motir 的工作方式"
+    },
+    "live": {
+      "eyebrow": "仍在构建",
+      "headline": "它从未停下。",
+      "body": "Motir 仍在公开地为自己添加功能。这些数字实时来自 Motir 自己的项目。",
+      "stats": {
+        "shipped": "已发布",
+        "planned": "已规划",
+        "requests": "功能需求",
+        "upvotes": "赞同"
+      },
+      "recent": "最近发布",
+      "unavailable": "暂时无法加载实时数字。Motir 的项目页面上有这些数据。"
+    },
+    "close": {
+      "headline": "用同样的方式构建你的项目。",
+      "body": "从一个想法开始。Motir 负责规划、构建，并让整个项目井井有条。",
+      "cta": "免费开始"
+    }
+  }
+}

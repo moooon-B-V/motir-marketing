@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { loadChangelog, loadProject, loadRequest } from '@/lib/publicProject'
-import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
+import { ProjectHeader } from '@/app/[locale]/p/[identifier]/_components/ProjectHeader'
 
 /*
  * THE SEAM THE UNITS MOCK (MOTIR-4121).

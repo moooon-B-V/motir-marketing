@@ -1,9 +1,10 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SiteHeader } from '@/app/_components/SiteHeader'
 import { SITE_HOST } from '@/lib/publicHost'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import sitemap from '@/app/sitemap'
 import { siteUrl } from '@/lib/siteOrigin'
 
@@ -17,7 +18,7 @@ vi.mock('next/headers', () => ({ headers: async () => new Headers() }))
  * The nav entrance for `/design` (MOTIR-1043) — the site's FIRST internal
  * second route, and therefore the first nav item that can ever be current.
  *
- * ⚠️ BOTH BRANCHES. The bar and the `md:hidden` menu panel are two separate
+ * ⚠️ BOTH BRANCHES. The bar and the Menu panel are two separate
  * branches of one component, which is exactly how a current-page treatment
  * ends up existing on desktop only — the design asset draws the open panel
  * (panel 4) rather than describing it, for that reason.
@@ -93,7 +94,7 @@ describe('the Design nav entry', () => {
     expect(link.className).toContain('font-semibold')
   })
 
-  it('draws the treatment in the md:hidden panel TOO, not only on desktop', async () => {
+  it('draws the treatment in the Menu panel TOO, not only on desktop', async () => {
     pathname.value = '/design'
     const user = userEvent.setup()
     render(<SiteHeader host={SITE_HOST} />)
@@ -113,7 +114,15 @@ describe('app/sitemap.ts', () => {
     // Awaited since MOTIR-4118 made the route dynamic. No API in this
     // environment, so the project entries are absent and the static list is
     // what remains — see `tests/entitySignal.test.ts` for that arm's own case.
-    expect((await sitemap()).map((entry) => entry.url)).toEqual([
+    // Each page is listed once per locale since MOTIR-7956; its English entry
+    // is the one its own `en` alternate names, and the list of those is the
+    // list of pages.
+    const english = (await sitemap()).filter(
+      (entry) =>
+        (entry.alternates?.languages as Record<string, string> | undefined)
+          ?.en === entry.url,
+    )
+    expect(english.map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       // 2026-10 redesign — "How Motir works", the developer page.
       siteUrl('/how-it-works'),

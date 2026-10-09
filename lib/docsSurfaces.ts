@@ -1,4 +1,4 @@
-import { copy } from '@/lib/copy'
+import type { Copy } from '@/lib/copy'
 
 /**
  * THE SURFACES `/docs` DOCUMENTS — one list, read by everything that draws them
@@ -57,98 +57,123 @@ export interface DocsSurface extends DocsPage {
   pages: DocsPage[]
 }
 
+export const DOCS_INDEX_HREF = '/docs'
+
 /**
  * The index itself — tier 1's first row on every page in the area, and the page
  * every surface below is listed on.
  */
-export const DOCS_INDEX: Omit<DocsPage, 'description'> = {
-  href: '/docs',
-  label: copy.docs.indexTitle,
+export function docsIndexFor(copy: Copy): Omit<DocsPage, 'description'> {
+  return { href: DOCS_INDEX_HREF, label: copy.docs.indexTitle }
 }
 
 /**
  * The surfaces, in reading order. A page added to `app/docs` is added HERE, and
  * the rail, the index and the sitemap all draw it with no second edit.
  */
-export const DOCS_SURFACES: DocsSurface[] = [
+/*
+ * ⚠️ CATALOGUE KEYS, NOT WORDS (MOTIR-7950). The list used to hold the English
+ * strings themselves, read when the module loaded — which no locale can reach,
+ * so the rail and the index would have stayed English on every page. It holds
+ * the `docs` keys instead, and `docsSurfacesFor(copy)` reads them from the
+ * caller's catalogue. The ROUTES need no words and stay a constant.
+ */
+type DocsKey = keyof Copy['docs']
+type PageKeys = { href: string; label: DocsKey; description: DocsKey }
+type SurfaceKeys = PageKeys & { pages: PageKeys[] }
+
+const SURFACES: SurfaceKeys[] = [
   {
     href: '/docs/api',
-    label: copy.docs.api,
-    description: copy.docs.descApi,
+    label: 'api',
+    description: 'descApi',
     pages: [
       {
         href: '/docs/api/getting-started',
-        label: copy.docs.apiGettingStarted,
-        description: copy.docs.descApiGettingStarted,
+        label: 'apiGettingStarted',
+        description: 'descApiGettingStarted',
       },
       {
         href: '/docs/api/stability',
-        label: copy.docs.apiStability,
-        description: copy.docs.descApiStability,
+        label: 'apiStability',
+        description: 'descApiStability',
       },
     ],
   },
   {
     href: '/docs/mcp',
-    label: copy.docs.mcp,
-    description: copy.docs.descMcp,
+    label: 'mcp',
+    description: 'descMcp',
     pages: [
       {
         href: '/docs/mcp/tools',
-        label: copy.docs.mcpTools,
-        description: copy.docs.descMcpTools,
+        label: 'mcpTools',
+        description: 'descMcpTools',
       },
     ],
   },
   {
     href: '/docs/cli',
-    label: copy.docs.cli,
-    description: copy.docs.descCli,
+    label: 'cli',
+    description: 'descCli',
     pages: [],
   },
   {
     href: '/docs/sandbox',
-    label: copy.docs.sandbox,
-    description: copy.docs.descSandbox,
+    label: 'sandbox',
+    description: 'descSandbox',
     pages: [],
   },
   {
     href: '/docs/public-address',
-    label: copy.docs.publicAddress,
-    description: copy.docs.descPublicAddress,
+    label: 'publicAddress',
+    description: 'descPublicAddress',
     pages: [],
   },
   {
     href: '/docs/sentry',
-    label: copy.docs.sentry,
-    description: copy.docs.descSentry,
+    label: 'sentry',
+    description: 'descSentry',
     pages: [],
   },
   {
     href: '/docs/difficulty',
-    label: copy.docs.difficulty,
-    description: copy.docs.descDifficulty,
+    label: 'difficulty',
+    description: 'descDifficulty',
     pages: [],
   },
   {
     href: '/docs/skills',
-    label: copy.docs.skills,
-    description: copy.docs.descSkills,
+    label: 'skills',
+    description: 'descSkills',
     pages: [],
   },
   {
     href: '/docs/claude-code-plugin',
-    label: copy.docs.claudeCodePlugin,
-    description: copy.docs.descClaudeCodePlugin,
+    label: 'claudeCodePlugin',
+    description: 'descClaudeCodePlugin',
     pages: [],
   },
   {
     href: '/docs/claude-code-connector',
-    label: copy.docs.claudeCodeConnector,
-    description: copy.docs.descClaudeCodeConnector,
+    label: 'claudeCodeConnector',
+    description: 'descClaudeCodeConnector',
     pages: [],
   },
 ]
+
+/** The surfaces in the caller's catalogue — what the rail and the index draw. */
+export function docsSurfacesFor(copy: Copy): DocsSurface[] {
+  const page = ({ href, label, description }: PageKeys): DocsPage => ({
+    href,
+    label: copy.docs[label],
+    description: copy.docs[description],
+  })
+  return SURFACES.map((surface) => ({
+    ...page(surface),
+    pages: surface.pages.map(page),
+  }))
+}
 
 /**
  * Every route the area serves, in reading order, the index first — a surface
@@ -156,8 +181,8 @@ export const DOCS_SURFACES: DocsSurface[] = [
  * the guard test measures it against the file system.
  */
 export const DOCS_ROUTES: string[] = [
-  DOCS_INDEX.href,
-  ...DOCS_SURFACES.flatMap((surface) => [
+  DOCS_INDEX_HREF,
+  ...SURFACES.flatMap((surface) => [
     surface.href,
     ...surface.pages.map((page) => page.href),
   ]),

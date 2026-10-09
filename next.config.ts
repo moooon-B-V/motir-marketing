@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import createNextIntlPlugin from 'next-intl/plugin'
 import { assertTenantDomainConfigured } from './lib/tenantDomain'
 
 /*
@@ -41,17 +42,18 @@ const nextConfig: NextConfig = {
    * repository. Getting this wrong is silent in BOTH directions under the build
    * that runs, which is the reason the paragraph below exists.
    *
-   * ⚠️ THIS KEY IS INERT UNDER THE BUILD THAT ACTUALLY RUNS, and it is kept
-   * anyway. `outputFileTracingIncludes` is read in exactly one module,
-   * `next/dist/build/collect-build-traces.js`, which `next/dist/build/index.js`
-   * invokes only when the bundler is NOT Turbopack — and Next 16 builds with
-   * Turbopack by default, which is what `pnpm next build` runs in CI and in the
-   * Dockerfile. What ships the bytes today is TURBOPACK's own tracer, which
-   * follows the read because `FONT_DIR` and `FACES` are statically analysable.
+   * ⚠️ THE BUILD IS WEBPACK, ON PURPOSE (MOTIR-7952). `pnpm build` and the
+   * Dockerfile pass `--webpack`. Next 16.2's Turbopack names font files with a
+   * hash whose alphabet includes `.`, and it preloads any font file whose name
+   * contains `.p.` — so a Japanese face could be preloaded on EVERY page,
+   * `preload: false` notwithstanding, depending on how its hash fell. Webpack
+   * marks preloads by name only for faces it was asked to preload.
    *
-   * So this is the webpack-path net, nothing more. **Never read its presence as
-   * evidence the fonts shipped** — a dead include reads exactly like a
-   * delivered asset. The evidence is the built trace:
+   * Under webpack this key is LIVE: `outputFileTracingIncludes` is read in
+   * `next/dist/build/collect-build-traces.js`, which runs only when the bundler
+   * is not Turbopack. **Never read its presence as evidence the fonts
+   * shipped** — a dead include reads exactly like a delivered asset. The
+   * evidence is the built trace:
    *
    *   grep -l Inter- .next/server/app/**\/*.nft.json
    *
@@ -60,8 +62,21 @@ const nextConfig: NextConfig = {
    * to a metadata route (`/opengraph-image-1br99b`).
    */
   outputFileTracingIncludes: {
-    '/opengraph-image': ['./node_modules/@motir/brand/fonts/**'],
+    // MOTIR-7972: the card moved under the locale tree and draws CJK from the
+    // committed subsets beside `ogFonts.ts`.
+    '/[locale]/opengraph-image': [
+      './node_modules/@motir/brand/fonts/**',
+      './app/_brand/og-fonts/**',
+    ],
   },
 }
 
-export default nextConfig
+/*
+ * next-intl (MOTIR-7948) — the plugin only points the library at its
+ * per-request config; it changes none of the keys above. Relative for the same
+ * reason the import at the top of this file is: Next's config loader resolves
+ * it, not the app's `@/` alias.
+ */
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
+
+export default withNextIntl(nextConfig)

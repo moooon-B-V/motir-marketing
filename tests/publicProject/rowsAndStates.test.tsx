@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { MoreLink, StatusPill } from '@/app/p/[identifier]/_components/Rows'
+import { screen } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import {
+  MoreLink,
+  StatusPill,
+} from '@/app/[locale]/p/[identifier]/_components/Rows'
 import {
   EmptyState,
   ErrorState,
   LoadingRows,
-} from '@/app/p/[identifier]/_components/States'
+} from '@/app/[locale]/p/[identifier]/_components/States'
 
 /*
  * The shared list primitives and the three states (MOTIR-4121).
@@ -58,7 +62,12 @@ describe('the three states', () => {
   })
 
   it('ERROR names the other host and is announced to assistive tech', () => {
-    render(<ErrorState what="this project's board" identifier="ACME" />)
+    render(
+      <ErrorState
+        title="We could not load this project's board"
+        identifier="ACME"
+      />,
+    )
 
     const alert = screen.getByRole('alert')
     expect(alert).toHaveTextContent('app.motir.co')
@@ -68,10 +77,14 @@ describe('the three states', () => {
   it('ERROR offers the feed only when it knows which project', () => {
     // Without an identifier there is no feed URL to offer, and a link to
     // nowhere is worse than no link.
-    const { rerender } = render(<ErrorState what="this project" />)
+    const { rerender } = render(
+      <ErrorState title="We could not load this project" />,
+    )
     expect(screen.queryByRole('link', { name: /changelog feed/i })).toBeNull()
 
-    rerender(<ErrorState what="this project" identifier="ACME" />)
+    rerender(
+      <ErrorState title="We could not load this project" identifier="ACME" />,
+    )
     expect(
       screen.getByRole('link', { name: /changelog feed/i }),
     ).toHaveAttribute('href', '/p/ACME/changelog.xml')

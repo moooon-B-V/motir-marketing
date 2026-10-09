@@ -1,13 +1,17 @@
 // @vitest-environment node
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { parse as parseFont } from 'opentype.js'
 import { OG_FONT_FACES as PACKAGE_FACES } from '@motir/brand'
 import { describe, expect, it } from 'vitest'
 import {
   loadOgFonts,
+  ogFontFamily,
+  type OgFont,
   OG_FONT_FACES as SITE_FACES,
   OG_FONT_FAMILY,
 } from '@/app/_brand/ogFonts'
+import { drawnStrings } from '@/scripts/brand/subset-og-fonts'
 
 /*
  * MOTIR-3848 — the root OG card's typeface, after the bytes moved into
@@ -70,11 +74,97 @@ describe('the root card is set in @motir/brand’s Inter, not a copy of its own'
   })
 
   it('still renders a real PNG at 1200 x 630', async () => {
-    const { default: route, size } = await import('@/app/opengraph-image')
+    const { default: route, size } =
+      await import('@/app/[locale]/opengraph-image')
     expect(size).toEqual({ width: 1200, height: 630 })
-    const png = Buffer.from(await (await route()).arrayBuffer())
+    const png = Buffer.from(
+      await (
+        await route({ params: Promise.resolve({ locale: 'en' }) })
+      ).arrayBuffer(),
+    )
     expect(png.subarray(0, 8).toString('hex')).toBe(PNG_MAGIC)
     expect(png.readUInt32BE(16)).toBe(1200)
     expect(png.readUInt32BE(20)).toBe(630)
   }, 30_000)
+})
+
+/*
+ * MOTIR-7972 — every character the per-locale card draws is IN a face it
+ * loads. satori does not error on a missing glyph: it draws tofu, or reaches
+ * for a font this site never chose. So the cmap of each face is read with a
+ * real font parser (`opentype.js`, pinned) and every non-whitespace code point
+ * of the three drawn strings — plus the `Motir` wordmark — must be in at least
+ * one of them. A catalogue edit that outgrows a committed CJK subset fails
+ * here until `pnpm brand:og-fonts` is re-run; a Latin letter Inter lacks
+ * (Polish ą, ł) would fail here too.
+ */
+/*
+ * ⚠️ NOT `hasChar`. In opentype.js 1.3.4 `hasChar` is
+ * `charToGlyphIndex(c) !== null`, and a code point absent from the cmap
+ * answers `undefined` — so `hasChar` is true for EVERY character and the
+ * coverage check below would pass over tofu. A real glyph is index > 0
+ * (index 0 is `.notdef`, the tofu box itself).
+ */
+function maps(face: ReturnType<typeof parseFont>, ch: string): boolean {
+  return (face.charToGlyphIndex(ch) ?? 0) > 0
+}
+
+function uncovered(strings: readonly string[], fonts: OgFont[]): string[] {
+  const faces = fonts.map((font) =>
+    parseFont(
+      font.data.buffer.slice(
+        font.data.byteOffset,
+        font.data.byteOffset + font.data.byteLength,
+      ) as ArrayBuffer,
+    ),
+  )
+  const missing = new Set<string>()
+  for (const text of strings)
+    for (const ch of text)
+      if (!/\s/u.test(ch) && !faces.some((face) => maps(face, ch)))
+        missing.add(ch)
+  return [...missing]
+}
+
+const catalogueLocales = readdirSync(join(process.cwd(), 'messages'))
+  .filter((f) => /^[a-z]{2,3}(-[A-Za-z0-9]+)?\.json$/.test(f))
+  .map((f) => f.replace(/\.json$/, ''))
+  .sort()
+
+function catalogue(locale: string): unknown {
+  return JSON.parse(
+    readFileSync(join(process.cwd(), 'messages', `${locale}.json`), 'utf8'),
+  )
+}
+
+describe('every catalogue’s card is drawable in the faces it loads', () => {
+  it.each(catalogueLocales)('%s', async (locale) => {
+    const fonts = await loadOgFonts(locale)
+    expect(
+      uncovered([...drawnStrings(catalogue(locale)), 'Motir'], fonts),
+    ).toEqual([])
+  })
+
+  it('loads a CJK face only for zh, ja and ko, under its own family', async () => {
+    for (const locale of ['en', 'pl', 'de']) {
+      expect((await loadOgFonts(locale)).length, locale).toBe(3)
+      expect(ogFontFamily(locale), locale).toBe(OG_FONT_FAMILY)
+    }
+    for (const locale of ['zh', 'ja', 'ko']) {
+      const fonts = await loadOgFonts(locale)
+      expect(fonts.map((f) => f.weight).sort(), locale).toEqual([
+        400, 400, 700, 700, 800, 800,
+      ])
+      const cjk = fonts.filter((f) => f.name !== OG_FONT_FAMILY)
+      expect(cjk, locale).toHaveLength(3)
+      expect(ogFontFamily(locale)).toBe(`${OG_FONT_FAMILY}, '${cjk[0]!.name}'`)
+    }
+  })
+
+  it('fails when a catalogue gains a character the subset was not cut for', async () => {
+    const ja = catalogue('ja') as { landing: { hero: { headline: string } } }
+    // 鬱 — far outside any headline's characters, so no subset holds it.
+    ja.landing.hero.headline += '鬱'
+    expect(uncovered(drawnStrings(ja), await loadOgFonts('ja'))).toEqual(['鬱'])
+  })
 })

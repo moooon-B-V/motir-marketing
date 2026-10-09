@@ -111,7 +111,7 @@ describe('THE REQUEST PATH', () => {
     // that spelled `/p/` into a URL itself would be a second answer, and the
     // first to be wrong on two hosts out of three.
     //
-    // ⚠️ `app/explore/**` IS EXEMPT, AND DELIBERATELY SO — MOTIR-4222's boundary
+    // ⚠️ `app/[locale]/explore/**` IS EXEMPT, AND DELIBERATELY SO — MOTIR-4222's boundary
     // says in terms not to touch it. The directory links `motir.co/p/<id>` for
     // every project it lists, which is a valid ALTERNATE address of each; the
     // page-level redirect carries a visitor from there to the primary. Making
@@ -125,7 +125,7 @@ describe('THE REQUEST PATH', () => {
     //   • `lib/publicProject.ts`  — the API path (`/api/public/p/<id>`), which
     //     is motir-core's endpoint and has nothing to do with a page's address.
     //   • `lib/hostResolution.ts` — the router's REWRITE target, i.e. the
-    //     internal route-tree path `app/p/[identifier]` lives at. It is the one
+    //     internal route-tree path `app/[locale]/p/[identifier]` lives at. It is the one
     //     place `/p/` must survive a tenant host, because that is where the
     //     visitor's address is translated INTO it.
     const OWNERS = [
@@ -133,7 +133,7 @@ describe('THE REQUEST PATH', () => {
       'lib/publicProject.ts',
       'lib/hostResolution.ts',
     ]
-    const offenders = [...tracked('app/p'), ...tracked('lib')]
+    const offenders = [...tracked('app/[locale]/p'), ...tracked('lib')]
       .filter((f) => !OWNERS.includes(f))
       .filter((f) => /['"`]\/p\/\$\{/.test(code(f)))
     expect(offenders, offenders.join('\n')).toEqual([])

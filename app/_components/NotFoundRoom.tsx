@@ -1,5 +1,5 @@
 import { buttonVariants } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy, usePageLocale } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
 import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
 import { ChromeLink } from './ChromeLink'
@@ -34,6 +34,11 @@ import { SiteShell } from './SiteShell'
  * prerendering — the change is one argument and nothing here moves.
  */
 export function NotFoundRoom({ host }: { host: PublicHost }) {
+  const copy = useCopy()
+  // The doors keep the room's language (MOTIR-7955): `/fr/explore` and `/fr`
+  // from a French 404, `/explore` and `/` from an English one. The global
+  // boundary's provider says `en`, so there this changes nothing.
+  const locale = usePageLocale()
   return (
     /* The box is the design's, verbatim. `max-w-[46rem]` is the shipped
        `/legal` measure, reused rather than re-chosen. */
@@ -71,14 +76,14 @@ export function NotFoundRoom({ host }: { host: PublicHost }) {
             `motir.co` this is byte-identical to what shipped — a `next/link` to
             `EXPLORE` and one to the site root. */}
         <ChromeLink
-          href={siteLinkFor(host, EXPLORE)}
+          href={siteLinkFor(host, EXPLORE, locale)}
           internal={host.kind === 'site'}
           className={buttonVariants({ size: 'md' })}
         >
           {copy.notFound.exploreDoor}
         </ChromeLink>
         <ChromeLink
-          href={siteLinkFor(host, SITE_ROOT)}
+          href={siteLinkFor(host, SITE_ROOT, locale)}
           internal={host.kind === 'site'}
           className={buttonVariants({ variant: 'ghost', size: 'md' })}
         >

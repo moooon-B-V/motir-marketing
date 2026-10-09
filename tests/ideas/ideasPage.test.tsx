@@ -1,8 +1,9 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { cleanup, render, screen, within } from '@testing-library/react'
-import { copy } from '@/lib/copy'
+import { cleanup, screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { englishCopy as copy } from '@/lib/copy'
 import {
   ideasHref,
   parseIdeasParams,
@@ -10,7 +11,7 @@ import {
   type PublicIdeaListDto,
   type PublicIdeaTagDto,
 } from '@/lib/ideas'
-import IdeasPage, { generateMetadata } from '@/app/ideas/page'
+import IdeasPage, { generateMetadata } from '@/app/[locale]/ideas/page'
 import ideasFixture from '../../e2e/fixtures/ideas.json'
 import tagsFixture from '../../e2e/fixtures/ideas-tags.json'
 import ideaFixture from '../../e2e/fixtures/idea-stop-returns-before-they-happen.json'
@@ -105,7 +106,12 @@ async function open(query: string) {
       }),
     ),
   )
-  render(await IdeasPage({ searchParams }))
+  render(
+    await IdeasPage({
+      params: Promise.resolve({ locale: 'en' }),
+      searchParams,
+    }),
+  )
 }
 
 /** The titles of every idea card on the page, in order. */
@@ -222,6 +228,7 @@ describe('the idea open in place', () => {
 
   it('the metadata names the open idea and keeps the idea in the canonical', async () => {
     const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en' }),
       searchParams: Promise.resolve({ tag: 'smb', idea: ONE.slug }),
     })
     expect(meta.title).toBe(`${ONE.title} · ${copy.ideas.metaTitle}`)
@@ -235,6 +242,7 @@ describe('the idea open in place', () => {
   it('with no idea, or an unknown one, the metadata is the page’s own', async () => {
     for (const idea of [undefined, 'no-such-idea']) {
       const meta = await generateMetadata({
+        params: Promise.resolve({ locale: 'en' }),
         searchParams: Promise.resolve({
           tag: 'smb',
           ...(idea ? { idea } : {}),

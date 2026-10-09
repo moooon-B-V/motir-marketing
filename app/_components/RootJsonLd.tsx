@@ -1,4 +1,4 @@
-import { copy } from '@/lib/copy'
+import type { Locale } from '@/i18n/routing'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 
 /*
@@ -51,12 +51,26 @@ export const WEBSITE_ID = `${SITE_ORIGIN}/#website`
  */
 export const SAME_AS = ['https://github.com/moooon-B-V']
 
+/** The page's language and its catalogue's `meta.description` (MOTIR-7956). */
+export interface RootJsonLdInput {
+  locale: Locale
+  description: string
+}
+
 /**
  * The graph, built as a plain object so it can be asserted in a test without
  * rendering. Nothing here is user-controlled: every value is a module constant
  * or a string from the copy catalogue.
+ *
+ * ⚠️ THE DESCRIPTION AND `inLanguage` ARE THE PAGE'S (MOTIR-7956). Both nodes
+ * keep their `@id`s whatever the locale — the entity is one Motir in eleven
+ * languages, not eleven entities — and only the words describing it, and the
+ * WebSite's stated language, follow the page.
  */
-export function buildRootJsonLd(): Record<string, unknown> {
+export function buildRootJsonLd({
+  locale,
+  description,
+}: RootJsonLdInput): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -66,7 +80,7 @@ export function buildRootJsonLd(): Record<string, unknown> {
         name: 'Motir',
         url: siteUrl('/'),
         logo: siteUrl('/motir-mark.svg'),
-        description: copy.meta.description,
+        description,
         sameAs: SAME_AS,
         // The legal entity behind the brand, exactly as the footer states it:
         // "Motir is a product of moooon B.V." — Motir is not itself the company,
@@ -81,8 +95,8 @@ export function buildRootJsonLd(): Record<string, unknown> {
         '@id': WEBSITE_ID,
         name: 'Motir',
         url: siteUrl('/'),
-        description: copy.meta.description,
-        inLanguage: 'en',
+        description,
+        inLanguage: locale,
         publisher: { '@id': ORGANIZATION_ID },
         // ⚠️ THE TARGET IS A REAL, SHIPPED SEARCH, AND IT NOW LIVES ON THIS
         // ORIGIN (MOTIR-4045). `/explore` moved from motir-core onto motir.co,
@@ -108,13 +122,15 @@ export function buildRootJsonLd(): Record<string, unknown> {
  * type="application/ld+json">` is the standard structured-data carrier and the
  * same one motir-core's public surface uses.
  */
-export function RootJsonLd() {
+export function RootJsonLd(input: RootJsonLdInput) {
   return (
     <script
       type="application/ld+json"
       // `JSON.stringify` of a server-built object with no user-controlled keys
       // or values — the same posture as motir-core's `PublicProjectJsonLd`.
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(buildRootJsonLd()) }}
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(buildRootJsonLd(input)),
+      }}
     />
   )
 }

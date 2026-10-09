@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
-import { SubscribeForm } from '@/app/p/[identifier]/_components/SubscribeForm'
+import { SubscribeForm } from '@/app/[locale]/p/[identifier]/_components/SubscribeForm'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 
 /*

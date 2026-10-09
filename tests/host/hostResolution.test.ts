@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   isSiteAssetPath,
+  localisedPath,
   maxAgeMs,
   resetHostResolutionCache,
   resolveHost,
@@ -210,21 +211,24 @@ describe('maxAgeMs', () => {
 
 describe('routeForHost — a workspace subdomain', () => {
   it('serves the workspace’s project list at the root', () => {
-    expect(routeForHost(WORKSPACE, '/')).toEqual({ action: 'workspace-root' })
+    expect(routeForHost(WORKSPACE, '/')).toEqual({
+      action: 'workspace-root',
+      path: '/en/w',
+    })
   })
 
   it('rewrites a known project onto the shipped /p/* tree, path and all', () => {
     expect(routeForHost(WORKSPACE, '/PROD/board')).toEqual({
       action: 'rewrite',
-      path: '/p/PROD/board',
+      path: '/en/p/PROD/board',
     })
     expect(routeForHost(WORKSPACE, '/PROD')).toEqual({
       action: 'rewrite',
-      path: '/p/PROD',
+      path: '/en/p/PROD',
     })
     expect(routeForHost(WORKSPACE, '/PROD/items/PROD-42')).toEqual({
       action: 'rewrite',
-      path: '/p/PROD/items/PROD-42',
+      path: '/en/p/PROD/items/PROD-42',
     })
   })
 
@@ -265,7 +269,7 @@ describe('routeForHost — a workspace subdomain', () => {
     // host. A project path is never ONE segment, which is what tells them apart.
     expect(routeForHost(WORKSPACE, '/PROD/changelog.xml')).toEqual({
       action: 'rewrite',
-      path: '/p/PROD/changelog.xml',
+      path: '/en/p/PROD/changelog.xml',
     })
   })
 })
@@ -274,15 +278,15 @@ describe('routeForHost — a customer domain', () => {
   it('puts the project at the host’s root (ADR Q3)', () => {
     expect(routeForHost(CUSTOM, '/')).toEqual({
       action: 'rewrite',
-      path: '/p/PROD',
+      path: '/en/p/PROD',
     })
     expect(routeForHost(CUSTOM, '/board')).toEqual({
       action: 'rewrite',
-      path: '/p/PROD/board',
+      path: '/en/p/PROD/board',
     })
     expect(routeForHost(CUSTOM, '/items/PROD-42')).toEqual({
       action: 'rewrite',
-      path: '/p/PROD/items/PROD-42',
+      path: '/en/p/PROD/items/PROD-42',
     })
   })
 
@@ -316,11 +320,30 @@ describe('routeForHost is IDEMPOTENT — Next re-enters on its own rewrite', () 
    * so EVERY tenant page 404'd while every single-pass unit test stayed green.
    */
   it('forwards a rewrite it could have produced, on both host kinds', () => {
-    expect(routeForHost(WORKSPACE, '/p/PROD/board')).toEqual({
+    // MOTIR-7948: the router's targets carry a locale, so the second pass
+    // arrives as `/en/p/…` — or as another locale's tree, once one is chosen.
+    expect(routeForHost(WORKSPACE, '/en/p/PROD/board')).toEqual({
       action: 'forward',
     })
-    expect(routeForHost(CUSTOM, '/p/PROD/items/PROD-1')).toEqual({
+    expect(routeForHost(CUSTOM, '/en/p/PROD/items/PROD-1')).toEqual({
       action: 'forward',
+    })
+    expect(routeForHost(WORKSPACE, '/ja/p/PROD')).toEqual({
+      action: 'forward',
+    })
+  })
+
+  it('rewrites an UNPREFIXED router path onto the locale tree', () => {
+    // A visitor can type `/p/PROD/board` on their own host. It was a duplicate
+    // URL before MOTIR-7948 and still is, but no route serves it bare any more,
+    // so it is rewritten rather than forwarded — into the chosen locale's tree.
+    expect(routeForHost(WORKSPACE, '/p/PROD/board')).toEqual({
+      action: 'rewrite',
+      path: '/en/p/PROD/board',
+    })
+    expect(routeForHost(CUSTOM, '/p/PROD', 'de')).toEqual({
+      action: 'rewrite',
+      path: '/de/p/PROD',
     })
   })
 
@@ -329,28 +352,59 @@ describe('routeForHost is IDEMPOTENT — Next re-enters on its own rewrite', () 
     // router already ran" would be settable by any caller, and trusting it
     // would serve any project at any tenant address. There is nothing to forge
     // here, because the identifier must be one the contract just named.
-    expect(routeForHost(WORKSPACE, '/p/OTHER/board')).toEqual({
+    for (const path of ['/p/OTHER/board', '/en/p/OTHER/board', '/p/']) {
+      expect(routeForHost(WORKSPACE, path), path).toEqual({
+        action: 'not-found',
+      })
+    }
+    expect(routeForHost(CUSTOM, '/en/p/OTHER')).toEqual({ action: 'not-found' })
+    // A locale tree that is none of the router's targets is not this host's.
+    expect(routeForHost(WORKSPACE, '/en/explore')).toEqual({
       action: 'not-found',
     })
-    expect(routeForHost(CUSTOM, '/p/OTHER')).toEqual({ action: 'not-found' })
-    expect(routeForHost(WORKSPACE, '/p/')).toEqual({ action: 'not-found' })
   })
 
   it('forwards the workspace root back to itself, and refuses it elsewhere', () => {
-    expect(routeForHost(WORKSPACE, '/w')).toEqual({ action: 'forward' })
+    expect(routeForHost(WORKSPACE, '/en/w')).toEqual({ action: 'forward' })
+    expect(routeForHost(WORKSPACE, '/w')).toEqual({
+      action: 'rewrite',
+      path: '/en/w',
+    })
     // A customer domain has no workspace list — the page would 404 anyway, but
     // the router must not tell it to try.
+    expect(routeForHost(CUSTOM, '/en/w')).toEqual({ action: 'not-found' })
     expect(routeForHost(CUSTOM, '/w')).toEqual({ action: 'not-found' })
   })
 
   it('passes its own two landing pads through untouched', () => {
-    // Anything else here is a redirect loop.
+    // Anything else here is a redirect loop. The 404 pad is never prefixed.
     expect(routeForHost(WORKSPACE, '/_host-unknown')).toEqual({
       action: 'forward',
     })
-    expect(routeForHost(CUSTOM, '/host-unavailable')).toEqual({
+    expect(routeForHost(CUSTOM, '/en/host-unavailable')).toEqual({
       action: 'forward',
     })
+  })
+
+  it('emits the locale it is given, defaulting to English', () => {
+    expect(routeForHost(CUSTOM, '/board', 'ja')).toEqual({
+      action: 'rewrite',
+      path: '/ja/p/PROD/board',
+    })
+    expect(routeForHost(WORKSPACE, '/', 'ko')).toEqual({
+      action: 'workspace-root',
+      path: '/ko/w',
+    })
+  })
+})
+
+describe('localisedPath', () => {
+  it('prefixes a router target, and the root has no trailing slash', () => {
+    expect(localisedPath('/w')).toBe('/en/w')
+    expect(localisedPath('/host-unavailable', 'pt')).toBe(
+      '/pt/host-unavailable',
+    )
+    expect(localisedPath('/', 'de')).toBe('/de')
   })
 })
 

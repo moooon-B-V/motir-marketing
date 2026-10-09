@@ -1,5 +1,6 @@
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { normaliseHost } from '@/lib/publicHost'
+import { DEFAULT_LOCALE, LOCALES, type Locale } from '@/i18n/routing'
 
 /**
  * THE ROUTER'S READ — `GET {APP_ORIGIN}/api/public/hosts/{host}`, its cache, and
@@ -210,6 +211,38 @@ export const ROUTER_PATHS = {
   unavailable: '/host-unavailable',
 } as const
 
+/**
+ * A router page target inside one locale's tree (MOTIR-7948) — `/en/w`,
+ * `/en/host-unavailable`, `/en/p/<id>/…`.
+ *
+ * Every PAGE lives under `app/[locale]` now, so a rewrite onto an unprefixed
+ * `/p/<id>` would reach no route at all. The locale is a parameter rather than
+ * a constant because the proxy detection card is the one that CHOOSES it; this
+ * card always passes English.
+ *
+ * ⚠️ `notFound` IS NEVER PREFIXED. It stays unmatched on purpose (the ⚠️ on
+ * {@link ROUTER_PATHS}`.notFound`), and under a prefix it would still be
+ * unmatched — but by the LOCALE layout's 404 rather than the global one, which
+ * is the room the 404 card owns. Unprefixed, it is a first segment that is not
+ * a locale, and so lands on `app/not-found.tsx` exactly as it did.
+ */
+export function localisedPath(
+  path: string,
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  return `/${locale}${path === '/' ? '' : path}`
+}
+
+/**
+ * Split a leading locale segment off a path — `/en/p/ACME` → `['en', '/p/ACME']`
+ * — or `null` when the first segment is not one of the eleven.
+ */
+function splitLocale(pathname: string): [Locale, string] | null {
+  const [, first, ...rest] = pathname.split('/')
+  const locale = LOCALES.find((l) => l === first)
+  return locale ? [locale, `/${rest.join('/')}`] : null
+}
+
 /** What the router does with one request. */
 export type HostRoute =
   /**
@@ -222,10 +255,13 @@ export type HostRoute =
    * Forwarding nothing meant they answered as `motir.co` on every tenant host.
    */
   | { action: 'forward' }
-  /** Rewrite onto the shipped `/p/*` tree, with the visitor's URL unchanged. */
+  /** Rewrite onto the shipped `/<locale>/p/*` tree, with the visitor's URL unchanged. */
   | { action: 'rewrite'; path: string }
-  /** A workspace subdomain's ROOT — that workspace's public-project list. */
-  | { action: 'workspace-root' }
+  /**
+   * A workspace subdomain's ROOT — that workspace's public-project list, at
+   * `path` (the locale's `/w`).
+   */
+  | { action: 'workspace-root'; path: string }
   /** 301 to the same path on another host (a retired subdomain). */
   | { action: 'redirect'; host: string }
   /** The site's not-found page, with a 404 status. */
@@ -285,23 +321,35 @@ function identifiersOf(
 function alreadyRouted(
   resolution: Exclude<PublicHostResolution, PublicHostAlias>,
   pathname: string,
+  locale: Locale,
 ): HostRoute | null {
-  if (
-    pathname === ROUTER_PATHS.notFound ||
-    pathname === ROUTER_PATHS.unavailable
-  ) {
-    return { action: 'forward' }
-  }
-  if (pathname === ROUTER_PATHS.workspaceRoot) {
-    return resolution.kind === 'workspace'
-      ? { action: 'forward' }
-      : { action: 'not-found' }
-  }
-  if (!pathname.startsWith('/p/')) return null
+  if (pathname === ROUTER_PATHS.notFound) return { action: 'forward' }
 
-  const identifier = pathname.split('/')[2] ?? ''
+  // ⚠️ THE ROUTER'S OWN TARGETS NOW CARRY A LOCALE (MOTIR-7948), so the
+  // second pass arrives as `/en/p/MOTIR/board`. A path WITHOUT one is still
+  // recognised — a visitor can type `/p/MOTIR/board` on their own host, which
+  // was a duplicate URL before this card — but it is rewritten onto the
+  // locale's tree rather than forwarded, because no route serves it bare.
+  const split = splitLocale(pathname)
+  const bare = split ? split[1] : pathname
+  const own = (route: string): HostRoute =>
+    split
+      ? { action: 'forward' }
+      : { action: 'rewrite', path: localisedPath(route, locale) }
+
+  if (bare === ROUTER_PATHS.unavailable) return own(bare)
+  if (bare === ROUTER_PATHS.workspaceRoot) {
+    return resolution.kind === 'workspace' ? own(bare) : { action: 'not-found' }
+  }
+  if (!bare.startsWith('/p/')) {
+    // A locale-prefixed path that is none of the router's targets — `/en/` or
+    // `/de/explore` on a tenant host — is not an address this host serves.
+    return split ? { action: 'not-found' } : null
+  }
+
+  const identifier = bare.split('/')[2] ?? ''
   return identifiersOf(resolution).includes(identifier)
-    ? { action: 'forward' }
+    ? own(bare)
     : { action: 'not-found' }
 }
 
@@ -313,12 +361,13 @@ function alreadyRouted(
 export function routeForHost(
   resolution: PublicHostResolution,
   pathname: string,
+  locale: Locale = DEFAULT_LOCALE,
 ): HostRoute {
   if (resolution.kind === 'alias') {
     return { action: 'redirect', host: resolution.redirectTo }
   }
 
-  const routed = alreadyRouted(resolution, pathname)
+  const routed = alreadyRouted(resolution, pathname, locale)
   if (routed) return routed
 
   if (resolution.kind === 'project') {
@@ -326,13 +375,21 @@ export function routeForHost(
     // ONE project at the root (ADR Q3): the whole path hangs below `/p/<id>`.
     return {
       action: 'rewrite',
-      path: `/p/${encodeURIComponent(resolution.project.identifier)}${pathname === '/' ? '' : pathname}`,
+      path: localisedPath(
+        `/p/${encodeURIComponent(resolution.project.identifier)}${pathname === '/' ? '' : pathname}`,
+        locale,
+      ),
     }
   }
 
   // A workspace subdomain. The ROOT is the workspace's project list; everything
   // else is addressed by a project identifier in the first segment.
-  if (pathname === '/') return { action: 'workspace-root' }
+  if (pathname === '/') {
+    return {
+      action: 'workspace-root',
+      path: localisedPath(ROUTER_PATHS.workspaceRoot, locale),
+    }
+  }
 
   const [first, ...rest] = pathname.split('/').filter(Boolean)
   const project = resolution.projects.find((p) => p.identifier === first)
@@ -347,6 +404,9 @@ export function routeForHost(
   const suffix = rest.length ? `/${rest.join('/')}` : ''
   return {
     action: 'rewrite',
-    path: `/p/${encodeURIComponent(project.identifier)}${suffix}`,
+    path: localisedPath(
+      `/p/${encodeURIComponent(project.identifier)}${suffix}`,
+      locale,
+    ),
   }
 }

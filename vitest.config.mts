@@ -27,6 +27,13 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     /*
+     * next-intl is INLINED (MOTIR-7948). Its ESM build imports `next/server`
+     * with no extension, which Node's own resolver refuses for a package with
+     * no `exports` map — so loaded as an external, `proxy.ts` failed to import
+     * at all. Inlined, Vite resolves the specifier the way Next's bundler does.
+     */
+    server: { deps: { inline: ['next-intl'] } },
+    /*
      * ⚠️ `tests/design/**` BELONGS TO THE OTHER LANE (MOTIR-4001), and the
      * exclusion is load-bearing rather than tidy. Those specs drive a real
      * headless chromium — jsdom cannot measure a `.mock.html`, which is the
@@ -75,14 +82,25 @@ export default defineConfig({
       enabled: true,
       provider: 'v8',
       reporter: ['text-summary'],
+      /*
+       * ⚠️ `?locale?`, NOT `[locale]` (MOTIR-7948). Every route moved under the
+       * `app/[locale]` segment. In glob syntax `[locale]` is a CHARACTER CLASS;
+       * picomatch, which this config is matched with, happens to fall back to a
+       * literal match when the class matches nothing — measured, and not a
+       * guarantee worth resting a floor on. And this file has a second reader:
+       * `tests/publicProject/standingRules.test.ts` reads these arrays as TEXT,
+       * up to their first `]`, so a bracket inside an entry would cut the list
+       * short there. `?` matches the bracket on each side and is unambiguous to
+       * both. The files measured are the same ones as before the move.
+       */
       include: [
         'lib/publicProject.ts',
-        'app/p/**/*.tsx',
+        'app/?locale?/p/**/*.tsx',
         // MOTIR-6743 — the five retired read pages are ROUTE HANDLERS now
         // (board, items, tree, roadmap and an item), each a permanent redirect
         // into the app. `.ts`, so the `.tsx` glob above does not reach them;
         // added WITH the files, per the rule the entry below records.
-        'app/p/**/route.ts',
+        'app/?locale?/p/**/route.ts',
         // MOTIR-4220. Added WITH the files rather than after them, which is the
         // rule the entry above earned: a file outside this list is not
         // measured, and a gate that measures nothing is green.
@@ -105,7 +123,20 @@ export default defineConfig({
         // (MOTIR-7687, MOTIR-7688). The page IS measured, unlike `app/p`'s:
         // `tests/ideas/ideasPage.test.tsx` awaits it against the recorded
         // contract, which is the integration gate the story asked for.
-        'app/ideas/**/*.tsx',
+        'app/?locale?/ideas/**/*.tsx',
+        // MOTIR-7967 — every non-route module Story MOTIR-7737 (eleven
+        // languages) added or rewrote, measured first and pinned below.
+        'i18n/*.ts',
+        'lib/copy.ts',
+        'lib/localeDetection.ts',
+        'lib/languageSwitch.ts',
+        'lib/localeMetadata.ts',
+        'app/_components/LanguageSwitcher.tsx',
+        'app/_components/NotFoundRoom.tsx',
+        'app/_components/products.ts',
+        'app/fonts.ts',
+        'app/?locale?/not-found.tsx',
+        'scripts/i18n/*.ts',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -128,11 +159,11 @@ export default defineConfig({
        *  • `layout.tsx` — nine lines of chrome composition with no branch.
        */
       exclude: [
-        'app/p/**/changelog.xml/route.ts',
-        'app/p/**/opengraph-image.tsx',
-        'app/p/**/page.tsx',
-        'app/p/**/layout.tsx',
-        'app/p/**/_components/tabPage.tsx',
+        'app/?locale?/p/**/changelog.xml/route.ts',
+        'app/?locale?/p/**/opengraph-image.tsx',
+        'app/?locale?/p/**/page.tsx',
+        'app/?locale?/p/**/layout.tsx',
+        'app/?locale?/p/**/_components/tabPage.tsx',
       ],
       /*
        * MEASURED FIRST, then pinned at the floor — motir-core's rule for its own
@@ -152,8 +183,12 @@ export default defineConfig({
         'app/robots.ts': { lines: 90, functions: 90, branches: 85 },
         // MOTIR-6743 — measured first: the five redirect handlers are 100
         // across under `tests/publicProject/readPageRedirects.test.ts`.
-        'app/p/**/route.ts': { lines: 90, functions: 90, branches: 90 },
-        'app/p/**/_components/*.tsx': {
+        'app/?locale?/p/**/route.ts': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/?locale?/p/**/_components/*.tsx': {
           lines: 90,
           functions: 90,
           branches: 75,
@@ -170,7 +205,41 @@ export default defineConfig({
         // MOTIR-7689 — MEASURED FIRST under `tests/ideas/`: the page 95.7
         // lines / 96.7 branches / 91.7 functions, every component 100 lines
         // and ≥ 90.9 branches. Pinned at the story's floor.
-        'app/ideas/**/*.tsx': { lines: 90, functions: 90, branches: 90 },
+        'app/?locale?/ideas/**/*.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        // MOTIR-7967 — the eleven-languages story's modules, MEASURED FIRST
+        // (the summary is on its pull request) and pinned at the story's
+        // floor. A glob key aggregates the files it matches.
+        'i18n/*.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/copy.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/localeDetection.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/languageSwitch.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/localeMetadata.ts': { lines: 90, functions: 90, branches: 90 },
+        'app/_components/LanguageSwitcher.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/_components/NotFoundRoom.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/_components/products.ts': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/fonts.ts': { lines: 90, functions: 90, branches: 90 },
+        'app/?locale?/not-found.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'scripts/i18n/*.ts': { lines: 90, functions: 90, branches: 90 },
       },
     },
   },

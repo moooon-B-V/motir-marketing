@@ -1,4 +1,5 @@
-import { cleanup, render } from '@testing-library/react'
+import { cleanup } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import {
   PALETTE_IDS,
   STYLE_IDS,
@@ -6,8 +7,8 @@ import {
   type PaletteId,
 } from '@motir/design-system'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import Page from '@/app/page'
-import DesignPage from '@/app/design/page'
+import Page from '@/app/[locale]/page'
+import DesignPage from '@/app/[locale]/design/page'
 import { distinctPairs, paintedPairs } from './support/paintedInks'
 import {
   contrastRatio,
@@ -16,6 +17,7 @@ import {
   tokenContrast,
   type Axes,
 } from './support/themeTokens'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * ⚠️ TWO STUBS THE PAGES NEED, both for the same reason `tests/siteHeader.tsx`
@@ -285,13 +287,27 @@ const PAIRS: {
   {
     ink: '--el-accent-on-surface',
     surface: '--el-surface',
-    element: 'the nav current-page item, md:hidden panel',
+    element: 'the nav current-page item, Menu panel',
     verdict: 'clears-AA',
   },
   {
     ink: '--el-text-secondary',
     surface: '--el-surface-soft',
     element: 'the other nav items in the bar, and the footer legal strip',
+    verdict: 'clears-AA',
+  },
+  // The language switcher's open list (MOTIR-7953): it sits on the page
+  // background, and a hovered row takes `--el-surface-soft`.
+  {
+    ink: '--el-accent-on-surface',
+    surface: '--el-page-bg',
+    element: 'the current language in the open switcher list',
+    verdict: 'clears-AA',
+  },
+  {
+    ink: '--el-text',
+    surface: '--el-surface-soft',
+    element: 'a hovered language in the open switcher list',
     verdict: 'clears-AA',
   },
 
@@ -492,7 +508,7 @@ describe('what the site actually paints, read off the rendered pages', () => {
     '%s paints no pair that is below AA',
     async (_route, Component) => {
       // Called, not mounted: the landing is an async server component.
-      const { container } = render(await Component())
+      const { container } = render(await Component(EN_PAGE))
       const painted = paintedPairs(container.firstElementChild as Element)
       expect(painted.length).toBeGreaterThan(20)
 
@@ -514,7 +530,7 @@ describe('what the site actually paints, read off the rendered pages', () => {
   it.each(pages)(
     '%s — every rendered pair clears AA on all 20 cells',
     async (_route, Component) => {
-      const { container } = render(await Component())
+      const { container } = render(await Component(EN_PAGE))
       const failures: string[] = []
       for (const pair of distinctPairs(
         paintedPairs(container.firstElementChild as Element),

@@ -16,3 +16,8 @@ next-env.d.ts
 /test-results/
 /blob-report/
 /playwright/.cache/
+
+# The catalogue script's batch files (MOTIR-7949). `pnpm i18n:extract` writes
+# them, an agent fills them, `pnpm i18n:merge` reads them back; only the merged
+# catalogue and its source record are committed.
+/.i18n-work/

@@ -1,12 +1,16 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { useCallback, useRef, useState } from 'react'
+import { useSitePathname } from '@/i18n/sitePathname'
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
-import { PRODUCT_MARK, productGroups, productItems } from './products'
+import { type Copy, useCopy, usePageLocale } from '@/lib/copy'
+import type { Locale } from '@/i18n/routing'
+import { PRODUCT_MARK, productGroupsFor, productItemsFor } from './products'
 import { BrandTile } from './BrandTile'
+import { LADDER_CLASSES } from './headerLadder'
+import { LanguageSwitcher } from './LanguageSwitcher'
+import { useDismiss } from './useDismiss'
 import {
   DESIGN,
   DOCS,
@@ -46,7 +50,7 @@ import { SetupPromptButton } from './SetupPromptButton'
  *     `@motir/design-system@0.1.0`, and it named its own expiry condition.
  *     MOTIR-3872 published 0.1.1 with MOTIR-3745's and MOTIR-3774's lifted ink
  *     and this repository pins it: the same pair now measures **5.76:1** in
- *     dark and 6.29:1 in light, on `--el-surface-soft`, and the `md:hidden`
+ *     dark and 6.29:1 in light, on `--el-surface-soft`, and the Menu
  *     panel's `--el-surface` reads 5.54:1 / 6.03:1. Those four are the warm
  *     palette's, which MOTIR-6471 renamed Amethyst; the monochrome Motir
  *     palette that is the default since MOTIR-6616 reads 9.40 / 5.99 and
@@ -81,13 +85,14 @@ import { SetupPromptButton } from './SetupPromptButton'
  * and took three 404s before the visitor touched anything. Neither prefetching,
  * client routing nor `aria-current` means anything across origins.
  */
-const navItems = [
-  { path: EXPLORE, label: copy.nav.explore },
-  { path: IDEAS, label: copy.nav.ideas },
-  { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself, feature: true },
-  { path: DOCS, label: copy.nav.docs },
-  { path: DESIGN, label: copy.nav.design },
-] as const
+const navItemsFor = (copy: Copy) =>
+  [
+    { path: EXPLORE, label: copy.nav.explore },
+    { path: IDEAS, label: copy.nav.ideas },
+    { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself, feature: true },
+    { path: DOCS, label: copy.nav.docs },
+    { path: DESIGN, label: copy.nav.design },
+  ] as const
 
 /**
  * Whether an item is the page being read. Explore and Docs each cover their
@@ -107,30 +112,19 @@ const navItems = [
  */
 
 /** A product's address: its page, or — for the tooling — its documentation. */
-const productHref = (host: PublicHost, slug: ProductSlug) =>
-  siteLinkFor(host, PRODUCT_DOCS[slug] ?? productPath(slug))
+const productHref = (host: PublicHost, slug: ProductSlug, locale: Locale) =>
+  siteLinkFor(host, PRODUCT_DOCS[slug] ?? productPath(slug), locale)
 const NEW_TAB = { target: '_blank', rel: 'noopener noreferrer' } as const
 
 function ProductsMenu({ host }: { host: PublicHost }) {
+  const copy = useCopy()
+  const locale = usePageLocale()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const onSite = host.kind === 'site'
 
-  useEffect(() => {
-    if (!open) return
-    const onPointer = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
-    }
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('pointerdown', onPointer)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('pointerdown', onPointer)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
+  const close = useCallback(() => setOpen(false), [])
+  useDismiss(rootRef, open, close)
 
   return (
     <div ref={rootRef} className="relative">
@@ -158,7 +152,7 @@ function ProductsMenu({ host }: { host: PublicHost }) {
           role="group"
           className="absolute top-[calc(100%+12px)] left-[-14px] z-40 grid w-[min(920px,calc(100vw-32px))] gap-x-4 gap-y-3 rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-(--spacing-card-padding) shadow-(--shadow-elevated) md:grid-cols-3"
         >
-          {productGroups.map((group) => (
+          {productGroupsFor(copy).map((group) => (
             <div key={group.label} className="grid content-start gap-1">
               <p className="m-0 px-(--spacing-control-x) pb-1 font-(family-name:--font-mono) text-[11px] tracking-[0.1em] text-(--el-text-secondary) uppercase">
                 {group.label}
@@ -166,7 +160,7 @@ function ProductsMenu({ host }: { host: PublicHost }) {
               {group.items.map((product) => (
                 <ChromeLink
                   key={product.slug}
-                  href={productHref(host, product.slug)}
+                  href={productHref(host, product.slug, locale)}
                   internal={onSite && !PRODUCT_DOCS[product.slug]}
                   {...(PRODUCT_DOCS[product.slug] ? NEW_TAB : {})}
                   onClick={() => setOpen(false)}
@@ -229,9 +223,14 @@ export function SiteHeader({
   /** Over the page's first section rather than above it (`SiteShell`). */
   overlay?: boolean
 }) {
+  const copy = useCopy()
+  const locale = usePageLocale()
   const [menuOpen, setMenuOpen] = useState(false)
-  const pathname = usePathname()
+  const pathname = useSitePathname()
   const onSite = host.kind === 'site'
+  // The give-way ladder (MOTIR-7947 revision 2): the widths each rung needs
+  // are this locale's, measured, not shared breakpoints.
+  const ladder = LADDER_CLASSES[locale]
 
   return (
     <header className={cn(overlay && 'absolute inset-x-0 top-0 z-30')}>
@@ -245,7 +244,7 @@ export function SiteHeader({
             different ORIGIN stays a plain `<a>`: `next/link` prefetches and
             client-routes, neither of which means anything across origins. */}
           <ChromeLink
-            href={siteLinkFor(host, SITE_ROOT)}
+            href={siteLinkFor(host, SITE_ROOT, locale)}
             internal={onSite}
             aria-label={copy.nav.brandAriaLabel}
             className="flex flex-none items-center"
@@ -259,15 +258,15 @@ export function SiteHeader({
 
           <nav
             aria-label={copy.nav.ariaLabel}
-            className="hidden items-center gap-5 md:flex"
+            className={cn('items-center gap-5', ladder.nav)}
           >
             <ProductsMenu host={host} />
-            {navItems.map((item) => {
+            {navItemsFor(copy).map((item) => {
               const current = isCurrent(host, item.path, pathname)
               return (
                 <ChromeLink
                   key={item.path}
-                  href={siteLinkFor(host, item.path)}
+                  href={siteLinkFor(host, item.path, locale)}
                   internal={onSite}
                   aria-current={current ? 'page' : undefined}
                   className={cn(
@@ -285,14 +284,15 @@ export function SiteHeader({
         </div>
 
         <div className="flex flex-none items-center gap-2">
-          {/* Hidden until the bar has room beside six nav links; narrower
-              viewports reach it in the Products menu. */}
-          <SetupPromptButton look="header" className="hidden xl:inline-flex" />
+          {/* The first thing to leave the bar (rung B); narrower viewports
+              reach it in the Products menu. */}
+          <SetupPromptButton look="header" className={ladder.setup} />
           <a
             href={SIGN_IN}
             className={cn(
               buttonVariants({ variant: 'ghost', size: 'md' }),
-              'hidden text-[15px] md:inline-flex',
+              'text-[15px]',
+              ladder.wide,
             )}
           >
             {copy.nav.signIn}
@@ -308,6 +308,11 @@ export function SiteHeader({
             {copy.nav.startFree}
             <ArrowRight aria-hidden="true" className="size-3.5" />
           </a>
+          {/* The language switcher (MOTIR-7953): the bar's LAST control, after
+              the account pair, and on the bar at EVERY width — a 40px square
+              that fits beside Start free and Menu at 390px. It has no section
+              in the Menu panel: one control, in one place. */}
+          <LanguageSwitcher host={host} />
           <button
             type="button"
             aria-label={copy.nav.menu}
@@ -316,7 +321,8 @@ export function SiteHeader({
             onClick={() => setMenuOpen((open) => !open)}
             className={cn(
               buttonVariants({ variant: 'ghost', size: 'sm' }),
-              'w-8 px-0 md:hidden',
+              'w-8 px-0',
+              ladder.menu,
             )}
           >
             <Menu aria-hidden="true" className="size-4" />
@@ -339,7 +345,10 @@ export function SiteHeader({
         <nav
           id="site-menu"
           aria-label={copy.nav.ariaLabel}
-          className="flex flex-col gap-3 border-t border-(--el-border) bg-(--el-page-bg) px-4 py-3 shadow-(--shadow-elevated) md:hidden"
+          className={cn(
+            'flex flex-col gap-3 border-t border-(--el-border) bg-(--el-page-bg) px-4 py-3 shadow-(--shadow-elevated)',
+            ladder.menu,
+          )}
         >
           {/* The current-page treatment is drawn HERE TOO. It is a separate
               branch in the same component, which is exactly how a treatment
@@ -347,15 +356,15 @@ export function SiteHeader({
               open panel (panel 4) rather than describing it, for that
               reason. */}
           {[
-            ...productItems.map((product) => ({
-              href: productHref(host, product.slug),
+            ...productItemsFor(copy).map((product) => ({
+              href: productHref(host, product.slug, locale),
               label: product.name,
               internal: onSite && !PRODUCT_DOCS[product.slug],
               current: false,
               newTab: Boolean(PRODUCT_DOCS[product.slug]),
             })),
-            ...navItems.map((item) => ({
-              href: siteLinkFor(host, item.path),
+            ...navItemsFor(copy).map((item) => ({
+              href: siteLinkFor(host, item.path, locale),
               label: item.label,
               internal: onSite,
               current: isCurrent(host, item.path, pathname),

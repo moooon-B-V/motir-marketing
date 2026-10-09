@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { render } from '@testing-library/react'
-import { ProjectJsonLd } from '@/app/p/[identifier]/_components/JsonLd'
+import { render } from '@/tests/helpers/withCopy'
+import { ProjectJsonLd } from '@/app/[locale]/p/[identifier]/_components/JsonLd'
 import type { PublicProjectOverviewDto } from '@/lib/publicProject'
 
 /*
@@ -68,11 +68,12 @@ describe.each(PRIMARIES)(
       try {
         vi.resetModules()
         const { tabMetadata } =
-          await import('@/app/p/[identifier]/_components/tabPage')
+          await import('@/app/[locale]/p/[identifier]/_components/tabPage')
         const meta = await tabMetadata({
+          locale: 'en',
           identifier: 'PROD',
           segment: 'board',
-          label: 'Board',
+          labelKey: 'board',
         })
 
         expect(meta.alternates?.canonical).toBe(boardUrl)
@@ -84,7 +85,9 @@ describe.each(PRIMARIES)(
     })
 
     it('names it in every JSON-LD `@id` and `url`', () => {
-      const { container } = render(<ProjectJsonLd project={project(primary)} />)
+      const { container } = render(
+        <ProjectJsonLd project={project(primary)} fallbackDescription="" />,
+      )
       const graph = JSON.parse(
         container.querySelector('script')!.innerHTML,
       ) as Record<string, unknown>

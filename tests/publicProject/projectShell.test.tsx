@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import type { PublicProjectOverviewDto } from '@/lib/publicProject'
-import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
-import { ProjectJsonLd } from '@/app/p/[identifier]/_components/JsonLd'
-import { EmptyState, ErrorState } from '@/app/p/[identifier]/_components/States'
+import { ProjectHeader } from '@/app/[locale]/p/[identifier]/_components/ProjectHeader'
+import { ProjectJsonLd } from '@/app/[locale]/p/[identifier]/_components/JsonLd'
+import {
+  EmptyState,
+  ErrorState,
+} from '@/app/[locale]/p/[identifier]/_components/States'
 
 /*
  * The `/p/*` SHELL (MOTIR-4115) — the hero, the tab bar, the entity signal and
@@ -154,7 +158,9 @@ describe('the tab bar', () => {
 
 describe('the entity signal', () => {
   const graphOf = () => {
-    const { container } = render(<ProjectJsonLd project={project} />)
+    const { container } = render(
+      <ProjectJsonLd project={project} fallbackDescription="" />,
+    )
     const script = container.querySelector('script[type="application/ld+json"]')
     return JSON.parse(script?.textContent ?? '{}') as Record<string, unknown>
   }
@@ -199,7 +205,12 @@ describe('the three states', () => {
     // "Something went wrong" on a page that otherwise looks fine is the least
     // actionable message a visitor can be given. §8 cost 1 is why this state
     // exists at all, and naming the separate deployment is what makes it honest.
-    render(<ErrorState what="this project's board" identifier="MOTIR" />)
+    render(
+      <ErrorState
+        title="We could not load this project's board"
+        identifier="MOTIR"
+      />,
+    )
 
     const alert = screen.getByRole('alert')
     expect(alert).toHaveTextContent('app.motir.co')
@@ -207,7 +218,12 @@ describe('the three states', () => {
   })
 
   it('the ERROR state offers the one route that does NOT depend on the failing hop', () => {
-    render(<ErrorState what="this project's board" identifier="MOTIR" />)
+    render(
+      <ErrorState
+        title="We could not load this project's board"
+        identifier="MOTIR"
+      />,
+    )
 
     expect(
       screen.getByRole('link', { name: /changelog feed/i }),
@@ -217,7 +233,7 @@ describe('the three states', () => {
   it('the ERROR state does NOT claim the project is missing', () => {
     // The failure this split exists to prevent: telling a visitor the project
     // was deleted every time motir-core restarts.
-    render(<ErrorState what="this project" />)
+    render(<ErrorState title="We could not load this project" />)
 
     expect(screen.getByRole('alert').textContent).not.toMatch(
       /not found|does not exist|deleted/i,

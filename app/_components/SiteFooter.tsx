@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { copy, format } from '@/lib/copy'
+import { ChromeLink } from './ChromeLink'
+import { type Copy, format, useCopy, usePageLocale } from '@/lib/copy'
 import {
   DOCS,
   EXPLORE,
@@ -47,40 +48,43 @@ import { BrandTile } from './BrandTile'
  * host — the two `APP_ORIGIN` doors and the GitHub repository — so there is
  * nothing per-host to decide about them.
  */
-const columns = [
-  {
-    heading: copy.footer.productHeading,
-    items: [
-      { href: HOW_IT_WORKS, label: copy.footer.howItWorks, site: true },
-      { href: FREE_DOOR, label: copy.footer.startFree },
-      { href: SIGN_IN, label: copy.footer.signIn },
-    ],
-  },
-  {
-    heading: copy.footer.resourcesHeading,
-    items: [
-      { href: EXPLORE, label: copy.footer.explore, site: true },
-      { href: IDEAS, label: copy.footer.ideas, site: true },
-      {
-        href: MOTIR_BUILDS_ITSELF,
-        label: copy.footer.buildsItself,
-        site: true,
-      },
-      { href: DOCS, label: copy.footer.docs, site: true },
-      { href: SOURCE_REPO, label: copy.footer.github },
-    ],
-  },
-  {
-    heading: copy.footer.legalHeading,
-    items: [
-      { href: LEGAL_PRIVACY, label: copy.footer.privacy, site: true },
-      { href: LEGAL_TERMS, label: copy.footer.terms, site: true },
-      { href: LEGAL_INDEX, label: copy.footer.legalIndex, site: true },
-    ],
-  },
-] as const
+const columnsFor = (copy: Copy) =>
+  [
+    {
+      heading: copy.footer.productHeading,
+      items: [
+        { href: HOW_IT_WORKS, label: copy.footer.howItWorks, site: true },
+        { href: FREE_DOOR, label: copy.footer.startFree },
+        { href: SIGN_IN, label: copy.footer.signIn },
+      ],
+    },
+    {
+      heading: copy.footer.resourcesHeading,
+      items: [
+        { href: EXPLORE, label: copy.footer.explore, site: true },
+        { href: IDEAS, label: copy.footer.ideas, site: true },
+        {
+          href: MOTIR_BUILDS_ITSELF,
+          label: copy.footer.buildsItself,
+          site: true,
+        },
+        { href: DOCS, label: copy.footer.docs, site: true },
+        { href: SOURCE_REPO, label: copy.footer.github },
+      ],
+    },
+    {
+      heading: copy.footer.legalHeading,
+      items: [
+        { href: LEGAL_PRIVACY, label: copy.footer.privacy, site: true },
+        { href: LEGAL_TERMS, label: copy.footer.terms, site: true },
+        { href: LEGAL_INDEX, label: copy.footer.legalIndex, site: true },
+      ],
+    },
+  ] as const
 
 export function SiteFooter({ host }: { host: PublicHost }) {
+  const copy = useCopy()
+  const locale = usePageLocale()
   return (
     <footer
       aria-label={copy.footer.ariaLabel}
@@ -95,7 +99,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
             ORIGIN is a plain `<a>`. */}
         {host.kind === 'site' ? (
           <Link
-            href={SITE_ROOT}
+            href={siteLinkFor(host, SITE_ROOT, locale)}
             aria-label={copy.nav.brandAriaLabel}
             className="inline-flex"
           >
@@ -103,7 +107,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
           </Link>
         ) : (
           <a
-            href={siteLinkFor(host, SITE_ROOT)}
+            href={siteLinkFor(host, SITE_ROOT, locale)}
             aria-label={copy.nav.brandAriaLabel}
             className="inline-flex"
           >
@@ -118,7 +122,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
         </p>
       </div>
 
-      {columns.map((column) => (
+      {columnsFor(copy).map((column) => (
         <div key={column.heading}>
           <h2 className="mb-2.5 text-[12px] font-semibold tracking-[0.04em] text-(--el-text-secondary) uppercase">
             {column.heading}
@@ -126,16 +130,22 @@ export function SiteFooter({ host }: { host: PublicHost }) {
           <ul className="flex list-none flex-col gap-1.5 p-0">
             {column.items.map((item) => (
               <li key={item.href}>
-                <a
+                {/* A page of this site is a client navigation, so the look a
+                    visitor picked on /design stays on for the visit; a
+                    full-page load would start it over (Yue, 2026-10-09). */}
+                <ChromeLink
                   href={
                     'site' in item && item.site
-                      ? siteLinkFor(host, item.href)
+                      ? siteLinkFor(host, item.href, locale)
                       : item.href
+                  }
+                  internal={
+                    'site' in item && !!item.site && host.kind === 'site'
                   }
                   className="text-[13px] text-(--el-text-secondary) hover:text-(--el-link) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
                 >
                   {item.label}
-                </a>
+                </ChromeLink>
               </li>
             ))}
           </ul>

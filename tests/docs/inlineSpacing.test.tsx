@@ -1,17 +1,18 @@
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import DocsIndexPage from '@/app/docs/(guides)/page'
-import CliPage from '@/app/docs/(guides)/cli/page'
-import McpPage from '@/app/docs/(guides)/mcp/page'
-import PublicAddressPage from '@/app/docs/(guides)/public-address/page'
-import SandboxPage from '@/app/docs/(guides)/sandbox/page'
-import SentryPage from '@/app/docs/(guides)/sentry/page'
-import DifficultyPage from '@/app/docs/(guides)/difficulty/page'
-import SkillsPage from '@/app/docs/(guides)/skills/page'
-import ClaudeCodePluginPage from '@/app/docs/(guides)/claude-code-plugin/page'
-import ClaudeCodeConnectorPage from '@/app/docs/(guides)/claude-code-connector/page'
-import GettingStartedPage from '@/app/docs/api/getting-started/page'
-import StabilityPage from '@/app/docs/api/stability/page'
+import DocsIndexPage from '@/app/[locale]/docs/(guides)/page'
+import CliPage from '@/app/[locale]/docs/(guides)/cli/page'
+import McpPage from '@/app/[locale]/docs/(guides)/mcp/page'
+import PublicAddressPage from '@/app/[locale]/docs/(guides)/public-address/page'
+import SandboxPage from '@/app/[locale]/docs/(guides)/sandbox/page'
+import SentryPage from '@/app/[locale]/docs/(guides)/sentry/page'
+import DifficultyPage from '@/app/[locale]/docs/(guides)/difficulty/page'
+import SkillsPage from '@/app/[locale]/docs/(guides)/skills/page'
+import ClaudeCodePluginPage from '@/app/[locale]/docs/(guides)/claude-code-plugin/page'
+import ClaudeCodeConnectorPage from '@/app/[locale]/docs/(guides)/claude-code-connector/page'
+import GettingStartedPage from '@/app/[locale]/docs/api/getting-started/page'
+import StabilityPage from '@/app/[locale]/docs/api/stability/page'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * A WORD RUNNING INTO THE ELEMENT BEFORE IT (MOTIR-4429).
@@ -125,47 +126,53 @@ describe('the run-on detector', () => {
   })
 })
 
-describe('no /docs page runs a word into the element before it', () => {
+describe('no /docs page runs a word into the element before it', async () => {
   const cases: [string, () => Promise<HTMLElement>][] = [
-    ['/docs', async () => render(<DocsIndexPage />).container],
+    ['/docs', async () => render(await DocsIndexPage(EN_PAGE)).container],
     [
       '/docs/mcp',
       async () => {
         stub(catalogueFixture)
-        return render(await McpPage()).container
+        return render(await McpPage(EN_PAGE)).container
       },
     ],
     [
       '/docs/cli',
       async () => {
         stub(cliFixture)
-        return render(await CliPage()).container
+        return render(await CliPage(EN_PAGE)).container
       },
     ],
-    ['/docs/sandbox', async () => render(<SandboxPage />).container],
+    ['/docs/sandbox', async () => render(await SandboxPage(EN_PAGE)).container],
     [
       '/docs/public-address',
-      async () => render(<PublicAddressPage />).container,
+      async () => render(await PublicAddressPage(EN_PAGE)).container,
     ],
-    ['/docs/sentry', async () => render(<SentryPage />).container],
-    ['/docs/difficulty', async () => render(<DifficultyPage />).container],
-    ['/docs/skills', async () => render(<SkillsPage />).container],
+    ['/docs/sentry', async () => render(await SentryPage(EN_PAGE)).container],
+    [
+      '/docs/difficulty',
+      async () => render(await DifficultyPage(EN_PAGE)).container,
+    ],
+    ['/docs/skills', async () => render(await SkillsPage(EN_PAGE)).container],
     [
       '/docs/claude-code-plugin',
-      async () => render(<ClaudeCodePluginPage />).container,
+      async () => render(await ClaudeCodePluginPage(EN_PAGE)).container,
     ],
     [
       '/docs/claude-code-connector',
-      async () => render(<ClaudeCodeConnectorPage />).container,
+      async () => render(await ClaudeCodeConnectorPage(EN_PAGE)).container,
     ],
     [
       '/docs/api/getting-started',
       async () => {
         stub(specFixture)
-        return render(await GettingStartedPage()).container
+        return render(await GettingStartedPage(EN_PAGE)).container
       },
     ],
-    ['/docs/api/stability', async () => render(<StabilityPage />).container],
+    [
+      '/docs/api/stability',
+      async () => render(await StabilityPage(EN_PAGE)).container,
+    ],
   ]
 
   for (const [route, mount] of cases) {

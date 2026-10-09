@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { EN_PAGE } from '@/tests/helpers/locale'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import McpPage from '@/app/docs/(guides)/mcp/page'
+import McpPage from '@/app/[locale]/docs/(guides)/mcp/page'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import {
   CLAUDE_AI_ROUTE_CHECKED_ON,
@@ -39,6 +40,14 @@ import {
  */
 
 const SENTINEL = 'https://sentinel.invalid'
+
+/**
+ * Whether a client's config text carries the sentinel origin anywhere. The
+ * config is a block of JSON, TOML or a shell line rather than a URL, so this
+ * is a text search; it is spelled as a split so CodeQL does not read it as a
+ * URL check (`js/incomplete-url-substring-sanitization`).
+ */
+const carriesOrigin = (config: string) => config.split(SENTINEL).length > 1
 
 /** The catalogue shape the scope table is derived from. Two invented groups. */
 const catalogueFixture = {
@@ -100,7 +109,7 @@ describe('the transport facts are ONE source, and every block reads them', () =>
     const clients = mcpClients(mcpTransportFacts(SENTINEL))
     expect(clients.length).toBeGreaterThanOrEqual(5)
     const missing = clients
-      .filter((client) => !client.config.includes(SENTINEL))
+      .filter((client) => !carriesOrigin(client.config))
       .map((client) => client.id)
     expect(missing, 'a config that does not interpolate the origin').toEqual([])
   })
@@ -112,7 +121,7 @@ describe('the transport facts are ONE source, and every block reads them', () =>
     ]
     expect(
       handCopied
-        .filter((client) => !client.config.includes(SENTINEL))
+        .filter((client) => !carriesOrigin(client.config))
         .map((client) => client.id),
     ).toEqual(['typed'])
   })
@@ -169,7 +178,7 @@ describe('the transport facts are ONE source, and every block reads them', () =>
 describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
   it('carries a config block per client — the page had ZERO', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
 
     const panes = [...container.querySelectorAll('pre')].map(
       (pane) => pane.textContent ?? '',
@@ -188,7 +197,7 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
     // value `vitest.config.mts` sets, which is not production — so a block
     // that typed the production URL fails here.
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const panes = [...container.querySelectorAll('pre')].map(
       (pane) => pane.textContent ?? '',
     )
@@ -201,7 +210,7 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
 
   it('names every supported client, with the file its config goes in', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const text = container.textContent ?? ''
     for (const client of mcpClients()) {
       expect(text, client.id).toContain(client.label)
@@ -211,7 +220,7 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
 
   it('leads with Add Motir to Claude, then walks the token route: mint, wire, check', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const headings = [...container.querySelectorAll('h2')].map(
       (heading) => heading.textContent ?? '',
     )
@@ -229,7 +238,7 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
 
   it('KEEPS the token-route anchors, so inbound links still land', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     for (const id of [
       'claude',
       'token-route',
@@ -244,7 +253,7 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
 
   it('warns that an unauthorized answer is about the TOKEN', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     expect(container.textContent).toMatch(/unauthorized answer is about the/i)
   })
 
@@ -252,7 +261,7 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
     // Every scope on the page comes from the fixture and from nowhere else —
     // this repository keeps no copy of a scope list it could not check.
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const text = container.textContent ?? ''
     for (const group of catalogueFixture.groups) {
       expect(text, group.permission).toContain(group.permission)
@@ -269,7 +278,7 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
     // Blanking the page would strand a reader on the one thing that still
     // worked.
     stubCatalogue({}, 503)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('The scope table is temporarily unreachable')
     expect(text).toContain('claude mcp add')
@@ -303,7 +312,7 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
 
   it('renders the three clients INSIDE the first section, before the token route', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const first = container.querySelector('h2')!
     const tokenRoute = container.querySelector('#token-route')!
     expect(first.textContent).toBe('Add Motir to Claude')
@@ -354,7 +363,7 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
 
   it('says claude.ai shows as a verified domain, and a self-registered client as Unverified', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const consent =
       container.querySelector('#consent')!.parentElement!.textContent!
     expect(consent).toContain(
@@ -368,7 +377,7 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
 
   it('prints the Claude Code command with a copy control', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const block = container.querySelector('#claude-code')!
     expect(block.querySelector('pre')!.textContent).toBe(
       `claude mcp add --transport http motir ${APP_ORIGIN}${MCP_ENDPOINT_PATH}`,
@@ -380,7 +389,7 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
 
   it('says what is approved, that Claude asks before a write, and where to revoke', async () => {
     stubCatalogue(catalogueFixture)
-    const { container } = render(await McpPage())
+    const { container } = render(await McpPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('pick one workspace')
     expect(text).toContain(

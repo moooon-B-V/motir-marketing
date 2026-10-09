@@ -417,3 +417,65 @@ body {
   stroke: var(--r-warm);
   stroke-width: 2.5;
 }
+
+/*
+ * The CJK font a zh, ja or ko visitor picks on `/design` (Yue, 2026-10-09).
+ * One pick draws all of that language's text — headings, body and the mono
+ * role's code and labels alike — in the face; with nothing picked, the
+ * language's site default does (LXGW WenKai for Chinese, the set's default
+ * sans for Japanese and Korean). `lib/cjkFaces.ts` lists the faces and
+ * `lib/useVisitAppearance.ts` writes the `data-cjk-<lang>` attribute;
+ * `tests/cjkFaces.test.ts` holds these blocks to that list.
+ *
+ * `[lang]` keeps each declaration on the element carrying the language, as the
+ * font set's own blocks in `theme.css` do, and the extra attribute lifts each
+ * rule over `[lang]:lang(zh)` rather than leaning on source order.
+ */
+[lang][data-cjk-zh='noto-sans-sc']:lang(zh) {
+  --font-script-sans: var(--font-set-zh-Hans-sans-noto-sans-sc, sans-serif);
+  --font-script-serif: var(--font-set-zh-Hans-sans-noto-sans-sc, sans-serif);
+  --font-script-mono: var(--font-set-zh-Hans-sans-noto-sans-sc, sans-serif);
+}
+[lang][data-cjk-zh='noto-serif-sc']:lang(zh) {
+  --font-script-sans: var(--font-set-zh-Hans-serif-noto-serif-sc, serif);
+  --font-script-serif: var(--font-set-zh-Hans-serif-noto-serif-sc, serif);
+  --font-script-mono: var(--font-set-zh-Hans-serif-noto-serif-sc, serif);
+}
+[lang]:lang(zh):not([data-cjk-zh]),
+[lang][data-cjk-zh='lxgw-wenkai-tc']:lang(zh) {
+  --font-script-sans: var(--font-set-zh-Hans-serif-lxgw-wenkai-tc, serif);
+  --font-script-serif: var(--font-set-zh-Hans-serif-lxgw-wenkai-tc, serif);
+  --font-script-mono: var(--font-set-zh-Hans-serif-lxgw-wenkai-tc, serif);
+}
+[lang]:lang(ja):not([data-cjk-ja]),
+[lang][data-cjk-ja='noto-sans-jp']:lang(ja) {
+  --font-script-sans: var(--font-set-ja-sans-noto-sans-jp, sans-serif);
+  --font-script-serif: var(--font-set-ja-sans-noto-sans-jp, sans-serif);
+  --font-script-mono: var(--font-set-ja-sans-noto-sans-jp, sans-serif);
+}
+[lang][data-cjk-ja='m-plus-rounded-1c']:lang(ja) {
+  --font-script-sans: var(--font-set-ja-sans-m-plus-rounded-1c, sans-serif);
+  --font-script-serif: var(--font-set-ja-sans-m-plus-rounded-1c, sans-serif);
+  --font-script-mono: var(--font-set-ja-sans-m-plus-rounded-1c, sans-serif);
+}
+[lang][data-cjk-ja='noto-serif-jp']:lang(ja) {
+  --font-script-sans: var(--font-set-ja-serif-noto-serif-jp, serif);
+  --font-script-serif: var(--font-set-ja-serif-noto-serif-jp, serif);
+  --font-script-mono: var(--font-set-ja-serif-noto-serif-jp, serif);
+}
+[lang]:lang(ko):not([data-cjk-ko]),
+[lang][data-cjk-ko='noto-sans-kr']:lang(ko) {
+  --font-script-sans: var(--font-set-ko-sans-noto-sans-kr, sans-serif);
+  --font-script-serif: var(--font-set-ko-sans-noto-sans-kr, sans-serif);
+  --font-script-mono: var(--font-set-ko-sans-noto-sans-kr, sans-serif);
+}
+[lang][data-cjk-ko='nanum-gothic']:lang(ko) {
+  --font-script-sans: var(--font-set-ko-sans-nanum-gothic, sans-serif);
+  --font-script-serif: var(--font-set-ko-sans-nanum-gothic, sans-serif);
+  --font-script-mono: var(--font-set-ko-sans-nanum-gothic, sans-serif);
+}
+[lang][data-cjk-ko='noto-serif-kr']:lang(ko) {
+  --font-script-sans: var(--font-set-ko-serif-noto-serif-kr, serif);
+  --font-script-serif: var(--font-set-ko-serif-noto-serif-kr, serif);
+  --font-script-mono: var(--font-set-ko-serif-noto-serif-kr, serif);
+}

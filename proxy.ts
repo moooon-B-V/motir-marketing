@@ -1,4 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import createIntlMiddleware from 'next-intl/middleware'
+import { DEFAULT_LOCALE, LOCALES, routing } from '@/i18n/routing'
+import { chooseLocale, LOCALE_COOKIE } from '@/lib/localeDetection'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { TENANT_DOMAIN } from '@/lib/tenantDomain'
 import {
@@ -10,6 +13,8 @@ import {
 } from '@/lib/publicHost'
 import {
   ROUTER_PATHS,
+  isSiteAssetPath,
+  localisedPath,
   resolveHost,
   routeForHost,
   type PublicHostResolution,
@@ -58,11 +63,121 @@ import {
 
 // The three paths the router itself produces live in `lib/hostResolution.ts`,
 // beside the branch that has to RECOGNISE them — see `alreadyRouted`.
-const {
-  notFound: NOT_FOUND_PATH,
-  unavailable: UNAVAILABLE_PATH,
-  workspaceRoot: WORKSPACE_ROOT_PATH,
-} = ROUTER_PATHS
+const { notFound: NOT_FOUND_PATH, unavailable: UNAVAILABLE_PATH } = ROUTER_PATHS
+
+/**
+ * next-intl's locale router (MOTIR-7948), run on the SITE host only.
+ *
+ * With `as-needed` it rewrites an unprefixed path onto the English tree
+ * (`/explore` → `/en/explore`, the visitor's URL unchanged); any other locale's
+ * prefixed path passes straight through. Detection and the cookie are off in
+ * `i18n/routing.ts`, so today it never moves a visitor between languages.
+ *
+ * ⚠️ THE ENGLISH TREE ITSELF NEVER REACHES IT, because its rewrite comes back.
+ * Next 16 dispatches an internal rewrite back through this proxy (the same
+ * second pass `alreadyRouted` handles for tenants), so `/explore` arrives again
+ * as `/en/explore` — and next-intl, which cannot tell that from a visitor who
+ * typed `/en/explore`, answers it with a redirect to `/explore`. Measured on the
+ * standalone server: `/` answered 307 → `/`, forever, and the browser lane never
+ * came up. So `/en` and `/en/…` are served as they are. A visitor who types one
+ * gets the same page at a second address, which is a duplicate rather than a
+ * fault, and the canonical link (MOTIR-7956) names the unprefixed one.
+ *
+ * ⚠️ IT RUNS INSIDE THE SITE BRANCH, NEVER AHEAD OF THE ROUTER. As a second
+ * proxy, or as this proxy's first line, it would rewrite a tenant host's
+ * `/MOTIR/board` to `/en/MOTIR/board` before the host was ever resolved — and
+ * the site branch would stop being the one that makes no network hop.
+ */
+const intlMiddleware = createIntlMiddleware(routing)
+
+/**
+ * A ROOT metadata route whose address carries no dot — `/icon`, `/apple-icon`,
+ * `/twitter-image` (Next may append a content hash: `/icon-1br99b`). They are
+ * files at `app/`'s root, outside every locale's tree, so the locale router
+ * must not prefix them: under `/en/icon` they would 404.
+ */
+const ROOT_METADATA_ROUTE =
+  /^\/(twitter-image|icon|apple-icon)(-[A-Za-z0-9]+)?$/
+
+/**
+ * THE LANDING'S SHARE IMAGE, which lives INSIDE the locale tree (MOTIR-7972):
+ * `app/[locale]/opengraph-image.tsx` answers `/<locale>/opengraph-image`.
+ * A share image has no language to choose — crawlers send no cookie, and a
+ * redirect would cost the unfurl — so neither form is ever detected or
+ * redirected: the unprefixed English one is REWRITTEN onto `/en/…`, and a
+ * prefixed one is served as it is, never through next-intl (whose `as-needed`
+ * prefix would bounce `/en/…`).
+ */
+const OG_IMAGE_ROUTE = /^\/opengraph-image(-[A-Za-z0-9]+)?$/
+
+/** `/opengraph-image` or `/ja/opengraph-image` → the path after the locale. */
+function ogImagePath(pathname: string): { prefixed: boolean } | null {
+  if (OG_IMAGE_ROUTE.test(pathname)) return { prefixed: false }
+  const [, first = '', ...rest] = pathname.split('/')
+  if (
+    (LOCALES as readonly string[]).includes(first) &&
+    OG_IMAGE_ROUTE.test(`/${rest.join('/')}`)
+  )
+    return { prefixed: true }
+  return null
+}
+
+/** A site path the locale router leaves alone — a file or a root metadata route. */
+function outsideLocaleTree(pathname: string): boolean {
+  return isSiteAssetPath(pathname) || ROOT_METADATA_ROUTE.test(pathname)
+}
+
+/** `/en` or `/en/…` — the default locale's tree, which the rewrite produces. */
+function inDefaultLocaleTree(pathname: string): boolean {
+  return (
+    pathname === `/${DEFAULT_LOCALE}` ||
+    pathname.startsWith(`/${DEFAULT_LOCALE}/`)
+  )
+}
+
+/** `/ja`, `/de/…` — any of the eleven as the first segment. */
+function hasLocalePrefix(pathname: string): boolean {
+  const first = pathname.split('/')[1] ?? ''
+  return (LOCALES as readonly string[]).includes(first)
+}
+
+/** The visitor's language for this request (MOTIR-7951). */
+function visitorLocale(request: NextRequest) {
+  return chooseLocale({
+    cookie: request.cookies.get(LOCALE_COOKIE)?.value,
+    acceptLanguage: request.headers.get('accept-language'),
+  })
+}
+
+/**
+ * ⚠️ A RESPONSE THAT DEPENDS ON THE COOKIE AND THE BROWSER SAYS SO. Without
+ * `Vary`, a shared cache in front of the site would store one visitor's
+ * language and serve it to the next.
+ */
+const LANGUAGE_VARY = 'Cookie, Accept-Language'
+
+function varyOnLanguage(response: NextResponse): NextResponse {
+  response.headers.append('Vary', LANGUAGE_VARY)
+  return response
+}
+
+/**
+ * The first-visit move onto the visitor's language: same path, same query,
+ * under `/<locale>`.
+ *
+ * ⚠️ 307, NEVER 301 OR 308. A permanent redirect is cached by the browser, so
+ * a visitor who later chose English could never reach `/` again. And
+ * `private, no-store`, so nothing between us and them keeps it either.
+ */
+function redirectToLocale(request: NextRequest, locale: string): NextResponse {
+  const destination = new URL(request.nextUrl)
+  destination.pathname = `/${locale}${
+    request.nextUrl.pathname === '/' ? '' : request.nextUrl.pathname
+  }`
+  const response = varyOnLanguage(NextResponse.redirect(destination, 307))
+  response.headers.set('Cache-Control', 'private, no-store')
+  return response
+}
 
 /**
  * Hosts this router steps aside for — the site itself and every local address.
@@ -159,7 +274,11 @@ function forwardWithHost(
 
   const destination = new URL(request.nextUrl)
   destination.pathname = rewriteTo
-  return NextResponse.rewrite(destination, { request: { headers } })
+  // Which locale tree a tenant page is rewritten onto follows the visitor's
+  // cookie and browser (MOTIR-7951), so the response varies on both.
+  return varyOnLanguage(
+    NextResponse.rewrite(destination, { request: { headers } }),
+  )
 }
 
 /** The header value for a resolution — an alias never reaches a page. */
@@ -176,8 +295,32 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     normaliseHost(request.headers.get('x-forwarded-host')) ??
     normaliseHost(request.headers.get('host'))
 
-  // Today's behaviour, untouched — and no network hop. See the note above.
-  if (!host || isSiteHost(host)) return NextResponse.next()
+  // The site itself — and no network hop. See the note above. Its one job here
+  // is the locale tree (MOTIR-7948): everything that is not a file or a root
+  // metadata route goes through next-intl, which maps the address onto
+  // `app/[locale]`.
+  //
+  // ⚠️ AN UNPREFIXED PAGE ADDRESS IS WHERE THE LANGUAGE IS CHOSEN (MOTIR-7951),
+  // and nowhere else. A prefixed one (`/de/…`) is never moved, whatever the
+  // cookie or the browser says — a shared German link stays German. A file or
+  // a root metadata route has no language. And `/en/…` here is the English
+  // rewrite coming back around (see `inDefaultLocaleTree`), never a choice.
+  if (!host || isSiteHost(host)) {
+    const { pathname } = request.nextUrl
+    const ogImage = ogImagePath(pathname)
+    if (ogImage?.prefixed) return NextResponse.next()
+    if (ogImage) {
+      const english = request.nextUrl.clone()
+      english.pathname = `/${DEFAULT_LOCALE}${pathname}`
+      return NextResponse.rewrite(english)
+    }
+    if (outsideLocaleTree(pathname) || inDefaultLocaleTree(pathname))
+      return NextResponse.next()
+    if (hasLocalePrefix(pathname)) return intlMiddleware(request)
+    const locale = visitorLocale(request)
+    if (locale !== DEFAULT_LOCALE) return redirectToLocale(request, locale)
+    return varyOnLanguage(intlMiddleware(request))
+  }
 
   // ⚠️ THE THREE BRANCHES WITH NO RESOLUTION, AND THEY ARE `unresolved` RATHER
   // THAN SILENT (MOTIR-4430). None of them can say WHICH tenant this is — the
@@ -192,6 +335,10 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     return forwardWithHost(request, 'unresolved', host, NOT_FOUND_PATH)
   }
 
+  // The visitor's language picks which locale tree a tenant page is rewritten
+  // onto; the address keeps its shape — no prefix, no redirect (MOTIR-7951).
+  const locale = visitorLocale(request)
+
   const read = await resolveHost(host)
   if (read.status === 'failed') {
     // The OUTAGE — and the one branch where the host is most likely to be a real
@@ -199,13 +346,18 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     // `app.motir.co` is restarting. Site-relative chrome is at its most wrong
     // here, which is why "SITE_HOST is fine on an unresolvable host" is not the
     // disposition this card took.
-    return forwardWithHost(request, 'unresolved', host, UNAVAILABLE_PATH)
+    return forwardWithHost(
+      request,
+      'unresolved',
+      host,
+      localisedPath(UNAVAILABLE_PATH, locale),
+    )
   }
   if (read.status === 'not-found') {
     return forwardWithHost(request, 'unresolved', host, NOT_FOUND_PATH)
   }
 
-  const route = routeForHost(read.data, request.nextUrl.pathname)
+  const route = routeForHost(read.data, request.nextUrl.pathname, locale)
 
   switch (route.action) {
     case 'redirect': {
@@ -257,7 +409,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       // reproduction takes.
       return forwardWithHost(request, kindOf(read.data), host, NOT_FOUND_PATH)
     case 'workspace-root':
-      return forwardWithHost(request, 'workspace', host, WORKSPACE_ROOT_PATH)
+      return forwardWithHost(request, 'workspace', host, route.path)
     default:
       return forwardWithHost(request, kindOf(read.data), host, route.path)
   }

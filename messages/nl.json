@@ -1,0 +1,2296 @@
+{
+  "publicProject": {
+    "appHost": "app.motir.co",
+    "tabs": {
+      "overview": "Overzicht",
+      "board": "Bord",
+      "items": "Items",
+      "tree": "Boom",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog"
+    },
+    "stats": {
+      "requests": "verzoeken",
+      "upvotes": "upvotes",
+      "planned": "gepland",
+      "shipped": "uitgebracht"
+    },
+    "header": {
+      "navAria": "Project",
+      "inTheApp": "In de app",
+      "opensInApp": "— opent in de Motir-app; je hebt een account nodig"
+    },
+    "actRail": {
+      "follow": "Volgen",
+      "followSr": "— gaat verder op app.motir.co",
+      "requestFeature": "Een functie aanvragen",
+      "atomFeed": "Atom-feed"
+    },
+    "subscribe": {
+      "label": "E-mail voor changelog-updates",
+      "placeholder": "jij@voorbeeld.nl",
+      "submit": "Abonneren",
+      "submitting": "Abonneren…",
+      "messages": {
+        "sent": "Kijk in je inbox om te bevestigen.",
+        "invalid": "Dat lijkt geen e-mailadres.",
+        "unavailable": "Dit project heeft changelog-e-mails uitgeschakeld.",
+        "limited": "Te veel pogingen op dit moment — probeer het over een paar minuten opnieuw.",
+        "failed": "We konden Motir niet bereiken. Probeer het zo opnieuw."
+      }
+    },
+    "watchLive": {
+      "titleNamed": "Kijk hoe {name} wordt gebouwd",
+      "titleUnnamed": "Kijk hoe dit project wordt gebouwd",
+      "lede": "Het live bord, de plannen terwijl ze worden opgesteld en de agent-runs terwijl ze gebeuren — in de Motir-app.",
+      "cost": "Je hebt een Motir-account nodig. Als je doorgaat, zijn je {nameAndEmail} zichtbaar voor {managers}, samen met het moment waarop je langskomt.",
+      "costNameAndEmail": "naam en e-mailadres",
+      "costManagers": "de werkruimtebeheerders van dit project",
+      "cta": "Live kijken",
+      "ctaSr": "— opent in de Motir-app"
+    },
+    "states": {
+      "error": {
+        "project": "We konden dit project niet laden",
+        "changelog": "We konden de changelog van dit project niet laden",
+        "request": "We konden dit functieverzoek niet laden",
+        "workspaceProjects": "We konden de projecten van deze werkruimte niet laden",
+        "address": "We konden dit adres niet laden",
+        "body": "De Motir-applicatie reageert op dit moment niet. De pagina waarop je bent werkt gewoon — deze gegevens komen van {host}, een aparte deployment. Probeer het zo opnieuw.",
+        "bodyWithFeed": "De Motir-applicatie reageert op dit moment niet. De pagina waarop je bent werkt gewoon — deze gegevens komen van {host}, een aparte deployment. Probeer het zo opnieuw, of lees de changelog, die vanuit een feed wordt geleverd.",
+        "feed": "Changelog-feed"
+      }
+    },
+    "overview": {
+      "empty": {
+        "title": "Dit project heeft nog geen overzicht geschreven",
+        "body": "Het live bord, de werkitems en de roadmap staan in de Motir-app — kijk daar hoe het wordt gebouwd, naast deze pagina."
+      }
+    },
+    "changelog": {
+      "empty": {
+        "title": "Nog niets uitgebracht",
+        "body": "Zodra dit project openbaar werk afrondt, wordt het hier vastgelegd — en in de feed."
+      },
+      "older": "Ouder",
+      "subscribeAtom": "Abonneren via Atom"
+    },
+    "requestNew": {
+      "heading": "Een functie aanvragen",
+      "intro": "Vertel het team van {project} wat je nodig hebt. Verzoeken zijn openbaar: iedereen die dit project leest, kan het jouwe zien en upvoten.",
+      "signInTitle": "Je logt eerst in",
+      "signInBody": "Voor een verzoek heb je een account nodig, dus het formulier staat op {host}. Je wordt ingelogd, ziet alles wat al is aangevraagd en erop lijkt — zodat je dat in plaats daarvan kunt upvoten — en wordt teruggebracht naar dit project.",
+      "continue": "Doorgaan naar Motir ↗",
+      "closing": "Iedereen kan {projectPage}, de changelog en de eigen pagina van elk verzoek lezen zonder account.",
+      "projectPage": "de projectpagina"
+    },
+    "request": {
+      "openedBy": "Geopend door {author} · {date}",
+      "discussion": "Discussie",
+      "noComments": "Nog geen reacties.",
+      "commentHandoff": "Om aan deze discussie bij te dragen log je in op {host}; daarna kom je terug bij dit verzoek.",
+      "addComment": "Reactie toevoegen",
+      "demand": "Vraag",
+      "upvote": "Upvoten",
+      "upvoteNote": "Upvoten gebeurt op app.motir.co en brengt je daarna hier terug.",
+      "askHeading": "Iets vragen",
+      "requestFeature": "Een functie aanvragen ↗"
+    },
+    "workspaceRoot": {
+      "heading": "Openbare projecten",
+      "empty": {
+        "title": "Hier is nog niets openbaar",
+        "body": "Deze werkruimte heeft haar adres geclaimd, maar nog geen project openbaar gemaakt. Zodra dat gebeurt, verschijnt het project hier."
+      }
+    },
+    "meta": {
+      "overviewFallback": "Een project dat openbaar wordt gebouwd op Motir — het overzicht, de changelog en de functieverzoeken, en het live bord in de Motir-app.",
+      "jsonLdFallback": "{name} — een openbaar projectplan op Motir.",
+      "tabTitle": "{label} · {name}",
+      "tabDescription": "{label} voor {name} — openbaar op Motir.",
+      "requestNewTitle": "Een functie aanvragen · {name}",
+      "requestNewDescription": "Vraag het team van {name} om iets. Verzoeken zijn openbaar.",
+      "workspaceTitle": "Openbare projecten",
+      "workspaceDescription": "De openbare projecten die deze werkruimte op Motir publiceert.",
+      "hostUnavailableTitle": "Tijdelijk niet beschikbaar"
+    }
+  },
+  "meta": {
+    "title": "Motir — AI-planning, projectmanagement en agent-orkestratie",
+    "description": "Het platform voor AI-planning, projectmanagement en agent-orkestratie. Beschrijf wat je wilt bouwen — Motir stelt het plan op, daarna nemen agents het werk over."
+  },
+  "nav": {
+    "ariaLabel": "Hoofdmenu",
+    "brandAriaLabel": "Motir — home",
+    "skipToContent": "Naar de inhoud",
+    "menu": "Menu",
+    "explore": "Openbaar bouwen",
+    "ideas": "Ideeën om te bouwen",
+    "buildsItself": "Motir bouwt zichzelf",
+    "docs": "Docs",
+    "design": "Design",
+    "signIn": "Inloggen",
+    "startFree": "Gratis beginnen",
+    "language": {
+      "label": "Taal: {language}",
+      "menuLabel": "Kies een taal",
+      "heading": "Taal"
+    },
+    "products": "Producten",
+    "productsMenuLabel": "Motir-producten",
+    "productGroups": {
+      "ai": "AI-producten",
+      "tooling": "Tools",
+      "infrastructure": "Infrastructuur"
+    },
+    "productItems": {
+      "aiPlanner": {
+        "name": "Motir AI Planner",
+        "blurb": "Maakt van een idee een plan dat jij goedkeurt"
+      },
+      "projectManagement": {
+        "name": "Motir Projectmanagement",
+        "blurb": "Borden, sprints, backlog en roadmap"
+      },
+      "projectManager": {
+        "name": "Motir Projectmanager",
+        "blurb": "Leidt het hele project en rapporteert aan jou"
+      },
+      "aiDebugging": {
+        "name": "Motir AI Debuggen",
+        "blurb": "Elke bug herleid tot de code en ingepland"
+      },
+      "mcp": {
+        "name": "Motir MCP",
+        "blurb": "Je project in elke AI-assistent die MCP spreekt"
+      },
+      "cli": {
+        "name": "Motir CLI",
+        "blurb": "Geef werk aan je eigen agent vanuit de terminal"
+      },
+      "claudeCodeConnector": {
+        "name": "Motir Claude Code connector",
+        "blurb": "Eén keer koppelen op claude.ai, Motir gebruiken in Claude Code"
+      },
+      "claudeCodePlugin": {
+        "name": "Motir Claude Code plugin",
+        "blurb": "Skills, MCP-server en CLI in één installatie"
+      },
+      "agentFleet": {
+        "name": "Motir Agentenvloot",
+        "blurb": "Gehoste agents die je plan parallel uitvoeren"
+      },
+      "agentHosting": {
+        "name": "Motir Agenthosting",
+        "blurb": "Je eigen agents, op de machines van Motir"
+      },
+      "sandbox": {
+        "name": "Motir Sandbox",
+        "blurb": "Een afgesloten container voor agents op je eigen machine"
+      }
+    }
+  },
+  "landing": {
+    "hero": {
+      "headline": "Vibe the project",
+      "lede": "Jij brengt het idee. Motir levert het hele project: het plan, het ontwerp, de bouw, de documenten en het volledige verhaal van hoe het zover kwam.",
+      "ideaLabel": "Wat ga je bouwen?",
+      "placeholder": "Een persoonlijke AI-assistent die mensen helpt hun doelen te bereiken…",
+      "hint": "Een paar zinnen is genoeg. Motir vraagt naar de rest.",
+      "cta": "Beginnen",
+      "ctaSubmitting": "Bezig met starten…",
+      "statusSubmitting": "Je idee wordt opgeslagen en je gaat naar Motir…",
+      "errorTitle": "We konden je idee nu niet opslaan.",
+      "errorBody": "Niets van wat je hebt getypt is verloren. Probeer het opnieuw, of ga door naar Motir en neem je idee mee.",
+      "errorRetry": "Opnieuw proberen",
+      "errorFallback": "Doorgaan naar Motir",
+      "existingProject": "Heb je al een project?",
+      "existingProjectLink": "Dat kunnen we ook viben"
+    },
+    "projectManager": {
+      "eyebrow": "Motir Projectmanager",
+      "headline": "Heb je al een project? Geef het aan Motir Projectmanager.",
+      "lede": "Jij bent de product owner. Motir Projectmanager leest het project dat je al hebt, plant wat er nu komt, zet agents aan het werk en rapporteert terug. Het leidt het project. Jij beslist wat er live gaat.",
+      "points": [
+        "Leest je code, taken en geschiedenis voordat het iets verandert",
+        "Plant de volgende stappen en houdt het plan actueel",
+        "Zet agents dag en nacht aan het werk",
+        "Legt elke beslissing en elke release aan jou voor"
+      ],
+      "importLabel": "Importeren uit",
+      "sources": {
+        "codebase": "Een coderepository",
+        "jira": "Jira",
+        "linear": "Linear",
+        "plane": "Plane"
+      },
+      "report": {
+        "ariaLabel": "Een voorbeeld van een weekrapport van Motir Projectmanager",
+        "title": "Weekrapport · Persoonlijke AI-assistent",
+        "range": "6 okt – 12 okt",
+        "done": "klaar deze week",
+        "inProgress": "bezig",
+        "waiting": "wacht op jou",
+        "log": [
+          {
+            "day": "ma",
+            "what": "Agendakoppeling uitgebracht",
+            "state": "Klaar",
+            "tone": "plain"
+          },
+          {
+            "day": "di",
+            "what": "Plan bijgewerkt: e-mailsamenvattingen in tweeën gesplitst",
+            "state": "Gepland",
+            "tone": "cool"
+          },
+          {
+            "day": "wo",
+            "what": "AI-kostenlimiet per gebruiker goedkeuren",
+            "state": "Jouw beslissing",
+            "tone": "you"
+          },
+          {
+            "day": "do",
+            "what": "Inlogfout op Android gevonden en opgelost",
+            "state": "Opgelost",
+            "tone": "plain"
+          },
+          {
+            "day": "vr",
+            "what": "Ochtendoverzicht klaar om te proberen",
+            "state": "Review",
+            "tone": "you"
+          }
+        ]
+      }
+    },
+    "builtByMotir": {
+      "eyebrow": "Gebouwd met Motir",
+      "headline": "Motir bouwt zichzelf.",
+      "body": "Motir wordt gepland, gebouwd, getest en uitgebracht door Motir. Zijn agents werken zijn eigen roadmap af, en een mens keurt elk plan en elke release goed. Het kan jouw project op dezelfde manier leiden.",
+      "points": [
+        "Elk plan, elke run en elke beslissing is openbaar te volgen",
+        "Zie het werk gebeuren terwijl het gebeurt",
+        "Dezelfde Project Manager die jij zou gebruiken"
+      ],
+      "watch": "Kijk hoe Motir zichzelf bouwt",
+      "runs": "Maak een account aan om de agent-runs te volgen",
+      "start": "Je project starten",
+      "note": "Het Motir-project, live op app.motir.co",
+      "story": "Hoe Motir zichzelf bouwt"
+    },
+    "moreThanCode": {
+      "headline": "Een project is meer dan code",
+      "lede": "Vibe coding geeft je code en laat de rest aan jou over. Motir levert alles wat een echt product nodig heeft om te lanceren en te blijven groeien.",
+      "items": {
+        "plan": {
+          "tab": "Plan",
+          "title": "Het plan",
+          "body": "Wat er wordt gemaakt, in welke volgorde en waarom. Motir stelt eerst de vragen die een goede partner zou stellen."
+        },
+        "design": {
+          "tab": "Ontwerp",
+          "title": "Het ontwerp",
+          "body": "Hoe het eruitziet en aanvoelt, voordat er iets wordt gebouwd. Jij kiest de richting."
+        },
+        "product": {
+          "tab": "Product",
+          "title": "Het product",
+          "body": "Het ding zelf, werkend en getest, gebouwd om te groeien van de eerste gebruiker tot de honderdduizendste."
+        },
+        "docs": {
+          "tab": "Docs",
+          "title": "De documenten",
+          "body": "Beslissingen, handleidingen en notities, bewaard naast het werk, zodat niemand ze later hoeft uit te schrijven."
+        },
+        "history": {
+          "tab": "Geschiedenis",
+          "title": "De geschiedenis",
+          "body": "Elke beslissing met reden en datum, zodat de context nooit verloren gaat."
+        }
+      }
+    },
+    "calls": {
+      "headline": "AI doet het werk. Jij neemt de beslissingen.",
+      "lede": "Motir gaat snel, en stopt overal waar een keuze aan jou is. Niets gaat verder zonder jouw ja.",
+      "items": {
+        "say": {
+          "tab": "Zeg het",
+          "title": "Zeg wat je wilt",
+          "body": "Een paar zinnen of een rommelige braindump. Motir blijft vragen tot het begrijpt wat je bedoelt."
+        },
+        "watch": {
+          "tab": "Volg het",
+          "title": "Zie het vorm krijgen",
+          "body": "Het plan, de ontwerpen, het product en de documenten worden stap voor stap gemaakt, voor iedereen zichtbaar."
+        },
+        "decide": {
+          "tab": "Jij beslist",
+          "title": "Jij beslist",
+          "body": "Elk onderdeel komt terug bij jou om te bekijken, uit te proberen en goed te keuren. Jij houdt de regie over wat er live gaat."
+        }
+      }
+    },
+    "resume": {
+      "headline": "Ga verder waar je gebleven was",
+      "body": "Kom morgen terug of over zes maanden, of geef het aan iemand nieuw. Het project onthoudt alles, zodat niemand opnieuw hoeft te beginnen of alles opnieuw hoeft uit te leggen."
+    },
+    "close": {
+      "headline": "Vibe the project",
+      "body": "Begin met een paar zinnen, of geef een bestaand project aan Motir Projectmanager.",
+      "start": "Een project starten",
+      "import": "Een project importeren",
+      "developers": "Hoe Motir werkt, voor developers",
+      "openCore": "Open source in de kern · Je project is altijd van jou",
+      "free": {
+        "lead": "Wil je alleen projectmanagement?",
+        "cta": "Gratis beginnen",
+        "tail": "— borden, sprints en een backlog, zonder AI die in de weg zit."
+      }
+    },
+    "art": {
+      "plan": {
+        "title": "Persoonlijke AI-assistent",
+        "rows": [
+          ["Accounts en inloggen", "Klaar"],
+          ["Agenda en e-mail", "3 van 5"],
+          ["AI-kosten per gebruiker", "Jouw beslissing"],
+          ["Mobiele app", "Later"]
+        ]
+      },
+      "design": {
+        "screen": "Je ochtendoverzicht",
+        "time": "07:30",
+        "items": [
+          ["09:00", "Review verplaatst naar 10:00"],
+          ["Mail", "3 antwoorden wachten"],
+          ["Te doen", "Het contract versturen"]
+        ],
+        "optionA": "Optie A",
+        "optionB": "Optie B"
+      },
+      "product": {
+        "greeting": "Goedemorgen",
+        "needs": "3 dingen hebben je nodig",
+        "rows": [
+          ["Antwoorden over het contract", "Vraagt eerst"],
+          ["Sportschool naar 18:00", "Agenda"]
+        ],
+        "edit": "Bewerken",
+        "send": "Versturen",
+        "count": "64",
+        "countLabel": "controles geslaagd",
+        "checks": [
+          "Verstuurt nooit iets zonder te vragen",
+          "Gegevens van elke gebruiker gescheiden",
+          "Snel met 100.000 gebruikers"
+        ]
+      },
+      "docs": {
+        "title": "Geschreven terwijl het gebeurt",
+        "page": "Wat de assistent mag lezen",
+        "decisionLabel": "Beslissing · jij",
+        "decision": "Gebruikers kiezen wat het mag zien",
+        "chips": ["Installatiehandleiding", "Privacy", "AI-kostenlimieten"]
+      },
+      "history": {
+        "title": "Wie besliste wat",
+        "events": [
+          ["1 okt", "Jij beschreef het", "één alinea", "you"],
+          ["2 okt", "Jij keurde het plan goed", "na 3 rondes", "you"],
+          ["3 okt", "Jij koos ontwerp B", "het overzicht komt eerst", "you"],
+          ["9 okt", "Agenda gebouwd en getest", "64 controles", "motir"]
+        ]
+      },
+      "say": {
+        "idea": "Een persoonlijke AI-assistent die mensen helpt hun doelen te bereiken.",
+        "qa": [
+          [
+            "Moet het zelfstandig handelen, of eerst vragen voordat het iets verstuurt?",
+            "Altijd eerst vragen."
+          ],
+          [
+            "Voor individuen, of ook voor teams?",
+            "Eerst individuen, volgend jaar teams."
+          ]
+        ]
+      },
+      "watch": {
+        "lanes": [
+          ["Plan", "done"],
+          ["Ontwerp", "done"],
+          ["Bouw", "running"],
+          ["Tests", "waiting"],
+          ["Docs", "ready"]
+        ],
+        "states": {
+          "done": "Klaar",
+          "running": "Agent bezig",
+          "ready": "Gereed",
+          "waiting": "Wacht op Bouw"
+        },
+        "live": "pricing-page.tsx"
+      },
+      "decide": {
+        "stamp": "Klaar voor jou",
+        "title": "Agendakoppeling is gebouwd",
+        "body": "Bekijk de opname en probeer het daarna zelf.",
+        "changes": "Wijzigingen vragen",
+        "approve": "Goedkeuren",
+        "video": {
+          "chapterCount": "{count} hoofdstukken",
+          "label": "Acceptatievideo",
+          "length": "0:48",
+          "chapters": [
+            "Een agenda koppelen",
+            "Een afspraak verplaatsen",
+            "Het overzicht werkt zich bij"
+          ]
+        }
+      },
+      "resume": {
+        "tab": "Terug na 3 weken",
+        "hello": "Welkom terug. Zo staat het met de persoonlijke AI-assistent.",
+        "cells": [
+          ["Vorige keer", "Agendakoppeling uitgebracht"],
+          ["Bezig", "E-mailsamenvattingen"],
+          ["Wacht op jou", "2 beslissingen"]
+        ]
+      }
+    }
+  },
+  "designShowcase": {
+    "specimen": {
+      "sectionLabel": "Samengestelde UI",
+      "primary": "Primair",
+      "secondary": "Secundair",
+      "ghost": "Ghost",
+      "danger": "Gevaar",
+      "badge": "Badge",
+      "done": "Klaar",
+      "inProgress": "Bezig",
+      "tooltip": "Een tooltip, opgebouwd uit dezelfde tokens.",
+      "hoverMe": "Beweeg hierover",
+      "titleLabel": "Titel van het werkitem",
+      "titleValue": "De betaalflow uitbrengen",
+      "assigneeLabel": "Verantwoordelijke",
+      "assigneePlaceholder": "Selecteren…",
+      "unassigned": "Niet toegewezen",
+      "viewLabel": "Weergave",
+      "board": "Bord",
+      "list": "Lijst",
+      "liveUpdates": "Live updates",
+      "notesLabel": "Notities",
+      "notesValue": "Elk bedieningselement in dit paneel is het uitgebrachte primitief.",
+      "popover": "Popover",
+      "popoverBody": "Een overlay opgebouwd uit dezelfde tokens. De afronding, rand en schaduw veranderen mee met de stijl, de kleuren met het palet.",
+      "modal": "Modal",
+      "modalDescription": "Dialoogvensters krijgen ook een andere vorm met de stijlas.",
+      "emptyTitle": "Hier is nog niets",
+      "emptyDescription": "EmptyState — het uitgebrachte primitief.",
+      "errorTitle": "Er ging iets mis",
+      "errorDescription": "ErrorState — het uitgebrachte primitief."
+    },
+    "heading": "Kies een uitstraling. De hele site verandert mee.",
+    "subline": "Dit is het designsysteem waarmee elk Motir-project begint. Het staat hier en niet in een stijlgids, omdat je het snelst ziet hoe jouw product eruit kan zien door de onze zelf een andere stijl te geven.",
+    "theme": {
+      "name": "Thema",
+      "help": "Licht, donker of gelijk aan je apparaat.",
+      "light": "Licht",
+      "dark": "Donker",
+      "system": "Systeem"
+    },
+    "style": {
+      "name": "Stijl",
+      "help": "De vorm en het gevoel — silhouet, diepte, dichtheid."
+    },
+    "palette": {
+      "name": "Palet",
+      "help": "Het kleurenschema van de interface."
+    },
+    "type": {
+      "name": "Lettertype",
+      "help": "De lettertypecombinatie voor koppen en tekst."
+    },
+    "reset": "Standaard herstellen",
+    "closing": "De drie assen hier zijn dezelfde drie die je project kiest wanneer je er een start in Motir — met hetzelfde designsysteem eronder. Deze site laat je geen demo ervan zien; hij is ermee gebouwd.",
+    "styles": {
+      "warm-editorial": {
+        "name": "Warm redactioneel",
+        "tagline": "Bedachtzaam, warm, technisch maar niet kil, licht redactioneel."
+      },
+      "soft-playful": {
+        "name": "Zacht / Speels",
+        "tagline": "Meer energie — afgerond, royaal, subtiel geanimeerd."
+      },
+      "swiss-minimal-flat": {
+        "name": "Zwitsers / Minimaal-plat",
+        "tagline": "Internationaal-typografisch, structureel, rustig — plat, scherp, op een raster."
+      },
+      "neo-brutalism": {
+        "name": "Neobrutalisme",
+        "tagline": "Rauw, krachtig, functioneel — hoeken van 0px, dikke randen, harde verschoven schaduwen."
+      },
+      "glassmorphism": {
+        "name": "Glasmorfisme",
+        "tagline": "Doorschijnend matglas dat zweeft boven een zacht, levendig verloop."
+      },
+      "cybercore-y2k": {
+        "name": "Cybercore / Y2K",
+        "tagline": "Neon-op-donker retrotech — gloeiende HUD-panelen, een techraster, monokoppen."
+      },
+      "aurora": {
+        "name": "Aurora",
+        "tagline": "Zacht, deinend noorderlicht achter vloeiende, zacht gloeiende oppervlakken."
+      },
+      "3d-immersive": {
+        "name": "3D / Meeslepend",
+        "tagline": "Diepte en perspectief — ruimtelijke panelen die boven de pagina zweven."
+      },
+      "neumorphism": {
+        "name": "Neumorfisme",
+        "tagline": "Zachte, uitgeperste oppervlakken die opbollen uit één monochroom vlak."
+      },
+      "hand-drawn-indie": {
+        "name": "Handgetekend / Indie",
+        "tagline": "Schetsmatig en vriendelijk — ruwe, met de hand geïnkte randen, scheve hoeken, zachte verschoven schaduwen, een speelse stuiter."
+      },
+      "retrofuturism": {
+        "name": "Retrofuturisme",
+        "tagline": "Chroom, verloopbanen en een synthwave-horizon — sciencefiction uit de jaren 70/80."
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Strak en redactioneel — koele grijstinten + inkt, een inktkleurige CTA, een ingetogen koelblauw accent en een paar warme toetsen."
+      },
+      "amethyst": {
+        "name": "Amethist",
+        "tagline": "Warm en redactioneel — crèmekleurige oppervlakken, antraciet inkt, paars als primaire kleur, pasteltinten."
+      },
+      "cobalt": {
+        "name": "Kobalt",
+        "tagline": "Koel en institutioneel — leikoele oppervlakken, zelfverzekerd kobalt als primaire kleur, verkoelde tinten."
+      },
+      "evergreen": {
+        "name": "Groenblijvend",
+        "tagline": "Fris en technisch — smaragd als primaire kleur over koele bosneutralen, een UI die naar groen neigt."
+      },
+      "spectrum": {
+        "name": "Spectrum",
+        "tagline": "Levendig en speels — heldere koele oppervlakken, felviolet als primaire kleur, een snoepkleurige set accenten en tinten in vele kleuren."
+      },
+      "amber": {
+        "name": "Amber",
+        "tagline": "Warm en elektrisch — het goud van de Binance-handelsvloer over de grafietzwarte tinten van de beurs; donkere labels op het goud."
+      },
+      "sienna": {
+        "name": "Sienna",
+        "tagline": "Warm en levendig — Mistral-vlamoranje over mediterrane warme crèmetinten; donkere labels op de vlam."
+      },
+      "garnet": {
+        "name": "Granaat",
+        "tagline": "Rijk en gedurfd — Pinterest Pushpin-rood over de neutrale grijstinten van het merk; witte labels op het rood."
+      },
+      "citrine": {
+        "name": "Citrien",
+        "tagline": "Helder en collaboratief — Miro’s Sunglow-geel over whiteboardgrijs, met het actieblauwe accent van Miro."
+      },
+      "candy": {
+        "name": "Snoep",
+        "tagline": "Zoet en speels — lichtroze kauwgom als primaire kleur over snoeppapierroze, met een complete pastelregenboog."
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "Redactionele serifkoppen boven een strakke schreefloze tekst — de huiscombinatie."
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "Volledig schreefloos — Inter voor koppen en tekst; structureel, geen schreef."
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "Overal monospace — een code-eigen UI, koppen, tekst en alles."
+      },
+      "grotesk": {
+        "name": "Grotesk",
+        "tagline": "Geometrische neogrotesk door de hele UI — strak, zelfverzekerd, productgericht."
+      },
+      "editorial": {
+        "name": "Redactioneel",
+        "tagline": "Een karaktervolle display-serif boven een humanistische schreefloze letter — tijdschriftachtig, doordacht."
+      },
+      "mono-technical": {
+        "name": "Mono-technisch",
+        "tagline": "Overal IBM Plex Mono — een precieze UI op ontwikkelaarsniveau."
+      }
+    }
+  },
+  "footer": {
+    "ariaLabel": "Voettekst",
+    "tagline": "Het platform voor AI-planning, projectmanagement en agent-orkestratie.",
+    "productHeading": "Product",
+    "resourcesHeading": "Bronnen",
+    "legalHeading": "Juridisch",
+    "explore": "Projecten die openbaar worden gebouwd",
+    "docs": "Docs",
+    "signIn": "Inloggen",
+    "startFree": "Gratis beginnen",
+    "github": "GitHub",
+    "openSource": "De projectmanagementkern is open source, GPL-3.0.",
+    "terms": "Servicevoorwaarden",
+    "privacy": "Privacybeleid",
+    "legalIndex": "Alle juridische documenten",
+    "entity": "Motir is een product van moooon B.V.",
+    "copyright": "© {year} moooon B.V.",
+    "howItWorks": "Hoe Motir werkt",
+    "ideas": "Ideeën om te bouwen",
+    "buildsItself": "Motir bouwt zichzelf"
+  },
+  "legal": {
+    "metaTitle": "Juridisch",
+    "metaDescription": "De voorwaarden, het beleid en de verklaringen voor de gehoste Motir-dienst, aangeboden door moooon B.V.",
+    "metaDocDescription": "{title} — versie {version}. Gepubliceerd door moooon B.V. voor de gehoste Motir-dienst.",
+    "breadcrumbAria": "Juridische documenten",
+    "allDocuments": "← Alle juridische documenten",
+    "versionAndEffective": "Versie {version} · van kracht vanaf {date}",
+    "versionNotYetEffective": "Versie {version} · nog niet van kracht",
+    "indexTitle": "Juridisch",
+    "indexIntro": "Alles wat moooon B.V. publiceert over de gehoste Motir-dienst — waarmee je akkoord gaat, wat we met je gegevens doen en bij wie ze nog meer terechtkomen. Draai je Motir zelf, dan ben je je eigen verwerkingsverantwoordelijke en beschrijven deze documenten onze dienst, niet de jouwe.",
+    "indexContact": "Vragen over een van deze documenten: legal@motir.co"
+  },
+  "explore": {
+    "topicNavAria": "Projectplein",
+    "topicHeading": "Projecten over {topic}",
+    "metaTitle": "Openbaar bouwen · Projecten op Motir",
+    "metaDescription": "Projecten die teams openbaar bouwen op Motir: hun roadmaps, borden, plannen en agent-runs. Lees het overzicht van elk project en volg het live werk met een gratis account.",
+    "metaTitleTopic": "Projecten over {topic} die openbaar worden gebouwd · Motir",
+    "metaDescriptionTopic": "Openbare projecten met het onderwerp {topic}: echte roadmaps, borden en sprints van teams die {topic} openbaar bouwen op Motir.",
+    "heroEyebrow": "Openbaar bouwen",
+    "heroTitle": "Projecten die openbaar worden gebouwd op Motir",
+    "heroLede": "Teams bouwen openbaar op Motir. Lees het overzicht en de changelog van elk project, en maak een gratis account aan om het live bord, de roadmap, de plannen en de agent-runs te volgen.",
+    "trustCrawlable": "Open overzicht en changelog",
+    "trustNoSignup": "Gratis account om het live werk te volgen",
+    "trustUpdated": "Dagelijks bijgewerkt",
+    "searchAria": "Openbare projecten zoeken",
+    "searchPlaceholder": "Zoek openbare projecten op naam of onderwerp…",
+    "searchSubmit": "Zoeken",
+    "sortAria": "Openbare projecten sorteren",
+    "rankTrending": "Trending",
+    "rankPopular": "Populair",
+    "rankNew": "Nieuw",
+    "windowDay": "Vandaag",
+    "windowWeek": "Deze week",
+    "windowMonth": "Deze maand",
+    "topicFilterAria": "Openbare projecten filteren op onderwerp",
+    "allTopics": "Alle onderwerpen",
+    "activeLabel": "Actief",
+    "summarySearch": "‘{query}’",
+    "summaryRankTrending": "Trending · {window}",
+    "summaryRankPopular": "Populair",
+    "summaryRankNew": "Nieuw",
+    "galleryHeadingSearch": "Resultaten voor ‘{query}’",
+    "galleryHeadingPopular": "Populaire openbare projecten",
+    "galleryHeadingNew": "Onlangs gepubliceerde openbare projecten",
+    "galleryHeadingTrending": "Trending openbare projecten",
+    "noResultsTitle": "Geen projecten die aan je filters voldoen",
+    "noResultsBody": "Probeer een andere zoekterm of een ander onderwerp — of wis je filters om het hele plein te bekijken.",
+    "emptyTitle": "Nog geen openbare projecten",
+    "emptyBody": "Zodra een team een project openbaar maakt, verschijnt het hier zodat iedereen het kan ontdekken. Kom snel terug.",
+    "clearFilters": "Filters wissen",
+    "loadMore": "Meer projecten laden",
+    "browseTitle": "Bladeren op onderwerp",
+    "browseSubtitle": "Onderwerpen gesorteerd op hun aantal openbare projecten — elk is een eigen, doorzoekbare landingspagina.",
+    "browseCountAria": "{count} openbare projecten",
+    "faqHeading": "Wat is openbaar bouwen?",
+    "faqLede": "Openbaar bouwen maakt van een Motir-project een pagina die iedereen op het web kan vinden: het overzicht en de changelog zijn voor iedereen open, en wie een gratis Motir-account heeft, kan het live bord, de roadmap en de werkitems volgen. Deze pagina toont elk project dat openbaar wordt gebouwd.",
+    "faqQ1": "Wat wordt openbaar en wat blijft privé?",
+    "faqA1": "Het bord, de roadmap en de werkitems, met hun titels, typen en beschrijvingen. Verantwoordelijken, schattingen en interne reacties worden nooit getoond. De eerste keer dat je de live weergaven van een project opent, laat Motir je weten dat je naam en e-mailadres zichtbaar zijn voor het team van het project.",
+    "faqQ2": "Heb ik een account nodig?",
+    "faqA2": "Niet om het overzicht en de changelog van een project te lezen. Om het live bord, de roadmap, de plannen en de agent-runs te volgen, log je in met een gratis Motir-account. Er is geen betaalmuur.",
+    "faqQ3": "Hoe worden projecten gerangschikt?",
+    "faqA3": "Trending toont projecten met recente upvotes en activiteit, Populair rangschikt op het totaal aantal upvotes, en Nieuw toont de meest recent gepubliceerde — elk met een deelbare, doorzoekbare URL.",
+    "cardViewAria": "{name} — openbaar project",
+    "statUpvotesAria": "{count} upvotes",
+    "statActivityAria": "Laatst actief {time}",
+    "statActivityNone": "Nog geen activiteit",
+    "errorTitle": "Kon het projectplein niet laden",
+    "errorBody": "De directory is tijdelijk niet bereikbaar. Probeer het zo opnieuw.",
+    "featured": {
+      "eyebrow": "Openbaar gebouwd door Motir",
+      "title": "Motir bouwt zichzelf.",
+      "body": "Motir wordt openbaar gepland, gebouwd en uitgebracht door Motir. Elk plan, elke run en elke beslissing is te volgen.",
+      "cta": "Kijk hoe Motir zichzelf bouwt"
+    },
+    "close": {
+      "headline": "Bouw het jouwe openbaar.",
+      "body": "Maak van elk Motir-project een openbare pagina met één schakelaar. Laat zien wat je bouwt, ontvang functieverzoeken en upvotes, en houd interne details privé.",
+      "cta": "Gratis beginnen"
+    }
+  },
+  "docs": {
+    "operationCount": "{count} operaties",
+    "metaTitle": "Docs · Motir",
+    "metaDescription": "Documentatie voor de Motir-API en de MCP-server — het openbare leescontract, de server die agents aanroepen en de CLI.",
+    "metaTitleReference": "API-referentie · Motir-docs",
+    "metaDescriptionReference": "Elke operatie in de openbare REST-API van Motir, met scopes, parameters, responses en een geauthenticeerd voorbeeld om te kopiëren.",
+    "metaTitleGuide": "Aan de slag · API-referentie · Motir-docs",
+    "metaDescriptionGuide": "Van een account naar een werkende aanroep van de Motir REST-API, in vijf stappen — een token, een eerste request en wat de fouten betekenen.",
+    "metaTitleStability": "Stabiliteit en uitfasering · API-referentie · Motir-docs",
+    "metaDescriptionStability": "Wat de v1 REST-API van Motir belooft niet te veranderen, wat zonder aankondiging kan veranderen en hoe iets wordt uitgefaseerd.",
+    "metaTitleMcp": "MCP-server · Motir-docs",
+    "metaDescriptionMcp": "Koppel elke Model Context Protocol-client aan Motir met een persoonlijk toegangstoken, en weet of je de MCP-server of de REST-API moet gebruiken.",
+    "metaTitleMcpTools": "Tools · MCP-server · Motir-docs",
+    "metaDescriptionMcpTools": "Elke tool die de Motir MCP-server aanbiedt, wat elke tool doet en welke tokenscope er toegang toe geeft.",
+    "metaTitleCli": "Motir CLI · Motir-docs",
+    "metaDescriptionCli": "Installeer de Motir CLI, log in, richt hem op je project en geef een werkitem aan je eigen agent — zonder iets te klonen.",
+    "metaTitleSandbox": "Agent-sandbox · Motir-docs",
+    "metaDescriptionSandbox": "Zet de gepubliceerde container op die een onbewaakte agent laat werken op je werkruimtemap en op niets anders op je machine.",
+    "metaTitlePublicAddress": "Openbaar adres · Motir-docs",
+    "metaDescriptionPublicAddress": "Geef een openbaar project een adres naar keuze — een Motir-subdomein voor je werkruimte, of een domein dat je al bezit, met de DNS-records die elk nodig heeft.",
+    "metaTitleSentry": "Sentry · Motir-docs",
+    "metaDescriptionSentry": "Koppel Sentry aan een Motir-project, zodat nieuwe fouten binnenkomen als bug-werkitems en het oplossen van de bug de fout in Sentry afhandelt.",
+    "metaTitleDifficulty": "Moeilijkheidsniveaus · Motir-docs",
+    "metaDescriptionDifficulty": "De vier moeilijkheidsniveaus die een werkitem kan hebben, de modellen die we per niveau aanraden en wat een taak kost.",
+    "metaTitleSkills": "Skills · Motir-docs",
+    "metaTitleClaudeCodeConnector": "Claude Code connector · Motir-docs",
+    "metaTitleClaudeCodePlugin": "Claude Code plugin · Motir-docs",
+    "metaDescriptionSkills": "Installeer de skills van Motir in Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot of OpenCode, en stuur je Motir-project aan vanuit de agent die je al gebruikt.",
+    "metaDescriptionClaudeCodeConnector": "Koppel Motir aan Claude Code als externe MCP-connector: voeg hem één keer toe op claude.ai of met één commando, log in met je Motir-account en keur goed wat Claude mag doen.",
+    "metaDescriptionClaudeCodePlugin": "Installeer de Claude Code plugin van Motir: één installatie levert de skills, de Motir MCP-server en een runner voor de CLI, en koppelt Motir zonder token.",
+    "indexTitle": "Documentatie",
+    "indexIntro": "Alles wat je nodig hebt om op Motir te bouwen: de openbare lees-API, de MCP-server die agents aanroepen en de CLI.",
+    "api": "API-referentie",
+    "apiGettingStarted": "Aan de slag",
+    "apiStability": "Stabiliteit en uitfasering",
+    "mcp": "MCP-server",
+    "mcpTools": "MCP-tools",
+    "mcpHintReads": "Leest",
+    "mcpHintWrites": "Schrijft",
+    "mcpHintDestructive": "Destructief",
+    "mcpHintsUnpublished": "Deze Motir-versie publiceert de gedragshints van deze tool niet.",
+    "mcpHintLedeIntro": "Elke tool zegt wat hij met je gegevens doet:",
+    "mcpHintReadsMeans": "verandert niets,",
+    "mcpHintWritesMeans": "voegt alleen toe, en",
+    "mcpHintDestructiveMeans": "kan wat er al is wijzigen of verwijderen.",
+    "mcpHintLedeClaude": "Claude leest deze hints en vraagt het eerst voordat het een tool gebruikt die niet alleen-lezen is, tenzij je dat hebt toegestaan.",
+    "cli": "CLI",
+    "sandbox": "Sandbox",
+    "publicAddress": "Openbaar adres",
+    "sentry": "Sentry",
+    "difficulty": "Moeilijkheidsniveaus",
+    "skills": "Skills",
+    "claudeCodeConnector": "Claude Code connector",
+    "claudeCodePlugin": "Claude Code plugin",
+    "descApi": "De openbare lees-API — elk endpoint, elke parameter en elke status, gegenereerd uit het geleverde OpenAPI-document.",
+    "descApiGettingStarted": "Het pad van een token naar je eerste request, in vijf stappen.",
+    "descApiStability": "Versiebeheer, uitfasering en wat een brekende wijziging is.",
+    "descMcp": "De Model Context Protocol-server die agents en de CLI aanroepen.",
+    "descMcpTools": "Elke tool die de server aanbiedt, met scope en toegangsrecht.",
+    "descCli": "De command-line-client en wat hij automatiseert.",
+    "descSandbox": "De gehoste sandbox waarin een agent werk uitvoert.",
+    "descPublicAddress": "Je werkruimte-subdomein, een domein dat je al bezit en de DNS-records die elk nodig heeft.",
+    "descSentry": "Maak van Sentry-fouten bug-werkitems, en handel ze af in Sentry zodra de bug klaar is.",
+    "descDifficulty": "Wat elk moeilijkheidsniveau betekent, op welke modellen je het draait en wat een taak kost.",
+    "descSkills": "Installeer de skills van Motir in je agent, en wat je zegt om elke skill te gebruiken.",
+    "descClaudeCodeConnector": "Koppel Motir aan Claude Code met je Motir-account en zonder token, vanaf claude.ai of met één commando.",
+    "descClaudeCodePlugin": "Eén installatie in Claude Code levert de skills, de MCP-server en de CLI van Motir, ingelogd zonder token.",
+    "apiIntro": "Elke operatie die de API aanbiedt, gegenereerd uit het OpenAPI-document dat Motir publiceert en opgehaald wanneer deze pagina wordt opgevraagd — dus precies wat de server nu levert. Bij elke operatie staan de parameters, de body die ze accepteert, een request om te kopiëren en elke status waarmee ze kan antwoorden.",
+    "sectionRequest": "Request",
+    "sectionBody": "Request-body",
+    "sectionExample": "Voorbeeld",
+    "sectionResponses": "Responses",
+    "sectionResponseSchema": "Responseschema",
+    "thStatus": "Status",
+    "thCondition": "Voorwaarde",
+    "filterOperations": "Operaties filteren",
+    "filterEmpty": "Geen operatie voldoet aan dat filter."
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "Die pagina is er niet",
+    "lede": "Het adres is misschien verkeerd getypt — of de pagina waarnaar het verwees is niet langer openbaar.",
+    "exploreDoor": "Bekijk projecten die openbaar worden gebouwd",
+    "homeDoor": "Naar de homepage"
+  },
+  "products": {
+    "eyebrow": "Motir-producten",
+    "comingSoon": "Deze pagina komt eraan. Tot die tijd zie je het het snelst door Motir uit te proberen.",
+    "start": "Een project starten",
+    "back": "Terug naar motir.co",
+    "metaTitle": "{name} — Motir",
+    "worksWith": "Werkt met",
+    "aiPlanner": {
+      "metaDescription": "Motir AI Planner blijft vragen tot duidelijk is wat je bouwt, en stelt dan het hele plan op: elk stuk werk, op volgorde, met wie het doet. Er begint niets voordat jij het goedkeurt.",
+      "headline": "Eerst het wat. Dan het hele plan.",
+      "lede": "Beschrijf wat je wilt bouwen. De planner blijft vragen tot duidelijk is wat je bedoelt, want hij plant geen gok. Daarna leest hij wat er al is en stelt hij het hele plan op: elk stuk werk, in de volgorde waarin het moet gebeuren, met wie het doet. Er begint niets voordat jij het goedkeurt.",
+      "steps": {
+        "eyebrow": "Hoe hij plant",
+        "headline": "Hij denkt het samen met jou door",
+        "items": [
+          {
+            "title": "Vraagt tot het duidelijk is",
+            "body": "Is nog niet duidelijk wat je bouwt, dan vraagt hij het. Hij plant pas als hij het weet."
+          },
+          {
+            "title": "Leest wat er al is",
+            "body": "Je repository’s, documenten en bord, of een project dat je meeneemt uit Jira, Linear of Plane. Hij plant vanaf waar jij staat, niet vanaf een leeg blad."
+          },
+          {
+            "title": "Stelt het hele plan op",
+            "body": "Elk stuk werk, van de grote doelen tot de kleine stappen, elk met wie het doet en waarop het wacht."
+          },
+          {
+            "title": "Controleert zijn eigen werk",
+            "body": "Elk plan wordt gecontroleerd voordat jij het ziet, zodat wat bij jou aankomt een plan is dat gebouwd kan worden."
+          }
+        ]
+      },
+      "gate": {
+        "eyebrow": "Jij beslist",
+        "headline": "Jij keurt het plan goed",
+        "body": "Er komt niets op het bord tot jij het zegt. Vraag om wijzigingen in gewone taal: zet dit later, splits dat, laat de export vallen. Elke ronde is een nieuwe beurt, en het plan bewaart elke versie en de reden waarom het veranderde.",
+        "motirPlans": "Maak een account aan om te zien wat Motir voor zichzelf plande"
+      },
+      "holds": {
+        "eyebrow": "Wat een plan bevat",
+        "headline": "Alles wat het werk nodig heeft",
+        "items": [
+          {
+            "title": "De hele boom",
+            "body": "Epics, stories, taken en subtaken, van het doel tot de stap."
+          },
+          {
+            "title": "Wie het doet",
+            "body": "Elk werkitem gaat naar een agent of naar een mens. Werk dat alleen een mens kan doen, is een handmatige taak."
+          },
+          {
+            "title": "De volgorde",
+            "body": "Wat op wat wacht, zodat elk onderdeel begint zodra het kan."
+          },
+          {
+            "title": "De moeilijkheid",
+            "body": "Een niveau op elk werkitem, zodat het draait op een model dat erbij past."
+          },
+          {
+            "title": "Het soort werk",
+            "body": "Code, ontwerp, tests, documenten, onderzoek, review: elk soort is gemarkeerd."
+          },
+          {
+            "title": "De planning",
+            "body": "Zodra jij goedkeurt: sprints, een backlog en een roadmap."
+          }
+        ]
+      },
+      "learns": {
+        "eyebrow": "Hij wordt beter",
+        "headline": "Hij leert van elke fout",
+        "body": "Als een agent niet kan bouwen wat het plan vroeg, controleert Motir eerst of het plan fout was of na jouw goedkeuring is gewijzigd. Een echte planningsfout wordt een les, of versterkt er een. Elk nieuw plan leest eerst de lessen, en een les die 90 dagen niet nodig was, vervalt.",
+        "library": "Lessen",
+        "lessons": [
+          [
+            "Zet inloggen vóór alles wat een gebruiker nodig heeft",
+            "14× gebruikt"
+          ],
+          [
+            "Houd de keuze van een e-mailprovider een handmatige taak",
+            "6× gebruikt"
+          ],
+          ["Splits een story die twee soorten werk vraagt", "9× gebruikt"],
+          ["Plan de lege toestand samen met het scherm", "Nieuw"]
+        ]
+      },
+      "close": {
+        "headline": "Breng het idee.",
+        "body": "De planner doet de rest van het denkwerk samen met jou."
+      },
+      "ui": {
+        "railLabel": "Motir AI",
+        "modeFirstPlan": "eerste plan",
+        "asking": "vraagt",
+        "close": "Sluiten",
+        "esc": "Esc",
+        "composer": "Antwoord, of verfijn verder…",
+        "chat": [
+          {
+            "role": "user",
+            "text": "Een persoonlijke AI-assistent die mensen helpt hun doelen te bereiken."
+          },
+          {
+            "role": "assistant",
+            "tone": "asking",
+            "text": "Wie stelt de doelen: ieder voor zichzelf, of een coach voor zijn cliënten?"
+          },
+          {
+            "role": "user",
+            "text": "Ieder voor zichzelf. Coaches kunnen later komen."
+          },
+          {
+            "role": "assistant",
+            "text": "Duidelijk. Ik lees wat je hebt en stel het eerste plan op."
+          }
+        ],
+        "newItem": "Nieuw",
+        "opAdd": "toevoegen",
+        "cards": [
+          {
+            "kind": "story",
+            "title": "Een doel instellen met een streefdatum",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "Een doel opdelen in wekelijkse mijlpalen",
+            "children": true
+          },
+          {
+            "kind": "task",
+            "title": "Kiezen welke agenda we ondersteunen",
+            "difficulty": "Laag",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "title": "Een agenda koppelen om vrije tijd te vinden",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "De sessies van de week in vrije tijd inplannen",
+            "children": true
+          }
+        ],
+        "project": "Persoonlijke AI-assistent",
+        "list": "Lijst",
+        "canvas": "Canvas",
+        "changeTurns": [
+          {
+            "role": "user",
+            "text": "Laat de story over herinneringen voorlopig vallen. Mensen kunnen zelf inchecken."
+          },
+          {
+            "role": "assistant",
+            "text": "Geschrapt. Het inplannen van de sessies van de week wacht nog op de mijlpalen en de agenda."
+          }
+        ],
+        "barCounts": "17 toegevoegd",
+        "consequence": "Goedkeuren voegt deze toe aan je backlog. Afwijzen beëindigt het plan en verandert niets.",
+        "approve": "Goedkeuren",
+        "decline": "Afwijzen",
+        "roadmap": "Roadmap",
+        "epic": "Persoonlijke agenda- en doelenplanner",
+        "back": "Terug",
+        "modeInContext": "in context",
+        "manual": "Handmatig"
+      }
+    },
+    "importExisting": "Neem een project mee uit Jira, Linear of Plane",
+    "projectManagement": {
+      "metaDescription": "Borden, sprints, een backlog en een roadmap waar agents en mensen aan hetzelfde plan werken, en elke beslissing op een mens wacht.",
+      "headline": "Waar agents en mensen aan hetzelfde plan werken.",
+      "lede": "Borden, sprints, een backlog en een roadmap, zoals je team al werkt. Agents en mensen pakken werk van hetzelfde bord, en alles wat een beslissing vraagt, wacht op een mens.",
+      "board": {
+        "eyebrow": "Het bord",
+        "headline": "Een bord dat weet wat agents doen",
+        "body": "Het werk van een agent gaat door dezelfde kolommen als dat van iedereen, met twee die er eerlijk over zijn. Geïmplementeerd betekent dat een agent een pull request heeft geopend die nog niemand heeft gecontroleerd. Goedgekeurd betekent dat een mens ja heeft gezegd en dat het nog niet live staat. Falende checks staan op het werkitem zelf.",
+        "motirBoard": "Maak een account aan om het eigen bord van Motir te zien"
+      },
+      "roadmap": {
+        "eyebrow": "De roadmap",
+        "headline": "Zie wat klaar is om te beginnen",
+        "body": "De roadmap toont elk werkitem met waarop het wacht. Werk dat nu kan beginnen, is gemarkeerd als gereed, zodat jij, een teamgenoot of een agent altijd weet wat je als volgende oppakt.",
+        "motirRoadmap": "Maak een account aan om de eigen roadmap van Motir te zien"
+      },
+      "holds": {
+        "eyebrow": "Alles wat een team verwacht",
+        "headline": "De tools die je al kent",
+        "items": [
+          {
+            "title": "Sprints en een backlog",
+            "body": "Plan sprints vanuit de backlog, stel een doel en volg de burndown."
+          },
+          {
+            "title": "Borden zoals jij wilt",
+            "body": "Meerdere borden per project, swimlanes, limieten op onderhanden werk en filters."
+          },
+          {
+            "title": "Neem je project mee",
+            "body": "Importeer uit Jira, Linear, Plane, GitHub of een CSV-bestand."
+          },
+          {
+            "title": "Open voor het publiek",
+            "body": "Maak een project openbaar en ontvang functieverzoeken, met upvotes en reacties."
+          },
+          {
+            "title": "Handmatige taken",
+            "body": "Werk dat alleen een mens kan doen, is een eigen soort werkitem, dat je stap voor stap doorloopt."
+          },
+          {
+            "title": "Open source",
+            "body": "De projectmanagementkern is open source onder GPL-3.0."
+          }
+        ]
+      },
+      "ui": {
+        "boardsHeading": "Borden",
+        "boardsSubtitle": "Kanbanbord voor Persoonlijke AI-assistent",
+        "newItem": "Nieuw werkitem",
+        "columns": [
+          {
+            "name": "Te doen",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-23",
+                "title": "De sessies van de week in vrije tijd inplannen",
+                "pill": "blocked",
+                "points": 5,
+                "who": "–"
+              },
+              {
+                "kind": "task",
+                "key": "PA-24",
+                "title": "Kiezen welke agenda we ondersteunen",
+                "pill": "high",
+                "points": 1,
+                "who": "Y"
+              }
+            ]
+          },
+          {
+            "name": "Bezig",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-28",
+                "title": "Mijlpalen op de doelpagina",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "Geïmplementeerd",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-27",
+                "title": "Een doel opsplitsen in weken",
+                "pill": "medium",
+                "points": 5,
+                "who": "A",
+                "ci": "failing"
+              }
+            ]
+          },
+          {
+            "name": "In review",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-26",
+                "title": "Mijlpalen bij hun doel opslaan",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "Klaar",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-21",
+                "title": "Een doel instellen met een streefdatum",
+                "pill": "low",
+                "points": 3,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "pill": {
+          "blocked": "Geblokkeerd",
+          "high": "Hoog",
+          "medium": "Gemiddeld",
+          "low": "Laag",
+          "awaiting": "Wacht op jou",
+          "running": "Checks lopen",
+          "failing": "Checks falen"
+        },
+        "waitingOnYou": "Wacht op jou",
+        "waitedHeader": ["Wacht op", "Gewacht"],
+        "rows": [
+          {
+            "kind": "plan",
+            "title": "Persoonlijke AI-assistent",
+            "sentence": "Plan voor {title}",
+            "key": "",
+            "waited": "2 uur",
+            "action": "Beoordelen"
+          },
+          {
+            "kind": "pr",
+            "title": "E-mail voor wachtwoordherstel",
+            "sentence": "{title} is af",
+            "key": "PA-7",
+            "waited": "1 dag",
+            "action": "Beoordelen"
+          },
+          {
+            "kind": "design",
+            "title": "Inlogscherm",
+            "sentence": "Ontwerp voor {title}",
+            "key": "PA-8",
+            "waited": "3 uur",
+            "action": "Beoordelen"
+          },
+          {
+            "kind": "video",
+            "title": "Accounts en inloggen",
+            "sentence": "Acceptatievideo voor story {title}",
+            "key": "PA-2",
+            "waited": "40 min",
+            "action": "Beoordelen"
+          },
+          {
+            "kind": "manual",
+            "title": "De e-mailprovider kiezen",
+            "sentence": "{title} wacht op jou",
+            "key": "PA-19",
+            "waited": "1 dag",
+            "action": "Als klaar markeren"
+          }
+        ],
+        "roadmap": [
+          {
+            "kind": "story",
+            "key": "PA-21",
+            "title": "Een doel instellen met een streefdatum",
+            "status": "done",
+            "label": "Klaar"
+          },
+          {
+            "kind": "task",
+            "key": "PA-24",
+            "title": "Kiezen welke agenda we ondersteunen",
+            "status": "ready",
+            "label": "Gereed",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "key": "PA-22",
+            "title": "Een doel opdelen in wekelijkse mijlpalen",
+            "status": "in_progress",
+            "label": "Bezig",
+            "progress": "2 / 5"
+          },
+          {
+            "kind": "story",
+            "key": "PA-25",
+            "title": "Een agenda koppelen om vrije tijd te vinden",
+            "status": "todo",
+            "label": "Te doen"
+          },
+          {
+            "kind": "story",
+            "key": "PA-23",
+            "title": "De sessies van de week in vrije tijd inplannen",
+            "status": "todo",
+            "label": "Te doen"
+          }
+        ],
+        "roadmapRoot": "Roadmap",
+        "roadmapEpic": "Persoonlijke agenda- en doelenplanner",
+        "back": "Terug",
+        "manual": "Handmatig"
+      },
+      "close": {
+        "headline": "Breng het project.",
+        "body": "Begin bij een idee, of neem het project mee dat je al hebt."
+      }
+    },
+    "aiDebugging": {
+      "metaDescription": "Bugs uit productie, van je team en van agents midden in een run komen binnen herleid tot de code en ingepland. Motir AI benoemt de waarschijnlijke oorzaak, controleert of er al een werkitem voor is en handelt de Sentry-fout af zodra de bug klaar is.",
+      "headline": "Elke bug komt binnen herleid tot de code en ingepland.",
+      "lede": "Uit productie, van iemand in je team of van een agent midden in een run: elke bug komt binnen met wat ‘klaar’ inhoudt, waar in de code je begint en wat er mis kan zijn. Jij beslist wie hem oplost.",
+      "plan": {
+        "eyebrow": "AI plant elke bug",
+        "headline": "Mogelijke oorzaken, nooit een gok die zich voordoet als het antwoord",
+        "body": "De planner legt de stacktrace naast je repository’s en schrijft de bug uit zoals een teamgenoot dat zou doen: wat ‘klaar’ inhoudt, waar in de code je begint en waarom het ertoe doet. Waarschijnlijke oorzaken staan er als mogelijkheden om te bevestigen of uit te sluiten, en als de trace niet aan je code te koppelen is, staat dat in de bug."
+      },
+      "fix": {
+        "eyebrow": "Jij beslist hoe het wordt opgelost",
+        "headline": "Los het zelf op, of geef het aan een agent",
+        "body": "Een ingeplande bug is een gewoon werkitem. Los het zelf op, of laat een agent de map Bugs oppakken en voor elke bug een pull request openen. Jij reviewt en merget, de bug is klaar en de fout is afgehandeld in Sentry."
+      },
+      "setup": {
+        "eyebrow": "In twee stappen ingesteld",
+        "headline": "Eén keer koppelen, kiezen wat telt",
+        "body": "Koppel je Sentry-organisatie en kies daarna welke van haar projecten fouten naar dit bord sturen. Stel per project het laagste niveau in dat telt, of het afronden van een bug de fout afhandelt en of de verantwoordelijke uit Sentry wordt overgenomen."
+      },
+      "ui": {
+        "errorsTitle": "Fouten",
+        "errorsGloss": "— Gekoppelde Sentry-fouten · aantallen per de laatste controle",
+        "linkError": "Fout koppelen",
+        "error": {
+          "title": "TypeError: Cannot read properties of undefined (reading 'goalId')",
+          "where": "acme / web-frontend · production · 2.14.0",
+          "level": "error",
+          "seenPre": "Gezien: ",
+          "count": "1.284",
+          "seenPost": " keer",
+          "lastSeen": "laatst gezien 6 minuten geleden",
+          "hideEvidence": "Bewijs verbergen",
+          "summary": "· TypeError · POST /api/check-ins · laatste event 6 minuten geleden",
+          "exception": "Exceptie",
+          "exceptionType": "TypeError",
+          "exceptionMessage": ": Cannot read properties of undefined (reading 'goalId')",
+          "stack": "Stacktrace",
+          "stackGloss": "· 2 in je code · 14 framework · meest recente aanroep eerst",
+          "frames": [
+            ["app/api/check-ins/route.ts:42", "in saveCheckIn"],
+            ["lib/goals/progress.ts:18", "in currentGoalFor"]
+          ],
+          "showFramework": "14 framework-frames tonen"
+        },
+        "aiDrafted": "Opgesteld door AI",
+        "explanation": "Toelichting",
+        "explanationGloss": "— waarom het ertoe doet",
+        "explanationBody": "Elke dagelijkse check-in van iemand zonder actief doel mislukt, waardoor die de reeks kwijtraakt waarvoor hij terugkwam. Het begon met release 2.14.0.",
+        "description": "Beschrijving",
+        "descriptionGloss": "— wat te doen",
+        "sections": [
+          {
+            "heading": "Acceptatiecriteria",
+            "items": [
+              "Een check-in wordt opgeslagen voor iemand zonder actief doel",
+              "Het check-ins-endpoint antwoordt 422, niet 500, als het doel ontbreekt"
+            ]
+          },
+          {
+            "heading": "Contextverwijzingen",
+            "items": ["app/api/check-ins/route.ts", "lib/goals/progress.ts"]
+          },
+          {
+            "heading": "Mogelijke mechanismen",
+            "note": "Geen van deze is vastgesteld. Elk is een hypothese die past bij de stacktrace, vermeld zodat de eerste die kijkt ze kan bevestigen of uitsluiten — geen diagnose.",
+            "items": [
+              "currentGoalFor geeft undefined terug als het laatste doel is gearchiveerd",
+              "De client verstuurt de check-in voordat de doelenlijst is geladen"
+            ]
+          }
+        ],
+        "monitoring": "Monitoring",
+        "monitoringBody": "Koppel de foutmonitor waaraan je services al rapporteren, en Motir maakt van de fouten werkitems op het bord van dit project.",
+        "sentry": "Sentry",
+        "connected": "Gekoppeld",
+        "org": "acme",
+        "checked": "4 minuten geleden gecontroleerd",
+        "recheck": "Opnieuw controleren",
+        "monitored": "Gemonitorde projecten",
+        "monitoredBody": "Fouten uit deze Sentry-projecten worden bug-werkitems op dit bord.",
+        "project": "web-frontend",
+        "bound": "3 dagen geleden gekoppeld",
+        "poll": "2 minuten geleden op nieuwe fouten gecontroleerd · ",
+        "filed": "3 bugs aangemaakt",
+        "minLevel": "Minimumniveau",
+        "everyLevel": "Elk niveau",
+        "sync": "Synchroniseren met Sentry",
+        "toggles": [
+          [
+            "Afhandelen in Sentry zodra de bug klaar is",
+            "Zet dit uit om Sentry-fouten te laten zoals ze zijn wanneer hun bugs klaar zijn."
+          ],
+          [
+            "Verantwoordelijke overnemen uit Sentry",
+            "Zet dit uit om toewijzingen in Sentry te negeren."
+          ]
+        ],
+        "add": "Een gemonitord project toevoegen",
+        "board": [
+          {
+            "name": "Te doen",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-41",
+                "title": "TypeError in saveCheckIn voor iemand zonder doel",
+                "pill": "high",
+                "points": 2,
+                "who": "–"
+              }
+            ]
+          },
+          {
+            "name": "Bezig",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-38",
+                "title": "Herinneringsmail om middernacht twee keer verstuurd",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "In review",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-35",
+                "title": "Reeks wordt gereset als de tijdzone verandert",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "Klaar",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-31",
+                "title": "Doelenlijst crasht bij een lege titel",
+                "pill": "low",
+                "points": 1,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "debug": {
+          "mode": "plan",
+          "turnLabel": "Beurt 1",
+          "user": "Dagelijkse check-ins mislukken bij mensen die hun laatste doel hebben gearchiveerd. De reeks wordt gereset en de check-in gaat verloren.",
+          "acts": [
+            ["Lezen", "Je verzoek lezen…"],
+            ["Overdracht", "De bug herleiden…"],
+            ["Ophalen", "De codegraaf gelezen"],
+            ["Ophalen", "De planboom gelezen"],
+            ["Vergelijken", "Gecontroleerd of een werkitem dit al dekt"]
+          ],
+          "causeLabel": "Waarschijnlijke oorzaak:",
+          "cause": "currentGoalFor geeft undefined terug zodra het laatste doel is gearchiveerd, en saveCheckIn leest goalId daaruit zonder controle.",
+          "cause2": "Nog geen werkitem dekt dit.",
+          "outcomePre": "Aangemaakt: ",
+          "outcomeKey": "PA-44",
+          "outcomeTitle": "Check-in mislukt nadat het laatste doel is gearchiveerd",
+          "outcomePost": " in Triage, met de diagnose. Verder is er niets veranderd."
+        },
+        "run": {
+          "title": "PA-8 · Inlogscherm",
+          "status": "Bezig",
+          "findings": "Wat deze run opleverde",
+          "bugFiled": "Bug aangemaakt",
+          "key": "PA-45",
+          "open": "Openen →",
+          "found": "Gevonden tijdens: run van PA-8",
+          "bugTitle": "Link voor wachtwoordherstel verloopt voordat de e-mail aankomt"
+        }
+      },
+      "close": {
+        "headline": "Laat bugs zichzelf plannen.",
+        "body": "Beschrijf er een, koppel Sentry, of laat je agents melden wat ze vinden."
+      },
+      "sources": {
+        "eyebrow": "Waar bugs vandaan komen",
+        "headline": "Drie wegen naar binnen, één soort bug",
+        "items": [
+          {
+            "title": "Beschrijf het aan Motir AI",
+            "body": "Vertel wat er kapot is. Het leest de code, benoemt de waarschijnlijke oorzaak, controleert of een werkitem het al dekt en schrijft dan precies één ding: een nieuwe bug of een notitie bij de bestaande."
+          },
+          {
+            "title": "Uit productie",
+            "body": "Koppel Sentry en elke nieuwe fout wordt een bug met de bijbehorende stacktrace. Gebeurt het opnieuw, dan gaat de teller omhoog, niet de stapel."
+          },
+          {
+            "title": "Uit een agent-run",
+            "body": "Een agent die buiten zijn eigen werk een bug vindt, legt die vast met wat hij zag en waar, en gaat verder."
+          }
+        ]
+      },
+      "describe": {
+        "eyebrow": "Beschrijf het",
+        "headline": "Zeg wat er kapot is. Motir AI herleidt het.",
+        "body": "Beschrijf de bug in je eigen woorden, of rapporteer hem en draag hem over. Motir AI leest je code en je plan, benoemt de waarschijnlijke oorzaak en controleert of er al een werkitem voor is. Het schrijft één ding en zegt precies wat: een nieuwe bug in Triage met de diagnose, of de diagnose toegevoegd aan het werkitem dat hem al volgt. Kan het de bug niet tot de code herleiden, dan schrijft het niets."
+      },
+      "production": {
+        "eyebrow": "Uit productie",
+        "headline": "Fouten komen binnen als bugs, met het bewijs",
+        "body": "Elke nieuwe Sentry-fout wordt één bug-werkitem met de exceptie, de stacktrace en een link terug. Zodra de bug klaar is, handelt Motir de fout af in Sentry. Komt hij terug, dan wordt er een nieuwe bug aangemaakt, gekoppeld aan de oude."
+      },
+      "runs": {
+        "eyebrow": "Uit agent-runs",
+        "headline": "Agents melden wat ze vinden",
+        "body": "Een agent die aan één werkitem bouwt en elders op een bug stuit, stopt niet en verbergt hem niet. Hij legt de bug vast met wat hij zag, noteert in welke run hij hem vond en gaat verder met zijn eigen werk. De run toont elke bug die hij aanmaakte."
+      }
+    },
+    "agentFleet": {
+      "metaDescription": "De gehoste agents van Motir werken alle gereedstaande items van je plan tegelijk af, elk op een eigen machine met een model dat bij de taak past. Start ze zelf of laat Motir Projectmanager ze aan het werk houden.",
+      "headline": "Je hele plan, parallel uitgevoerd.",
+      "lede": "De gehoste agents van Motir pakken elk werkitem dat gereed is en werken ze tegelijk af, elk op een nieuwe machine met een eigen branch en pull request. Start ze zelf, of laat Motir Projectmanager ze aan het werk houden, en het project schiet op alle fronten tegelijk op.",
+      "parallel": {
+        "eyebrow": "Schaal",
+        "headline": "Eén machine voor elk gereed werkitem",
+        "body": "Alles wat kan beginnen, begint. Elke run claimt zijn werkitem, zodat nooit twee agents hetzelfde oppakken, en werkt het af op een eigen machine. Een story voert zijn onderdelen uit in de volgorde waarin ze van elkaar afhangen. Hoe meer werk gereed is, hoe meer runs tegelijk."
+      },
+      "pm": {
+        "eyebrow": "Zonder omkijken",
+        "headline": "Motir Projectmanager houdt de vloot aan het werk",
+        "body": "Geef het project aan Motir Projectmanager en het start een run zodra een werkitem gereed is, kiest het model en legt je alleen voor wat jouw beslissing vraagt: de pull requests, de ontwerpen, de plannen."
+      },
+      "models": {
+        "eyebrow": "Het juiste model voor elke klus",
+        "headline": "Elk werkitem heeft een moeilijkheid. Die kiest het model.",
+        "body": "De planner geeft elke taak, subtaak en bug een moeilijkheid: hoe lastig het werk is om goed te krijgen, niet hoe groot het is. Een wijziging van één regel aan de volgorde van locks kan hoog zijn, terwijl een grote hernoeming triviaal is. De vloot leest het om het model te kiezen, zodat een hernoeming niet betaalt voor het sterkste model en een datamigratie nooit op het goedkoopste draait.",
+        "items": [
+          {
+            "title": "Triviaal",
+            "body": "Mechanisch werk met een eenduidige specificatie: een hernoeming, een tekstwijziging, een configuratieschakelaar. Draait op een sneller, goedkoper model."
+          },
+          {
+            "title": "Laag",
+            "body": "Routinewerk dat een patroon volgt dat de code al heeft, zoals een nieuw veld in een bestaand formulier. Draait op een sneller, goedkoper model."
+          },
+          {
+            "title": "Gemiddeld",
+            "body": "Echte ontwerpkeuzes over meerdere bestanden of services, of een bug waarvan de oorzaak nog onbekend is. Draait op het sterkste model."
+          },
+          {
+            "title": "Hoog",
+            "body": "Werk waarbij een subtiele fout duur is: concurrency, beveiliging, een migratie op live data. Draait op het sterkste model."
+          },
+          {
+            "title": "Jouw keuze",
+            "body": "Stel per niveau je eigen model in voor het project, of kies er een voor één run, uit Claude, DeepSeek, GLM en Qwen."
+          },
+          {
+            "title": "Betaal voor wat draait",
+            "body": "Gefactureerd in credits voor modelaanroepen en machinetijd. Draait er niets, dan betaal je niets."
+          }
+        ],
+        "docsLink": "Hoe moeilijkheidsniveaus werken, en wat een taak op elk model kost"
+      },
+      "care": {
+        "eyebrow": "Runs die voor zichzelf zorgen",
+        "headline": "Problemen opgelost zonder jou",
+        "items": [
+          {
+            "title": "Falende checks",
+            "body": "Een run repareert zijn pull request op dezelfde branch, in maximaal vijf pogingen."
+          },
+          {
+            "title": "Een run die is gestopt",
+            "body": "Het werk blijft op zijn branch staan, en een nieuwe run zet het voort zonder opnieuw te beginnen."
+          },
+          {
+            "title": "Een vastgelopen agent",
+            "body": "Een run die 15 minuten stil blijft, wordt gestopt, zodat een vastgelopen agent nooit credits verbrandt."
+          },
+          {
+            "title": "Een bug onderweg",
+            "body": "Een agent die buiten zijn eigen werk een bug vindt, legt die vast en gaat verder."
+          }
+        ]
+      },
+      "record": {
+        "eyebrow": "Vastgelegd",
+        "headline": "Elke run, stap voor stap",
+        "body": "Elke run legt zijn model vast, elke stap, wat het kostte en hoe elk werkitem eindigde: geïmplementeerd, mislukt, opnieuw gepland of overgeslagen."
+      },
+      "ui": {
+        "runsHeading": "Runs",
+        "runsSubtitle": "Elke run die Persoonlijke AI-assistent heeft gedaan — huidig en eerder.",
+        "runningNow": "Nu bezig",
+        "pastRuns": "Eerdere runs",
+        "columns": [
+          "Commando",
+          "Bereik",
+          "Agent",
+          "Gestart",
+          "Status",
+          "Werkitems"
+        ],
+        "live": [
+          {
+            "command": "Run",
+            "scope": "PA-8 · Inlogscherm",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:42",
+            "status": "Bezig",
+            "tone": "running",
+            "summary": "0 van 1 klaar"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-21 · Doelherinneringen",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:42",
+            "status": "Bezig",
+            "tone": "running",
+            "summary": "0 van 1 klaar"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-22 · Tijdkiezer voor herinneringen",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:41",
+            "status": "Bezig",
+            "tone": "running",
+            "summary": "0 van 1 klaar"
+          },
+          {
+            "command": "Run",
+            "scope": "Story PA-2 · Accounts en inloggen",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:38",
+            "status": "Bezig",
+            "tone": "running",
+            "summary": "2 van 5 klaar"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-17 · Instellingenpagina",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:35",
+            "status": "Bezig",
+            "tone": "running",
+            "summary": "0 van 1 klaar"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-30 · Wekelijkse samenvatting",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:31",
+            "status": "Bezig",
+            "tone": "running",
+            "summary": "0 van 1 klaar"
+          }
+        ],
+        "past": [
+          {
+            "command": "Run",
+            "scope": "Story PA-6 · Doelen",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Gisteren 18:04",
+            "status": "Geslaagd",
+            "tone": "implemented",
+            "summary": "4 van 4 klaar · 1 wacht op jou"
+          },
+          {
+            "command": "motir fix",
+            "scope": "PA-9 · Inlogservice",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "Gisteren 16:20",
+            "status": "Geslaagd",
+            "tone": "implemented",
+            "summary": "1 van 1 klaar"
+          },
+          {
+            "command": "Run",
+            "scope": "PA-31 · Exporteren naar agenda",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Gisteren 14:55",
+            "status": "Mislukt",
+            "tone": "failed",
+            "summary": "1 mislukt"
+          },
+          {
+            "command": "motir continue",
+            "scope": "PA-12 · Doelen en dagelijkse check-ins",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "Gisteren 11:02",
+            "status": "Geslaagd",
+            "tone": "implemented",
+            "summary": "1 van 1 klaar"
+          }
+        ],
+        "readyHeading": "Klaar om te beginnen",
+        "readyLane": "Klaar om te draaien",
+        "ready": [
+          {
+            "kind": "task",
+            "key": "PA-19",
+            "title": "De e-mailprovider kiezen"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-22",
+            "title": "Tijdkiezer voor herinneringen"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-23",
+            "title": "E-mailsjabloon voor herinneringen"
+          },
+          {
+            "kind": "bug",
+            "key": "PA-44",
+            "title": "Check-in mislukt nadat het laatste doel is gearchiveerd"
+          }
+        ]
+      },
+      "close": {
+        "headline": "Ga op alle fronten tegelijk vooruit.",
+        "body": "Breng het idee of het project dat je hebt, en laat de vloot alles afwerken wat gereed is."
+      }
+    },
+    "agentHosting": {
+      "metaDescription": "Draai Claude Code, Codex of de agent die je al gebruikt op een eigen machine in de cloud van Motir, ingelogd met je eigen account. Stuur hem werk vanuit Motir; hij slaapt als je klaar bent en je betaalt alleen voor zijn machinetijd.",
+      "headline": "Je eigen agents, op de machines van Motir.",
+      "lede": "Draai Claude Code, Codex of de agent die je al gebruikt in de cloud van Motir, ingelogd met je eigen account en ingericht met de code van je project. Stuur hem een werkitem en klap je laptop dicht: hij blijft doorwerken en slaapt als je klaar bent.",
+      "setup": {
+        "eyebrow": "Eén keer instellen",
+        "headline": "In drie stappen je agent in de cloud",
+        "items": [
+          {
+            "title": "Maak hem aan",
+            "body": "Geef hem een naam, kies het project en de agent: Claude Code, Codex, OpenCode, Kimi Code, Aider of Goose. De repository’s van je project worden in zijn thuismap gekloond."
+          },
+          {
+            "title": "Log in als jezelf",
+            "body": "Log vanuit zijn terminal in met je eigen account, net zoals je op je laptop zou doen."
+          },
+          {
+            "title": "Stuur hem werk",
+            "body": "Druk bij elk gereed werkitem op Naar mijn agent sturen. Hij claimt het, bouwt het op een eigen branch en opent een pull request."
+          }
+        ]
+      },
+      "away": {
+        "eyebrow": "Weg van je bureau",
+        "headline": "Hij gaat door als je je laptop dichtklapt",
+        "items": [
+          {
+            "title": "Een eigen machine",
+            "body": "Er draait niets op je laptop, dus een dichte klep of een verbroken verbinding houdt het werk niet tegen."
+          },
+          {
+            "title": "Overal meekijken",
+            "body": "Zijn runs staan in Runs naast die van alle andere agents, en zijn terminal is één klik verderop in Mijn agents."
+          },
+          {
+            "title": "Meerdere tegelijk",
+            "body": "Houd tot tien agents aan, elk bezig met een eigen werkitem."
+          }
+        ]
+      },
+      "ui": {
+        "title": "Mijn agents",
+        "subtitle": "Je eigen agents, met je eigen login, in de cloud van Motir — Persoonlijke AI-assistent",
+        "newAgent": "Nieuwe agent",
+        "columns": [
+          "Naam",
+          "Agent",
+          "Toestand",
+          "Machinetijd deze maand",
+          "Credits"
+        ],
+        "rows": [
+          {
+            "name": "yue-claude",
+            "agent": "Claude Code",
+            "state": "Actief",
+            "tone": "implemented",
+            "time": "3 u 12 min",
+            "credits": "212"
+          },
+          {
+            "name": "yue-codex",
+            "agent": "Codex",
+            "state": "In slaapstand",
+            "tone": "cancelled",
+            "time": "1 u 05 min",
+            "credits": "95"
+          },
+          {
+            "name": "night-shift",
+            "agent": "OpenCode",
+            "state": "Wordt gewekt",
+            "tone": "running",
+            "time": "6 u 40 min",
+            "credits": "430"
+          }
+        ]
+      },
+      "close": {
+        "headline": "Geef je agent een bureau.",
+        "body": "Neem de agent mee die je gebruikt, en laat hem werken terwijl jij dat niet doet."
+      },
+      "terms": {
+        "eyebrow": "Jouw login, onze machine",
+        "headline": "Je betaalt voor de machine, en alleen zolang die werkt",
+        "items": [
+          {
+            "title": "Jouw account, jouw model",
+            "body": "De agent draait op je eigen login, met het model en de instellingen die jij koos. Het modelgebruik wordt door de leverancier aan jou gefactureerd, en Motir ziet je login nooit."
+          },
+          {
+            "title": "Eén credit per minuut",
+            "body": "Motir rekent alleen de machinetijd van de agent: één credit per minuut zolang hij draait."
+          },
+          {
+            "title": "Slaapt als je klaar bent",
+            "body": "Na 30 minuten zonder gebruik gaat hij in slaapstand en kost hij niets behalve wat opslag. Hij wordt wakker zodra je hem het volgende werkitem stuurt."
+          }
+        ]
+      }
+    }
+  },
+  "howItWorks": {
+    "metaTitle": "Hoe Motir werkt",
+    "metaDescription": "De workflow achter ‘vibe the project’: AI-planning, de plangoedkeuring, agent-runs, de merge-goedkeuring, reparatie, de leerlus en het geheugen van het project.",
+    "eyebrow": "Voor developers · de machine achter ‘vibe the project’",
+    "headline": "Hoe Motir werkt",
+    "lede": "Elk Motir-project loopt door hetzelfde instrument. De modules zijn Motir en zijn agents. De knoppen en schakelaars zijn van jou: er gaat niets verder voordat een mens eraan draait.",
+    "legendMotir": "Motir en agents",
+    "legendYou": "Jij beslist",
+    "scrollHint": "Scroll de tekening opzij →",
+    "rackTitle": "De Motir-workflow als een rack met modules",
+    "rackDesc": "Je idee wordt doorgeschakeld naar de planner, dan naar een knop waar jij het plan goedkeurt, dan naar het bord, dan naar een agent-run, dan naar een knop waar jij reviewt en merget, en dan naar Klaar. Handmatige taken gaan van het bord naar Klaar. Een agent-run kan een bug die hij vindt vastleggen in de map Bugs en gewoon doorgaan. Een reparatiemodule stuurt mislukte runs terug naar de agent-run. Een leerlus loopt van de agent-run via een oordeel, een herplanning en de lessenbibliotheek terug naar de planner. Een geheugenbank onderaan bewaart ontwerpen, beslissingen, docs, lessen, run-geschiedenis, revisies en wie wat besliste.",
+    "rack": {
+      "engine": "Motir · projectmotor",
+      "engineTitle": "Van idee tot klaar.",
+      "engineSub": "Blauwe modules doen het werk. Oranje knoppen zijn van jou.",
+      "signal": "Signaal",
+      "signalMotir": "Motir en agents",
+      "signalYou": "jij beslist",
+      "idea": {
+        "label": "[01] Jij",
+        "title": "Je idee",
+        "screen": ["> een persoonlijke", "  AI-assistent…_"],
+        "note": ["of importeer een repo,", "Jira, Linear of Plane"]
+      },
+      "planner": {
+        "label": "[01] AI-planning",
+        "title": "Planner",
+        "screen": [
+          "? Vervolgvragen",
+          "Epic › story › taak",
+          "blocked_by · omvang",
+          "validate_plan  OK"
+        ]
+      },
+      "approve": {
+        "label": "[02] Jij",
+        "title": "Goedkeuren",
+        "min": "Bewerken",
+        "max": "Start",
+        "screen": "Plan · alle beurten"
+      },
+      "board": {
+        "label": "[03] Werkitems",
+        "title": "Bord",
+        "screen": ["Uitvoerder agent|mens", "Sprint · backlog", "Roadmap"],
+        "ready": "Gereed 4/6"
+      },
+      "run": {
+        "label": "[04] Agent-run",
+        "title": "Agent-run",
+        "screen": [
+          "Claim › eigen branch",
+          "1 PR per repository",
+          "Harness · model",
+          "Stappen ▮▮▮▮▯"
+        ]
+      },
+      "review": {
+        "label": "[05] Jij",
+        "title": "Review",
+        "min": "Fixen",
+        "max": "Mergen",
+        "screen": "Test · video"
+      },
+      "done": {
+        "label": "[05]",
+        "title": "Klaar",
+        "note": ["de merge sluit", "het werkitem"]
+      },
+      "manual": {
+        "label": "[03] Jij · handmatige taak",
+        "title": "Handmatige taak",
+        "screen": "motir guide · 3/7"
+      },
+      "learning": {
+        "label": "[07] Leerlus",
+        "title": ["De planner", "leert"],
+        "note": ["elke fout maakt", "het volgende plan beter"]
+      },
+      "lessons": {
+        "label": "[07] Lessen",
+        "title": "Lessen",
+        "screen": [
+          "Fout › les",
+          "Opnieuw › versterken",
+          "Geen regel › planningsbug",
+          "90d ongebruikt › vervalt"
+        ]
+      },
+      "replan": {
+        "label": "[07] Herplannen",
+        "title": "Herplannen",
+        "screen": [
+          "Wijziging geclassificeerd",
+          "Reden vastgelegd",
+          "Plangeschiedenis +1"
+        ]
+      },
+      "verdict": {
+        "label": "[07] Oordeel",
+        "title": "Oordeel",
+        "screen": [
+          "Nog wat het plan",
+          "goedkeurde?",
+          "Ja › planner miste",
+          "Nee › latere wijziging"
+        ]
+      },
+      "repair": {
+        "label": "[06] Reparatie",
+        "title": "Als runs stukgaan",
+        "rows": [
+          ["PR rood", "motir fix"],
+          ["Run gestopt", "motir continue"]
+        ]
+      },
+      "memory": {
+        "label": "[08] Geheugen",
+        "title": "Het project onthoudt",
+        "keys": [
+          "Ontwerpen",
+          "Beslissingen",
+          "Docs",
+          "Lessen",
+          "Run-geschiedenis",
+          "Revisies",
+          "Wie besliste"
+        ]
+      },
+      "bugs": {
+        "label": "[04] Bug gevonden",
+        "screen": "Bug vastleggen › map Bugs",
+        "note": "de run gaat door"
+      }
+    },
+    "modulesHeadline": "Module voor module",
+    "modulesLede": "Elke module uit de tekening hierboven, van dichtbij. Beweeg over een module om hem in de tekening te vinden.",
+    "modules": [
+      {
+        "step": "1",
+        "human": false,
+        "label": "[01] AI-planning",
+        "title": "Van een prompt naar een plan",
+        "paras": [
+          "Begin met een zin, een repository of een import uit Jira, Linear of Plane. De planner leest wat er al is, inclusief een codegraaf van je repository’s, en stelt vervolgvragen waar het verzoek onduidelijk is.",
+          "Hij stelt epics, stories, taken en subtaken op, elk met een type, een uitvoerder, een omvang en de bijbehorende `blocked_by`-relaties. `validate_plan` controleert de boom voordat jij hem ziet."
+        ]
+      },
+      {
+        "step": "2",
+        "human": true,
+        "label": "[02] Jij · plangoedkeuring",
+        "title": "Jij keurt het plan goed",
+        "paras": [
+          "Er komt niets op het bord tot een mens het plan goedkeurt. Vraag om wijzigingen in gewone taal; elke ronde is een nieuwe beurt, en de geschiedenis van het plan bewaart elke versie en waarom die veranderde."
+        ]
+      },
+      {
+        "step": "3",
+        "human": false,
+        "label": "[03] Werkitems",
+        "title": "Het bord",
+        "paras": [
+          "Het goedgekeurde plan wordt werkitems met sprints, een backlog en een roadmap. De uitvoerder van elk werkitem is `agent` of `human`.",
+          "Handmatige taken (een account, een secret, een DNS-record, een release-akkoord) worden stap voor stap doorlopen met `motir guide`."
+        ]
+      },
+      {
+        "step": "4",
+        "human": false,
+        "label": "[04] Agent-run",
+        "title": "Agents bouwen",
+        "paras": [
+          "Een agent pakt het volgende gerede werkitem (`motir next` of `motir run <KEY>`), claimt het, bouwt op een eigen branch en opent één pull request per repository, gekoppeld aan het werkitem.",
+          "Een bug die hij buiten zijn eigen werkitem vindt, houdt de run niet tegen: de agent zoekt de oorzaak, legt hem met `motir log bug` vast in de map Bugs als eigen werkitem en gaat door.",
+          "Elke run legt de agent-harness, het model, elke stap en de uitkomst vast. Agents verbinden via MCP, op je eigen machine of als gehoste agents van Motir."
+        ]
+      },
+      {
+        "step": "5",
+        "human": true,
+        "label": "[05] Jij · merge-goedkeuring",
+        "title": "Jij reviewt en merget",
+        "paras": [
+          "Het werkitem gaat naar `Geïmplementeerd` en de agent publiceert ‘Zo test je het’. Stories krijgen een acceptatievideo die in CI wordt opgenomen. Jij reviewt, keurt goed en merget; de merge sluit het werkitem. Niets bereikt `Klaar` zonder een mens."
+        ]
+      },
+      {
+        "step": "6",
+        "human": false,
+        "label": "[06] Reparatie",
+        "title": "Als runs stukgaan",
+        "paras": [
+          "Een rode of conflicterende pull request wordt op zijn eigen branch gerepareerd met `motir fix`, in maximaal vijf pogingen. Een run die is gestopt (een laptop dichtgeklapt, een sandbox kwijt) wordt hervat met `motir continue` op de branch die hij achterliet.",
+          "Bugs die onderweg zijn vastgelegd, wachten in de map Bugs; `motir fix bugs` werkt ze af, de oudste eerst."
+        ]
+      },
+      {
+        "step": "7",
+        "human": false,
+        "label": "[07] Leerlus",
+        "title": "De planner leert",
+        "paras": [
+          "Een agent die een werkitem niet kan bouwen, vraagt eerst of het nog is wat het goedgekeurde plan goedkeurde (`get_approved_shape_verdict`), zodat een latere wijziging niet de planner wordt aangerekend. Was het plan fout, dan wordt het opnieuw gepland en wordt de wijziging met de reden vastgelegd.",
+          "De fout wordt een les, of versterkt er een; is er geen regel die hem dekt, dan wordt er een planningsbug aangemaakt. Het volgende plan leest eerst de lessen. Lessen die 90 dagen niet terugkomen, vervallen."
+        ]
+      },
+      {
+        "step": "8",
+        "human": false,
+        "label": "[08] Geheugen",
+        "title": "Het project onthoudt",
+        "paras": [
+          "Ontwerpen, beslispagina’s, docs, lessen, planrevisies en de geschiedenis van elke run staan naast de werkitems. Jij, een nieuwe teamgenoot of de volgende agent kan het project maanden later oppakken zonder dat iemand het opnieuw hoeft uit te leggen."
+        ]
+      }
+    ],
+    "art": {
+      "plan": {
+        "prompt": "een persoonlijke AI-assistent die mensen helpt hun doelen te bereiken",
+        "question": "Zelfstandig handelen, of eerst vragen voor het verzenden?",
+        "answers": ["Zelfstandig", "Eerst vragen"],
+        "tree": [
+          ["0", "Epic · Koppelingen", ""],
+          ["1", "Story · Agendasynchronisatie", ""],
+          ["2", "Taak · Afspraken lezen", "blocked_by 2"],
+          ["1", "Story · Ochtendoverzicht", ""],
+          ["2m", "Handmatige taak · Account bij e-mailprovider", ""]
+        ]
+      },
+      "approve": {
+        "title": "Plan · beurt 3",
+        "turns": [
+          ["Beurt 1", "Opgesteld vanuit je prompt"],
+          ["Beurt 2", "‘Splits e-mail in twee stories’"],
+          ["Beurt 3", "Klaar voor jouw beslissing"]
+        ],
+        "min": "Herzien",
+        "max": "Goedkeuren",
+        "cta": "Plan goedkeuren"
+      },
+      "board": {
+        "title": "Werkitems",
+        "sub": "Sprint 1 · koppelingen",
+        "count": "24",
+        "columns": ["Te doen", "Bezig", "Geïmplementeerd", "Klaar"],
+        "agent": "agent",
+        "manual": "handmatige taak"
+      },
+      "run": {
+        "run": "Run ·",
+        "key": "PA-12",
+        "agent": "Je agent",
+        "title": "Agendasynchronisatie",
+        "faders": ["Claim", "Branch", "Bouw", "Test", "PR"],
+        "stats": [
+          ["stappen", "9 / 14"],
+          ["bugs vastgelegd", "1"],
+          ["branch", "pa-12"]
+        ]
+      },
+      "review": {
+        "title": "Zo test je het",
+        "checks": [
+          "Koppel een testagenda",
+          "Verplaats een afspraak en zie het overzicht bijwerken",
+          "Trek de toegang in en zie het lezen stoppen"
+        ],
+        "video": "acceptance.mp4",
+        "length": "0:42",
+        "merge": "Mergen"
+      },
+      "repair": {
+        "title": "Als runs stukgaan",
+        "rows": [
+          ["Pull request rood", "motir fix"],
+          ["Run gestopt", "motir continue"],
+          ["Map Bugs", "motir fix bugs"]
+        ],
+        "attempt": "Poging 2 van 5"
+      },
+      "learning": {
+        "loop": ["Lezen", "voor het", "plannen"],
+        "title": "Lessenbibliotheek",
+        "lessons": [
+          ["Eén testgate per repository", "3× versterkt", 80],
+          [
+            "Dupliceer geen branch die al bestaat",
+            "Nieuw · vervalt na 90 dagen ongebruikt",
+            25
+          ]
+        ]
+      },
+      "memory": {
+        "title": ":: Geschiedenis",
+        "span": "PA · 41 dagen",
+        "tip": "Eerst vragen voor het verzenden · jij · 3 okt",
+        "axis": ["Dag 1", "Dag 20", "Dag 41"],
+        "tabs": ["Ontwerpen", "Beslissingen", "Docs", "Lessen", "Runs"]
+      }
+    },
+    "closeHeadline": "Open in de kern",
+    "closeBody": "De projectmanagementkern is open source onder GPL-3.0. Host hem zelf, of gebruik hem op motir.co.",
+    "closeStart": "Vibe a project",
+    "closeDocs": "De docs lezen",
+    "closeMcp": "Je agent koppelen"
+  },
+  "ideas": {
+    "metaTitle": "Ideeën om te bouwen · Motir",
+    "metaDescription": "Producten die Motir zou kopen: AI-platforms voor het werk dat een softwarebedrijf niet met code alleen kan doen. Bouw er een die schaalt, en Motir wordt je eerste klant.",
+    "eyebrow": "Ideeën om te bouwen",
+    "headline": "Bouw wat Motir zou kopen.",
+    "lede": "Een softwarebedrijf draait op meer dan code. Het heeft een jurist nodig, een boekhouder, een securityteam en mensen die andere markten kennen, en Motir is daarop geen uitzondering. We kopen dat werk liever van een product dat op Motir is gebouwd. Dit zijn de producten die we nodig hebben. Bouw er een die schaalt, en Motir wordt je eerste klant.",
+    "promiseTitle": "Motir is je eerste klant",
+    "promiseBody": "Bouw er een op Motir, in het openbaar, en wij gebruiken het, betalen ervoor en vertellen je wat er ontbreekt.",
+    "rulesEyebrow": "Wat hier een goed idee is",
+    "rulesHeadline": "Producten die schalen, geen tools voor één team",
+    "rules": [
+      {
+        "title": "Veel klanten, één product",
+        "body": "Elk idee bedient duizenden bedrijven met hetzelfde probleem, niet het eigen proces van één bedrijf."
+      },
+      {
+        "title": "Expertise die je niet goedkoop inhuurt",
+        "body": "Recht, belastingen, security, talen: werk waarvoor je een specialist nodig hebt, betaalbaar gemaakt door AI en eerlijk gehouden door mensen."
+      },
+      {
+        "title": "Er tekent nog steeds een mens",
+        "body": "De AI stelt het werk op, controleert het en dient het in. Een gekwalificeerd persoon keurt goed wat risico draagt, zoals Motir bij elke poort een mens zet."
+      }
+    ],
+    "listEyebrow": "Motir zou kopen · {n}",
+    "listHeadline": "Producten die Motir vandaag zou kopen",
+    "needLabel": "Waarom Motir het nodig heeft",
+    "whoLabel": "Wie het nog meer koopt",
+    "close": {
+      "headline": "Bouw er een. Wij worden je eerste klant.",
+      "body": "Begin met het idee, plan het met Motir en bouw het in het openbaar. Kies er een van deze, of breng je eigen idee mee."
+    },
+    "placeholder": "Een AI-financeteam voor startups: het prijst de abonnementen, doet de btw-aangifte en betaalt de leveranciers…",
+    "more": {
+      "eyebrow": "Meer richtingen · {n}",
+      "headline": "Goede producten om te bouwen, voorbij wat Motir nodig heeft",
+      "body": "Voor deze wordt Motir niet je eerste klant. Elk is een markt met aantoonbare vraag, een gat dat de huidige spelers openlaten en een reden waarom het nu te bouwen is en niet vijf jaar geleden. Het bewijs staat onder elk idee gelinkt.",
+      "evidenceLabel": "Het bewijs",
+      "gapLabel": "Het gat"
+    },
+    "find": {
+      "heading": "Een idee vinden",
+      "searchPlaceholder": "Zoek in ideeën, bewijs en gaten",
+      "searchAria": "De ideeën doorzoeken",
+      "searchSubmit": "Zoeken",
+      "searchClear": "Zoekopdracht wissen",
+      "categoryGroup": "Categorie",
+      "allCategories": "Alle categorieën",
+      "tags": "Tags",
+      "tagsSelected": "Tags · {n} geselecteerd",
+      "activeLabel": "Gefilterd op",
+      "pillCategory": "Categorie: {label}",
+      "pillTag": "Tag: {label}",
+      "pillSearch": "‘{q}’",
+      "remove": "Verwijderen",
+      "clearAll": "Alles wissen",
+      "countAll": "{n} ideeën",
+      "countMatch": "{n} ideeën komen overeen",
+      "countMatchOne": "1 idee komt overeen",
+      "countNone": "Geen ideeën komen overeen",
+      "updating": "Bijwerken…"
+    },
+    "card": {
+      "open": "Het idee openen",
+      "moreSources": "+{n} andere bronnen",
+      "tagsAria": "Tags"
+    },
+    "detail": {
+      "kindBuys": "Motir zou kopen",
+      "kindDirection": "Een richting",
+      "capabilities": "Wat het zou doen",
+      "evidence": "Het bewijs",
+      "gap": "Het gat",
+      "whyNow": "Waarom nu",
+      "whyMotir": "Waarom Motir het nodig heeft",
+      "whoElse": "Wie het nog meer koopt",
+      "close": "Sluiten",
+      "foot": "Druk op {key} of Terug om naar de lijst terug te gaan.",
+      "opensInNewTab": "(opent in een nieuw tabblad)"
+    },
+    "empty": {
+      "title": "Geen idee voldoet aan deze filters",
+      "body": "Probeer minder tags, een andere categorie of andere woorden. Elk idee is er nog.",
+      "action": "Alle filters wissen"
+    },
+    "error": {
+      "eyebrow": "Tijdelijk niet beschikbaar",
+      "title": "De ideeën konden nu niet worden geladen",
+      "body": "De lijst wordt live uit Motir gelezen, en Motir antwoordde niet. Er is niets verloren; probeer het zo opnieuw.",
+      "action": "Opnieuw proberen"
+    }
+  },
+  "setupPrompt": {
+    "title": "Motir instellen in je agent",
+    "body": "Kopieer één prompt en plak hem in Claude Code, Codex, Cursor of een andere agent. Die koppelt de MCP-server van Motir, installeert de CLI en de skills en controleert of ze werken. In Claude Code installeert hij de Motir-plugin.",
+    "button": "De installatieprompt kopiëren",
+    "copied": "Gekopieerd. Plak hem in je agent",
+    "failed": "Kopiëren mislukt. Selecteer de prompt hieronder",
+    "menuLabel": "Een installatieprompt voor je agent kopiëren",
+    "show": "De prompt tonen",
+    "menuHint": "Plak hem in een willekeurige agent — die stelt Motir daar in.",
+    "headerLabel": "Installatieprompt kopiëren",
+    "headerCopied": "Gekopieerd",
+    "headerFailed": "Kopiëren mislukt"
+  },
+  "builtByMotirPage": {
+    "metaTitle": "Motir bouwt zichzelf · Motir",
+    "metaDescription": "Hoe Motir Motir bouwt: het begon als een map met prompts, een takenlijst en een verzameling fouten, en elke functie die het uitbracht werd het gereedschap om de volgende te bouwen.",
+    "eyebrow": "Motir bouwt zichzelf",
+    "headline": "Hoe Motir Motir bouwt.",
+    "lede": "Het klinkt als een kip-en-eiprobleem. Dat is het niet. Motir begon als een map met prompts, en elke functie die het uitbracht werd een gereedschap om de volgende te bouwen.",
+    "watch": "Kijk hoe Motir zichzelf bouwt",
+    "runs": "Maak een account aan om de agent-runs te volgen",
+    "lost": {
+      "scenes": {
+        "fixLater": "later fixen",
+        "features": [
+          "Agenda",
+          "Herinneringen",
+          "Facturatie",
+          "Export",
+          "Zoeken"
+        ],
+        "inProgress": "bezig",
+        "question": "waarom zo?",
+        "answer": "omdat de…",
+        "sessionEnded": "sessie beëindigd"
+      },
+      "eyebrow": "Waar het begon",
+      "headline": "We deden aan vibe coding. Het project viel uit elkaar.",
+      "body": "Vibe coding maakte de code snel. Maar hoe verder we kwamen, hoe meer we van het project kwijtraakten — want een project is niet alleen code.",
+      "items": [
+        {
+          "title": "Een bug gevonden, nooit vastgelegd",
+          "body": "Opgemerkt midden in een sessie, vergeten aan het eind ervan."
+        },
+        {
+          "title": "Te veel tegelijk",
+          "body": "Vijf functies onderhanden, en geen manier om te zien welke als volgende moest beginnen."
+        },
+        {
+          "title": "Tests die er niet waren",
+          "body": "Ontbrekend, of niet op het niveau dat de rest van de code nodig had."
+        },
+        {
+          "title": "Beslissingen verloren in een chat",
+          "body": "Waarom iets zo was gebouwd, verdween zodra de codeersessie eindigde."
+        }
+      ]
+    },
+    "missing": {
+      "eyebrow": "Wat we nodig hadden",
+      "headline": "Jira en Linear houden werk bij. Wij hadden meer nodig.",
+      "body": "We pasten ons proces in de projecttools die we kenden. Die bevatten de taken, maar niet wat we misten.",
+      "items": [
+        {
+          "title": "Een plan vóór de code",
+          "body": "Een agent moet beginnen bij een plan dat een mens heeft goedgekeurd, niet bij een prompt.",
+          "product": "ai-planner"
+        },
+        {
+          "title": "Gereed, of geblokkeerd door wat",
+          "body": "Zie welk werk nu kan beginnen en welk werk wacht — en op welk ander werk precies."
+        },
+        {
+          "title": "Iemand die het hele project leidt",
+          "body": "Een projectmanager die alles overziet en samenbrengt, zonder dat iemand erom vraagt.",
+          "product": "project-manager"
+        }
+      ],
+      "after": "Dus bouwden we het."
+    },
+    "bootstrap": {
+      "eyebrow": "De bootstrap",
+      "headline": "Elke functie wordt het gereedschap voor de volgende.",
+      "body": "Motir wachtte niet tot het af was voordat het werd gebruikt. Elke functie die het uitbracht, verving de steigers waarmee het was gebouwd.",
+      "steps": [
+        {
+          "tag": "Dag 0",
+          "title": "motir-meta",
+          "body": "Een intern project: een set prompts, een takenlijst en een verzameling fouten. Daarmee werd een model aangestuurd om de eerste functies van Motir te bouwen.",
+          "uses": "Prompts en een takenbestand"
+        },
+        {
+          "tag": "Daarna",
+          "title": "Werkitems",
+          "body": "Toen werkitems er waren, vroeg Motir zichzelf wat het als volgende moest bouwen, niet een externe tool.",
+          "uses": "Zijn eigen werkitems"
+        },
+        {
+          "tag": "Daarna",
+          "title": "De MCP-server",
+          "body": "Toen de MCP er was, werden die opzoekacties MCP-aanroepen, en hield de status zichzelf bij.",
+          "uses": "Zijn eigen MCP-server"
+        },
+        {
+          "tag": "Daarna",
+          "title": "AI-planning",
+          "body": "Toen planning er was, plande Motir zijn volgende functies met zijn eigen planner.",
+          "uses": "Zijn eigen planner"
+        },
+        {
+          "tag": "Nu",
+          "title": "Agents en goedkeuringen",
+          "body": "Agents bouwen de werkitems van Motir; een mens keurt elk plan en elke merge goed.",
+          "uses": "Alles"
+        }
+      ],
+      "loop": ["Bouw een functie", "Gebruik hem", "Bouw er de volgende mee"]
+    },
+    "howItWorks": {
+      "eyebrow": "Onder de motorkap",
+      "headline": "De workflow die Motir bouwt, is de workflow die jij krijgt.",
+      "body": "AI-planning, de plangoedkeuring, agent-runs, de merge-goedkeuring, reparatie en de leerlus: elk Motir-project loopt door dezelfde workflow, dit project ook.",
+      "cta": "Bekijk hoe Motir werkt"
+    },
+    "live": {
+      "eyebrow": "Nog steeds in aanbouw",
+      "headline": "Het is niet gestopt.",
+      "body": "Motir voegt nog steeds functies aan zichzelf toe, in het openbaar. Deze cijfers komen live uit het eigen project van Motir.",
+      "stats": {
+        "shipped": "uitgebracht",
+        "planned": "gepland",
+        "requests": "functieverzoeken",
+        "upvotes": "upvotes"
+      },
+      "recent": "Onlangs uitgebracht",
+      "unavailable": "De live cijfers konden nu niet worden geladen. De projectpagina van Motir heeft ze."
+    },
+    "close": {
+      "headline": "Bouw het jouwe op dezelfde manier.",
+      "body": "Begin met een idee. Motir plant het, bouwt het en houdt het hele project bij elkaar.",
+      "cta": "Gratis beginnen"
+    }
+  }
+}

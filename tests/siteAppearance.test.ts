@@ -18,7 +18,7 @@ import {
  * never resolved from the OS and never replayed from storage.
  */
 
-const LAYOUT = readFileSync('app/layout.tsx', 'utf8')
+const LAYOUT = readFileSync('app/_components/SiteDocument.tsx', 'utf8')
 
 afterEach(() => {
   window.localStorage.clear()

@@ -123,12 +123,16 @@ describe('the tab set', () => {
   })
 
   it('builds the Overview href without a trailing segment', () => {
-    expect(projectTabHref(SITE_HOST, 'ACME', '')).toBe('/p/ACME')
-    expect(projectTabHref(SITE_HOST, 'ACME', 'board')).toBe('/p/ACME/board')
+    expect(projectTabHref(SITE_HOST, 'ACME', '', 'en')).toBe('/p/ACME')
+    expect(projectTabHref(SITE_HOST, 'ACME', 'board', 'en')).toBe(
+      '/p/ACME/board',
+    )
   })
 
   it('encodes the identifier in a tab href too', () => {
-    expect(projectTabHref(SITE_HOST, 'a b', 'items')).toBe('/p/a%20b/items')
+    expect(projectTabHref(SITE_HOST, 'a b', 'items', 'en')).toBe(
+      '/p/a%20b/items',
+    )
   })
 
   it('takes the shape of the host it is given (MOTIR-4220)', () => {
@@ -145,8 +149,8 @@ describe('the tab set', () => {
       host: 'roadmap.acme.com',
       origin: 'https://roadmap.acme.com',
     } as const
-    expect(projectTabHref(workspace, 'ACME', 'board')).toBe('/ACME/board')
-    expect(projectTabHref(project, 'ACME', 'board')).toBe('/board')
+    expect(projectTabHref(workspace, 'ACME', 'board', 'en')).toBe('/ACME/board')
+    expect(projectTabHref(project, 'ACME', 'board', 'en')).toBe('/board')
   })
 })
 

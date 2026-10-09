@@ -1,10 +1,13 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import NotFound from '@/app/not-found'
-import HostUnavailablePage from '@/app/host-unavailable/page'
+import LocaleNotFound from '@/app/[locale]/not-found'
+import HostUnavailablePage from '@/app/[locale]/host-unavailable/page'
 import { NotFoundRoom } from '@/app/_components/NotFoundRoom'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy, resolveCopy } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
+import { EN_PAGE } from '@/tests/helpers/locale'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
   PUBLIC_HOST_HEADER,
@@ -12,6 +15,23 @@ import {
   SITE_HOST,
 } from '@/lib/publicHost'
 import { siteUrl } from '@/lib/siteOrigin'
+
+// The global 404 renders its own `<html>` now (MOTIR-7948), through the shared
+// document shell — which loads `next/font` and the stylesheet this lane cannot
+// evaluate, and an `<html>` jsdom cannot mount inside a container. The ROOM is
+// what these tests read, so the shell passes its children straight through.
+// ⚠️ THE 404 ROOM'S SERVER HALF, UNDER jsdom (MOTIR-7950). `app/not-found.tsx`
+// hands its provider only the namespaces client modules read; on the server
+// the room and the footer read the full catalogue from next-intl's request
+// config instead. jsdom has no server half — every component reads the
+// provider — so here the provider gets the whole English catalogue.
+vi.mock('@/lib/copy', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/copy')>()
+  return { ...actual, clientCopy: (copy: Record<string, unknown>) => copy }
+})
+vi.mock('@/app/_components/SiteDocument', () => ({
+  SiteDocument: ({ children }: { children: React.ReactNode }) => children,
+}))
 
 /*
  * THE 404 ROOM (MOTIR-4193) — the jsdom half.
@@ -206,7 +226,7 @@ describe('the room, given a host', () => {
  */
 describe('the host-unavailable page', () => {
   it('renders the error state in the chrome, with no link of its own', async () => {
-    render(await HostUnavailablePage())
+    render(await HostUnavailablePage(EN_PAGE))
 
     // `ErrorState` with no `identifier` draws no link, so every href on this
     // page is the chrome's — which is what makes the counts below exact.
@@ -218,7 +238,7 @@ describe('the host-unavailable page', () => {
   it('keeps motir.co’s own chrome relative when no router header arrived', async () => {
     // A request the router did not handle carries neither header and reads as
     // `SITE_HOST` — the correct answer for somebody who typed the URL.
-    const { container } = render(await HostUnavailablePage())
+    const { container } = render(await HostUnavailablePage(EN_PAGE))
 
     const hrefs = [...container.querySelectorAll('a[href]')].map((a) =>
       a.getAttribute('href')!,
@@ -229,7 +249,7 @@ describe('the host-unavailable page', () => {
 
   it('spells every site path absolutely on an UNRESOLVED host', async () => {
     arriveOn('unresolved', 'roadmap.acme.com')
-    const { container } = render(await HostUnavailablePage())
+    const { container } = render(await HostUnavailablePage(EN_PAGE))
 
     const hrefs = [...container.querySelectorAll('a[href]')].map((a) =>
       a.getAttribute('href')!,
@@ -237,5 +257,50 @@ describe('the host-unavailable page', () => {
     expect(hrefs.length).toBeGreaterThan(8)
     expect(hrefs.filter((h) => h.startsWith('/'))).toEqual([])
     expect(hrefs).toContain(siteUrl(EXPLORE))
+  })
+})
+
+/*
+ * THE ROOM UNDER A LOCALE (MOTIR-7955) — `app/[locale]/not-found.tsx`, the
+ * boundary every `notFound()` inside a locale's tree reaches. The catalogue is
+ * a TEST catalogue (no `messages/fr.json` exists yet): it translates the title
+ * and leaves the lede out, which is the case the English fallback is for.
+ */
+describe('the room in French', () => {
+  const FRENCH = resolveCopy({
+    notFound: { title: 'Cette page n’existe pas' },
+  })
+  const renderFrench = () =>
+    render(<LocaleNotFound />, { locale: 'fr', messages: FRENCH })
+
+  it('reads the locale’s catalogue, with English where it has no key', () => {
+    const { container } = renderFrench()
+
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Cette page n’existe pas',
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByText(copy.notFound.lede)).toBeInTheDocument()
+    // No dotted catalogue path stands in for a missing string.
+    expect(container.textContent).not.toMatch(/\bnotFound\.[a-zA-Z]+/)
+  })
+
+  it('keeps its two doors in French, on the site origin', () => {
+    renderFrench()
+
+    const doors = within(screen.getByRole('main')).getAllByRole('link')
+    expect(doors).toHaveLength(2)
+    expect(doors[0]).toHaveAttribute('href', siteUrl('/fr/explore'))
+    expect(doors[1]).toHaveAttribute('href', siteUrl('/fr'))
+  })
+
+  it('and in English the locale boundary is the global room, door for door', () => {
+    render(<LocaleNotFound />)
+
+    const doors = within(screen.getByRole('main')).getAllByRole('link')
+    expect(doors[0]).toHaveAttribute('href', siteUrl(EXPLORE))
+    expect(doors[1]).toHaveAttribute('href', siteUrl(SITE_ROOT))
   })
 })

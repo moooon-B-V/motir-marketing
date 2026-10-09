@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Check, ClipboardCopy, TriangleAlert } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { setupPrompt } from '@/lib/setupPrompt'
 
 /*
@@ -22,7 +22,7 @@ export function SetupPromptButton({
   look = 'button',
   className,
 }: Readonly<{ look?: 'button' | 'row' | 'header'; className?: string }>) {
-  const s = copy.setupPrompt
+  const s = useCopy().setupPrompt
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(
