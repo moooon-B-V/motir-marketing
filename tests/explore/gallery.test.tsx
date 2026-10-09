@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { copy } from '@/lib/copy'
-import { ExploreGallery } from '@/app/explore/_components/Gallery'
+import { ExploreGallery } from '@/app/[locale]/explore/_components/Gallery'
 import type { ExploreQuery } from '@/lib/explore'
 
 /*

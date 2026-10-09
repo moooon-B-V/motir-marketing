@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { useSitePathname } from '@/i18n/sitePathname'
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
 import { copy } from '@/lib/copy'
@@ -230,7 +230,7 @@ export function SiteHeader({
   overlay?: boolean
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const pathname = usePathname()
+  const pathname = useSitePathname()
   const onSite = host.kind === 'site'
 
   return (

@@ -1,4 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import createIntlMiddleware from 'next-intl/middleware'
+import { DEFAULT_LOCALE, routing } from '@/i18n/routing'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { TENANT_DOMAIN } from '@/lib/tenantDomain'
 import {
@@ -10,6 +12,8 @@ import {
 } from '@/lib/publicHost'
 import {
   ROUTER_PATHS,
+  isSiteAssetPath,
+  localisedPath,
   resolveHost,
   routeForHost,
   type PublicHostResolution,
@@ -58,11 +62,55 @@ import {
 
 // The three paths the router itself produces live in `lib/hostResolution.ts`,
 // beside the branch that has to RECOGNISE them — see `alreadyRouted`.
-const {
-  notFound: NOT_FOUND_PATH,
-  unavailable: UNAVAILABLE_PATH,
-  workspaceRoot: WORKSPACE_ROOT_PATH,
-} = ROUTER_PATHS
+const { notFound: NOT_FOUND_PATH, unavailable: UNAVAILABLE_PATH } = ROUTER_PATHS
+
+/**
+ * next-intl's locale router (MOTIR-7948), run on the SITE host only.
+ *
+ * With `as-needed` it rewrites an unprefixed path onto the English tree
+ * (`/explore` → `/en/explore`, the visitor's URL unchanged); any other locale's
+ * prefixed path passes straight through. Detection and the cookie are off in
+ * `i18n/routing.ts`, so today it never moves a visitor between languages.
+ *
+ * ⚠️ THE ENGLISH TREE ITSELF NEVER REACHES IT, because its rewrite comes back.
+ * Next 16 dispatches an internal rewrite back through this proxy (the same
+ * second pass `alreadyRouted` handles for tenants), so `/explore` arrives again
+ * as `/en/explore` — and next-intl, which cannot tell that from a visitor who
+ * typed `/en/explore`, answers it with a redirect to `/explore`. Measured on the
+ * standalone server: `/` answered 307 → `/`, forever, and the browser lane never
+ * came up. So `/en` and `/en/…` are served as they are. A visitor who types one
+ * gets the same page at a second address, which is a duplicate rather than a
+ * fault, and the canonical link (MOTIR-7956) names the unprefixed one.
+ *
+ * ⚠️ IT RUNS INSIDE THE SITE BRANCH, NEVER AHEAD OF THE ROUTER. As a second
+ * proxy, or as this proxy's first line, it would rewrite a tenant host's
+ * `/MOTIR/board` to `/en/MOTIR/board` before the host was ever resolved — and
+ * the site branch would stop being the one that makes no network hop.
+ */
+const intlMiddleware = createIntlMiddleware(routing)
+
+/**
+ * A ROOT metadata route whose address carries no dot — `/opengraph-image`
+ * (Next may append a content hash: `/opengraph-image-1br99b`), `/icon`,
+ * `/apple-icon`, `/twitter-image`. They are files at `app/`'s root, outside
+ * every locale's tree, so the locale router must not prefix them: under
+ * `/en/opengraph-image` the landing's `og:image` would 404.
+ */
+const ROOT_METADATA_ROUTE =
+  /^\/(opengraph-image|twitter-image|icon|apple-icon)(-[A-Za-z0-9]+)?$/
+
+/** A site path the locale router leaves alone — a file or a root metadata route. */
+function outsideLocaleTree(pathname: string): boolean {
+  return isSiteAssetPath(pathname) || ROOT_METADATA_ROUTE.test(pathname)
+}
+
+/** `/en` or `/en/…` — the default locale's tree, which the rewrite produces. */
+function inDefaultLocaleTree(pathname: string): boolean {
+  return (
+    pathname === `/${DEFAULT_LOCALE}` ||
+    pathname.startsWith(`/${DEFAULT_LOCALE}/`)
+  )
+}
 
 /**
  * Hosts this router steps aside for — the site itself and every local address.
@@ -176,8 +224,16 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     normaliseHost(request.headers.get('x-forwarded-host')) ??
     normaliseHost(request.headers.get('host'))
 
-  // Today's behaviour, untouched — and no network hop. See the note above.
-  if (!host || isSiteHost(host)) return NextResponse.next()
+  // The site itself — and no network hop. See the note above. Its one job here
+  // is the locale tree (MOTIR-7948): everything that is not a file or a root
+  // metadata route goes through next-intl, which maps the address onto
+  // `app/[locale]`.
+  if (!host || isSiteHost(host)) {
+    const { pathname } = request.nextUrl
+    if (outsideLocaleTree(pathname) || inDefaultLocaleTree(pathname))
+      return NextResponse.next()
+    return intlMiddleware(request)
+  }
 
   // ⚠️ THE THREE BRANCHES WITH NO RESOLUTION, AND THEY ARE `unresolved` RATHER
   // THAN SILENT (MOTIR-4430). None of them can say WHICH tenant this is — the
@@ -199,7 +255,12 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     // `app.motir.co` is restarting. Site-relative chrome is at its most wrong
     // here, which is why "SITE_HOST is fine on an unresolvable host" is not the
     // disposition this card took.
-    return forwardWithHost(request, 'unresolved', host, UNAVAILABLE_PATH)
+    return forwardWithHost(
+      request,
+      'unresolved',
+      host,
+      localisedPath(UNAVAILABLE_PATH),
+    )
   }
   if (read.status === 'not-found') {
     return forwardWithHost(request, 'unresolved', host, NOT_FOUND_PATH)
@@ -257,7 +318,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       // reproduction takes.
       return forwardWithHost(request, kindOf(read.data), host, NOT_FOUND_PATH)
     case 'workspace-root':
-      return forwardWithHost(request, 'workspace', host, WORKSPACE_ROOT_PATH)
+      return forwardWithHost(request, 'workspace', host, route.path)
     default:
       return forwardWithHost(request, kindOf(read.data), host, route.path)
   }

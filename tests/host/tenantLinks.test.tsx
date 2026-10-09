@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
-import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
-import { MoreLink } from '@/app/p/[identifier]/_components/Rows'
-import { ErrorState } from '@/app/p/[identifier]/_components/States'
+import { ProjectHeader } from '@/app/[locale]/p/[identifier]/_components/ProjectHeader'
+import { MoreLink } from '@/app/[locale]/p/[identifier]/_components/Rows'
+import { ErrorState } from '@/app/[locale]/p/[identifier]/_components/States'
 import {
   pagedTabHref,
   type PublicProjectOverviewDto,
@@ -14,7 +14,7 @@ import { SITE_HOST, type PublicHost } from '@/lib/publicHost'
  *
  * ⚠️ RENDERED, NOT GREPPED, and the two guards catch different things.
  * `tests/publicProject/standingRules.test.ts` asks the TREE whether a `/p/`
- * literal survives anywhere under `app/p/**` — which catches a link that never
+ * literal survives anywhere under `app/[locale]/p/**` — which catches a link that never
  * went through the helper. This asks the DOM what a component actually emitted,
  * which catches one that goes through the helper and passes it the wrong host.
  * A component can pass either guard while failing the other.

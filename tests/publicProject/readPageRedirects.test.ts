@@ -3,14 +3,14 @@ import { PROJECT_TABS, visitorViewUrl } from '@/lib/publicProject'
 import {
   GET as boardGET,
   HEAD as boardHEAD,
-} from '@/app/p/[identifier]/board/route'
-import { GET as itemsGET } from '@/app/p/[identifier]/items/route'
-import { GET as treeGET } from '@/app/p/[identifier]/tree/route'
-import { GET as roadmapGET } from '@/app/p/[identifier]/roadmap/route'
+} from '@/app/[locale]/p/[identifier]/board/route'
+import { GET as itemsGET } from '@/app/[locale]/p/[identifier]/items/route'
+import { GET as treeGET } from '@/app/[locale]/p/[identifier]/tree/route'
+import { GET as roadmapGET } from '@/app/[locale]/p/[identifier]/roadmap/route'
 import {
   GET as itemGET,
   HEAD as itemHEAD,
-} from '@/app/p/[identifier]/items/[key]/route'
+} from '@/app/[locale]/p/[identifier]/items/[key]/route'
 
 /**
  * THE RETIRED READ PAGES (MOTIR-6743, Story MOTIR-6171). motir.co's board,

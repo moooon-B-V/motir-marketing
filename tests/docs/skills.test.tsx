@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import SkillsDocsPage from '@/app/docs/(guides)/skills/page'
+import SkillsDocsPage from '@/app/[locale]/docs/(guides)/skills/page'
 import { DOCS_SURFACES } from '@/lib/docsSurfaces'
 import {
   AGENT_INSTALLS,
@@ -10,6 +10,7 @@ import {
   SKILL_USAGE,
   SKILLS_RELEASE_TAG,
 } from '@/lib/skillsGuide'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * `/docs/skills` (MOTIR-6717).
@@ -37,8 +38,8 @@ const AGENTS = [
   'OpenCode',
 ]
 
-function page() {
-  return render(<SkillsDocsPage />).container
+async function page() {
+  return render(await SkillsDocsPage(EN_PAGE)).container
 }
 
 function headings(container: HTMLElement, level: 'h2' | 'h3'): string[] {
@@ -48,14 +49,14 @@ function headings(container: HTMLElement, level: 'h2' | 'h3'): string[] {
 }
 
 describe('/docs/skills', () => {
-  it('has an install section for each of the six agents', () => {
-    const h3 = headings(page(), 'h3')
+  it('has an install section for each of the six agents', async () => {
+    const h3 = headings(await page(), 'h3')
     for (const agent of AGENTS) expect(h3, agent).toContain(agent)
     expect(AGENT_INSTALLS.map((a) => a.label)).toEqual(AGENTS)
   })
 
-  it('has a usage section for each skill the release carries', () => {
-    const h3 = headings(page(), 'h3')
+  it('has a usage section for each skill the release carries', async () => {
+    const h3 = headings(await page(), 'h3')
     expect([...SKILL_NAMES]).toEqual([
       'motir-run',
       'motir-fix',
@@ -69,18 +70,18 @@ describe('/docs/skills', () => {
     expect(SKILL_USAGE.map((s) => s.name)).toEqual([...SKILL_NAMES])
   })
 
-  it('documents only skills the pinned release carries, and names every one it installs', () => {
+  it('documents only skills the pinned release carries, and names every one it installs', async () => {
     // A release can carry a skill before its usage section lands, so the
     // documented set is a subset and the install copy names the whole.
     for (const skill of SKILL_NAMES)
       expect(RELEASE_SKILLS, skill).toContain(skill)
-    const text = page().textContent ?? ''
+    const text = (await page()).textContent ?? ''
     for (const skill of RELEASE_SKILLS) expect(text, skill).toContain(skill)
     expect(text).not.toMatch(/\bthree\b/)
   })
 
-  it('tells a manual-card reader what motir-guide does and shows them', () => {
-    const container = page()
+  it('tells a manual-card reader what motir-guide does and shows them', async () => {
+    const container = await page()
     const section = container
       .querySelector('h3#motir-guide')
       ?.closest('section')
@@ -99,8 +100,10 @@ describe('/docs/skills', () => {
     expect(text).toContain('moves to Done, with a comment summarising')
   })
 
-  it('tells a reader with a red pull request what motir-fix does and shows them', () => {
-    const section = page().querySelector('h3#motir-fix')?.closest('section')
+  it('tells a reader with a red pull request what motir-fix does and shows them', async () => {
+    const section = (await page())
+      .querySelector('h3#motir-fix')
+      ?.closest('section')
     expect(section, 'the motir-fix section').not.toBeNull()
     const text = section?.textContent ?? ''
     // What to say: one work item, named.
@@ -116,8 +119,8 @@ describe('/docs/skills', () => {
     expect(text).toContain('says it is being fixed, and by whom')
   })
 
-  it('tells a reader whose run died what motir-continue does, and when to use fix or run instead', () => {
-    const section = page()
+  it('tells a reader whose run died what motir-continue does, and when to use fix or run instead', async () => {
+    const section = (await page())
       .querySelector('h3#motir-continue')
       ?.closest('section')
     expect(section, 'the motir-continue section').not.toBeNull()
@@ -143,8 +146,8 @@ describe('/docs/skills', () => {
     expect(text).toContain('it is being continued, and by whom')
   })
 
-  it('tells a Bugs-folder reader what motir-fix-bugs does and shows them', () => {
-    const section = page()
+  it('tells a Bugs-folder reader what motir-fix-bugs does and shows them', async () => {
+    const section = (await page())
       .querySelector('h3#motir-fix-bugs')
       ?.closest('section')
     expect(section, 'the motir-fix-bugs section').not.toBeNull()
@@ -171,8 +174,8 @@ describe('/docs/skills', () => {
     expect(text).toContain('a comment with the evidence')
   })
 
-  it('has the prerequisite, the install, the use, the wrong-card and the updating sections', () => {
-    const container = page()
+  it('has the prerequisite, the install, the use, the wrong-card and the updating sections', async () => {
+    const container = await page()
     for (const id of ['before', 'install', 'use', 'wrong', 'updating']) {
       expect(container.querySelector(`h2#${id}`), id).not.toBeNull()
     }
@@ -193,10 +196,10 @@ describe('/docs/skills', () => {
     expect(RELEASE_SKILLS).toContain('motir-continue')
   })
 
-  it('copies the skills from where the pinned release keeps them', () => {
+  it('copies the skills from where the pinned release keeps them', async () => {
     // Since v0.4.2 (MOTIR-7186) the skills live under plugins/motir/skills/,
     // and a copy from a root skills/ folder at that tag copies nothing.
-    const panes = [...page().querySelectorAll('pre')]
+    const panes = [...(await page()).querySelectorAll('pre')]
       .map((pre) => pre.textContent ?? '')
       .filter((text) => text.includes('git clone'))
     expect(panes).toHaveLength(
@@ -208,8 +211,8 @@ describe('/docs/skills', () => {
     }
   })
 
-  it('says the Claude Code plugin brings three things, and links the MCP sign-in', () => {
-    const container = page()
+  it('says the Claude Code plugin brings three things, and links the MCP sign-in', async () => {
+    const container = await page()
     const section = container
       .querySelector('h3#claude-code')!
       .closest('section')!
@@ -229,14 +232,16 @@ describe('/docs/skills', () => {
     }
   })
 
-  it('tells a Claude Code reader they need no token, and the others where to get one', () => {
-    const before = page().querySelector('h2#before')!.nextElementSibling!
+  it('tells a Claude Code reader they need no token, and the others where to get one', async () => {
+    const before = (await page()).querySelector(
+      'h2#before',
+    )!.nextElementSibling!
     expect(before.textContent).toContain('there is no token')
     expect(before.textContent).toContain('personal access token')
   })
 
-  it('pins every command it renders to ONE release tag', () => {
-    const container = page()
+  it('pins every command it renders to ONE release tag', async () => {
+    const container = await page()
     const panes = [...container.querySelectorAll('pre')].map(
       (pre) => pre.textContent ?? '',
     )
@@ -255,8 +260,8 @@ describe('/docs/skills', () => {
     expect([...tags]).toEqual([SKILLS_RELEASE_TAG])
   })
 
-  it('links each agent section to that agent’s own documentation', () => {
-    const container = page()
+  it('links each agent section to that agent’s own documentation', async () => {
+    const container = await page()
     for (const agent of AGENT_INSTALLS) {
       const link = [...container.querySelectorAll('a')].find(
         (a) => a.textContent === `${agent.label} documentation`,
@@ -266,8 +271,8 @@ describe('/docs/skills', () => {
     }
   })
 
-  it('gives every copy button its own accessible name', () => {
-    const names = [...page().querySelectorAll('button')].map((b) =>
+  it('gives every copy button its own accessible name', async () => {
+    const names = [...(await page()).querySelectorAll('button')].map((b) =>
       b.getAttribute('aria-label'),
     )
     expect(names.length).toBeGreaterThan(0)

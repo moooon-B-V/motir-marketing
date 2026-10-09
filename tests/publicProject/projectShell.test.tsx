@@ -3,9 +3,12 @@ import { render, screen, within } from '@testing-library/react'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import type { PublicProjectOverviewDto } from '@/lib/publicProject'
-import { ProjectHeader } from '@/app/p/[identifier]/_components/ProjectHeader'
-import { ProjectJsonLd } from '@/app/p/[identifier]/_components/JsonLd'
-import { EmptyState, ErrorState } from '@/app/p/[identifier]/_components/States'
+import { ProjectHeader } from '@/app/[locale]/p/[identifier]/_components/ProjectHeader'
+import { ProjectJsonLd } from '@/app/[locale]/p/[identifier]/_components/JsonLd'
+import {
+  EmptyState,
+  ErrorState,
+} from '@/app/[locale]/p/[identifier]/_components/States'
 
 /*
  * The `/p/*` SHELL (MOTIR-4115) — the hero, the tab bar, the entity signal and

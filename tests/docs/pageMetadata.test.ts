@@ -8,7 +8,7 @@ import { copy } from '@/lib/copy'
  * EVERY `/docs` PAGE PUBLISHES ITS OWN TITLE (MOTIR-4429).
  *
  * ── The defect this closes, which is a REGRESSION of a fixed one ────────────
- * `app/docs/layout.tsx` exported the only metadata in the tree and every page
+ * `app/[locale]/docs/layout.tsx` exported the only metadata in the tree and every page
  * inherited it, so `/docs/mcp`, `/docs/cli`, `/docs/sandbox`, `/docs/api` and
  * the rest all published "Docs · Motir" — in the browser tab, in search
  * results, in a shared link's preview, and to a screen reader on arrival.
@@ -25,7 +25,7 @@ import { copy } from '@/lib/copy'
  * ── Why the check is structural rather than a render ────────────────────────
  * Nothing FAILS when a page inherits: the shell supplies a title, so every
  * page has one. It is invisible from inside the product and visible only from
- * outside it. So the check reads the file system — every page under `app/docs`
+ * outside it. So the check reads the file system — every page under `app/[locale]/docs`
  * must carry the export — which also means a page added tomorrow is covered
  * without anybody remembering to add a case.
  *
@@ -39,7 +39,7 @@ import { copy } from '@/lib/copy'
  * out.
  */
 
-const DOCS_ROOT = join(process.cwd(), 'app', 'docs')
+const DOCS_ROOT = join(process.cwd(), 'app', '[locale]', 'docs')
 
 /**
  * ⚠️ THE ONE EXEMPT ROUTE, by name and with its reason. `/docs` INHERITS the
@@ -48,7 +48,7 @@ const DOCS_ROOT = join(process.cwd(), 'app', 'docs')
  */
 const INHERITS = new Set([join(DOCS_ROOT, '(guides)', 'page.tsx')])
 
-/** Every `page.tsx` under `app/docs`, found rather than listed. */
+/** Every `page.tsx` under `app/[locale]/docs`, found rather than listed. */
 function docsPages(dir: string = DOCS_ROOT): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = join(dir, entry)

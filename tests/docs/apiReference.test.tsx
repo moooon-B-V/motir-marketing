@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import ApiReferencePage from '@/app/docs/api/page'
+import ApiReferencePage from '@/app/[locale]/docs/api/page'
 import {
   describeSchema,
   exampleRequest,

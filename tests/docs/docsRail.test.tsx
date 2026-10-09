@@ -79,7 +79,8 @@ afterEach(() => {
 async function renderRail(pathname: string, withOperations = true) {
   stubPath(pathname)
   vi.resetModules()
-  const { DocsRail: Rail } = await import('@/app/docs/_components/DocsRail')
+  const { DocsRail: Rail } =
+    await import('@/app/[locale]/docs/_components/DocsRail')
   return render(<Rail operations={withOperations ? RAIL : undefined} />)
 }
 
@@ -217,7 +218,7 @@ describe('the three tiers, and what decides them', () => {
     // this file — the same defect this test is about, one level up. It now
     // walks `lib/docsSurfaces.ts`, which is the list the rail itself reads, and
     // `tests/docs/docsSurfaces.test.tsx` is what holds that list to the pages
-    // `app/docs` actually serves.
+    // `app/[locale]/docs` actually serves.
     const onApi = await renderRail('/docs/api')
     const onMcp = await renderRail('/docs/mcp/tools', false)
     const reachable = new Set(
@@ -347,7 +348,7 @@ describe('the route GROUP is what decides the operation tier', () => {
   /*
    * ⚠️ THE STRUCTURAL HALF OF THE ROUTE-PREFIX RULE. A server layout cannot read
    * a pathname, so "tiers 2 and 3 render if and only if the route is /docs/api
-   * or below" is expressed by WHERE THE FILE LIVES: only `app/docs/api/layout.tsx`
+   * or below" is expressed by WHERE THE FILE LIVES: only `app/[locale]/docs/api/layout.tsx`
    * passes operations. This walks the tree from disk so a page added later
    * cannot quietly acquire — or lose — the rail.
    */
@@ -361,25 +362,25 @@ describe('the route GROUP is what decides the operation tier', () => {
   }
 
   it('every docs page sits under exactly one of the two sub-area layouts', () => {
-    const pages = pagesUnder('app/docs')
+    const pages = pagesUnder('app/[locale]/docs')
     expect(pages.length).toBe(14)
     const unclaimed = pages.filter(
       (page) =>
-        !page.startsWith(join('app', 'docs', '(guides)')) &&
-        !page.startsWith(join('app', 'docs', 'api')),
+        !page.startsWith(join('app', '[locale]', 'docs', '(guides)')) &&
+        !page.startsWith(join('app', '[locale]', 'docs', 'api')),
     )
     expect(unclaimed).toEqual([])
   })
 
   it('the API sub-area is the ONLY layout that passes operations', () => {
     const layouts = [
-      'app/docs/layout.tsx',
-      'app/docs/(guides)/layout.tsx',
-      'app/docs/api/layout.tsx',
+      'app/[locale]/docs/layout.tsx',
+      'app/[locale]/docs/(guides)/layout.tsx',
+      'app/[locale]/docs/api/layout.tsx',
     ]
     const passing = layouts.filter((layout) =>
       readFileSync(layout, 'utf8').includes('operations={'),
     )
-    expect(passing).toEqual(['app/docs/api/layout.tsx'])
+    expect(passing).toEqual(['app/[locale]/docs/api/layout.tsx'])
   })
 })

@@ -1,11 +1,11 @@
 import { readFileSync } from 'node:fs'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import GettingStartedPage from '@/app/docs/api/getting-started/page'
+import GettingStartedPage from '@/app/[locale]/docs/api/getting-started/page'
 import StabilityPage, {
   POLICY_ADDITIVE,
   POLICY_FORBIDDEN,
-} from '@/app/docs/api/stability/page'
+} from '@/app/[locale]/docs/api/stability/page'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 
 /*
@@ -96,7 +96,7 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
     }
 
     const source = readFileSync(
-      'app/docs/api/getting-started/page.tsx',
+      'app/[locale]/docs/api/getting-started/page.tsx',
       'utf8',
     ).replace(/\/\*[\s\S]*?\*\//g, '')
     expect(source).not.toContain('https://app.motir.co')

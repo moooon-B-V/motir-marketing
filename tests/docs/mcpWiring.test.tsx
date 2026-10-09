@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import McpPage from '@/app/docs/(guides)/mcp/page'
+import McpPage from '@/app/[locale]/docs/(guides)/mcp/page'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import {
   CLAUDE_AI_ROUTE_CHECKED_ON,

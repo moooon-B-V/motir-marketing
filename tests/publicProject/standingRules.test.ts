@@ -29,14 +29,14 @@ describe('the standing NO-DATABASE rule reaches the new tree', () => {
     // filesystem, so it covers this tree by construction. That is only true
     // while the tree is IN those directories, which is what this asserts —
     // otherwise the guard would keep passing over a surface it no longer sees.
-    expect(tracked('app/p').length).toBeGreaterThanOrEqual(10)
+    expect(tracked('app/[locale]/p').length).toBeGreaterThanOrEqual(10)
     expect(tracked('lib')).toContain('lib/publicProject.ts')
   })
 
   it('no /p/* file imports a database client or a connection string', () => {
     const forbidden = [/@prisma\/client/, /from\s+['"]pg['"]/, /DATABASE_URL/]
     const hits: string[] = []
-    for (const file of [...tracked('app/p'), 'lib/publicProject.ts']) {
+    for (const file of [...tracked('app/[locale]/p'), 'lib/publicProject.ts']) {
       const src = read(file)
       for (const pattern of forbidden) {
         if (pattern.test(src)) hits.push(`${file}: ${pattern}`)
@@ -55,7 +55,7 @@ describe('ORIGINS DO NOT CROSS', () => {
     // `lib/publicProject.ts` owns the only `${APP_ORIGIN}/api/public` there is.
     // A component that built its own would be a second answer to where the API
     // lives, and the first one to drift at cutover.
-    const offenders = [...tracked('app/p')].filter((file) =>
+    const offenders = [...tracked('app/[locale]/p')].filter((file) =>
       /\/api\/public/.test(read(file)),
     )
     expect(
@@ -69,7 +69,7 @@ describe('ORIGINS DO NOT CROSS', () => {
     // `lib/siteOrigin.ts`'s own header warns about exactly that — and a literal
     // is how it happens.
     const hits: string[] = []
-    for (const file of [...tracked('app/p'), 'lib/publicProject.ts']) {
+    for (const file of [...tracked('app/[locale]/p'), 'lib/publicProject.ts']) {
       const src = read(file)
       // In prose, naming the host is how these files explain themselves; in
       // CODE it is a second source of truth. Strings are what this looks for.
@@ -111,7 +111,7 @@ describe('ONE CANONICAL PER PAGE — MOTIR-4222', () => {
         .replace(/\/\*[\s\S]*?\*\//g, '')
         .replace(/\/\/[^\n]*/g, '')
 
-    const offenders = tracked('app/p').filter((f) =>
+    const offenders = tracked('app/[locale]/p').filter((f) =>
       /siteUrl\(\s*[`'"]\/p\//.test(code(f)),
     )
     expect(
@@ -139,7 +139,9 @@ describe('THE ERROR STATE IS REACHABLE — every /p/* screen has one', () => {
     // which is the one thing `public-surface-hosts.md` §8 cost 1 says this
     // surface must not do. Derived from the filesystem so a screen added later
     // cannot skip it.
-    const pages = tracked('app/p').filter((f) => f.endsWith('page.tsx'))
+    const pages = tracked('app/[locale]/p').filter((f) =>
+      f.endsWith('page.tsx'),
+    )
     // Four since MOTIR-6743: the overview, the changelog and the two request
     // pages. The board, items, tree, roadmap and item pages are route handlers
     // answering a redirect into the app, which read nothing and so have no
@@ -156,7 +158,9 @@ describe('THE ERROR STATE IS REACHABLE — every /p/* screen has one', () => {
   })
 
   it('and the 404 stays distinct from the outage on every screen that can 404', () => {
-    const pages = tracked('app/p').filter((f) => f.endsWith('page.tsx'))
+    const pages = tracked('app/[locale]/p').filter((f) =>
+      f.endsWith('page.tsx'),
+    )
     const both = pages.filter((file) => {
       const src = read(file)
       return src.includes('notFound()') || src.includes('renderTabPage')
@@ -171,7 +175,7 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
     // ⚠️ MOTIR-4120 found exactly this on the motir-core side: the include entry
     // there was a LITERAL path, so five new route files inherited no floor and
     // the gate was green because it was measuring nothing. The globs here are
-    // `app/p/**/*.tsx` and `lib/publicProject.ts`, so a component added later is
+    // `app/[locale]/p/**/*.tsx` and `lib/publicProject.ts`, so a component added later is
     // measured — this asserts the globs still SAY that, since narrowing them is
     // the change that would silently un-measure the surface.
     const config = read('vitest.config.mts')
@@ -184,7 +188,7 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
     // change that silently un-measures a surface. The rest of the list is
     // literal paths, and each is asserted to EXIST below rather than merely to
     // be named, so a file that moves cannot leave a dead entry behind.
-    for (const entry of ['lib/publicProject.ts', 'app/p/**/*.tsx']) {
+    for (const entry of ['lib/publicProject.ts', 'app/?locale?/p/**/*.tsx']) {
       expect(include, `the coverage include lost ${entry}`).toContain(entry)
     }
 
@@ -235,12 +239,14 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
       coverage.indexOf('exclude: ['),
       coverage.indexOf(']', coverage.indexOf('exclude: [')),
     )
-    const excluded = [...block.matchAll(/'(app\/p\/[^']+)'/g)].map((m) => m[1]!)
+    const excluded = [...block.matchAll(/'(app\/\?locale\?\/p\/[^']+)'/g)].map(
+      (m) => m[1]!,
+    )
     expect(excluded.length).toBeGreaterThan(0)
 
-    const files = tracked('app/p')
+    const files = tracked('app/[locale]/p')
     for (const pattern of excluded) {
-      const suffix = pattern.replace('app/p/**/', '')
+      const suffix = pattern.replace('app/?locale?/p/**/', '')
       const matched = files.some((f) => f.endsWith(`/${suffix}`))
       expect(matched, `nothing matches the exclusion ${pattern}`).toBe(true)
     }
@@ -310,7 +316,7 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
  * 308 (MOTIR-6743). The rule is written against the CONCEPT — "reads a read
  * view from the public API" — not a list of the files that used to, so a later
  * page that fetched `/p/<id>/board` again, or a loader named for one, fails
- * here whatever it is called and wherever under `app/p/**` it lands.
+ * here whatever it is called and wherever under `app/[locale]/p/**` it lands.
  */
 const READ_VIEW = /\/(board|items|tree|roadmap)\b/
 const CALL_LITERAL =
@@ -358,7 +364,7 @@ describe('NO READ VIEW COMES BACK TO motir.co — MOTIR-6747', () => {
   })
 
   it('no module under app/p/**, nor the read module, reads a read view', () => {
-    const files = [...tracked('app/p'), 'lib/publicProject.ts']
+    const files = [...tracked('app/[locale]/p'), 'lib/publicProject.ts']
     expect(files.length).toBeGreaterThanOrEqual(10)
     const hits = files.flatMap((file) =>
       readViewReads(read(file)).map((hit) => `${file}: ${hit}`),
@@ -368,7 +374,7 @@ describe('NO READ VIEW COMES BACK TO motir.co — MOTIR-6747', () => {
 
   it('and each retired read path is a route handler, never a page', () => {
     for (const view of ['board', 'items', 'tree', 'roadmap', 'items/[key]']) {
-      const dir = `app/p/[identifier]/${view}`
+      const dir = `app/[locale]/p/[identifier]/${view}`
       expect(existsSync(join(ROOT, dir, 'route.ts')), dir).toBe(true)
       expect(existsSync(join(ROOT, dir, 'page.tsx')), dir).toBe(false)
     }

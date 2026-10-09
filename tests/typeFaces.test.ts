@@ -23,7 +23,7 @@ import { referencedFontSources } from './support/themeTokens'
  * no face fails the suite on the day the package is bumped.
  */
 
-const LAYOUT = readFileSync('app/layout.tsx', 'utf8')
+const LAYOUT = readFileSync('app/_components/SiteDocument.tsx', 'utf8')
 
 /** Every `variable: '--font-…'` a `next/font` loader is given in the layout. */
 function loadedFontVariables(): Set<string> {

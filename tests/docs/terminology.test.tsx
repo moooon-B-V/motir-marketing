@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { APP_ORIGIN } from '@/lib/appOrigin'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * THE TERMINOLOGY SWEEP, ON THE RENDER (MOTIR-4508).
@@ -13,7 +14,7 @@ import { APP_ORIGIN } from '@/lib/appOrigin'
  * holding a coding agent, the Motir CLI and your checkouts". `tests/copy.test.ts`
  * carries a case named *"never says 'coding agent' — agents do all kinds of
  * work"*, and it passed, because it walks `lib/copy` — the catalogue — and this
- * sentence was typed into `app/docs/(guides)/sandbox/page.tsx` as JSX prose.
+ * sentence was typed into `app/[locale]/docs/(guides)/sandbox/page.tsx` as JSX prose.
  *
  * The catalogue was once the only place a rendered string could enter. It is not
  * any more: `lib/docs.ts`'s own carve-out makes the guide pages AUTHORED
@@ -108,9 +109,9 @@ export function spacedText(html: string): string {
   return html.replace(/<[^>]+>/g, ' ')
 }
 
-const DOCS_ROOT = join(process.cwd(), 'app', 'docs')
+const DOCS_ROOT = join(process.cwd(), 'app', '[locale]', 'docs')
 
-/** Every `page.tsx` under `app/docs`, found rather than listed. */
+/** Every `page.tsx` under `app/[locale]/docs`, found rather than listed. */
 function docsPages(dir: string = DOCS_ROOT): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = join(dir, entry)
@@ -119,9 +120,9 @@ function docsPages(dir: string = DOCS_ROOT): string[] {
   })
 }
 
-/** `app/docs/(guides)/sandbox/page.tsx` → `/docs/sandbox`. Route groups add no segment. */
+/** `app/[locale]/docs/(guides)/sandbox/page.tsx` → `/docs/sandbox`. Route groups add no segment. */
 function routeOf(file: string): string {
-  const segments = relative(join(process.cwd(), 'app'), file)
+  const segments = relative(join(process.cwd(), 'app', '[locale]'), file)
     .split(sep)
     .slice(0, -1)
     .filter((segment) => !/^\(.*\)$/.test(segment))
@@ -246,7 +247,7 @@ async function renderRoute(
   load: () => Promise<PageModule>,
 ): Promise<{ text: string; spaced: string }> {
   const Page = (await load()).default
-  const { container } = render((await Page()) as React.ReactElement)
+  const { container } = render((await Page(EN_PAGE)) as React.ReactElement)
   return {
     text: container.textContent ?? '',
     spaced: spacedText(container.innerHTML),
@@ -267,7 +268,7 @@ afterEach(() => {
  * dependency of Vitest rather than a declared one, and adding a dependency to
  * type a test is a worse trade than importing by path.)
  */
-type PageModule = { default: () => unknown }
+type PageModule = { default: (props: typeof EN_PAGE) => unknown }
 
 function loaderFor(file: string): () => Promise<PageModule> {
   return () => import(/* @vite-ignore */ pathToFileURL(file).href)
@@ -275,7 +276,7 @@ function loaderFor(file: string): () => Promise<PageModule> {
 
 describe('the terminology detector', () => {
   it('FIRES on the sentence that shipped, across the line break JSX wraps it at', () => {
-    // Verbatim from `app/docs/(guides)/sandbox/page.tsx` at `3ca037b`,
+    // Verbatim from `app/[locale]/docs/(guides)/sandbox/page.tsx` at `3ca037b`,
     // including the source indentation that broke the phrase in two.
     const shipped =
       'A sandbox is a container you start on your own machine, holding a coding\n' +

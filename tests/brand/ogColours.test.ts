@@ -117,7 +117,7 @@ describe.each([
   ['the root card', () => import('@/app/opengraph-image'), undefined],
   [
     'the per-project card',
-    () => import('@/app/p/[identifier]/opengraph-image'),
+    () => import('@/app/[locale]/p/[identifier]/opengraph-image'),
     { params: { identifier: 'ACME' } },
   ],
 ] as const)('%s', (_name, load, arg) => {

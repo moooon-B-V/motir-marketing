@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MoreLink, StatusPill } from '@/app/p/[identifier]/_components/Rows'
+import {
+  MoreLink,
+  StatusPill,
+} from '@/app/[locale]/p/[identifier]/_components/Rows'
 import {
   EmptyState,
   ErrorState,
   LoadingRows,
-} from '@/app/p/[identifier]/_components/States'
+} from '@/app/[locale]/p/[identifier]/_components/States'
 
 /*
  * The shared list primitives and the three states (MOTIR-4121).

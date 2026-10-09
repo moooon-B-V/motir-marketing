@@ -45,7 +45,9 @@ vi.mock('next/navigation', () => ({ usePathname: () => '/' }))
 // `process.cwd()` rather than `import.meta.url`: this lane runs on jsdom,
 // where `import.meta.url` is not a `file:` URL and `fileURLToPath` throws.
 // `tests/entitySignal.test.ts` reads `public/` the same way.
-const APP_DIR = join(process.cwd(), 'app')
+// Every page lives under the locale segment (MOTIR-7948); a route's address is
+// its path below it, since English — the address every test uses — is unprefixed.
+const APP_DIR = join(process.cwd(), 'app', '[locale]')
 
 /** Every `page.tsx` under `app/`, as a path relative to `app/`. */
 function pageFiles(dir: string = APP_DIR): string[] {

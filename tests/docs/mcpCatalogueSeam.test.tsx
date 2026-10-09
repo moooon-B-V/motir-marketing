@@ -1,11 +1,12 @@
 import { readFileSync } from 'node:fs'
 import { render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import McpToolsPage from '@/app/docs/(guides)/mcp/tools/page'
-import SkillsDocsPage from '@/app/docs/(guides)/skills/page'
+import McpToolsPage from '@/app/[locale]/docs/(guides)/mcp/tools/page'
+import SkillsDocsPage from '@/app/[locale]/docs/(guides)/skills/page'
 import { copy } from '@/lib/copy'
 import { fetchMcpToolCatalogue, toolHint, type McpToolHint } from '@/lib/docs'
 import { AGENT_INSTALLS, SKILLS_RELEASE_TAG } from '@/lib/skillsGuide'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * THE STORY INTEGRATION GATE (MOTIR-7083) — MOTIR-6976's motir-marketing
@@ -180,8 +181,8 @@ describe('GUARD: a write is never shown as a read', () => {
 })
 
 describe('GUARD: every install command names the current release', () => {
-  it('every rendered marketplace and skill-folder command names SKILLS_RELEASE_TAG', () => {
-    const { container } = render(<SkillsDocsPage />)
+  it('every rendered marketplace and skill-folder command names SKILLS_RELEASE_TAG', async () => {
+    const { container } = render(await SkillsDocsPage(EN_PAGE))
     const commands = [...container.querySelectorAll('pre')]
       .map((pre) => pre.textContent ?? '')
       .flatMap((pane) => pane.split('\n'))

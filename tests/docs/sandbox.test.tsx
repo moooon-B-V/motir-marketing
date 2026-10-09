@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import SandboxPage from '@/app/docs/(guides)/sandbox/page'
+import SandboxPage from '@/app/[locale]/docs/(guides)/sandbox/page'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * The sandbox guide's shape (MOTIR-4392).
@@ -23,8 +24,8 @@ import SandboxPage from '@/app/docs/(guides)/sandbox/page'
  */
 
 describe('the sandbox guide is instructions, not a definition', () => {
-  it('carries runnable command blocks — the page had ZERO before this card', () => {
-    const { container } = render(<SandboxPage />)
+  it('carries runnable command blocks — the page had ZERO before this card', async () => {
+    const { container } = render(await SandboxPage(EN_PAGE))
     const panes = container.querySelectorAll('pre')
     expect(panes.length).toBeGreaterThan(0)
     const text = [...panes].map((pane) => pane.textContent ?? '').join('\n')
@@ -34,7 +35,7 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(text).toContain('motir doctor')
   })
 
-  it('publishes the DISPOSABLE recipe, and nothing that keeps a container', () => {
+  it('publishes the DISPOSABLE recipe, and nothing that keeps a container', async () => {
     // ⚠️ TRANSCRIBED, NOT DERIVED (MOTIR-4976 · MOTIR-4972). The literal below is
     // read off motir-core's `sandboxRunCommand` in `lib/apiDocs/sandbox.ts` and
     // copied here, the same rule MOTIR-4961 recorded for this file: this page's
@@ -47,7 +48,7 @@ describe('the sandbox guide is instructions, not a definition', () => {
     // container is what pinned them to the image it was built from. A reader's
     // six-week-old container ran a CLI with no `login` command while step 4 told
     // them to run it.
-    const { container } = render(<SandboxPage />)
+    const { container } = render(await SandboxPage(EN_PAGE))
     const code = [...container.querySelectorAll('pre')]
       .map((pane) => pane.textContent ?? '')
       .join('\n')
@@ -76,13 +77,13 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(text).toContain('sign-in survives')
   })
 
-  it('documents the five things a reader needs: start, environment, grant, output, failures', () => {
+  it('documents the five things a reader needs: start, environment, grant, output, failures', async () => {
     // ⚠️ WIDENED BY MOTIR-4429 — three sections the deleted motir-core page
     // carried and this one had lost. The list is EXACT rather than a subset
     // check, deliberately: it is what makes a section quietly disappearing a
     // red test rather than a shorter page nobody measures, which is the family
     // of defect MOTIR-4375 → MOTIR-4429 is entirely made of.
-    const { container } = render(<SandboxPage />)
+    const { container } = render(await SandboxPage(EN_PAGE))
     const headings = [...container.querySelectorAll('h2')].map(
       (heading) => heading.textContent ?? '',
     )
@@ -118,13 +119,13 @@ describe('the sandbox guide is instructions, not a definition', () => {
    * losing its content is the exact shape MOTIR-4397's ledger found.
    */
 
-  it('says the NETWORK is open, so the confinement claim is not read as total', () => {
+  it('says the NETWORK is open, so the confinement claim is not read as total', async () => {
     // The page's opening paragraph says an agent "reaches your work tree and
     // not the rest of your machine". The deleted page qualified that: egress
     // is NOT confined. A confinement claim with its exception deleted is a
     // different and false claim, which is why this is a correction as much as
     // a restore — `Network` and `unprivileged` each appeared ZERO times.
-    const { container } = render(<SandboxPage />)
+    const { container } = render(await SandboxPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toMatch(/Network\s*—\s*OPEN, by design/)
     expect(text).toContain(
@@ -133,8 +134,8 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(text).toContain('uid 1000')
   })
 
-  it('states the prerequisites, INCLUDING the arm64 fact', () => {
-    const { container } = render(<SandboxPage />)
+  it('states the prerequisites, INCLUDING the arm64 fact', async () => {
+    const { container } = render(await SandboxPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('Docker, running')
     expect(text).toContain('linux/arm64')
@@ -147,8 +148,8 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(panes.join('\n')).toContain('start the container from HERE')
   })
 
-  it('documents the VS Code path, with the heredoc quoted', () => {
-    const { container } = render(<SandboxPage />)
+  it('documents the VS Code path, with the heredoc quoted', async () => {
+    const { container } = render(await SandboxPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('Dev Containers')
     const panes = [...container.querySelectorAll('pre')].map(
@@ -167,11 +168,11 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(code).toContain('${localEnv:HOME}')
   })
 
-  it('builds BOTH devcontainer blocks from one object, so they cannot disagree', () => {
+  it('builds BOTH devcontainer blocks from one object, so they cannot disagree', async () => {
     // The listing and the heredoc show the same config under two captions. Two
     // typed copies is a `mounts` entry corrected in one of them and published
     // wrong in the other.
-    const { container } = render(<SandboxPage />)
+    const { container } = render(await SandboxPage(EN_PAGE))
     const panes = [...container.querySelectorAll('pre')].map(
       (pane) => pane.textContent ?? '',
     )
@@ -207,22 +208,22 @@ describe('the sandbox guide is instructions, not a definition', () => {
     }
   })
 
-  it('no longer records the VS Code path as undocumented', () => {
+  it('no longer records the VS Code path as undocumented', async () => {
     // The closing paragraph said the editor integrations "are not documented
     // here yet" — a deleted section recorded as a decision. It was neither.
-    const { container } = render(<SandboxPage />)
+    const { container } = render(await SandboxPage(EN_PAGE))
     expect(container.textContent).not.toMatch(
       /editor integrations, are not documented/,
     )
   })
 
-  it('lists the grant the SHIPPED constant carries, not the card’s four', () => {
+  it('lists the grant the SHIPPED constant carries, not the card’s four', async () => {
     // ⚠️ MOTIR-4392 states the grant as four keys. `CLI_TOKEN_GRANT` on
     // motir-core's `origin/main` carries six — `lesson:view` and
     // `lesson:reinforce` were added by MOTIR-3480 and MOTIR-3553. The page
     // carries the shipped set; this pins that it was not quietly reverted to
     // the card's list by a later editor reading the card and not the constant.
-    const { container } = render(<SandboxPage />)
+    const { container } = render(await SandboxPage(EN_PAGE))
     const text = container.textContent ?? ''
     for (const key of [
       'project:browse',
@@ -236,8 +237,8 @@ describe('the sandbox guide is instructions, not a definition', () => {
     }
   })
 
-  it('names the plan-append refusal as INTENDED behaviour, not an error', () => {
-    const { container } = render(<SandboxPage />)
+  it('names the plan-append refusal as INTENDED behaviour, not an error', async () => {
+    const { container } = render(await SandboxPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('ai:view_plan')
     // The key half: a reader who meets the refusal must be told it is the
@@ -247,8 +248,8 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(text).toMatch(/the design rather than a bug/i)
   })
 
-  it('LINKS the command reference instead of restating it — one home per fact', () => {
-    const { container } = render(<SandboxPage />)
+  it('LINKS the command reference instead of restating it — one home per fact', async () => {
+    const { container } = render(await SandboxPage(EN_PAGE))
     const hrefs = [...container.querySelectorAll('a')].map((a) =>
       a.getAttribute('href'),
     )
@@ -258,8 +259,8 @@ describe('the sandbox guide is instructions, not a definition', () => {
     expect(container.querySelectorAll('table').length).toBe(0)
   })
 
-  it('states its own boundary, so the split with /docs/cli is legible', () => {
-    const { container } = render(<SandboxPage />)
+  it('states its own boundary, so the split with /docs/cli is legible', async () => {
+    const { container } = render(await SandboxPage(EN_PAGE))
     expect(container.textContent).toContain('What this page does not cover')
   })
 })

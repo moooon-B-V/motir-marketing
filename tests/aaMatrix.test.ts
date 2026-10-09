@@ -6,8 +6,8 @@ import {
   type PaletteId,
 } from '@motir/design-system'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import Page from '@/app/page'
-import DesignPage from '@/app/design/page'
+import Page from '@/app/[locale]/page'
+import DesignPage from '@/app/[locale]/design/page'
 import { distinctPairs, paintedPairs } from './support/paintedInks'
 import {
   contrastRatio,
@@ -16,6 +16,7 @@ import {
   tokenContrast,
   type Axes,
 } from './support/themeTokens'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * ⚠️ TWO STUBS THE PAGES NEED, both for the same reason `tests/siteHeader.tsx`
@@ -492,7 +493,7 @@ describe('what the site actually paints, read off the rendered pages', () => {
     '%s paints no pair that is below AA',
     async (_route, Component) => {
       // Called, not mounted: the landing is an async server component.
-      const { container } = render(await Component())
+      const { container } = render(await Component(EN_PAGE))
       const painted = paintedPairs(container.firstElementChild as Element)
       expect(painted.length).toBeGreaterThan(20)
 
@@ -514,7 +515,7 @@ describe('what the site actually paints, read off the rendered pages', () => {
   it.each(pages)(
     '%s — every rendered pair clears AA on all 20 cells',
     async (_route, Component) => {
-      const { container } = render(await Component())
+      const { container } = render(await Component(EN_PAGE))
       const failures: string[] = []
       for (const pair of distinctPairs(
         paintedPairs(container.firstElementChild as Element),

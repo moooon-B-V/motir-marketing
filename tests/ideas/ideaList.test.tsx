@@ -13,21 +13,24 @@ import {
   type PublicIdeaListDto,
   type PublicIdeaTagDto,
 } from '@/lib/ideas'
-import { IdeaControls, countLine } from '@/app/ideas/_components/IdeaControls'
+import {
+  IdeaControls,
+  countLine,
+} from '@/app/[locale]/ideas/_components/IdeaControls'
 import {
   BuyCard,
   CategoryMark,
   DirectionCard,
-} from '@/app/ideas/_components/IdeaCards'
+} from '@/app/[locale]/ideas/_components/IdeaCards'
 import {
   IdeasEmpty,
   IdeasUnavailable,
-} from '@/app/ideas/_components/IdeaStates'
+} from '@/app/[locale]/ideas/_components/IdeaStates'
 import {
   IdeasNavProvider,
   ResultsRegion,
   takeOpenedFromList,
-} from '@/app/ideas/_components/IdeasNav'
+} from '@/app/[locale]/ideas/_components/IdeasNav'
 import ideasFixture from '../../e2e/fixtures/ideas.json'
 import tagsFixture from '../../e2e/fixtures/ideas-tags.json'
 

@@ -63,7 +63,10 @@ describe('an unknown slug is a 404', () => {
 
 describe('no loading.tsx above the document route', () => {
   it('the legal tree and the app root carry no loading boundary', () => {
-    for (const candidate of ['app/legal/loading.tsx', 'app/loading.tsx']) {
+    for (const candidate of [
+      'app/[locale]/legal/loading.tsx',
+      'app/loading.tsx',
+    ]) {
       expect(
         existsSync(candidate),
         `${candidate} would flush a 200 and turn the unknown-slug 404 into a page`,

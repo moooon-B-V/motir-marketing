@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import createNextIntlPlugin from 'next-intl/plugin'
 import { assertTenantDomainConfigured } from './lib/tenantDomain'
 
 /*
@@ -64,4 +65,12 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+/*
+ * next-intl (MOTIR-7948) — the plugin only points the library at its
+ * per-request config; it changes none of the keys above. Relative for the same
+ * reason the import at the top of this file is: Next's config loader resolves
+ * it, not the app's `@/` alias.
+ */
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
+
+export default withNextIntl(nextConfig)

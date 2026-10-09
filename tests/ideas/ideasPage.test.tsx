@@ -10,7 +10,7 @@ import {
   type PublicIdeaListDto,
   type PublicIdeaTagDto,
 } from '@/lib/ideas'
-import IdeasPage, { generateMetadata } from '@/app/ideas/page'
+import IdeasPage, { generateMetadata } from '@/app/[locale]/ideas/page'
 import ideasFixture from '../../e2e/fixtures/ideas.json'
 import tagsFixture from '../../e2e/fixtures/ideas-tags.json'
 import ideaFixture from '../../e2e/fixtures/idea-stop-returns-before-they-happen.json'

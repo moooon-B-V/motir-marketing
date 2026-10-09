@@ -2,8 +2,9 @@ import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import DocsIndexPage from '@/app/docs/(guides)/page'
+import DocsIndexPage from '@/app/[locale]/docs/(guides)/page'
 import { DOCS_INDEX, DOCS_ROUTES, DOCS_SURFACES } from '@/lib/docsSurfaces'
+import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
  * ONE LIST OF WHAT `/docs` CONTAINS (MOTIR-4507).
@@ -23,9 +24,9 @@ import { DOCS_INDEX, DOCS_ROUTES, DOCS_SURFACES } from '@/lib/docsSurfaces'
  * that does not participate in the mistake.
  */
 
-const DOCS_ROOT = join(process.cwd(), 'app', 'docs')
+const DOCS_ROOT = join(process.cwd(), 'app', '[locale]', 'docs')
 
-/** Every `page.tsx` under `app/docs`, found rather than listed. */
+/** Every `page.tsx` under `app/[locale]/docs`, found rather than listed. */
 function docsPageFiles(dir: string = DOCS_ROOT): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = join(dir, entry)
@@ -41,22 +42,22 @@ function docsPageFiles(dir: string = DOCS_ROOT): string[] {
  */
 function routeOf(file: string): string {
   const segments = file
-    .slice(join(process.cwd(), 'app').length)
+    .slice(join(process.cwd(), 'app', '[locale]').length)
     .split(/[\\/]/)
     .filter((segment) => segment && segment !== 'page.tsx')
     .filter((segment) => !/^\(.*\)$/.test(segment))
   return `/${segments.join('/')}`
 }
 
-function indexHrefs(): string[] {
-  const { container } = render(<DocsIndexPage />)
+async function indexHrefs(): Promise<string[]> {
+  const { container } = render(await DocsIndexPage(EN_PAGE))
   return [...container.querySelectorAll('a')].map(
     (anchor) => anchor.getAttribute('href') ?? '',
   )
 }
 
 describe('the surfaces `/docs` documents', () => {
-  it('names every route `app/docs` actually serves, and no route it does not', () => {
+  it('names every route `app/[locale]/docs` actually serves, and no route it does not', () => {
     // The file system is the authority on which pages answer 200; this file is
     // the authority on which of them anything DRAWS. When they disagree, a
     // reader cannot reach a page that exists — which is the whole bug.
@@ -64,8 +65,8 @@ describe('the surfaces `/docs` documents', () => {
     expect([...DOCS_ROUTES].sort()).toEqual(served)
   })
 
-  it('links every route it names from the index — the door this card is about', () => {
-    const hrefs = indexHrefs()
+  it('links every route it names from the index — the door this card is about', async () => {
+    const hrefs = await indexHrefs()
     // `/docs` is the page being rendered, so it is a rail row and not a row on
     // itself; everything else the list names is a destination the index owes.
     const owed = DOCS_ROUTES.filter((route) => route !== DOCS_INDEX.href)
@@ -74,10 +75,10 @@ describe('the surfaces `/docs` documents', () => {
     }
   })
 
-  it('links NOTHING the list does not name — no row survives the list it came from', () => {
+  it('links NOTHING the list does not name — no row survives the list it came from', async () => {
     // The other direction, and it is the one that catches a row typed straight
     // into the page: a link the shared list has never heard of.
-    expect([...new Set(indexHrefs())].sort()).toEqual(
+    expect([...new Set(await indexHrefs())].sort()).toEqual(
       DOCS_ROUTES.filter((route) => route !== DOCS_INDEX.href).sort(),
     )
   })
@@ -104,8 +105,15 @@ describe('the surfaces `/docs` documents', () => {
      */
     const routes = new Set(DOCS_ROUTES)
     for (const file of [
-      join(process.cwd(), 'app', 'docs', '(guides)', 'page.tsx'),
-      join(process.cwd(), 'app', 'docs', '_components', 'DocsRail.tsx'),
+      join(process.cwd(), 'app', '[locale]', 'docs', '(guides)', 'page.tsx'),
+      join(
+        process.cwd(),
+        'app',
+        '[locale]',
+        'docs',
+        '_components',
+        'DocsRail.tsx',
+      ),
     ]) {
       const quoted = [
         ...readFileSync(file, 'utf8').matchAll(/['"](\/[^'"]*)['"]/g),

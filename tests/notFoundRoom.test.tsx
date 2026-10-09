@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import NotFound from '@/app/not-found'
-import HostUnavailablePage from '@/app/host-unavailable/page'
+import HostUnavailablePage from '@/app/[locale]/host-unavailable/page'
 import { NotFoundRoom } from '@/app/_components/NotFoundRoom'
 import { copy } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
@@ -12,6 +12,14 @@ import {
   SITE_HOST,
 } from '@/lib/publicHost'
 import { siteUrl } from '@/lib/siteOrigin'
+
+// The global 404 renders its own `<html>` now (MOTIR-7948), through the shared
+// document shell — which loads `next/font` and the stylesheet this lane cannot
+// evaluate, and an `<html>` jsdom cannot mount inside a container. The ROOM is
+// what these tests read, so the shell passes its children straight through.
+vi.mock('@/app/_components/SiteDocument', () => ({
+  SiteDocument: ({ children }: { children: React.ReactNode }) => children,
+}))
 
 /*
  * THE 404 ROOM (MOTIR-4193) — the jsdom half.

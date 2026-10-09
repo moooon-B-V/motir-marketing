@@ -1,4 +1,5 @@
 import { NotFoundRoom } from './_components/NotFoundRoom'
+import { SiteDocument } from './_components/SiteDocument'
 import { UNKNOWN_HOST } from '@/lib/publicHost'
 
 /**
@@ -125,6 +126,18 @@ import { UNKNOWN_HOST } from '@/lib/publicHost'
  * `draftMode()` from anything it renders. Nothing in the test suite catches it:
  * `pnpm build`'s route table is the only signal, and only if somebody reads it.
  */
+/*
+ * ⚠️ AND IT RENDERS ITS OWN DOCUMENT (MOTIR-7948). The root layout is a
+ * pass-through now — `<html lang>` belongs to `app/[locale]/layout.tsx`, which
+ * this global boundary does not sit under — so the room is wrapped here in the
+ * SAME `SiteDocument` that layout uses, in English. That component reads no
+ * request either, so the rule above still holds; the room in each language is
+ * the 404 card's, from a locale-scoped boundary, not a reason to read one here.
+ */
 export default function NotFound() {
-  return <NotFoundRoom host={UNKNOWN_HOST} />
+  return (
+    <SiteDocument lang="en">
+      <NotFoundRoom host={UNKNOWN_HOST} />
+    </SiteDocument>
+  )
 }
