@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
-import { DEFAULT_LOCALE, routing } from '@/i18n/routing'
+import { DEFAULT_LOCALE, LOCALES, routing } from '@/i18n/routing'
+import { chooseLocale, LOCALE_COOKIE } from '@/lib/localeDetection'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { TENANT_DOMAIN } from '@/lib/tenantDomain'
 import {
@@ -112,6 +113,50 @@ function inDefaultLocaleTree(pathname: string): boolean {
   )
 }
 
+/** `/ja`, `/de/…` — any of the eleven as the first segment. */
+function hasLocalePrefix(pathname: string): boolean {
+  const first = pathname.split('/')[1] ?? ''
+  return (LOCALES as readonly string[]).includes(first)
+}
+
+/** The visitor's language for this request (MOTIR-7951). */
+function visitorLocale(request: NextRequest) {
+  return chooseLocale({
+    cookie: request.cookies.get(LOCALE_COOKIE)?.value,
+    acceptLanguage: request.headers.get('accept-language'),
+  })
+}
+
+/**
+ * ⚠️ A RESPONSE THAT DEPENDS ON THE COOKIE AND THE BROWSER SAYS SO. Without
+ * `Vary`, a shared cache in front of the site would store one visitor's
+ * language and serve it to the next.
+ */
+const LANGUAGE_VARY = 'Cookie, Accept-Language'
+
+function varyOnLanguage(response: NextResponse): NextResponse {
+  response.headers.append('Vary', LANGUAGE_VARY)
+  return response
+}
+
+/**
+ * The first-visit move onto the visitor's language: same path, same query,
+ * under `/<locale>`.
+ *
+ * ⚠️ 307, NEVER 301 OR 308. A permanent redirect is cached by the browser, so
+ * a visitor who later chose English could never reach `/` again. And
+ * `private, no-store`, so nothing between us and them keeps it either.
+ */
+function redirectToLocale(request: NextRequest, locale: string): NextResponse {
+  const destination = new URL(request.nextUrl)
+  destination.pathname = `/${locale}${
+    request.nextUrl.pathname === '/' ? '' : request.nextUrl.pathname
+  }`
+  const response = varyOnLanguage(NextResponse.redirect(destination, 307))
+  response.headers.set('Cache-Control', 'private, no-store')
+  return response
+}
+
 /**
  * Hosts this router steps aside for — the site itself and every local address.
  *
@@ -207,7 +252,11 @@ function forwardWithHost(
 
   const destination = new URL(request.nextUrl)
   destination.pathname = rewriteTo
-  return NextResponse.rewrite(destination, { request: { headers } })
+  // Which locale tree a tenant page is rewritten onto follows the visitor's
+  // cookie and browser (MOTIR-7951), so the response varies on both.
+  return varyOnLanguage(
+    NextResponse.rewrite(destination, { request: { headers } }),
+  )
 }
 
 /** The header value for a resolution — an alias never reaches a page. */
@@ -228,11 +277,20 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // is the locale tree (MOTIR-7948): everything that is not a file or a root
   // metadata route goes through next-intl, which maps the address onto
   // `app/[locale]`.
+  //
+  // ⚠️ AN UNPREFIXED PAGE ADDRESS IS WHERE THE LANGUAGE IS CHOSEN (MOTIR-7951),
+  // and nowhere else. A prefixed one (`/de/…`) is never moved, whatever the
+  // cookie or the browser says — a shared German link stays German. A file or
+  // a root metadata route has no language. And `/en/…` here is the English
+  // rewrite coming back around (see `inDefaultLocaleTree`), never a choice.
   if (!host || isSiteHost(host)) {
     const { pathname } = request.nextUrl
     if (outsideLocaleTree(pathname) || inDefaultLocaleTree(pathname))
       return NextResponse.next()
-    return intlMiddleware(request)
+    if (hasLocalePrefix(pathname)) return intlMiddleware(request)
+    const locale = visitorLocale(request)
+    if (locale !== DEFAULT_LOCALE) return redirectToLocale(request, locale)
+    return varyOnLanguage(intlMiddleware(request))
   }
 
   // ⚠️ THE THREE BRANCHES WITH NO RESOLUTION, AND THEY ARE `unresolved` RATHER
@@ -248,6 +306,10 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     return forwardWithHost(request, 'unresolved', host, NOT_FOUND_PATH)
   }
 
+  // The visitor's language picks which locale tree a tenant page is rewritten
+  // onto; the address keeps its shape — no prefix, no redirect (MOTIR-7951).
+  const locale = visitorLocale(request)
+
   const read = await resolveHost(host)
   if (read.status === 'failed') {
     // The OUTAGE — and the one branch where the host is most likely to be a real
@@ -259,14 +321,14 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       request,
       'unresolved',
       host,
-      localisedPath(UNAVAILABLE_PATH),
+      localisedPath(UNAVAILABLE_PATH, locale),
     )
   }
   if (read.status === 'not-found') {
     return forwardWithHost(request, 'unresolved', host, NOT_FOUND_PATH)
   }
 
-  const route = routeForHost(read.data, request.nextUrl.pathname)
+  const route = routeForHost(read.data, request.nextUrl.pathname, locale)
 
   switch (route.action) {
     case 'redirect': {

@@ -427,3 +427,120 @@ describe('the router targets the English tree, and recognises it coming back', (
     expect(rewriteOf(res)).toBe('/_host-unknown')
   })
 })
+
+/*
+ * MOTIR-7951 — the visitor's language: the `NEXT_LOCALE` cookie, then
+ * `Accept-Language`, then English. On the site it is a 307 to the prefixed
+ * address; on a tenant host it picks the tree the router rewrites onto.
+ */
+describe('the first-visit language', () => {
+  const ask = (url: string, headers: Record<string, string> = {}) =>
+    proxy(request(url, headers))
+  const locationOf = (res: Response) => {
+    const to = res.headers.get('location')
+    return to ? `${new URL(to).pathname}${new URL(to).search}` : null
+  }
+  const expectLanguageRedirect = (res: Response, to: string) => {
+    expect(res.status).toBe(307)
+    expect(locationOf(res)).toBe(to)
+    expect(res.headers.get('vary')).toMatch(/Cookie/)
+    expect(res.headers.get('vary')).toMatch(/Accept-Language/)
+    expect(res.headers.get('cache-control')).toBe('private, no-store')
+  }
+
+  it('moves an unprefixed site address onto the browser’s language', async () => {
+    expectLanguageRedirect(
+      await ask('https://motir.co/', { 'accept-language': 'ja' }),
+      '/ja',
+    )
+    expectLanguageRedirect(
+      await ask('https://motir.co/explore?x=1', { 'accept-language': 'de-AT' }),
+      '/de/explore?x=1',
+    )
+    expect(resolveHost).not.toHaveBeenCalled()
+  })
+
+  it('serves English when the browser asks for nothing it speaks', async () => {
+    const res = await ask('https://motir.co/', { 'accept-language': 'sv' })
+    expect(res.headers.get('location')).toBeNull()
+    expect(rewriteOf(res)).toBe('/en')
+    expect(res.headers.get('vary')).toMatch(/Accept-Language/)
+  })
+
+  it('takes the remembered choice over the browser', async () => {
+    expectLanguageRedirect(
+      await ask('https://motir.co/', {
+        cookie: 'NEXT_LOCALE=fr',
+        'accept-language': 'de',
+      }),
+      '/fr',
+    )
+    const english = await ask('https://motir.co/', {
+      cookie: 'NEXT_LOCALE=en',
+      'accept-language': 'ja',
+    })
+    expect(english.headers.get('location')).toBeNull()
+    expect(rewriteOf(english)).toBe('/en')
+  })
+
+  it('never moves a prefixed address', async () => {
+    const res = await ask('https://motir.co/de/', {
+      cookie: 'NEXT_LOCALE=fr',
+      'accept-language': 'ja',
+    })
+    expect(res.headers.get('location') ?? '').not.toMatch(/\/(fr|ja)\b/)
+    expect(rewriteOf(res) ?? '/de').toMatch(/^\/de/)
+  })
+
+  it('never moves a file or a root metadata route', async () => {
+    for (const path of [
+      '/motir-mark.svg',
+      '/robots.txt',
+      '/sitemap.xml',
+      '/opengraph-image',
+      '/icon',
+    ]) {
+      const res = await ask(`https://motir.co${path}`, {
+        'accept-language': 'ja',
+      })
+      expect(res.headers.get('location'), path).toBeNull()
+      expect(res.headers.get('x-middleware-next'), path).toBe('1')
+    }
+  })
+
+  it('rewrites a workspace host onto the chosen tree, address unchanged', async () => {
+    resolveHost.mockResolvedValue(WORKSPACE)
+    const fr = { 'accept-language': 'fr' }
+    const tab = await ask('https://acme.motir.site/PROD/changelog', fr)
+    expect(tab.headers.get('location')).toBeNull()
+    expect(rewriteOf(tab)).toBe('/fr/p/PROD/changelog')
+    expect(tab.headers.get('vary')).toMatch(/Accept-Language/)
+    const root = await ask('https://acme.motir.site/', fr)
+    expect(rewriteOf(root)).toBe('/fr/w')
+
+    const second = await ask('https://acme.motir.site/fr/p/PROD/changelog', fr)
+    expect(rewriteOf(second)).toBeNull()
+    expect(second.headers.get('x-middleware-next')).toBe('1')
+  })
+
+  it('lets a customer domain’s cookie beat the browser', async () => {
+    resolveHost.mockResolvedValue(CUSTOM)
+    const res = await ask('https://roadmap.acme.com/', {
+      cookie: 'NEXT_LOCALE=ja',
+      'accept-language': 'de',
+    })
+    expect(rewriteOf(res)).toBe('/ja/p/PROD')
+  })
+
+  it('puts the outage on the chosen tree, and leaves the 404 unprefixed', async () => {
+    const fr = { 'accept-language': 'fr' }
+    resolveHost.mockResolvedValue({ status: 'failed' })
+    expect(rewriteOf(await ask('https://roadmap.acme.com/board', fr))).toBe(
+      '/fr/host-unavailable',
+    )
+    resolveHost.mockResolvedValue({ status: 'not-found' })
+    expect(rewriteOf(await ask('https://nope.example/', fr))).toBe(
+      '/_host-unknown',
+    )
+  })
+})
