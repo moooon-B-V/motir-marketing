@@ -17,21 +17,21 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * remote connector in Claude Code, over OAuth, with no token. The Products menu
  * opens it for "Motir Claude Code connector".
  *
- * ⚠️ NOTHING ABOUT A CLAUDE CLIENT IS TYPED IN THIS FILE. The steps, the URL,
- * the command, Anthropic's documentation links and their check dates are
+ * ⚠️ NOTHING ABOUT A CLAUDE CLIENT IS TYPED IN THIS FILE. The URL, the
+ * command, Anthropic's documentation links and their check dates are
  * `claudeRoutes()` in `lib/mcpWiring.ts` — the same routes the MCP guide's
  * "Add Motir to Claude" renders — so the two pages cannot disagree. This file
  * picks the two routes that reach Claude Code (claude.ai, whose connectors
  * Claude Code inherits, and Claude Code's own command) and arranges them.
  *
  * THE PROSE LIVES IN `content/docs/claude-code-connector/<locale>.md`
- * (MOTIR-8036). ⚠️ The step and note text of the two routes is transcribed there
- * from `claudeRoutes()` at this card's base and is no longer read from it —
- * `/docs/mcp` still renders the same fields, and the move item for that page
- * removes them from `claudeRoutes()` when it stops. What stays read from it is
- * what a reader copies or follows: `code`, `docsUrl` and `checkedOn`, so the two
- * pages still cannot disagree on a command, a link or a date. The captions and
- * copy-button names are catalogue copy (`docs.guideLabels.*`).
+ * (MOTIR-8036). `claudeRoutes()` no longer carries a step, a note or a label
+ * (MOTIR-8055 moved them into `content/docs/mcp/<locale>.md`, where the MCP
+ * guide renders them), so the two documents each hold their own wording. What
+ * stays read from it is what a reader copies or follows: `code`, `docsUrl` and
+ * `checkedOn`, so the two pages still cannot disagree on a command, a link or a
+ * date. The captions and copy-button names are catalogue copy
+ * (`docs.guideLabels.*`).
  */
 
 export function generateMetadata({

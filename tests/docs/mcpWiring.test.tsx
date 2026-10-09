@@ -14,9 +14,8 @@ import {
   MCP_TOKEN_ENV_VAR,
   MCP_TOKEN_PLACEHOLDER,
   claudeRoutes,
+  mcpClaudeCodeTokenCommand,
   mcpClients,
-  mcpForkRows,
-  mcpTransportFactRows,
   mcpTransportFacts,
   mcpVerifyCommand,
 } from '@/lib/mcpWiring'
@@ -142,8 +141,9 @@ describe('the transport facts are ONE source, and every block reads them', () =>
     // file says where it goes, the note says what to do about the secret, and
     // the vendor link is the authority when the format goes stale.
     for (const client of mcpClients()) {
-      expect(client.file, client.id).not.toBe('')
-      expect(client.note, client.id).not.toBe('')
+      // Only the generic block has no path: its caption is a catalogue sentence.
+      if (client.id === 'other') expect(client.file).toBeNull()
+      else expect(client.file, client.id).toMatch(/\S/)
       expect(client.docsUrl, client.id).toMatch(/^https:\/\//)
       expect(client.checkedOn, client.id).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     }
@@ -161,17 +161,24 @@ describe('the transport facts are ONE source, and every block reads them', () =>
     expect(configs.join('\n')).toContain('promptString')
   })
 
-  it('the verification command and the fork table read the same facts', () => {
+  it('the verification command, the one-command form and the page read the same facts', async () => {
     const facts = mcpTransportFacts(SENTINEL)
     expect(mcpVerifyCommand(facts)).toContain(`${SENTINEL}${MCP_ENDPOINT_PATH}`)
     expect(mcpVerifyCommand(facts)).toContain(`$${MCP_TOKEN_ENV_VAR}`)
-    expect(mcpForkRows(facts)[0]!.mcp).toContain(MCP_ENDPOINT_PATH)
-    expect(mcpTransportFactRows(facts).map((row) => row.label)).toEqual([
-      'URL',
-      'Transport',
-      'Header',
-      'Token',
-    ])
+    expect(mcpClaudeCodeTokenCommand(facts)).toBe(
+      `claude mcp add --transport http motir ${SENTINEL}${MCP_ENDPOINT_PATH} --header "${MCP_AUTH_HEADER}: ${MCP_AUTH_SCHEME} ${MCP_TOKEN_PLACEHOLDER}"`,
+    )
+    // The tables now live in the document and read those facts as values.
+    stubCatalogue(catalogueFixture)
+    const { container } = render(await McpPage(EN_PAGE))
+    const cells = [...container.querySelectorAll('td')].map(
+      (cell) => cell.textContent,
+    )
+    expect(cells).toContain(`POST ${MCP_ENDPOINT_PATH}`)
+    expect(cells).toContain(`${APP_ORIGIN}${MCP_ENDPOINT_PATH}`)
+    expect(cells).toContain(
+      `${MCP_TOKEN_PLACEHOLDER} — the one you minted in step 1`,
+    )
   })
 })
 
@@ -212,9 +219,21 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
     stubCatalogue(catalogueFixture)
     const { container } = render(await McpPage(EN_PAGE))
     const text = container.textContent ?? ''
+    const labels: Record<string, string> = {
+      'claude-code': 'Claude Code',
+      cursor: 'Cursor',
+      vscode: 'VS Code',
+      codex: 'Codex CLI',
+      other: 'Any other streamable-HTTP client',
+    }
+    expect(Object.keys(labels).sort()).toEqual(
+      mcpClients()
+        .map((client) => client.id)
+        .sort(),
+    )
     for (const client of mcpClients()) {
-      expect(text, client.id).toContain(client.label)
-      expect(text, `${client.id} file`).toContain(client.file)
+      expect(text, client.id).toContain(labels[client.id]!)
+      if (client.file) expect(text, `${client.id} file`).toContain(client.file)
     }
   })
 
@@ -228,9 +247,9 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
       'Add Motir to Claude',
       'Other clients and CI: use a token',
       'This server, or the REST API?',
-      '1Mint a token',
-      '2Wire your client',
-      '3Check the connection',
+      '1. Mint a token',
+      '2. Wire your client',
+      '3. Check the connection',
       'What a connection may call',
       'What next',
     ])
@@ -289,6 +308,30 @@ describe('/docs/mcp is a wiring GUIDE, not a definition', () => {
   })
 })
 
+/**
+ * A route or client's block: its heading and every sibling after it up to the
+ * next heading. The anchor is on the heading itself since the move to a
+ * document (MOTIR-8055), where it used to be on a wrapping element.
+ */
+function sectionOf(container: HTMLElement, id: string) {
+  const heading = container.querySelector(`#${id}`)!
+  const siblings: Element[] = []
+  for (
+    let next = heading.nextElementSibling;
+    next && !/^H[1-6]$/.test(next.tagName) && !next.querySelector('h1,h2,h3');
+    next = next.nextElementSibling
+  ) {
+    siblings.push(next)
+  }
+  return {
+    heading,
+    pre: siblings.map((e) => e.querySelector('pre')).find(Boolean) ?? null,
+    button:
+      siblings.map((e) => e.querySelector('button')).find(Boolean) ?? null,
+    text: [heading, ...siblings].map((e) => e.textContent).join(' '),
+  }
+}
+
 describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
   it('every Claude route interpolates the origin, and none carries a header or token', () => {
     const routes = claudeRoutes(mcpTransportFacts(SENTINEL))
@@ -301,7 +344,6 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
       expect(route.code, route.id).toContain(`${SENTINEL}${MCP_ENDPOINT_PATH}`)
       expect(route.code, route.id).not.toContain(MCP_AUTH_HEADER)
       expect(route.code, route.id).not.toContain(MCP_TOKEN_PLACEHOLDER)
-      expect(route.steps.length, route.id).toBeGreaterThan(0)
       expect(route.docsUrl, route.id).toMatch(/^https:\/\//)
       expect(route.checkedOn, route.id).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     }
@@ -316,22 +358,26 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
     const first = container.querySelector('h2')!
     const tokenRoute = container.querySelector('#token-route')!
     expect(first.textContent).toBe('Add Motir to Claude')
+    const labels: Record<string, string> = {
+      'claude-ai': 'claude.ai',
+      'claude-desktop': 'Claude desktop app',
+      'claude-code': 'Claude Code',
+    }
     for (const route of claudeRoutes()) {
-      const block = container.querySelector(`#${route.id}`)
-      expect(block, route.id).not.toBeNull()
+      const block = sectionOf(container, route.id)
       // Between the first H2 and the token route, in document order.
       expect(
-        first.compareDocumentPosition(block!) &
+        first.compareDocumentPosition(block.heading) &
           Node.DOCUMENT_POSITION_FOLLOWING,
         route.id,
       ).toBeTruthy()
       expect(
-        block!.compareDocumentPosition(tokenRoute) &
+        block.heading.compareDocumentPosition(tokenRoute) &
           Node.DOCUMENT_POSITION_FOLLOWING,
         route.id,
       ).toBeTruthy()
-      expect(block!.textContent, route.id).toContain(route.label)
-      expect(block!.textContent, route.id).toContain(
+      expect(block.heading.textContent, route.id).toBe(labels[route.id])
+      expect(block.text, route.id).toContain(
         `${APP_ORIGIN}${MCP_ENDPOINT_PATH}`,
       )
     }
@@ -342,19 +388,20 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
   // identity, marked Detected — and no longer the DCR one. The desktop and
   // Claude Code routes were not re-checked, so their wording and date stand
   // and nothing says how Claude Code identifies itself.
-  it('tells claude.ai users to choose Claude’s published identity, and only them', () => {
+  it('tells claude.ai users to choose Claude’s published identity, and only them', async () => {
+    stubCatalogue(catalogueFixture)
+    const { container } = render(await McpPage(EN_PAGE))
     const [claudeAi, desktop, claudeCode] = claudeRoutes()
-    const step = claudeAi.steps.join(' ')
+    const step = sectionOf(container, 'claude-ai').text
     expect(step).toContain(
       'Under OAuth client, choose Use Claude’s published identity',
     )
     expect(step).toContain('claude.ai marks it Detected')
     expect(step).toContain('Leave the OAuth client ID and secret empty')
     expect(step).not.toMatch(/Register\s+automatically/)
-    expect(claudeAi.checkedOn).toBe(CLAUDE_AI_ROUTE_CHECKED_ON)
-    for (const route of [desktop, claudeCode]) {
-      const text = [...route.steps, route.note].join(' ')
-      expect(text, route.id).not.toMatch(
+    expect(claudeAi!.checkedOn).toBe(CLAUDE_AI_ROUTE_CHECKED_ON)
+    for (const route of [desktop!, claudeCode!]) {
+      expect(sectionOf(container, route.id).text, route.id).not.toMatch(
         /published identity|Register\s+automatically|verified/i,
       )
       expect(route.checkedOn, route.id).toBe(CLAUDE_ROUTES_CHECKED_ON)
@@ -364,8 +411,7 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
   it('says claude.ai shows as a verified domain, and a self-registered client as Unverified', async () => {
     stubCatalogue(catalogueFixture)
     const { container } = render(await McpPage(EN_PAGE))
-    const consent =
-      container.querySelector('#consent')!.parentElement!.textContent!
+    const consent = sectionOf(container, 'consent').text
     expect(consent).toContain(
       'shows claude.ai as a verified domain on the sign-in page and in Connected apps',
     )
@@ -378,13 +424,13 @@ describe('Add Motir to Claude — the route with no token (MOTIR-7078)', () => {
   it('prints the Claude Code command with a copy control', async () => {
     stubCatalogue(catalogueFixture)
     const { container } = render(await McpPage(EN_PAGE))
-    const block = container.querySelector('#claude-code')!
-    expect(block.querySelector('pre')!.textContent).toBe(
+    const block = sectionOf(container, 'claude-code')
+    expect(block.pre!.textContent).toBe(
       `claude mcp add --transport http motir ${APP_ORIGIN}${MCP_ENDPOINT_PATH}`,
     )
-    expect(
-      block.querySelector('button[aria-label="Copy the Claude Code command"]'),
-    ).not.toBeNull()
+    expect(block.button?.getAttribute('aria-label')).toBe(
+      'Copy the Claude Code command',
+    )
   })
 
   it('says what is approved, that Claude asks before a write, and where to revoke', async () => {

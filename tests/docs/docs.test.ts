@@ -425,23 +425,23 @@ describe('the MCP pages name no tools, because nothing here could check them', (
     })
   }
 
-  // MOTIR-8037: the page's prose is a document per language now, so the guard
-  // follows it there. Every `content/docs/mcp/tools/*.md` — the English source and
-  // any translation — is scanned by glob, so a translation that types a tool name
-  // fails exactly as the page source would.
-  const documents = readdirSync('content/docs/mcp/tools').filter((name) =>
-    name.endsWith('.md'),
-  )
-  it('finds the mcp/tools documents it is meant to scan', () => {
-    expect(documents).toContain('en.md')
-  })
-  for (const name of documents) {
-    it(`names no tool in content/docs/mcp/tools/${name}`, () => {
-      expect(
-        toolNameLiterals(
-          readFileSync(`content/docs/mcp/tools/${name}`, 'utf8'),
-        ),
-      ).toEqual([])
+  // MOTIR-8037 / MOTIR-8055: the pages' prose is a document per language now, so
+  // the guard follows it there. Every `content/docs/mcp/*.md` and
+  // `content/docs/mcp/tools/*.md` — the English source and any translation — is
+  // scanned by glob, so a translation that types a tool name (or a vendor key
+  // with the same shape, which `lib/mcpWiring.ts` hands over as a value) fails
+  // exactly as the page source would.
+  for (const dir of ['content/docs/mcp', 'content/docs/mcp/tools']) {
+    const documents = readdirSync(dir).filter((name) => name.endsWith('.md'))
+    it(`finds the ${dir} documents it is meant to scan`, () => {
+      expect(documents).toContain('en.md')
     })
+    for (const name of documents) {
+      it(`names no tool in ${dir}/${name}`, () => {
+        expect(
+          toolNameLiterals(readFileSync(`${dir}/${name}`, 'utf8')),
+        ).toEqual([])
+      })
+    }
   }
 })
