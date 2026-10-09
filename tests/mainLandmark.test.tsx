@@ -102,7 +102,23 @@ function providesLandmark(appRelativePath: string): boolean {
   return /<SiteShell[\s/>]/.test(source) || /<main[\s/>]/.test(source)
 }
 
-const PAGES = pageFiles()
+/**
+ * Pages that render NO document of their own: they only throw `notFound()`, so
+ * what reaches the reader is the locale's `not-found.tsx` (the 404 room inside
+ * `SiteShell`). Their landmark is the room's, and their browser half is
+ * `e2e/specs/not-found.spec.ts`, which asserts the 404 status a
+ * `SITE_ROUTES` row (asserted 200) cannot carry.
+ */
+const NOT_FOUND_ONLY: { file: string; reason: string }[] = [
+  {
+    file: join('[...rest]', 'page.tsx'),
+    reason:
+      'the locale catch-all (MOTIR-7955): every unmatched path, answered by the localised 404 room',
+  },
+]
+const notFoundOnly = new Set(NOT_FOUND_ONLY.map(({ file }) => file))
+
+const PAGES = pageFiles().filter((file) => !notFoundOnly.has(file))
 
 describe('every route renders exactly one main landmark', () => {
   it('finds the route tree at all', () => {
@@ -120,6 +136,26 @@ describe('every route renders exactly one main landmark', () => {
       expect(providers).toHaveLength(1)
     },
   )
+})
+
+describe('a page that only throws notFound() is landmarked by the 404 room', () => {
+  it.each(NOT_FOUND_ONLY)('$file', ({ file }) => {
+    const source = readFileSync(join(APP_DIR, file), 'utf8')
+    // It must stay a page that renders nothing: the moment it grows markup, it
+    // is an ordinary route and belongs back in the enumeration above.
+    expect(source).toMatch(/\bnotFound\(\)/)
+    expect(source).not.toMatch(/return\s*\(?\s*</)
+    // …and the boundary that answers it renders the room, which owns the shell.
+    expect(readFileSync(join(APP_DIR, 'not-found.tsx'), 'utf8')).toMatch(
+      /<NotFoundRoom[\s/>]/,
+    )
+    expect(
+      readFileSync(
+        join(process.cwd(), 'app', '_components', 'NotFoundRoom.tsx'),
+        'utf8',
+      ),
+    ).toMatch(/<SiteShell[\s/>]/)
+  })
 })
 
 describe('the shell that owns the landmark', () => {
