@@ -10,11 +10,13 @@
   "tags": [
     {
       "slug": "smb",
-      "label": "Small businesses"
+      "label": "Small businesses",
+      "labelFallback": false
     },
     {
       "slug": "vertical-saas",
-      "label": "Vertical software"
+      "label": "Vertical software",
+      "labelFallback": false
     }
   ],
   "capabilities": [],
@@ -23,7 +25,8 @@
       "claim": "Shoppers were expected to return $849.9 billion of goods in 2025, 19.3% of online sales, and 9% of returns are fraudulent.",
       "sourceName": "National Retail Federation and Happy Returns, October 2025",
       "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
-      "sourceDate": "2025-10-01"
+      "sourceDate": "2025-10-01",
+      "claimFallback": false
     }
   ],
   "gap": "Return platforms handle the return once it starts. Preventing it, for stores below enterprise size, is barely served.",
@@ -31,5 +34,7 @@
   "whyMotir": null,
   "whoElse": null,
   "addedAt": "2026-10-06T23:59:53.000Z",
-  "lastReviewedAt": null
+  "lastReviewedAt": null,
+  "locale": "en",
+  "fallbackFields": []
 }

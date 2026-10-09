@@ -1,0 +1,159 @@
+{
+  "items": [
+    {
+      "slug": "an-ai-legal-team-for-software-companies",
+      "title": "소프트웨어 기업을 위한 AI 법무팀",
+      "pitch": "이용약관, 개인정보 처리방침, 데이터 처리 계약, 고객 데이터를 다루는 모든 공급업체 기록을 작성하고 최신으로 유지하며 변호사가 검토합니다.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "legal",
+        "label": "Legal"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "AI 에이전트",
+          "labelFallback": false
+        },
+        {
+          "slug": "b2b-saas",
+          "label": "B2B 소프트웨어",
+          "labelFallback": false
+        },
+        {
+          "slug": "compliance",
+          "label": "컴플라이언스",
+          "labelFallback": false
+        },
+        {
+          "slug": "eu-ai-act",
+          "label": "EU AI법",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [
+        "제품이 바뀔 때마다 이용약관, 개인정보 처리방침, 데이터 처리 계약을 작성하고 갱신합니다",
+        "공급업체 및 고객 계약을 검토하고 변호사가 필요한 부분을 알려 줍니다",
+        "EU AI법 같은 새 규칙을 추적하고 각각 무엇이 바뀌는지 알려 줍니다"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Motir 가 모델 제공자를 추가할 때마다 데이터 처리 계약과 고객 데이터를 보내는 법적 근거 기록이 필요합니다. 지금은 느린 수작업입니다.",
+      "whoElse": "고객 데이터를 다루는 모든 소프트웨어 기업, 즉 모든 기업입니다.",
+      "addedAt": "2026-10-07T00:00:00.000Z",
+      "lastReviewedAt": null,
+      "locale": "ko",
+      "fallbackFields": []
+    },
+    {
+      "slug": "stop-returns-before-they-happen",
+      "title": "반품을 미리 막기",
+      "pitch": "Spots the order bought in three sizes to send two back, answers the fit question before checkout, and scores each return for fraud.",
+      "kind": "direction",
+      "category": {
+        "slug": "ecommerce",
+        "label": "E-commerce"
+      },
+      "tags": [
+        {
+          "slug": "smb",
+          "label": "소상공인",
+          "labelFallback": false
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "업종 특화 소프트웨어",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "2025년 쇼핑객은 8,499억 달러어치 상품을 반품할 것으로 예상되며, 이는 온라인 매출의 19.3%이고 반품의 9%는 사기입니다.",
+          "sourceName": "National Retail Federation and Happy Returns, October 2025",
+          "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
+          "sourceDate": "2025-10-01",
+          "claimFallback": false
+        }
+      ],
+      "gap": "반품 플랫폼은 반품이 시작된 뒤에 처리합니다. 대기업이 아닌 상점을 위해 반품을 막는 서비스는 거의 없습니다.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:53.000Z",
+      "lastReviewedAt": null,
+      "locale": "ko",
+      "fallbackFields": ["pitch"]
+    },
+    {
+      "slug": "treatment-options-for-vet-clinics",
+      "title": "동물병원 치료 선택지",
+      "pitch": "진료 중에 하나의 진단을 가격이 붙은 치료 계획 두세 가지로 바꾸고 분할 결제를 붙여, 보호자가 감당할 수 있는 치료를 반려동물이 받게 합니다.",
+      "kind": "direction",
+      "category": {
+        "slug": "pets",
+        "label": "Pets"
+      },
+      "tags": [
+        {
+          "slug": "healthcare",
+          "label": "의료",
+          "labelFallback": false
+        },
+        {
+          "slug": "pricing-and-billing",
+          "label": "Pricing and billing",
+          "labelFallback": true
+        },
+        {
+          "slug": "smb",
+          "label": "소상공인",
+          "labelFallback": false
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "업종 특화 소프트웨어",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+          "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+          "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+          "sourceDate": "2025-01-01",
+          "claimFallback": true
+        }
+      ],
+      "gap": "수의사용 AI는 진료 기록을 쓰고 병원 관리 소프트웨어는 예약을 받습니다. 사례를 가격이 붙은 선택지로 바꾸는 것은 없습니다.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:47.000Z",
+      "lastReviewedAt": null,
+      "locale": "ko",
+      "fallbackFields": []
+    }
+  ],
+  "categories": [
+    {
+      "slug": "legal",
+      "label": "Legal",
+      "count": 1
+    },
+    {
+      "slug": "ecommerce",
+      "label": "E-commerce",
+      "count": 1
+    },
+    {
+      "slug": "pets",
+      "label": "Pets",
+      "count": 1
+    }
+  ],
+  "total": 3,
+  "locale": "ko"
+}

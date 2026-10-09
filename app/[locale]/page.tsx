@@ -29,6 +29,7 @@ import { HeroBrief } from '../_components/landing/HeroBrief'
 import { HeroWaves } from '../_components/landing/HeroWaves'
 import { ProjectManagerSection } from '../_components/landing/ProjectManagerSection'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import type { Locale } from '@/i18n/routing'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 
@@ -67,9 +68,10 @@ const H2 =
  * through the public API like `/ideas` reads them (revalidated hourly). An
  * unreachable store leaves the box with its static placeholder.
  */
-async function loadExamples(): Promise<string[]> {
+async function loadExamples(locale: Locale): Promise<string[]> {
   try {
-    const { items } = await fetchIdeas({ tags: [] })
+    // In the page's language where the store has the title (MOTIR-7777).
+    const { items } = await fetchIdeas({ tags: [] }, locale)
     return items.map((idea) => idea.title)
   } catch {
     return []
@@ -88,7 +90,7 @@ export function generateMetadata({
 export default async function Page({ params }: LocalePageProps) {
   const locale = await enterLocale(params)
   const l = (await getCopy(locale)).landing
-  const examples = await loadExamples()
+  const examples = await loadExamples(locale)
   return (
     <>
       <SiteShell host={SITE_HOST} className="bg-(--el-surface)" overlayHeader>

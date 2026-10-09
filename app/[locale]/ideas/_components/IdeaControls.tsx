@@ -6,8 +6,9 @@ import {
   hasIdeaFilters,
   ideasHref,
   type IdeasParams,
+  ideaTextLang,
   type PublicIdeaCategoryCountDto,
-  type PublicIdeaTagDto,
+  type PublicIdeaTagListDto,
 } from '@/lib/ideas'
 import { CountLine, FilterLink, SearchForm } from './IdeasNav'
 
@@ -53,7 +54,7 @@ export function IdeaControls({
   total: number
   categories: PublicIdeaCategoryCountDto[]
   /** `null` when the tags read failed: the disclosure is then not drawn. */
-  tags: PublicIdeaTagDto[] | null
+  tags: PublicIdeaTagListDto | null
 }) {
   const f = useCopy().ideas.find
   const locale = usePageLocale()
@@ -70,7 +71,10 @@ export function IdeaControls({
   const categoryLabel =
     chips.find((c) => c.slug === params.category)?.label ?? params.category
   const tagLabel = (slug: string) =>
-    tags?.find((t) => t.slug === slug)?.label ?? slug
+    tags?.tags.find((t) => t.slug === slug)?.label ?? slug
+  // A label the store served in English on another language's page is marked.
+  const tagLang = (labelFallback: boolean) =>
+    tags ? ideaTextLang(locale, tags.locale, labelFallback) : undefined
 
   return (
     <section
@@ -176,7 +180,7 @@ export function IdeaControls({
         })}
       </div>
 
-      {tags && tags.length > 0 ? (
+      {tags && tags.tags.length > 0 ? (
         <details open={params.tags.length > 0} className="group">
           <summary className="inline-flex cursor-pointer list-none items-center gap-2 rounded-(--radius-control) border border-(--el-border) px-(--spacing-control-x) py-(--spacing-control-y) text-[13px] font-semibold text-(--el-text) [&::-webkit-details-marker]:hidden">
             <Tag aria-hidden className="size-3.5" />
@@ -193,7 +197,7 @@ export function IdeaControls({
             aria-label={f.tags}
             className="mt-2.5 flex flex-wrap gap-1.5"
           >
-            {tags.map((t) => {
+            {tags.tags.map((t) => {
               const on = params.tags.includes(t.slug)
               return (
                 <FilterLink
@@ -211,7 +215,7 @@ export function IdeaControls({
                   className={cn(CHIP, on ? CHIP_ON : CHIP_OFF)}
                 >
                   <Tag aria-hidden className="size-3" />
-                  {t.label}
+                  <span lang={tagLang(t.labelFallback)}>{t.label}</span>
                   <span className={COUNT}>{t.count}</span>
                   {on ? <X aria-hidden className="size-3" /> : null}
                 </FilterLink>

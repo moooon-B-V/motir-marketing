@@ -1,0 +1,50 @@
+{
+  "slug": "treatment-options-for-vet-clinics",
+  "title": "Behandlungsoptionen für Tierarztpraxen",
+  "pitch": "Macht während der Untersuchung aus einer Diagnose zwei oder drei Behandlungspläne mit Preis und Ratenzahlung, damit das Tier Hilfe bekommt, die sich der Halter leisten kann.",
+  "kind": "direction",
+  "category": {
+    "slug": "pets",
+    "label": "Pets"
+  },
+  "tags": [
+    {
+      "slug": "healthcare",
+      "label": "Gesundheitswesen",
+      "labelFallback": false
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "labelFallback": true
+    },
+    {
+      "slug": "smb",
+      "label": "Kleine Unternehmen",
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "Branchensoftware",
+      "labelFallback": false
+    }
+  ],
+  "capabilities": [],
+  "evidence": [
+    {
+      "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+      "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+      "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+      "sourceDate": "2025-01-01",
+      "claimFallback": true
+    }
+  ],
+  "gap": "KI für Tierärzte schreibt die Befunde, Praxissoftware bucht die Termine. Keine macht aus einem Fall Optionen mit Preis.",
+  "whyNow": null,
+  "whyMotir": null,
+  "whoElse": null,
+  "addedAt": "2026-10-06T23:59:47.000Z",
+  "lastReviewedAt": null,
+  "locale": "de",
+  "fallbackFields": []
+}

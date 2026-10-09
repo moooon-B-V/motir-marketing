@@ -1,4 +1,5 @@
 import { APP_ORIGIN } from '@/lib/appOrigin'
+import type { Locale } from '@/i18n/routing'
 
 /**
  * The ideas data layer for `motir-marketing` (MOTIR-7685, Story MOTIR-7665).
@@ -16,10 +17,17 @@ import { APP_ORIGIN } from '@/lib/appOrigin'
  *
  * Mirrored BY HAND from motir-core `lib/dto/ideas.ts` (the PUBLIC half) and
  * the `IdeaCategory` / `IdeaKind` enums in `prisma/schema.prisma`, as they
- * stand at motir-core `0ee9f99` (2026-10-07). The contract is guarded in the
- * PRODUCING repository and changes additively only; when it changes, these
- * follow. `e2e/fixtures/ideas*.json` are recorded responses of it, and a test
- * type-checks them against these interfaces. */
+ * stand at motir-core `0ee9f99` (2026-10-07), widened with the per-locale
+ * fields of motir-core `03c9c32` (Story MOTIR-7772 · MOTIR-7775: `locale`,
+ * `fallbackFields`, `claimFallback`, `labelFallback`). The contract is guarded
+ * in the PRODUCING repository and changes additively only; when it changes,
+ * these follow. `e2e/fixtures/ideas*.json` are recorded responses of it, and a
+ * test type-checks them against these interfaces.
+ *
+ * Every response passes through a COERCER below before the page sees it, and
+ * the coercer names every field it keeps: a response from a motir-core that
+ * predates the locale fields reads as served in English, with nothing listed
+ * as a fallback. */
 
 /** The fixed category list, in motir-core's (grouped) enum order. */
 export const IDEA_CATEGORY_SLUGS = [
@@ -73,21 +81,50 @@ export interface IdeaEvidenceDto {
   sourceDate: string | null
 }
 
+/** The locale a response was served in: the page's, or `en`. */
+export type IdeaLocale = Locale
+
+/** An idea's own translatable fields (motir-core `IDEA_TRANSLATABLE_FIELDS`). */
+export const IDEA_TRANSLATABLE_FIELDS = [
+  'title',
+  'pitch',
+  'capabilities',
+  'gap',
+  'whyNow',
+  'whyMotir',
+  'whoElse',
+] as const
+export type IdeaTranslatableField = (typeof IDEA_TRANSLATABLE_FIELDS)[number]
+
+/** A public evidence row; `claimFallback` is true when the claim is the English. */
+export interface PublicIdeaEvidenceDto extends IdeaEvidenceDto {
+  claimFallback: boolean
+}
+
+/** A public tag reference; `labelFallback` is true when the label is the English. */
+export interface PublicIdeaTagRefDto extends IdeaTagRefDto {
+  labelFallback: boolean
+}
+
 export interface PublicIdeaDto {
   slug: string
   title: string
   pitch: string
   kind: IdeaKind
   category: IdeaCategoryRefDto
-  tags: IdeaTagRefDto[]
+  tags: PublicIdeaTagRefDto[]
   capabilities: string[]
-  evidence: IdeaEvidenceDto[]
+  evidence: PublicIdeaEvidenceDto[]
   gap: string | null
   whyNow: string | null
   whyMotir: string | null
   whoElse: string | null
   addedAt: string
   lastReviewedAt: string | null
+  /** The locale served. */
+  locale: IdeaLocale
+  /** The idea fields served in English although another locale was asked for. */
+  fallbackFields: IdeaTranslatableField[]
 }
 
 export interface PublicIdeaCategoryCountDto extends IdeaCategoryRefDto {
@@ -99,11 +136,138 @@ export interface PublicIdeaListDto {
   /** Counts over every filter EXCEPT `category`, so the chips stay choosable. */
   categories: PublicIdeaCategoryCountDto[]
   total: number
+  /** The locale served. Category labels stay English: the page names its own sections. */
+  locale: IdeaLocale
 }
 
-export interface PublicIdeaTagDto extends IdeaTagRefDto {
+export interface PublicIdeaTagDto extends PublicIdeaTagRefDto {
   /** How many ACTIVE ideas carry the tag. */
   count: number
+}
+
+/** `GET /api/public/ideas/tags`. */
+export interface PublicIdeaTagListDto {
+  tags: PublicIdeaTagDto[]
+  locale: IdeaLocale
+}
+
+/* ── the coercers ──────────────────────────────────────────────────────────
+ *
+ * The ONLY path from a response to the page. Each names every field it keeps,
+ * so a field the contract adds reaches a component only when it is named here.
+ * A field the server did not send takes its pre-locale meaning: served in
+ * `en`, no fallback listed, every flag `false` — so a page in another language
+ * marks all of it English (`ideaTextLang`), which is true. */
+
+type Wire<T> = Omit<T, 'locale' | 'fallbackFields'> & {
+  locale?: IdeaLocale
+  fallbackFields?: IdeaTranslatableField[]
+}
+
+/** An idea as the wire may carry it: the locale fields absent on an older server. */
+export type PublicIdeaWire = Omit<Wire<PublicIdeaDto>, 'evidence' | 'tags'> & {
+  evidence: Array<IdeaEvidenceDto & { claimFallback?: boolean }>
+  tags: Array<IdeaTagRefDto & { labelFallback?: boolean }>
+}
+
+export function toPublicIdea(raw: PublicIdeaWire): PublicIdeaDto {
+  return {
+    slug: raw.slug,
+    title: raw.title,
+    pitch: raw.pitch,
+    kind: raw.kind,
+    category: { slug: raw.category.slug, label: raw.category.label },
+    tags: raw.tags.map((t) => ({
+      slug: t.slug,
+      label: t.label,
+      labelFallback: t.labelFallback ?? false,
+    })),
+    capabilities: [...raw.capabilities],
+    evidence: raw.evidence.map((e) => ({
+      claim: e.claim,
+      sourceName: e.sourceName,
+      url: e.url,
+      sourceDate: e.sourceDate,
+      claimFallback: e.claimFallback ?? false,
+    })),
+    gap: raw.gap,
+    whyNow: raw.whyNow,
+    whyMotir: raw.whyMotir,
+    whoElse: raw.whoElse,
+    addedAt: raw.addedAt,
+    lastReviewedAt: raw.lastReviewedAt,
+    locale: raw.locale ?? 'en',
+    fallbackFields: [...(raw.fallbackFields ?? [])],
+  }
+}
+
+export interface PublicIdeaListWire {
+  items: PublicIdeaWire[]
+  categories: PublicIdeaCategoryCountDto[]
+  total: number
+  locale?: IdeaLocale
+}
+
+export function toPublicIdeaList(raw: PublicIdeaListWire): PublicIdeaListDto {
+  return {
+    items: raw.items.map(toPublicIdea),
+    categories: raw.categories.map((c) => ({
+      slug: c.slug,
+      label: c.label,
+      count: c.count,
+    })),
+    total: raw.total,
+    locale: raw.locale ?? 'en',
+  }
+}
+
+export interface PublicIdeaTagListWire {
+  tags: Array<IdeaTagRefDto & { count: number; labelFallback?: boolean }>
+  locale?: IdeaLocale
+}
+
+export function toPublicIdeaTagList(
+  raw: PublicIdeaTagListWire,
+): PublicIdeaTagListDto {
+  return {
+    tags: raw.tags.map((t) => ({
+      slug: t.slug,
+      label: t.label,
+      count: t.count,
+      labelFallback: t.labelFallback ?? false,
+    })),
+    locale: raw.locale ?? 'en',
+  }
+}
+
+/**
+ * The `lang` an idea's text element takes on a page in `pageLocale`: `'en'`
+ * when the page is not English and the text is — the response was served in
+ * English (an old server, an unknown locale), or this field is a fallback —
+ * else `undefined`, so text in the page's language, and every element of an
+ * English page, carries no attribute. Put it on the element that HOLDS the
+ * text, never on a wrapper, so one English claim marks only that claim.
+ */
+export function ideaTextLang(
+  pageLocale: IdeaLocale,
+  servedLocale: IdeaLocale,
+  isFallback: boolean,
+): 'en' | undefined {
+  if (pageLocale === 'en') return undefined
+  return servedLocale === 'en' || isFallback ? 'en' : undefined
+}
+
+/** Whether an idea field was served in English (see {@link ideaTextLang}). */
+export function ideaFieldLang(
+  pageLocale: IdeaLocale,
+  idea: Pick<PublicIdeaDto, 'locale' | 'fallbackFields'>,
+  field: IdeaTranslatableField,
+): 'en' | undefined {
+  return ideaTextLang(
+    pageLocale,
+    idea.locale,
+    idea.fallbackFields.includes(field),
+  )
 }
 
 /* ── the URL model ─────────────────────────────────────────────────────────
@@ -285,20 +449,35 @@ async function json<T>(path: string, res: Response): Promise<T> {
   }
 }
 
+/**
+ * `locale=<l>` on the STORE's URL, for every locale `en` included: the query
+ * string is the store's cache key, so each locale is its own entry in Next's
+ * URL-keyed fetch cache too. It never reaches the visitor's URL — the page's
+ * path already carries the language (`ideasHref` has no locale).
+ */
+function withLocale(entries: Array<[string, string]>, locale: IdeaLocale) {
+  return new URLSearchParams([...entries, ['locale', locale]]).toString()
+}
+
 /** Every active idea matching the filters, with per-category counts. */
 export async function fetchIdeas(
   params: IdeasParams,
+  locale: IdeaLocale,
 ): Promise<PublicIdeaListDto> {
-  const qs = new URLSearchParams(filterEntries(params)).toString()
-  const path = qs ? `?${qs}` : ''
-  return json<PublicIdeaListDto>(path, await read(path))
+  const path = `?${withLocale(filterEntries(params), locale)}`
+  return toPublicIdeaList(
+    await json<PublicIdeaListWire>(path, await read(path)),
+  )
 }
 
 /** Every tag carried by at least one active idea, with its count. */
-export async function fetchIdeaTags(): Promise<PublicIdeaTagDto[]> {
-  const path = '/tags'
-  const body = await json<{ tags: PublicIdeaTagDto[] }>(path, await read(path))
-  return body.tags
+export async function fetchIdeaTags(
+  locale: IdeaLocale,
+): Promise<PublicIdeaTagListDto> {
+  const path = `/tags?${withLocale([], locale)}`
+  return toPublicIdeaTagList(
+    await json<PublicIdeaTagListWire>(path, await read(path)),
+  )
 }
 
 /**
@@ -306,11 +485,14 @@ export async function fetchIdeaTags(): Promise<PublicIdeaTagDto[]> {
  * answers an unknown slug and a RETIRED one with the same 404, so `null` is
  * both — the page falls back to the list either way.
  */
-export async function fetchIdea(slug: string): Promise<PublicIdeaDto | null> {
-  const path = `/${encodeURIComponent(slug)}`
+export async function fetchIdea(
+  slug: string,
+  locale: IdeaLocale,
+): Promise<PublicIdeaDto | null> {
+  const path = `/${encodeURIComponent(slug)}?${withLocale([], locale)}`
   const res = await read(path)
   if (res.status === 404) return null
-  return json<PublicIdeaDto>(path, res)
+  return toPublicIdea(await json<PublicIdeaWire>(path, res))
 }
 
 /* ── presentation helpers the page and the detail share ────────────────────

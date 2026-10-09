@@ -6,7 +6,10 @@ import { cn } from '@motir/design-system'
 import { useCopy, usePageLocale } from '@/lib/copy'
 import {
   hasText,
+  ideaFieldLang,
   ideasHref,
+  ideaTextLang,
+  type IdeaTranslatableField,
   sourceMonth,
   type IdeasParams,
   type PublicIdeaDto,
@@ -18,6 +21,9 @@ import { IdeaSheet } from './IdeaSheet'
  * An idea's full record, open in place over the list (MOTIR-7688). Every field
  * the contract carries, in the design's order; a field that is null or an
  * empty string is not drawn (the seeded directions carry `whyMotir: ""`).
+ * Each field, claim and tag the store served in English on a page in another
+ * language carries `lang="en"` on the element holding it (Story MOTIR-7772 ·
+ * MOTIR-7777) — never on the sheet, so one English claim marks only itself.
  */
 
 function Row({ heading, children }: { heading: string; children: ReactNode }) {
@@ -51,11 +57,11 @@ export function IdeaDetail({
   const titleId = `idea-title-${idea.slug}`
   const kind = idea.kind === 'motir_buys' ? d.kindBuys : d.kindDirection
   const [before, after] = d.foot.split('{key}')
-  const prose: Array<[string, string | null]> = [
-    [d.gap, idea.gap],
-    [d.whyNow, idea.whyNow],
-    [d.whyMotir, idea.whyMotir],
-    [d.whoElse, idea.whoElse],
+  const prose: Array<[string, string | null, IdeaTranslatableField]> = [
+    [d.gap, idea.gap, 'gap'],
+    [d.whyNow, idea.whyNow, 'whyNow'],
+    [d.whyMotir, idea.whyMotir, 'whyMotir'],
+    [d.whoElse, idea.whoElse, 'whoElse'],
   ]
 
   return (
@@ -80,12 +86,16 @@ export function IdeaDetail({
     >
       <h2
         id={titleId}
+        lang={ideaFieldLang(locale, idea, 'title')}
         tabIndex={-1}
         className="m-0 font-(family-name:--font-serif) text-[clamp(28px,3vw,36px)] leading-[1.05] font-bold tracking-[-0.025em] focus:outline-none"
       >
         {idea.title}
       </h2>
-      <p className="m-0 text-[17px] leading-[1.5] text-(--el-text-secondary)">
+      <p
+        lang={ideaFieldLang(locale, idea, 'pitch')}
+        className="m-0 text-[17px] leading-[1.5] text-(--el-text-secondary)"
+      >
         {idea.pitch}
       </p>
 
@@ -109,7 +119,9 @@ export function IdeaDetail({
                 className="inline-flex min-h-[26px] items-center gap-1.5 rounded-(--radius-badge) border border-(--el-border-soft) bg-(--el-surface) px-(--spacing-chip-x) py-(--spacing-chip-y) text-[12px] font-medium text-(--el-text-secondary) no-underline hover:border-(--el-border-strong)"
               >
                 <Tag aria-hidden className="size-3" />
-                {t.label}
+                <span lang={ideaTextLang(locale, idea.locale, t.labelFallback)}>
+                  {t.label}
+                </span>
               </Link>
             </li>
           ))}
@@ -122,6 +134,7 @@ export function IdeaDetail({
             {idea.capabilities.map((line) => (
               <li
                 key={line}
+                lang={ideaFieldLang(locale, idea, 'capabilities')}
                 className="grid grid-cols-[14px_minmax(0,1fr)] gap-2.5"
               >
                 <i
@@ -145,7 +158,10 @@ export function IdeaDetail({
                   key={`${e.url}-${e.claim}`}
                   className="grid gap-1.5 border-l-[3px] border-(--el-showcase-field) py-1 pl-3.5"
                 >
-                  <p className="m-0 text-[16px] leading-[1.5] text-(--el-text)">
+                  <p
+                    lang={ideaTextLang(locale, idea.locale, e.claimFallback)}
+                    className="m-0 text-[16px] leading-[1.5] text-(--el-text)"
+                  >
                     {e.claim}
                   </p>
                   <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
@@ -172,10 +188,12 @@ export function IdeaDetail({
         </Row>
       ) : null}
 
-      {prose.map(([heading, text]) =>
+      {prose.map(([heading, text, field]) =>
         hasText(text) ? (
           <Row key={heading} heading={heading}>
-            <p className={PROSE}>{text}</p>
+            <p lang={ideaFieldLang(locale, idea, field)} className={PROSE}>
+              {text}
+            </p>
           </Row>
         ) : null,
       )}
