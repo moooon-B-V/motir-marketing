@@ -145,19 +145,19 @@
     },
     "productItems": {
       "aiPlanner": {
-        "name": "Motir AI Planner",
+        "name": "Motir AI Planer",
         "blurb": "Macht aus einer Idee einen Plan, den Sie genehmigen"
       },
       "projectManagement": {
-        "name": "Motir Project Management",
+        "name": "Motir Projektmanagement",
         "blurb": "Boards, Sprints, Backlog und Roadmap"
       },
       "projectManager": {
-        "name": "Motir Project Manager",
+        "name": "Motir Projektmanager",
         "blurb": "Führt das ganze Projekt und berichtet Ihnen"
       },
       "aiDebugging": {
-        "name": "Motir AI Debugging",
+        "name": "Motir AI Fehlersuche",
         "blurb": "Jeder Bug bis in den Code verfolgt und eingeplant"
       },
       "mcp": {
@@ -177,11 +177,11 @@
         "blurb": "Skills, MCP-Server und CLI in einer Installation"
       },
       "agentFleet": {
-        "name": "Motir Agent Fleet",
+        "name": "Motir Agentenflotte",
         "blurb": "Gehostete Agenten, die Ihren Plan parallel abarbeiten"
       },
       "agentHosting": {
-        "name": "Motir Agent Hosting",
+        "name": "Motir Agenten-Hosting",
         "blurb": "Ihre eigenen Agenten auf den Maschinen von Motir"
       },
       "sandbox": {
@@ -208,9 +208,9 @@
       "existingProjectLink": "Auch das können wir viben"
     },
     "projectManager": {
-      "eyebrow": "Motir Project Manager",
-      "headline": "Sie haben schon ein Projekt? Übergeben Sie es an Motir Project Manager.",
-      "lede": "Sie sind der Product Owner. Motir Project Manager liest Ihr bestehendes Projekt, plant die nächsten Schritte, setzt Agenten an die Arbeit und berichtet zurück. Er führt das Projekt. Sie entscheiden, was ausgeliefert wird.",
+      "eyebrow": "Motir Projektmanager",
+      "headline": "Sie haben schon ein Projekt? Übergeben Sie es an Motir Projektmanager.",
+      "lede": "Sie sind der Product Owner. Motir Projektmanager liest Ihr bestehendes Projekt, plant die nächsten Schritte, setzt Agenten an die Arbeit und berichtet zurück. Er führt das Projekt. Sie entscheiden, was ausgeliefert wird.",
       "points": [
         "Liest Ihren Code, Ihre Aufgaben und die Historie, bevor er etwas ändert",
         "Plant die nächsten Schritte und hält den Plan aktuell",
@@ -225,7 +225,7 @@
         "plane": "Plane"
       },
       "report": {
-        "ariaLabel": "Ein beispielhafter Wochenbericht von Motir Project Manager",
+        "ariaLabel": "Ein beispielhafter Wochenbericht von Motir Projektmanager",
         "title": "Wochenbericht · Persönlicher KI-Assistent",
         "range": "6.–12. Okt.",
         "done": "diese Woche erledigt",
@@ -338,7 +338,7 @@
     },
     "close": {
       "headline": "Vibe the project",
-      "body": "Beginnen Sie mit ein paar Sätzen, oder übergeben Sie ein bestehendes Projekt an Motir Project Manager.",
+      "body": "Beginnen Sie mit ein paar Sätzen, oder übergeben Sie ein bestehendes Projekt an Motir Projektmanager.",
       "start": "Projekt starten",
       "import": "Projekt importieren",
       "developers": "So funktioniert Motir – für Entwickler",
@@ -830,7 +830,7 @@
     "metaTitle": "{name} – Motir",
     "worksWith": "Funktioniert mit",
     "aiPlanner": {
-      "metaDescription": "Motir AI Planner fragt nach, bis klar ist, was Sie bauen, und entwirft dann den ganzen Plan: jedes Stück Arbeit, in der richtigen Reihenfolge, mit Zuständigkeit. Nichts beginnt, bevor Sie es genehmigen.",
+      "metaDescription": "Motir AI Planer fragt nach, bis klar ist, was Sie bauen, und entwirft dann den ganzen Plan: jedes Stück Arbeit, in der richtigen Reihenfolge, mit Zuständigkeit. Nichts beginnt, bevor Sie es genehmigen.",
       "headline": "Erst das Was. Dann der ganze Plan.",
       "lede": "Beschreiben Sie, was Sie bauen möchten. Der Planer fragt nach, bis klar ist, was Sie meinen, denn auf eine Vermutung hin plant er nicht. Dann liest er, was bereits existiert, und entwirft den ganzen Plan: jedes Stück Arbeit, in der Reihenfolge, in der es geschehen muss, mit Zuständigkeit. Nichts beginnt, bevor Sie es genehmigen.",
       "steps": {
@@ -1448,9 +1448,9 @@
       }
     },
     "agentFleet": {
-      "metaDescription": "Die gehosteten Agenten von Motir bearbeiten jedes bereite Element Ihres Plans gleichzeitig, jeder auf seiner eigenen Maschine mit einem Modell, das zur Aufgabe passt. Starten Sie sie selbst, oder lassen Sie Motir Project Manager sie beschäftigt halten.",
+      "metaDescription": "Die gehosteten Agenten von Motir bearbeiten jedes bereite Element Ihres Plans gleichzeitig, jeder auf seiner eigenen Maschine mit einem Modell, das zur Aufgabe passt. Starten Sie sie selbst, oder lassen Sie Motir Projektmanager sie beschäftigt halten.",
       "headline": "Ihr ganzer Plan, parallel abgearbeitet.",
-      "lede": "Die gehosteten Agenten von Motir nehmen sich jedes Arbeitselement, das bereit ist, und bearbeiten alle gleichzeitig, jedes auf einer frischen Maschine mit eigenem Branch und Pull Request. Starten Sie sie selbst, oder lassen Sie Motir Project Manager sie beschäftigt halten – und das Projekt kommt an allen Fronten zugleich voran.",
+      "lede": "Die gehosteten Agenten von Motir nehmen sich jedes Arbeitselement, das bereit ist, und bearbeiten alle gleichzeitig, jedes auf einer frischen Maschine mit eigenem Branch und Pull Request. Starten Sie sie selbst, oder lassen Sie Motir Projektmanager sie beschäftigt halten – und das Projekt kommt an allen Fronten zugleich voran.",
       "parallel": {
         "eyebrow": "Skalierung",
         "headline": "Eine Maschine für jedes bereite Arbeitselement",
@@ -1458,8 +1458,8 @@
       },
       "pm": {
         "eyebrow": "Ohne Zutun",
-        "headline": "Motir Project Manager hält die Flotte beschäftigt",
-        "body": "Übergeben Sie das Projekt an Motir Project Manager: Er startet einen Lauf, sobald ein Arbeitselement bereit ist, wählt das Modell und legt Ihnen nur vor, was Ihre Entscheidung braucht: die Pull Requests, die Designs, die Pläne."
+        "headline": "Motir Projektmanager hält die Flotte beschäftigt",
+        "body": "Übergeben Sie das Projekt an Motir Projektmanager: Er startet einen Lauf, sobald ein Arbeitselement bereit ist, wählt das Modell und legt Ihnen nur vor, was Ihre Entscheidung braucht: die Pull Requests, die Designs, die Pläne."
       },
       "models": {
         "eyebrow": "Das richtige Modell für jede Aufgabe",

@@ -149,15 +149,15 @@
         "blurb": "Maakt van een idee een plan dat jij goedkeurt"
       },
       "projectManagement": {
-        "name": "Motir Project Management",
+        "name": "Motir Projectmanagement",
         "blurb": "Borden, sprints, backlog en roadmap"
       },
       "projectManager": {
-        "name": "Motir Project Manager",
+        "name": "Motir Projectmanager",
         "blurb": "Leidt het hele project en rapporteert aan jou"
       },
       "aiDebugging": {
-        "name": "Motir AI Debugging",
+        "name": "Motir AI Debuggen",
         "blurb": "Elke bug herleid tot de code en ingepland"
       },
       "mcp": {
@@ -177,11 +177,11 @@
         "blurb": "Skills, MCP-server en CLI in één installatie"
       },
       "agentFleet": {
-        "name": "Motir Agent Fleet",
+        "name": "Motir Agentenvloot",
         "blurb": "Gehoste agents die je plan parallel uitvoeren"
       },
       "agentHosting": {
-        "name": "Motir Agent Hosting",
+        "name": "Motir Agenthosting",
         "blurb": "Je eigen agents, op de machines van Motir"
       },
       "sandbox": {
@@ -208,9 +208,9 @@
       "existingProjectLink": "Dat kunnen we ook viben"
     },
     "projectManager": {
-      "eyebrow": "Motir Project Manager",
-      "headline": "Heb je al een project? Geef het aan Motir Project Manager.",
-      "lede": "Jij bent de product owner. Motir Project Manager leest het project dat je al hebt, plant wat er nu komt, zet agents aan het werk en rapporteert terug. Het leidt het project. Jij beslist wat er live gaat.",
+      "eyebrow": "Motir Projectmanager",
+      "headline": "Heb je al een project? Geef het aan Motir Projectmanager.",
+      "lede": "Jij bent de product owner. Motir Projectmanager leest het project dat je al hebt, plant wat er nu komt, zet agents aan het werk en rapporteert terug. Het leidt het project. Jij beslist wat er live gaat.",
       "points": [
         "Leest je code, taken en geschiedenis voordat het iets verandert",
         "Plant de volgende stappen en houdt het plan actueel",
@@ -225,7 +225,7 @@
         "plane": "Plane"
       },
       "report": {
-        "ariaLabel": "Een voorbeeld van een weekrapport van Motir Project Manager",
+        "ariaLabel": "Een voorbeeld van een weekrapport van Motir Projectmanager",
         "title": "Weekrapport · Persoonlijke AI-assistent",
         "range": "6 okt – 12 okt",
         "done": "klaar deze week",
@@ -338,7 +338,7 @@
     },
     "close": {
       "headline": "Vibe the project",
-      "body": "Begin met een paar zinnen, of geef een bestaand project aan Motir Project Manager.",
+      "body": "Begin met een paar zinnen, of geef een bestaand project aan Motir Projectmanager.",
       "start": "Een project starten",
       "import": "Een project importeren",
       "developers": "Hoe Motir werkt, voor developers",
@@ -1440,9 +1440,9 @@
       }
     },
     "agentFleet": {
-      "metaDescription": "De gehoste agents van Motir werken alle gereedstaande items van je plan tegelijk af, elk op een eigen machine met een model dat bij de taak past. Start ze zelf of laat Motir Project Manager ze aan het werk houden.",
+      "metaDescription": "De gehoste agents van Motir werken alle gereedstaande items van je plan tegelijk af, elk op een eigen machine met een model dat bij de taak past. Start ze zelf of laat Motir Projectmanager ze aan het werk houden.",
       "headline": "Je hele plan, parallel uitgevoerd.",
-      "lede": "De gehoste agents van Motir pakken elk werkitem dat gereed is en werken ze tegelijk af, elk op een nieuwe machine met een eigen branch en pull request. Start ze zelf, of laat Motir Project Manager ze aan het werk houden, en het project schiet op alle fronten tegelijk op.",
+      "lede": "De gehoste agents van Motir pakken elk werkitem dat gereed is en werken ze tegelijk af, elk op een nieuwe machine met een eigen branch en pull request. Start ze zelf, of laat Motir Projectmanager ze aan het werk houden, en het project schiet op alle fronten tegelijk op.",
       "parallel": {
         "eyebrow": "Schaal",
         "headline": "Eén machine voor elk gereed werkitem",
@@ -1450,8 +1450,8 @@
       },
       "pm": {
         "eyebrow": "Zonder omkijken",
-        "headline": "Motir Project Manager houdt de vloot aan het werk",
-        "body": "Geef het project aan Motir Project Manager en het start een run zodra een werkitem gereed is, kiest het model en legt je alleen voor wat jouw beslissing vraagt: de pull requests, de ontwerpen, de plannen."
+        "headline": "Motir Projectmanager houdt de vloot aan het werk",
+        "body": "Geef het project aan Motir Projectmanager en het start een run zodra een werkitem gereed is, kiest het model en legt je alleen voor wat jouw beslissing vraagt: de pull requests, de ontwerpen, de plannen."
       },
       "models": {
         "eyebrow": "Het juiste model voor elke klus",

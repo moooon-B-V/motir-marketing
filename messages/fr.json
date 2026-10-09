@@ -145,19 +145,19 @@
     },
     "productItems": {
       "aiPlanner": {
-        "name": "Motir AI Planner",
+        "name": "Planificateur Motir AI",
         "blurb": "Transforme une idée en un plan que vous approuvez"
       },
       "projectManagement": {
-        "name": "Motir Project Management",
+        "name": "Gestion de projet Motir",
         "blurb": "Tableaux, Sprints, Backlog et feuille de route"
       },
       "projectManager": {
-        "name": "Motir Project Manager",
+        "name": "Chef de projet Motir",
         "blurb": "Pilote tout le projet et vous rend compte"
       },
       "aiDebugging": {
-        "name": "Motir AI Debugging",
+        "name": "Débogage Motir AI",
         "blurb": "Chaque bug remonté jusqu’au code, puis planifié"
       },
       "mcp": {
@@ -177,15 +177,15 @@
         "blurb": "Skills, serveur MCP et CLI en une seule installation"
       },
       "agentFleet": {
-        "name": "Motir Agent Fleet",
+        "name": "Flotte d’agents Motir",
         "blurb": "Des agents hébergés qui exécutent votre plan en parallèle"
       },
       "agentHosting": {
-        "name": "Motir Agent Hosting",
+        "name": "Hébergement d’agents Motir",
         "blurb": "Vos propres agents, sur les machines de Motir"
       },
       "sandbox": {
-        "name": "Motir Sandbox",
+        "name": "Bac à sable Motir",
         "blurb": "Un conteneur isolé pour les agents, sur votre propre machine"
       }
     }
@@ -208,9 +208,9 @@
       "existingProjectLink": "Celui-là aussi, nous pouvons le viber"
     },
     "projectManager": {
-      "eyebrow": "Motir Project Manager",
-      "headline": "Vous avez déjà un projet ? Confiez-le à Motir Project Manager.",
-      "lede": "Vous êtes le product owner. Motir Project Manager lit le projet que vous avez déjà, planifie la suite, met des agents au travail et vous rend compte. Il pilote le projet. Vous décidez de ce qui est livré.",
+      "eyebrow": "Chef de projet Motir",
+      "headline": "Vous avez déjà un projet ? Confiez-le au Chef de projet Motir.",
+      "lede": "Vous êtes le product owner. Le Chef de projet Motir lit le projet que vous avez déjà, planifie la suite, met des agents au travail et vous rend compte. Il pilote le projet. Vous décidez de ce qui est livré.",
       "points": [
         "Lit votre code, vos tâches et votre historique avant de modifier quoi que ce soit",
         "Planifie les prochaines étapes et tient le plan à jour",
@@ -225,7 +225,7 @@
         "plane": "Plane"
       },
       "report": {
-        "ariaLabel": "Un exemple de rapport hebdomadaire de Motir Project Manager",
+        "ariaLabel": "Un exemple de rapport hebdomadaire du Chef de projet Motir",
         "title": "Rapport hebdomadaire · Assistant personnel IA",
         "range": "6 – 12 oct.",
         "done": "terminés cette semaine",
@@ -338,7 +338,7 @@
     },
     "close": {
       "headline": "Vibe the project",
-      "body": "Commencez avec quelques phrases, ou confiez un projet existant à Motir Project Manager.",
+      "body": "Commencez avec quelques phrases, ou confiez un projet existant au Chef de projet Motir.",
       "start": "Démarrer un projet",
       "import": "Importer un projet",
       "developers": "Comment fonctionne Motir, pour les développeurs",
@@ -839,7 +839,7 @@
     "metaTitle": "{name} — Motir",
     "worksWith": "Fonctionne avec",
     "aiPlanner": {
-      "metaDescription": "Motir AI Planner pose des questions jusqu’à ce que ce que vous construisez soit clair, puis rédige le plan entier : chaque morceau de travail, dans l’ordre, avec qui s’en charge. Rien ne démarre avant votre approbation.",
+      "metaDescription": "Le Planificateur Motir AI pose des questions jusqu’à ce que ce que vous construisez soit clair, puis rédige le plan entier : chaque morceau de travail, dans l’ordre, avec qui s’en charge. Rien ne démarre avant votre approbation.",
       "headline": "D’abord le quoi. Ensuite, le plan entier.",
       "lede": "Décrivez ce que vous voulez construire. Le planificateur pose des questions jusqu’à ce que votre intention soit claire, car il ne planifie pas sur une supposition. Il lit ensuite ce qui existe déjà et rédige le plan entier : chaque morceau de travail, dans l’ordre où il doit se faire, avec qui s’en charge. Rien ne démarre avant votre approbation.",
       "steps": {
@@ -1460,9 +1460,9 @@
       }
     },
     "agentFleet": {
-      "metaDescription": "Les agents hébergés de Motir travaillent en même temps sur chaque élément prêt de votre plan, chacun sur sa propre machine, avec un modèle adapté à la tâche. Lancez-les vous-même, ou laissez Motir Project Manager les occuper.",
+      "metaDescription": "Les agents hébergés de Motir travaillent en même temps sur chaque élément prêt de votre plan, chacun sur sa propre machine, avec un modèle adapté à la tâche. Lancez-les vous-même, ou laissez le Chef de projet Motir les occuper.",
       "headline": "Tout votre plan, exécuté en parallèle.",
-      "lede": "Les agents hébergés de Motir prennent chaque élément de travail prêt et les traitent en même temps, chacun sur une machine neuve avec sa propre branche et sa propre pull request. Lancez-les vous-même, ou laissez Motir Project Manager les occuper, et le projet avance sur tous les fronts à la fois.",
+      "lede": "Les agents hébergés de Motir prennent chaque élément de travail prêt et les traitent en même temps, chacun sur une machine neuve avec sa propre branche et sa propre pull request. Lancez-les vous-même, ou laissez le Chef de projet Motir les occuper, et le projet avance sur tous les fronts à la fois.",
       "parallel": {
         "eyebrow": "Échelle",
         "headline": "Une machine pour chaque élément de travail prêt",
@@ -1470,8 +1470,8 @@
       },
       "pm": {
         "eyebrow": "Sans les mains",
-        "headline": "Motir Project Manager occupe la flotte",
-        "body": "Confiez le projet à Motir Project Manager : il lance une exécution dès qu’un élément de travail est prêt, choisit le modèle, et ne vous soumet que ce qui requiert votre décision : les pull requests, les designs, les plans."
+        "headline": "Le Chef de projet Motir occupe la flotte",
+        "body": "Confiez le projet au Chef de projet Motir : il lance une exécution dès qu’un élément de travail est prêt, choisit le modèle, et ne vous soumet que ce qui requiert votre décision : les pull requests, les designs, les plans."
       },
       "models": {
         "eyebrow": "Le bon modèle pour chaque tâche",

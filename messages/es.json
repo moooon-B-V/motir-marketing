@@ -145,19 +145,19 @@
     },
     "productItems": {
       "aiPlanner": {
-        "name": "Motir AI Planner",
+        "name": "Planificador Motir AI",
         "blurb": "Convierte una idea en un plan que tú apruebas"
       },
       "projectManagement": {
-        "name": "Motir Project Management",
+        "name": "Gestión de proyectos Motir",
         "blurb": "Tableros, Sprints, Backlog y hoja de ruta"
       },
       "projectManager": {
-        "name": "Motir Project Manager",
+        "name": "Gestor de proyectos Motir",
         "blurb": "Dirige todo el proyecto y te rinde cuentas"
       },
       "aiDebugging": {
-        "name": "Motir AI Debugging",
+        "name": "Depuración Motir AI",
         "blurb": "Cada error, rastreado hasta el código y planificado"
       },
       "mcp": {
@@ -177,15 +177,15 @@
         "blurb": "Skills, servidor MCP y CLI en una sola instalación"
       },
       "agentFleet": {
-        "name": "Motir Agent Fleet",
+        "name": "Flota de agentes Motir",
         "blurb": "Agentes alojados que trabajan tu plan en paralelo"
       },
       "agentHosting": {
-        "name": "Motir Agent Hosting",
+        "name": "Alojamiento de agentes Motir",
         "blurb": "Tus propios agentes, en las máquinas de Motir"
       },
       "sandbox": {
-        "name": "Motir Sandbox",
+        "name": "Entorno aislado Motir",
         "blurb": "Un contenedor aislado para agentes en tu propia máquina"
       }
     }
@@ -208,9 +208,9 @@
       "existingProjectLink": "También podemos hacerle vibe"
     },
     "projectManager": {
-      "eyebrow": "Motir Project Manager",
-      "headline": "¿Ya tienes un proyecto? Pásaselo a Motir Project Manager.",
-      "lede": "Tú eres el product owner. Motir Project Manager lee el proyecto que ya tienes, planifica lo siguiente, pone a los agentes a trabajar y te informa. Dirige el proyecto. Tú decides qué se publica.",
+      "eyebrow": "Gestor de proyectos Motir",
+      "headline": "¿Ya tienes un proyecto? Pásaselo al Gestor de proyectos Motir.",
+      "lede": "Tú eres el product owner. El Gestor de proyectos Motir lee el proyecto que ya tienes, planifica lo siguiente, pone a los agentes a trabajar y te informa. Dirige el proyecto. Tú decides qué se publica.",
       "points": [
         "Lee tu código, tus tareas y tu historial antes de cambiar nada",
         "Planifica los siguientes pasos y mantiene el plan al día",
@@ -225,7 +225,7 @@
         "plane": "Plane"
       },
       "report": {
-        "ariaLabel": "Un ejemplo de informe semanal de Motir Project Manager",
+        "ariaLabel": "Un ejemplo de informe semanal del Gestor de proyectos Motir",
         "title": "Informe semanal · Asistente personal con IA",
         "range": "6 – 12 oct.",
         "done": "hechos esta semana",
@@ -338,7 +338,7 @@
     },
     "close": {
       "headline": "Vibe the project",
-      "body": "Empieza con unas pocas frases o pasa un proyecto existente a Motir Project Manager.",
+      "body": "Empieza con unas pocas frases o pasa un proyecto existente al Gestor de proyectos Motir.",
       "start": "Empezar un proyecto",
       "import": "Importar un proyecto",
       "developers": "Cómo funciona Motir, para desarrolladores",
@@ -834,7 +834,7 @@
     "metaTitle": "{name} — Motir",
     "worksWith": "Funciona con",
     "aiPlanner": {
-      "metaDescription": "Motir AI Planner pregunta hasta que queda claro qué estás construyendo y luego redacta el plan completo: cada parte del trabajo, en orden, con quién la hace. Nada empieza hasta que lo apruebas.",
+      "metaDescription": "El Planificador Motir AI pregunta hasta que queda claro qué estás construyendo y luego redacta el plan completo: cada parte del trabajo, en orden, con quién la hace. Nada empieza hasta que lo apruebas.",
       "headline": "Primero el qué. Luego el plan completo.",
       "lede": "Describe lo que quieres construir. El planificador pregunta hasta que queda claro lo que quieres decir, porque no planifica a ciegas. Luego lee lo que ya existe y redacta el plan completo: cada parte del trabajo, en el orden en que tiene que ocurrir, con quién la hace. Nada empieza hasta que lo apruebas.",
       "steps": {
@@ -1455,9 +1455,9 @@
       }
     },
     "agentFleet": {
-      "metaDescription": "Los agentes alojados de Motir trabajan a la vez todos los elementos listos de tu plan, cada uno en su propia máquina y con un modelo adecuado para la tarea. Lánzalos tú o deja que Motir Project Manager los mantenga ocupados.",
+      "metaDescription": "Los agentes alojados de Motir trabajan a la vez todos los elementos listos de tu plan, cada uno en su propia máquina y con un modelo adecuado para la tarea. Lánzalos tú o deja que el Gestor de proyectos Motir los mantenga ocupados.",
       "headline": "Todo tu plan, trabajado en paralelo.",
-      "lede": "Los agentes alojados de Motir toman cada elemento de trabajo que está listo y los trabajan a la vez, cada uno en una máquina nueva con su propia rama y su propia pull request. Lánzalos tú o deja que Motir Project Manager los mantenga ocupados, y el proyecto avanza en todos los frentes a la vez.",
+      "lede": "Los agentes alojados de Motir toman cada elemento de trabajo que está listo y los trabajan a la vez, cada uno en una máquina nueva con su propia rama y su propia pull request. Lánzalos tú o deja que el Gestor de proyectos Motir los mantenga ocupados, y el proyecto avanza en todos los frentes a la vez.",
       "parallel": {
         "eyebrow": "Escala",
         "headline": "Una máquina para cada elemento de trabajo listo",
@@ -1465,8 +1465,8 @@
       },
       "pm": {
         "eyebrow": "Sin intervención",
-        "headline": "Motir Project Manager mantiene ocupada a la flota",
-        "body": "Pasa el proyecto a Motir Project Manager y lanzará una ejecución en cuanto un elemento de trabajo esté listo, elegirá el modelo y solo te traerá lo que necesita tu decisión: las pull requests, los diseños, los planes."
+        "headline": "El Gestor de proyectos Motir mantiene ocupada a la flota",
+        "body": "Pasa el proyecto al Gestor de proyectos Motir y lanzará una ejecución en cuanto un elemento de trabajo esté listo, elegirá el modelo y solo te traerá lo que necesita tu decisión: las pull requests, los diseños, los planes."
       },
       "models": {
         "eyebrow": "El modelo adecuado para cada tarea",

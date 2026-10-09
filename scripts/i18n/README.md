@@ -25,11 +25,16 @@ pnpm i18n:status --locale ja --check  # exits 1 while anything is missing, stale
 Commit `messages/<l>.json` and `messages/sources/<l>.json` together, in the
 same commit: the record gate fails a catalogue without its record.
 
-**Product names are never translated.** `Motir` and `Motir AI` stay verbatim
-wherever the English has them, and every `nav.productItems.*.name` ("Motir AI
-Planner" … "Motir Sandbox") is exactly en.json's, the way localized product UIs
-keep a product's name in Latin. `merge` refuses a translated `Motir`; the
-product-name sweep in `tests/copy.test.ts` refuses a localized product name.
+**`Motir` and `Motir AI` are never translated**: they stay verbatim wherever the
+English has them, and `merge` refuses a translated one. **The product names
+around them are** (Yue, 2026-10-09), all but four: "Motir MCP", "Motir CLI" and
+the two "Motir Claude Code" ones stay in English. Each locale's glossary records
+every `nav.productItems.*.name` — the translation ("Motir AI 规划器",
+"Planificateur Motir AI"), or the English with `doNotTranslate` — and the
+product-name sweep in `tests/copy.test.ts` holds each catalogue's menu to its
+glossary. Prose that names a product uses the same words, with the article or
+case the sentence needs ("au Chef de projet Motir", "Kierownikowi projektu
+Motir").
 
 After changing `meta.title`, `landing.hero.headline` or `footer.tagline` in
 `zh`, `ja` or `ko`, run `pnpm brand:og-fonts`: the share image draws those
@@ -101,5 +106,6 @@ every glossary before writing any, and prints which files changed.
   together. A stale key does not fail it; `pnpm i18n:status` reports staleness.
 - `tests/copy.test.ts` § _every catalogue_ — the copy rules en.json is held to
   (no "issue" / "tracker" / "coding agent", the glossary's banned words for a
-  work item, `Motir` and `Motir AI` verbatim, product names as in en.json, no
+  work item, `Motir` and `Motir AI` verbatim, product names as their glossary
+  records them, no
   third-party agent named on the landing), over every catalogue.

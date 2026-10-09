@@ -237,6 +237,54 @@
       "doNotTranslate": true,
       "source": "Yue, 2026-10-09: the slogan is kept in English, like \"vibe coding\"",
       "note": "Never translated, in a headline, a call to action or quoted in a sentence."
+    },
+    "Motir AI Planner": {
+      "translation": "Pianificatore Motir AI",
+      "source": "Product name, translated (Yue, 2026-10-09)"
+    },
+    "Motir Project Management": {
+      "translation": "Gestione progetti Motir",
+      "source": "Product name, translated (Yue, 2026-10-09)"
+    },
+    "Motir Project Manager": {
+      "translation": "Responsabile di progetto Motir",
+      "source": "Product name, translated (Yue, 2026-10-09)"
+    },
+    "Motir AI Debugging": {
+      "translation": "Debug Motir AI",
+      "source": "Product name, translated (Yue, 2026-10-09)"
+    },
+    "Motir Agent Fleet": {
+      "translation": "Flotta di agenti Motir",
+      "source": "Product name, translated (Yue, 2026-10-09)"
+    },
+    "Motir Agent Hosting": {
+      "translation": "Hosting di agenti Motir",
+      "source": "Product name, translated (Yue, 2026-10-09)"
+    },
+    "Motir Sandbox": {
+      "translation": "Ambiente isolato Motir",
+      "source": "Product name, translated (Yue, 2026-10-09)"
+    },
+    "Motir MCP": {
+      "translation": "Motir MCP",
+      "doNotTranslate": true,
+      "source": "Product name, kept in English (Yue, 2026-10-09)"
+    },
+    "Motir CLI": {
+      "translation": "Motir CLI",
+      "doNotTranslate": true,
+      "source": "Product name, kept in English (Yue, 2026-10-09)"
+    },
+    "Motir Claude Code connector": {
+      "translation": "Motir Claude Code connector",
+      "doNotTranslate": true,
+      "source": "Product name, kept in English (Yue, 2026-10-09)"
+    },
+    "Motir Claude Code plugin": {
+      "translation": "Motir Claude Code plugin",
+      "doNotTranslate": true,
+      "source": "Product name, kept in English (Yue, 2026-10-09)"
     }
   }
 }

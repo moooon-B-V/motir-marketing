@@ -145,19 +145,19 @@
     },
     "productItems": {
       "aiPlanner": {
-        "name": "Motir AI Planner",
+        "name": "Planer Motir AI",
         "blurb": "Zamienia pomysł w plan, który zatwierdzasz"
       },
       "projectManagement": {
-        "name": "Motir Project Management",
+        "name": "Zarządzanie projektami Motir",
         "blurb": "Tablice, sprinty, backlog i roadmapa"
       },
       "projectManager": {
-        "name": "Motir Project Manager",
+        "name": "Kierownik projektu Motir",
         "blurb": "Prowadzi cały projekt i raportuje do Ciebie"
       },
       "aiDebugging": {
-        "name": "Motir AI Debugging",
+        "name": "Debugowanie Motir AI",
         "blurb": "Każdy błąd prześledzony do kodu i zaplanowany"
       },
       "mcp": {
@@ -177,15 +177,15 @@
         "blurb": "Umiejętności, serwer MCP i CLI w jednej instalacji"
       },
       "agentFleet": {
-        "name": "Motir Agent Fleet",
+        "name": "Flota agentów Motir",
         "blurb": "Hostowani agenci, którzy równolegle realizują Twój plan"
       },
       "agentHosting": {
-        "name": "Motir Agent Hosting",
+        "name": "Hosting agentów Motir",
         "blurb": "Twoi własni agenci na maszynach Motir"
       },
       "sandbox": {
-        "name": "Motir Sandbox",
+        "name": "Piaskownica Motir",
         "blurb": "Szczelny kontener dla agentów na Twojej maszynie"
       }
     }
@@ -208,9 +208,9 @@
       "existingProjectLink": "Jego też zvibe’ujemy"
     },
     "projectManager": {
-      "eyebrow": "Motir Project Manager",
-      "headline": "Masz już projekt? Przekaż go Motir Project Manager.",
-      "lede": "Masz rolę właściciela produktu. Motir Project Manager czyta projekt, który już masz, planuje kolejne kroki, zleca pracę agentom i składa raporty. Prowadzi projekt. Decyzja, co trafia do wydania, należy do Ciebie.",
+      "eyebrow": "Kierownik projektu Motir",
+      "headline": "Masz już projekt? Przekaż go Kierownikowi projektu Motir.",
+      "lede": "Masz rolę właściciela produktu. Kierownik projektu Motir czyta projekt, który już masz, planuje kolejne kroki, zleca pracę agentom i składa raporty. Prowadzi projekt. Decyzja, co trafia do wydania, należy do Ciebie.",
       "points": [
         "Czyta Twój kod, zadania i historię, zanim cokolwiek zmieni",
         "Planuje kolejne kroki i dba o aktualność planu",
@@ -225,7 +225,7 @@
         "plane": "Plane"
       },
       "report": {
-        "ariaLabel": "Przykładowy raport tygodniowy od Motir Project Manager",
+        "ariaLabel": "Przykładowy raport tygodniowy od Kierownika projektu Motir",
         "title": "Raport tygodniowy · Osobisty asystent AI",
         "range": "6–12 paź",
         "done": "gotowe w tym tygodniu",
@@ -338,7 +338,7 @@
     },
     "close": {
       "headline": "Vibe the project",
-      "body": "Zacznij od kilku zdań albo przekaż istniejący projekt Motir Project Manager.",
+      "body": "Zacznij od kilku zdań albo przekaż istniejący projekt Kierownikowi projektu Motir.",
       "start": "Zacznij projekt",
       "import": "Zaimportuj projekt",
       "developers": "Jak działa Motir — dla programistów",
@@ -830,7 +830,7 @@
     "metaTitle": "{name} — Motir",
     "worksWith": "Działa z",
     "aiPlanner": {
-      "metaDescription": "Motir AI Planner dopytuje, aż będzie jasne, co budujesz, a potem przygotowuje cały plan: każdą część pracy, po kolei, wraz z tym, kto ją wykona. Nic się nie zaczyna, dopóki go nie zatwierdzisz.",
+      "metaDescription": "Planer Motir AI dopytuje, aż będzie jasne, co budujesz, a potem przygotowuje cały plan: każdą część pracy, po kolei, wraz z tym, kto ją wykona. Nic się nie zaczyna, dopóki go nie zatwierdzisz.",
       "headline": "Najpierw co. Potem cały plan.",
       "lede": "Opisz, co chcesz zbudować. Planer dopytuje, aż będzie jasne, o co Ci chodzi, bo nie planuje na podstawie domysłów. Potem czyta to, co już istnieje, i przygotowuje cały plan: każdą część pracy, w kolejności, w jakiej musi się wydarzyć, wraz z tym, kto ją wykona. Nic się nie zaczyna, dopóki go nie zatwierdzisz.",
       "steps": {
@@ -1442,9 +1442,9 @@
       }
     },
     "agentFleet": {
-      "metaDescription": "Hostowani agenci Motir realizują jednocześnie każdy gotowy element Twojego planu, każdy na własnej maszynie, z modelem dopasowanym do zadania. Uruchamiaj ich samodzielnie albo pozwól, by Motir Project Manager zapewniał im pracę.",
+      "metaDescription": "Hostowani agenci Motir realizują jednocześnie każdy gotowy element Twojego planu, każdy na własnej maszynie, z modelem dopasowanym do zadania. Uruchamiaj ich samodzielnie albo pozwól, by Kierownik projektu Motir zapewniał im pracę.",
       "headline": "Cały Twój plan, realizowany równolegle.",
-      "lede": "Hostowani agenci Motir biorą każdy gotowy element roboczy i realizują je jednocześnie, każdy na świeżej maszynie, z własną gałęzią i własnym pull requestem. Uruchamiaj ich samodzielnie albo pozwól, by Motir Project Manager zapewniał im pracę, a projekt posuwa się naprzód na wszystkich frontach naraz.",
+      "lede": "Hostowani agenci Motir biorą każdy gotowy element roboczy i realizują je jednocześnie, każdy na świeżej maszynie, z własną gałęzią i własnym pull requestem. Uruchamiaj ich samodzielnie albo pozwól, by Kierownik projektu Motir zapewniał im pracę, a projekt posuwa się naprzód na wszystkich frontach naraz.",
       "parallel": {
         "eyebrow": "Skala",
         "headline": "Jedna maszyna na każdy gotowy element roboczy",
@@ -1452,8 +1452,8 @@
       },
       "pm": {
         "eyebrow": "Bez Twojego udziału",
-        "headline": "Motir Project Manager zapewnia flocie pracę",
-        "body": "Przekaż projekt Motir Project Manager, a uruchomi pracę w chwili, gdy element roboczy jest gotowy, dobierze model i przyniesie Ci tylko to, co wymaga Twojej decyzji: pull requesty, projekty graficzne, plany."
+        "headline": "Kierownik projektu Motir zapewnia flocie pracę",
+        "body": "Przekaż projekt Kierownikowi projektu Motir, a uruchomi pracę w chwili, gdy element roboczy jest gotowy, dobierze model i przyniesie Ci tylko to, co wymaga Twojej decyzji: pull requesty, projekty graficzne, plany."
       },
       "models": {
         "eyebrow": "Właściwy model do każdego zadania",

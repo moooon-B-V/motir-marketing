@@ -312,6 +312,26 @@ function workItemBans(glossaryDir: string, locale: string): string[] {
   }
 }
 
+/*
+ * A product's name in a locale is the one its glossary records (Yue,
+ * 2026-10-09: the product names are translated, but "Claude Code, CLI, MCP
+ * don't need translations"), and en.json's where the glossary records none.
+ */
+function productNameIn(
+  glossaryDir: string,
+  locale: string,
+  english: string,
+): string {
+  try {
+    const glossary = JSON.parse(
+      readFileSync(join(glossaryDir, `${locale}.json`), 'utf8'),
+    ) as { terms: Record<string, { translation?: string }> }
+    return glossary.terms[english]?.translation ?? english
+  } catch {
+    return english
+  }
+}
+
 function leafOf(catalogue: unknown, key: string): unknown {
   return key
     .split('.')
@@ -353,11 +373,18 @@ const sweeps = {
   productItemNames: (dir: string) => {
     const all = catalogues(dir)
     const en = all.find(([l]) => l === 'en')![1]
-    return hits(
-      all,
-      (text, key) =>
-        /^nav\.productItems\.[^.]+\.name$/.test(key) &&
-        text !== leafOf(en, key),
+    return all.flatMap(([locale, catalogue]) =>
+      hits(
+        [[locale, catalogue]],
+        (text, key) =>
+          /^nav\.productItems\.[^.]+\.name$/.test(key) &&
+          text !==
+            productNameIn(
+              join(dir, 'glossary'),
+              locale,
+              leafOf(en, key) as string,
+            ),
+      ),
     )
   },
   thirdPartyInLanding: (dir: string) =>
@@ -396,7 +423,9 @@ describe('every catalogue', () => {
       other: { line: 'Your work item' },
     }
     const GOOD = {
-      nav: { productItems: { planner: { name: 'Motir AI Planner' } } },
+      nav: {
+        productItems: { planner: { name: 'Planificateur Motir AI' } },
+      },
       landing: { line: 'Planifiez avec Motir AI' },
       designShowcase: { specimen: { notesValue: 'Une carte' } },
       other: { line: 'Votre élément de travail' },
@@ -409,7 +438,10 @@ describe('every catalogue', () => {
       writeFileSync(
         join(dir, 'glossary', 'xx.json'),
         JSON.stringify({
-          terms: { 'work item': { banned: ['carte', 'ticket'] } },
+          terms: {
+            'work item': { banned: ['carte', 'ticket'] },
+            'Motir AI Planner': { translation: 'Planificateur Motir AI' },
+          },
         }),
       )
       try {
@@ -452,13 +484,11 @@ describe('every catalogue', () => {
       ).toEqual(['xx:landing.line'])
     })
 
-    it("productItemNames: a product's name is en.json's", () => {
+    it("productItemNames: a product's name is its glossary's", () => {
       expect(
         run('productItemNames', {
           ...GOOD,
-          nav: {
-            productItems: { planner: { name: 'Planificateur Motir AI' } },
-          },
+          nav: { productItems: { planner: { name: 'Motir AI Planner' } } },
         }),
       ).toEqual(['xx:nav.productItems.planner.name'])
     })

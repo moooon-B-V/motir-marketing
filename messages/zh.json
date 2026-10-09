@@ -145,19 +145,19 @@
     },
     "productItems": {
       "aiPlanner": {
-        "name": "Motir AI Planner",
+        "name": "Motir AI 规划器",
         "blurb": "把想法变成由你批准的计划"
       },
       "projectManagement": {
-        "name": "Motir Project Management",
+        "name": "Motir 项目管理",
         "blurb": "面板、Sprint、待办列表与路线图"
       },
       "projectManager": {
-        "name": "Motir Project Manager",
+        "name": "Motir 项目经理",
         "blurb": "负责整个项目，并向你汇报"
       },
       "aiDebugging": {
-        "name": "Motir AI Debugging",
+        "name": "Motir AI 调试",
         "blurb": "每个缺陷都追溯到代码并纳入计划"
       },
       "mcp": {
@@ -177,15 +177,15 @@
         "blurb": "技能、MCP 服务器和 CLI，一次安装"
       },
       "agentFleet": {
-        "name": "Motir Agent Fleet",
+        "name": "Motir 智能体集群",
         "blurb": "托管智能体，并行推进你的计划"
       },
       "agentHosting": {
-        "name": "Motir Agent Hosting",
+        "name": "Motir 智能体托管",
         "blurb": "你自己的智能体，运行在 Motir 的机器上"
       },
       "sandbox": {
-        "name": "Motir Sandbox",
+        "name": "Motir 沙箱",
         "blurb": "在你自己的机器上为智能体提供一个密封容器"
       }
     }
@@ -208,9 +208,9 @@
       "existingProjectLink": "它同样可以 Vibe"
     },
     "projectManager": {
-      "eyebrow": "Motir Project Manager",
-      "headline": "已经有项目了？交给 Motir Project Manager。",
-      "lede": "你是产品负责人。Motir Project Manager 会读取你已有的项目，规划下一步，安排智能体投入工作，再向你汇报。它负责运转项目，由你决定发布什么。",
+      "eyebrow": "Motir 项目经理",
+      "headline": "已经有项目了？交给 Motir 项目经理。",
+      "lede": "你是产品负责人。Motir 项目经理会读取你已有的项目，规划下一步，安排智能体投入工作，再向你汇报。它负责运转项目，由你决定发布什么。",
       "points": [
         "在改动任何东西之前，先读懂你的代码、任务和历史",
         "规划后续步骤，并让计划始终保持最新",
@@ -225,7 +225,7 @@
         "plane": "Plane"
       },
       "report": {
-        "ariaLabel": "Motir Project Manager 的周报示例",
+        "ariaLabel": "Motir 项目经理的周报示例",
         "title": "周报 · AI 私人助理",
         "range": "10月6日 – 10月12日",
         "done": "本周完成",
@@ -338,7 +338,7 @@
     },
     "close": {
       "headline": "Vibe the project",
-      "body": "从几句话开始，或者把现有项目交给 Motir Project Manager。",
+      "body": "从几句话开始，或者把现有项目交给 Motir 项目经理。",
       "start": "开始一个项目",
       "import": "导入一个项目",
       "developers": "面向开发者：Motir 的工作方式",
@@ -815,7 +815,7 @@
     "metaTitle": "{name}——Motir",
     "worksWith": "兼容",
     "aiPlanner": {
-      "metaDescription": "Motir AI Planner 会一直提问，直到弄清你要构建什么，然后起草完整的计划：每一项工作、先后顺序，以及由谁来做。在你批准之前，什么都不会开始。",
+      "metaDescription": "Motir AI 规划器会一直提问，直到弄清你要构建什么，然后起草完整的计划：每一项工作、先后顺序，以及由谁来做。在你批准之前，什么都不会开始。",
       "headline": "先弄清做什么，再给出完整计划。",
       "lede": "描述你想构建的东西。规划器会一直问到弄清你的意思为止，因为它不会基于猜测做计划。然后它读取已有的一切，起草完整的计划：每一项工作、必须遵循的先后顺序，以及由谁来做。在你批准之前，什么都不会开始。",
       "steps": {
@@ -1421,9 +1421,9 @@
       }
     },
     "agentFleet": {
-      "metaDescription": "Motir 的托管智能体同时处理你计划中每一个就绪的工作项，每个都在自己的机器上运行，并使用适合该工作的模型。你可以亲自启动它们，也可以让 Motir Project Manager 让它们一直保持忙碌。",
+      "metaDescription": "Motir 的托管智能体同时处理你计划中每一个就绪的工作项，每个都在自己的机器上运行，并使用适合该工作的模型。你可以亲自启动它们，也可以让 Motir 项目经理让它们一直保持忙碌。",
       "headline": "你的整个计划，并行推进。",
-      "lede": "Motir 的托管智能体会接手每一个就绪的工作项并同时处理，每个都在一台全新的机器上运行，拥有自己的分支和拉取请求。你可以亲自启动它们，也可以让 Motir Project Manager 让它们一直保持忙碌，项目就会在所有方面同时推进。",
+      "lede": "Motir 的托管智能体会接手每一个就绪的工作项并同时处理，每个都在一台全新的机器上运行，拥有自己的分支和拉取请求。你可以亲自启动它们，也可以让 Motir 项目经理让它们一直保持忙碌，项目就会在所有方面同时推进。",
       "parallel": {
         "eyebrow": "规模",
         "headline": "每个就绪的工作项，一台机器",
@@ -1431,8 +1431,8 @@
       },
       "pm": {
         "eyebrow": "无需操心",
-        "headline": "Motir Project Manager 让智能体集群一直保持忙碌",
-        "body": "把项目交给 Motir Project Manager，只要有工作项就绪，它就会立即启动一次运行、选好模型，只把需要你决定的事带给你：拉取请求、设计和计划。"
+        "headline": "Motir 项目经理让智能体集群一直保持忙碌",
+        "body": "把项目交给 Motir 项目经理，只要有工作项就绪，它就会立即启动一次运行、选好模型，只把需要你决定的事带给你：拉取请求、设计和计划。"
       },
       "models": {
         "eyebrow": "每项工作用对的模型",

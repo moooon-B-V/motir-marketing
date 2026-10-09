@@ -145,19 +145,19 @@
     },
     "productItems": {
       "aiPlanner": {
-        "name": "Motir AI Planner",
+        "name": "Motir AI 플래너",
         "blurb": "아이디어를 승인 가능한 계획으로 바꿉니다"
       },
       "projectManagement": {
-        "name": "Motir Project Management",
+        "name": "Motir 프로젝트 관리",
         "blurb": "보드, Sprint, 백로그, 로드맵"
       },
       "projectManager": {
-        "name": "Motir Project Manager",
+        "name": "Motir 프로젝트 매니저",
         "blurb": "프로젝트 전체를 운영하고 보고합니다"
       },
       "aiDebugging": {
-        "name": "Motir AI Debugging",
+        "name": "Motir AI 디버깅",
         "blurb": "모든 버그를 코드까지 추적하고 계획에 넣습니다"
       },
       "mcp": {
@@ -177,15 +177,15 @@
         "blurb": "스킬, MCP 서버, CLI를 한 번에 설치"
       },
       "agentFleet": {
-        "name": "Motir Agent Fleet",
+        "name": "Motir 에이전트 플릿",
         "blurb": "계획을 병렬로 처리하는 호스팅 에이전트"
       },
       "agentHosting": {
-        "name": "Motir Agent Hosting",
+        "name": "Motir 에이전트 호스팅",
         "blurb": "내 에이전트를 Motir의 머신에서"
       },
       "sandbox": {
-        "name": "Motir Sandbox",
+        "name": "Motir 샌드박스",
         "blurb": "내 컴퓨터에서 에이전트를 위한 격리된 컨테이너"
       }
     }
@@ -208,9 +208,9 @@
       "existingProjectLink": "그것도 바이브할 수 있습니다"
     },
     "projectManager": {
-      "eyebrow": "Motir Project Manager",
-      "headline": "이미 프로젝트가 있으신가요? Motir Project Manager에게 맡기세요.",
-      "lede": "제품 책임자는 바로 당신입니다. Motir Project Manager는 기존 프로젝트를 읽고, 다음 할 일을 계획하고, 에이전트에게 일을 맡긴 뒤 결과를 보고합니다. 프로젝트 운영은 Motir가, 무엇을 출시할지는 당신이 결정합니다.",
+      "eyebrow": "Motir 프로젝트 매니저",
+      "headline": "이미 프로젝트가 있으신가요? Motir 프로젝트 매니저에게 맡기세요.",
+      "lede": "제품 책임자는 바로 당신입니다. Motir 프로젝트 매니저는 기존 프로젝트를 읽고, 다음 할 일을 계획하고, 에이전트에게 일을 맡긴 뒤 결과를 보고합니다. 프로젝트 운영은 Motir가, 무엇을 출시할지는 당신이 결정합니다.",
       "points": [
         "무엇이든 바꾸기 전에 코드, 작업, 이력을 먼저 읽습니다",
         "다음 단계를 계획하고 계획을 최신 상태로 유지합니다",
@@ -225,7 +225,7 @@
         "plane": "Plane"
       },
       "report": {
-        "ariaLabel": "Motir Project Manager의 주간 보고서 예시",
+        "ariaLabel": "Motir 프로젝트 매니저의 주간 보고서 예시",
         "title": "주간 보고서 · AI 개인 비서",
         "range": "10월 6일 – 10월 12일",
         "done": "이번 주 완료",
@@ -338,7 +338,7 @@
     },
     "close": {
       "headline": "Vibe the project",
-      "body": "몇 문장으로 시작하거나, 기존 프로젝트를 Motir Project Manager에게 맡기세요.",
+      "body": "몇 문장으로 시작하거나, 기존 프로젝트를 Motir 프로젝트 매니저에게 맡기세요.",
       "start": "프로젝트 시작하기",
       "import": "프로젝트 가져오기",
       "developers": "개발자를 위한 Motir 작동 방식",
@@ -818,7 +818,7 @@
     "metaTitle": "{name} — Motir",
     "worksWith": "함께 쓸 수 있는 도구",
     "aiPlanner": {
-      "metaDescription": "Motir AI Planner는 무엇을 만드는지 분명해질 때까지 질문한 다음, 모든 작업을 순서대로, 누가 할지까지 담은 전체 계획을 작성합니다. 승인하기 전에는 아무것도 시작되지 않습니다.",
+      "metaDescription": "Motir AI 플래너는 무엇을 만드는지 분명해질 때까지 질문한 다음, 모든 작업을 순서대로, 누가 할지까지 담은 전체 계획을 작성합니다. 승인하기 전에는 아무것도 시작되지 않습니다.",
       "headline": "먼저 무엇을. 그다음 전체 계획을.",
       "lede": "만들고 싶은 것을 설명하세요. 플래너는 추측으로 계획하지 않으므로, 의도가 분명해질 때까지 질문합니다. 그런 다음 이미 있는 것을 읽고 전체 계획을 작성합니다. 모든 작업을 일어나야 할 순서대로, 누가 할지까지 담습니다. 승인하기 전에는 아무것도 시작되지 않습니다.",
       "steps": {
@@ -1427,9 +1427,9 @@
       }
     },
     "agentFleet": {
-      "metaDescription": "Motir의 호스팅 에이전트는 계획의 준비된 항목을 한꺼번에 처리하며, 각자 자기 머신에서 작업에 맞는 모델로 일합니다. 직접 시작하거나 Motir Project Manager가 계속 일을 맡기게 하세요.",
+      "metaDescription": "Motir의 호스팅 에이전트는 계획의 준비된 항목을 한꺼번에 처리하며, 각자 자기 머신에서 작업에 맞는 모델로 일합니다. 직접 시작하거나 Motir 프로젝트 매니저가 계속 일을 맡기게 하세요.",
       "headline": "계획 전체를 병렬로 처리합니다.",
-      "lede": "Motir의 호스팅 에이전트는 준비된 작업 항목을 모두 맡아 동시에 처리하며, 각자 새 머신에서 자기 브랜치와 풀 리퀘스트로 일합니다. 직접 시작하거나 Motir Project Manager가 계속 일을 맡기게 하면, 프로젝트가 모든 방면에서 한꺼번에 나아갑니다.",
+      "lede": "Motir의 호스팅 에이전트는 준비된 작업 항목을 모두 맡아 동시에 처리하며, 각자 새 머신에서 자기 브랜치와 풀 리퀘스트로 일합니다. 직접 시작하거나 Motir 프로젝트 매니저가 계속 일을 맡기게 하면, 프로젝트가 모든 방면에서 한꺼번에 나아갑니다.",
       "parallel": {
         "eyebrow": "확장",
         "headline": "준비된 작업 항목마다 머신 하나",
@@ -1437,8 +1437,8 @@
       },
       "pm": {
         "eyebrow": "알아서 운영",
-        "headline": "Motir Project Manager가 에이전트들에게 계속 일을 맡깁니다",
-        "body": "프로젝트를 Motir Project Manager에게 맡기면, 작업 항목이 준비되는 즉시 실행을 시작하고 모델을 고르며, 당신의 결정이 필요한 것만 가져옵니다: 풀 리퀘스트, 디자인, 계획."
+        "headline": "Motir 프로젝트 매니저가 에이전트들에게 계속 일을 맡깁니다",
+        "body": "프로젝트를 Motir 프로젝트 매니저에게 맡기면, 작업 항목이 준비되는 즉시 실행을 시작하고 모델을 고르며, 당신의 결정이 필요한 것만 가져옵니다: 풀 리퀘스트, 디자인, 계획."
       },
       "models": {
         "eyebrow": "작업마다 알맞은 모델",
