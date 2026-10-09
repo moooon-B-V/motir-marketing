@@ -22,7 +22,12 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "brand:icons": "node scripts/brand/generate-brand-icons.ts",
-    "design:render": "node scripts/design/render-design-mock.ts"
+    "design:render": "node scripts/design/render-design-mock.ts",
+    "i18n:extract": "node scripts/i18n/catalogue.ts extract",
+    "i18n:merge": "node scripts/i18n/catalogue.ts merge",
+    "i18n:status": "node scripts/i18n/catalogue.ts status",
+    "i18n:baseline": "node scripts/i18n/catalogue.ts baseline",
+    "i18n:glossary-sync": "node scripts/i18n/catalogue.ts glossary-sync"
   },
   "dependencies": {
     "@motir/brand": "0.4.4",
@@ -38,6 +43,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@formatjs/icu-messageformat-parser": "3.5.21",
     "@playwright/test": "^1.62.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^7.0.1",

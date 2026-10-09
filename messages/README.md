@@ -212,3 +212,26 @@ prose written anywhere else is covered by neither.**
 - **`robots` / `sitemap` / JSON-LD copy** — `MOTIR-1154` (8.3.7) owns the entity signal.
 - **Anything `motir-core` renders.** The sign-in, onboarding and legal surfaces keep
   their own catalogue; this card touches no file in that repository.
+
+## Translating the catalogue
+
+`en.json` is the source. Each other locale is a sibling `messages/<locale>.json`
+with `messages/sources/<locale>.json` beside it, recording the English every
+string was translated from, so an English edit shows up as **stale** rather
+than silently drifting. Both files are written by the catalogue script, never by
+hand, and are committed together (MOTIR-7949):
+
+```sh
+pnpm i18n:status                      # per locale: current / missing / stale / untracked / orphan
+pnpm i18n:extract --locale fr         # batch files in .i18n-work/fr/ (git-ignored)
+pnpm i18n:merge --locale fr           # checks each entry, writes fr.json + sources/fr.json
+```
+
+Every translation is made under the language's glossary in `glossary/`, a mirror
+of motir-core's. The loop, the checks `merge` makes and the gates are in
+[`scripts/i18n/README.md`](../scripts/i18n/README.md).
+
+**Product names stay in English in every catalogue.** `Motir` and `Motir AI`
+are never translated (rule 4 above), and each `nav.productItems.*.name` is
+exactly en.json's: a translator does not localize "Motir Project Management"
+one word at a time. `tests/copy.test.ts` § _every catalogue_ checks both.
