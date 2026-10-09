@@ -10,6 +10,7 @@ import {
   WifiOff,
 } from 'lucide-react'
 import { EmptyState, buttonVariants } from '@motir/design-system'
+import { useLocale } from 'next-intl'
 import { format, useCopy } from '@/lib/copy'
 import {
   buildExploreHref,
@@ -27,10 +28,10 @@ import {
  * a `failed` read renders the error state.
  */
 
-/** A compact "n d/h/m ago" for the card's recency stat (English only). */
-function relativeAge(iso: string): string {
+/** A compact "n d/h/m ago" for the card's recency stat, in the page's locale. */
+function relativeAge(iso: string, locale: string): string {
   const diffMs = new Date(iso).getTime() - Date.now()
-  const rtf = new Intl.RelativeTimeFormat('en', {
+  const rtf = new Intl.RelativeTimeFormat(locale, {
     numeric: 'auto',
     style: 'narrow',
   })
@@ -48,8 +49,9 @@ function relativeAge(iso: string): string {
 
 function ProjectCard({ card }: { card: ProjectSquareCardDto }) {
   const copy = useCopy()
+  const locale = useLocale()
   const age = card.stats.lastActivityAt
-    ? relativeAge(card.stats.lastActivityAt)
+    ? relativeAge(card.stats.lastActivityAt, locale)
     : null
   return (
     <article className="min-w-0">

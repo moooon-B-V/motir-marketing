@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSitePathname } from '@/i18n/sitePathname'
-import { type Copy, useCopy } from '@/lib/copy'
+import { type Copy, format, useCopy } from '@/lib/copy'
 import type { RailOperation } from '@/lib/docs'
 import { docsIndexFor, docsSurfacesFor } from '@/lib/docsSurfaces'
 
@@ -309,7 +309,8 @@ export function DocsRail({
               className="mb-2 flex min-h-(--height-control) w-full cursor-pointer items-center justify-between rounded-(--radius-control) border border-(--el-border) bg-(--el-page-bg) px-(--spacing-control-x) text-[13px] font-semibold text-(--el-text) md:hidden"
             >
               <span>
-                {copy.docs.api} · {total} operations
+                {copy.docs.api} ·{' '}
+                {format(copy.docs.operationCount, { count: total })}
               </span>
               <svg
                 viewBox="0 0 24 24"

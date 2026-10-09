@@ -272,7 +272,9 @@ function Specimen() {
 
       <div className="mx-auto flex max-w-[1080px] flex-col gap-8 px-4 pb-4 sm:px-7">
         <section className="flex flex-col gap-3">
-          <SectionLabel>Composed UI</SectionLabel>
+          <SectionLabel>
+            {copy.designShowcase.specimen.sectionLabel}
+          </SectionLabel>
           <ComposedUi />
         </section>
       </div>
@@ -288,23 +290,18 @@ function Specimen() {
   )
 }
 
-const ASSIGNEES = [
-  { value: 'yue', label: 'Zhu Yue' },
-  { value: 'unassigned', label: 'Unassigned' },
-] as const
-
 /*
  * The primitives the asset draws that `TokensSpecimen` does not carry —
  * overlays, the two state primitives, the segmented control and the switch.
  *
- * ⚠️ THE LABELS HERE ARE SPECIMEN DATA, NOT COPY, and that is why they are not
- * in `messages/en.json`. `designShowcase.*` is MOTIR-3862's key set and
- * `tests/copy.test.ts` asserts it exactly; a demo work item's title is the
- * same kind of string as `TokensSpecimen`'s own "Ship the billing flow", which
- * the package hard-codes for the same reason. They still obey the register: a
- * work item is never an "issue".
+ * The labels here are specimen data, but a reader on `/ja/design` reads them
+ * all the same, so they live in the catalogue under
+ * `designShowcase.specimen` (MOTIR-7970) and translate with the rest of the
+ * page. They still obey the register: a work item is never an "issue". The one
+ * literal left is the demo assignee's name, which no locale translates.
  */
 function ComposedUi() {
+  const s = useCopy().designShowcase.specimen
   const [live, setLive] = useState(true)
   const [view, setView] = useState<'board' | 'list'>('board')
   const [assignee, setAssignee] = useState<string | null>(null)
@@ -318,16 +315,16 @@ function ComposedUi() {
     <Card>
       <div className="flex flex-col gap-5">
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="danger">Danger</Button>
-          <Pill>Badge</Pill>
-          <Pill status="done">Done</Pill>
-          <Pill status="in-progress">In progress</Pill>
-          <Tooltip content="A tooltip, drawn from the same tokens.">
+          <Button variant="primary">{s.primary}</Button>
+          <Button variant="secondary">{s.secondary}</Button>
+          <Button variant="ghost">{s.ghost}</Button>
+          <Button variant="danger">{s.danger}</Button>
+          <Pill>{s.badge}</Pill>
+          <Pill status="done">{s.done}</Pill>
+          <Pill status="in-progress">{s.inProgress}</Pill>
+          <Tooltip content={s.tooltip}>
             <Button variant="ghost" size="sm">
-              Hover me
+              {s.hoverMe}
             </Button>
           </Tooltip>
           <Spinner />
@@ -335,24 +332,27 @@ function ComposedUi() {
 
         <div className="flex flex-wrap items-end gap-4">
           <Input
-            label="Work item title"
-            defaultValue="Ship the billing flow"
+            label={s.titleLabel}
+            defaultValue={s.titleValue}
             className="min-w-[220px]"
           />
           <Combobox
-            label="Assignee"
-            placeholder="Select…"
-            options={[...ASSIGNEES]}
+            label={s.assigneeLabel}
+            placeholder={s.assigneePlaceholder}
+            options={[
+              { value: 'yue', label: 'Zhu Yue' },
+              { value: 'unassigned', label: s.unassigned },
+            ]}
             value={assignee}
             onChange={setAssignee}
           />
           <Segmented
-            label="View"
+            label={s.viewLabel}
             value={view}
             onChange={setView}
             options={[
-              { value: 'board', label: 'Board' },
-              { value: 'list', label: 'List' },
+              { value: 'board', label: s.board },
+              { value: 'list', label: s.list },
             ]}
           />
           <div className="flex items-center gap-2">
@@ -360,37 +360,32 @@ function ComposedUi() {
               id="showcase-live"
               checked={live}
               onCheckedChange={setLive}
-              aria-label="Live updates"
+              aria-label={s.liveUpdates}
             />
             <label
               htmlFor="showcase-live"
               className="text-sm text-(--el-text-secondary)"
             >
-              Live updates
+              {s.liveUpdates}
             </label>
           </div>
         </div>
 
-        <Textarea
-          label="Notes"
-          rows={2}
-          defaultValue="Every control on this card is the shipped primitive."
-        />
+        <Textarea label={s.notesLabel} rows={2} defaultValue={s.notesValue} />
 
         <div className="flex flex-wrap items-center gap-2">
           <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
             <Popover.Trigger asChild>
               <Button variant="secondary" size="sm">
-                Popover
+                {s.popover}
               </Button>
             </Popover.Trigger>
             <Popover.Content className="grid w-80 gap-1.5 p-(--spacing-card-padding)">
               <p className="m-0 text-[15px] font-semibold text-(--el-text)">
-                Popover
+                {s.popover}
               </p>
               <p className="m-0 text-sm text-(--el-text-secondary)">
-                An overlay drawn from the same tokens. Its radius, border and
-                shadow change with the style, its colours with the palette.
+                {s.popoverBody}
               </p>
             </Popover.Content>
           </Popover>
@@ -399,25 +394,19 @@ function ComposedUi() {
             size="sm"
             onClick={() => setModalOpen(true)}
           >
-            Modal
+            {s.modal}
           </Button>
           <Modal
             open={modalOpen}
             onOpenChange={setModalOpen}
-            title="Modal"
-            description="Dialogs re-shape with the style axis too."
+            title={s.modal}
+            description={s.modalDescription}
           />
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <EmptyState
-            title="Nothing here yet"
-            description="EmptyState — the shipped primitive."
-          />
-          <ErrorState
-            title="Something broke"
-            description="ErrorState — the shipped primitive."
-          />
+          <EmptyState title={s.emptyTitle} description={s.emptyDescription} />
+          <ErrorState title={s.errorTitle} description={s.errorDescription} />
         </div>
       </div>
     </Card>

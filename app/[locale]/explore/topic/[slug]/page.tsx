@@ -87,7 +87,7 @@ export default async function TopicPage({
       contentClassName="mx-auto w-full max-w-[72rem] px-(--spacing-card-padding) py-10"
     >
       <nav
-        aria-label="Project square"
+        aria-label={copy.explore.topicNavAria}
         className="mb-4 flex items-center gap-1 text-[13px]"
       >
         <Link
@@ -102,7 +102,7 @@ export default async function TopicPage({
 
       <header className="mb-6">
         <h1 className="font-(family-name:--font-serif) text-3xl font-semibold tracking-tight text-(--el-text)">
-          {label} projects
+          {format(copy.explore.topicHeading, { topic: label })}
         </h1>
         <p className="mt-2 max-w-[40rem] text-[14px] text-(--el-text-secondary)">
           {format(copy.explore.metaDescriptionTopic, { topic: label })}

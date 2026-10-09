@@ -246,7 +246,7 @@ export default async function MotirBuildsItselfPage({
               ).map(([k, n]) => (
                 <div key={k} className="grid gap-1">
                   <dd className="m-0 font-(family-name:--font-serif) text-[clamp(40px,4.4vw,72px)] leading-none font-bold tracking-[-0.03em]">
-                    {n.toLocaleString('en')}
+                    {n.toLocaleString(locale)}
                   </dd>
                   <dt
                     className={cn(

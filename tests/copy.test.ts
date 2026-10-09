@@ -124,6 +124,9 @@ describe('the copy catalogue', () => {
       'heading',
       'palette',
       'reset',
+      // MOTIR-7970 — the composed specimen's labels, moved out of the JSX so
+      // they translate with the page.
+      'specimen',
       'style',
       'subline',
       'theme',

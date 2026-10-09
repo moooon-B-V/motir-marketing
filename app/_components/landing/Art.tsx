@@ -1,6 +1,6 @@
 import { Check, Play } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { useCopy } from '@/lib/copy'
+import { format, useCopy } from '@/lib/copy'
 
 /*
  * The landing's pictures (2026-10 redesign).
@@ -517,7 +517,7 @@ function AcceptanceVideo() {
             'absolute bottom-1.5 left-2.5 text-[9.5px] text-(--el-showcase-ground-muted)',
           )}
         >
-          {v.label} · {v.chapters.length} chapters
+          {v.label} · {format(v.chapterCount, { count: v.chapters.length })}
         </span>
       </div>
       {/* The timeline, cut at its chapters. */}

@@ -18,6 +18,7 @@ const MONO = 'font-(family-name:--font-mono) tracking-[0.06em] uppercase'
 
 /** One "what got lost" scene, by its index in `lost.items`. */
 function LostScene({ i }: Readonly<{ i: number }>) {
+  const scenes = useCopy().builtByMotirPage.lost.scenes
   if (i === 0)
     return (
       <div className="grid gap-2 font-(family-name:--font-mono) text-[11.5px]">
@@ -25,14 +26,14 @@ function LostScene({ i }: Readonly<{ i: number }>) {
           checkout.ts:42 TypeError
         </span>
         <span className="self-start rounded-(--radius-control) bg-(--el-showcase-paper) px-(--spacing-control-x) py-(--spacing-control-y) text-(--el-showcase-muted) line-through">
-          fix later
+          {scenes.fixLater}
         </span>
       </div>
     )
   if (i === 1)
     return (
       <ul className="m-0 grid list-none gap-1.5 p-0 text-[11.5px]">
-        {['Calendar', 'Reminders', 'Billing', 'Export', 'Search'].map((f) => (
+        {scenes.features.map((f) => (
           <li
             key={f}
             className="flex items-center justify-between gap-2 rounded-(--radius-control) bg-(--el-showcase-paper) px-2 py-0.5"
@@ -44,7 +45,7 @@ function LostScene({ i }: Readonly<{ i: number }>) {
                 'text-[9.5px] text-(--el-showcase-decision-ink)',
               )}
             >
-              in progress
+              {scenes.inProgress}
             </span>
           </li>
         ))}
@@ -72,12 +73,14 @@ function LostScene({ i }: Readonly<{ i: number }>) {
   return (
     <div className="grid gap-1.5 text-[12px]">
       <span className="justify-self-end rounded-(--radius-card) bg-(--el-showcase-ground) px-3 py-1.5 text-(--el-showcase-ground-text)">
-        why this way?
+        {scenes.question}
       </span>
       <span className="rounded-(--radius-card) bg-(--el-showcase-paper) px-3 py-1.5 opacity-70">
-        because the…
+        {scenes.answer}
       </span>
-      <span className={cn(MONO, 'text-[10px] opacity-70')}>session ended</span>
+      <span className={cn(MONO, 'text-[10px] opacity-70')}>
+        {scenes.sessionEnded}
+      </span>
     </div>
   )
 }

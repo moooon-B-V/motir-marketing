@@ -318,6 +318,7 @@
         "changes": "Ask for changes",
         "approve": "Approve",
         "video": {
+          "chapterCount": "{count} chapters",
           "label": "Acceptance video",
           "length": "0:48",
           "chapters": [
@@ -339,6 +340,37 @@
     }
   },
   "designShowcase": {
+    "specimen": {
+      "sectionLabel": "Composed UI",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "ghost": "Ghost",
+      "danger": "Danger",
+      "badge": "Badge",
+      "done": "Done",
+      "inProgress": "In progress",
+      "tooltip": "A tooltip, drawn from the same tokens.",
+      "hoverMe": "Hover me",
+      "titleLabel": "Work item title",
+      "titleValue": "Ship the billing flow",
+      "assigneeLabel": "Assignee",
+      "assigneePlaceholder": "Select…",
+      "unassigned": "Unassigned",
+      "viewLabel": "View",
+      "board": "Board",
+      "list": "List",
+      "liveUpdates": "Live updates",
+      "notesLabel": "Notes",
+      "notesValue": "Every control on this card is the shipped primitive.",
+      "popover": "Popover",
+      "popoverBody": "An overlay drawn from the same tokens. Its radius, border and shadow change with the style, its colours with the palette.",
+      "modal": "Modal",
+      "modalDescription": "Dialogs re-shape with the style axis too.",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "EmptyState — the shipped primitive.",
+      "errorTitle": "Something broke",
+      "errorDescription": "ErrorState — the shipped primitive."
+    },
     "heading": "Pick a look. The whole site changes.",
     "subline": "This is the design system every Motir project starts with. It is here rather than in a styleguide because the fastest way to show what your product could look like is to let you restyle ours.",
     "theme": {
@@ -397,6 +429,8 @@
     "indexContact": "Questions about any of these: legal@motir.co"
   },
   "explore": {
+    "topicNavAria": "Project square",
+    "topicHeading": "{topic} projects",
     "metaTitle": "Build in public · Projects on Motir",
     "metaDescription": "Projects teams build in public on Motir: their roadmaps, boards, plans and agent runs. Read any project's overview, and follow the live work with a free account.",
     "metaTitleTopic": "{topic} projects built in public · Motir",
@@ -464,6 +498,7 @@
     }
   },
   "docs": {
+    "operationCount": "{count} operations",
     "metaTitle": "Docs · Motir",
     "metaDescription": "Documentation for the Motir API and MCP server — the public read contract, the server that agents call, and the CLI.",
     "metaTitleReference": "API reference · Motir docs",
@@ -1892,6 +1927,14 @@
     "watch": "Watch Motir build itself",
     "runs": "Create an account to watch its agent runs",
     "lost": {
+      "scenes": {
+        "fixLater": "fix later",
+        "features": ["Calendar", "Reminders", "Billing", "Export", "Search"],
+        "inProgress": "in progress",
+        "question": "why this way?",
+        "answer": "because the…",
+        "sessionEnded": "session ended"
+      },
       "eyebrow": "Where it started",
       "headline": "We vibe coded. The project fell apart.",
       "body": "Vibe coding made the code fast. But the further we got, the more of the project we lost — because a project is not only code.",
