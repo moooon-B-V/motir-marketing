@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import { getCopy, format } from '@/lib/copy'
 import { listLegalDocuments } from '@/lib/legal/documents'
@@ -48,7 +49,7 @@ export default async function LegalIndexPage({ params }: LocalePageProps) {
             className="border-b border-(--el-border) last:border-b-0"
           >
             <Link
-              href={`/legal/${doc.slug}`}
+              href={localizedPath(locale, `/legal/${doc.slug}`)}
               className="flex flex-col gap-1 py-4 hover:bg-(--el-surface-soft)"
             >
               <span className="text-[14px] font-semibold text-(--el-text)">

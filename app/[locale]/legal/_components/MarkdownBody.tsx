@@ -1,6 +1,8 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { localizedPath } from '@/i18n/localizedPath'
+import type { Locale } from '@/i18n/routing'
 
 /**
  * The legal-document Markdown body, rendered with `react-markdown` +
@@ -25,14 +27,43 @@ type ComponentMap = ComponentProps<typeof ReactMarkdown>['components']
 /** An absolute http(s) href leaves this site; relative links stay in-page. */
 const isExternal = (href: string) => /^https?:\/\//.test(href)
 
-export function MarkdownBody({ value }: { value: string }) {
+export function MarkdownBody({
+  value,
+  locale,
+}: {
+  value: string
+  /**
+   * The page's locale, for a body that is the SITE's own text (a legal
+   * document), whose root-relative links are motir.co pages and so keep the
+   * reader's language (MOTIR-7971). Omitted for a project's or a requester's
+   * Markdown: their links are whatever they wrote, and stay as written.
+   */
+  locale?: Locale
+}) {
   return (
     <div className="text-[15px] leading-[1.7] text-(--el-text)">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={locale ? siteComponents(locale) : components}
+      >
         {value}
       </ReactMarkdown>
     </div>
   )
+}
+
+/** `components`, with a root-relative link spelled in the page's locale. */
+function siteComponents(locale: Locale): ComponentMap {
+  const Anchor = components!.a as (props: { href?: string }) => ReactNode
+  return {
+    ...components,
+    a: ({ href, ...props }) => (
+      <Anchor
+        {...props}
+        href={href?.startsWith('/') ? localizedPath(locale, href) : href}
+      />
+    ),
+  }
 }
 
 const components: ComponentMap = {

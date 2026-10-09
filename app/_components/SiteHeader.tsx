@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useSitePathname } from '@/i18n/sitePathname'
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
-import { type Copy, useCopy } from '@/lib/copy'
+import { type Copy, useCopy, usePageLocale } from '@/lib/copy'
+import type { Locale } from '@/i18n/routing'
 import { PRODUCT_MARK, productGroupsFor, productItemsFor } from './products'
 import { BrandTile } from './BrandTile'
 import {
@@ -108,12 +109,13 @@ const navItemsFor = (copy: Copy) =>
  */
 
 /** A product's address: its page, or — for the tooling — its documentation. */
-const productHref = (host: PublicHost, slug: ProductSlug) =>
-  siteLinkFor(host, PRODUCT_DOCS[slug] ?? productPath(slug))
+const productHref = (host: PublicHost, slug: ProductSlug, locale: Locale) =>
+  siteLinkFor(host, PRODUCT_DOCS[slug] ?? productPath(slug), locale)
 const NEW_TAB = { target: '_blank', rel: 'noopener noreferrer' } as const
 
 function ProductsMenu({ host }: { host: PublicHost }) {
   const copy = useCopy()
+  const locale = usePageLocale()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const onSite = host.kind === 'site'
@@ -168,7 +170,7 @@ function ProductsMenu({ host }: { host: PublicHost }) {
               {group.items.map((product) => (
                 <ChromeLink
                   key={product.slug}
-                  href={productHref(host, product.slug)}
+                  href={productHref(host, product.slug, locale)}
                   internal={onSite && !PRODUCT_DOCS[product.slug]}
                   {...(PRODUCT_DOCS[product.slug] ? NEW_TAB : {})}
                   onClick={() => setOpen(false)}
@@ -232,6 +234,7 @@ export function SiteHeader({
   overlay?: boolean
 }) {
   const copy = useCopy()
+  const locale = usePageLocale()
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = useSitePathname()
   const onSite = host.kind === 'site'
@@ -248,7 +251,7 @@ export function SiteHeader({
             different ORIGIN stays a plain `<a>`: `next/link` prefetches and
             client-routes, neither of which means anything across origins. */}
           <ChromeLink
-            href={siteLinkFor(host, SITE_ROOT)}
+            href={siteLinkFor(host, SITE_ROOT, locale)}
             internal={onSite}
             aria-label={copy.nav.brandAriaLabel}
             className="flex flex-none items-center"
@@ -270,7 +273,7 @@ export function SiteHeader({
               return (
                 <ChromeLink
                   key={item.path}
-                  href={siteLinkFor(host, item.path)}
+                  href={siteLinkFor(host, item.path, locale)}
                   internal={onSite}
                   aria-current={current ? 'page' : undefined}
                   className={cn(
@@ -351,14 +354,14 @@ export function SiteHeader({
               reason. */}
           {[
             ...productItemsFor(copy).map((product) => ({
-              href: productHref(host, product.slug),
+              href: productHref(host, product.slug, locale),
               label: product.name,
               internal: onSite && !PRODUCT_DOCS[product.slug],
               current: false,
               newTab: Boolean(PRODUCT_DOCS[product.slug]),
             })),
             ...navItemsFor(copy).map((item) => ({
-              href: siteLinkFor(host, item.path),
+              href: siteLinkFor(host, item.path, locale),
               label: item.label,
               internal: onSite,
               current: isCurrent(host, item.path, pathname),

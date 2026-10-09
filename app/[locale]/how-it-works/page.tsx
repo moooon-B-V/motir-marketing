@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import { ArrowRight } from 'lucide-react'
@@ -211,13 +212,13 @@ export default async function HowItWorksPage({ params }: LocalePageProps) {
                 <ArrowRight aria-hidden="true" className="size-4" />
               </a>
               <a
-                href={DOCS}
+                href={localizedPath(locale, DOCS)}
                 className="inline-flex items-center rounded-(--radius-btn) border border-current/30 h-(--height-btn-lg) px-(--spacing-btn-x) text-[15px] font-medium no-underline"
               >
                 {h.closeDocs}
               </a>
               <a
-                href={`${DOCS}/mcp`}
+                href={localizedPath(locale, `${DOCS}/mcp`)}
                 className="inline-flex items-center rounded-(--radius-btn) border border-current/30 h-(--height-btn-lg) px-(--spacing-btn-x) text-[15px] font-medium no-underline"
               >
                 {h.closeMcp}

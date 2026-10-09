@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -138,7 +139,7 @@ export default async function PublicAddressDocsPage({
         <p>
           Connecting a domain you own is available on paid plans — see{' '}
           <Link
-            href="/"
+            href={localizedPath(locale, '/')}
             className="text-(--el-link) underline underline-offset-2"
           >
             our plans

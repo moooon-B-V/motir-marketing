@@ -1,6 +1,7 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import { Tag } from 'lucide-react'
-import { format, useCopy } from '@/lib/copy'
+import { format, useCopy, usePageLocale } from '@/lib/copy'
 import type { ProjectCategoryDto } from '@/lib/explore'
 
 /*
@@ -15,6 +16,7 @@ export function CategoriesBrowse({
   categories: ProjectCategoryDto[]
 }) {
   const copy = useCopy()
+  const locale = usePageLocale()
   if (categories.length === 0) return null
   const max = Math.max(...categories.map((c) => c.projectCount), 1)
 
@@ -33,7 +35,7 @@ export function CategoriesBrowse({
         {categories.map((cat) => (
           <Link
             key={cat.slug}
-            href={`/explore/topic/${cat.slug}`}
+            href={localizedPath(locale, `/explore/topic/${cat.slug}`)}
             className="flex items-center gap-3 rounded-(--radius-control) px-(--spacing-control-x) py-(--spacing-control-y) hover:bg-(--el-surface-soft)"
           >
             <Tag

@@ -3,6 +3,7 @@ import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SiteShell } from '@/app/_components/SiteShell'
+import type { Locale } from '@/i18n/routing'
 import { englishCopy as copy } from '@/lib/copy'
 import {
   DESIGN,
@@ -10,6 +11,9 @@ import {
   EXPLORE,
   SITE_PATHS,
   SITE_ROOT,
+  PRODUCT_DOCS,
+  PRODUCT_SLUGS,
+  productPath,
 } from '@/lib/destinations'
 import { SITE_HOST, siteLinkFor, type PublicHost } from '@/lib/publicHost'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
@@ -71,9 +75,14 @@ const UNRESOLVED: PublicHost = {
 }
 
 /** Every href the chrome emits, in document order, with the menu panel OPEN. */
-async function chromeHrefs(host: PublicHost): Promise<string[]> {
+async function chromeHrefs(
+  host: PublicHost,
+  locale: Locale = 'en',
+): Promise<string[]> {
   const user = userEvent.setup()
-  const { container } = render(<SiteShell host={host}>content</SiteShell>)
+  const { container } = render(<SiteShell host={host}>content</SiteShell>, {
+    locale,
+  })
   // The bar and the `md:hidden` panel are two branches rendering the same
   // items, which is exactly how a treatment ends up existing on desktop only
   // (`SiteHeader`'s own note). Opening the panel puts both in one sweep.
@@ -107,7 +116,7 @@ describe.each([
   it('emits every site path ABSOLUTELY, on the site origin', async () => {
     const hrefs = await chromeHrefs(host)
     for (const path of SITE_PATHS) {
-      expect(hrefs).toContain(siteLinkFor(host, path))
+      expect(hrefs).toContain(siteLinkFor(host, path, 'en'))
       expect(hrefs).toContain(new URL(path, `${SITE_ORIGIN}/`).toString())
     }
   })
@@ -133,7 +142,7 @@ describe.each([
     // root" while emitting `/`, which on these two host kinds is the WORKSPACE's
     // root or the PROJECT's. The prose was the intent; the href was not.
     const hrefs = await chromeHrefs(host)
-    const home = siteLinkFor(host, SITE_ROOT)
+    const home = siteLinkFor(host, SITE_ROOT, 'en')
     expect(home).toBe(`${SITE_ORIGIN}/`)
     expect(hrefs.filter((h) => h === home)).toHaveLength(2)
   })
@@ -172,9 +181,9 @@ describe.each([
 describe('siteLinkFor', () => {
   it('is a no-op on the site and absolute everywhere else', () => {
     for (const path of [SITE_ROOT, EXPLORE, DOCS, DESIGN, '/legal/terms']) {
-      expect(siteLinkFor(SITE_HOST, path)).toBe(path)
+      expect(siteLinkFor(SITE_HOST, path, 'en')).toBe(path)
       for (const host of [WORKSPACE, CUSTOM, UNRESOLVED]) {
-        expect(siteLinkFor(host, path)).toBe(
+        expect(siteLinkFor(host, path, 'en')).toBe(
           new URL(path, `${SITE_ORIGIN}/`).toString(),
         )
       }
@@ -191,7 +200,63 @@ describe('siteLinkFor', () => {
      * send every visitor to production. Comparing the two functions is what
      * says the override is honoured.
      */
-    expect(siteLinkFor(WORKSPACE, EXPLORE)).toBe(siteUrl(EXPLORE))
-    expect(siteLinkFor(CUSTOM, SITE_ROOT)).toBe(siteUrl(SITE_ROOT))
+    expect(siteLinkFor(WORKSPACE, EXPLORE, 'en')).toBe(siteUrl(EXPLORE))
+    expect(siteLinkFor(CUSTOM, SITE_ROOT, 'en')).toBe(siteUrl(SITE_ROOT))
+  })
+})
+
+/*
+ * THE CHROME KEEPS THE PAGE'S LOCALE (MOTIR-7971). Under `fr` every site path
+ * and every product link the header and footer emit is `siteLinkFor(host,
+ * path, 'fr')` — `/fr/docs` on the site, `https://motir.co/fr/docs` off it —
+ * and on the site no chrome href is an unprefixed site path.
+ */
+describe.each([
+  ['the site', SITE_HOST],
+  ['a workspace subdomain', WORKSPACE],
+  ['a customer domain', CUSTOM],
+  ['an UNRESOLVED host', UNRESOLVED],
+])('under fr, on %s', (_label, host) => {
+  it('emits every site path and product link in French', async () => {
+    const hrefs = await chromeHrefs(host, 'fr')
+    for (const path of SITE_PATHS) {
+      expect(hrefs).toContain(siteLinkFor(host, path, 'fr'))
+    }
+    for (const slug of PRODUCT_SLUGS) {
+      expect(hrefs).toContain(
+        siteLinkFor(host, PRODUCT_DOCS[slug] ?? productPath(slug), 'fr'),
+      )
+    }
+  })
+
+  it('emits no English site address', async () => {
+    const hrefs = await chromeHrefs(host, 'fr')
+    const site = hrefs
+      // `#main` is the skip link — a fragment, not an address.
+      .filter((h) => !h.startsWith('#'))
+      .map((h) => new URL(h, `${SITE_ORIGIN}/`))
+      .filter((url) => url.origin === SITE_ORIGIN)
+      .map((url) => url.pathname)
+    expect(site.length).toBeGreaterThan(0)
+    expect(
+      site.filter((path) => !(path === '/fr' || path.startsWith('/fr/'))),
+    ).toEqual([])
+  })
+})
+
+describe('siteLinkFor carries the locale', () => {
+  it('on the site, English unprefixed and every other locale prefixed', () => {
+    expect(siteLinkFor(SITE_HOST, DOCS, 'en')).toBe('/docs')
+    expect(siteLinkFor(SITE_HOST, DOCS, 'fr')).toBe('/fr/docs')
+    expect(siteLinkFor(SITE_HOST, DOCS, 'ja')).toBe('/ja/docs')
+    expect(siteLinkFor(SITE_HOST, SITE_ROOT, 'fr')).toBe('/fr')
+    expect(siteLinkFor(SITE_HOST, SITE_ROOT, 'en')).toBe('/')
+  })
+
+  it('off the site, absolute AND prefixed', () => {
+    expect(siteLinkFor(WORKSPACE, DOCS, 'fr')).toBe(`${SITE_ORIGIN}/fr/docs`)
+    expect(siteLinkFor(CUSTOM, DOCS, 'ja')).toBe(`${SITE_ORIGIN}/ja/docs`)
+    expect(siteLinkFor(UNRESOLVED, DOCS, 'en')).toBe(`${SITE_ORIGIN}/docs`)
+    expect(siteLinkFor(UNRESOLVED, SITE_ROOT, 'fr')).toBe(`${SITE_ORIGIN}/fr`)
   })
 })

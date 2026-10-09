@@ -97,7 +97,7 @@ describe.each([
   it('the ITEMS PAGER points at this host', () => {
     const { container } = render(
       <MoreLink
-        href={pagedTabHref(host, 'PROD', 'items', { cursor: 'w9' })}
+        href={pagedTabHref(host, 'PROD', 'items', { cursor: 'w9' }, 'en')}
         label="Load more"
       />,
     )

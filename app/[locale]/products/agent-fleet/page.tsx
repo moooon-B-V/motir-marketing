@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import { format, getCopy } from '@/lib/copy'
@@ -76,7 +77,10 @@ export default async function AgentFleetPage({ params }: LocalePageProps) {
       >
         <div className="grid gap-5">
           <PointGrid items={p.models.items} />
-          <OutLink href={DOCS_DIFFICULTY} className="justify-self-start">
+          <OutLink
+            href={localizedPath(locale, DOCS_DIFFICULTY)}
+            className="justify-self-start"
+          >
             {p.models.docsLink}
           </OutLink>
         </div>

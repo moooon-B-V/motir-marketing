@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -306,7 +307,7 @@ X-Motir-Api-Version:   ${contractVersion ?? '<the contract version>'}`}
             The specification was unreachable when this page was rendered, so
             the block above leaves that line as a placeholder —{' '}
             <Link
-              href="/docs/api"
+              href={localizedPath(locale, '/docs/api')}
               className="text-(--el-accent-on-surface) underline underline-offset-2"
             >
               {copy.docs.api}
@@ -324,14 +325,14 @@ X-Motir-Api-Version:   ${contractVersion ?? '<the contract version>'}`}
       <H2 id="what-next">What next</H2>
       <Prose>
         <Link
-          href="/docs/api"
+          href={localizedPath(locale, '/docs/api')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.api}
         </Link>{' '}
         lists every operation with its parameters, its body and its statuses.{' '}
         <Link
-          href="/docs/api/stability"
+          href={localizedPath(locale, '/docs/api/stability')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.apiStability}
@@ -339,7 +340,7 @@ X-Motir-Api-Version:   ${contractVersion ?? '<the contract version>'}`}
         is what the contract promises not to do to you. If you are wiring an
         agent rather than writing a client, the{' '}
         <Link
-          href="/docs/mcp"
+          href={localizedPath(locale, '/docs/mcp')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.mcp}

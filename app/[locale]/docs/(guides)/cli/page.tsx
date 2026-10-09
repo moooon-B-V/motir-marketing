@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -325,7 +326,7 @@ export default async function CliPage({ params }: LocalePageProps) {
         own agent credential — what it provides, what its token refuses, and the
         failures a first run hits are on the{' '}
         <Link
-          href="/docs/sandbox"
+          href={localizedPath(locale, '/docs/sandbox')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.sandbox}
@@ -333,14 +334,14 @@ export default async function CliPage({ params }: LocalePageProps) {
         page rather than restated here. Wiring an agent to Motir without the CLI
         is{' '}
         <Link
-          href="/docs/mcp"
+          href={localizedPath(locale, '/docs/mcp')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.mcp}
         </Link>
         , and driving the same work loop over HTTP is the{' '}
         <Link
-          href="/docs/api"
+          href={localizedPath(locale, '/docs/api')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.api}

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
 import { languageAlternates, localizedPath } from '@/lib/localeMetadata'
-import { LOCALES } from '@/i18n/routing'
+import { DEFAULT_LOCALE, LOCALES } from '@/i18n/routing'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
 import { DOCS_INDEX_HREF, DOCS_ROUTES } from '@/lib/docsSurfaces'
 import { PROJECT_TABS, loadAllPublicProjects } from '@/lib/publicProject'
@@ -119,7 +119,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           // same helper every rendered link goes through, so a sitemap entry
           // and the page's own navigation cannot spell the address differently
           // — which is the way a sitemap normally goes stale.
-          const path = publicPathFor(host, project.identifier, tab.segment)
+          // The ENGLISH path: `everyLanguage` spells the other ten from it.
+          const path = publicPathFor(
+            host,
+            project.identifier,
+            tab.segment,
+            DEFAULT_LOCALE,
+          )
           const rest = {
             lastModified,
             changeFrequency: 'daily' as const,

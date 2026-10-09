@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { type Copy, format, useCopy } from '@/lib/copy'
+import { type Copy, format, useCopy, usePageLocale } from '@/lib/copy'
 import {
   DOCS,
   EXPLORE,
@@ -83,6 +83,7 @@ const columnsFor = (copy: Copy) =>
 
 export function SiteFooter({ host }: { host: PublicHost }) {
   const copy = useCopy()
+  const locale = usePageLocale()
   return (
     <footer
       aria-label={copy.footer.ariaLabel}
@@ -97,7 +98,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
             ORIGIN is a plain `<a>`. */}
         {host.kind === 'site' ? (
           <Link
-            href={SITE_ROOT}
+            href={siteLinkFor(host, SITE_ROOT, locale)}
             aria-label={copy.nav.brandAriaLabel}
             className="inline-flex"
           >
@@ -105,7 +106,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
           </Link>
         ) : (
           <a
-            href={siteLinkFor(host, SITE_ROOT)}
+            href={siteLinkFor(host, SITE_ROOT, locale)}
             aria-label={copy.nav.brandAriaLabel}
             className="inline-flex"
           >
@@ -131,7 +132,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
                 <a
                   href={
                     'site' in item && item.site
-                      ? siteLinkFor(host, item.href)
+                      ? siteLinkFor(host, item.href, locale)
                       : item.href
                   }
                   className="text-[13px] text-(--el-text-secondary) hover:text-(--el-link) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"

@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -65,7 +66,10 @@ export default async function ClaudeCodeConnectorDocsPage({
         Code picks it up wherever you are signed in with your Claude account, or
         add it in Claude Code itself with one command. Want Motir’s skills as
         well? The{' '}
-        <Link href="/docs/claude-code-plugin" className={linkClass}>
+        <Link
+          href={localizedPath(locale, '/docs/claude-code-plugin')}
+          className={linkClass}
+        >
           {copy.docs.claudeCodePlugin}
         </Link>{' '}
         brings this connector with it.
@@ -107,7 +111,10 @@ export default async function ClaudeCodeConnectorDocsPage({
         you in that workspace, within what you approved, and never beyond what
         your own role allows. Claude asks before it uses a tool that changes
         anything, and{' '}
-        <Link href="/docs/mcp/tools" className={linkClass}>
+        <Link
+          href={localizedPath(locale, '/docs/mcp/tools')}
+          className={linkClass}
+        >
           {copy.docs.mcpTools}
         </Link>{' '}
         shows which tools only read, write or delete.
@@ -120,7 +127,7 @@ export default async function ClaudeCodeConnectorDocsPage({
         , on Settings → Account → Tokens in Motir, with its workspace,
         permissions and when it was last used. Revoke ends its access at its
         next request. The{' '}
-        <Link href="/docs/mcp" className={linkClass}>
+        <Link href={localizedPath(locale, '/docs/mcp')} className={linkClass}>
           {copy.docs.mcp}
         </Link>{' '}
         guide has the server’s details, and the token route for other clients

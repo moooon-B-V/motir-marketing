@@ -1,4 +1,6 @@
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
+import { localizedPath } from '@/i18n/localizedPath'
+import type { Locale } from '@/i18n/routing'
 
 /**
  * THE ONE PLACE THAT KNOWS WHAT A LINK LOOKS LIKE ON THIS HOST
@@ -180,11 +182,22 @@ export function normaliseHost(raw: string | null | undefined): string | null {
  * leading slash — `''` for the overview, `'board'`, `'items/ACME-42'`,
  * `'changelog.xml'`. The identifier is encoded here, because on two of the three
  * host kinds it is a path segment this function alone emits.
+ *
+ * ⚠️ THE LOCALE IS A REQUIRED PARAMETER, AND ONLY THE SITE ARM USES IT
+ * (MOTIR-7971). On motir.co a project page has eleven addresses — `/p/ACME` and
+ * `/fr/p/ACME` and the rest — and a tab bar on the French page must link to the
+ * French tabs, or every click is a hop through the proxy back to French (or, for
+ * a visitor with no cookie, a silent move into English). On a workspace or
+ * customer host ONE unprefixed URL serves every language (the proxy rewrites by
+ * cookie and `Accept-Language`, MOTIR-7951), so those arms return exactly what
+ * they always did. Required rather than defaulted so a forgotten caller is a
+ * compile error, not a link that is wrong in ten languages out of eleven.
  */
 export function publicPathFor(
   host: PublicHost,
   identifier: string,
-  path = '',
+  path: string,
+  locale: Locale,
 ): string {
   const rest = path ? `/${path}` : ''
   switch (host.kind) {
@@ -199,7 +212,10 @@ export function publicPathFor(
       // router's own two landing pads (MOTIR-4430), neither of which renders a
       // project path, so this arm is the site's shape and nothing is claimed
       // about a host that has no projects to address.
-      return `/p/${encodeURIComponent(identifier)}${rest}`
+      return localizedPath(
+        locale,
+        `/p/${encodeURIComponent(identifier)}${rest}`,
+      )
   }
 }
 
@@ -209,11 +225,12 @@ export function publicPathWithQuery(
   identifier: string,
   path: string,
   params: Record<string, string | undefined>,
+  locale: Locale,
 ): string {
   const search = new URLSearchParams()
   for (const [k, v] of Object.entries(params)) if (v) search.set(k, v)
   const qs = search.toString()
-  return `${publicPathFor(host, identifier, path)}${qs ? `?${qs}` : ''}`
+  return `${publicPathFor(host, identifier, path, locale)}${qs ? `?${qs}` : ''}`
 }
 
 /**
@@ -248,11 +265,27 @@ export function publicPathWithQuery(
  * written as `kind === 'workspace' || kind === 'project'` would have answered
  * "relative" for a shape that did not exist when it was written.
  *
+ * ⚠️ AND IT CARRIES THE PAGE'S LOCALE, ON EVERY HOST (MOTIR-7971). The site is
+ * served in eleven languages, English unprefixed, and a link that dropped the
+ * prefix sent a French reader to the English page — a proxy hop back to French
+ * when they had the cookie, a silent move into English when they had arrived on
+ * a shared `/fr/…` link without one. Off the site the link is absolute AND
+ * prefixed (`https://motir.co/fr/docs`), so a French reader on a tenant host
+ * lands on French docs without detection guessing. The locale is REQUIRED, with
+ * no default: a dependency in the type makes a forgotten caller a compile
+ * error, not a link that is wrong in ten languages out of eleven. English
+ * output is byte-identical to what it was.
+ *
  * `path` is root-relative and starts with a slash: `'/'`, `'/explore'`,
- * `'/legal/terms'`.
+ * `'/legal/terms'`, and may carry a query.
  */
-export function siteLinkFor(host: PublicHost, path: string): string {
-  return host.kind === 'site' ? path : siteUrl(path)
+export function siteLinkFor(
+  host: PublicHost,
+  path: string,
+  locale: Locale,
+): string {
+  const localized = localizedPath(locale, path)
+  return host.kind === 'site' ? localized : siteUrl(localized)
 }
 
 /** Read the router's two headers off a `Headers`. Pure, so a test can call it. */

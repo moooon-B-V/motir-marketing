@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
@@ -54,10 +55,17 @@ const WRITTEN: ReadonlySet<ProductSlug> = new Set([
   'agent-hosting',
 ])
 
+/**
+ * The placeholders, AND the tooling slugs that forward to their docs.
+ *
+ * ⚠️ THE FORWARDING SLUGS MUST BE LISTED. The locale layout sets
+ * `dynamicParams = false`, which every segment below inherits, so a slug this
+ * function does not name is a 404 without a render — `/products/mcp` stopped
+ * reaching its redirect when the pages moved under `[locale]` (MOTIR-7948).
+ * Named here, each is prerendered as its 308 to the docs (MOTIR-7971).
+ */
 export function generateStaticParams() {
-  return PRODUCT_SLUGS.filter(
-    (slug) => !WRITTEN.has(slug) && !PRODUCT_DOCS[slug],
-  ).map((slug) => ({
+  return PRODUCT_SLUGS.filter((slug) => !WRITTEN.has(slug)).map((slug) => ({
     slug,
   }))
 }
@@ -88,7 +96,8 @@ export default async function ProductPage({
   const { slug } = await params
   // The tooling's page is its documentation: its address forwards there.
   const docs = PRODUCT_DOCS[slug as ProductSlug]
-  if (docs) permanentRedirect(docs)
+  // To the docs in the SAME language: `/fr/products/mcp` → `/fr/docs/mcp` (MOTIR-7971).
+  if (docs) permanentRedirect(localizedPath(locale, docs))
   const product = productFor(slug, copy)
   if (!product) notFound()
 
@@ -114,7 +123,7 @@ export default async function ProductPage({
               <ArrowRight aria-hidden="true" className="size-4" />
             </a>
             <Link
-              href={SITE_ROOT}
+              href={localizedPath(locale, SITE_ROOT)}
               className={buttonVariants({ variant: 'ghost' })}
             >
               {copy.products.back}

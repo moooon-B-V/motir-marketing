@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -105,7 +106,7 @@ export default async function SkillsDocsPage({ params }: LocalePageProps) {
         browser, and there is no token. Every other agent needs that server
         connected first — a Motir project, a personal access token, and the
         setup for your agent in the{' '}
-        <Link href="/docs/mcp" className={linkClass}>
+        <Link href={localizedPath(locale, '/docs/mcp')} className={linkClass}>
           {copy.docs.mcp}
         </Link>{' '}
         guide, which also covers the token route in Claude Code if you cannot

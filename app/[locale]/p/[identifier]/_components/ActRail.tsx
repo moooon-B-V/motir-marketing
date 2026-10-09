@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { actHref } from '@/lib/publicProject'
 import { publicPathFor, type PublicHost } from '@/lib/publicHost'
-import { useCopy } from '@/lib/copy'
+import { useCopy, usePageLocale } from '@/lib/copy'
+import { DEFAULT_LOCALE } from '@/i18n/routing'
 import { SubscribeForm } from './SubscribeForm'
 
 /**
@@ -35,6 +36,7 @@ export function ActRail({
   host: PublicHost
 }) {
   const rail = useCopy().publicProject.actRail
+  const locale = usePageLocale()
   return (
     <div className="mt-5 flex flex-wrap items-center gap-2">
       {/* Row 2 — FOLLOW, a hand-off. */}
@@ -51,7 +53,7 @@ export function ActRail({
 
       {/* Row 6 — REQUEST A FEATURE, a hand-off through the doorway page. */}
       <Link
-        href={publicPathFor(host, identifier, 'requests/new')}
+        href={publicPathFor(host, identifier, 'requests/new', locale)}
         className="inline-flex h-(--height-btn-md) items-center rounded-(--radius-btn) border border-(--el-border-strong) px-(--spacing-btn-x) text-[14px] font-medium text-(--el-text) hover:bg-(--el-surface-soft)"
       >
         {rail.requestFeature}
@@ -65,7 +67,13 @@ export function ActRail({
           spec counted responses instead of reading markup
           (`e2e/specs/tenant-chrome.spec.ts`). */}
       <a
-        href={publicPathFor(host, identifier, 'changelog.xml')}
+        href={publicPathFor(
+          host,
+          identifier,
+          'changelog.xml',
+          // A feed, not a page: one address whatever the reader's language.
+          DEFAULT_LOCALE,
+        )}
         className="inline-flex h-(--height-btn-md) items-center px-2 text-[14px] text-(--el-text-secondary) hover:text-(--el-link)"
       >
         {rail.atomFeed}

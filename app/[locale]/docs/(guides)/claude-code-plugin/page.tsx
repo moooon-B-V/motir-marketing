@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -121,7 +122,10 @@ export default async function ClaudeCodePluginDocsPage({
       <Prose>
         Say what you want in Claude Code. Each skill’s full behaviour, and what
         you will see in Motir, is in the{' '}
-        <Link href="/docs/skills#use" className={linkClass}>
+        <Link
+          href={localizedPath(locale, '/docs/skills#use')}
+          className={linkClass}
+        >
           {copy.docs.skills}
         </Link>{' '}
         guide.
@@ -129,7 +133,10 @@ export default async function ClaudeCodePluginDocsPage({
       <ul className="mt-3 max-w-[68ch] space-y-1.5 text-[15px] leading-relaxed text-(--el-text)">
         {SKILL_USAGE.map((skill) => (
           <li key={skill.name}>
-            <Link href={`/docs/skills#${skill.name}`} className={linkClass}>
+            <Link
+              href={localizedPath(locale, `/docs/skills#${skill.name}`)}
+              className={linkClass}
+            >
               <Mono>{skill.say[0]}</Mono>
             </Link>
           </li>
@@ -151,11 +158,17 @@ export default async function ClaudeCodePluginDocsPage({
       </div>
       <Prose>
         Using another agent, or only want the connector? See the{' '}
-        <Link href="/docs/skills" className={linkClass}>
+        <Link
+          href={localizedPath(locale, '/docs/skills')}
+          className={linkClass}
+        >
           {copy.docs.skills}
         </Link>{' '}
         guide for every agent, or the{' '}
-        <Link href="/docs/claude-code-connector" className={linkClass}>
+        <Link
+          href={localizedPath(locale, '/docs/claude-code-connector')}
+          className={linkClass}
+        >
           {copy.docs.claudeCodeConnector}
         </Link>
         .

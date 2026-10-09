@@ -4,7 +4,7 @@ import { setupPrompt } from '@/lib/setupPrompt'
 import { SetupPromptButton } from '@/app/_components/SetupPromptButton'
 import { DOCS_INDEX_HREF, docsSurfacesFor } from '@/lib/docsSurfaces'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
-import { localePageMetadata } from '@/lib/localeMetadata'
+import { localePageMetadata, localizedPath } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 
 /*
@@ -77,7 +77,7 @@ export default async function DocsIndexPage({ params }: LocalePageProps) {
             {[surface, ...surface.pages].map((item) => (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={localizedPath(locale, item.href)}
                   className="flex flex-col gap-1 py-4 hover:bg-(--el-surface-soft)"
                 >
                   <span className="text-[14px] font-semibold text-(--el-text)">

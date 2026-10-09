@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { ArrowDown } from 'lucide-react'
 import { cn } from '@motir/design-system'
 import { format, getCopy } from '@/lib/copy'
-import { localePageMetadata } from '@/lib/localeMetadata'
+import { localePageMetadata, localizedPath } from '@/lib/localeMetadata'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
 import { SITE_HOST } from '@/lib/publicHost'
 import {
@@ -229,7 +229,9 @@ export default async function IdeasPage({
                 tags={tags}
               />
             ) : (
-              <IdeasUnavailable retryHref={ideasHref(params)} />
+              <IdeasUnavailable
+                retryHref={localizedPath(locale, ideasHref(params))}
+              />
             )}
           </div>
         </div>

@@ -6,6 +6,7 @@ import {
   visitorViewUrl,
 } from '@/lib/publicProject'
 import { getCopy } from '@/lib/copy'
+import { DEFAULT_LOCALE } from '@/i18n/routing'
 import { enterLocale } from '@/i18n/locale'
 import { publicPathFor } from '@/lib/publicHost'
 import { renderTabPage, tabMetadata } from '../_components/tabPage'
@@ -119,9 +120,13 @@ export default async function ChangelogTab({
 
           {page.nextCursor ? (
             <MoreLink
-              href={pagedTabHref(host, identifier, 'changelog', {
-                cursor: page.nextCursor,
-              })}
+              href={pagedTabHref(
+                host,
+                identifier,
+                'changelog',
+                { cursor: page.nextCursor },
+                locale,
+              )}
               label={copy.changelog.older}
             />
           ) : null}
@@ -131,7 +136,13 @@ export default async function ChangelogTab({
                 `next/link` prefetches it and takes a 404 (MOTIR-4372, and see
                 `ActRail`). */}
             <a
-              href={publicPathFor(host, identifier, 'changelog.xml')}
+              href={publicPathFor(
+                host,
+                identifier,
+                'changelog.xml',
+                // A feed, not a page: one address whatever the reader's language.
+                DEFAULT_LOCALE,
+              )}
               className="text-(--el-link) underline underline-offset-2"
             >
               {copy.changelog.subscribeAtom}

@@ -1,7 +1,8 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { useCopy } from '@/lib/copy'
+import { useCopy, usePageLocale } from '@/lib/copy'
 import {
   MOTIR_BUILDS_ITSELF,
   MOTIR_PROJECT,
@@ -25,6 +26,7 @@ const MONO = 'font-(family-name:--font-mono) tracking-[0.1em] uppercase'
 
 export function BuiltByMotirSection() {
   const b = useCopy().landing.builtByMotir
+  const locale = usePageLocale()
   return (
     <section
       aria-labelledby="built-by-motir-h"
@@ -52,7 +54,7 @@ export function BuiltByMotirSection() {
         </h2>
         <p className="m-0 max-w-[48ch] text-[18px]">{b.body}</p>
         <Link
-          href={MOTIR_BUILDS_ITSELF}
+          href={localizedPath(locale, MOTIR_BUILDS_ITSELF)}
           className="mt-5 inline-flex items-center gap-2 text-[16px] font-semibold text-(--el-showcase-field-ink) underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-ground)"
         >
           {b.story}

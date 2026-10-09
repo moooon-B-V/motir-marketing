@@ -1,5 +1,4 @@
 import { buttonVariants } from '@motir/design-system'
-import { localizedPath } from '@/i18n/localizedPath'
 import { useCopy, usePageLocale } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
 import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
@@ -77,14 +76,14 @@ export function NotFoundRoom({ host }: { host: PublicHost }) {
             `motir.co` this is byte-identical to what shipped — a `next/link` to
             `EXPLORE` and one to the site root. */}
         <ChromeLink
-          href={siteLinkFor(host, localizedPath(locale, EXPLORE))}
+          href={siteLinkFor(host, EXPLORE, locale)}
           internal={host.kind === 'site'}
           className={buttonVariants({ size: 'md' })}
         >
           {copy.notFound.exploreDoor}
         </ChromeLink>
         <ChromeLink
-          href={siteLinkFor(host, localizedPath(locale, SITE_ROOT))}
+          href={siteLinkFor(host, SITE_ROOT, locale)}
           internal={host.kind === 'site'}
           className={buttonVariants({ variant: 'ghost', size: 'md' })}
         >

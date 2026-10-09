@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -260,7 +261,7 @@ export default async function SandboxPage({ params }: LocalePageProps) {
         drains the ready set unattended instead, one item at a time onto a
         session branch. Every flag both accept is on the{' '}
         <Link
-          href="/docs/cli"
+          href={localizedPath(locale, '/docs/cli')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.cli}
@@ -529,7 +530,7 @@ ai:plan             open a plan`}
       <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
         Every command and every flag — that is{' '}
         <Link
-          href="/docs/cli"
+          href={localizedPath(locale, '/docs/cli')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.cli}
@@ -537,14 +538,14 @@ ai:plan             open a plan`}
         , which is generated from the CLI’s own catalogue and cannot drift from
         it. Wiring an agent to Motir directly, without the CLI, is{' '}
         <Link
-          href="/docs/mcp"
+          href={localizedPath(locale, '/docs/mcp')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.mcp}
         </Link>
         . Driving the same work loop over HTTP instead of from a terminal is the{' '}
         <Link
-          href="/docs/api"
+          href={localizedPath(locale, '/docs/api')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.api}

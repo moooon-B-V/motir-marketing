@@ -1,7 +1,8 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import { ArrowRight, Check, CornerDownRight, RefreshCw } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { useCopy } from '@/lib/copy'
+import { useCopy, usePageLocale } from '@/lib/copy'
 import { productPath, type ProductSlug } from '@/lib/destinations'
 import { productOf } from '@/app/_components/products'
 
@@ -125,6 +126,7 @@ export function LostTiles() {
 /** The three things we needed, each as a numbered row. */
 export function NeedList() {
   const copy = useCopy()
+  const locale = usePageLocale()
   const b = copy.builtByMotirPage
   return (
     <ol className="m-0 grid list-none gap-3 p-0">
@@ -150,7 +152,10 @@ export function NeedList() {
           </span>
           {'product' in item && item.product ? (
             <Link
-              href={productPath(item.product as ProductSlug)}
+              href={localizedPath(
+                locale,
+                productPath(item.product as ProductSlug),
+              )}
               className="col-start-2 mt-1 inline-flex items-center gap-1.5 justify-self-start text-[14px] font-semibold text-(--el-accent-on-surface) underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
             >
               {productOf(item.product as ProductSlug, copy).name}

@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -206,7 +207,7 @@ export default async function StabilityPage({ params }: LocalePageProps) {
         patch on a documentation-only correction. Read it off any response as{' '}
         <Mono>X-Motir-Api-Version</Mono> —{' '}
         <Link
-          href="/docs/api/getting-started"
+          href={localizedPath(locale, '/docs/api/getting-started')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.apiGettingStarted}

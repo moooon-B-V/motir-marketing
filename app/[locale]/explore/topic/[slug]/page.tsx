@@ -70,6 +70,8 @@ export default async function TopicPage({
   const copy = await getCopy(locale)
   const { slug } = await params
   const query = topicQuery(slug, await searchParams)
+  // The links this page draws, in its locale (MOTIR-7971).
+  const base = localizedPath(locale, basePathFor(slug))
   const { page, categories, failed } = await loadSquare(query)
 
   // A topic page 404s an unknown slug — but only when the API reached us and
@@ -91,7 +93,7 @@ export default async function TopicPage({
         className="mb-4 flex items-center gap-1 text-[13px]"
       >
         <Link
-          href="/explore"
+          href={localizedPath(locale, '/explore')}
           className="text-(--el-text-secondary) hover:text-(--el-link)"
         >
           {copy.explore.heroEyebrow}
@@ -109,7 +111,7 @@ export default async function TopicPage({
         </p>
         <div className="mt-4 w-full max-w-[34rem]">
           <ExploreSearchForm
-            basePath={basePathFor(slug)}
+            basePath={base}
             query={query}
             preserveCategory={false}
           />
@@ -117,17 +119,13 @@ export default async function TopicPage({
       </header>
 
       <div className="flex flex-col gap-3">
-        <RankTabs basePath={basePathFor(slug)} query={query} />
-        <ActiveFilters
-          basePath={basePathFor(slug)}
-          query={query}
-          categoryLabel={label}
-        />
+        <RankTabs basePath={base} query={query} />
+        <ActiveFilters basePath={base} query={query} categoryLabel={label} />
       </div>
 
       <div className="mt-6">
         <ExploreGallery
-          basePath={basePathFor(slug)}
+          basePath={base}
           query={query}
           page={page}
           heading={galleryHeading(query, label, copy)}

@@ -1,6 +1,7 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { format, useCopy } from '@/lib/copy'
+import { format, useCopy, usePageLocale } from '@/lib/copy'
 import {
   hasText,
   ideaCategoryMark,
@@ -104,6 +105,7 @@ export function BuyCard({
   params: IdeasParams
 }) {
   const i = useCopy().ideas
+  const locale = usePageLocale()
   const tone = TONES[index % TONES.length]
   return (
     <li
@@ -120,7 +122,7 @@ export function BuyCard({
       </p>
       <h3 className="m-0 font-(family-name:--font-serif) text-[clamp(26px,2.4vw,32px)] leading-[1.04] font-bold tracking-[-0.025em]">
         <OpenIdeaLink
-          href={ideasHref(params, { idea: idea.slug })}
+          href={localizedPath(locale, ideasHref(params, { idea: idea.slug }))}
           slug={idea.slug}
           className={STRETCH}
         >
@@ -198,6 +200,7 @@ export function DirectionCard({
   params: IdeasParams
 }) {
   const i = useCopy().ideas
+  const locale = usePageLocale()
   const first = idea.evidence[0]
   const extra = idea.evidence.length - 1
   return (
@@ -217,7 +220,7 @@ export function DirectionCard({
       </p>
       <h3 className="m-0 text-[20px] leading-[1.2] font-semibold tracking-[-0.01em] text-(--el-text)">
         <OpenIdeaLink
-          href={ideasHref(params, { idea: idea.slug })}
+          href={localizedPath(locale, ideasHref(params, { idea: idea.slug }))}
           slug={idea.slug}
           className={STRETCH}
         >

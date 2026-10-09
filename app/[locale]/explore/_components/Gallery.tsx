@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import {
   Building2,
@@ -55,7 +56,10 @@ function ProjectCard({ card }: { card: ProjectSquareCardDto }) {
   return (
     <article className="min-w-0">
       <Link
-        href={`/p/${encodeURIComponent(card.identifier)}`}
+        href={localizedPath(
+          locale,
+          `/p/${encodeURIComponent(card.identifier)}`,
+        )}
         aria-label={format(copy.explore.cardViewAria, { name: card.name })}
         className="group flex h-full min-w-0 flex-col rounded-(--radius-card) border border-(--el-border) bg-(--el-surface) p-(--spacing-card-padding) shadow-(--shadow-card) transition-shadow hover:border-(--el-border-strong) hover:shadow-(--shadow-elevated)"
       >

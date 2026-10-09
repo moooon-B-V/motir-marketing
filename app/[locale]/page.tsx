@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
 import { getCopy } from '@/lib/copy'
@@ -248,7 +249,10 @@ export default async function Page({ params }: LocalePageProps) {
               <a href={IMPORT_DOOR} className={CLOSE_BTN.plain}>
                 {l.close.import}
               </a>
-              <a href={HOW_IT_WORKS} className={CLOSE_BTN.warm}>
+              <a
+                href={localizedPath(locale, HOW_IT_WORKS)}
+                className={CLOSE_BTN.warm}
+              >
                 {l.close.developers}
               </a>
             </div>

@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -253,7 +254,7 @@ export default async function McpToolsPage({ params }: LocalePageProps) {
 
       <p className="mt-8 text-[14px] text-(--el-text-secondary)">
         <Link
-          href="/docs/mcp"
+          href={localizedPath(locale, '/docs/mcp')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.mcp}

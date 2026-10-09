@@ -1,7 +1,8 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import { RefreshCw } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
-import { useCopy } from '@/lib/copy'
+import { useCopy, usePageLocale } from '@/lib/copy'
 import { MONO } from './IdeaCards'
 
 /*
@@ -13,6 +14,7 @@ import { MONO } from './IdeaCards'
 
 export function IdeasEmpty() {
   const e = useCopy().ideas.empty
+  const locale = usePageLocale()
   return (
     <section
       aria-labelledby="empty-h"
@@ -25,7 +27,7 @@ export function IdeasEmpty() {
         {e.body}
       </p>
       <Link
-        href="/ideas"
+        href={localizedPath(locale, '/ideas')}
         className={buttonVariants({ variant: 'ghost', size: 'md' })}
       >
         {e.action}

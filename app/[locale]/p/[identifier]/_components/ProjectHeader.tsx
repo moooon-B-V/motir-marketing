@@ -54,10 +54,13 @@ export function ProjectHeader({
   // prefixes this with `SITE_ORIGIN`, so a host-relative path would become
   // `motir.co/board` — a URL that does not exist. `actHref`'s note carries the
   // reasoning and the consequence.
+  // In the page's locale, so the round trip comes back to the same language.
+  const locale = usePageLocale()
   const returnPath = projectTabHref(
     SITE_HOST,
     project.identifier,
     current ?? '',
+    locale,
   )
   const { identifier, name, workspaceName, publicTagline, publicTags, stats } =
     project
@@ -134,7 +137,7 @@ export function ProjectHeader({
           return (
             <Link
               key={tab.segment || 'overview'}
-              href={projectTabHref(host, identifier, tab.segment)}
+              href={projectTabHref(host, identifier, tab.segment, locale)}
               aria-current={isCurrent ? 'page' : undefined}
               className={
                 isCurrent

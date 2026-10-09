@@ -1,5 +1,6 @@
 import { publicPathFor, SITE_HOST, type PublicHost } from '@/lib/publicHost'
 import { formatRich, useCopy } from '@/lib/copy'
+import { DEFAULT_LOCALE } from '@/i18n/routing'
 
 /**
  * The three states every `/p/*` screen can be in (MOTIR-4115) — panels 10, 11
@@ -78,7 +79,13 @@ export function ErrorState({
               `next/link` prefetches it and takes a 404 (MOTIR-4372, and see
               `ActRail`). */}
           <a
-            href={publicPathFor(host, identifier, 'changelog.xml')}
+            href={publicPathFor(
+              host,
+              identifier,
+              'changelog.xml',
+              // A feed, not a page: one address whatever the reader's language.
+              DEFAULT_LOCALE,
+            )}
             className="text-(--el-link) underline underline-offset-2"
           >
             {error.feed}

@@ -1,9 +1,11 @@
 'use client'
 
+import { localizedPath } from '@/i18n/localizedPath'
+
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSitePathname } from '@/i18n/sitePathname'
-import { type Copy, format, useCopy } from '@/lib/copy'
+import { type Copy, format, useCopy, usePageLocale } from '@/lib/copy'
 import type { RailOperation } from '@/lib/docs'
 import { docsIndexFor, docsSurfacesFor } from '@/lib/docsSurfaces'
 
@@ -115,6 +117,7 @@ export function DocsRail({
   operations?: readonly { group: string; operations: RailOperation[] }[]
 }) {
   const copy = useCopy()
+  const locale = usePageLocale()
   const pathname = useSitePathname()
   const [query, setQuery] = useState('')
   const [narrowOpen, setNarrowOpen] = useState(false)
@@ -249,7 +252,7 @@ export function DocsRail({
             return (
               <li key={surface.href}>
                 <Link
-                  href={surface.href}
+                  href={localizedPath(locale, surface.href)}
                   aria-current={current ? 'page' : undefined}
                   className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
                 >
@@ -275,7 +278,7 @@ export function DocsRail({
                   return (
                     <li key={page.href}>
                       <Link
-                        href={page.href}
+                        href={localizedPath(locale, page.href)}
                         aria-current={current ? 'page' : undefined}
                         className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
                       >
@@ -337,7 +340,10 @@ export function DocsRail({
                     {group.operations.map((operation) => (
                       <li key={operation.id}>
                         <Link
-                          href={`/docs/api#${operation.id}`}
+                          href={localizedPath(
+                            locale,
+                            `/docs/api#${operation.id}`,
+                          )}
                           className={`${ROW} ${ROW_REST}`}
                         >
                           <span

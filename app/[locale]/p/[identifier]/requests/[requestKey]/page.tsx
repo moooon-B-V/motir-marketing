@@ -118,8 +118,9 @@ export default async function PublicRequestPage({
           SITE_HOST,
           identifier,
           `requests/${encodeURIComponent(request.data.identifier)}`,
+          locale,
         )
-      : publicPathFor(SITE_HOST, identifier)
+      : publicPathFor(SITE_HOST, identifier, '', locale)
 
   return (
     <>
@@ -138,7 +139,7 @@ export default async function PublicRequestPage({
               {/* Back to the project page: the request board this pointed at is
                   retired (MOTIR-6745; design MOTIR-6742 panel C). */}
               <Link
-                href={publicPathFor(host, identifier)}
+                href={publicPathFor(host, identifier, '', locale)}
                 className="text-(--el-text-secondary) hover:text-(--el-link)"
               >
                 ← {project.data.name}

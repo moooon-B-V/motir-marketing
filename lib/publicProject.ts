@@ -1,3 +1,4 @@
+import type { Locale } from '@/i18n/routing'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { SITE_ORIGIN as SITE_ORIGIN_FOR_RETURN } from '@/lib/siteOrigin'
 import {
@@ -282,8 +283,9 @@ export function projectTabHref(
   host: PublicHost,
   identifier: string,
   segment: string,
+  locale: Locale,
 ): string {
-  return publicPathFor(host, identifier, segment)
+  return publicPathFor(host, identifier, segment, locale)
 }
 
 /**
@@ -339,8 +341,9 @@ export function pagedTabHref(
   identifier: string,
   segment: string,
   params: Record<string, string | undefined>,
+  locale: Locale,
 ): string {
-  return publicPathWithQuery(host, identifier, segment, params)
+  return publicPathWithQuery(host, identifier, segment, params, locale)
 }
 
 /* ── the request DETAIL read (MOTIR-4117) ─────────────────────────────────── */

@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
@@ -217,7 +218,7 @@ export default async function MotirBuildsItselfPage({
               developers' door — so it reads apart from the field-coloured
               close below; the ink button stands out on it. */}
           <a
-            href={HOW_IT_WORKS}
+            href={localizedPath(locale, HOW_IT_WORKS)}
             className="group inline-flex h-(--height-btn-lg) items-center gap-2 justify-self-start rounded-(--radius-btn) bg-(--el-showcase-ground) px-(--spacing-btn-x) text-[16px] font-semibold text-(--el-showcase-ground-text) no-underline shadow-(--shadow-card) transition hover:-translate-y-0.5 hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-showcase-decision-text) motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             {b.howItWorks.cta}

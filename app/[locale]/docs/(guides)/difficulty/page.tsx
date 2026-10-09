@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -305,7 +306,7 @@ export default async function DifficultyDocsPage({ params }: LocalePageProps) {
             <strong>Check where your data may go.</strong> Not every provider
             can be used for every project. See{' '}
             <Link
-              href="/legal/model-providers"
+              href={localizedPath(locale, '/legal/model-providers')}
               className="text-(--el-link) underline underline-offset-2"
             >
               Model providers

@@ -1,5 +1,8 @@
 'use client'
 
+import { localizedPath } from '@/i18n/localizedPath'
+import { usePageLocale } from '@/lib/copy'
+
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -103,16 +106,22 @@ export function SearchForm({
   'aria-label'?: string
 }) {
   const { navigate } = useContext(PendingContext)
+  const locale = usePageLocale()
   return (
     <form
       method="get"
-      action="/ideas"
+      action={localizedPath(locale, '/ideas')}
       role="search"
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const q = new FormData(event.currentTarget).get('q')
         const text = typeof q === 'string' ? q.trim() : ''
-        navigate(ideasHref(params, { q: text || null, idea: null }))
+        navigate(
+          localizedPath(
+            locale,
+            ideasHref(params, { q: text || null, idea: null }),
+          ),
+        )
       }}
       {...rest}
     >

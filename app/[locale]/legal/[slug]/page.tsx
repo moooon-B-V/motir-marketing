@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -62,7 +63,7 @@ export default async function LegalDocumentPage({
     <>
       <nav aria-label={copy.legal.breadcrumbAria} className="mb-6">
         <Link
-          href="/legal"
+          href={localizedPath(locale, '/legal')}
           className="text-[13px] text-(--el-text-secondary) hover:text-(--el-link)"
         >
           {copy.legal.allDocuments}
@@ -94,7 +95,7 @@ export default async function LegalDocumentPage({
         </p>
       </header>
 
-      <MarkdownBody value={doc.body} />
+      <MarkdownBody value={doc.body} locale={locale} />
     </>
   )
 }

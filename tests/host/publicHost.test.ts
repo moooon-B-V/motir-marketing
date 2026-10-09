@@ -54,18 +54,20 @@ describe('normaliseHost', () => {
 
 describe('publicPathFor — the same page, three addresses', () => {
   it('is /p/<id>/<tab> on the site', () => {
-    expect(publicPathFor(SITE_HOST, 'ACME', 'board')).toBe('/p/ACME/board')
-    expect(publicPathFor(SITE_HOST, 'ACME')).toBe('/p/ACME')
+    expect(publicPathFor(SITE_HOST, 'ACME', 'board', 'en')).toBe(
+      '/p/ACME/board',
+    )
+    expect(publicPathFor(SITE_HOST, 'ACME', '', 'en')).toBe('/p/ACME')
   })
 
   it('drops the /p prefix on a workspace subdomain', () => {
-    expect(publicPathFor(WORKSPACE, 'ACME', 'board')).toBe('/ACME/board')
-    expect(publicPathFor(WORKSPACE, 'ACME')).toBe('/ACME')
+    expect(publicPathFor(WORKSPACE, 'ACME', 'board', 'en')).toBe('/ACME/board')
+    expect(publicPathFor(WORKSPACE, 'ACME', '', 'en')).toBe('/ACME')
   })
 
   it('drops the identifier too on a customer domain — ONE project at the root', () => {
-    expect(publicPathFor(CUSTOM, 'ACME', 'board')).toBe('/board')
-    expect(publicPathFor(CUSTOM, 'ACME', 'items/ACME-42')).toBe(
+    expect(publicPathFor(CUSTOM, 'ACME', 'board', 'en')).toBe('/board')
+    expect(publicPathFor(CUSTOM, 'ACME', 'items/ACME-42', 'en')).toBe(
       '/items/ACME-42',
     )
   })
@@ -73,36 +75,44 @@ describe('publicPathFor — the same page, three addresses', () => {
   it('gives the customer domain’s root a slash rather than the empty string', () => {
     // `href=""` is the CURRENT url including its query, not the root — so a
     // "back to the project" link on a paged tab would go nowhere.
-    expect(publicPathFor(CUSTOM, 'ACME')).toBe('/')
+    expect(publicPathFor(CUSTOM, 'ACME', '', 'en')).toBe('/')
   })
 
   it('encodes the identifier where the identifier is a path segment', () => {
-    expect(publicPathFor(SITE_HOST, 'A B', 'items')).toBe('/p/A%20B/items')
-    expect(publicPathFor(WORKSPACE, 'A B', 'items')).toBe('/A%20B/items')
+    expect(publicPathFor(SITE_HOST, 'A B', 'items', 'en')).toBe(
+      '/p/A%20B/items',
+    )
+    expect(publicPathFor(WORKSPACE, 'A B', 'items', 'en')).toBe('/A%20B/items')
   })
 })
 
 describe('publicPathWithQuery — the no-JS pager, per host', () => {
   it('carries the coordinate on every host kind', () => {
     expect(
-      publicPathWithQuery(SITE_HOST, 'ACME', 'items', { cursor: 'w9' }),
+      publicPathWithQuery(SITE_HOST, 'ACME', 'items', { cursor: 'w9' }, 'en'),
     ).toBe('/p/ACME/items?cursor=w9')
     expect(
-      publicPathWithQuery(WORKSPACE, 'ACME', 'items', { cursor: 'w9' }),
+      publicPathWithQuery(WORKSPACE, 'ACME', 'items', { cursor: 'w9' }, 'en'),
     ).toBe('/ACME/items?cursor=w9')
-    expect(publicPathWithQuery(CUSTOM, 'ACME', 'items', { cursor: 'w9' })).toBe(
-      '/items?cursor=w9',
-    )
+    expect(
+      publicPathWithQuery(CUSTOM, 'ACME', 'items', { cursor: 'w9' }, 'en'),
+    ).toBe('/items?cursor=w9')
   })
 
   it('drops undefined parameters rather than emitting empty ones', () => {
     // `?parentId=` reads to the endpoint as the ROOT level, so the pager would
     // silently jump back to the top of the tree.
     expect(
-      publicPathWithQuery(WORKSPACE, 'ACME', 'tree', {
-        parentId: undefined,
-        offset: '3',
-      }),
+      publicPathWithQuery(
+        WORKSPACE,
+        'ACME',
+        'tree',
+        {
+          parentId: undefined,
+          offset: '3',
+        },
+        'en',
+      ),
     ).toBe('/ACME/tree?offset=3')
   })
 })
@@ -202,6 +212,38 @@ describe('requestPublicHost — the one ambient read on the surface', () => {
       })
     } finally {
       vi.doUnmock('next/headers')
+    }
+  })
+})
+
+describe('publicPathFor keeps the page’s locale on the site, and only there (MOTIR-7971)', () => {
+  it('prefixes the site arm in every locale but English', () => {
+    expect(publicPathFor(SITE_HOST, 'ACME', 'board', 'fr')).toBe(
+      '/fr/p/ACME/board',
+    )
+    expect(publicPathFor(SITE_HOST, 'ACME', 'board', 'en')).toBe(
+      '/p/ACME/board',
+    )
+    expect(publicPathFor(SITE_HOST, 'ACME', '', 'ja')).toBe('/ja/p/ACME')
+    expect(
+      publicPathWithQuery(
+        SITE_HOST,
+        'ACME',
+        'changelog',
+        { cursor: 'w9' },
+        'fr',
+      ),
+    ).toBe('/fr/p/ACME/changelog?cursor=w9')
+  })
+
+  it('leaves the workspace and project arms EXACTLY as they were', () => {
+    // One unprefixed URL serves every language on a tenant host (MOTIR-7951).
+    for (const locale of ['en', 'fr', 'ja'] as const) {
+      expect(publicPathFor(WORKSPACE, 'ACME', 'board', locale)).toBe(
+        '/ACME/board',
+      )
+      expect(publicPathFor(CUSTOM, 'ACME', 'board', locale)).toBe('/board')
+      expect(publicPathFor(CUSTOM, 'ACME', '', locale)).toBe('/')
     }
   })
 })

@@ -1,3 +1,4 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -312,7 +313,7 @@ export default async function McpPage({ params }: LocalePageProps) {
         Claude asks before it uses a tool that changes anything: every tool says
         whether it only reads, writes or deletes, and{' '}
         <Link
-          href="/docs/mcp/tools"
+          href={localizedPath(locale, '/docs/mcp/tools')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.mcpTools}
@@ -320,7 +321,7 @@ export default async function McpPage({ params }: LocalePageProps) {
         shows which is which. Want the plugin for Claude Code instead? It brings
         this server with it —{' '}
         <Link
-          href="/docs/skills"
+          href={localizedPath(locale, '/docs/skills')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.skills}
@@ -367,7 +368,7 @@ export default async function McpPage({ params }: LocalePageProps) {
       <Prose>
         Wiring an agent? Stay here. Writing software other people install? The{' '}
         <Link
-          href="/docs/api"
+          href={localizedPath(locale, '/docs/api')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.api}
@@ -468,7 +469,7 @@ export default async function McpPage({ params }: LocalePageProps) {
       <H2 id="what-next">What next</H2>
       <Prose>
         <Link
-          href="/docs/mcp/tools"
+          href={localizedPath(locale, '/docs/mcp/tools')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.mcpTools}
@@ -485,7 +486,7 @@ export default async function McpPage({ params }: LocalePageProps) {
         in motir-core carries each tool’s complete description. Driving the same
         data from a terminal instead is the{' '}
         <Link
-          href="/docs/cli"
+          href={localizedPath(locale, '/docs/cli')}
           className="text-(--el-accent-on-surface) underline underline-offset-2"
         >
           {copy.docs.cli}

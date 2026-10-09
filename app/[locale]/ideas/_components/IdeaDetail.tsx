@@ -1,8 +1,9 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ArrowUpRight, Tag } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { useCopy } from '@/lib/copy'
+import { useCopy, usePageLocale } from '@/lib/copy'
 import {
   hasText,
   ideasHref,
@@ -45,6 +46,7 @@ export function IdeaDetail({
   params: IdeasParams
 }) {
   const copy = useCopy()
+  const locale = usePageLocale()
   const d = copy.ideas.detail
   const titleId = `idea-title-${idea.slug}`
   const kind = idea.kind === 'motir_buys' ? d.kindBuys : d.kindDirection
@@ -60,7 +62,7 @@ export function IdeaDetail({
     <IdeaSheet
       slug={idea.slug}
       titleId={titleId}
-      closeHref={ideasHref(params, { idea: null })}
+      closeHref={localizedPath(locale, ideasHref(params, { idea: null }))}
       closeLabel={d.close}
       eyebrow={
         <p
@@ -95,12 +97,15 @@ export function IdeaDetail({
           {idea.tags.map((t) => (
             <li key={t.slug}>
               <Link
-                href={ideasHref(params, {
-                  tags: params.tags.includes(t.slug)
-                    ? params.tags
-                    : [...params.tags, t.slug],
-                  idea: null,
-                })}
+                href={localizedPath(
+                  locale,
+                  ideasHref(params, {
+                    tags: params.tags.includes(t.slug)
+                      ? params.tags
+                      : [...params.tags, t.slug],
+                    idea: null,
+                  }),
+                )}
                 className="inline-flex min-h-[26px] items-center gap-1.5 rounded-(--radius-badge) border border-(--el-border-soft) bg-(--el-surface) px-(--spacing-chip-x) py-(--spacing-chip-y) text-[12px] font-medium text-(--el-text-secondary) no-underline hover:border-(--el-border-strong)"
               >
                 <Tag aria-hidden className="size-3" />

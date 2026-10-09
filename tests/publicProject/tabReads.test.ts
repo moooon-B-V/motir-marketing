@@ -39,29 +39,37 @@ describe('the changelog reads its own endpoint', () => {
 
 describe('pagedTabHref — the no-JS pager’s target', () => {
   it('is a real URL on this site, carrying the coordinate', () => {
-    expect(pagedTabHref(SITE_HOST, 'ACME', 'items', { cursor: 'wi_9' })).toBe(
-      '/p/ACME/items?cursor=wi_9',
-    )
+    expect(
+      pagedTabHref(SITE_HOST, 'ACME', 'items', { cursor: 'wi_9' }, 'en'),
+    ).toBe('/p/ACME/items?cursor=wi_9')
   })
 
   it('drops undefined parameters rather than emitting empty ones', () => {
     // `?parentId=&offset=3` would be an EMPTY parentId, which the endpoint reads
     // as the root level — so the pager would silently jump back to the top.
     expect(
-      pagedTabHref(SITE_HOST, 'ACME', 'tree', {
-        parentId: undefined,
-        offset: '3',
-      }),
+      pagedTabHref(
+        SITE_HOST,
+        'ACME',
+        'tree',
+        {
+          parentId: undefined,
+          offset: '3',
+        },
+        'en',
+      ),
     ).toBe('/p/ACME/tree?offset=3')
   })
 
   it('has no query string at all when nothing is carried', () => {
-    expect(pagedTabHref(SITE_HOST, 'ACME', 'tree', {})).toBe('/p/ACME/tree')
+    expect(pagedTabHref(SITE_HOST, 'ACME', 'tree', {}, 'en')).toBe(
+      '/p/ACME/tree',
+    )
   })
 
   it('encodes the identifier and the values', () => {
-    expect(pagedTabHref(SITE_HOST, 'A B', 'items', { cursor: 'a b' })).toBe(
-      '/p/A%20B/items?cursor=a+b',
-    )
+    expect(
+      pagedTabHref(SITE_HOST, 'A B', 'items', { cursor: 'a b' }, 'en'),
+    ).toBe('/p/A%20B/items?cursor=a+b')
   })
 })

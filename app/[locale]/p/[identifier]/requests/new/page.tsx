@@ -71,7 +71,8 @@ export default async function RequestIntakePage({
   params: Promise<{ locale?: string; identifier: string }>
 }) {
   const { identifier } = await params
-  const copy = (await getCopy(await enterLocale(params))).publicProject
+  const locale = await enterLocale(params)
+  const copy = (await getCopy(locale)).publicProject
   const intake = copy.requestNew
   const host = await requestPublicHost()
   const read = await loadProject(identifier)
@@ -95,8 +96,8 @@ export default async function RequestIntakePage({
   // ⚠️ BOTH ARE THE PROJECT PAGE since MOTIR-6745 (design MOTIR-6742 panel B).
   // They named the roadmap, which was the request board — retired, and its
   // path a redirect into the app's sign-in now (MOTIR-6743).
-  const projectHref = publicPathFor(host, identifier)
-  const returnPath = publicPathFor(SITE_HOST, identifier)
+  const projectHref = publicPathFor(host, identifier, '', locale)
+  const returnPath = publicPathFor(SITE_HOST, identifier, '', locale)
 
   return (
     <>

@@ -60,7 +60,8 @@ export async function generateMetadata({
 }
 
 export default async function WorkspaceRootPage({ params }: LocalePageProps) {
-  const copy = (await getCopy(await enterLocale(params))).publicProject
+  const locale = await enterLocale(params)
+  const copy = (await getCopy(locale)).publicProject
   const host = await requestPublicHost()
 
   // Not routed here by the proxy — `motir.co/w` is not a workspace.
@@ -109,7 +110,7 @@ export default async function WorkspaceRootPage({ params }: LocalePageProps) {
           {projects.map((project) => (
             <li key={project.identifier} className="min-w-0">
               <Link
-                href={publicPathFor(host, project.identifier)}
+                href={publicPathFor(host, project.identifier, '', locale)}
                 className="group flex h-full min-w-0 flex-col rounded-(--radius-card) border border-(--el-border) bg-(--el-surface) p-(--spacing-card-padding) shadow-(--shadow-card) transition-shadow hover:border-(--el-border-strong) hover:shadow-(--shadow-elevated)"
               >
                 <span className="font-(family-name:--font-mono) text-[11px] font-medium text-(--el-text-secondary)">

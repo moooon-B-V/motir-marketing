@@ -75,29 +75,32 @@ export default async function ExplorePage({
   const query = parseExploreSearchParams(await searchParams)
   const { page, categories, failed } = await loadSquare(query)
   const heading = galleryHeading(query, copy)
+  // Every link the square draws is built from this, so it is the page's
+  // locale's address (MOTIR-7971); the canonical above stays English.
+  const base = localizedPath(locale, BASE)
 
   return (
     <SiteShell host={SITE_HOST} overlayHeader>
-      <ExploreHero basePath={BASE} query={query} />
+      <ExploreHero basePath={base} query={query} />
       <div className="mx-auto w-full max-w-[1400px] px-[clamp(16px,3vw,48px)] pb-[clamp(56px,7vw,112px)]">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <RankTabs basePath={BASE} query={query} />
+            <RankTabs basePath={base} query={query} />
             <CategoryFilter
-              basePath={BASE}
+              basePath={base}
               query={query}
               categories={categories}
             />
           </div>
           <ActiveFilters
-            basePath={BASE}
+            basePath={base}
             query={query}
             categoryLabel={categoryLabel(categories, query.category ?? '')}
           />
         </div>
         <div className="mt-6">
           <ExploreGallery
-            basePath={BASE}
+            basePath={base}
             query={query}
             page={page}
             heading={heading}

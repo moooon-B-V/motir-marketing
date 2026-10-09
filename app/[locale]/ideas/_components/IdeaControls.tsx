@@ -1,6 +1,7 @@
+import { localizedPath } from '@/i18n/localizedPath'
 import { ChevronDown, Search, Tag, X } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { format, useCopy, type Copy } from '@/lib/copy'
+import { format, useCopy, usePageLocale, type Copy } from '@/lib/copy'
 import {
   hasIdeaFilters,
   ideasHref,
@@ -55,6 +56,7 @@ export function IdeaControls({
   tags: PublicIdeaTagDto[] | null
 }) {
   const f = useCopy().ideas.find
+  const locale = usePageLocale()
   const filtered = hasIdeaFilters(params)
   // A pressed category the response omits (no match under the other filters)
   // stays visible, so it can be un-pressed.
@@ -117,7 +119,10 @@ export function IdeaControls({
         ) : null}
         {params.q ? (
           <FilterLink
-            href={ideasHref(params, { q: null, idea: null })}
+            href={localizedPath(
+              locale,
+              ideasHref(params, { q: null, idea: null }),
+            )}
             aria-label={f.searchClear}
             className="inline-flex size-8 flex-none items-center justify-center rounded-(--radius-control) text-(--el-text-secondary) hover:text-(--el-text)"
           >
@@ -139,7 +144,10 @@ export function IdeaControls({
         className="flex flex-nowrap gap-1.5 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible md:pb-0"
       >
         <FilterLink
-          href={ideasHref(params, { category: null, idea: null })}
+          href={localizedPath(
+            locale,
+            ideasHref(params, { category: null, idea: null }),
+          )}
           aria-current={!params.category ? 'true' : undefined}
           className={cn(CHIP, !params.category ? CHIP_ON : CHIP_OFF)}
         >
@@ -150,10 +158,13 @@ export function IdeaControls({
           return (
             <FilterLink
               key={c.slug}
-              href={ideasHref(params, {
-                category: on ? null : c.slug,
-                idea: null,
-              })}
+              href={localizedPath(
+                locale,
+                ideasHref(params, {
+                  category: on ? null : c.slug,
+                  idea: null,
+                }),
+              )}
               aria-current={on ? 'true' : undefined}
               className={cn(CHIP, on ? CHIP_ON : CHIP_OFF)}
             >
@@ -187,12 +198,15 @@ export function IdeaControls({
               return (
                 <FilterLink
                   key={t.slug}
-                  href={ideasHref(params, {
-                    tags: on
-                      ? params.tags.filter((x) => x !== t.slug)
-                      : [...params.tags, t.slug],
-                    idea: null,
-                  })}
+                  href={localizedPath(
+                    locale,
+                    ideasHref(params, {
+                      tags: on
+                        ? params.tags.filter((x) => x !== t.slug)
+                        : [...params.tags, t.slug],
+                      idea: null,
+                    }),
+                  )}
                   aria-current={on ? 'true' : undefined}
                   className={cn(CHIP, on ? CHIP_ON : CHIP_OFF)}
                 >
@@ -214,7 +228,10 @@ export function IdeaControls({
           </span>
           {params.category ? (
             <FilterLink
-              href={ideasHref(params, { category: null, idea: null })}
+              href={localizedPath(
+                locale,
+                ideasHref(params, { category: null, idea: null }),
+              )}
               className={cn(PILL, 'bg-(--el-tint-sky)')}
             >
               {format(f.pillCategory, { label: categoryLabel ?? '' })}
@@ -225,10 +242,13 @@ export function IdeaControls({
           {params.tags.map((t) => (
             <FilterLink
               key={t}
-              href={ideasHref(params, {
-                tags: params.tags.filter((x) => x !== t),
-                idea: null,
-              })}
+              href={localizedPath(
+                locale,
+                ideasHref(params, {
+                  tags: params.tags.filter((x) => x !== t),
+                  idea: null,
+                }),
+              )}
               className={cn(PILL, 'bg-(--el-tint-lavender)')}
             >
               {format(f.pillTag, { label: tagLabel(t) })}
@@ -238,7 +258,10 @@ export function IdeaControls({
           ))}
           {params.q ? (
             <FilterLink
-              href={ideasHref(params, { q: null, idea: null })}
+              href={localizedPath(
+                locale,
+                ideasHref(params, { q: null, idea: null }),
+              )}
               className={cn(PILL, 'bg-(--el-tint-mint)')}
             >
               {format(f.pillSearch, { q: params.q })}
@@ -247,7 +270,7 @@ export function IdeaControls({
             </FilterLink>
           ) : null}
           <FilterLink
-            href="/ideas"
+            href={localizedPath(locale, '/ideas')}
             className="text-[12px] font-semibold text-(--el-link) hover:text-(--el-link-pressed)"
           >
             {f.clearAll}
