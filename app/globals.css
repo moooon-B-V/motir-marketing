@@ -417,3 +417,56 @@ body {
   stroke: var(--r-warm);
   stroke-width: 2.5;
 }
+
+/*
+ * CJK text follows the Type pairing (Yue, 2026-10-09). A pairing re-points only
+ * the LATIN face of each role; the script face behind it is the font set's
+ * per-language default, whatever the pairing. These blocks give each pairing
+ * its own CJK voice, from `app/_brand/cjkPairingFaces.ts` (which says why each
+ * face) and held to it by `tests/cjkPairingFaces.test.ts`.
+ *
+ * `[lang]` keeps the declaration on the element that carries the language, as
+ * the font set's own blocks do, and lifts each rule over `[lang]:lang(zh)` by
+ * one attribute rather than by source order.
+ */
+[lang][data-type='motir-sans']:lang(zh) {
+  --font-script-serif: var(--font-set-zh-Hans-sans-noto-sans-sc, sans-serif);
+}
+[lang][data-type='motir-sans']:lang(ja) {
+  --font-script-serif: var(--font-set-ja-sans-m-plus-rounded-1c, sans-serif);
+  --font-script-sans: var(--font-set-ja-sans-m-plus-rounded-1c, sans-serif);
+}
+[lang][data-type='motir-sans']:lang(ko) {
+  --font-script-serif: var(--font-set-ko-sans-nanum-gothic, sans-serif);
+  --font-script-sans: var(--font-set-ko-sans-nanum-gothic, sans-serif);
+}
+[lang][data-type='motir-mono']:lang(zh) {
+  --font-script-serif: var(--font-set-zh-Hans-sans-noto-sans-sc, sans-serif);
+}
+[lang][data-type='motir-mono']:lang(ja) {
+  --font-script-serif: var(--font-set-ja-sans-noto-sans-jp, sans-serif);
+}
+[lang][data-type='motir-mono']:lang(ko) {
+  --font-script-serif: var(--font-set-ko-sans-noto-sans-kr, sans-serif);
+}
+[lang][data-type='grotesk']:lang(zh) {
+  --font-script-serif: var(--font-set-zh-Hans-sans-noto-sans-sc, sans-serif);
+}
+[lang][data-type='grotesk']:lang(ja) {
+  --font-script-serif: var(--font-set-ja-sans-noto-sans-jp, sans-serif);
+}
+[lang][data-type='grotesk']:lang(ko) {
+  --font-script-serif: var(--font-set-ko-sans-noto-sans-kr, sans-serif);
+}
+[lang][data-type='editorial']:lang(zh) {
+  --font-script-serif: var(--font-set-zh-Hans-serif-lxgw-wenkai-tc, serif);
+}
+[lang][data-type='mono-technical']:lang(zh) {
+  --font-script-serif: var(--font-set-zh-Hans-sans-noto-sans-sc, sans-serif);
+}
+[lang][data-type='mono-technical']:lang(ja) {
+  --font-script-serif: var(--font-set-ja-sans-noto-sans-jp, sans-serif);
+}
+[lang][data-type='mono-technical']:lang(ko) {
+  --font-script-serif: var(--font-set-ko-sans-noto-sans-kr, sans-serif);
+}
