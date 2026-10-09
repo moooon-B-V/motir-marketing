@@ -1,0 +1,2173 @@
+{
+  "publicProject": {
+    "appHost": "app.motir.co",
+    "tabs": {
+      "overview": "概要",
+      "board": "ボード",
+      "items": "項目",
+      "tree": "ツリー",
+      "roadmap": "ロードマップ",
+      "changelog": "変更履歴"
+    },
+    "stats": {
+      "requests": "要望",
+      "upvotes": "賛成票",
+      "planned": "計画済み",
+      "shipped": "リリース済み"
+    },
+    "header": {
+      "navAria": "プロジェクト",
+      "inTheApp": "アプリで見る",
+      "opensInApp": "— Motir アプリで開きます。アカウントが必要です"
+    },
+    "actRail": {
+      "follow": "フォロー",
+      "followSr": "— app.motir.co で続行します",
+      "requestFeature": "機能をリクエスト",
+      "atomFeed": "Atom フィード"
+    },
+    "subscribe": {
+      "label": "変更履歴の更新を受け取るメールアドレス",
+      "placeholder": "you@example.com",
+      "submit": "購読する",
+      "submitting": "購読しています…",
+      "messages": {
+        "sent": "受信トレイを確認して、購読を確定してください。",
+        "invalid": "メールアドレスの形式ではないようです。",
+        "unavailable": "このプロジェクトは変更履歴メールを停止しています。",
+        "limited": "試行回数が多すぎます。数分後にもう一度お試しください。",
+        "failed": "Motir に接続できませんでした。しばらくしてからもう一度お試しください。"
+      }
+    },
+    "watchLive": {
+      "titleNamed": "{name}が作られていく様子を見る",
+      "titleUnnamed": "このプロジェクトが作られていく様子を見る",
+      "lede": "ライブのボード、作成途中の計画、進行中のエージェントの実行を、Motir アプリで見られます。",
+      "cost": "Motir のアカウントが必要です。続行すると、あなたの{nameAndEmail}と訪問した日時が{managers}に表示されます。",
+      "costNameAndEmail": "名前とメールアドレス",
+      "costManagers": "このプロジェクトのワークスペースのマネージャー",
+      "cta": "ライブで見る",
+      "ctaSr": "— Motir アプリで開きます"
+    },
+    "states": {
+      "error": {
+        "project": "このプロジェクトを読み込めませんでした",
+        "changelog": "このプロジェクトの変更履歴を読み込めませんでした",
+        "request": "この機能リクエストを読み込めませんでした",
+        "workspaceProjects": "このワークスペースのプロジェクトを読み込めませんでした",
+        "address": "このアドレスを読み込めませんでした",
+        "body": "Motir アプリケーションが現在応答していません。このページ自体は問題ありません。この内容は別のデプロイである{host}から読み込んでいます。しばらくしてからもう一度お試しください。",
+        "bodyWithFeed": "Motir アプリケーションが現在応答していません。このページ自体は問題ありません。この内容は別のデプロイである{host}から読み込んでいます。しばらくしてからもう一度お試しいただくか、フィードから配信されている変更履歴をご覧ください。",
+        "feed": "変更履歴フィード"
+      }
+    },
+    "overview": {
+      "empty": {
+        "title": "このプロジェクトはまだ概要を書いていません",
+        "body": "ライブのボード、作業項目、ロードマップは Motir アプリにあります。このページと並べて、作られていく様子をご覧ください。"
+      }
+    },
+    "changelog": {
+      "empty": {
+        "title": "まだリリースされたものはありません",
+        "body": "このプロジェクトが公開の作業を完了すると、こことフィードに記録されます。"
+      },
+      "older": "以前の記録",
+      "subscribeAtom": "Atom で購読"
+    },
+    "requestNew": {
+      "heading": "機能をリクエスト",
+      "intro": "必要なものを{project}チームに伝えましょう。リクエストは公開されます。このプロジェクトを見ている人は誰でも、あなたのリクエストを閲覧して賛成票を投じられます。",
+      "signInTitle": "最初にサインインします",
+      "signInBody": "リクエストの送信にはアカウントが必要なため、フォームは{host}にあります。サインイン後、すでに寄せられている似たリクエストが表示されるので、そちらに賛成票を投じることもできます。その後、このプロジェクトに戻ります。",
+      "continue": "Motir へ進む ↗",
+      "closing": "{projectPage}、その変更履歴、各リクエストのページは、アカウントがなくても誰でも閲覧できます。",
+      "projectPage": "プロジェクトページ"
+    },
+    "request": {
+      "openedBy": "{author}が作成 · {date}",
+      "discussion": "ディスカッション",
+      "noComments": "まだコメントはありません。",
+      "commentHandoff": "このディスカッションに参加すると、{host}でサインインし、このリクエストに戻ります。",
+      "addComment": "コメントを追加",
+      "demand": "需要",
+      "upvote": "賛成票を投じる",
+      "upvoteNote": "賛成票は app.motir.co で投じられ、その後このページに戻ります。",
+      "askHeading": "リクエストする",
+      "requestFeature": "機能をリクエスト ↗"
+    },
+    "workspaceRoot": {
+      "heading": "公開プロジェクト",
+      "empty": {
+        "title": "まだ公開されているものはありません",
+        "body": "このワークスペースはアドレスを取得しましたが、まだプロジェクトを公開していません。公開されると、ここに表示されます。"
+      }
+    },
+    "meta": {
+      "overviewFallback": "Motir で公開しながら作られているプロジェクト。概要、変更履歴、機能リクエスト、そして Motir アプリのライブボードを見られます。",
+      "jsonLdFallback": "{name} — Motir で公開されているプロジェクト計画です。",
+      "tabTitle": "{label} · {name}",
+      "tabDescription": "{name}の{label} — Motir で公開中。",
+      "requestNewTitle": "機能をリクエスト · {name}",
+      "requestNewDescription": "{name}チームにリクエストを送りましょう。リクエストは公開されます。",
+      "workspaceTitle": "公開プロジェクト",
+      "workspaceDescription": "このワークスペースが Motir で公開しているプロジェクトです。",
+      "hostUnavailableTitle": "一時的に利用できません"
+    }
+  },
+  "meta": {
+    "title": "Motir — AI による計画、プロジェクト管理、エージェントのオーケストレーション",
+    "description": "AI 計画、プロジェクト管理、エージェントオーケストレーションのプラットフォーム。作りたいものを伝えれば、Motir が計画を作成し、エージェントが作業を引き継ぎます。"
+  },
+  "nav": {
+    "ariaLabel": "メイン",
+    "brandAriaLabel": "Motir — ホーム",
+    "skipToContent": "本文へスキップ",
+    "menu": "メニュー",
+    "explore": "ビルド・イン・パブリック",
+    "ideas": "作るためのアイデア",
+    "buildsItself": "Motir は Motir で作られています",
+    "docs": "ドキュメント",
+    "design": "デザイン",
+    "signIn": "サインイン",
+    "startFree": "無料で始める",
+    "language": {
+      "label": "言語：{language}",
+      "menuLabel": "言語を選択",
+      "heading": "言語"
+    },
+    "products": "製品",
+    "productsMenuLabel": "Motir の製品",
+    "productGroups": {
+      "ai": "AI 製品",
+      "tooling": "ツール",
+      "infrastructure": "インフラ"
+    },
+    "productItems": {
+      "aiPlanner": {
+        "name": "Motir AI Planner",
+        "blurb": "アイデアを、あなたが承認する計画に変えます"
+      },
+      "projectManagement": {
+        "name": "Motir Project Management",
+        "blurb": "ボード、Sprint、バックログ、ロードマップ"
+      },
+      "projectManager": {
+        "name": "Motir Project Manager",
+        "blurb": "プロジェクト全体を進め、あなたに報告します"
+      },
+      "aiDebugging": {
+        "name": "Motir AI Debugging",
+        "blurb": "すべてのバグをコードまでたどり、計画に組み込みます"
+      },
+      "mcp": {
+        "name": "Motir MCP",
+        "blurb": "MCP に対応したあらゆる AI アシスタントの中に、あなたのプロジェクトを"
+      },
+      "cli": {
+        "name": "Motir CLI",
+        "blurb": "ターミナルから自分のエージェントに作業を任せます"
+      },
+      "claudeCodeConnector": {
+        "name": "Motir Claude Code connector",
+        "blurb": "claude.ai で一度接続すれば、Claude Code で Motir を使えます"
+      },
+      "claudeCodePlugin": {
+        "name": "Motir Claude Code plugin",
+        "blurb": "スキル、MCP サーバー、CLI を一度にインストール"
+      },
+      "agentFleet": {
+        "name": "Motir Agent Fleet",
+        "blurb": "ホスト型エージェントが、あなたの計画を並行して進めます"
+      },
+      "agentHosting": {
+        "name": "Motir Agent Hosting",
+        "blurb": "あなた自身のエージェントを、Motir のマシンで"
+      },
+      "sandbox": {
+        "name": "Motir Sandbox",
+        "blurb": "自分のマシン上で、エージェントのための密閉されたコンテナ"
+      }
+    }
+  },
+  "landing": {
+    "hero": {
+      "headline": "プロジェクトを、バイブで。",
+      "lede": "あなたはアイデアを持ってくるだけ。Motir がプロジェクトのすべてを届けます。計画、デザイン、開発、ドキュメント、そしてそこに至るまでの経緯のすべてを。",
+      "ideaLabel": "何を作りますか？",
+      "placeholder": "人々が目標を達成するのを助ける、AI パーソナルアシスタント…",
+      "hint": "数文で十分です。残りは Motir が質問します。",
+      "cta": "始める",
+      "ctaSubmitting": "開始しています…",
+      "statusSubmitting": "アイデアを保存して、Motir へ移動しています…",
+      "errorTitle": "今はアイデアを保存できませんでした。",
+      "errorBody": "入力した内容は失われていません。もう一度お試しいただくか、アイデアを持ったまま Motir へ進んでください。",
+      "errorRetry": "もう一度試す",
+      "errorFallback": "Motir へ進む",
+      "existingProject": "すでにプロジェクトをお持ちですか？",
+      "existingProjectLink": "それもバイブで進められます"
+    },
+    "projectManager": {
+      "eyebrow": "Motir Project Manager",
+      "headline": "すでにプロジェクトをお持ちですか？Motir Project Manager に任せましょう。",
+      "lede": "あなたはプロダクトオーナーです。Motir Project Manager は既存のプロジェクトを読み込み、次にやることを計画し、エージェントに作業を割り当てて報告します。プロジェクトを動かすのは Motir。何をリリースするかを決めるのはあなたです。",
+      "points": [
+        "何かを変更する前に、コード、タスク、これまでの経緯を読み込みます",
+        "次のステップを計画し、計画を常に最新に保ちます",
+        "エージェントに作業を任せ、24 時間休まず進めます",
+        "すべての判断とすべてのリリースを、あなたのもとに届けます"
+      ],
+      "importLabel": "インポート元",
+      "sources": {
+        "codebase": "コードリポジトリ",
+        "jira": "Jira",
+        "linear": "Linear",
+        "plane": "Plane"
+      },
+      "report": {
+        "ariaLabel": "Motir Project Manager の週次レポートの例",
+        "title": "週次レポート · AI パーソナルアシスタント",
+        "range": "10月6日～10月12日",
+        "done": "今週完了",
+        "inProgress": "進行中",
+        "waiting": "あなたの判断待ち",
+        "log": [
+          {
+            "day": "月",
+            "what": "カレンダー連携をリリース",
+            "state": "完了",
+            "tone": "plain"
+          },
+          {
+            "day": "火",
+            "what": "計画を更新：メール要約を 2 つに分割",
+            "state": "計画済み",
+            "tone": "cool"
+          },
+          {
+            "day": "水",
+            "what": "ユーザーごとの AI コスト上限を承認",
+            "state": "あなたの判断",
+            "tone": "you"
+          },
+          {
+            "day": "木",
+            "what": "Android のログインエラーを発見して修正",
+            "state": "修正済み",
+            "tone": "plain"
+          },
+          {
+            "day": "金",
+            "what": "朝のブリーフィングを試せる状態に",
+            "state": "確認待ち",
+            "tone": "you"
+          }
+        ]
+      }
+    },
+    "builtByMotir": {
+      "eyebrow": "Motir で開発",
+      "headline": "Motir は Motir で作られています。",
+      "body": "Motir は、Motir によって計画され、開発され、テストされ、リリースされています。エージェントが Motir 自身のロードマップを進め、すべての計画とすべてのリリースは人が承認します。あなたのプロジェクトも同じように進められます。",
+      "points": [
+        "すべての計画、実行、判断を公開で追えます",
+        "作業が進むその瞬間を見られます",
+        "あなたが使うのと同じ Project Manager です"
+      ],
+      "watch": "Motir が自らを作る様子を見る",
+      "runs": "アカウントを作成して、エージェントの実行を見る",
+      "start": "プロジェクトを始める",
+      "note": "Motir プロジェクト。app.motir.co でライブ公開中",
+      "story": "Motir が自らを作る仕組み"
+    },
+    "moreThanCode": {
+      "headline": "プロジェクトは、コードだけではありません",
+      "lede": "バイブコーディングはコードを渡すだけで、残りはあなた任せです。Motir は、本物のプロダクトがローンチし、成長し続けるために必要なものをすべて届けます。",
+      "items": {
+        "plan": {
+          "tab": "計画",
+          "title": "計画",
+          "body": "何を、どの順番で、なぜ作るのか。Motir は、良いパートナーが最初に尋ねるような質問をします。"
+        },
+        "design": {
+          "tab": "デザイン",
+          "title": "デザイン",
+          "body": "作り始める前に、見た目と使い心地を決めます。方向性を選ぶのはあなたです。"
+        },
+        "product": {
+          "tab": "プロダクト",
+          "title": "プロダクト",
+          "body": "動作し、テストされたプロダクトそのもの。最初のユーザーから 10 万人目まで成長できるように作られています。"
+        },
+        "docs": {
+          "tab": "ドキュメント",
+          "title": "ドキュメント",
+          "body": "判断、ガイド、メモを作業のすぐそばに残すので、後からまとめ直す必要はありません。"
+        },
+        "history": {
+          "tab": "履歴",
+          "title": "履歴",
+          "body": "すべての判断を理由と日付とともに記録するので、文脈が失われることはありません。"
+        }
+      }
+    },
+    "calls": {
+      "headline": "作業は AI が。判断はあなたが。",
+      "lede": "Motir はすばやく進み、あなたが選ぶべき場面では必ず立ち止まります。あなたの承認なしには何も進みません。",
+      "items": {
+        "say": {
+          "tab": "伝える",
+          "title": "望むことを伝える",
+          "body": "数文でも、とりとめのないメモでも構いません。Motir は理解できるまで質問します。"
+        },
+        "watch": {
+          "tab": "見守る",
+          "title": "形になっていく様子を見守る",
+          "body": "計画、デザイン、プロダクト、ドキュメントが、目に見える形で一歩ずつ作られていきます。"
+        },
+        "decide": {
+          "tab": "決める",
+          "title": "決めるのはあなた",
+          "body": "すべての成果物があなたのもとに戻り、確認し、試し、承認できます。何をリリースするかは、常にあなたが決めます。"
+        }
+      }
+    },
+    "resume": {
+      "headline": "中断したところから再開",
+      "body": "明日でも半年後でも、新しい人に引き継いでも大丈夫です。プロジェクトがすべてを覚えているので、誰もゼロからやり直したり、一から説明し直したりする必要はありません。"
+    },
+    "close": {
+      "headline": "プロジェクトを、バイブで。",
+      "body": "数文から始めるか、既存のプロジェクトを Motir Project Manager に任せましょう。",
+      "start": "プロジェクトを始める",
+      "import": "プロジェクトをインポート",
+      "developers": "開発者向け：Motir の仕組み",
+      "openCore": "コアはオープンソース · プロジェクトは常にあなたのもの",
+      "free": {
+        "lead": "プロジェクト管理だけで十分ですか？",
+        "cta": "無料で始める",
+        "tail": "— ボード、Sprint、バックログ。AI に邪魔されることはありません。"
+      }
+    },
+    "art": {
+      "plan": {
+        "title": "AI パーソナルアシスタント",
+        "rows": [
+          ["アカウントとサインイン", "完了"],
+          ["カレンダーとメール", "5 件中 3 件"],
+          ["ユーザーあたりの AI コスト", "あなたの判断"],
+          ["モバイルアプリ", "後で"]
+        ]
+      },
+      "design": {
+        "screen": "あなたの朝のブリーフィング",
+        "time": "07:30",
+        "items": [
+          ["09:00", "レビューは 10:00 に変更"],
+          ["メール", "返信待ちが 3 件"],
+          ["やること", "契約書を送る"]
+        ],
+        "optionA": "案 A",
+        "optionB": "案 B"
+      },
+      "product": {
+        "greeting": "おはようございます",
+        "needs": "あなたの対応が必要なことが 3 件",
+        "rows": [
+          ["契約書の件に返信", "先に確認"],
+          ["ジムを 18:00 に移動", "カレンダー"]
+        ],
+        "edit": "編集",
+        "send": "送信",
+        "count": "64",
+        "countLabel": "件のチェックに合格",
+        "checks": [
+          "確認なしに送信することはありません",
+          "ユーザーごとのデータを分離して保管",
+          "10 万ユーザーでも高速"
+        ]
+      },
+      "docs": {
+        "title": "進めながら書き残す",
+        "page": "アシスタントが読んでよいもの",
+        "decisionLabel": "判断 · あなた",
+        "decision": "何を見せるかはユーザーが選ぶ",
+        "chips": ["セットアップガイド", "プライバシー", "AI コストの上限"]
+      },
+      "history": {
+        "title": "誰が何を決めたか",
+        "events": [
+          ["10月1日", "あなたが説明", "1 段落", "you"],
+          ["10月2日", "あなたが計画を承認", "3 回のやり取りの後", "you"],
+          [
+            "10月3日",
+            "あなたがデザイン B を選択",
+            "ブリーフィングを最優先に",
+            "you"
+          ],
+          ["10月9日", "カレンダーを開発・テスト", "64 件のチェック", "motir"]
+        ]
+      },
+      "say": {
+        "idea": "人々が目標を達成するのを助ける、AI パーソナルアシスタント。",
+        "qa": [
+          [
+            "自分の判断で動くべきですか？それとも、何かを送る前に確認すべきですか？",
+            "必ず先に確認してください。"
+          ],
+          [
+            "個人向けですか？それともチーム向けにも？",
+            "まずは個人向けに。チーム向けは来年です。"
+          ]
+        ]
+      },
+      "watch": {
+        "lanes": [
+          ["計画", "done"],
+          ["デザイン", "done"],
+          ["開発", "running"],
+          ["テスト", "waiting"],
+          ["ドキュメント", "ready"]
+        ],
+        "states": {
+          "done": "完了",
+          "running": "エージェント実行中",
+          "ready": "準備完了",
+          "waiting": "開発を待機中"
+        },
+        "live": "pricing-page.tsx"
+      },
+      "decide": {
+        "stamp": "確認をお待ちしています",
+        "title": "カレンダー連携ができあがりました",
+        "body": "録画を見てから、実際に試してみてください。",
+        "changes": "修正を依頼",
+        "approve": "承認",
+        "video": {
+          "chapterCount": "{count}チャプター",
+          "label": "受け入れ動画",
+          "length": "0:48",
+          "chapters": [
+            "カレンダーを接続",
+            "会議を移動",
+            "ブリーフィングが更新される"
+          ]
+        }
+      },
+      "resume": {
+        "tab": "3 週間ぶりに再開",
+        "hello": "おかえりなさい。AI パーソナルアシスタントの現状はこちらです。",
+        "cells": [
+          ["前回", "カレンダー連携をリリース"],
+          ["進行中", "メール要約"],
+          ["あなたの判断待ち", "2 件の判断"]
+        ]
+      }
+    }
+  },
+  "designShowcase": {
+    "specimen": {
+      "sectionLabel": "組み合わせた UI",
+      "primary": "プライマリ",
+      "secondary": "セカンダリ",
+      "ghost": "ゴースト",
+      "danger": "危険",
+      "badge": "バッジ",
+      "done": "完了",
+      "inProgress": "進行中",
+      "tooltip": "同じトークンから描かれたツールチップです。",
+      "hoverMe": "ホバーしてください",
+      "titleLabel": "作業項目のタイトル",
+      "titleValue": "請求フローをリリースする",
+      "assigneeLabel": "担当者",
+      "assigneePlaceholder": "選択…",
+      "unassigned": "未割り当て",
+      "viewLabel": "表示",
+      "board": "ボード",
+      "list": "リスト",
+      "liveUpdates": "ライブ更新",
+      "notesLabel": "メモ",
+      "notesValue": "このパネルのコントロールは、すべて実際に提供されているプリミティブです。",
+      "popover": "ポップオーバー",
+      "popoverBody": "同じトークンから描かれたオーバーレイです。角の丸み、枠線、影はスタイルに、色はパレットに合わせて変わります。",
+      "modal": "モーダル",
+      "modalDescription": "ダイアログもスタイル軸に合わせて形が変わります。",
+      "emptyTitle": "まだ何もありません",
+      "emptyDescription": "EmptyState — 実際に提供されているプリミティブです。",
+      "errorTitle": "問題が発生しました",
+      "errorDescription": "ErrorState — 実際に提供されているプリミティブです。"
+    },
+    "heading": "見た目を選ぶと、サイト全体が変わります。",
+    "subline": "これは、すべての Motir プロジェクトの出発点となるデザインシステムです。スタイルガイドではなくここに置いているのは、あなたのプロダクトがどんな見た目になり得るかを示すには、このサイトの見た目を変えてもらうのが一番早いからです。",
+    "theme": {
+      "name": "テーマ",
+      "help": "ライト、ダーク、またはデバイスの設定に合わせます。",
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システム"
+    },
+    "style": {
+      "name": "スタイル",
+      "help": "形と雰囲気（シルエット、立体感、密度）です。"
+    },
+    "palette": {
+      "name": "パレット",
+      "help": "インターフェースの配色です。"
+    },
+    "type": {
+      "name": "書体",
+      "help": "見出しと本文の書体の組み合わせです。"
+    },
+    "reset": "デフォルトに戻す",
+    "closing": "ここにある 3 つの軸は、Motir でプロジェクトを始めるときに選ぶ 3 つと同じで、その下にあるデザインシステムも同じです。このサイトはそのデモを見せているのではなく、それで作られています。"
+  },
+  "footer": {
+    "ariaLabel": "フッター",
+    "tagline": "AI 計画、プロジェクト管理、エージェントオーケストレーションのプラットフォーム。",
+    "productHeading": "製品",
+    "resourcesHeading": "リソース",
+    "legalHeading": "法務",
+    "explore": "ビルド・イン・パブリックのプロジェクト",
+    "docs": "ドキュメント",
+    "signIn": "サインイン",
+    "startFree": "無料で始める",
+    "github": "GitHub",
+    "openSource": "プロジェクト管理のコアは GPL-3.0 のオープンソースです。",
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー",
+    "legalIndex": "すべての法務文書",
+    "entity": "Motir は moooon B.V. の製品です。",
+    "copyright": "© {year} moooon B.V.",
+    "howItWorks": "Motir の仕組み",
+    "ideas": "作るためのアイデア",
+    "buildsItself": "Motir は Motir で作られています"
+  },
+  "legal": {
+    "metaTitle": "法務",
+    "metaDescription": "moooon B.V. が運営するホスト型 Motir サービスの規約、ポリシー、開示事項です。",
+    "metaDocDescription": "{title} — バージョン{version}。ホスト型 Motir サービスについて moooon B.V. が公開しています。",
+    "breadcrumbAria": "法務文書",
+    "allDocuments": "← すべての法務文書",
+    "versionAndEffective": "バージョン{version} · {date}から有効",
+    "versionNotYetEffective": "バージョン{version} · まだ有効ではありません",
+    "indexTitle": "法務",
+    "indexIntro": "ホスト型 Motir サービスについて moooon B.V. が公開しているすべての文書です。あなたが同意する内容、私たちがあなたのデータをどう扱うか、そしてデータが誰に届くかを記載しています。Motir を自分で運用する場合は、あなた自身が管理者となり、これらの文書はあなたのサービスではなく私たちのサービスについて述べたものになります。",
+    "indexContact": "これらに関するご質問：legal@motir.co"
+  },
+  "explore": {
+    "topicNavAria": "プロジェクト広場",
+    "topicHeading": "{topic}のプロジェクト",
+    "metaTitle": "ビルド・イン・パブリック · Motir のプロジェクト",
+    "metaDescription": "チームが Motir で公開しながら作っているプロジェクト。ロードマップ、ボード、計画、エージェントの実行を見られます。どのプロジェクトの概要も読めて、無料アカウントでライブの作業を追えます。",
+    "metaTitleTopic": "公開で作られている{topic}のプロジェクト · Motir",
+    "metaDescriptionTopic": "{topic}のタグが付いた公開プロジェクト。Motir で{topic}を公開しながら作っているチームの、実際のロードマップ、ボード、Sprint です。",
+    "heroEyebrow": "ビルド・イン・パブリック",
+    "heroTitle": "Motir で公開しながら作られているプロジェクト",
+    "heroLede": "チームは Motir で公開しながら開発しています。どのプロジェクトの概要と変更履歴も読めます。無料アカウントを作成すれば、ライブのボード、ロードマップ、計画、エージェントの実行を追えます。",
+    "trustCrawlable": "概要と変更履歴は公開",
+    "trustNoSignup": "無料アカウントでライブの作業を追える",
+    "trustUpdated": "毎日更新",
+    "searchAria": "公開プロジェクトを検索",
+    "searchPlaceholder": "名前やトピックで公開プロジェクトを検索…",
+    "searchSubmit": "検索",
+    "sortAria": "公開プロジェクトの並べ替え",
+    "rankTrending": "トレンド",
+    "rankPopular": "人気",
+    "rankNew": "新着",
+    "windowDay": "今日",
+    "windowWeek": "今週",
+    "windowMonth": "今月",
+    "topicFilterAria": "トピックで公開プロジェクトを絞り込む",
+    "allTopics": "すべてのトピック",
+    "activeLabel": "適用中",
+    "summarySearch": "「{query}」",
+    "summaryRankTrending": "トレンド · {window}",
+    "summaryRankPopular": "人気",
+    "summaryRankNew": "新着",
+    "galleryHeadingSearch": "「{query}」の検索結果",
+    "galleryHeadingPopular": "人気の公開プロジェクト",
+    "galleryHeadingNew": "最近公開されたプロジェクト",
+    "galleryHeadingTrending": "トレンドの公開プロジェクト",
+    "noResultsTitle": "条件に一致するプロジェクトはありません",
+    "noResultsBody": "別の検索語やトピックを試すか、絞り込みを解除して広場全体をご覧ください。",
+    "emptyTitle": "公開プロジェクトはまだありません",
+    "emptyBody": "チームがプロジェクトを公開すると、誰でも見つけられるようにここに表示されます。またのぞいてみてください。",
+    "clearFilters": "絞り込みを解除",
+    "loadMore": "さらにプロジェクトを読み込む",
+    "browseTitle": "トピックから探す",
+    "browseSubtitle": "公開プロジェクトの数で並べたトピックです。それぞれがクロール可能な独自のランディングページです。",
+    "browseCountAria": "{count}件の公開プロジェクト",
+    "faqHeading": "ビルド・イン・パブリックとは？",
+    "faqLede": "ビルド・イン・パブリックにすると、Motir のプロジェクトがウェブ上の誰もが見つけられるページになります。概要と変更履歴は誰でも閲覧でき、無料の Motir アカウントがあれば、ライブのボード、ロードマップ、作業項目を追えます。このページには、公開で作られているすべてのプロジェクトが並んでいます。",
+    "faqQ1": "何が公開され、何が非公開のままですか？",
+    "faqA1": "ボード、ロードマップ、作業項目（タイトル、種類、説明）が公開されます。担当者、見積もり、内部コメントが表示されることはありません。プロジェクトのライブビューを初めて開くときに、あなたの名前とメールアドレスがプロジェクトのチームに表示されることを Motir がお知らせします。",
+    "faqQ2": "アカウントは必要ですか？",
+    "faqA2": "プロジェクトの概要と変更履歴を読むだけなら不要です。ライブのボード、ロードマップ、計画、エージェントの実行を追うには、無料の Motir アカウントでサインインします。有料の壁はありません。",
+    "faqQ3": "プロジェクトはどのように順位付けされますか？",
+    "faqA3": "「トレンド」は最近の賛成票と活動が多いプロジェクトを、「人気」はこれまでの賛成票の合計で、「新着」は最近公開された順に表示します。それぞれが共有可能でクロール可能な URL です。",
+    "cardViewAria": "{name} — 公開プロジェクト",
+    "statUpvotesAria": "{count}件の賛成票",
+    "statActivityAria": "最終活動：{time}",
+    "statActivityNone": "まだ活動はありません",
+    "errorTitle": "プロジェクト広場を読み込めませんでした",
+    "errorBody": "ディレクトリに一時的に接続できません。しばらくしてからもう一度お試しください。",
+    "featured": {
+      "eyebrow": "Motir がビルド・イン・パブリックで開発",
+      "title": "Motir は Motir で作られています。",
+      "body": "Motir は、Motir によって公開で計画され、開発され、リリースされています。すべての計画、実行、判断を公開で追えます。",
+      "cta": "Motir が自らを作る様子を見る"
+    },
+    "close": {
+      "headline": "あなたのプロジェクトも、公開しながら作りましょう。",
+      "body": "スイッチひとつで、どの Motir プロジェクトも公開ページにできます。作っているものを見せ、機能リクエストや賛成票を受け付けながら、内部の詳細は非公開のままにできます。",
+      "cta": "無料で始める"
+    }
+  },
+  "docs": {
+    "operationCount": "{count}件のオペレーション",
+    "metaTitle": "ドキュメント · Motir",
+    "metaDescription": "Motir API と MCP サーバーのドキュメント。公開の読み取り契約、エージェントが呼び出すサーバー、そして CLI について説明します。",
+    "metaTitleReference": "API リファレンス · Motir ドキュメント",
+    "metaDescriptionReference": "Motir の公開 REST API のすべてのオペレーションを、スコープ、パラメーター、レスポンス、コピーしてそのまま使える認証付きの例とともに掲載しています。",
+    "metaTitleGuide": "はじめに · API リファレンス · Motir ドキュメント",
+    "metaDescriptionGuide": "アカウントの作成から Motir REST API への呼び出しが動くまでを 5 つのステップで。トークン、最初のリクエスト、エラーの意味を説明します。",
+    "metaTitleStability": "安定性と非推奨化 · API リファレンス · Motir ドキュメント",
+    "metaDescriptionStability": "Motir の v1 REST API が変更しないと約束していること、予告なく変わる可能性があること、そして非推奨化の進め方を説明します。",
+    "metaTitleMcp": "MCP サーバー · Motir ドキュメント",
+    "metaDescriptionMcp": "個人用アクセストークンを使って、あらゆる Model Context Protocol クライアントを Motir に接続できます。MCP サーバーと REST API のどちらを使うべきかも説明します。",
+    "metaTitleMcpTools": "ツール · MCP サーバー · Motir ドキュメント",
+    "metaDescriptionMcpTools": "Motir MCP サーバーが公開するすべてのツールと、それぞれの機能、利用に必要なトークンスコープを掲載しています。",
+    "metaTitleCli": "Motir CLI · Motir ドキュメント",
+    "metaDescriptionCli": "Motir CLI をインストールしてサインインし、プロジェクトを指定して、作業項目を自分のエージェントに任せましょう。何もクローンする必要はありません。",
+    "metaTitleSandbox": "エージェントサンドボックス · Motir ドキュメント",
+    "metaDescriptionSandbox": "無人のエージェントを、マシン上のワークスペースツリーだけを対象に実行する公開コンテナをセットアップします。",
+    "metaTitlePublicAddress": "公開アドレス · Motir ドキュメント",
+    "metaDescriptionPublicAddress": "公開プロジェクトに好きなアドレスを付けられます。ワークスペース用の Motir サブドメインか、すでにお持ちのドメインを使い、それぞれに必要な DNS レコードを設定します。",
+    "metaTitleSentry": "Sentry · Motir ドキュメント",
+    "metaDescriptionSentry": "Sentry を Motir プロジェクトに接続すると、新しいエラーがバグの作業項目として届き、バグを修正すると Sentry 側のエラーも解決されます。",
+    "metaTitleDifficulty": "難易度 · Motir ドキュメント",
+    "metaDescriptionDifficulty": "作業項目に設定できる 4 つの難易度と、それぞれの難易度で使うことをおすすめするモデル、そしてタスクあたりのコストを説明します。",
+    "metaTitleSkills": "スキル · Motir ドキュメント",
+    "metaTitleClaudeCodeConnector": "Claude Code コネクター · Motir ドキュメント",
+    "metaTitleClaudeCodePlugin": "Claude Code プラグイン · Motir ドキュメント",
+    "metaDescriptionSkills": "Claude Code、Codex、Cursor、Gemini CLI、GitHub Copilot、OpenCode に Motir のスキルをインストールして、使い慣れたエージェントから Motir のプロジェクトを進めましょう。",
+    "metaDescriptionClaudeCodeConnector": "Motir をリモート MCP コネクターとして Claude Code に接続します。claude.ai で一度追加するか 1 つのコマンドで追加し、Motir アカウントでサインインして、Claude に許可する操作を承認します。",
+    "metaDescriptionClaudeCodePlugin": "Motir の Claude Code プラグインをインストールしましょう。一度のインストールでスキル、Motir MCP サーバー、CLI 用のランナーが揃い、トークンなしで Motir に接続できます。",
+    "indexTitle": "ドキュメント",
+    "indexIntro": "Motir と連携して開発するために必要なすべて。公開の読み取り API、エージェントが呼び出す MCP サーバー、そして CLI です。",
+    "api": "API リファレンス",
+    "apiGettingStarted": "はじめに",
+    "apiStability": "安定性と非推奨化",
+    "mcp": "MCP サーバー",
+    "mcpTools": "MCP ツール",
+    "mcpHintReads": "読み取り",
+    "mcpHintWrites": "書き込み",
+    "mcpHintDestructive": "破壊的",
+    "mcpHintsUnpublished": "この Motir のバージョンは、このツールの動作ヒントを公開していません。",
+    "mcpHintLedeIntro": "各ツールは、あなたのデータに何をするかを示しています。",
+    "mcpHintReadsMeans": "は何も変更しません。",
+    "mcpHintWritesMeans": "は追加のみを行います。",
+    "mcpHintDestructiveMeans": "は既存のものを変更または削除する可能性があります。",
+    "mcpHintLedeClaude": "Claude はこれらのヒントを読み取り、読み取り専用ではないツールを使う前には、あなたが許可していない限り確認を求めます。",
+    "cli": "CLI",
+    "sandbox": "サンドボックス",
+    "publicAddress": "公開アドレス",
+    "sentry": "Sentry",
+    "difficulty": "難易度",
+    "skills": "スキル",
+    "claudeCodeConnector": "Claude Code コネクター",
+    "claudeCodePlugin": "Claude Code プラグイン",
+    "descApi": "公開の読み取り API。すべてのエンドポイント、パラメーター、ステータスを、配信中の OpenAPI ドキュメントから生成しています。",
+    "descApiGettingStarted": "トークンの取得から最初のリクエストまでの 5 ステップ。",
+    "descApiStability": "バージョン管理、非推奨化、そして破壊的変更とは何か。",
+    "descMcp": "エージェントと CLI が呼び出す Model Context Protocol サーバー。",
+    "descMcpTools": "サーバーが公開するすべてのツールと、そのスコープと権限。",
+    "descCli": "コマンドラインクライアントと、それが自動化すること。",
+    "descSandbox": "エージェントが作業を実行するホスト型サンドボックス。",
+    "descPublicAddress": "ワークスペースのサブドメイン、すでにお持ちのドメイン、そしてそれぞれに必要な DNS レコード。",
+    "descSentry": "Sentry のエラーをバグの作業項目に変え、バグが完了したら Sentry 側でも解決します。",
+    "descDifficulty": "各難易度の意味と、どのモデルで実行すべきか、タスクあたりのコスト。",
+    "descSkills": "Motir のスキルをエージェントにインストールする方法と、それぞれを使うための伝え方。",
+    "descClaudeCodeConnector": "claude.ai から、または 1 つのコマンドで、トークンなしに Motir アカウントで Motir を Claude Code に接続します。",
+    "descClaudeCodePlugin": "Claude Code に一度インストールするだけで、Motir のスキル、MCP サーバー、CLI が揃い、トークンなしでサインインできます。",
+    "apiIntro": "API が提供するすべてのオペレーションを、Motir が公開する OpenAPI ドキュメントから生成し、このページのリクエスト時に取得しています。そのため、サーバーが今まさに提供している内容そのものです。各オペレーションには、パラメーター、受け付けるボディ、コピーできるリクエスト、返し得るすべてのステータスが載っています。",
+    "sectionRequest": "リクエスト",
+    "sectionBody": "リクエストボディ",
+    "sectionExample": "例",
+    "sectionResponses": "レスポンス",
+    "sectionResponseSchema": "レスポンススキーマ",
+    "thStatus": "ステータス",
+    "thCondition": "条件",
+    "filterOperations": "オペレーションを絞り込む",
+    "filterEmpty": "その条件に一致するオペレーションはありません。"
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "そのページはここにはありません",
+    "lede": "アドレスの入力ミスか、リンク先のページがもう公開されていない可能性があります。",
+    "exploreDoor": "公開で作られているプロジェクトを見る",
+    "homeDoor": "ホームページへ"
+  },
+  "products": {
+    "eyebrow": "Motir の製品",
+    "comingSoon": "このページは準備中です。それまでは、Motir を試していただくのが一番の近道です。",
+    "start": "プロジェクトを始める",
+    "back": "motir.co に戻る",
+    "metaTitle": "{name} — Motir",
+    "worksWith": "連携先",
+    "aiPlanner": {
+      "metaDescription": "Motir AI Planner は、何を作るのかが明確になるまで質問し、それから計画全体を作成します。すべての作業を、順序と担当者とともに。あなたが承認するまで何も始まりません。",
+      "headline": "まず「何を」。それから計画のすべてを。",
+      "lede": "作りたいものを説明してください。プランナーは推測で計画を立てないので、意図が明確になるまで質問します。それから既存のものを読み込み、計画全体を作成します。すべての作業を、必要な順序で、担当者とともに。あなたが承認するまで何も始まりません。",
+      "steps": {
+        "eyebrow": "計画の立て方",
+        "headline": "あなたと一緒に考え抜きます",
+        "items": [
+          {
+            "title": "明確になるまで質問",
+            "body": "何を作るのかがまだはっきりしなければ、質問します。わかるまで計画は立てません。"
+          },
+          {
+            "title": "既存のものを読み込む",
+            "body": "リポジトリ、ドキュメント、ボード、あるいは Jira、Linear、Plane から持ち込んだプロジェクト。白紙からではなく、今いる地点から計画します。"
+          },
+          {
+            "title": "計画全体を作成",
+            "body": "大きな目標から小さなステップまで、すべての作業を。それぞれに担当者と、先に終わるべき作業が付きます。"
+          },
+          {
+            "title": "自らの計画を検証",
+            "body": "すべての計画はあなたに届く前に確認されるので、受け取るのは実際に作れる計画です。"
+          }
+        ]
+      },
+      "gate": {
+        "eyebrow": "決めるのはあなた",
+        "headline": "計画を承認するのはあなたです",
+        "body": "あなたが承認するまで、何もボードには載りません。修正は普段の言葉で依頼できます。これは後回しに、あれは分割して、エクスポートはなしで、というように。やり取りのたびに新しいターンになり、計画はすべてのバージョンと変更の理由を保持します。",
+        "motirPlans": "アカウントを作成して、Motir が自分のために立てた計画を見る"
+      },
+      "holds": {
+        "eyebrow": "計画に含まれるもの",
+        "headline": "作業に必要なすべて",
+        "items": [
+          {
+            "title": "ツリー全体",
+            "body": "エピック、ストーリー、タスク、サブタスク。目標からステップまで。"
+          },
+          {
+            "title": "担当者",
+            "body": "各作業項目はエージェントか人に割り当てられます。人にしかできない作業は手動タスクになります。"
+          },
+          {
+            "title": "順序",
+            "body": "何が何を待っているかを示すので、各作業は始められる瞬間に始まります。"
+          },
+          {
+            "title": "難易度",
+            "body": "すべての作業項目に難易度があるので、それに合ったモデルで実行されます。"
+          },
+          {
+            "title": "作業の種類",
+            "body": "コード、デザイン、テスト、ドキュメント、調査、レビュー。種類ごとに印が付きます。"
+          },
+          {
+            "title": "スケジュール",
+            "body": "承認後は、Sprint、バックログ、ロードマップになります。"
+          }
+        ]
+      },
+      "learns": {
+        "eyebrow": "どんどん良くなる",
+        "headline": "すべての失敗から学びます",
+        "body": "計画が求めたものをエージェントが作れなかったとき、Motir はまず、計画が間違っていたのか、承認後に変更されたのかを確認します。本当の計画ミスは教訓になるか、既存の教訓を強めます。新しい計画は必ず最初に教訓を読み込み、90 日間必要とされなかった教訓は引退します。",
+        "library": "教訓",
+        "lessons": [
+          ["ユーザーが必要な機能より前にサインインを置く", "14 回使用"],
+          ["メールプロバイダーの選定は手動タスクにする", "6 回使用"],
+          ["2 種類の作業が必要なストーリーは分割する", "9 回使用"],
+          ["空の状態は画面と一緒に計画する", "新規"]
+        ]
+      },
+      "close": {
+        "headline": "アイデアを持ってきてください。",
+        "body": "残りの考えるべきことは、プランナーがあなたと一緒に進めます。"
+      },
+      "ui": {
+        "railLabel": "Motir AI",
+        "modeFirstPlan": "最初の計画",
+        "asking": "質問中",
+        "close": "閉じる",
+        "esc": "Esc",
+        "composer": "返信するか、さらに具体化してください…",
+        "chat": [
+          {
+            "role": "user",
+            "text": "人々が目標を達成するのを助ける、AI パーソナルアシスタント。"
+          },
+          {
+            "role": "assistant",
+            "tone": "asking",
+            "text": "目標を設定するのは誰ですか？一人ひとりが自分のために設定しますか？それともコーチがクライアントのために設定しますか？"
+          },
+          {
+            "role": "user",
+            "text": "一人ひとりが自分のために設定します。コーチ向けは後からで大丈夫です。"
+          },
+          {
+            "role": "assistant",
+            "text": "わかりました。今あるものを読み込んで、最初の計画を作成します。"
+          }
+        ],
+        "newItem": "新規",
+        "opAdd": "追加",
+        "cards": [
+          {
+            "kind": "story",
+            "title": "期日付きで目標を設定する",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "目標を週ごとのマイルストーンに分ける",
+            "children": true
+          },
+          {
+            "kind": "task",
+            "title": "対応するカレンダーを決める",
+            "difficulty": "低",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "title": "カレンダーを接続して空き時間を見つける",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "その週のセッションを空き時間に予約する",
+            "children": true
+          }
+        ],
+        "project": "AI パーソナルアシスタント",
+        "list": "リスト",
+        "canvas": "キャンバス",
+        "changeTurns": [
+          {
+            "role": "user",
+            "text": "リマインダーのストーリーは今は外してください。各自で進捗を確認できるので。"
+          },
+          {
+            "role": "assistant",
+            "text": "外しました。その週のセッションの予約は、引き続きマイルストーンとカレンダーを待ちます。"
+          }
+        ],
+        "barCounts": "17 件を追加",
+        "consequence": "承認すると、これらがバックログに追加されます。却下すると計画は終了し、何も変更されません。",
+        "approve": "承認",
+        "decline": "却下",
+        "roadmap": "ロードマップ",
+        "epic": "個人のスケジュールと目標のプランナー",
+        "back": "戻る",
+        "modeInContext": "コンテキスト内",
+        "manual": "手動"
+      }
+    },
+    "importExisting": "Jira、Linear、Plane からプロジェクトを持ち込む",
+    "projectManagement": {
+      "metaDescription": "ボード、Sprint、バックログ、ロードマップ。エージェントと人が同じ計画で作業し、すべての判断は人を待ちます。",
+      "headline": "エージェントと人が、同じ計画で働く場所。",
+      "lede": "ボード、Sprint、バックログ、ロードマップを、チームがすでに慣れているやり方で。エージェントも人も同じボードから作業を取り、判断が必要なものはすべて人を待ちます。",
+      "board": {
+        "eyebrow": "ボード",
+        "headline": "エージェントの働きを理解するボード",
+        "body": "エージェントの作業も、ほかの誰の作業とも同じ列を進みます。さらに、その実態を正直に示す 2 つの列があります。「実装済み」は、エージェントがプルリクエストを作成したものの、まだ誰も確認していない状態。「承認済み」は、人が承認したもののまだリリースされていない状態です。失敗したチェックは作業項目そのものに表示されます。",
+        "motirBoard": "アカウントを作成して、Motir 自身のボードを見る"
+      },
+      "roadmap": {
+        "eyebrow": "ロードマップ",
+        "headline": "すぐに始められるものが見える",
+        "body": "ロードマップは、すべての作業項目を、それが待っているものとともに描きます。今すぐ始められる作業には「着手可能」の印が付くので、あなたもチームメイトもエージェントも、次に何に取りかかればよいかが常にわかります。",
+        "motirRoadmap": "アカウントを作成して、Motir 自身のロードマップを見る"
+      },
+      "holds": {
+        "eyebrow": "チームが期待するものはすべて",
+        "headline": "使い慣れたツール",
+        "items": [
+          {
+            "title": "Sprint とバックログ",
+            "body": "バックログから Sprint を計画し、目標を設定して、バーンダウンを追跡します。"
+          },
+          {
+            "title": "思いどおりのボード",
+            "body": "プロジェクトごとに複数のボード、スイムレーン、仕掛かり作業の上限、フィルター。"
+          },
+          {
+            "title": "プロジェクトを持ち込む",
+            "body": "Jira、Linear、Plane、GitHub、または CSV ファイルからインポートできます。"
+          },
+          {
+            "title": "一般に公開",
+            "body": "プロジェクトを公開して、賛成票やコメント付きの機能リクエストを受け付けられます。"
+          },
+          {
+            "title": "手動タスク",
+            "body": "人にしかできない作業は独自の種類の作業項目になり、一歩ずつ案内されます。"
+          },
+          {
+            "title": "オープンソース",
+            "body": "プロジェクト管理のコアは GPL-3.0 のオープンソースです。"
+          }
+        ]
+      },
+      "ui": {
+        "boardsHeading": "ボード",
+        "boardsSubtitle": "AI パーソナルアシスタントのカンバンボード",
+        "newItem": "新しい作業項目",
+        "columns": [
+          {
+            "name": "未着手",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-23",
+                "title": "その週のセッションを空き時間に予約する",
+                "pill": "blocked",
+                "points": 5,
+                "who": "–"
+              },
+              {
+                "kind": "task",
+                "key": "PA-24",
+                "title": "対応するカレンダーを決める",
+                "pill": "high",
+                "points": 1,
+                "who": "Y"
+              }
+            ]
+          },
+          {
+            "name": "進行中",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-28",
+                "title": "目標ページにマイルストーンを表示",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "実装済み",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-27",
+                "title": "目標を週ごとに分割",
+                "pill": "medium",
+                "points": 5,
+                "who": "A",
+                "ci": "failing"
+              }
+            ]
+          },
+          {
+            "name": "レビュー中",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-26",
+                "title": "マイルストーンを目標とともに保存",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "完了",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-21",
+                "title": "期日付きで目標を設定する",
+                "pill": "low",
+                "points": 3,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "pill": {
+          "blocked": "ブロック中",
+          "high": "高",
+          "medium": "中",
+          "low": "低",
+          "awaiting": "あなたの対応待ち",
+          "running": "チェック実行中",
+          "failing": "チェック失敗"
+        },
+        "waitingOnYou": "あなた待ち",
+        "waitedHeader": ["待機対象", "待機時間"],
+        "rows": [
+          {
+            "kind": "plan",
+            "title": "AI パーソナルアシスタント",
+            "sentence": "{title}の計画",
+            "key": "",
+            "waited": "2 時間",
+            "action": "確認"
+          },
+          {
+            "kind": "pr",
+            "title": "パスワードリセットのメール",
+            "sentence": "{title}が完成しました",
+            "key": "PA-7",
+            "waited": "1 日",
+            "action": "確認"
+          },
+          {
+            "kind": "design",
+            "title": "サインイン画面",
+            "sentence": "{title}のデザイン",
+            "key": "PA-8",
+            "waited": "3 時間",
+            "action": "確認"
+          },
+          {
+            "kind": "video",
+            "title": "アカウントとサインイン",
+            "sentence": "ストーリー「{title}」の受け入れ動画",
+            "key": "PA-2",
+            "waited": "40 分",
+            "action": "確認"
+          },
+          {
+            "kind": "manual",
+            "title": "メールプロバイダーを選ぶ",
+            "sentence": "{title}があなたを待っています",
+            "key": "PA-19",
+            "waited": "1 日",
+            "action": "完了にする"
+          }
+        ],
+        "roadmap": [
+          {
+            "kind": "story",
+            "key": "PA-21",
+            "title": "期日付きで目標を設定する",
+            "status": "done",
+            "label": "完了"
+          },
+          {
+            "kind": "task",
+            "key": "PA-24",
+            "title": "対応するカレンダーを決める",
+            "status": "ready",
+            "label": "着手可能",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "key": "PA-22",
+            "title": "目標を週ごとのマイルストーンに分ける",
+            "status": "in_progress",
+            "label": "進行中",
+            "progress": "2 / 5"
+          },
+          {
+            "kind": "story",
+            "key": "PA-25",
+            "title": "カレンダーを接続して空き時間を見つける",
+            "status": "todo",
+            "label": "未着手"
+          },
+          {
+            "kind": "story",
+            "key": "PA-23",
+            "title": "その週のセッションを空き時間に予約する",
+            "status": "todo",
+            "label": "未着手"
+          }
+        ],
+        "roadmapRoot": "ロードマップ",
+        "roadmapEpic": "個人のスケジュールと目標のプランナー",
+        "back": "戻る",
+        "manual": "手動"
+      },
+      "close": {
+        "headline": "プロジェクトを持ってきてください。",
+        "body": "アイデアから始めることも、今あるプロジェクトを持ち込むこともできます。"
+      }
+    },
+    "aiDebugging": {
+      "metaDescription": "本番環境から、チームから、そして実行中のエージェントから届くバグが、コードまでたどられ、計画された状態で届きます。Motir AI はありそうな原因を挙げ、それを扱う作業項目がすでにあるかを確認し、バグが完了すると Sentry のエラーを解決します。",
+      "headline": "すべてのバグが、コードまでたどられ、計画された状態で届きます。",
+      "lede": "本番環境から、チームの誰かから、あるいは実行中のエージェントから。どのバグも、完了の条件、コードのどこから手をつけるか、何が問題でありそうかとともに届きます。誰が修正するかはあなたが決めます。",
+      "plan": {
+        "eyebrow": "AI が各バグを計画",
+        "headline": "考えられる原因を示し、推測を答えとして出すことはありません",
+        "body": "プランナーはスタックトレースをリポジトリと照らし合わせ、チームメイトのようにバグを書きます。完了の条件、コードのどこから手をつけるか、そしてなぜ重要なのか。ありそうな原因は、確かめるべき可能性として列挙されます。トレースがコードと一致しない場合は、バグにそう明記されます。"
+      },
+      "fix": {
+        "eyebrow": "修正方法はあなたが決める",
+        "headline": "自分で直すか、エージェントに任せるか",
+        "body": "計画されたバグは普通の作業項目です。自分で修正することも、エージェントに「バグ」フォルダーを任せて 1 件ずつプルリクエストを作成させることもできます。あなたがレビューしてマージすればバグは完了し、Sentry のエラーも解決されます。"
+      },
+      "setup": {
+        "eyebrow": "2 ステップで設定",
+        "headline": "一度接続して、対象を選ぶ",
+        "body": "Sentry の組織を接続し、そのうちどのプロジェクトのエラーをこのボードに送るかを選びます。プロジェクトごとに、対象とする最低レベル、バグの完了でエラーを解決するかどうか、Sentry の担当者を引き継ぐかどうかを設定します。"
+      },
+      "ui": {
+        "errorsTitle": "エラー",
+        "errorsGloss": "— リンクされた Sentry のエラー · 件数は前回の確認時点",
+        "linkError": "エラーをリンク",
+        "error": {
+          "title": "TypeError: Cannot read properties of undefined (reading 'goalId')",
+          "where": "acme / web-frontend · production · 2.14.0",
+          "level": "エラー",
+          "seenPre": "発生回数 ",
+          "count": "1,284",
+          "seenPost": " 回",
+          "lastSeen": "最終発生：6 分前",
+          "hideEvidence": "証拠を隠す",
+          "summary": "· TypeError · POST /api/check-ins · 最新のイベントは 6 分前",
+          "exception": "例外",
+          "exceptionType": "TypeError",
+          "exceptionMessage": ": Cannot read properties of undefined (reading 'goalId')",
+          "stack": "スタックトレース",
+          "stackGloss": "· 自分のコード 2 件 · フレームワーク 14 件 · 新しい呼び出し順",
+          "frames": [
+            ["app/api/check-ins/route.ts:42", "saveCheckIn 内"],
+            ["lib/goals/progress.ts:18", "currentGoalFor 内"]
+          ],
+          "showFramework": "フレームワークのフレームを 14 件表示"
+        },
+        "aiDrafted": "AI が作成",
+        "explanation": "説明",
+        "explanationGloss": "— なぜ重要か",
+        "explanationBody": "有効な目標がない人の毎日のチェックインがすべて失敗するため、その人は取り戻しに来た連続記録を失ってしまいます。リリース 2.14.0 から発生しています。",
+        "description": "詳細",
+        "descriptionGloss": "— やるべきこと",
+        "sections": [
+          {
+            "heading": "受け入れ基準",
+            "items": [
+              "有効な目標がない人でもチェックインが保存される",
+              "目標がない場合、チェックインのエンドポイントは 500 ではなく 422 を返す"
+            ]
+          },
+          {
+            "heading": "参照するコンテキスト",
+            "items": ["app/api/check-ins/route.ts", "lib/goals/progress.ts"]
+          },
+          {
+            "heading": "考えられるメカニズム",
+            "note": "いずれも確定したものではありません。それぞれはスタックトレースと矛盾しない仮説であり、最初に調べる人が確かめられるように列挙したものです。診断ではありません。",
+            "items": [
+              "最後の目標がアーカイブされると currentGoalFor が undefined を返す",
+              "目標の一覧が読み込まれる前に、クライアントがチェックインを送信している"
+            ]
+          }
+        ],
+        "monitoring": "モニタリング",
+        "monitoringBody": "サービスがすでにエラーを報告しているエラーモニターを接続すると、Motir がそのエラーをこのプロジェクトのボード上の作業項目に変えます。",
+        "sentry": "Sentry",
+        "connected": "接続済み",
+        "org": "acme",
+        "checked": "4 分前に確認",
+        "recheck": "再確認",
+        "monitored": "監視対象のプロジェクト",
+        "monitoredBody": "これらの Sentry プロジェクトのエラーは、このボード上のバグの作業項目になります。",
+        "project": "web-frontend",
+        "bound": "3 日前に紐付け",
+        "poll": "2 分前に新しいエラーを確認 · ",
+        "filed": "3 件のバグを登録",
+        "minLevel": "最低レベル",
+        "everyLevel": "すべてのレベル",
+        "sync": "Sentry と同期",
+        "toggles": [
+          [
+            "バグが完了したら Sentry で解決する",
+            "オフにすると、バグが完了しても Sentry のエラーはそのままになります。"
+          ],
+          [
+            "Sentry から担当者を引き継ぐ",
+            "オフにすると、Sentry での割り当ては無視されます。"
+          ]
+        ],
+        "add": "監視対象のプロジェクトを追加",
+        "board": [
+          {
+            "name": "未着手",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-41",
+                "title": "目標のない人で saveCheckIn に TypeError",
+                "pill": "high",
+                "points": 2,
+                "who": "–"
+              }
+            ]
+          },
+          {
+            "name": "進行中",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-38",
+                "title": "深夜 0 時にリマインダーメールが 2 回送信される",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "レビュー中",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-35",
+                "title": "タイムゾーンが変わると連続記録がリセットされる",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "完了",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-31",
+                "title": "タイトルが空だと目標一覧がクラッシュする",
+                "pill": "low",
+                "points": 1,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "debug": {
+          "mode": "計画",
+          "turnLabel": "ターン 1",
+          "user": "最後の目標をアーカイブした人の毎日のチェックインが失敗します。連続記録がリセットされ、チェックインも失われます。",
+          "acts": [
+            ["読み取り", "リクエストを読み取っています…"],
+            ["引き継ぎ", "バグをたどっています…"],
+            ["取得", "コードグラフを読み込みました"],
+            ["取得", "計画ツリーを読み込みました"],
+            ["照合", "すでにこれを扱う作業項目があるか確認しました"]
+          ],
+          "causeLabel": "考えられる原因：",
+          "cause": "最後の目標がアーカイブされると currentGoalFor が undefined を返し、saveCheckIn がチェックせずにそこから goalId を読み取っています。",
+          "cause2": "これを扱う作業項目はまだありません。",
+          "outcomePre": "診断とともに ",
+          "outcomeKey": "PA-44",
+          "outcomeTitle": "最後の目標をアーカイブするとチェックインが失敗する",
+          "outcomePost": " をトリアージに登録しました。ほかには何も変更していません。"
+        },
+        "run": {
+          "title": "PA-8 · サインイン画面",
+          "status": "実行中",
+          "findings": "この実行で生まれたもの",
+          "bugFiled": "バグを登録",
+          "key": "PA-45",
+          "open": "開く →",
+          "found": "発見時の作業：PA-8 を実行中",
+          "bugTitle": "メールが届く前にパスワードリセットのリンクが期限切れになる"
+        }
+      },
+      "close": {
+        "headline": "バグには、自分で計画させましょう。",
+        "body": "バグを説明するか、Sentry を接続するか、エージェントに見つけたものを報告させましょう。"
+      },
+      "sources": {
+        "eyebrow": "バグの入り口",
+        "headline": "入り口は 3 つ、バグの形は 1 つ",
+        "items": [
+          {
+            "title": "Motir AI に説明する",
+            "body": "何が壊れているかを伝えてください。Motir AI はコードを読み、ありそうな原因を挙げ、それを扱う作業項目がすでにあるかを確認してから、ちょうど 1 つだけ書きます。新しいバグか、既存のバグへのメモです。"
+          },
+          {
+            "title": "本番環境から",
+            "body": "Sentry を接続すると、新しいエラーがそれぞれスタックトレース付きのバグになります。同じエラーが再発すると、件数が増えるだけで、バグの山は増えません。"
+          },
+          {
+            "title": "エージェントの実行から",
+            "body": "自分の作業の外でバグを見つけたエージェントは、何をどこで見たかを添えて登録し、作業を続けます。"
+          }
+        ]
+      },
+      "describe": {
+        "eyebrow": "説明する",
+        "headline": "壊れているものを伝えれば、Motir AI がたどります。",
+        "body": "バグを自分の言葉で説明するか、報告して任せてください。Motir AI はコードと計画を読み、ありそうな原因を挙げ、それをすでに扱っている作業項目があるかを確認します。書くのは 1 つだけで、何を書いたかを正確に伝えます。診断付きの新しいバグをトリアージに登録するか、すでに追跡している作業項目に診断を追加するかのどちらかです。コードまでたどれない場合は、何も書きません。"
+      },
+      "production": {
+        "eyebrow": "本番環境から",
+        "headline": "エラーが、証拠付きのバグとして届きます",
+        "body": "Sentry の新しいエラーはそれぞれ、例外、スタックトレース、元のエラーへのリンクを含む 1 件のバグの作業項目になります。バグが完了すると、Motir が Sentry のエラーを解決します。再発した場合は、古いバグにリンクされた新しいバグが登録されます。"
+      },
+      "runs": {
+        "eyebrow": "エージェントの実行から",
+        "headline": "エージェントが、見つけたものを報告します",
+        "body": "ある作業項目を作っているエージェントが別の場所でバグに遭遇しても、止まることも、隠すこともありません。見たものを添えてバグを登録し、どの実行で見つかったかを記録して、自分の作業を続けます。実行には、登録したすべてのバグが一覧表示されます。"
+      }
+    },
+    "agentFleet": {
+      "metaDescription": "Motir のホスト型エージェントが、計画の着手可能な項目すべてに同時に取り組みます。それぞれが専用のマシンで、作業に合ったモデルを使います。自分で起動することも、Motir Project Manager に任せて稼働させ続けることもできます。",
+      "headline": "計画のすべてを、並行して。",
+      "lede": "Motir のホスト型エージェントは、着手可能な作業項目をすべて引き受け、同時に進めます。それぞれが新しいマシンで、専用のブランチとプルリクエストを持ちます。自分で起動することも、Motir Project Manager に任せて稼働させ続けることもでき、プロジェクトはあらゆる方面で一斉に前進します。",
+      "parallel": {
+        "eyebrow": "スケール",
+        "headline": "着手可能な作業項目ごとに、マシンを 1 台",
+        "body": "始められるものは、すべて始まります。各実行は自分の作業項目を確保するので、2 つのエージェントが同じ項目を取ることはなく、それぞれ専用のマシンで作業します。ストーリーは、構成要素を依存関係の順に実行します。着手可能な作業が多いほど、同時に動く実行も増えます。"
+      },
+      "pm": {
+        "eyebrow": "おまかせ",
+        "headline": "Motir Project Manager がフリートを稼働させ続けます",
+        "body": "プロジェクトを Motir Project Manager に任せれば、作業項目が着手可能になった瞬間に実行を開始し、モデルを選び、あなたの判断が必要なものだけを届けます。プルリクエスト、デザイン、計画です。"
+      },
+      "models": {
+        "eyebrow": "作業ごとに最適なモデル",
+        "headline": "すべての作業項目に難易度があり、それがモデルを決めます。",
+        "body": "プランナーは、すべてのタスク、サブタスク、バグに難易度を付けます。作業の大きさではなく、正しく仕上げる難しさです。ロック順序を変える 1 行の変更が「高」になることもあれば、大規模な名前変更が「ごく簡単」なこともあります。フリートはこれを読んでモデルを選ぶので、名前変更に最も高性能なモデルの料金を払うことも、データ移行が最も安価なモデルで実行されることもありません。",
+        "items": [
+          {
+            "title": "ごく簡単",
+            "body": "仕様が明確な機械的な作業。名前変更、文言の変更、設定の切り替えなど。より速く安価なモデルで実行します。"
+          },
+          {
+            "title": "低",
+            "body": "既存のフォームに新しいフィールドを通すなど、コードにすでにあるパターンに沿った定型作業。より速く安価なモデルで実行します。"
+          },
+          {
+            "title": "中",
+            "body": "複数のファイルやサービスにまたがる本格的な設計判断や、原因がまだわからないバグ。最も高性能なモデルで実行します。"
+          },
+          {
+            "title": "高",
+            "body": "並行処理、セキュリティ、本番データの移行など、わずかなミスが大きな代償になる作業。最も高性能なモデルで実行します。"
+          },
+          {
+            "title": "自分で選ぶ",
+            "body": "Claude、DeepSeek、GLM、Qwen の中から、プロジェクト内の任意の難易度に自分のモデルを設定することも、1 回の実行だけモデルを選ぶこともできます。"
+          },
+          {
+            "title": "動いた分だけ支払う",
+            "body": "モデルの呼び出しとマシン時間に応じてクレジットで課金されます。何も実行しなければ、何も課金されません。"
+          }
+        ],
+        "docsLink": "難易度の仕組みと、各モデルでのタスクあたりのコスト"
+      },
+      "care": {
+        "eyebrow": "自律的に面倒を見る実行",
+        "headline": "問題は、あなたなしで対処されます",
+        "items": [
+          {
+            "title": "チェックの失敗",
+            "body": "実行は同じブランチ上でプルリクエストを修復し、最大 5 回まで試みます。"
+          },
+          {
+            "title": "止まってしまった実行",
+            "body": "作業はブランチに残り、新しい実行が最初からやり直すことなく続きを引き継ぎます。"
+          },
+          {
+            "title": "動かなくなったエージェント",
+            "body": "15 分間応答のない実行は停止されるので、行き詰まったエージェントがクレジットを浪費することはありません。"
+          },
+          {
+            "title": "途中で見つかったバグ",
+            "body": "自分の作業の外でバグを見つけたエージェントは、それを登録して作業を続けます。"
+          }
+        ]
+      },
+      "record": {
+        "eyebrow": "すべてを記録",
+        "headline": "すべての実行を、一歩ずつ",
+        "body": "各実行は、使ったモデル、すべてのステップ、かかったコスト、そして各作業項目の結末を記録します。実装済み、失敗、再計画、スキップのいずれかです。"
+      },
+      "ui": {
+        "runsHeading": "実行",
+        "runsSubtitle": "AI パーソナルアシスタントのこれまでのすべての実行（現在と過去）。",
+        "runningNow": "実行中",
+        "pastRuns": "過去の実行",
+        "columns": [
+          "コマンド",
+          "範囲",
+          "エージェント",
+          "開始",
+          "ステータス",
+          "作業項目"
+        ],
+        "live": [
+          {
+            "command": "実行",
+            "scope": "PA-8 · サインイン画面",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:42",
+            "status": "実行中",
+            "tone": "running",
+            "summary": "1 件中 0 件完了"
+          },
+          {
+            "command": "実行",
+            "scope": "PA-21 · 目標のリマインダー",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:42",
+            "status": "実行中",
+            "tone": "running",
+            "summary": "1 件中 0 件完了"
+          },
+          {
+            "command": "実行",
+            "scope": "PA-22 · リマインダーの時刻選択",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:41",
+            "status": "実行中",
+            "tone": "running",
+            "summary": "1 件中 0 件完了"
+          },
+          {
+            "command": "実行",
+            "scope": "ストーリー PA-2 · アカウントとサインイン",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:38",
+            "status": "実行中",
+            "tone": "running",
+            "summary": "5 件中 2 件完了"
+          },
+          {
+            "command": "実行",
+            "scope": "PA-17 · 設定ページ",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:35",
+            "status": "実行中",
+            "tone": "running",
+            "summary": "1 件中 0 件完了"
+          },
+          {
+            "command": "実行",
+            "scope": "PA-30 · 週次サマリー",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:31",
+            "status": "実行中",
+            "tone": "running",
+            "summary": "1 件中 0 件完了"
+          }
+        ],
+        "past": [
+          {
+            "command": "実行",
+            "scope": "ストーリー PA-6 · 目標",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨日 18:04",
+            "status": "成功",
+            "tone": "implemented",
+            "summary": "4 件中 4 件完了 · 1 件があなた待ち"
+          },
+          {
+            "command": "motir fix",
+            "scope": "PA-9 · サインインサービス",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "昨日 16:20",
+            "status": "成功",
+            "tone": "implemented",
+            "summary": "1 件中 1 件完了"
+          },
+          {
+            "command": "実行",
+            "scope": "PA-31 · カレンダーへのエクスポート",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨日 14:55",
+            "status": "失敗",
+            "tone": "failed",
+            "summary": "1 件失敗"
+          },
+          {
+            "command": "motir continue",
+            "scope": "PA-12 · 目標と毎日のチェックイン",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨日 11:02",
+            "status": "成功",
+            "tone": "implemented",
+            "summary": "1 件中 1 件完了"
+          }
+        ],
+        "readyHeading": "着手可能",
+        "readyLane": "実行可能",
+        "ready": [
+          {
+            "kind": "task",
+            "key": "PA-19",
+            "title": "メールプロバイダーを選ぶ"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-22",
+            "title": "リマインダーの時刻選択"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-23",
+            "title": "リマインダーメールのテンプレート"
+          },
+          {
+            "kind": "bug",
+            "key": "PA-44",
+            "title": "最後の目標をアーカイブするとチェックインが失敗する"
+          }
+        ]
+      },
+      "close": {
+        "headline": "あらゆる方面を、一斉に前へ。",
+        "body": "アイデアか今あるプロジェクトを持ってきて、着手可能なものすべてをフリートに任せましょう。"
+      }
+    },
+    "agentHosting": {
+      "metaDescription": "Claude Code、Codex、または使い慣れたエージェントを、Motir のクラウド上の専用マシンで、自分のアカウントでサインインして実行します。Motir から作業を送れば、終わるとスリープし、支払うのはマシン時間の分だけです。",
+      "headline": "あなた自身のエージェントを、Motir のマシンで。",
+      "lede": "Claude Code、Codex、または使い慣れたエージェントを Motir のクラウドで実行します。自分のアカウントでサインインし、プロジェクトのコードもセットアップ済みです。作業項目を送ってノートパソコンを閉じても、作業は続き、終われば自動でスリープします。",
+      "setup": {
+        "eyebrow": "一度だけ設定",
+        "headline": "3 ステップで、クラウドにあなたのエージェントを",
+        "items": [
+          {
+            "title": "作成する",
+            "body": "名前を付け、プロジェクトとエージェントを選びます。Claude Code、Codex、OpenCode、Kimi Code、Aider、Goose から選べます。プロジェクトのリポジトリはホームディレクトリにクローンされます。"
+          },
+          {
+            "title": "自分としてサインイン",
+            "body": "ノートパソコンと同じように、そのターミナルから自分のアカウントでサインインします。"
+          },
+          {
+            "title": "作業を送る",
+            "body": "着手可能な作業項目で「自分のエージェントに送る」を押します。エージェントはそれを確保し、専用のブランチで作り、プルリクエストを作成します。"
+          }
+        ]
+      },
+      "away": {
+        "eyebrow": "デスクを離れていても",
+        "headline": "ノートパソコンを閉じても、作業は続きます",
+        "items": [
+          {
+            "title": "専用のマシン",
+            "body": "ノートパソコンでは何も実行されないので、蓋を閉じても接続が切れても、作業は止まりません。"
+          },
+          {
+            "title": "どこからでも見守れる",
+            "body": "実行は「実行」でほかのエージェントの実行と並んで表示され、ターミナルは「マイエージェント」からワンクリックで開けます。"
+          },
+          {
+            "title": "複数を同時に",
+            "body": "最大 10 個のエージェントを持ち、それぞれに別の作業項目を進めさせられます。"
+          }
+        ]
+      },
+      "ui": {
+        "title": "マイエージェント",
+        "subtitle": "あなた自身のエージェントを、あなたのサインインで、Motir のクラウドで — AI パーソナルアシスタント",
+        "newAgent": "新しいエージェント",
+        "columns": [
+          "名前",
+          "エージェント",
+          "状態",
+          "今月のマシン時間",
+          "クレジット"
+        ],
+        "rows": [
+          {
+            "name": "yue-claude",
+            "agent": "Claude Code",
+            "state": "実行中",
+            "tone": "implemented",
+            "time": "3 時間 12 分",
+            "credits": "212"
+          },
+          {
+            "name": "yue-codex",
+            "agent": "Codex",
+            "state": "休止中",
+            "tone": "cancelled",
+            "time": "1 時間 05 分",
+            "credits": "95"
+          },
+          {
+            "name": "night-shift",
+            "agent": "OpenCode",
+            "state": "起動中",
+            "tone": "running",
+            "time": "6 時間 40 分",
+            "credits": "430"
+          }
+        ]
+      },
+      "close": {
+        "headline": "エージェントに、専用のデスクを。",
+        "body": "使い慣れたエージェントを持ってきて、あなたが休んでいる間も働かせましょう。"
+      },
+      "terms": {
+        "eyebrow": "サインインはあなた、マシンは Motir",
+        "headline": "支払うのはマシンの分だけ、それも動いている間だけ",
+        "items": [
+          {
+            "title": "あなたのアカウント、あなたのモデル",
+            "body": "エージェントは、あなたが選んだモデルと設定で、あなた自身のサインインで動きます。モデルの利用料はその提供元からあなたに請求され、Motir があなたのサインイン情報を見ることはありません。"
+          },
+          {
+            "title": "1 分あたり 1 クレジット",
+            "body": "Motir が請求するのはエージェントのマシン時間だけで、動いている間 1 分あたり 1 クレジットです。"
+          },
+          {
+            "title": "終わればスリープ",
+            "body": "30 分間使われないと休止状態になり、わずかなストレージ以外の費用はかかりません。次の作業項目を送ると起動します。"
+          }
+        ]
+      }
+    }
+  },
+  "howItWorks": {
+    "metaTitle": "Motir の仕組み",
+    "metaDescription": "「プロジェクトを、バイブで。」を支えるワークフロー。AI による計画、計画ゲート、エージェントの実行、マージゲート、修復、学習ループ、そしてプロジェクトの記憶。",
+    "eyebrow": "開発者向け · 「プロジェクトを、バイブで。」を支える仕組み",
+    "headline": "Motir の仕組み",
+    "lede": "すべての Motir プロジェクトは、同じ 1 台の楽器を通ります。モジュールは Motir とそのエージェント。つまみとスイッチはあなたのものです。人が回すまで、何も先へは進みません。",
+    "legendMotir": "Motir とエージェント",
+    "legendYou": "あなたが決める",
+    "scrollHint": "図を横にスクロール →",
+    "rackTitle": "モジュールのラックとして描いた Motir のワークフロー",
+    "rackDesc": "あなたのアイデアはプランナーにつながり、次にあなたが計画を承認するつまみ、ボード、エージェントの実行、あなたがレビューしてマージするつまみを経て、完了に至ります。手動タスクはボードから完了へ進みます。エージェントの実行は、見つけたバグを「バグ」フォルダーに登録して作業を続けられます。修復モジュールは、失敗した実行をエージェントの実行へ戻します。学習ループは、エージェントの実行から判定、再計画、教訓ライブラリを経てプランナーへ戻ります。下部のメモリーバンクには、デザイン、判断、ドキュメント、教訓、実行履歴、改訂、そして誰が何を決めたかが保存されます。",
+    "rack": {
+      "engine": "Motir · プロジェクトエンジン",
+      "engineTitle": "アイデアから完了まで。",
+      "engineSub": "青いモジュールが作業し、オレンジのコントロールはあなたが操作します。",
+      "signal": "信号",
+      "signalMotir": "Motir とエージェント",
+      "signalYou": "あなたが決める",
+      "idea": {
+        "label": "[01] あなた",
+        "title": "あなたのアイデア",
+        "screen": ["> AI パーソナル", "  アシスタント…_"],
+        "note": ["またはリポジトリ、", "Jira、Linear、Plane から"]
+      },
+      "planner": {
+        "label": "[01] AI 計画",
+        "title": "プランナー",
+        "screen": [
+          "? 追加の質問",
+          "エピック › ストーリー › タスク",
+          "blocked_by · 規模",
+          "validate_plan  OK"
+        ]
+      },
+      "approve": {
+        "label": "[02] あなた",
+        "title": "承認",
+        "min": "修正",
+        "max": "実行",
+        "screen": "計画 · 全ターン"
+      },
+      "board": {
+        "label": "[03] 作業項目",
+        "title": "ボード",
+        "screen": ["実行者 agent|human", "Sprint · バックログ", "ロードマップ"],
+        "ready": "着手可能 4/6"
+      },
+      "run": {
+        "label": "[04] エージェントの実行",
+        "title": "エージェントの実行",
+        "screen": [
+          "確保 › 専用ブランチ",
+          "リポジトリごとに PR 1 件",
+          "ハーネス · モデル",
+          "ステップ ▮▮▮▮▯"
+        ]
+      },
+      "review": {
+        "label": "[05] あなた",
+        "title": "レビュー",
+        "min": "修正",
+        "max": "マージ",
+        "screen": "テスト · 動画"
+      },
+      "done": {
+        "label": "[05]",
+        "title": "完了",
+        "note": ["マージで", "作業項目を完了"]
+      },
+      "manual": {
+        "label": "[03] あなた · 手動タスク",
+        "title": "手動タスク",
+        "screen": "motir guide · 3/7"
+      },
+      "learning": {
+        "label": "[07] 学習ループ",
+        "title": ["プランナーは", "学習する"],
+        "note": ["ミスのたびに", "次の計画が良くなる"]
+      },
+      "lessons": {
+        "label": "[07] 教訓",
+        "title": "教訓",
+        "screen": [
+          "ミス › 教訓",
+          "再発 › 強化",
+          "ルールなし › 計画バグ",
+          "90 日未使用 › 引退"
+        ]
+      },
+      "replan": {
+        "label": "[07] 再計画",
+        "title": "再計画",
+        "screen": ["変更を分類", "理由を記録", "計画履歴 +1"]
+      },
+      "verdict": {
+        "label": "[07] 判定",
+        "title": "判定",
+        "screen": [
+          "承認された計画の",
+          "ままか？",
+          "はい › 計画の見落とし",
+          "いいえ › 後の編集"
+        ]
+      },
+      "repair": {
+        "label": "[06] 修復",
+        "title": "実行が壊れたとき",
+        "rows": [
+          ["PR が失敗", "motir fix"],
+          ["実行が停止", "motir continue"]
+        ]
+      },
+      "memory": {
+        "label": "[08] 記憶",
+        "title": "プロジェクトは覚えている",
+        "keys": [
+          "デザイン",
+          "判断",
+          "ドキュメント",
+          "教訓",
+          "実行履歴",
+          "改訂",
+          "決定者"
+        ]
+      },
+      "bugs": {
+        "label": "[04] バグを発見",
+        "screen": "バグを登録 › 「バグ」フォルダー",
+        "note": "実行は続く"
+      }
+    },
+    "modulesHeadline": "モジュールごとに",
+    "modulesLede": "上の図の各モジュールを詳しく見ていきます。カーソルを合わせると、図の中の位置がわかります。",
+    "modules": [
+      {
+        "step": "1",
+        "human": false,
+        "label": "[01] AI 計画",
+        "title": "プロンプトから計画へ",
+        "paras": [
+          "1 つの文、リポジトリ、あるいは Jira、Linear、Plane からのインポートで始めます。プランナーは、リポジトリのコードグラフも含めて既存のものを読み込み、リクエストがあいまいなところでは追加の質問をします。",
+          "エピック、ストーリー、タスク、サブタスクを作成し、それぞれに種類、実行者、規模、`blocked_by` の依存関係を付けます。あなたが見る前に、`validate_plan` がツリーを検証します。"
+        ]
+      },
+      {
+        "step": "2",
+        "human": true,
+        "label": "[02] あなた · 計画ゲート",
+        "title": "計画を承認するのはあなたです",
+        "paras": [
+          "人が計画を承認するまで、何もボードには載りません。修正は普段の言葉で依頼できます。やり取りのたびに新しいターンになり、計画の履歴はすべてのバージョンと変更の理由を保持します。"
+        ]
+      },
+      {
+        "step": "3",
+        "human": false,
+        "label": "[03] 作業項目",
+        "title": "ボード",
+        "paras": [
+          "承認された計画は、Sprint、バックログ、ロードマップを備えた作業項目になります。各作業項目の実行者は `agent` か `human` です。",
+          "手動タスク（アカウント、シークレット、DNS レコード、リリースの承認など）は、`motir guide` が一歩ずつ案内します。"
+        ]
+      },
+      {
+        "step": "4",
+        "human": false,
+        "label": "[04] エージェントの実行",
+        "title": "エージェントが作る",
+        "paras": [
+          "エージェントは次の着手可能な作業項目を取り（`motir next` または `motir run <KEY>`）、それを確保し、専用のブランチで作業して、作業項目にリンクされたプルリクエストをリポジトリごとに 1 件作成します。",
+          "自分の作業項目の外で見つけたバグがあっても、実行は止まりません。エージェントは根本原因を突き止め、`motir log bug` で独立した作業項目として「バグ」フォルダーに登録し、作業を続けます。",
+          "各実行は、エージェントのハーネス、モデル、すべてのステップ、結果を記録します。エージェントは MCP 経由で接続し、あなたのマシンでも Motir のホスト型エージェントでも動きます。"
+        ]
+      },
+      {
+        "step": "5",
+        "human": true,
+        "label": "[05] あなた · マージゲート",
+        "title": "レビューしてマージするのはあなたです",
+        "paras": [
+          "作業項目は `Implemented` に移り、エージェントがテスト方法を公開します。ストーリーには CI で録画された受け入れ動画が付きます。あなたがレビューし、承認してマージすると、マージによって作業項目が完了します。人の手を経ずに `Done` に達するものはありません。"
+        ]
+      },
+      {
+        "step": "6",
+        "human": false,
+        "label": "[06] 修復",
+        "title": "実行が壊れたとき",
+        "paras": [
+          "失敗したプルリクエストや競合のあるプルリクエストは、`motir fix` によって同じブランチ上で最大 5 回まで修復されます。止まってしまった実行（ノートパソコンを閉じた、サンドボックスが失われたなど）は、`motir continue` で残されたブランチから再開されます。",
+          "途中で登録されたバグは「バグ」フォルダーで待機し、`motir fix bugs` が古いものから順に片付けます。"
+        ]
+      },
+      {
+        "step": "7",
+        "human": false,
+        "label": "[07] 学習ループ",
+        "title": "プランナーは学習する",
+        "paras": [
+          "作業項目を作れないエージェントは、まずそれが承認された計画のままかを確認します（`get_approved_shape_verdict`）。こうすることで、後からの編集の責任がプランナーに押し付けられることはありません。計画が間違っていた場合は再計画され、変更は理由とともに記録されます。",
+          "ミスは教訓になるか、既存の教訓を強めます。該当するルールがない場合は、計画バグが登録されます。次の計画は必ず最初に教訓を読み込みます。90 日間再発しなかった教訓は引退します。"
+        ]
+      },
+      {
+        "step": "8",
+        "human": false,
+        "label": "[08] 記憶",
+        "title": "プロジェクトは覚えている",
+        "paras": [
+          "デザイン、判断のページ、ドキュメント、教訓、計画の改訂、そしてすべての実行の履歴が、作業項目のすぐそばに保存されます。あなたも、新しいチームメイトも、次のエージェントも、数か月後に誰からの説明もなくプロジェクトを引き継げます。"
+        ]
+      }
+    ],
+    "art": {
+      "plan": {
+        "prompt": "人々が目標を達成するのを助ける AI パーソナルアシスタント",
+        "question": "自分の判断で動く？送る前に確認する？",
+        "answers": ["自分の判断で", "先に確認"],
+        "tree": [
+          ["0", "エピック · 連携", ""],
+          ["1", "ストーリー · カレンダー同期", ""],
+          ["2", "タスク · 予定を読み込む", "blocked_by 2"],
+          ["1", "ストーリー · 朝のブリーフィング", ""],
+          ["2m", "手動タスク · メールプロバイダーのアカウント", ""]
+        ]
+      },
+      "approve": {
+        "title": "計画 · ターン 3",
+        "turns": [
+          ["ターン 1", "プロンプトから作成"],
+          ["ターン 2", "「メールを 2 つのストーリーに分割して」"],
+          ["ターン 3", "あなたの判断を待っています"]
+        ],
+        "min": "修正",
+        "max": "承認",
+        "cta": "計画を承認"
+      },
+      "board": {
+        "title": "作業項目",
+        "sub": "Sprint 1 · 連携",
+        "count": "24",
+        "columns": ["未着手", "進行中", "実装済み", "完了"],
+        "agent": "エージェント",
+        "manual": "手動タスク"
+      },
+      "run": {
+        "run": "実行 ·",
+        "key": "PA-12",
+        "agent": "あなたのエージェント",
+        "title": "カレンダー同期",
+        "faders": ["確保", "ブランチ", "開発", "テスト", "PR"],
+        "stats": [
+          ["ステップ", "9 / 14"],
+          ["登録したバグ", "1"],
+          ["ブランチ", "pa-12"]
+        ]
+      },
+      "review": {
+        "title": "テスト方法",
+        "checks": [
+          "テスト用のカレンダーを接続する",
+          "会議を移動し、ブリーフィングの更新を確認する",
+          "アクセスを取り消し、読み込みが止まるのを確認する"
+        ],
+        "video": "acceptance.mp4",
+        "length": "0:42",
+        "merge": "マージ"
+      },
+      "repair": {
+        "title": "実行が壊れたとき",
+        "rows": [
+          ["プルリクエストが失敗", "motir fix"],
+          ["実行が停止", "motir continue"],
+          ["「バグ」フォルダー", "motir fix bugs"]
+        ],
+        "attempt": "5 回中 2 回目の試行"
+      },
+      "learning": {
+        "loop": ["計画の", "前に", "読む"],
+        "title": "教訓ライブラリ",
+        "lessons": [
+          ["テストゲートはリポジトリごとに 1 つ", "3 回強化", 80],
+          ["既存のブランチを重複させない", "新規 · 90 日未使用で引退", 25]
+        ]
+      },
+      "memory": {
+        "title": ":: 履歴",
+        "span": "PA · 41 日間",
+        "tip": "送る前に確認 · あなた · 10月3日",
+        "axis": ["1 日目", "20 日目", "41 日目"],
+        "tabs": ["デザイン", "判断", "ドキュメント", "教訓", "実行"]
+      }
+    },
+    "closeHeadline": "コアはオープン",
+    "closeBody": "プロジェクト管理のコアは GPL-3.0 のオープンソースです。セルフホストすることも、motir.co で使うこともできます。",
+    "closeStart": "プロジェクトをバイブで始める",
+    "closeDocs": "ドキュメントを読む",
+    "closeMcp": "エージェントを接続"
+  },
+  "ideas": {
+    "metaTitle": "作るためのアイデア · Motir",
+    "metaDescription": "Motir が買いたいプロダクト。ソフトウェア会社がコードだけではこなせない仕事のための AI プラットフォームです。スケールするものを作れば、Motir が最初の顧客になります。",
+    "eyebrow": "作るためのアイデア",
+    "headline": "Motir が買いたいものを作りましょう。",
+    "lede": "ソフトウェア会社はコードだけでは回りません。弁護士、会計士、セキュリティチーム、そして他の市場を知る人が必要で、Motir も例外ではありません。私たちはその仕事を、Motir で作られたプロダクトから買いたいと考えています。ここにあるのは、私たちが必要としているものです。スケールするものを作れば、Motir が最初の顧客になります。",
+    "promiseTitle": "Motir があなたの最初の顧客になります",
+    "promiseBody": "これらのうち 1 つを Motir で公開しながら作ってくだされば、私たちはそれを使い、料金を支払い、足りないものをお伝えします。",
+    "rulesEyebrow": "ここで良いアイデアとされるもの",
+    "rulesHeadline": "1 つのチームのためのツールではなく、スケールするプロダクト",
+    "rules": [
+      {
+        "title": "多くの顧客に、1 つのプロダクト",
+        "body": "どのアイデアも、1 社の独自プロセスではなく、同じ悩みを抱える何千もの企業に役立つものです。"
+      },
+      {
+        "title": "安くは雇えない専門性",
+        "body": "法律、税務、セキュリティ、言語。専門家が必要な仕事を、AI で手の届く価格にし、人がその正確さを保ちます。"
+      },
+      {
+        "title": "最後は人が署名する",
+        "body": "AI が作業の下書き、確認、提出を行います。リスクを伴うものは資格を持つ人が承認します。Motir がすべてのゲートに人を置くのと同じです。"
+      }
+    ],
+    "listEyebrow": "Motir が買いたいもの · {n}",
+    "listHeadline": "Motir が今すぐ買いたいプロダクト",
+    "needLabel": "Motir が必要とする理由",
+    "whoLabel": "ほかに買う人",
+    "close": {
+      "headline": "1 つ作ってください。私たちが最初の顧客になります。",
+      "body": "アイデアから始め、Motir で計画し、公開しながら作りましょう。この中から選んでも、自分のアイデアを持ち込んでも構いません。"
+    },
+    "placeholder": "スタートアップ向けの AI 経理チーム。料金プランを設計し、売上税を申告し、取引先に支払います…",
+    "more": {
+      "eyebrow": "ほかの方向性 · {n}",
+      "headline": "Motir が必要とするもの以外にも、作る価値のあるプロダクト",
+      "body": "これらについては、Motir が最初の顧客になることはありません。いずれも需要が裏付けられた市場であり、既存のプレイヤーが残している隙間があり、5 年前ではなく今だからこそ作れる理由があります。根拠はそれぞれの下にリンクしています。",
+      "evidenceLabel": "根拠",
+      "gapLabel": "隙間"
+    },
+    "find": {
+      "heading": "アイデアを探す",
+      "searchPlaceholder": "アイデア、根拠、隙間を検索",
+      "searchAria": "アイデアを検索",
+      "searchSubmit": "検索",
+      "searchClear": "検索をクリア",
+      "categoryGroup": "カテゴリー",
+      "allCategories": "すべてのカテゴリー",
+      "tags": "タグ",
+      "tagsSelected": "タグ · {n}件選択中",
+      "activeLabel": "絞り込み条件",
+      "pillCategory": "カテゴリー：{label}",
+      "pillTag": "タグ：{label}",
+      "pillSearch": "「{q}」",
+      "remove": "削除",
+      "clearAll": "すべてクリア",
+      "countAll": "{n}件のアイデア",
+      "countMatch": "{n}件のアイデアが一致",
+      "countMatchOne": "1 件のアイデアが一致",
+      "countNone": "一致するアイデアはありません",
+      "updating": "更新しています…"
+    },
+    "card": {
+      "open": "アイデアを開く",
+      "moreSources": "ほか{n}件の出典",
+      "tagsAria": "タグ"
+    },
+    "detail": {
+      "kindBuys": "Motir が買いたいもの",
+      "kindDirection": "方向性",
+      "capabilities": "できること",
+      "evidence": "根拠",
+      "gap": "隙間",
+      "whyNow": "なぜ今なのか",
+      "whyMotir": "Motir が必要とする理由",
+      "whoElse": "ほかに買う人",
+      "close": "閉じる",
+      "foot": "{key}キーか「戻る」で一覧に戻ります。",
+      "opensInNewTab": "（新しいタブで開きます）"
+    },
+    "empty": {
+      "title": "この条件に一致するアイデアはありません",
+      "body": "タグを減らすか、別のカテゴリーや言葉を試してください。どのアイデアもなくなってはいません。",
+      "action": "すべての絞り込みを解除"
+    },
+    "error": {
+      "eyebrow": "一時的に利用できません",
+      "title": "現在アイデアを読み込めませんでした",
+      "body": "この一覧は Motir からリアルタイムで読み込んでいますが、Motir から応答がありませんでした。何も失われていません。しばらくしてからもう一度お試しください。",
+      "action": "もう一度試す"
+    }
+  },
+  "setupPrompt": {
+    "title": "エージェントに Motir をセットアップ",
+    "body": "プロンプトを 1 つコピーして、Claude Code、Codex、Cursor など任意のエージェントに貼り付けてください。Motir の MCP サーバーを接続し、CLI とスキルをインストールして、動作を確認します。Claude Code では Motir プラグインをインストールします。",
+    "button": "セットアッププロンプトをコピー",
+    "copied": "コピーしました。エージェントに貼り付けてください",
+    "failed": "コピーできませんでした。下のプロンプトを選択してください",
+    "menuLabel": "エージェント用のセットアッププロンプトをコピー",
+    "show": "プロンプトを表示",
+    "menuHint": "任意のエージェントに貼り付ければ、そこに Motir がセットアップされます。",
+    "headerLabel": "セットアッププロンプトをコピー",
+    "headerCopied": "コピーしました",
+    "headerFailed": "コピーできませんでした"
+  },
+  "builtByMotirPage": {
+    "metaTitle": "Motir は Motir で作られています · Motir",
+    "metaDescription": "Motir が Motir を作る方法。始まりはプロンプトのフォルダー、タスクリスト、そしてミスの記録でした。リリースした機能はすべて、次の機能を作るための道具になりました。",
+    "eyebrow": "Motir は Motir で作られています",
+    "headline": "Motir が Motir を作る方法。",
+    "lede": "鶏が先か卵が先か、という話に聞こえるかもしれません。でも、そうではありません。Motir はプロンプトのフォルダーから始まり、リリースした機能がひとつ残らず次の機能を作るための道具になりました。",
+    "watch": "Motir が自らを作る様子を見る",
+    "runs": "アカウントを作成して、エージェントの実行を見る",
+    "lost": {
+      "scenes": {
+        "fixLater": "あとで直す",
+        "features": [
+          "カレンダー",
+          "リマインダー",
+          "請求",
+          "エクスポート",
+          "検索"
+        ],
+        "inProgress": "進行中",
+        "question": "なぜこの方法に？",
+        "answer": "それは…",
+        "sessionEnded": "セッション終了"
+      },
+      "eyebrow": "始まり",
+      "headline": "バイブコーディングをしたら、プロジェクトが崩れていきました。",
+      "body": "バイブコーディングでコードは速く書けました。でも進めば進むほど、プロジェクトの多くが失われていきました。プロジェクトはコードだけではないからです。",
+      "items": [
+        {
+          "title": "見つけたバグが、記録されないまま",
+          "body": "セッションの途中で気づき、終わるころには忘れていました。"
+        },
+        {
+          "title": "一度に抱えすぎ",
+          "body": "5 つの機能が同時に進行し、次にどれを始めるべきかわかりませんでした。"
+        },
+        {
+          "title": "なかったテスト",
+          "body": "テストがないか、ほかのコードが求める水準に達していませんでした。"
+        },
+        {
+          "title": "チャットに消えた判断",
+          "body": "なぜそう作ったのかは、コーディングセッションの終わりとともに消えてしまいました。"
+        }
+      ]
+    },
+    "missing": {
+      "eyebrow": "必要だったもの",
+      "headline": "Jira や Linear は作業を管理します。私たちにはそれ以上が必要でした。",
+      "body": "私たちは、知っているプロジェクトツールに自分たちのプロセスをつなぎました。タスクは管理できても、私たちに欠けていたものはそこにありませんでした。",
+      "items": [
+        {
+          "title": "コードの前に計画を",
+          "body": "エージェントはプロンプトからではなく、人が承認した計画から始めるべきです。",
+          "product": "ai-planner"
+        },
+        {
+          "title": "着手可能か、何に阻まれているか",
+          "body": "どの作業を今すぐ始められ、どれが待っているのか。待っているなら、正確にどの作業を待っているのかがわかること。"
+        },
+        {
+          "title": "プロジェクト全体を動かす誰か",
+          "body": "頼まれなくても、すべてを見渡してまとめ上げるプロジェクトマネージャー。",
+          "product": "project-manager"
+        }
+      ],
+      "after": "だから、作りました。"
+    },
+    "bootstrap": {
+      "eyebrow": "ブートストラップ",
+      "headline": "すべての機能が、次の機能を作る道具になる。",
+      "body": "Motir は完成を待たずに使われ始めました。リリースした機能が、それを作るのに使った足場を一つずつ置き換えていきました。",
+      "steps": [
+        {
+          "tag": "0 日目",
+          "title": "motir-meta",
+          "body": "社内プロジェクト。プロンプトの一式、タスクリスト、そしてミスの記録です。これでモデルに指示を出し、Motir の最初の機能を作りました。",
+          "uses": "プロンプトとタスクファイル"
+        },
+        {
+          "tag": "次に",
+          "title": "作業項目",
+          "body": "作業項目をリリースすると、Motir は次に何を作るかを外部のツールではなく自分自身に尋ねるようになりました。",
+          "uses": "自身の作業項目"
+        },
+        {
+          "tag": "次に",
+          "title": "MCP サーバー",
+          "body": "MCP をリリースすると、そうした参照は MCP の呼び出しになり、ステータスは自動で同期されるようになりました。",
+          "uses": "自身の MCP サーバー"
+        },
+        {
+          "tag": "次に",
+          "title": "AI による計画",
+          "body": "計画機能をリリースすると、Motir は次の機能を自分のプランナーで計画するようになりました。",
+          "uses": "自身のプランナー"
+        },
+        {
+          "tag": "現在",
+          "title": "エージェントと承認",
+          "body": "エージェントが Motir の作業項目を作り、すべての計画とすべてのマージは人が承認します。",
+          "uses": "そのすべて"
+        }
+      ],
+      "loop": ["機能を作る", "使う", "それで次を作る"]
+    },
+    "howItWorks": {
+      "eyebrow": "内部の仕組み",
+      "headline": "Motir を作っているワークフローを、そのままあなたも使えます。",
+      "body": "AI による計画、計画ゲート、エージェントの実行、マージゲート、修復、学習ループ。Motir のすべてのプロジェクトは、このプロジェクトも含め、同じワークフローで進みます。",
+      "cta": "Motir の仕組みを見る"
+    },
+    "live": {
+      "eyebrow": "今も開発中",
+      "headline": "止まってはいません。",
+      "body": "Motir は今も、公開の場で自らに機能を追加し続けています。これらの数字は Motir 自身のプロジェクトからのリアルタイムの値です。",
+      "stats": {
+        "shipped": "リリース済み",
+        "planned": "計画済み",
+        "requests": "機能リクエスト",
+        "upvotes": "賛成票"
+      },
+      "recent": "最近のリリース",
+      "unavailable": "現在、リアルタイムの数字を読み込めませんでした。Motir のプロジェクトページでご覧いただけます。"
+    },
+    "close": {
+      "headline": "あなたのプロジェクトも、同じやり方で。",
+      "body": "アイデアから始めましょう。Motir が計画し、作り、プロジェクト全体をまとめ続けます。",
+      "cta": "無料で始める"
+    }
+  }
+}
