@@ -1,0 +1,3402 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="warm-editorial"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/docs — the generated-reference note and the being-updated note ·
+      MOTIR-8030
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of `--el-*` (light + dark,
+         `warm-editorial`, `motir` palette), copied from `@motir/design-system`.
+         Standalone, as every asset in this repository is. Re-defines no
+         semantics. Nothing here is an invented hue; the only raw values are the
+         doc-annotation scaffold's own fills and the non-semantic shadows.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface: #f6f5f4;
+        --el-surface-soft: #fafaf9;
+        --el-muted: #f3f4f6;
+        --el-sidebar-bg: #fafaf9;
+        --el-text: #1a1a1a;
+        --el-text-strong: #37352f;
+        --el-text-secondary: #5d5b54;
+        --el-text-muted: #787671;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #a4a097;
+        --el-text-inverted: #ffffff;
+        --el-border: #e5e3df;
+        --el-border-soft: #ede9e4;
+        --el-border-strong: #c8c4be;
+        --el-accent: #5645d4;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #5645d4;
+        --el-accent-pressed: #4534b3;
+        --el-highlight: #ff64c8;
+        --el-link: #0070d2;
+        --el-link-pressed: #005bab;
+        --el-danger: #e03131;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #fde0ec;
+        --el-success: #1aae39;
+        --el-info: #0075de;
+        --el-tint-peach: #ffe8d4;
+        --el-tint-rose: #fde0ec;
+        --el-tint-mint: #d9f3e1;
+        --el-tint-lavender: #e6e0f5;
+        --el-tint-sky: #dcecfa;
+        --el-tint-yellow: #fef7d6;
+        --radius-card: 12px;
+        --radius-btn: 8px;
+        --radius-input: 8px;
+        --radius-control: 6px;
+        --radius-badge: 9999px;
+        --radius-kbd: 4px;
+        --spacing-card-padding: 24px;
+        --spacing-chip-x: 10px;
+        --spacing-chip-y: 2px;
+        --spacing-control-x: 10px;
+        --spacing-control-y: 6px;
+        --spacing-input-x: 12px;
+        --spacing-input-y: 8px;
+        --spacing-kbd-x: 5px;
+        --spacing-kbd-y: 2px;
+        --height-btn-sm: 32px;
+        --height-btn-md: 40px;
+        --height-control: 36px;
+        --height-input: 36px;
+        --shadow-subtle: 0 1px 2px rgba(15, 15, 15, 0.04);
+        --shadow-card: 0 4px 12px rgba(15, 15, 15, 0.08);
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --font-sans-source: 'Inter';
+        --font-serif-source: 'Source Serif 4';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0f0f0f;
+        --el-surface: #1a1a1a;
+        --el-surface-soft: #161616;
+        --el-muted: #1a1a1a;
+        --el-sidebar-bg: #161616;
+        --el-text: #f3f4f6;
+        --el-text-strong: #e5e5e5;
+        --el-text-secondary: #a4a097;
+        --el-text-muted: #a4a097;
+        --el-text-tertiary: #787671;
+        --el-text-faint: #5d5b54;
+        --el-text-inverted: #0f0f0f;
+        --el-border: #2a2a2a;
+        --el-border-soft: #1f1f1f;
+        --el-border-strong: #3a3a3a;
+        --el-accent: #6c5cdd;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: color(srgb 0.567059 0.519529 0.910039);
+        --el-accent-pressed: #5645d4;
+        --el-link: #58a6ff;
+        --el-link-pressed: #79b8ff;
+        --el-danger-on-surface: color-mix(
+          in srgb,
+          var(--el-danger) 70%,
+          var(--el-text)
+        );
+        --el-danger-surface: #3a1f2a;
+        --el-tint-peach: #3a2a1a;
+        --el-tint-rose: #3a1f2a;
+        --el-tint-mint: #1a2f25;
+        --el-tint-lavender: #2a253a;
+        --el-tint-sky: #1a2a3a;
+        --el-tint-yellow: #3a341a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .doc-head h1 {
+        font: 700 26px/1.2 var(--font-serif);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .doc-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .doc-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-accent-on-surface);
+        background: #f4f2fd;
+        border: 1px solid #e3def8;
+        border-radius: var(--radius-badge);
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        background: var(--el-surface);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 38px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: #fff;
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+        letter-spacing: 0.02em;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        max-width: 78ch;
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        background: var(--el-page-bg);
+      }
+      .frame.narrow {
+        max-width: 400px;
+      }
+      /* A callout in the annotation layer. `--el-text-strong` on a tint is the
+         AA recipe every coloured surface in this tree follows. */
+      .callout {
+        margin: 12px 0 0;
+        border-radius: var(--radius-card);
+        background: var(--el-tint-sky);
+        color: var(--el-text-strong);
+        padding: 12px 14px;
+        font-size: 13.5px;
+        line-height: 1.55;
+        max-width: 88ch;
+      }
+      .callout.warn {
+        background: var(--el-tint-peach);
+      }
+      .callout b {
+        font-weight: 700;
+      }
+      .marker {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--el-accent);
+        color: #fff;
+        font: 700 11px/1 var(--font-mono);
+        vertical-align: middle;
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE CHROME — COMPOSED from this repository's shipped `SiteShell`
+         (`app/_components/SiteShell.tsx`, itself composed from
+         motir-core/design/public-site/, MOTIR-3880), not redrawn. The header
+         and footer below are that component's markup, class for class. This
+         asset draws ONLY what sits BETWEEN them.
+      ═══════════════════════════════════════════════════════════════ */
+      .site {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 12px var(--spacing-card-padding);
+      }
+      .brand-lockup {
+        --brand-size: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: calc(var(--brand-size) * 0.33);
+        text-decoration: none;
+        flex: none;
+      }
+      .brand-glyph {
+        color: var(--el-accent-on-surface);
+        flex: none;
+        display: block;
+      }
+      .brand-word {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: calc(var(--brand-size) * 0.72);
+        line-height: 1;
+        color: var(--el-text);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav a {
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .nav a.current {
+        font-weight: 600;
+        color: var(--el-accent-on-surface);
+      }
+      .nav .ph {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13.5px;
+        color: var(--el-text-secondary);
+        cursor: default;
+      }
+      .nav .ph .soon {
+        font: 600 9px/1 var(--font-mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-strong);
+        background: var(--el-tint-lavender);
+        border-radius: var(--radius-kbd);
+        padding: 2px 4px;
+      }
+      .bar-cta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font: 600 14px/1 var(--font-sans);
+        border-radius: var(--radius-btn);
+        padding: 0 18px;
+        height: var(--height-btn-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn.sm {
+        height: var(--height-btn-sm);
+        font-size: 13px;
+        padding: 0 12px;
+      }
+      .btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn.sm svg {
+        width: 14px;
+        height: 14px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text);
+      }
+      .foot {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 40px var(--spacing-card-padding);
+      }
+      .foot h2 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .foot ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .foot li,
+      .foot li a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .foot .tag {
+        margin: 10px 0 0;
+        max-width: 30rem;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE DOCS SHELL — what this asset OWNS.
+
+         The one structural change: `app/docs/layout.tsx` centres a single
+         46rem column, and this puts a RAIL beside it. The rail is the answer
+         to the navigation question; everything else about the chrome is
+         unchanged.
+      ═══════════════════════════════════════════════════════════════ */
+      .docs {
+        display: grid;
+        grid-template-columns: 264px minmax(0, 1fr);
+        /* ⚠️ STRETCH, and it is stated rather than left to the default so that
+           nobody re-adds `align-items: start` (MOTIR-4432). `start` shrinks the
+           rail to its own rows, and the rail is the element that PAINTS the
+           surface — so the tint and the right border stopped partway down the
+           page and the sidebar read as a floating box. The rail spans the row;
+           the sticky region is `.rail-inner`, inside it. */
+        align-items: stretch;
+        /* ⚠️ AND THE ROW FILLS THE LANDMARK — `flex-grow`, never a `min-height`
+           of its own (MOTIR-4465). `.site` is the chrome's column and this is
+           the room between its bar and its footer, so a row sized by its own
+           CONTENT stops wherever the content stops: on a page shorter than the
+           viewport the tint ended above the footer and the sidebar read as a
+           stub, which is MOTIR-4432's defect again on the other axis. The
+           panels below therefore carry their height on `.site` — the viewport
+           stand-in — and never here. Shipped as `md:flex md:flex-col` on the
+           landmark plus `md:grow` on the grid (`app/docs/layout.tsx` ·
+           `DocsShell.tsx`), gated at `md` because below the breakpoint the rail
+           is a band above the content and a full-height one would be wrong. */
+        flex-grow: 1;
+      }
+      .rail {
+        /* The SURFACE, and nothing else. No sticky, no max-height, no padding:
+           those belong to `.rail-inner` below, because a full-height element
+           cannot stick and a shrunk one cannot span. */
+        border-right: 1px solid var(--el-border);
+        background: var(--el-sidebar-bg);
+      }
+      .rail-inner {
+        position: sticky;
+        top: 0;
+        max-height: 100vh;
+        overflow: auto;
+        padding: 20px 14px 28px;
+      }
+      .rail .find {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: var(--height-input);
+        border: 1px solid var(--el-border-strong);
+        background: var(--el-page-bg);
+        border-radius: var(--radius-input);
+        padding: 0 var(--spacing-input-x);
+      }
+      .rail .find input {
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font: 400 13px var(--font-sans);
+        color: var(--el-text);
+        width: 100%;
+      }
+      .rail .find input::placeholder {
+        color: var(--el-text-secondary);
+      }
+      .rail .find kbd {
+        font: 600 10px var(--font-mono);
+        color: var(--el-text-secondary);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-kbd);
+        padding: var(--spacing-kbd-y) var(--spacing-kbd-x);
+      }
+      .rail .count {
+        margin: 8px 2px 14px;
+        font-size: 11.5px;
+        color: var(--el-text-secondary);
+      }
+      .rail .group {
+        margin: 0 0 6px;
+        padding: 0 8px;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .rail .group + .group {
+        margin-top: 18px;
+      }
+      .rail ul {
+        list-style: none;
+        margin: 0 0 4px;
+        padding: 0;
+      }
+      .rail li a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: var(--height-control);
+        padding: 0 var(--spacing-control-x);
+        border-radius: var(--radius-control);
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .rail li a:hover {
+        background: var(--el-muted);
+        color: var(--el-text-secondary);
+      }
+      .rail li a.current {
+        background: var(--el-muted);
+        color: var(--el-text);
+        font-weight: 600;
+        box-shadow: var(--shadow-subtle);
+      }
+      .rail li a .verb {
+        flex: none;
+        min-width: 40px;
+        text-align: center;
+        font: 700 9.5px/1 var(--font-mono);
+        letter-spacing: 0.02em;
+        color: var(--el-text-strong);
+        border-radius: var(--radius-badge);
+        padding: 3px 0;
+      }
+      .rail li a .op {
+        font: 400 12px var(--font-mono);
+        color: var(--el-text-secondary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .rail li a.current .op {
+        color: var(--el-text);
+      }
+
+      .room {
+        padding: 40px var(--spacing-card-padding) 56px;
+        max-width: 46rem;
+      }
+      .room h1 {
+        font: 700 30px/1.2 var(--font-serif);
+        letter-spacing: -0.01em;
+        margin: 0;
+        color: var(--el-text);
+      }
+      .room .meta {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .room .intro {
+        margin: 16px 0 0;
+        max-width: 68ch;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--el-text-secondary);
+      }
+      .room h2.area {
+        margin: 34px 0 0;
+        font: 600 20px var(--font-serif);
+        color: var(--el-text);
+      }
+
+      /* ── one operation ────────────────────────────────────────────── */
+      .op-sec {
+        border-bottom: 1px solid var(--el-border-soft);
+        padding: 26px 0 30px;
+      }
+      .op-sec:last-child {
+        border-bottom: 0;
+      }
+      .op-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .verb {
+        display: inline-flex;
+        justify-content: center;
+        min-width: 52px;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        font: 700 10.5px/1.5 var(--font-mono);
+        letter-spacing: 0.02em;
+        color: var(--el-text-strong);
+      }
+      .verb.get {
+        background: var(--el-tint-sky);
+      }
+      .verb.post {
+        background: var(--el-tint-mint);
+      }
+      .verb.patch {
+        background: var(--el-tint-peach);
+      }
+      .verb.delete {
+        background: var(--el-tint-rose);
+      }
+      .scope {
+        display: inline-flex;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        background: var(--el-tint-lavender);
+        color: var(--el-text-strong);
+        font: 400 11px var(--font-mono);
+      }
+      .op-path {
+        font: 600 15px var(--font-mono);
+        color: var(--el-text);
+        word-break: break-all;
+      }
+      .op-sec h3.sum {
+        margin: 0 0 4px;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .op-sec p.desc {
+        margin: 0 0 18px;
+        max-width: 68ch;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .eyebrow {
+        margin: 20px 0 6px;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      table.spec {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+      table.spec th {
+        border-bottom: 1px solid var(--el-border);
+        padding: 6px 10px;
+        text-align: left;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      table.spec td {
+        border-bottom: 1px solid var(--el-border-soft);
+        padding: 8px 10px;
+        vertical-align: top;
+        color: var(--el-text-secondary);
+        line-height: 1.5;
+      }
+      table.spec td .name {
+        font: 400 12.5px var(--font-mono);
+        color: var(--el-text);
+      }
+      table.spec td .req {
+        font: 400 11.5px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      table.spec td .ty {
+        font: 400 11.5px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .status {
+        display: inline-flex;
+        justify-content: center;
+        min-width: 42px;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        font: 700 11px/1.5 var(--font-mono);
+        color: var(--el-text-strong);
+      }
+      .status.ok {
+        background: var(--el-tint-mint);
+      }
+      .status.warn {
+        background: var(--el-tint-peach);
+      }
+      .status.err {
+        background: var(--el-tint-rose);
+      }
+      .pane {
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      .pane .cap {
+        border-bottom: 1px solid var(--el-border);
+        background: var(--el-surface);
+        padding: 6px 12px;
+        font: 400 11px var(--font-mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .pane pre {
+        margin: 0;
+        overflow-x: auto;
+        background: var(--el-page-bg);
+        padding: 10px 12px;
+        font: 400 12.5px/1.6 var(--font-mono);
+        color: var(--el-text);
+      }
+
+      /* ── the collapsed catalogue row (the list state) ─────────────── */
+      .op-row {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        border-bottom: 1px solid var(--el-border-soft);
+        padding: 12px 0;
+      }
+      .op-row .op-path {
+        font-size: 13px;
+        font-weight: 400;
+      }
+      .op-row p {
+        margin: 2px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the index page's section list ───────────────────────────── */
+      ul.index {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+        border-top: 1px solid var(--el-border);
+      }
+      ul.index li {
+        border-bottom: 1px solid var(--el-border);
+        padding: 12px 0;
+      }
+      ul.index .t {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      ul.index .v {
+        display: block;
+        margin-top: 2px;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ── the unreachable state ───────────────────────────────────── */
+      .unreachable {
+        margin-top: 18px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-surface);
+        padding: 18px 20px;
+        max-width: 68ch;
+      }
+      .unreachable h3 {
+        margin: 0 0 6px;
+        font-size: 15px;
+        color: var(--el-text);
+      }
+      .unreachable p {
+        margin: 0;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      code.inline {
+        border-radius: var(--radius-kbd);
+        background: var(--el-muted);
+        padding: 1px 5px;
+        font: 400 12.5px var(--font-mono);
+        color: var(--el-text);
+      }
+
+      /* ── narrow ──────────────────────────────────────────────────── */
+      .narrow .docs {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+      }
+      .narrow .rail {
+        border-right: 0;
+        border-bottom: 1px solid var(--el-border);
+      }
+      .narrow .rail-inner {
+        position: static;
+        max-height: none;
+        padding: 14px;
+      }
+      .narrow .rail .ops-group,
+      .narrow .rail .ops-list {
+        display: none;
+      }
+      .narrow .rail .disclosure {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: var(--height-control);
+        margin-top: 10px;
+        padding: 0 var(--spacing-control-x);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-control);
+        background: var(--el-page-bg);
+        font: 600 13px var(--font-sans);
+        color: var(--el-text);
+      }
+      .narrow .topbar .nav,
+      .narrow .topbar .bar-cta .btn.ghost {
+        display: none;
+      }
+      .narrow .room {
+        padding: 22px 16px 32px;
+      }
+      .narrow .room h1 {
+        font-size: 24px;
+      }
+      .narrow .foot {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .disclosure {
+        display: none;
+      }
+
+      /* ═══════════════════════════════════════════════════════════════════
+         THE TWO NOTES — what this delta OWNS.
+
+         ONE SHAPE, TWO TREATMENTS. Same geometry (--radius-card, the control
+         paddings, 13.5px, one glyph slot, no heading, no dismiss, no link);
+         the treatment says which KIND of notice it is, and it says it three
+         ways so colour is never alone:
+           · reference  = a PERMANENT explanation   → the quiet --el-surface
+                          fill, the info glyph, the page's secondary ink
+           · updating   = a TEMPORARY state          → the --el-tint-yellow fill
+                          (a hue in the BACKGROUND, --el-text-strong ink, the
+                          area's chip recipe), the clock glyph
+         No new token, no hex, no fallback value.
+      ═══════════════════════════════════════════════════════════════════ */
+      .note {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin: 20px 0 0;
+        max-width: 68ch;
+        padding: calc(var(--spacing-control-y) * 2)
+          calc(var(--spacing-control-x) * 1.5);
+        border-radius: var(--radius-card);
+        border: 1px solid transparent;
+        font-size: 13.5px;
+        line-height: 1.55;
+      }
+      .note svg {
+        flex: none;
+        width: 16px;
+        height: 16px;
+        margin-top: 2px;
+      }
+      .note p {
+        margin: 0;
+        min-width: 0;
+        overflow-wrap: break-word;
+        hyphens: auto;
+      }
+      .note.reference {
+        background: var(--el-surface);
+        border-color: var(--el-border);
+        color: var(--el-text-secondary);
+      }
+      .note.updating {
+        background: var(--el-tint-yellow);
+        color: var(--el-text-strong);
+      }
+      /* The updating note is the FIRST thing in the column, above the h1. */
+      .room > .note.updating:first-child {
+        margin: 0 0 24px;
+      }
+
+      /* ═══ the page-language rule, drawn ═══════════════════════════════
+         The Latin faces come back on an English island inside a CJK page:
+         the real app does this through :lang(), and a variable redefinition
+         is how a standalone mock draws the same thing. */
+      [lang='ja'] {
+        --font-sans:
+          var(--font-sans-source), 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic',
+          -apple-system, sans-serif;
+        --font-serif:
+          var(--font-sans-source), 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic',
+          sans-serif;
+      }
+      [lang='ko'] {
+        --font-sans:
+          var(--font-sans-source), 'Noto Sans KR', 'Apple SD Gothic Neo',
+          'Malgun Gothic', -apple-system, sans-serif;
+        --font-serif:
+          var(--font-sans-source), 'Noto Sans KR', 'Apple SD Gothic Neo',
+          'Malgun Gothic', sans-serif;
+      }
+      [lang='en'] {
+        --font-sans:
+          var(--font-sans-source), -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif:
+          var(--font-serif-source), 'Iowan Old Style', 'Palatino Linotype',
+          Georgia, serif;
+      }
+
+      /* ═══ the language switcher — COMPOSED from the shipped
+         `LanguageSwitcher` (a ghost icon button + a 13rem menu), not redrawn ═══ */
+      .switcher {
+        position: relative;
+      }
+      .btn.globe {
+        width: var(--height-btn-md);
+        padding: 0;
+        color: var(--el-text);
+      }
+      .btn.globe.open {
+        background: var(--el-surface-soft);
+      }
+      .lang-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        z-index: 5;
+        display: grid;
+        min-width: 13rem;
+        padding: 4px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-page-bg);
+        box-shadow: var(--shadow-elevated);
+      }
+      .lang-menu a {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 16px;
+        align-items: center;
+        gap: 12px;
+        padding: var(--spacing-control-y) var(--spacing-control-x);
+        border-radius: var(--radius-control);
+        font-size: 15px;
+        color: var(--el-text);
+        text-decoration: none;
+      }
+      .lang-menu a.cur {
+        font-weight: 600;
+        color: var(--el-accent-on-surface);
+      }
+
+      /* ═══ pieces the panels need that the base asset did not draw ═══ */
+      .fallback-body h1 {
+        font: 700 30px/1.2 var(--font-serif);
+        letter-spacing: -0.01em;
+        margin: 0;
+        color: var(--el-text);
+      }
+      .copybtn {
+        float: right;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 24px;
+        padding: 0 var(--spacing-control-x);
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-control);
+        background: var(--el-page-bg);
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--el-text);
+      }
+      .cmd-list {
+        list-style: none;
+        margin: 8px 0 0;
+        padding: 0;
+        border-top: 1px solid var(--el-border);
+        border-bottom: 1px solid var(--el-border);
+      }
+      .cmd-list li {
+        padding: 16px 0;
+      }
+      .cmd-list li + li {
+        border-top: 1px solid var(--el-border);
+      }
+      .cmd-name {
+        font: 600 13.5px var(--font-mono);
+        color: var(--el-text);
+      }
+      .cmd-desc {
+        margin: 4px 0 0;
+        max-width: 68ch;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+      }
+      .group-eyebrow {
+        margin: 28px 0 0;
+        font: 600 11px var(--font-sans);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .tool-summary {
+        margin: 4px 0 0;
+        max-width: 68ch;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--el-text-secondary);
+      }
+      .tool-row {
+        padding: 16px 0;
+      }
+      .tool-row + .tool-row {
+        border-top: 1px solid var(--el-border);
+      }
+      .tool-list {
+        list-style: none;
+        margin: 12px 0 0;
+        padding: 0;
+        border-top: 1px solid var(--el-border);
+        border-bottom: 1px solid var(--el-border);
+      }
+      .tool-nm {
+        font: 400 13px var(--font-mono);
+        color: var(--el-text);
+      }
+
+      /* ═══ annotation layer — never product UI ═══════════════════════ */
+      .lang-tag {
+        display: inline-block;
+        margin-left: 8px;
+        font: 600 10.5px var(--font-mono);
+        color: var(--el-text-secondary);
+        border: 1px dashed var(--el-border-strong);
+        border-radius: 6px;
+        padding: 1px 6px;
+        vertical-align: middle;
+        background: var(--el-page-bg);
+      }
+      .ghost-note {
+        margin: 20px 0 0;
+        max-width: 68ch;
+        border: 1px dashed var(--el-border-strong);
+        border-radius: var(--radius-card);
+        padding: 8px 12px;
+        font: 400 12px/1.5 var(--font-sans);
+        color: var(--el-text-secondary);
+      }
+      .panel-cap .note-cap {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        max-width: 78ch;
+      }
+      .minis {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .minis .site .room {
+        padding: 24px 20px 28px;
+      }
+      .minis .room h1 {
+        font-size: 24px;
+      }
+      .quad {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 420px));
+        gap: 24px;
+        align-items: start;
+      }
+      .quad .cap-small {
+        margin: 0 0 8px;
+        font: 600 12px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .frame.narrow .topbar {
+        padding: 10px 16px;
+      }
+      .frame.narrow .lang-menu {
+        right: 0;
+      }
+      table.map {
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-top: 10px;
+        background: var(--el-page-bg);
+      }
+      table.map th,
+      table.map td {
+        border: 1px solid var(--el-border);
+        padding: 6px 10px;
+        text-align: left;
+        color: var(--el-text);
+        vertical-align: top;
+      }
+      table.map th {
+        color: var(--el-text-secondary);
+        font-weight: 600;
+      }
+
+      .access {
+        margin-bottom: 18px;
+      }
+      .access .cap-small {
+        margin: 0 0 8px;
+        font: 400 12px var(--font-sans);
+        color: var(--el-text-secondary);
+      }
+      .fallback-body .pane .cap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .copybtn {
+        float: none;
+      }
+      .menu-btn {
+        display: none;
+      }
+      .narrow .topbar .bar-cta .btn.ghost.menu-btn {
+        display: inline-flex;
+      }
+      .tool-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 10px;
+        row-gap: 6px;
+      }
+      .hint {
+        display: inline-flex;
+        justify-content: center;
+        border-radius: var(--radius-badge);
+        padding: var(--spacing-chip-y) var(--spacing-chip-x);
+        font: 700 10.5px/1.5 var(--font-mono);
+        letter-spacing: 0.02em;
+        color: var(--el-text-strong);
+        white-space: nowrap;
+      }
+      .hint.reads {
+        background: var(--el-tint-sky);
+      }
+      .hint.writes {
+        background: var(--el-tint-peach);
+      }
+      .hint.destructive {
+        background: var(--el-tint-rose);
+      }
+      @media (max-width: 1000px) {
+        .minis,
+        .quad {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <div class="doc-head">
+        <h1>/docs in ten more languages — the two notes (a delta)</h1>
+        <p>
+          A <b>delta</b> on
+          <code class="inline">design/docs/docs.mock.html</code>: only what the
+          story adds to a translated page changes. Two notices — the
+          <b>generated-reference note</b> (a permanent explanation: these
+          descriptions are generated, so they stay English) and the
+          <b>being-updated note</b> (a temporary state: this page is shown in
+          English while its translation is made current) — their placement,
+          their English source text, the <code class="inline">lang</code> rule
+          for the English regions inside a translated page, and the three
+          decisions the code items build to exactly: panel D (stale or missing),
+          E (both would apply) and F (a tool summary that falls back). The rail,
+          the page column, the operation and the command list are the base
+          asset’s and the shipped components’; the header’s language control is
+          the shipped <code class="inline">LanguageSwitcher</code>.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-8030 · design</span>
+          <span class="ref muted">MOTIR-7739 · the story</span>
+          <span class="ref muted">MOTIR-8032 · being-updated note</span>
+          <span class="ref muted">MOTIR-8049 · generated-reference note</span>
+          <span class="ref muted">MOTIR-8050 · /docs/mcp/tools</span>
+          <span class="ref muted">amends: design/docs/docs.mock.html</span>
+          <span class="ref muted">repository: motir-marketing</span>
+        </div>
+        <div class="callout warn">
+          <b>Every translated sentence in this asset is ILLUSTRATIVE.</b> This
+          item writes English only; the ten catalogues’ note text belongs to the
+          items that build the notes. The chrome words (rail rows, nav, section
+          labels, table headings) are the shipped catalogues’ own, read from
+          <code class="inline">messages/*.json</code>. The running app could not
+          be rendered in the authoring environment (the dev server needs
+          <code class="inline">fonts.gstatic.com</code>), so the chrome is
+          composed from the shipped component source and the language-switcher
+          design of record, and no pixel measurement is claimed.
+        </div>
+      </div>
+      <section class="panel" id="panel-a">
+        <div class="panel-cap">
+          <span class="n">A</span>
+          <h2>
+            German /docs/api — translated and current, one operation expanded
+          </h2>
+          <span class="note-cap"
+            >The generated-reference note sits <b>once</b>, between the page’s
+            own introduction and the first operation. The strip above is the
+            access path: the shipped language control, open on <b>Deutsch</b>.
+            The note’s German here is illustrative; the real text is the
+            consuming item’s.</span
+          >
+        </div>
+        <div class="access">
+          <p class="cap-small">
+            Access path — the shipped language control, open; <b>Deutsch</b> is
+            the active locale
+          </p>
+          <div class="frame">
+            <div class="site" lang="de" style="min-height: 470px">
+              <header class="topbar">
+                <a class="brand-lockup" href="/" aria-label="Motir"
+                  ><svg
+                    class="brand-glyph"
+                    viewBox="0 0 24 24"
+                    width="26"
+                    height="26"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      fill="currentColor"
+                    /></svg
+                  ><span class="brand-word">Motir</span></a
+                >
+                <nav class="nav" aria-label="Hauptnavigation">
+                  <a href="/explore">Öffentlich entwickeln</a
+                  ><a href="/ideas">Ideen zum Bauen</a
+                  ><a class="current" href="/docs">Doku</a
+                  ><a href="/design">Design</a>
+                </nav>
+                <div class="bar-cta">
+                  <div class="switcher">
+                    <button
+                      type="button"
+                      class="btn ghost globe open"
+                      aria-haspopup="true"
+                      aria-expanded="true"
+                      aria-controls="language-menu"
+                      aria-label="Sprache: Deutsch"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20" />
+                        <path
+                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="lang-menu"
+                      id="language-menu"
+                      role="group"
+                      aria-label="Sprache wählen"
+                    >
+                      <a href="#" lang="en" hreflang="en">English</a
+                      ><a href="#" lang="zh" hreflang="zh">中文</a
+                      ><a href="#" lang="ja" hreflang="ja">日本語</a
+                      ><a href="#" lang="ko" hreflang="ko">한국어</a
+                      ><a
+                        href="#"
+                        lang="de"
+                        hreflang="de"
+                        aria-current="true"
+                        class="cur"
+                        >Deutsch<svg
+                          viewBox="0 0 24 24"
+                          width="16"
+                          height="16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M20 6 9 17l-5-5" /></svg></a
+                      ><a href="#" lang="fr" hreflang="fr">Français</a
+                      ><a href="#" lang="es" hreflang="es">Español</a
+                      ><a href="#" lang="it" hreflang="it">Italiano</a
+                      ><a href="#" lang="nl" hreflang="nl">Nederlands</a
+                      ><a href="#" lang="pl" hreflang="pl">Polski</a
+                      ><a href="#" lang="pt" hreflang="pt">Português</a>
+                    </div>
+                  </div>
+                  <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                    >Anmelden</a
+                  ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                    >Kostenlos starten<svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" /></svg
+                  ></a>
+                </div>
+              </header>
+            </div>
+          </div>
+        </div>
+        <div class="frame">
+          <div class="site" lang="de" style="min-height: 900px">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span class="brand-word">Motir</span></a
+              >
+              <nav class="nav" aria-label="Hauptnavigation">
+                <a href="/explore">Öffentlich entwickeln</a
+                ><a href="/ideas">Ideen zum Bauen</a
+                ><a class="current" href="/docs">Doku</a
+                ><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <div class="switcher">
+                  <button
+                    type="button"
+                    class="btn ghost globe"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="language-menu"
+                    aria-label="Sprache: Deutsch"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Anmelden</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Kostenlos starten<svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Dokumentation">
+                <div class="rail-inner">
+                  <div class="find">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                      style="color: var(--el-text-secondary); flex: none"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m20 20-3.5-3.5" /></svg
+                    ><input
+                      placeholder="Operationen filtern"
+                      aria-label="Operationen filtern"
+                    /><kbd>/</kbd>
+                  </div>
+                  <p class="count">49 Operationen</p>
+                  <p class="group">Dokumentation</p>
+                  <ul>
+                    <li>
+                      <a class="current" aria-current="page" href="/docs/api"
+                        >API-Referenz</a
+                      >
+                    </li>
+                    <li><a href="/docs/mcp">MCP-Server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a href="/docs/sandbox">Sandbox</a></li>
+                    <li>
+                      <a href="/docs/public-address">Öffentliche Adresse</a>
+                    </li>
+                    <li><a href="/docs/sentry">Sentry</a></li>
+                    <li><a href="/docs/difficulty">Schwierigkeitsstufen</a></li>
+                    <li><a href="/docs/skills">Skills</a></li>
+                    <li>
+                      <a href="/docs/claude-code-plugin">Claude Code plugin</a>
+                    </li>
+                    <li>
+                      <a href="/docs/claude-code-connector"
+                        >Claude Code connector</a
+                      >
+                    </li>
+                  </ul>
+                  <p class="group" style="margin-top: 18px">API-Referenz</p>
+                  <ul>
+                    <li>
+                      <a href="/docs/api/getting-started">Erste Schritte</a>
+                    </li>
+                    <li>
+                      <a href="/docs/api/stability"
+                        >Stabilität &amp; Abkündigung</a
+                      >
+                    </li>
+                  </ul>
+                  <p class="group ops-group" lang="en" style="margin-top: 18px">
+                    Work items
+                  </p>
+                  <ul class="ops-list" lang="en">
+                    <li>
+                      <a href="#listWorkItems"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a class="current" href="#createWorkItem"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-mint)"
+                          >POST</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a href="#getWorkItem"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items/{key}</span></a
+                      >
+                    </li>
+                  </ul>
+                  <button class="disclosure" aria-expanded="false">
+                    <span>API-Referenz · 49 Operationen</span
+                    ><svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </nav>
+              <main class="room">
+                <h1>API-Referenz</h1>
+                <p class="meta">49 Operationen</p>
+                <p class="intro">
+                  Jede Operation, die die API bereitstellt, generiert aus dem
+                  OpenAPI-Dokument, das Motir veröffentlicht, und beim Aufruf
+                  dieser Seite abgerufen – also genau das, was der Server gerade
+                  ausliefert. Zu jeder sind ihre Parameter, der akzeptierte
+                  Body, eine kopierbare Anfrage und jeder mögliche Antwortstatus
+                  aufgeführt.
+                </p>
+                <div class="note reference" role="note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                  </svg>
+                  <p>
+                    Die Operationsbeschreibungen sowie die Tabellen mit
+                    Parametern und Feldern unten werden aus dem OpenAPI-Dokument
+                    von Motir generiert und bleiben deshalb auf Englisch.
+                  </p>
+                </div>
+                <h2 class="area" lang="en">Work items</h2>
+                <section class="op-sec" id="createWorkItem">
+                  <div class="op-head">
+                    <span class="verb post">POST</span
+                    ><span class="op-path"
+                      >/api/v1/projects/{projectKey}/work-items</span
+                    ><span class="scope">work_item:edit</span>
+                  </div>
+                  <h3 class="sum" lang="en">Create a work item</h3>
+                  <p class="desc" lang="en">
+                    Create a work item in a project. The parent, if given, is
+                    named by its key and must be a kind-legal parent in the same
+                    project.
+                  </p>
+                  <p class="eyebrow">Anfrage-Body</p>
+                  <table class="spec" lang="en">
+                    <thead>
+                      <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <span class="name">kind</span><br /><span class="req"
+                            >required</span
+                          >
+                        </td>
+                        <td>
+                          <span class="ty"
+                            >string<br />epic · story · task · subtask ·
+                            bug</span
+                          >
+                        </td>
+                        <td>The work item kind.</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span class="name">title</span><br /><span class="req"
+                            >required</span
+                          >
+                        </td>
+                        <td><span class="ty">string</span></td>
+                        <td>The work item title, one line.</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span class="name">parentKey</span><br /><span
+                            class="req"
+                            >optional</span
+                          >
+                        </td>
+                        <td><span class="ty">string | null</span></td>
+                        <td>A kind-legal parent in the same project.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="eyebrow">Antworten</p>
+                  <table class="spec">
+                    <thead>
+                      <tr>
+                        <th>Status</th>
+                        <th>Bedingung</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><span class="status ok">201</span></td>
+                        <td lang="en">The created work item.</td>
+                      </tr>
+                      <tr>
+                        <td><span class="status warn">422</span></td>
+                        <td lang="en">The body did not validate.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>What the note governs.</b> Everything English in this frame is the
+          OpenAPI document’s: the group heading and the three operations in the
+          rail, the summary, the description and both tables in the expanded
+          operation — headings, <code class="inline">required</code> /
+          <code class="inline">optional</code> and types included. The
+          <b>German</b> words are the page’s own: the title, the count, the
+          introduction, the section labels and the Responses headings (<code
+            class="inline"
+            >docs.sectionBody</code
+          >, <code class="inline">docs.thStatus</code> … are already translated
+          in the shipped catalogue). Each English element carries
+          <code class="inline">lang="en"</code> itself — not the wrapper — so
+          the German labels between them stay German to a screen reader.
+        </div>
+      </section>
+      <section class="panel" id="panel-b">
+        <div class="panel-cap">
+          <span class="n">B</span>
+          <h2>French /docs/cli — translated and current</h2>
+          <span class="note-cap"
+            >Same split, but the page is a <b>guide with a generated middle</b>:
+            its own prose (Installation, “Where Motir keeps things”) is French
+            and surrounds the command catalogue. The note therefore sits
+            directly above the <b>first command group</b>, not at the top of the
+            page.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" lang="fr" style="min-height: 620px">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span class="brand-word">Motir</span></a
+              >
+              <nav class="nav" aria-label="Principale">
+                <a href="/explore">Construire en public</a
+                ><a href="/ideas">Idées à construire</a
+                ><a class="current" href="/docs">Documentation</a
+                ><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <div class="switcher">
+                  <button
+                    type="button"
+                    class="btn ghost globe"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="language-menu"
+                    aria-label="Langue : Français"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Se connecter</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Commencer gratuitement<svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Documentation">
+                <div class="rail-inner">
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li><a href="/docs/api">Référence de l’API</a></li>
+                    <li><a href="/docs/mcp">Serveur MCP</a></li>
+                    <li>
+                      <a class="current" aria-current="page" href="/docs/cli"
+                        >CLI</a
+                      >
+                    </li>
+                    <li><a href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Adresse publique</a></li>
+                    <li><a href="/docs/sentry">Sentry</a></li>
+                    <li>
+                      <a href="/docs/difficulty">Niveaux de difficulté</a>
+                    </li>
+                    <li><a href="/docs/skills">Skills</a></li>
+                    <li>
+                      <a href="/docs/claude-code-plugin">Plugin Claude Code</a>
+                    </li>
+                    <li>
+                      <a href="/docs/claude-code-connector"
+                        >Connecteur Claude Code</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+              <main class="room">
+                <h1>CLI</h1>
+                <p class="meta" lang="en">
+                  @motir/cli · version 1.4.0 · 41 commands<span class="lang-tag"
+                    >lang="en"</span
+                  >
+                </p>
+                <p class="intro">
+                  Le client en ligne de commande et ce qu’il automatise.
+                </p>
+                <h2 class="area">Installation</h2>
+                <p class="intro">
+                  Node 20 ou plus récent. Installez-la globalement, ou lancez-la
+                  une seule fois avec npx.
+                </p>
+                <div class="note reference" role="note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                  </svg>
+                  <p>
+                    Les descriptions des commandes et des options ci-dessous
+                    sont le texte qu’affiche la commande motir installée ; elles
+                    restent donc en anglais.
+                  </p>
+                </div>
+                <p class="group-eyebrow" lang="en">Work items</p>
+                <ul class="cmd-list">
+                  <li>
+                    <code class="cmd-name">motir items list</code>
+                    <p class="cmd-desc" lang="en">
+                      List the work items of a project, newest first.
+                    </p>
+                  </li>
+                  <li>
+                    <code class="cmd-name">motir items create</code>
+                    <p class="cmd-desc" lang="en">
+                      Create a work item in a project.
+                    </p>
+                  </li>
+                </ul>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout warn">
+          <b>Found while drawing: the count line is half English.</b> Today the
+          line under the title is built from the catalogue as
+          <code class="inline"
+            >{package} · version {version} · {count} commands</code
+          >, and its two words are hard-coded English. It is drawn as the
+          generated region’s (<code class="inline">lang="en"</code>, stays
+          English), and the notes record it as a GIVES entry for the
+          generated-reference item: a catalogue key with
+          <code class="inline">{count}</code>, as
+          <code class="inline">docs.operationCount</code> already does for the
+          API rail.
+        </div>
+      </section>
+      <section class="panel" id="panel-c">
+        <div class="panel-cap">
+          <span class="n">C</span>
+          <h2>German /docs/sandbox — the translation is stale</h2>
+          <span class="note-cap"
+            >The rail and the header are German (they come from the catalogue
+            and are unaffected). The being-updated note is the
+            <b>first element of the column</b>, above the title; the whole body
+            beneath it is English.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" lang="de" style="min-height: 560px">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span class="brand-word">Motir</span></a
+              >
+              <nav class="nav" aria-label="Hauptnavigation">
+                <a href="/explore">Öffentlich entwickeln</a
+                ><a href="/ideas">Ideen zum Bauen</a
+                ><a class="current" href="/docs">Doku</a
+                ><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <div class="switcher">
+                  <button
+                    type="button"
+                    class="btn ghost globe"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="language-menu"
+                    aria-label="Sprache: Deutsch"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Anmelden</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Kostenlos starten<svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Dokumentation">
+                <div class="rail-inner">
+                  <p class="group">Dokumentation</p>
+                  <ul>
+                    <li><a href="/docs/api">API-Referenz</a></li>
+                    <li><a href="/docs/mcp">MCP-Server</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li>
+                      <a
+                        class="current"
+                        aria-current="page"
+                        href="/docs/sandbox"
+                        >Sandbox</a
+                      >
+                    </li>
+                    <li>
+                      <a href="/docs/public-address">Öffentliche Adresse</a>
+                    </li>
+                    <li><a href="/docs/sentry">Sentry</a></li>
+                    <li><a href="/docs/difficulty">Schwierigkeitsstufen</a></li>
+                    <li><a href="/docs/skills">Skills</a></li>
+                    <li>
+                      <a href="/docs/claude-code-plugin">Claude Code plugin</a>
+                    </li>
+                    <li>
+                      <a href="/docs/claude-code-connector"
+                        >Claude Code connector</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+              <main class="room">
+                <div class="note updating" role="note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                  <p>
+                    Die Übersetzung dieser Seite wird gerade aktualisiert. Bis
+                    sie fertig ist, wird der englische Text angezeigt.
+                  </p>
+                </div>
+                <div class="fallback-body" lang="en">
+                  <h1>Agent sandbox</h1>
+                  <p class="intro">
+                    The hosted sandbox an agent runs work in. Pick a profile,
+                    then copy one command.
+                  </p>
+                  <h2 class="area">Run it locally</h2>
+                  <p class="intro">
+                    Pull the image once, then start the container with your
+                    workspace mounted.
+                  </p>
+                  <div class="pane">
+                    <p class="cap">
+                      docker run<button
+                        type="button"
+                        class="copybtn"
+                        aria-label="Copy the docker run command"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="14"
+                          height="14"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <rect x="9" y="9" width="13" height="13" rx="2" />
+                          <path
+                            d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                          /></svg
+                        ><span>Copy</span>
+                      </button>
+                    </p>
+                    <pre>
+docker run --rm -it -v "$PWD":/workspace ghcr.io/moooon-b-v/motir-sandbox:base</pre>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>The body is one <code class="inline">lang="en"</code> island.</b>
+          The wrapper of the English body carries the attribute — the one place
+          a wrapper does — because here the whole region is English. The note is
+          outside it and inherits the page’s <code class="inline">de</code>. The
+          <code class="inline">docker run</code> block and its copy button are
+          exactly the English page’s.
+        </div>
+      </section>
+      <section class="panel" id="panel-d">
+        <div class="panel-cap">
+          <span class="n">D</span>
+          <h2>Italian /docs/sentry — no translation exists for this locale</h2>
+          <span class="note-cap"
+            ><b>Decision: visually identical to C.</b> Same note, same copy,
+            same key, same position, same
+            <code class="inline">lang</code> island.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" lang="it" style="min-height: 520px">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span class="brand-word">Motir</span></a
+              >
+              <nav class="nav" aria-label="Principale">
+                <a href="/explore">Costruisci in pubblico</a
+                ><a href="/ideas">Idee da realizzare</a
+                ><a class="current" href="/docs">Documentazione</a
+                ><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <div class="switcher">
+                  <button
+                    type="button"
+                    class="btn ghost globe"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="language-menu"
+                    aria-label="Lingua: Italiano"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Accedi</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Inizia gratis<svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Documentazione">
+                <div class="rail-inner">
+                  <p class="group">Documentazione</p>
+                  <ul>
+                    <li><a href="/docs/api">Riferimento API</a></li>
+                    <li><a href="/docs/mcp">Server MCP</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a href="/docs/sandbox">Sandbox</a></li>
+                    <li>
+                      <a href="/docs/public-address">Indirizzo pubblico</a>
+                    </li>
+                    <li>
+                      <a class="current" aria-current="page" href="/docs/sentry"
+                        >Sentry</a
+                      >
+                    </li>
+                    <li>
+                      <a href="/docs/difficulty">Livelli di difficoltà</a>
+                    </li>
+                    <li><a href="/docs/skills">Skill</a></li>
+                    <li>
+                      <a href="/docs/claude-code-plugin">Plugin Claude Code</a>
+                    </li>
+                    <li>
+                      <a href="/docs/claude-code-connector"
+                        >Connettore Claude Code</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+              <main class="room">
+                <div class="note updating" role="note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                  <p>
+                    La traduzione di questa pagina è in aggiornamento. Fino a
+                    quando non sarà pronta, viene mostrato il testo in inglese.
+                  </p>
+                </div>
+                <div class="fallback-body" lang="en">
+                  <h1>Sentry</h1>
+                  <p class="intro">
+                    Send your application’s errors to Motir, and see them next
+                    to the work that caused them.
+                  </p>
+                  <h2 class="area">Connect Sentry</h2>
+                  <p class="intro">
+                    Create an internal integration, then paste its token into
+                    your workspace settings.
+                  </p>
+                  <div class="pane">
+                    <p class="cap">
+                      curl<button
+                        type="button"
+                        class="copybtn"
+                        aria-label="Copy the docker run command"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="14"
+                          height="14"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <rect x="9" y="9" width="13" height="13" rx="2" />
+                          <path
+                            d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                          /></svg
+                        ><span>Copy</span>
+                      </button>
+                    </p>
+                    <pre>
+curl -H "Authorization: Bearer $SENTRY_TOKEN" https://sentry.io/api/0/organizations/</pre>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>Why one state and not two.</b> The reader’s situation is the same
+          in both: the page is English and a translation is on its way. “Out of
+          date” and “never made” are facts about the translation pipeline;
+          saying which would show the reader our process and change nothing they
+          can do. The two cases differ only in the code that detects them, and
+          the consuming item treats them as one fallback.
+        </div>
+      </section>
+      <section class="panel" id="panel-e">
+        <div class="panel-cap">
+          <span class="n">E</span>
+          <h2>
+            French /docs/api whose own prose is stale — both notes would apply
+          </h2>
+          <span class="note-cap"
+            ><b>Decision: only the being-updated note renders.</b> The page, and
+            its rail’s API sub-pages, are English; the catalogue-driven rail and
+            header stay French.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" lang="fr" style="min-height: 620px">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span class="brand-word">Motir</span></a
+              >
+              <nav class="nav" aria-label="Principale">
+                <a href="/explore">Construire en public</a
+                ><a href="/ideas">Idées à construire</a
+                ><a class="current" href="/docs">Documentation</a
+                ><a href="/design">Design</a>
+              </nav>
+              <div class="bar-cta">
+                <div class="switcher">
+                  <button
+                    type="button"
+                    class="btn ghost globe"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="language-menu"
+                    aria-label="Langue : Français"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >Se connecter</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >Commencer gratuitement<svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="Documentation">
+                <div class="rail-inner">
+                  <div class="find">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                      style="color: var(--el-text-secondary); flex: none"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m20 20-3.5-3.5" /></svg
+                    ><input
+                      placeholder="Filtrer les opérations"
+                      aria-label="Filtrer les opérations"
+                    /><kbd>/</kbd>
+                  </div>
+                  <p class="count">49 opérations</p>
+                  <p class="group">Documentation</p>
+                  <ul>
+                    <li>
+                      <a class="current" aria-current="page" href="/docs/api"
+                        >Référence de l’API</a
+                      >
+                    </li>
+                    <li><a href="/docs/mcp">Serveur MCP</a></li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a href="/docs/sandbox">Sandbox</a></li>
+                    <li><a href="/docs/public-address">Adresse publique</a></li>
+                    <li><a href="/docs/sentry">Sentry</a></li>
+                    <li>
+                      <a href="/docs/difficulty">Niveaux de difficulté</a>
+                    </li>
+                    <li><a href="/docs/skills">Skills</a></li>
+                    <li>
+                      <a href="/docs/claude-code-plugin">Plugin Claude Code</a>
+                    </li>
+                    <li>
+                      <a href="/docs/claude-code-connector"
+                        >Connecteur Claude Code</a
+                      >
+                    </li>
+                  </ul>
+                  <p class="group" style="margin-top: 18px">
+                    Référence de l’API
+                  </p>
+                  <ul>
+                    <li>
+                      <a href="/docs/api/getting-started">Premiers pas</a>
+                    </li>
+                    <li>
+                      <a href="/docs/api/stability"
+                        >Stabilité et dépréciation</a
+                      >
+                    </li>
+                  </ul>
+                  <p class="group ops-group" lang="en" style="margin-top: 18px">
+                    Work items
+                  </p>
+                  <ul class="ops-list" lang="en">
+                    <li>
+                      <a href="#listWorkItems"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a class="current" href="#createWorkItem"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-mint)"
+                          >POST</span
+                        ><span class="op">/work-items</span></a
+                      >
+                    </li>
+                    <li>
+                      <a href="#getWorkItem"
+                        ><span
+                          class="verb"
+                          style="background: var(--el-tint-sky)"
+                          >GET</span
+                        ><span class="op">/work-items/{key}</span></a
+                      >
+                    </li>
+                  </ul>
+                  <button class="disclosure" aria-expanded="false">
+                    <span>Référence de l’API · 49 opérations</span
+                    ><svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </nav>
+              <main class="room">
+                <div class="note updating" role="note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                  <p>
+                    La traduction de cette page est en cours de mise à jour. Le
+                    texte anglais s’affiche en attendant.
+                  </p>
+                </div>
+                <div class="fallback-body" lang="en">
+                  <h1>API reference</h1>
+                  <p class="meta">49 operations</p>
+                  <p class="intro">
+                    Every operation the API serves, generated from the OpenAPI
+                    document Motir publishes and fetched when this page is
+                    requested.
+                  </p>
+                  <h2 class="area">Work items</h2>
+                  <section class="op-sec" id="createWorkItem">
+                    <div class="op-head">
+                      <span class="verb post">POST</span
+                      ><span class="op-path"
+                        >/api/v1/projects/{projectKey}/work-items</span
+                      ><span class="scope">work_item:edit</span>
+                    </div>
+                    <h3 class="sum">Create a work item</h3>
+                    <p class="desc">
+                      Create a work item in a project. The parent, if given, is
+                      named by its key and must be a kind-legal parent in the
+                      same project.
+                    </p>
+                  </section>
+                </div>
+                <p class="ghost-note">
+                  Not rendered here: the generated-reference note. It is
+                  suppressed on a page whose own prose is in the fallback,
+                  because the whole page is English and a note saying
+                  <i>these descriptions stay English</i> would be a claim about
+                  a contrast that is not on the page.
+                </p>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b
+            >The rule the code builds: the generated-reference note renders if
+            and only if the page’s own document rendered.</b
+          >
+          Stacking the two would put two French sentences above a page that is
+          English from top to bottom, one of them about a split that does not
+          exist there. One note, the one about the actual state. When the
+          translation is current again, the page is French and the
+          generated-reference note returns. (The dashed box above is annotation,
+          not product.)
+        </div>
+      </section>
+      <section class="panel" id="panel-f">
+        <div class="panel-cap">
+          <span class="n">F</span>
+          <h2>
+            Korean /docs/mcp/tools — one tool’s summary falls back to English
+          </h2>
+          <span class="note-cap"
+            ><b>Decision: no marker on the row, and no note on the page.</b>
+            Tool names here are examples — the page names no tool of its
+            own.</span
+          >
+        </div>
+        <div class="frame">
+          <div class="site" lang="ko" style="min-height: 520px">
+            <header class="topbar">
+              <a class="brand-lockup" href="/" aria-label="Motir"
+                ><svg
+                  class="brand-glyph"
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                    fill="currentColor"
+                  /></svg
+                ><span class="brand-word">Motir</span></a
+              >
+              <nav class="nav" aria-label="주 메뉴">
+                <a href="/explore">공개 개발</a
+                ><a href="/ideas">만들 만한 아이디어</a
+                ><a class="current" href="/docs">문서</a
+                ><a href="/design">디자인</a>
+              </nav>
+              <div class="bar-cta">
+                <div class="switcher">
+                  <button
+                    type="button"
+                    class="btn ghost globe"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="language-menu"
+                    aria-label="언어: 한국어"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                  >로그인</a
+                ><a class="btn primary sm" href="https://app.motir.co/sign-up"
+                  >무료로 시작<svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </header>
+            <div class="docs">
+              <nav class="rail" aria-label="문서">
+                <div class="rail-inner">
+                  <p class="group">문서</p>
+                  <ul>
+                    <li><a href="/docs/api">API 참조</a></li>
+                    <li>
+                      <a class="current" aria-current="page" href="/docs/mcp"
+                        >MCP 서버</a
+                      >
+                    </li>
+                    <li><a href="/docs/cli">CLI</a></li>
+                    <li><a href="/docs/sandbox">샌드박스</a></li>
+                    <li><a href="/docs/public-address">공개 주소</a></li>
+                    <li><a href="/docs/sentry">Sentry</a></li>
+                    <li><a href="/docs/difficulty">난이도</a></li>
+                    <li><a href="/docs/skills">스킬</a></li>
+                    <li>
+                      <a href="/docs/claude-code-plugin"
+                        >Claude Code 플러그인</a
+                      >
+                    </li>
+                    <li>
+                      <a href="/docs/claude-code-connector"
+                        >Claude Code 커넥터</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+              <main class="room">
+                <h1>MCP 도구</h1>
+                <p class="meta">
+                  서버가 제공하는 모든 도구와 각 도구의 범위 및 권한.
+                </p>
+                <p class="intro">
+                  각 도구는 데이터에 어떤 영향을 주는지 알려 줍니다:
+                </p>
+                <h2 class="area">예시 그룹</h2>
+                <ul class="tool-list">
+                  <li class="tool-row">
+                    <div class="tool-head">
+                      <code class="tool-nm">exampleReadTool</code
+                      ><span class="hint reads">읽기</span>
+                    </div>
+                    <p class="tool-summary">
+                      예시 도구입니다. 아무것도 변경하지 않고 항목을 읽어
+                      옵니다.
+                    </p>
+                  </li>
+                  <li class="tool-row">
+                    <div class="tool-head">
+                      <code class="tool-nm">exampleWriteTool</code
+                      ><span class="hint writes">쓰기</span>
+                    </div>
+                    <p class="tool-summary" lang="en">
+                      An example tool. Its Korean summary was made from an
+                      earlier English text, so the current English summary is
+                      shown.<span class="lang-tag">lang="en"</span>
+                    </p>
+                  </li>
+                  <li class="tool-row">
+                    <div class="tool-head">
+                      <code class="tool-nm">exampleRemoveTool</code
+                      ><span class="hint destructive">파괴적</span>
+                    </div>
+                    <p class="tool-summary">
+                      예시 도구입니다. 항목을 삭제할 수 있습니다.
+                    </p>
+                  </li>
+                </ul>
+              </main>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>Why no marker is not a silent defect.</b> (1) The fallback is a
+          <b>whole sentence</b> in English, never a fragment inside a Korean
+          one, which is the only mixing the requirement forbids. (2) It is never
+          <b>stale</b>: the English shown is the current English, so a reader is
+          not handed an outdated instruction. (3) It is
+          <b>programmatically honest</b>: the summary element carries
+          <code class="inline">lang="en"</code>, so a screen reader switches
+          voice and the font falls back to Latin faces. (4) A visible marker
+          would need new catalogue data per tool, and motir-core’s per-locale
+          catalogue is specified to keep the unlocalized shape; the page would
+          also flicker with a page-level note on every English edit. (5) The
+          reader of a tool reference already reads tool names, scopes and
+          schemas in English. The dashed tag is annotation.
+        </div>
+      </section>
+      <section class="panel" id="panel-g">
+        <div class="panel-cap">
+          <span class="n">G</span>
+          <h2>The English locale — neither note renders</h2>
+          <span class="note-cap"
+            >Drawn once so “absent in <code class="inline">en</code>” is a state
+            and not an assumption. English is the source: it is never a
+            translation, so it is never stale, and its generated descriptions
+            are not an exception to anything.</span
+          >
+        </div>
+        <div class="minis">
+          <div class="frame">
+            <div class="site" lang="en">
+              <div class="docs" style="grid-template-columns: minmax(0, 1fr)">
+                <main class="room">
+                  <h1>API reference</h1>
+                  <p class="meta">49 operations</p>
+                  <p class="intro">
+                    Every operation the API serves, generated from the OpenAPI
+                    document Motir publishes.
+                  </p>
+                  <h2 class="area">Work items</h2>
+                  <section class="op-sec">
+                    <div class="op-head">
+                      <span class="verb post">POST</span
+                      ><span class="op-path">/work-items</span>
+                    </div>
+                    <h3 class="sum">Create a work item</h3>
+                  </section>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame">
+            <div class="site" lang="en">
+              <div class="docs" style="grid-template-columns: minmax(0, 1fr)">
+                <main class="room">
+                  <h1>CLI</h1>
+                  <p class="meta">@motir/cli · version 1.4.0 · 41 commands</p>
+                  <p class="intro">
+                    The command-line client and what it automates.
+                  </p>
+                  <h2 class="area">Install</h2>
+                  <p class="intro">Node 20 or newer.</p>
+                  <p class="group-eyebrow">Work items</p>
+                  <ul class="cmd-list">
+                    <li>
+                      <code class="cmd-name">motir items list</code>
+                      <p class="cmd-desc">
+                        List the work items of a project, newest first.
+                      </p>
+                    </li>
+                  </ul>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame">
+            <div class="site" lang="en">
+              <div class="docs" style="grid-template-columns: minmax(0, 1fr)">
+                <main class="room">
+                  <h1>Agent sandbox</h1>
+                  <p class="intro">The hosted sandbox an agent runs work in.</p>
+                  <h2 class="area">Run it locally</h2>
+                  <p class="intro">
+                    Pull the image once, then start the container.
+                  </p>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>The check the code makes first:</b>
+          <code class="inline">locale === 'en'</code> renders neither note and
+          adds no <code class="inline">lang</code> attribute — every element
+          already inherits <code class="inline">en</code> from
+          <code class="inline">&lt;html&gt;</code>.
+        </div>
+      </section>
+      <section class="panel" id="panel-h">
+        <div class="panel-cap">
+          <span class="n">H</span>
+          <h2>
+            Narrow (390 wide) and dark — both notes at both, a German wrap and a
+            Japanese note
+          </h2>
+          <span class="note-cap"
+            >Four frames. The rail becomes the band above the column and the bar
+            folds to a Menu button (the language control lives inside it), as
+            the base asset’s narrow panel and the language-switcher design draw
+            them; the notes wrap inside the column and nothing scrolls
+            sideways.</span
+          >
+        </div>
+        <div class="quad">
+          <div>
+            <p class="cap-small">
+              narrow · light · German · generated-reference (long compounds
+              wrap)
+            </p>
+            <div class="frame narrow narrow-h">
+              <div class="site" lang="de">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 24 24"
+                      width="26"
+                      height="26"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        fill="currentColor"
+                      /></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <nav class="nav" aria-label="Hauptnavigation">
+                    <a href="/explore">Öffentlich entwickeln</a
+                    ><a href="/ideas">Ideen zum Bauen</a
+                    ><a class="current" href="/docs">Doku</a
+                    ><a href="/design">Design</a>
+                  </nav>
+                  <div class="bar-cta">
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-controls="language-menu"
+                        aria-label="Sprache: Deutsch"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button type="button" class="btn ghost sm menu-btn">
+                      Menü</button
+                    ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                      >Anmelden</a
+                    ><a
+                      class="btn primary sm"
+                      href="https://app.motir.co/sign-up"
+                      >Kostenlos starten<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                  </div>
+                </header>
+                <div class="docs">
+                  <nav class="rail" aria-label="Dokumentation">
+                    <div class="rail-inner">
+                      <div class="find">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="14"
+                          height="14"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          aria-hidden="true"
+                          style="color: var(--el-text-secondary); flex: none"
+                        >
+                          <circle cx="11" cy="11" r="7" />
+                          <path d="m20 20-3.5-3.5" /></svg
+                        ><input
+                          placeholder="Operationen filtern"
+                          aria-label="Operationen filtern"
+                        /><kbd>/</kbd>
+                      </div>
+                      <p class="count">49 Operationen</p>
+                      <p class="group">Dokumentation</p>
+                      <ul>
+                        <li>
+                          <a
+                            class="current"
+                            aria-current="page"
+                            href="/docs/api"
+                            >API-Referenz</a
+                          >
+                        </li>
+                        <li><a href="/docs/mcp">MCP-Server</a></li>
+                        <li><a href="/docs/cli">CLI</a></li>
+                        <li><a href="/docs/sandbox">Sandbox</a></li>
+                        <li>
+                          <a href="/docs/public-address">Öffentliche Adresse</a>
+                        </li>
+                        <li><a href="/docs/sentry">Sentry</a></li>
+                        <li>
+                          <a href="/docs/difficulty">Schwierigkeitsstufen</a>
+                        </li>
+                        <li><a href="/docs/skills">Skills</a></li>
+                        <li>
+                          <a href="/docs/claude-code-plugin"
+                            >Claude Code plugin</a
+                          >
+                        </li>
+                        <li>
+                          <a href="/docs/claude-code-connector"
+                            >Claude Code connector</a
+                          >
+                        </li>
+                      </ul>
+                      <p class="group" style="margin-top: 18px">API-Referenz</p>
+                      <ul>
+                        <li>
+                          <a href="/docs/api/getting-started">Erste Schritte</a>
+                        </li>
+                        <li>
+                          <a href="/docs/api/stability"
+                            >Stabilität &amp; Abkündigung</a
+                          >
+                        </li>
+                      </ul>
+                      <p
+                        class="group ops-group"
+                        lang="en"
+                        style="margin-top: 18px"
+                      >
+                        Work items
+                      </p>
+                      <ul class="ops-list" lang="en">
+                        <li>
+                          <a href="#listWorkItems"
+                            ><span
+                              class="verb"
+                              style="background: var(--el-tint-sky)"
+                              >GET</span
+                            ><span class="op">/work-items</span></a
+                          >
+                        </li>
+                        <li>
+                          <a class="current" href="#createWorkItem"
+                            ><span
+                              class="verb"
+                              style="background: var(--el-tint-mint)"
+                              >POST</span
+                            ><span class="op">/work-items</span></a
+                          >
+                        </li>
+                        <li>
+                          <a href="#getWorkItem"
+                            ><span
+                              class="verb"
+                              style="background: var(--el-tint-sky)"
+                              >GET</span
+                            ><span class="op">/work-items/{key}</span></a
+                          >
+                        </li>
+                      </ul>
+                      <button class="disclosure" aria-expanded="false">
+                        <span>API-Referenz · 49 Operationen</span
+                        ><svg
+                          viewBox="0 0 24 24"
+                          width="16"
+                          height="16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          aria-hidden="true"
+                        >
+                          <path d="m6 9 6 6 6-6" />
+                        </svg>
+                      </button>
+                    </div>
+                  </nav>
+                  <main class="room">
+                    <h1>API-Referenz</h1>
+                    <p class="meta">49 Operationen</p>
+                    <div class="note reference" role="note">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4" />
+                        <path d="M12 8h.01" />
+                      </svg>
+                      <p>
+                        Die Operationsbeschreibungen sowie die Tabellen mit
+                        Parametern und Feldern unten werden aus dem
+                        OpenAPI-Dokument von Motir generiert und bleiben deshalb
+                        auf Englisch.
+                      </p>
+                    </div>
+                  </main>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="cap-small">
+              narrow · light · Japanese · being-updated (CJK, the language’s
+              font set)
+            </p>
+            <div class="frame narrow narrow-h">
+              <div class="site" lang="ja">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 24 24"
+                      width="26"
+                      height="26"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        fill="currentColor"
+                      /></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <nav class="nav" aria-label="メイン">
+                    <a href="/explore">ビルド・イン・パブリック</a
+                    ><a href="/ideas">作るためのアイデア</a
+                    ><a class="current" href="/docs">ドキュメント</a
+                    ><a href="/design">デザイン</a>
+                  </nav>
+                  <div class="bar-cta">
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-controls="language-menu"
+                        aria-label="言語：日本語"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button type="button" class="btn ghost sm menu-btn">
+                      メニュー</button
+                    ><a class="btn ghost sm" href="https://app.motir.co/sign-in"
+                      >サインイン</a
+                    ><a
+                      class="btn primary sm"
+                      href="https://app.motir.co/sign-up"
+                      >無料で始める<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                  </div>
+                </header>
+                <div class="docs">
+                  <nav class="rail" aria-label="ドキュメント">
+                    <div class="rail-inner">
+                      <p class="group">ドキュメント</p>
+                      <ul>
+                        <li><a href="/docs/api">API リファレンス</a></li>
+                        <li><a href="/docs/mcp">MCP サーバー</a></li>
+                        <li>
+                          <a
+                            class="current"
+                            aria-current="page"
+                            href="/docs/cli"
+                            >CLI</a
+                          >
+                        </li>
+                        <li><a href="/docs/sandbox">サンドボックス</a></li>
+                        <li><a href="/docs/public-address">公開アドレス</a></li>
+                        <li><a href="/docs/sentry">Sentry</a></li>
+                        <li><a href="/docs/difficulty">難易度</a></li>
+                        <li><a href="/docs/skills">スキル</a></li>
+                        <li>
+                          <a href="/docs/claude-code-plugin"
+                            >Claude Code プラグイン</a
+                          >
+                        </li>
+                        <li>
+                          <a href="/docs/claude-code-connector"
+                            >Claude Code コネクター</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </nav>
+                  <main class="room">
+                    <div class="note updating" role="note">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v6l4 2" />
+                      </svg>
+                      <p>
+                        このページの翻訳は更新中です。準備が整うまで、英語のテキストを表示しています。
+                      </p>
+                    </div>
+                    <div class="fallback-body" lang="en">
+                      <h1>Agent sandbox</h1>
+                      <p class="intro">
+                        The hosted sandbox an agent runs work in.
+                      </p>
+                    </div>
+                  </main>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="cap-small">narrow · dark · German · being-updated</p>
+            <div class="dark">
+              <div class="frame narrow narrow-h">
+                <div class="site" lang="de">
+                  <header class="topbar">
+                    <a class="brand-lockup" href="/" aria-label="Motir"
+                      ><svg
+                        class="brand-glyph"
+                        viewBox="0 0 24 24"
+                        width="26"
+                        height="26"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                          fill="currentColor"
+                        /></svg
+                      ><span class="brand-word">Motir</span></a
+                    >
+                    <nav class="nav" aria-label="Hauptnavigation">
+                      <a href="/explore">Öffentlich entwickeln</a
+                      ><a href="/ideas">Ideen zum Bauen</a
+                      ><a class="current" href="/docs">Doku</a
+                      ><a href="/design">Design</a>
+                    </nav>
+                    <div class="bar-cta">
+                      <div class="switcher">
+                        <button
+                          type="button"
+                          class="btn ghost globe"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                          aria-controls="language-menu"
+                          aria-label="Sprache: Deutsch"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="18"
+                            height="18"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M2 12h20" />
+                            <path
+                              d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <button type="button" class="btn ghost sm menu-btn">
+                        Menü</button
+                      ><a
+                        class="btn ghost sm"
+                        href="https://app.motir.co/sign-in"
+                        >Anmelden</a
+                      ><a
+                        class="btn primary sm"
+                        href="https://app.motir.co/sign-up"
+                        >Kostenlos starten<svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
+                  </header>
+                  <div class="docs">
+                    <nav class="rail" aria-label="Dokumentation">
+                      <div class="rail-inner">
+                        <p class="group">Dokumentation</p>
+                        <ul>
+                          <li><a href="/docs/api">API-Referenz</a></li>
+                          <li><a href="/docs/mcp">MCP-Server</a></li>
+                          <li>
+                            <a
+                              class="current"
+                              aria-current="page"
+                              href="/docs/cli"
+                              >CLI</a
+                            >
+                          </li>
+                          <li><a href="/docs/sandbox">Sandbox</a></li>
+                          <li>
+                            <a href="/docs/public-address"
+                              >Öffentliche Adresse</a
+                            >
+                          </li>
+                          <li><a href="/docs/sentry">Sentry</a></li>
+                          <li>
+                            <a href="/docs/difficulty">Schwierigkeitsstufen</a>
+                          </li>
+                          <li><a href="/docs/skills">Skills</a></li>
+                          <li>
+                            <a href="/docs/claude-code-plugin"
+                              >Claude Code plugin</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/docs/claude-code-connector"
+                              >Claude Code connector</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                    </nav>
+                    <main class="room">
+                      <div class="note updating" role="note">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 6v6l4 2" />
+                        </svg>
+                        <p>
+                          Die Übersetzung dieser Seite wird gerade aktualisiert.
+                          Bis sie fertig ist, wird der englische Text angezeigt.
+                        </p>
+                      </div>
+                      <div class="fallback-body" lang="en">
+                        <h1>Public address</h1>
+                        <p class="intro">
+                          Your workspace subdomain, a domain you already own,
+                          and the DNS records each one needs.
+                        </p>
+                      </div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="cap-small">
+              narrow · dark · Japanese · generated-reference
+            </p>
+            <div class="dark">
+              <div class="frame narrow narrow-h">
+                <div class="site" lang="ja">
+                  <header class="topbar">
+                    <a class="brand-lockup" href="/" aria-label="Motir"
+                      ><svg
+                        class="brand-glyph"
+                        viewBox="0 0 24 24"
+                        width="26"
+                        height="26"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                          fill="currentColor"
+                        /></svg
+                      ><span class="brand-word">Motir</span></a
+                    >
+                    <nav class="nav" aria-label="メイン">
+                      <a href="/explore">ビルド・イン・パブリック</a
+                      ><a href="/ideas">作るためのアイデア</a
+                      ><a class="current" href="/docs">ドキュメント</a
+                      ><a href="/design">デザイン</a>
+                    </nav>
+                    <div class="bar-cta">
+                      <div class="switcher">
+                        <button
+                          type="button"
+                          class="btn ghost globe"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                          aria-controls="language-menu"
+                          aria-label="言語：日本語"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="18"
+                            height="18"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M2 12h20" />
+                            <path
+                              d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <button type="button" class="btn ghost sm menu-btn">
+                        メニュー</button
+                      ><a
+                        class="btn ghost sm"
+                        href="https://app.motir.co/sign-in"
+                        >サインイン</a
+                      ><a
+                        class="btn primary sm"
+                        href="https://app.motir.co/sign-up"
+                        >無料で始める<svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" /></svg
+                      ></a>
+                    </div>
+                  </header>
+                  <div class="docs">
+                    <nav class="rail" aria-label="ドキュメント">
+                      <div class="rail-inner">
+                        <p class="group">ドキュメント</p>
+                        <ul>
+                          <li><a href="/docs/api">API リファレンス</a></li>
+                          <li><a href="/docs/mcp">MCP サーバー</a></li>
+                          <li>
+                            <a
+                              class="current"
+                              aria-current="page"
+                              href="/docs/cli"
+                              >CLI</a
+                            >
+                          </li>
+                          <li><a href="/docs/sandbox">サンドボックス</a></li>
+                          <li>
+                            <a href="/docs/public-address">公開アドレス</a>
+                          </li>
+                          <li><a href="/docs/sentry">Sentry</a></li>
+                          <li><a href="/docs/difficulty">難易度</a></li>
+                          <li><a href="/docs/skills">スキル</a></li>
+                          <li>
+                            <a href="/docs/claude-code-plugin"
+                              >Claude Code プラグイン</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/docs/claude-code-connector"
+                              >Claude Code コネクター</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                    </nav>
+                    <main class="room">
+                      <h1>CLI</h1>
+                      <p class="meta" lang="en">
+                        @motir/cli · version 1.4.0 · 41 commands
+                      </p>
+                      <div class="note reference" role="note">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 16v-4" />
+                          <path d="M12 8h.01" />
+                        </svg>
+                        <p>
+                          以下のコマンドとオプションの説明は、インストール済みの
+                          motir
+                          コマンドが表示するテキストであるため、英語のままです。
+                        </p>
+                      </div>
+                      <p class="group-eyebrow" lang="en">Work items</p>
+                      <ul class="cmd-list">
+                        <li>
+                          <code class="cmd-name">motir items list</code>
+                          <p class="cmd-desc" lang="en">
+                            List the work items of a project, newest first.
+                          </p>
+                        </li>
+                      </ul>
+                    </main>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>German wrap.</b> The note’s text uses
+          <code class="inline">overflow-wrap: break-word</code> and
+          <code class="inline">hyphens: auto</code> (hyphenation follows the
+          element’s <code class="inline">lang</code>), so
+          “Operationsbeschreibungen” breaks at a syllable instead of
+          overflowing. <b>Japanese.</b> No hyphenation applies; lines break
+          between characters, and the face is the language’s own font set (<code
+            class="inline"
+            >--font-script-sans</code
+          >, set by the font-sets story and only composed here — a standalone
+          mock draws it with the system CJK stack). <b>Dark.</b> The yellow tint
+          is the dark token’s <code class="inline">--el-tint-yellow</code>, with
+          the same ink recipe; the reference note’s surface fill is the dark
+          <code class="inline">--el-surface</code>.
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
