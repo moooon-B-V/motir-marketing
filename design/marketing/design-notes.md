@@ -1769,3 +1769,161 @@ live only in motir-core and are unreachable here, exactly as the card says.
 - `app/sitemap.ts` gains its `/design` line in the same change — the file's own comment asks for it.
 - **Before the AA matrix can pass, MOTIR-3872 must land.** Assert the contrast harness against a
   known pair first (see _How this asset was measured_).
+
+---
+
+## The language switcher in the site header
+
+**Subtask:** MOTIR-7947 (`type: design`) · **Story:** MOTIR-7737 (motir.co in eleven languages) ·
+**Builds it:** MOTIR-7953. **Delta mock:**
+[`site-header--language-switcher.mock.html`](site-header--language-switcher.mock.html) — it holds
+only the panels that change. It amends the site header as shipped in
+`app/_components/SiteHeader.tsx`; no earlier mock in this area draws that bar's right cluster, so
+none is edited.
+
+**Design system: Motir Design (branch a).** `package.json` depends on `@motir/design-system` 0.13.0
+and `app/globals.css` imports `@motir/design-system/theme.css`, so the mock is generated with the
+package's `renderMock` (axes `hand-drawn-indie` · the default palette · `grotesk`, light) from the
+real `buttonVariants`, the header's own class constants and `lucide-react` glyphs. Colour is `--el-*`
+only and shape is the shape tokens only; the board passes `pnpm test:design`.
+
+### What changes, in one paragraph
+
+The bar gains one control: a **ghost button** in the right cluster, directly before Sign in, reading
+the Languages glyph + the current language's **endonym** + a chevron. It opens an end-aligned list of
+the eleven languages as **links** — each one is the address of the page being read, in that
+language. When the bar runs out of room it gives way in a fixed order, and the language control
+folds into the Menu panel as its own section. Nothing else on the bar moves.
+
+### The trigger (panels 1–4)
+
+| element                 | spec                                                                                                                                                                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| control                 | `<button type="button">`, `buttonVariants({ variant: 'ghost', size: 'md' })` + `gap-1.5 px-(--spacing-control-x) text-[15px] font-medium text-(--el-text)` — the same family as Sign in, so it reads as chrome, not a call to action |
+| glyph                   | `Languages` (lucide), `size-4`, `text-(--el-text-secondary)`, `aria-hidden`                                                                                                                                                          |
+| label                   | the endonym of the CURRENT locale, wrapped in `<span lang="<code>">` so a 日本語 label on an English page is shaped as Japanese                                                                                                      |
+| chevron                 | `ChevronDown`, `size-3.5`, `text-(--el-text-secondary)`; rotated 180° while open                                                                                                                                                     |
+| accessible name         | `aria-label` = `nav.language.label` → **"Language: {language}"** with the endonym interpolated, so a screen reader announces what the button is for and not just "English"                                                           |
+| state                   | `aria-haspopup="true"`, `aria-expanded`, `aria-controls="language-menu"`; open and hover take `bg-(--el-surface-soft)`; focus-visible is the bar's outline, `outline-(--el-accent-on-surface)`                                       |
+| over the hero (panel 2) | unchanged: a ghost button carries no fill at rest, so it lies on the wave field exactly as the nav and Sign in do                                                                                                                    |
+
+### The open list (panels 3, 4, 6)
+
+- **A group of links, not a listbox.** `<div id="language-menu" role="group" aria-label="{nav.language.menuLabel}">`
+  holding eleven `<a>`. Choosing a language is a navigation to a different document, so the
+  entries are ordinary links: they work without JavaScript, open in a new tab, and are crawlable,
+  which is also what the hreflang work (MOTIR-7956) wants from them.
+- **Container** — ProductsMenu's popover vocabulary: `absolute top-[calc(100%+8px)] right-0 z-40`,
+  `rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-1 shadow-(--shadow-elevated)`,
+  `min-w-[13rem]`. **End-aligned** to the trigger, because the trigger sits at the right edge of the
+  bar and a start-aligned list would run off the page at the narrow end of rung B.
+- **Order** — `en zh ja ko de fr es it nl pl pt`, the story's locale order, the same on every page.
+  Not alphabetised by endonym: an order that changes with the reader's language is an order nobody
+  learns.
+- **Row** — `grid grid-cols-[minmax(0,1fr)_16px] gap-3 rounded-(--radius-control) px-(--spacing-control-x) py-(--spacing-control-y) text-[15px]`,
+  hover `bg-(--el-surface-soft)`, focus-visible `outline-2 outline-(--el-accent-on-surface)`.
+- **Each entry** carries `lang="<code>"` and `hreflang="<code>"`, and its text is that language's
+  endonym in its own script. `lang` is what makes the system pick regional glyph forms for 中文 vs
+  日本語 vs 한국어 on a page whose own font set does not cover them.
+- **The current language** — `aria-current="true"`, `font-semibold text-(--el-accent-on-surface)` and
+  a trailing `Check` in `--el-accent-on-surface` (`aria-hidden`). Weight + accent ink is the bar's own
+  current-item pairing (_The nav entry_ above), so the list does not invent a second one; the check is
+  there because the list is read in isolation, away from the nav that teaches the pairing.
+- **Behaviour** — opens on click / Enter / Space; Escape closes it and returns focus to the trigger;
+  a pointerdown outside closes it — ProductsMenu's own rules, so the two popovers in one bar behave
+  alike. Tab moves through the links in order (panel 3, right).
+
+### Where each entry points
+
+| where the reader is                                                    | the entry for `<code>` points at                                                                                                                      | how it takes effect                                           |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| motir.co, any page                                                     | the SAME page with the locale prefix swapped: English unprefixed, every other locale under `/<code>` (e.g. `https://motir.co/de/products/ai-planner`) | the address IS the language (MOTIR-7948's `as-needed` prefix) |
+| a public-project host (`acme.motir.site`, a customer domain — panel 6) | the SAME path, no prefix: the address keeps its shape                                                                                                 | the remembered-choice cookie, read by `proxy.ts` (MOTIR-7951) |
+
+**Every choice also remembers itself.** A visitor who picks Deutsch and later types the bare
+`motir.co` should land in German, so a choice writes the locale cookie MOTIR-7951 reads. On motir.co
+the link alone is enough to show the right page; on a tenant host it is the ONLY signal. **Flagged
+for MOTIR-7953:** to keep the tenant entries working without JavaScript, point them at a small
+route handler that sets the cookie and redirects back to the same path, rather than relying on an
+`onClick` that sets it — the mock draws the destination, not that mechanism.
+
+### When the bar runs out of room — the give-way ladder (panel 1)
+
+The bar already holds more than it has room for between the md breakpoint and the widest desktop,
+and German and Japanese run longer than English. So instead of fixed breakpoints the bar has a
+**ladder**, always climbed down in the same order, and the width at which each rung starts is
+**measured per locale**:
+
+| rung  | what the bar shows                                                                            |
+| ----- | --------------------------------------------------------------------------------------------- |
+| **A** | brand · nav · Copy setup prompt · language trigger · Sign in · Start free                     |
+| **B** | Copy setup prompt leaves — it is also in the hero and on the docs pages                       |
+| **D** | brand · Start free · Menu. The nav, Sign in and the language control fold into the Menu panel |
+
+**Measured** (Playwright chromium on the mock, Space Grotesk / JetBrains Mono / Noto Sans JP loaded,
+the bar's `--spacing-card-padding` both sides). Each number is the narrowest viewport at which the
+rung fits without overflow:
+
+| locale                    | A from | B from | D below |
+| ------------------------- | ------ | ------ | ------- |
+| English                   | 1442px | 1226px | 1226px  |
+| Deutsch                   | 1646px | 1401px | 1401px  |
+| 日本語 (placeholder copy) | 1559px | 1244px | 1244px  |
+
+- **There is no rung C.** Dropping the endonym to a two-letter code bought 35–44px in all three
+  locales — too little to be worth a third state, and a code reads worse than a name. The trigger
+  shows the endonym whenever it is in the bar.
+- **Start free never leaves** and **Sign in leaves only with the nav**: the conversion action stays
+  on screen at every width, and Sign in is always one tap away in the Menu panel.
+- **The ladder also fixes a defect the bar has today.** Measured without the switcher, the shipped
+  English bar needs 1043px of content from the md breakpoint (768px) up, and 1260px once Copy setup
+  prompt joins at xl — so it overflows between 768px and ~1100px, and between 1280px and ~1316px.
+  Rung D below the measured width replaces the `md:` / `xl:` breakpoints, which is what removes it.
+- **For MOTIR-7953 (the mechanism):** the per-locale widths live beside the locale list as data
+  (`{ en: { a: 1442, b: 1226 }, … }`) and are applied as **static** class strings per locale
+  (`min-[1442px]:inline-flex`, …) so Tailwind can see them. A test renders the bar per locale with
+  each catalogue's real copy and fails when a stored width no longer matches the measurement — a
+  translator who lengthens a label then gets a red check, not a wrapped bar. The numbers above are a
+  starting point measured on placeholder German and Japanese copy; the catalogue cards replace them.
+
+### The Menu panel's language section (panel 5)
+
+`#site-menu` gains a section after Sign in, so it is the last thing in the panel and does not push
+the products or nav down:
+
+- `<section aria-labelledby="site-menu-language">`, separated by `border-t border-(--el-border) pt-3 mt-1`.
+- **Heading** — `<h2>` with the Languages glyph and `nav.language.heading` → **"Language"**, in the
+  products menu's group-label style: `font-(family-name:--font-mono) text-[11px] tracking-[0.1em] uppercase text-(--el-text-secondary)`.
+- **List** — `<ul>` in **two columns** (`grid-cols-2 gap-x-3 gap-y-1`), the same eleven links in the
+  same order, with the same `lang` / `hreflang`. Two columns keep the section to six rows at 390px.
+- **Row** — `rounded-(--radius-control) px-(--spacing-control-x) py-(--spacing-control-y) text-[16px]`.
+  **The current entry** takes `bg-(--el-surface-soft) font-semibold text-(--el-accent-on-surface)` + the
+  check: the panel is a long list, and a fill finds the current row faster than ink alone.
+- The panel's own comment calls it a declared rung-1 fill; adding a section does not change that.
+
+### Copy
+
+| key (`messages/<locale>.json`) | English              | used by                          |
+| ------------------------------ | -------------------- | -------------------------------- |
+| `nav.language.label`           | Language: {language} | the trigger's `aria-label`       |
+| `nav.language.menuLabel`       | Choose a language    | the open list's `aria-label`     |
+| `nav.language.heading`         | Language             | the Menu panel's section heading |
+
+**The endonyms are not catalogue strings.** English, 中文, 日本語, 한국어, Deutsch, Français, Español,
+Italiano, Nederlands, Polski, Português are the same on every page, so they live in a constant beside
+the locale list, not in eleven catalogues. German and Japanese nav copy in the mock is a placeholder
+that shows the length problem; the catalogue cards own the real wording.
+
+### Script and fonts
+
+On a page in a Latin locale the CJK endonyms in the list fall outside the loaded font set and render
+in the reader's system fallback. That is accepted: they are eleven short words, the `lang` on each
+entry makes the system choose the right regional forms, and loading three CJK fonts on every English
+page to draw three words is the wrong trade. On a CJK page the page's own font (MOTIR-7952) covers its
+own endonym, and the Latin endonyms fall back to the grotesk.
+
+### Out of scope
+
+- The locale routing, detection, fonts, catalogues and hreflang are their own cards (MOTIR-7948,
+  7951, 7952, 7949/7950, 7956). This asset draws the control and where its entries point.
+- No footer switcher. One control, in one place, keeps one current-language truth on the page.
