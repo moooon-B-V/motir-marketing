@@ -62,7 +62,12 @@ const nextConfig: NextConfig = {
    * to a metadata route (`/opengraph-image-1br99b`).
    */
   outputFileTracingIncludes: {
-    '/opengraph-image': ['./node_modules/@motir/brand/fonts/**'],
+    // MOTIR-7972: the card moved under the locale tree and draws CJK from the
+    // committed subsets beside `ogFonts.ts`.
+    '/[locale]/opengraph-image': [
+      './node_modules/@motir/brand/fonts/**',
+      './app/_brand/og-fonts/**',
+    ],
   },
 }
 

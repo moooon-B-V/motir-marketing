@@ -91,14 +91,36 @@ const { notFound: NOT_FOUND_PATH, unavailable: UNAVAILABLE_PATH } = ROUTER_PATHS
 const intlMiddleware = createIntlMiddleware(routing)
 
 /**
- * A ROOT metadata route whose address carries no dot — `/opengraph-image`
- * (Next may append a content hash: `/opengraph-image-1br99b`), `/icon`,
- * `/apple-icon`, `/twitter-image`. They are files at `app/`'s root, outside
- * every locale's tree, so the locale router must not prefix them: under
- * `/en/opengraph-image` the landing's `og:image` would 404.
+ * A ROOT metadata route whose address carries no dot — `/icon`, `/apple-icon`,
+ * `/twitter-image` (Next may append a content hash: `/icon-1br99b`). They are
+ * files at `app/`'s root, outside every locale's tree, so the locale router
+ * must not prefix them: under `/en/icon` they would 404.
  */
 const ROOT_METADATA_ROUTE =
-  /^\/(opengraph-image|twitter-image|icon|apple-icon)(-[A-Za-z0-9]+)?$/
+  /^\/(twitter-image|icon|apple-icon)(-[A-Za-z0-9]+)?$/
+
+/**
+ * THE LANDING'S SHARE IMAGE, which lives INSIDE the locale tree (MOTIR-7972):
+ * `app/[locale]/opengraph-image.tsx` answers `/<locale>/opengraph-image`.
+ * A share image has no language to choose — crawlers send no cookie, and a
+ * redirect would cost the unfurl — so neither form is ever detected or
+ * redirected: the unprefixed English one is REWRITTEN onto `/en/…`, and a
+ * prefixed one is served as it is, never through next-intl (whose `as-needed`
+ * prefix would bounce `/en/…`).
+ */
+const OG_IMAGE_ROUTE = /^\/opengraph-image(-[A-Za-z0-9]+)?$/
+
+/** `/opengraph-image` or `/ja/opengraph-image` → the path after the locale. */
+function ogImagePath(pathname: string): { prefixed: boolean } | null {
+  if (OG_IMAGE_ROUTE.test(pathname)) return { prefixed: false }
+  const [, first = '', ...rest] = pathname.split('/')
+  if (
+    (LOCALES as readonly string[]).includes(first) &&
+    OG_IMAGE_ROUTE.test(`/${rest.join('/')}`)
+  )
+    return { prefixed: true }
+  return null
+}
 
 /** A site path the locale router leaves alone — a file or a root metadata route. */
 function outsideLocaleTree(pathname: string): boolean {
@@ -285,6 +307,13 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // rewrite coming back around (see `inDefaultLocaleTree`), never a choice.
   if (!host || isSiteHost(host)) {
     const { pathname } = request.nextUrl
+    const ogImage = ogImagePath(pathname)
+    if (ogImage?.prefixed) return NextResponse.next()
+    if (ogImage) {
+      const english = request.nextUrl.clone()
+      english.pathname = `/${DEFAULT_LOCALE}${pathname}`
+      return NextResponse.rewrite(english)
+    }
     if (outsideLocaleTree(pathname) || inDefaultLocaleTree(pathname))
       return NextResponse.next()
     if (hasLocalePrefix(pathname)) return intlMiddleware(request)

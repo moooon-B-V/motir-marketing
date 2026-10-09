@@ -39,12 +39,17 @@ export function languageAlternates(path: string): Record<string, string> {
 
 /**
  * The share card, named on every page that sets `openGraph`: a child
- * `openGraph` REPLACES its parent's whole, and the root's file-based image
- * goes with it (measured in MOTIR-7948; `siteMetadata.ts` has the note).
+ * `openGraph` REPLACES its parent's whole, and the file-based image goes with
+ * it (measured in MOTIR-7948; `siteMetadata.ts` has the note).
+ *
+ * ⚠️ THE CARD IS THE PAGE'S OWN LOCALE'S (MOTIR-7972): `app/[locale]/opengraph-image.tsx`
+ * answers `/<locale>/opengraph-image`, English unprefixed — the proxy
+ * rewrites that one onto `/en/…` without detection, so the URL advertised here
+ * answers 200 as written.
  */
-export function siteCard(alt: string) {
+export function siteCard(locale: Locale, alt: string) {
   return {
-    url: '/opengraph-image',
+    url: localizedPath(locale, '/opengraph-image'),
     width: 1200,
     height: 630,
     type: 'image/png',
@@ -91,7 +96,7 @@ export function localeMetadata({
   extra = {},
 }: LocaleMetadataInput): Metadata {
   const url = siteUrl(localizedPath(locale, path))
-  const card = siteCard(copy.meta.title)
+  const card = siteCard(locale, copy.meta.title)
   return {
     title,
     description,

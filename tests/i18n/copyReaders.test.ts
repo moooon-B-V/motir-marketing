@@ -19,10 +19,9 @@ import { CLIENT_COPY_NAMESPACES } from '@/lib/copy'
  * removes its line; the second test fails if a line outlives its import.
  */
 const ENGLISH_ON_PURPOSE: Record<string, string> = {
-  // MOTIR-7956 localised every page's metadata, the JSON-LD and the sitemap;
-  // these two are what remains, each for a reason that is not "not yet".
-  'app/opengraph-image.tsx':
-    'the share image is rendered once, not per locale — a per-locale image needs CJK faces in the renderer (MOTIR-7972)',
+  // MOTIR-7956 localised every page's metadata, the JSON-LD and the sitemap,
+  // and MOTIR-7972 the share image; this is what remains, for a reason that is
+  // not "not yet".
   'app/not-found.tsx':
     'the global 404 reads no request, so it cannot know the locale; each locale’s room is `app/[locale]/not-found.tsx` (MOTIR-7955)',
 }

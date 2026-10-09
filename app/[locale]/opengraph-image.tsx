@@ -4,14 +4,22 @@ import {
   WAVE_BAND_PATH,
   WAVE_BAND_VIEW_BOX,
 } from '@motir/brand'
-import { englishCopy as copy } from '@/lib/copy'
-import { loadOgFonts, OG_FONT_FAMILY } from './_brand/ogFonts'
-import { OG_TEXT_HEX, OG_TEXT_SECONDARY_HEX, OG_WASH } from './_brand/ogColours'
+import { getCopy } from '@/lib/copy'
+import { hasLocale } from 'next-intl'
+import { routing, type Locale } from '@/i18n/routing'
+import { loadOgFonts, ogFontFamily } from '../_brand/ogFonts'
+import {
+  OG_TEXT_HEX,
+  OG_TEXT_SECONDARY_HEX,
+  OG_WASH,
+} from '../_brand/ogColours'
 
 /*
- * motir.co's root social card (MOTIR-1154 · 8.3.7).
+ * motir.co's landing social card (MOTIR-1154 · 8.3.7), one per locale
+ * (MOTIR-7972).
  *
- * ⚠️ IT LIVES BESIDE THE PAGE IT DECORATES, AT `app/`, AND MUST STAY THERE. A
+ * ⚠️ IT LIVES BESIDE THE PAGE IT DECORATES, `app/[locale]/page.tsx`, AND MUST
+ * STAY THERE. A
  * metadata image file is resolved for the page in its OWN segment and is NOT
  * inherited — motir-core lost every `og:image` tag from `/explore` by leaving
  * one behind when its `page.tsx` moved into a route group (MOTIR-3491), while
@@ -46,17 +54,53 @@ import { OG_TEXT_HEX, OG_TEXT_SECONDARY_HEX, OG_WASH } from './_brand/ogColours'
  */
 
 export const runtime = 'nodejs'
+
+/*
+ * ⚠️ ONE CARD PER LOCALE, IN THAT LOCALE'S WORDS (MOTIR-7972). The words are
+ * the catalogue's, through `getCopy`, so a key a catalogue lacks renders in
+ * English rather than as a raw key. A `zh` / `ja` / `ko` card draws its Han,
+ * kana and Hangul from the subset faces `loadOgFonts(locale)` adds, which are
+ * cut from exactly these three strings (`pnpm brand:og-fonts`;
+ * `tests/ogFonts.test.ts` fails when a catalogue edit leaves a glyph out).
+ *
+ * The card is generated at BUILD time for each of the eleven locales the
+ * layout's `generateStaticParams` names: nothing below reads the request, and
+ * nothing fetches. A fallback font fetched at render would be a face this site
+ * did not choose, so `tests/og/localeShareImage.test.ts` spies on `fetch`.
+ */
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-/*
- * §6: "`export const alt` … is the only accessible name a social embed gets."
- * The meta title is that sentence already, and it carries the three pillars.
- */
-export const alt = copy.meta.title
+function ogLocale(locale: string | undefined): Locale {
+  return hasLocale(routing.locales, locale) ? locale : routing.defaultLocale
+}
 
-export default async function RootOpengraphImage() {
-  const fonts = await loadOgFonts()
+/*
+ * ⚠️ THE ROUTE NAMES THE ELEVEN ITSELF. An image file is a ROUTE HANDLER, and
+ * a route handler does not inherit the layout's `generateStaticParams` — so
+ * without this the route is `●` in the table and prerenders nothing, rendering
+ * each card on its first request instead. Measured on `next build`: the
+ * prerender manifest listed no path for it until this was added.
+ *
+ * ⚠️ AND SO NO `generateImageMetadata`, which is how a per-locale `alt` would
+ * otherwise be declared. Next's loader answers that export with a
+ * `generateStaticParams` of its own (one per image id) and drops this one, and
+ * the two cannot both be exported. The per-locale `alt` is set where the card
+ * is ADVERTISED instead — `siteCard(locale, copy.meta.title)` in
+ * `lib/localeMetadata.ts`, which every page's `openGraph.images` carries.
+ */
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
+
+export default async function LocaleOpengraphImage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const locale = ogLocale((await params).locale)
+  const copy = await getCopy(locale)
+  const fonts = await loadOgFonts(locale)
   return new ImageResponse(
     <div
       style={{
@@ -68,7 +112,7 @@ export default async function RootOpengraphImage() {
         padding: '80px',
         // --color-tint-lavender → --color-tint-sky.
         background: OG_WASH,
-        fontFamily: OG_FONT_FAMILY,
+        fontFamily: ogFontFamily(locale),
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>

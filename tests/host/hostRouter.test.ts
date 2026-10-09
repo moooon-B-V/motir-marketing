@@ -497,7 +497,6 @@ describe('the first-visit language', () => {
       '/motir-mark.svg',
       '/robots.txt',
       '/sitemap.xml',
-      '/opengraph-image',
       '/icon',
     ]) {
       const res = await ask(`https://motir.co${path}`, {
@@ -506,6 +505,23 @@ describe('the first-visit language', () => {
       expect(res.headers.get('location'), path).toBeNull()
       expect(res.headers.get('x-middleware-next'), path).toBe('1')
     }
+  })
+
+  it('serves the share card under the locale tree, never redirected (MOTIR-7972)', async () => {
+    // Crawlers send no cookie; a redirect would cost the unfurl. The English
+    // card's unprefixed address is rewritten onto `/en/…`; a prefixed one
+    // passes straight through.
+    const english = await ask('https://motir.co/opengraph-image', {
+      'accept-language': 'ja',
+    })
+    expect(english.headers.get('location')).toBeNull()
+    expect(rewriteOf(english)).toBe('/en/opengraph-image')
+    const ja = await ask('https://motir.co/ja/opengraph-image', {
+      'accept-language': 'ja',
+    })
+    expect(ja.headers.get('location')).toBeNull()
+    expect(rewriteOf(ja)).toBeNull()
+    expect(ja.headers.get('x-middleware-next')).toBe('1')
   })
 
   it('rewrites a workspace host onto the chosen tree, address unchanged', async () => {

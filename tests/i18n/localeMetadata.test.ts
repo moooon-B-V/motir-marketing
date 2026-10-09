@@ -68,9 +68,10 @@ describe('the helper', () => {
     expect(og.alternateLocale).toHaveLength(10)
     expect(og.alternateLocale).not.toContain(OG_LOCALE.ja)
     expect(og.url).toBe(siteUrl('/ja/design'))
-    // A child `openGraph` replaces the root's, so the share card is named.
+    // A child `openGraph` replaces the root's, so the share card is named —
+    // the page's own locale's card (MOTIR-7972).
     expect(og.images).toEqual([
-      expect.objectContaining({ url: '/opengraph-image' }),
+      expect.objectContaining({ url: '/ja/opengraph-image' }),
     ])
   })
 })
@@ -81,7 +82,7 @@ describe('the landing reads its words from the locale’s catalogue', () => {
     vi.resetModules()
   })
 
-  it('a translated title under ja; English under de, which has no catalogue', async () => {
+  it('a mocked title under ja; de’s own catalogue title under de', async () => {
     vi.resetModules()
     vi.doMock('@/lib/copy', async (importOriginal) => {
       const actual = await importOriginal<typeof import('@/lib/copy')>()
@@ -105,7 +106,11 @@ describe('the landing reads its words from the locale’s catalogue', () => {
     const de = await generateMetadata({
       params: Promise.resolve({ locale: 'de' }),
     })
-    expect(de.title).toBe(englishCopy.meta.title)
+    // de's catalogue shipped (MOTIR-7960), so the real reader serves its title.
+    expect(de.title).toBe(
+      (await import('@/messages/de.json')).default.meta.title,
+    )
+    expect(de.title).not.toBe(englishCopy.meta.title)
     expect(canonicalOf(de)).toBe(siteUrl('/de'))
   })
 })

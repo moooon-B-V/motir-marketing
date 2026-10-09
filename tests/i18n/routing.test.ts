@@ -27,8 +27,8 @@ const layout = await import('@/app/[locale]/layout')
 const { proxy } = await import('@/proxy')
 const { NextRequest } = await import('next/server')
 
-const request = (url: string) =>
-  new NextRequest(url, { headers: { host: new URL(url).host } })
+const request = (url: string, headers: Record<string, string> = {}) =>
+  new NextRequest(url, { headers: { host: new URL(url).host, ...headers } })
 
 const rewriteOf = (res: Response) => {
   const to = res.headers.get('x-middleware-rewrite')
@@ -88,12 +88,16 @@ describe('the locale layout', () => {
     })
     expect(en.openGraph).toMatchObject({ locale: 'en_US' })
     // The share card is named, because a child `openGraph` replaces the root
-    // segment's file-based image — measured missing without it.
+    // segment's file-based image — measured missing without it. Each locale
+    // names its OWN card (MOTIR-7972), English unprefixed.
     expect(en.openGraph?.images).toEqual([
       expect.objectContaining({ url: '/opengraph-image' }),
     ])
     expect(en.twitter?.images).toEqual([
       expect.objectContaining({ url: '/opengraph-image' }),
+    ])
+    expect(ja.openGraph?.images).toEqual([
+      expect.objectContaining({ url: '/ja/opengraph-image' }),
     ])
   })
 
@@ -151,18 +155,38 @@ describe('the site host, through the proxy', () => {
   })
 
   it('leaves files and root metadata routes OUTSIDE the locale tree', async () => {
-    // Under `/en/…` each of these would 404 — the logo, the crawl files and
-    // the landing's share card.
+    // Under `/en/…` each of these would 404 — the logo and the crawl files.
     for (const path of [
       '/motir-mark.svg',
       '/robots.txt',
       '/sitemap.xml',
       '/favicon.ico',
       '/icon.svg',
-      '/opengraph-image',
-      '/opengraph-image-1br99b',
+      '/icon',
+      '/icon-1br99b',
     ]) {
       const res = await proxy(request(`https://motir.co${path}`))
+      expect(rewriteOf(res), path).toBeNull()
+      expect(res.headers.get('x-middleware-next'), path).toBe('1')
+    }
+  })
+
+  it('serves the share card from inside the locale tree, never redirecting it (MOTIR-7972)', async () => {
+    // The card lives at `app/[locale]/opengraph-image.tsx`: English's
+    // unprefixed address is REWRITTEN onto `/en/…`, and a prefixed one is
+    // served as it is — never through next-intl, never detected.
+    for (const path of ['/opengraph-image', '/opengraph-image-1br99b']) {
+      const res = await proxy(
+        request(`https://motir.co${path}`, { 'accept-language': 'ja' }),
+      )
+      expect(res.headers.get('location'), path).toBeNull()
+      expect(rewriteOf(res), path).toBe(`/en${path}`)
+    }
+    for (const path of ['/ja/opengraph-image', '/en/opengraph-image']) {
+      const res = await proxy(
+        request(`https://motir.co${path}`, { 'accept-language': 'de' }),
+      )
+      expect(res.headers.get('location'), path).toBeNull()
       expect(rewriteOf(res), path).toBeNull()
       expect(res.headers.get('x-middleware-next'), path).toBe('1')
     }

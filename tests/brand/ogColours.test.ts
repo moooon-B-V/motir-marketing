@@ -114,7 +114,11 @@ describe('every OG ink clears its bar on both ends of the wash', () => {
 })
 
 describe.each([
-  ['the root card', () => import('@/app/opengraph-image'), undefined],
+  [
+    'the landing card',
+    () => import('@/app/[locale]/opengraph-image'),
+    { params: Promise.resolve({ locale: 'en' }) },
+  ],
   [
     'the per-project card',
     () => import('@/app/[locale]/p/[identifier]/opengraph-image'),

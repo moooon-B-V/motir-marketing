@@ -8,7 +8,7 @@ import type { Locale } from '@/i18n/routing'
  * The root metadata. MOTIR-1152 shipped the title and description and left the
  * ENTITY SIGNAL to MOTIR-1154 (8.3.7); this is that card, so the rest of it
  * arrives here — `metadataBase`, the canonical, the OpenGraph / Twitter shape
- * that makes `app/opengraph-image.tsx` render as a large card, and the Search
+ * that makes `app/[locale]/opengraph-image.tsx` render as a large card, and the Search
  * Console meta tag. The JSON-LD graph is a `<script>` rather than metadata and
  * is injected in the tree below.
  *
@@ -46,7 +46,7 @@ import type { Locale } from '@/i18n/routing'
  * through `localeMetadata`; a 404 names none, which is right for a 404.
  */
 export function siteMetadata(locale: Locale, copy: Copy): Metadata {
-  const SITE_CARD = siteCard(copy.meta.title)
+  const SITE_CARD = siteCard(locale, copy.meta.title)
   return {
     metadataBase: new URL(SITE_ORIGIN),
     title: copy.meta.title,

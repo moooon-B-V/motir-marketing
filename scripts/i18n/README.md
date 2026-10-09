@@ -31,6 +31,11 @@ Planner" … "Motir Sandbox") is exactly en.json's, the way localized product UI
 keep a product's name in Latin. `merge` refuses a translated `Motir`; the
 product-name sweep in `tests/copy.test.ts` refuses a localized product name.
 
+After changing `meta.title`, `landing.hero.headline` or `footer.tagline` in
+`zh`, `ja` or `ko`, run `pnpm brand:og-fonts`: the share image draws those
+three strings from font subsets cut to their characters, and
+`tests/ogFonts.test.ts` fails until the subsets are re-cut (MOTIR-7972).
+
 Run `merge` again after fixing what it rejected. A batch can be merged more than
 once, and an entry already merged is not rewritten.
 
