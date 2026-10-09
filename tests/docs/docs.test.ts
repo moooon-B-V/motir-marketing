@@ -424,4 +424,24 @@ describe('the MCP pages name no tools, because nothing here could check them', (
       expect(toolNameLiterals(readFileSync(page, 'utf8'))).toEqual([])
     })
   }
+
+  // MOTIR-8037: the page's prose is a document per language now, so the guard
+  // follows it there. Every `content/docs/mcp/tools/*.md` — the English source and
+  // any translation — is scanned by glob, so a translation that types a tool name
+  // fails exactly as the page source would.
+  const documents = readdirSync('content/docs/mcp/tools').filter((name) =>
+    name.endsWith('.md'),
+  )
+  it('finds the mcp/tools documents it is meant to scan', () => {
+    expect(documents).toContain('en.md')
+  })
+  for (const name of documents) {
+    it(`names no tool in content/docs/mcp/tools/${name}`, () => {
+      expect(
+        toolNameLiterals(
+          readFileSync(`content/docs/mcp/tools/${name}`, 'utf8'),
+        ),
+      ).toEqual([])
+    })
+  }
 })

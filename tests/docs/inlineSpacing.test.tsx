@@ -11,6 +11,8 @@ import DifficultyPage from '@/app/[locale]/docs/(guides)/difficulty/page'
 import SkillsPage from '@/app/[locale]/docs/(guides)/skills/page'
 import ClaudeCodePluginPage from '@/app/[locale]/docs/(guides)/claude-code-plugin/page'
 import ClaudeCodeConnectorPage from '@/app/[locale]/docs/(guides)/claude-code-connector/page'
+import ApiReferencePage from '@/app/[locale]/docs/api/page'
+import McpToolsPage from '@/app/[locale]/docs/(guides)/mcp/tools/page'
 import GettingStartedPage from '@/app/[locale]/docs/api/getting-started/page'
 import StabilityPage from '@/app/[locale]/docs/api/stability/page'
 import { EN_PAGE } from '@/tests/helpers/locale'
@@ -182,15 +184,37 @@ describe('no /docs page runs a word into the element before it', async () => {
         ).container,
     ],
     [
+      '/docs/api',
+      async () => {
+        stub(specFixture)
+        return render(
+          (await resolveAsync(await ApiReferencePage(EN_PAGE))) as never,
+        ).container
+      },
+    ],
+    [
+      '/docs/mcp/tools',
+      async () => {
+        stub(catalogueFixture)
+        return render(
+          (await resolveAsync(await McpToolsPage(EN_PAGE))) as never,
+        ).container
+      },
+    ],
+    [
       '/docs/api/getting-started',
       async () => {
         stub(specFixture)
-        return render(await GettingStartedPage(EN_PAGE)).container
+        return render(
+          (await resolveAsync(await GettingStartedPage(EN_PAGE))) as never,
+        ).container
       },
     ],
     [
       '/docs/api/stability',
-      async () => render(await StabilityPage(EN_PAGE)).container,
+      async () =>
+        render((await resolveAsync(await StabilityPage(EN_PAGE))) as never)
+          .container,
     ],
   ]
 

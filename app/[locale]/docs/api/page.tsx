@@ -8,8 +8,9 @@ import {
   type ApiOperation,
 } from '@/lib/docs'
 import { APP_ORIGIN } from '@/lib/appOrigin'
-import { getCopy, useCopy } from '@/lib/copy'
+import { formatIcu, getCopy, useCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { DocsDocument } from '../_components/DocsDocument'
 import {
   CodeBlock,
   MethodPill,
@@ -207,18 +208,20 @@ function successSchema(operation: ApiOperation) {
 export default async function ApiReferencePage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)
   const copy = await getCopy(locale)
+  const heading = (
+    <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
+      {copy.docs.api}
+    </h1>
+  )
   let spec
   try {
     spec = await fetchOpenApiSpec()
   } catch {
     return (
       <>
-        <h1 className="font-(family-name:--font-serif) text-[30px] font-bold text-(--el-text)">
-          {copy.docs.api}
-        </h1>
+        {heading}
         <p className="mt-4 text-[14px] text-(--el-text-secondary)">
-          The API reference is temporarily unreachable. Please try again in a
-          moment.
+          {copy.docs.apiUnreachable}
         </p>
       </>
     )
@@ -228,37 +231,48 @@ export default async function ApiReferencePage({ params }: LocalePageProps) {
 
   return (
     <>
-      <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
-        {copy.docs.api}
-      </h1>
-      <p className="mt-2 text-[13px] text-(--el-text-secondary)">
-        {spec.info.title} · version {spec.info.version} · {operations.length}{' '}
-        operations ·{' '}
-        {/* ⚠️ THE DOCUMENT ITSELF, RESTORED (MOTIR-4429). The deleted
-            motir-core page linked the spec path beside this line; the move
-            dropped it, so a reader who wanted to point a code generator at the
-            contract had to guess its URL. It is built from the ONE configured
-            origin, like every other door out of this repository. */}
-        <a
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-          href={`${APP_ORIGIN}/api/openapi/v1.json`}
-          rel="noreferrer noopener"
-        >
-          /api/openapi/v1.json
-        </a>
-      </p>
-      <p className="mt-4 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        {copy.docs.apiIntro}
-      </p>
-
-      <div className="mt-2 flex flex-col">
-        {operations.map((operation) => (
-          <Operation
-            key={`${operation.method} ${operation.path}`}
-            operation={operation}
-          />
-        ))}
-      </div>
+      {heading}
+      <DocsDocument
+        slug="api"
+        locale={locale}
+        slots={{
+          'spec-summary': (
+            <p className="mt-2 text-[13px] text-(--el-text-secondary)">
+              {formatIcu(locale, copy.docs.apiSpecSummary, {
+                title: spec.info.title,
+                version: spec.info.version,
+                count: operations.length,
+                path: '/api/openapi/v1.json',
+                /* ⚠️ THE DOCUMENT ITSELF, RESTORED (MOTIR-4429). The deleted
+                   motir-core page linked the spec path beside this line; the
+                   move dropped it, so a reader who wanted to point a code
+                   generator at the contract had to guess its URL. It is built
+                   from the ONE configured origin, like every other door out of
+                   this repository. */
+                link: (chunks) => (
+                  <a
+                    className="text-(--el-accent-on-surface) underline underline-offset-2"
+                    href={`${APP_ORIGIN}/api/openapi/v1.json`}
+                    rel="noreferrer noopener"
+                  >
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </p>
+          ),
+          operations: (
+            <div className="mt-2 flex flex-col">
+              {operations.map((operation) => (
+                <Operation
+                  key={`${operation.method} ${operation.path}`}
+                  operation={operation}
+                />
+              ))}
+            </div>
+          ),
+        }}
+      />
     </>
   )
 }

@@ -1,7 +1,6 @@
-import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import type { ReactNode } from 'react'
 import {
   countCatalogueTools,
   describeSchema,
@@ -11,8 +10,15 @@ import {
   type McpToolEntry,
   type McpToolHint,
 } from '@/lib/docs'
-import { getCopy, useCopy, type Copy } from '@/lib/copy'
+import {
+  formatIcu,
+  getCopy,
+  useCopy,
+  usePageLocale,
+  type Copy,
+} from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { DocsDocument } from '../../../_components/DocsDocument'
 import { SchemaTable } from '../../../_components/DocSchema'
 
 /*
@@ -81,14 +87,19 @@ export function generateMetadata({
   }))
 }
 
+/** The inline code tag a catalogue sentence wraps a literal in. */
+const codeTag = (chunks: ReactNode) => (
+  <code className="font-(family-name:--font-mono)">{chunks}</code>
+)
+
 /** How deep the argument tables render — stated, as the producer states what it emits. */
 function ToolArguments({ tool }: { tool: McpToolEntry }) {
+  const copy = useCopy()
+  const locale = usePageLocale()
   if (!tool.inputSchema) {
     return (
       <p className="mt-2 text-[13px] text-(--el-text-secondary)">
-        This Motir version does not publish this tool&apos;s arguments. A{' '}
-        <code className="font-(family-name:--font-mono)">tools/list</code>{' '}
-        handshake against the endpoint carries them.
+        {formatIcu(locale, copy.docs.mcpArgsUnpublished, { code: codeTag })}
       </p>
     )
   }
@@ -97,7 +108,7 @@ function ToolArguments({ tool }: { tool: McpToolEntry }) {
   if (fields.length === 0) {
     return (
       <p className="mt-2 text-[13px] text-(--el-text-secondary)">
-        Takes no arguments.
+        {copy.docs.mcpNoArguments}
       </p>
     )
   }
@@ -160,23 +171,26 @@ function ToolHead({ tool }: { tool: McpToolEntry }) {
 export default async function McpToolsPage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)
   const copy = await getCopy(locale)
+  const heading = (
+    <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
+      {copy.docs.mcpTools}
+    </h1>
+  )
   let catalogue: McpToolCatalogue
   try {
     catalogue = await fetchMcpToolCatalogue()
   } catch {
     return (
       <>
-        <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
-          {copy.docs.mcpTools}
-        </h1>
+        {heading}
         <p className="mt-4 text-[14px] text-(--el-text-secondary)">
-          The tool catalogue is temporarily unreachable. The list this page
-          renders is published by Motir itself and is never copied here, so
-          there is nothing to show you in the meantime — open a{' '}
-          <code className="rounded-(--radius-kbd) bg-(--el-muted) px-1.5 py-0.5 font-(family-name:--font-mono) text-[13px]">
-            tools/list
-          </code>{' '}
-          handshake against the endpoint, or try again in a moment.
+          {formatIcu(locale, copy.docs.mcpToolsUnreachable, {
+            code: (chunks) => (
+              <code className="rounded-(--radius-kbd) bg-(--el-muted) px-1.5 py-0.5 font-(family-name:--font-mono) text-[13px]">
+                {chunks}
+              </code>
+            ),
+          })}
         </p>
       </>
     )
@@ -186,81 +200,57 @@ export default async function McpToolsPage({ params }: LocalePageProps) {
 
   return (
     <>
-      <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
-        {copy.docs.mcpTools}
-      </h1>
-      <p className="mt-2 text-[13px] text-(--el-text-secondary)">
-        {total} tools at{' '}
-        <code className="font-(family-name:--font-mono)">
-          {catalogue.endpoint}
-        </code>
-        , grouped by the permission that gates them
-      </p>
-      <p className="mt-4 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        This list is fetched from Motir when the page is requested, so it is
-        whatever the server ships right now. Each tool shows the arguments it
-        takes — their names, their types and which are required — read from the
-        same registry that answers a{' '}
-        <code className="rounded-(--radius-kbd) bg-(--el-muted) px-1.5 py-0.5 font-(family-name:--font-mono) text-[13px]">
-          tools/list
-        </code>{' '}
-        handshake against{' '}
-        <code className="rounded-(--radius-kbd) bg-(--el-muted) px-1.5 py-0.5 font-(family-name:--font-mono) text-[13px]">
-          {catalogue.endpoint}
-        </code>
-        , which is still the authoritative surface and carries each tool&apos;s
-        full description. Which of these a given token may call depends on the
-        grant it carries, so the list your client shows is already scoped to
-        you.
-      </p>
-      <p className="mt-3 max-w-[68ch] text-[14px] leading-[1.9] text-(--el-text-secondary)">
-        {copy.docs.mcpHintLedeIntro} <HintChip hint="reads" />{' '}
-        {copy.docs.mcpHintReadsMeans} <HintChip hint="writes" />{' '}
-        {copy.docs.mcpHintWritesMeans} <HintChip hint="destructive" />{' '}
-        {copy.docs.mcpHintDestructiveMeans} {copy.docs.mcpHintLedeClaude}
-      </p>
-      <p className="mt-3 max-w-[68ch] text-[13px] leading-relaxed text-(--el-text-secondary)">
-        Argument tables render one level: a nested object or a list shows its
-        type, and the handshake carries the shape inside it.
-      </p>
-
-      {catalogue.groups.map((group) => (
-        <section key={group.permission} className="mt-8">
-          <h2 className="font-(family-name:--font-serif) text-lg font-semibold text-(--el-text)">
-            {group.label}
-          </h2>
-          <p className="mt-1 max-w-[40rem] text-[13px] text-(--el-text-secondary)">
-            {group.gates}
-            {group.grantedByDefault ? ' · granted by default' : ''}
-          </p>
-          <ul className="mt-3 flex flex-col divide-y divide-(--el-border) border-y border-(--el-border)">
-            {group.tools.map((tool) => (
-              <li key={tool.name} className="py-4">
-                <ToolHead tool={tool} />
-                <p className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
-                  {tool.summary}
-                </p>
-                {toolHint(tool) === 'unpublished' ? (
-                  <p className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
-                    {copy.docs.mcpHintsUnpublished}
-                  </p>
-                ) : null}
-                <ToolArguments tool={tool} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-
-      <p className="mt-8 text-[14px] text-(--el-text-secondary)">
-        <Link
-          href={localizedPath(locale, '/docs/mcp')}
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.mcp}
-        </Link>{' '}
-        covers wiring an agent to the endpoint and the token it needs.
-      </p>
+      {heading}
+      <DocsDocument
+        slug="mcp/tools"
+        locale={locale}
+        slots={{
+          'catalogue-summary': (
+            <p className="mt-2 text-[13px] text-(--el-text-secondary)">
+              {formatIcu(locale, copy.docs.mcpToolsSummary, {
+                count: total,
+                endpoint: catalogue.endpoint,
+                code: codeTag,
+              })}
+            </p>
+          ),
+          'hint-legend': (
+            <p className="mt-3 max-w-[68ch] text-[14px] leading-[1.9] text-(--el-text-secondary)">
+              {copy.docs.mcpHintLedeIntro} <HintChip hint="reads" />{' '}
+              {copy.docs.mcpHintReadsMeans} <HintChip hint="writes" />{' '}
+              {copy.docs.mcpHintWritesMeans} <HintChip hint="destructive" />{' '}
+              {copy.docs.mcpHintDestructiveMeans} {copy.docs.mcpHintLedeClaude}
+            </p>
+          ),
+          catalogue: catalogue.groups.map((group) => (
+            <section key={group.permission} className="mt-8">
+              <h2 className="font-(family-name:--font-serif) text-lg font-semibold text-(--el-text)">
+                {group.label}
+              </h2>
+              <p className="mt-1 max-w-[40rem] text-[13px] text-(--el-text-secondary)">
+                {group.gates}
+                {group.grantedByDefault ? copy.docs.mcpGrantedByDefault : ''}
+              </p>
+              <ul className="mt-3 flex flex-col divide-y divide-(--el-border) border-y border-(--el-border)">
+                {group.tools.map((tool) => (
+                  <li key={tool.name} className="py-4">
+                    <ToolHead tool={tool} />
+                    <p className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
+                      {tool.summary}
+                    </p>
+                    {toolHint(tool) === 'unpublished' ? (
+                      <p className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
+                        {copy.docs.mcpHintsUnpublished}
+                      </p>
+                    ) : null}
+                    <ToolArguments tool={tool} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )),
+        }}
+      />
     </>
   )
 }

@@ -12,6 +12,10 @@ export async function resolveAsync(node: ReactNode): Promise<ReactNode> {
   if (!isValidElement(node)) return node
   const element = node as React.ReactElement<{ children?: ReactNode }>
   if (typeof element.type === 'function') {
+    // A synchronous component is left for React to render: calling it here, outside
+    // a render, would break any that reads a hook (`useCopy`) — a slot node such as
+    // an operation section. Only an async Server Component needs resolving.
+    if (element.type.constructor.name !== 'AsyncFunction') return element
     const out = (element.type as (props: unknown) => unknown)(element.props)
     if (out instanceof Promise) return resolveAsync((await out) as ReactNode)
     return element

@@ -5,6 +5,7 @@ import { render } from '@/tests/helpers/withCopy'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { EN_PAGE } from '@/tests/helpers/locale'
+import { resolveAsync } from '@/tests/helpers/resolveAsync'
 
 /*
  * THE TERMINOLOGY SWEEP, ON THE RENDER (MOTIR-4508).
@@ -247,7 +248,13 @@ async function renderRoute(
   load: () => Promise<PageModule>,
 ): Promise<{ text: string; spaced: string }> {
   const Page = (await load()).default
-  const { container } = render((await Page(EN_PAGE)) as React.ReactElement)
+  // An async Server Component (a page that renders `<DocsDocument/>`) is resolved
+  // first, or this reads an empty page and the check passes for free.
+  const { container } = render(
+    (await resolveAsync(
+      (await Page(EN_PAGE)) as React.ReactNode,
+    )) as React.ReactElement,
+  )
   return {
     text: container.textContent ?? '',
     spaced: spacedText(container.innerHTML),
