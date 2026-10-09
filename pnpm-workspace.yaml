@@ -84,5 +84,5 @@ allowBuilds:
 # 2026-10-07T08:36Z, minutes before this install. The 0.2.0 and 0.8.2 lines
 # match nothing once the pins move, so they were deleted.
 minimumReleaseAgeExclude:
-  - '@motir/brand@0.4.1'
-  - '@motir/design-system@0.10.0'
+  - '@motir/brand@0.4.4'
+  - '@motir/design-system@0.13.0'
