@@ -1,10 +1,18 @@
 // Ported from moooon-B-V/motir-core `scripts/i18n/sourceRecord.ts` at
 // 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949). Kept in step with that
-// file, with one difference: a catalogue or a record is written through
+// file, with two differences. A catalogue or a record is written through
 // prettier (`writeFormattedJson`), because this repository's `format:check`
 // runs over `messages/` and JSON.stringify's layout is not prettier's — an
 // array of short strings is one line to prettier and one line per element to
 // JSON.stringify. Batch files stay plain: `.i18n-work/` is git-ignored.
+//
+// And this site's en.json carries DATA beside its copy — the landing's art
+// panels hold numbers, booleans and deliberately empty cells (`""`) inside
+// arrays of strings — which motir-core's catalogue does not. None of that is
+// translatable, so it is not a leaf: `flattenCatalogue` skips it, and
+// `buildCatalogue` writes en.json's own value in its place. Without that, an
+// array holding one such cell could never be complete, so it was never
+// written, and its strings stayed `missing` however often they were merged.
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -38,7 +46,7 @@ export function flattenCatalogue(
     for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
       flattenCatalogue(v, prefix ? `${prefix}.${k}` : k, out)
     }
-  } else if (typeof obj === 'string') {
+  } else if (typeof obj === 'string' && obj !== '') {
     out.set(prefix, obj)
   }
   return out
@@ -59,7 +67,8 @@ export function arrayParentOf(en: Catalogue, key: string): string | null {
 }
 
 /** Rebuild a nested catalogue in en.json's key order from a flat map. Keys en
- *  does not hold are dropped (they are orphans). */
+ *  does not hold are dropped (they are orphans). A value that is not a leaf —
+ *  a number, a boolean, null, an empty string — is en.json's own. */
 export function buildCatalogue(
   en: Catalogue,
   values: FlatCatalogue,
@@ -77,6 +86,7 @@ export function buildCatalogue(
       }
       return Object.keys(out).length ? out : undefined
     }
+    if (typeof node !== 'string' || node === '') return node
     return values.get(prefix)
   }
   return (build(en, '') as Catalogue | undefined) ?? {}

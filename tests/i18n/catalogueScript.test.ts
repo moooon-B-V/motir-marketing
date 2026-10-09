@@ -485,6 +485,57 @@ describe('the catalogue model (MOTIR-7760)', () => {
   })
 })
 
+// This repository's own case (MOTIR-7957): the landing's art panels keep DATA
+// in en.json beside the copy — a number, a boolean, a deliberately empty cell —
+// inside arrays of strings. None of it is translatable, so none of it is a
+// leaf, and an array holding it must still be written once its strings are.
+describe('data inside the catalogue', () => {
+  const en = {
+    tree: [['Plan', '', 3, true, null]],
+    flag: false,
+    blank: '',
+    label: 'Label',
+  }
+
+  it('is not a leaf, and buildCatalogue writes en’s own value in its place', async () => {
+    expect([...flattenCatalogue(en).keys()]).toEqual(['tree.0.0', 'label'])
+    expect(
+      buildCatalogue(
+        en,
+        new Map([
+          ['tree.0.0', 'Plan-xx'],
+          ['label', 'Label-xx'],
+        ]),
+      ),
+    ).toEqual({
+      tree: [['Plan-xx', '', 3, true, null]],
+      flag: false,
+      blank: '',
+      label: 'Label-xx',
+    })
+  })
+
+  it('lets a merge finish an array that holds it, with nothing left missing', async () => {
+    write('messages/en.json', en)
+    rmSync(join(root, 'messages/xx.json'))
+    rmSync(join(root, 'messages/sources/xx.json'))
+    extract({ rootDir: root, locale: 'xx', log })
+    fill((_key, source) => `${source}-xx`)
+    const result = await merge({ rootDir: root, locale: 'xx', log })
+    expect(result).toMatchObject({ rejected: [], stillMissing: 0 })
+    expect(readJson('messages/xx.json')).toEqual({
+      tree: [['Plan-xx', '', 3, true, null]],
+      flag: false,
+      blank: '',
+      label: 'Label-xx',
+    })
+    expect(readJson('messages/sources/xx.json')).toEqual({
+      'tree.0.0': 'Plan',
+      label: 'Label',
+    })
+  })
+})
+
 describe('extract / merge edge paths (MOTIR-7760)', () => {
   it('keeps an array whole when a batch boundary falls inside it', async () => {
     write('messages/en.json', { ...EN, c: { list: ['x', 'y', 'z'] } })
