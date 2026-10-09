@@ -287,13 +287,27 @@ const PAIRS: {
   {
     ink: '--el-accent-on-surface',
     surface: '--el-surface',
-    element: 'the nav current-page item, md:hidden panel',
+    element: 'the nav current-page item, Menu panel',
     verdict: 'clears-AA',
   },
   {
     ink: '--el-text-secondary',
     surface: '--el-surface-soft',
     element: 'the other nav items in the bar, and the footer legal strip',
+    verdict: 'clears-AA',
+  },
+  // The language switcher's open list (MOTIR-7953): it sits on the page
+  // background, and a hovered row takes `--el-surface-soft`.
+  {
+    ink: '--el-accent-on-surface',
+    surface: '--el-page-bg',
+    element: 'the current language in the open switcher list',
+    verdict: 'clears-AA',
+  },
+  {
+    ink: '--el-text',
+    surface: '--el-surface-soft',
+    element: 'a hovered language in the open switcher list',
     verdict: 'clears-AA',
   },
 

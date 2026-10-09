@@ -131,6 +131,11 @@
     "design": "Design",
     "signIn": "Sign in",
     "startFree": "Start free",
+    "language": {
+      "label": "Language: {language}",
+      "menuLabel": "Choose a language",
+      "heading": "Language"
+    },
     "products": "Products",
     "productsMenuLabel": "Motir products",
     "productGroups": {

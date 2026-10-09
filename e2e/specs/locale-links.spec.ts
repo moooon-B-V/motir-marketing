@@ -20,6 +20,9 @@ import { SITE_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
 test('a link on a French page goes straight to the French page', async ({
   page,
 }) => {
+  // Wide enough for the French bar's nav (the header's give-way ladder,
+  // `HEADER_LADDER` — below it the nav folds into the Menu panel).
+  await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto(`${SITE_ORIGIN}/fr/explore`)
   const docs = page.locator('header a[href="/fr/docs"]').first()
   await expect(docs).toBeVisible()

@@ -83,7 +83,7 @@ async function chromeHrefs(
   const { container } = render(<SiteShell host={host}>content</SiteShell>, {
     locale,
   })
-  // The bar and the `md:hidden` panel are two branches rendering the same
+  // The bar and the Menu panel are two branches rendering the same
   // items, which is exactly how a treatment ends up existing on desktop only
   // (`SiteHeader`'s own note). Opening the panel puts both in one sweep.
   await user.click(screen.getByRole('button', { name: copy.nav.menu }))
@@ -258,5 +258,36 @@ describe('siteLinkFor carries the locale', () => {
     expect(siteLinkFor(CUSTOM, DOCS, 'ja')).toBe(`${SITE_ORIGIN}/ja/docs`)
     expect(siteLinkFor(UNRESOLVED, DOCS, 'en')).toBe(`${SITE_ORIGIN}/docs`)
     expect(siteLinkFor(UNRESOLVED, SITE_ROOT, 'fr')).toBe(`${SITE_ORIGIN}/fr`)
+  })
+})
+
+/*
+ * THE LANGUAGE SWITCHER IS THE ONE ROOT-RELATIVE LINK, AND ONLY BY DESIGN
+ * (MOTIR-7953). Its entries are not site paths: each is THIS address in
+ * another language, and a tenant address has no prefix, so every entry is the
+ * page's own path on its own host — the cookie the click writes is what
+ * changes the language. The sweep above asserts the chrome with the list
+ * CLOSED; this asserts it open, and that the switcher adds nothing else.
+ */
+describe.each([
+  ['a workspace subdomain', WORKSPACE, '/ACME/changelog'],
+  ['a customer domain', CUSTOM, '/changelog'],
+  ['an UNRESOLVED host', UNRESOLVED, '/somewhere'],
+])('on %s, the open language list', (_label, host, path) => {
+  it('points every entry at this same address and nowhere else', async () => {
+    pathname.value = path
+    const user = userEvent.setup()
+    const { container } = render(<SiteShell host={host}>content</SiteShell>)
+    const closed = [...container.querySelectorAll('a[href]')].length
+    await user.click(screen.getByRole('button', { name: /^Language: / }))
+    const group = screen.getByRole('group', {
+      name: copy.nav.language.menuLabel,
+    })
+    const entries = within(group)
+      .getAllByRole('link')
+      .map((a) => a.getAttribute('href'))
+    expect(entries).toHaveLength(11)
+    expect(new Set(entries)).toEqual(new Set([path]))
+    expect(container.querySelectorAll('a[href]')).toHaveLength(closed + 11)
   })
 })

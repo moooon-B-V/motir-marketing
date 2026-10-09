@@ -18,7 +18,7 @@ vi.mock('next/headers', () => ({ headers: async () => new Headers() }))
  * The nav entrance for `/design` (MOTIR-1043) — the site's FIRST internal
  * second route, and therefore the first nav item that can ever be current.
  *
- * ⚠️ BOTH BRANCHES. The bar and the `md:hidden` menu panel are two separate
+ * ⚠️ BOTH BRANCHES. The bar and the Menu panel are two separate
  * branches of one component, which is exactly how a current-page treatment
  * ends up existing on desktop only — the design asset draws the open panel
  * (panel 4) rather than describing it, for that reason.
@@ -94,7 +94,7 @@ describe('the Design nav entry', () => {
     expect(link.className).toContain('font-semibold')
   })
 
-  it('draws the treatment in the md:hidden panel TOO, not only on desktop', async () => {
+  it('draws the treatment in the Menu panel TOO, not only on desktop', async () => {
     pathname.value = '/design'
     const user = userEvent.setup()
     render(<SiteHeader host={SITE_HOST} />)

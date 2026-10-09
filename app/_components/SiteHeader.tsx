@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useSitePathname } from '@/i18n/sitePathname'
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
@@ -8,6 +8,9 @@ import { type Copy, useCopy, usePageLocale } from '@/lib/copy'
 import type { Locale } from '@/i18n/routing'
 import { PRODUCT_MARK, productGroupsFor, productItemsFor } from './products'
 import { BrandTile } from './BrandTile'
+import { LADDER_CLASSES } from './headerLadder'
+import { LanguageSwitcher } from './LanguageSwitcher'
+import { useDismiss } from './useDismiss'
 import {
   DESIGN,
   DOCS,
@@ -47,7 +50,7 @@ import { SetupPromptButton } from './SetupPromptButton'
  *     `@motir/design-system@0.1.0`, and it named its own expiry condition.
  *     MOTIR-3872 published 0.1.1 with MOTIR-3745's and MOTIR-3774's lifted ink
  *     and this repository pins it: the same pair now measures **5.76:1** in
- *     dark and 6.29:1 in light, on `--el-surface-soft`, and the `md:hidden`
+ *     dark and 6.29:1 in light, on `--el-surface-soft`, and the Menu
  *     panel's `--el-surface` reads 5.54:1 / 6.03:1. Those four are the warm
  *     palette's, which MOTIR-6471 renamed Amethyst; the monochrome Motir
  *     palette that is the default since MOTIR-6616 reads 9.40 / 5.99 and
@@ -120,21 +123,8 @@ function ProductsMenu({ host }: { host: PublicHost }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const onSite = host.kind === 'site'
 
-  useEffect(() => {
-    if (!open) return
-    const onPointer = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
-    }
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('pointerdown', onPointer)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('pointerdown', onPointer)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
+  const close = useCallback(() => setOpen(false), [])
+  useDismiss(rootRef, open, close)
 
   return (
     <div ref={rootRef} className="relative">
@@ -238,6 +228,9 @@ export function SiteHeader({
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = useSitePathname()
   const onSite = host.kind === 'site'
+  // The give-way ladder (MOTIR-7947 revision 2): the widths each rung needs
+  // are this locale's, measured, not shared breakpoints.
+  const ladder = LADDER_CLASSES[locale]
 
   return (
     <header className={cn(overlay && 'absolute inset-x-0 top-0 z-30')}>
@@ -265,7 +258,7 @@ export function SiteHeader({
 
           <nav
             aria-label={copy.nav.ariaLabel}
-            className="hidden items-center gap-5 md:flex"
+            className={cn('items-center gap-5', ladder.nav)}
           >
             <ProductsMenu host={host} />
             {navItemsFor(copy).map((item) => {
@@ -291,14 +284,15 @@ export function SiteHeader({
         </div>
 
         <div className="flex flex-none items-center gap-2">
-          {/* Hidden until the bar has room beside six nav links; narrower
-              viewports reach it in the Products menu. */}
-          <SetupPromptButton look="header" className="hidden xl:inline-flex" />
+          {/* The first thing to leave the bar (rung B); narrower viewports
+              reach it in the Products menu. */}
+          <SetupPromptButton look="header" className={ladder.setup} />
           <a
             href={SIGN_IN}
             className={cn(
               buttonVariants({ variant: 'ghost', size: 'md' }),
-              'hidden text-[15px] md:inline-flex',
+              'text-[15px]',
+              ladder.wide,
             )}
           >
             {copy.nav.signIn}
@@ -314,6 +308,11 @@ export function SiteHeader({
             {copy.nav.startFree}
             <ArrowRight aria-hidden="true" className="size-3.5" />
           </a>
+          {/* The language switcher (MOTIR-7953): the bar's LAST control, after
+              the account pair, and on the bar at EVERY width — a 40px square
+              that fits beside Start free and Menu at 390px. It has no section
+              in the Menu panel: one control, in one place. */}
+          <LanguageSwitcher host={host} />
           <button
             type="button"
             aria-label={copy.nav.menu}
@@ -322,7 +321,8 @@ export function SiteHeader({
             onClick={() => setMenuOpen((open) => !open)}
             className={cn(
               buttonVariants({ variant: 'ghost', size: 'sm' }),
-              'w-8 px-0 md:hidden',
+              'w-8 px-0',
+              ladder.menu,
             )}
           >
             <Menu aria-hidden="true" className="size-4" />
@@ -345,7 +345,10 @@ export function SiteHeader({
         <nav
           id="site-menu"
           aria-label={copy.nav.ariaLabel}
-          className="flex flex-col gap-3 border-t border-(--el-border) bg-(--el-page-bg) px-4 py-3 shadow-(--shadow-elevated) md:hidden"
+          className={cn(
+            'flex flex-col gap-3 border-t border-(--el-border) bg-(--el-page-bg) px-4 py-3 shadow-(--shadow-elevated)',
+            ladder.menu,
+          )}
         >
           {/* The current-page treatment is drawn HERE TOO. It is a separate
               branch in the same component, which is exactly how a treatment
