@@ -114,7 +114,15 @@ describe('app/sitemap.ts', () => {
     // Awaited since MOTIR-4118 made the route dynamic. No API in this
     // environment, so the project entries are absent and the static list is
     // what remains — see `tests/entitySignal.test.ts` for that arm's own case.
-    expect((await sitemap()).map((entry) => entry.url)).toEqual([
+    // Each page is listed once per locale since MOTIR-7956; its English entry
+    // is the one its own `en` alternate names, and the list of those is the
+    // list of pages.
+    const english = (await sitemap()).filter(
+      (entry) =>
+        (entry.alternates?.languages as Record<string, string> | undefined)
+          ?.en === entry.url,
+    )
+    expect(english.map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       // 2026-10 redesign — "How Motir works", the developer page.
       siteUrl('/how-it-works'),
