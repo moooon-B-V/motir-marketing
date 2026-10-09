@@ -47,6 +47,36 @@ with four rules that make a translation safe:
 Root-relative links (`/docs/api#start`) are spelled in the page's locale by the
 renderer; absolute links open in a new tab.
 
+## Values, parts and catalogue-only routes (MOTIR-8054)
+
+The form fits one flowing body. Three additions carry the shapes it cannot, and a
+page that does not need them is unchanged.
+
+- **A value slot is a node as well as a string.** `{{value:name}}` resolves from
+  the page's `values: Record<string, ReactNode>`. A **string** works anywhere,
+  including a table cell, an inline code span and a link destination. A **React
+  node** the page renders (its own `<code>`, a link) works anywhere outside
+  backticks, which are literal: a node inside a code span is an error with the
+  file and line. A value is never typed in a document, and an unknown name throws
+  at render.
+- **Named parts.** A line `{{part:name}}` starts a named part; the text before the
+  first marker is the part `body`. Names are unique within a document (`body` is
+  reserved). `renderDocsParts({ slug, locale, slots, values })` resolves the
+  document **once** and returns `{ parts, names, note, shownLocale }`. Place each
+  part where it belongs — inside a fetch-failure branch, or as a `ReactNode` prop
+  of a client component. Asking for a part the document lacks throws. Every part
+  comes from the same resolved document, so a stale translation falls back as a
+  whole (every part English, each root `lang="en"`) and a page never mixes a fresh
+  part with a stale one. Render `note` once at the top of the page.
+- **Catalogue-only routes.** `DOCS_CATALOGUE_ONLY_ROUTES` (`lib/docsSurfaces.ts`)
+  lists routes whose human text is entirely catalogue copy and which therefore have
+  no document. It ships empty; a move item adds a route only after verifying it has
+  no authored prose.
+
+**A translation keeps every value name and every part name, in order**
+(`documentInvariants` returns `values` and `parts`, so a dropped slot or a
+reordered part is reported as a difference).
+
 ## Which English a translation was made from
 
 Each page keeps an append-only ledger, `<slug>/revisions.json`:

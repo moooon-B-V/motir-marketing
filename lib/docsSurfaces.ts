@@ -188,3 +188,12 @@ export const DOCS_ROUTES: string[] = [
     ...surface.pages.map((page) => page.href),
   ]),
 ]
+
+/**
+ * Routes whose human text is entirely catalogue copy (`copy.*`) and which therefore
+ * have NO per-language document (MOTIR-8054). It ships empty: each move item adds
+ * a route here only after verifying the route has no authored prose, and the
+ * coverage gate exempts exactly these from "every route has a document per
+ * locale". Directive-free, so a client component may import it.
+ */
+export const DOCS_CATALOGUE_ONLY_ROUTES: string[] = []

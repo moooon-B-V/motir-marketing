@@ -54,6 +54,8 @@ export interface DocsDocumentText {
   source: string | undefined
   /** The file it was read from, for messages. */
   file: string
+  /** The file line the body's first line is on (after front matter), for messages. */
+  bodyStartLine: number
 }
 
 export interface ResolvedDocsDocument {
@@ -91,6 +93,7 @@ export function revisionOf(text: string): string {
 const REVISION = /^[0-9a-f]{12}$/
 const ANCHOR = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const SLOT_LINE = /^\{\{slot:([a-z][A-Za-z0-9_-]*)\}\}$/
+const PART_LINE = /^\{\{part:([a-z][A-Za-z0-9_-]*)\}\}$/
 const VALUE = /\{\{value:([a-z][A-Za-z0-9_-]*)\}\}/g
 const HEADING = /^(#{1,6})\s+(.*)$/
 const HEADING_ANCHOR = /\s+\{#([^}\s]*)\}\s*$/
@@ -137,6 +140,7 @@ export function validateBody(
   bodyStartLine = 1,
 ): void {
   const lines = body.split('\n')
+  const seenParts = new Set<string>()
   for (const [index, line] of lines.entries()) {
     const at = bodyStartLine + index
     if (FENCE.test(line)) {
@@ -157,6 +161,28 @@ export function validateBody(
         )
       }
     }
+    const part = PART_LINE.exec(line.trim())
+    if (part) {
+      const name = part[1]!
+      if (name === 'body' || seenParts.has(name)) {
+        throw new DocsDocumentError(
+          file,
+          name === 'body'
+            ? '`body` is reserved for the text before the first `{{part:…}}` marker'
+            : `duplicate part name "${name}"`,
+          at,
+        )
+      }
+      seenParts.add(name)
+      continue
+    }
+    if (/\{\{\s*part:/.test(line)) {
+      throw new DocsDocumentError(
+        file,
+        'a part marker must be alone on its own line: `{{part:name}}`',
+        at,
+      )
+    }
     const slot = SLOT_LINE.exec(line.trim())
     const withoutValues = line.replace(VALUE, '')
     if (slot === null && /\{\{\s*slot:/.test(line)) {
@@ -169,7 +195,7 @@ export function validateBody(
     if (slot === null && /\{\{/.test(withoutValues)) {
       throw new DocsDocumentError(
         file,
-        'unknown `{{…}}` syntax — only `{{slot:name}}` (own line) and `{{value:name}}` exist',
+        'unknown `{{…}}` syntax — only `{{slot:name}}` and `{{part:name}}` (own line) and `{{value:name}}` exist',
         at,
       )
     }
@@ -233,7 +259,7 @@ function readDocument(
       1,
     )
   }
-  return { markdown: body, source, file }
+  return { markdown: body, source, file, bodyStartLine }
 }
 
 /**
@@ -297,6 +323,8 @@ export function resolveDocsDocument(
 export interface DocumentInvariants {
   slots: string[]
   values: string[]
+  /** `{{part:name}}` markers in order (the text before the first is the implicit `body`). */
+  parts: string[]
   inlineCode: string[]
   hrefs: string[]
   anchors: string[]
@@ -309,16 +337,20 @@ export interface DocumentInvariants {
  */
 export function documentInvariants(markdown: string): DocumentInvariants {
   const slots: string[] = []
+  const parts: string[] = []
   const anchors: string[] = []
   for (const line of markdown.split('\n')) {
     const slot = SLOT_LINE.exec(line.trim())
     if (slot) slots.push(slot[1]!)
+    const part = PART_LINE.exec(line.trim())
+    if (part) parts.push(part[1]!)
     const anchor = HEADING.test(line) ? HEADING_ANCHOR.exec(line) : null
     if (anchor) anchors.push(anchor[1]!)
   }
   return {
     slots,
     values: [...markdown.matchAll(VALUE)].map((m) => m[1]!),
+    parts,
     inlineCode: [...markdown.matchAll(/`([^`\n]+)`/g)].map((m) => m[1]!),
     hrefs: [...markdown.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)].map(
       (m) => m[1]!,
@@ -327,28 +359,87 @@ export function documentInvariants(markdown: string): DocumentInvariants {
   }
 }
 
-/** Substitute `{{value:name}}`; an unresolved name throws at render. */
+/** The placeholder a non-string value leaves in the Markdown, filled in at render. */
+export const VALUE_MARK_OPEN = '\uE000'
+export const VALUE_MARK_CLOSE = '\uE001'
+
+/**
+ * Resolve `{{value:name}}` against the page's `values`.
+ *
+ * A STRING is substituted into the Markdown before it is parsed, so it works in a
+ * paragraph, a table cell, an inline code span and a link destination alike (and
+ * must be one plain line: no newline, no backtick). Any other value (a React node
+ * the page renders — its own `<code>`, a link) leaves a placeholder the renderer
+ * fills in; a node cannot go inside backticks, which are literal, so that is an
+ * error naming the file and line. An unresolved name throws.
+ */
 export function substituteValues(
   markdown: string,
-  values: Record<string, string>,
+  values: Record<string, unknown>,
   file: string,
+  bodyStartLine = 1,
 ): string {
-  return markdown.replace(VALUE, (_whole, name: string) => {
-    const value = values[name]
-    if (value === undefined) {
-      throw new DocsDocumentError(
-        file,
-        `no value named "${name}" was passed to the renderer`,
-      )
+  return markdown
+    .split('\n')
+    .map((line, index) =>
+      line.replace(VALUE, (whole, name: string, offset: number) => {
+        const at = bodyStartLine + index
+        if (!(name in values) || values[name] === undefined) {
+          throw new DocsDocumentError(
+            file,
+            `no value named "${name}" was passed to the renderer`,
+            at,
+          )
+        }
+        const value = values[name]
+        if (typeof value === 'string') {
+          if (/[\n`]/.test(value)) {
+            throw new DocsDocumentError(
+              file,
+              `value "${name}" must be a plain one-line string (no newline, no backtick)`,
+              at,
+            )
+          }
+          return value
+        }
+        const backticksBefore = (line.slice(0, offset).match(/`/g) ?? []).length
+        if (backticksBefore % 2 === 1) {
+          throw new DocsDocumentError(
+            file,
+            `value "${name}" is not a string, so it cannot sit inside backticks (they are literal) — pass a string, or move it out of the code span`,
+            at,
+          )
+        }
+        return `${VALUE_MARK_OPEN}${name}${VALUE_MARK_CLOSE}`
+      }),
+    )
+    .join('\n')
+}
+
+/** Split a document body into its named parts: text before the first marker is `body`. */
+export function splitParts(
+  markdown: string,
+): Array<{ name: string; text: string }> {
+  const parts: Array<{ name: string; text: string }> = []
+  let name = 'body'
+  let run: string[] = []
+  const flush = (final: boolean) => {
+    const text = run.join('\n')
+    if (final || name !== 'body' || text.trim().length > 0)
+      parts.push({ name, text })
+    run = []
+  }
+  for (const line of markdown.split('\n')) {
+    const marker = PART_LINE.exec(line.trim())
+    if (marker) {
+      flush(false)
+      name = marker[1]!
+    } else {
+      run.push(line)
     }
-    if (/[\n`]/.test(value)) {
-      throw new DocsDocumentError(
-        file,
-        `value "${name}" must be a plain one-line string (no newline, no backtick)`,
-      )
-    }
-    return value
-  })
+  }
+  flush(true)
+  return parts
 }
 
 /** Split a body into Markdown runs and slot names, in order. */

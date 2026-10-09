@@ -1,4 +1,4 @@
-import { Children, type ComponentProps, type ReactNode } from 'react'
+import { Children, Fragment, type ComponentProps, type ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { localizedPath } from '@/i18n/localizedPath'
@@ -7,8 +7,12 @@ import { getCopy } from '@/lib/copy'
 import {
   DocsDocumentError,
   resolveDocsDocument,
+  splitParts,
   splitSlots,
   substituteValues,
+  VALUE_MARK_CLOSE,
+  VALUE_MARK_OPEN,
+  type DocsDocumentText,
 } from '@/lib/docsDocuments'
 import { TranslationUpdatingNote } from './TranslationUpdatingNote'
 
@@ -56,13 +60,40 @@ function splitAnchor(children: ReactNode): { id: string; rest: ReactNode[] } {
 
 const isExternal = (href: string) => /^https?:\/\//.test(href)
 
-function components(locale: Locale): ComponentMap {
+const VALUE_MARK = new RegExp(
+  `${VALUE_MARK_OPEN}([^${VALUE_MARK_CLOSE}]+)${VALUE_MARK_CLOSE}`,
+)
+
+/** Fill the placeholders a non-string `{{value:…}}` left in a run of text. */
+function fill(
+  children: ReactNode,
+  nodes: Record<string, ReactNode>,
+): ReactNode {
+  return Children.map(children, (child) => {
+    if (typeof child !== 'string' || !child.includes(VALUE_MARK_OPEN))
+      return child
+    return child
+      .split(VALUE_MARK)
+      .map((piece, index) =>
+        index % 2 === 0 ? (
+          piece
+        ) : (
+          <Fragment key={index}>{nodes[piece]}</Fragment>
+        ),
+      )
+  })
+}
+
+function components(
+  locale: Locale,
+  nodes: Record<string, ReactNode>,
+): ComponentMap {
   function heading(Tag: 'h1' | 'h2' | 'h3' | 'h4', className: string) {
     function Heading({ children }: { children?: ReactNode }) {
       const { id, rest } = splitAnchor(children)
       return (
         <Tag id={id} className={className}>
-          {rest}
+          {fill(rest, nodes)}
         </Tag>
       )
     }
@@ -81,7 +112,7 @@ function components(locale: Locale): ComponentMap {
     h4: heading('h4', 'mt-5 text-[15px] font-semibold text-(--el-text)'),
     p: ({ children }) => (
       <p className="mt-4 max-w-[68ch] text-[15px] leading-relaxed text-(--el-text)">
-        {children}
+        {fill(children, nodes)}
       </p>
     ),
     ul: ({ children }) => (
@@ -92,11 +123,13 @@ function components(locale: Locale): ComponentMap {
     ),
     li: ({ children }) => (
       <li className="py-1 text-[13.5px] leading-relaxed text-(--el-text-secondary)">
-        {children}
+        {fill(children, nodes)}
       </li>
     ),
     strong: ({ children }) => (
-      <strong className="font-semibold text-(--el-text)">{children}</strong>
+      <strong className="font-semibold text-(--el-text)">
+        {fill(children, nodes)}
+      </strong>
     ),
     code: ({ children }) => (
       <code className="font-(family-name:--font-mono) text-[0.92em]">
@@ -111,7 +144,7 @@ function components(locale: Locale): ComponentMap {
           {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
           className="text-(--el-link) underline underline-offset-2 hover:text-(--el-link-pressed)"
         >
-          {children}
+          {fill(children, nodes)}
         </a>
       )
     },
@@ -122,15 +155,67 @@ function components(locale: Locale): ComponentMap {
     ),
     th: ({ children }) => (
       <th className="border border-(--el-border) bg-(--el-surface-soft) px-2.5 py-2 text-left font-semibold text-(--el-text-strong)">
-        {children}
+        {fill(children, nodes)}
       </th>
     ),
     td: ({ children }) => (
       <td className="border border-(--el-border) px-2.5 py-2 align-top text-(--el-text-secondary)">
-        {children}
+        {fill(children, nodes)}
       </td>
     ),
   }
+}
+
+function renderText(
+  text: string,
+  document: DocsDocumentText,
+  locale: Locale,
+  slots: Record<string, ReactNode>,
+  values: Record<string, ReactNode>,
+  keyPrefix: string,
+): ReactNode[] {
+  const markdown = substituteValues(
+    text,
+    values,
+    document.file,
+    document.bodyStartLine,
+  )
+  return splitSlots(markdown).map((part, index) => {
+    if (part.kind === 'slot') {
+      if (!(part.name in slots)) {
+        throw new DocsDocumentError(
+          document.file,
+          `no slot named "${part.name}" was passed to the renderer`,
+        )
+      }
+      return <div key={`${keyPrefix}slot-${index}`}>{slots[part.name]}</div>
+    }
+    return (
+      <ReactMarkdown
+        key={`${keyPrefix}md-${index}`}
+        remarkPlugins={[remarkGfm]}
+        components={components(locale, values)}
+      >
+        {part.text}
+      </ReactMarkdown>
+    )
+  })
+}
+
+interface DocsDocumentProps {
+  /** The route minus `/docs`: `index`, `sandbox`, `mcp/tools`. */
+  slug: string
+  locale: Locale
+  /** Block slots: what a reader copies or a generated table renders. */
+  slots: Record<string, ReactNode>
+  /**
+   * Inline values the prose must not restate; built per request and locale. A
+   * string works anywhere (a paragraph, a cell, a code span, a link destination);
+   * a React node the page renders works anywhere outside backticks.
+   */
+  values?: Record<string, ReactNode>
+  /** Tests only: point at a fixture tree. */
+  root?: string
 }
 
 export async function DocsDocument({
@@ -139,39 +224,12 @@ export async function DocsDocument({
   slots,
   values = {},
   root,
-}: {
-  /** The route minus `/docs`: `index`, `sandbox`, `mcp/tools`. */
-  slug: string
-  locale: Locale
-  /** Block slots: what a reader copies or a generated table renders. */
-  slots: Record<string, ReactNode>
-  /** Inline values the prose must not restate; built per request and locale. */
-  values?: Record<string, string>
-  /** Tests only: point at a fixture tree. */
-  root?: string
-}) {
+}: DocsDocumentProps) {
   const { document, fallback } = resolveDocsDocument(slug, locale, root)
-  const markdown = substituteValues(document.markdown, values, document.file)
-  const body = splitSlots(markdown).map((part, index) => {
-    if (part.kind === 'slot') {
-      if (!(part.name in slots)) {
-        throw new DocsDocumentError(
-          document.file,
-          `no slot named "${part.name}" was passed to the renderer`,
-        )
-      }
-      return <div key={`slot-${index}`}>{slots[part.name]}</div>
-    }
-    return (
-      <ReactMarkdown
-        key={`md-${index}`}
-        remarkPlugins={[remarkGfm]}
-        components={components(locale)}
-      >
-        {part.text}
-      </ReactMarkdown>
-    )
-  })
+  // One flowing body: every part, in order, with the markers dropped.
+  const body = splitParts(document.markdown).flatMap((part) =>
+    renderText(part.text, document, locale, slots, values, `${part.name}-`),
+  )
   if (fallback === null) return <>{body}</>
   const copy = await getCopy(locale)
   return (
@@ -180,6 +238,64 @@ export async function DocsDocument({
       <div lang="en">{body}</div>
     </>
   )
+}
+
+/**
+ * Resolve a document ONCE and hand its named parts to the page (MOTIR-8054), for
+ * prose that is not one flowing body: a paragraph that renders only when a fetch
+ * fails, text a client component holds. Every part comes from the same resolved
+ * document, so a page never mixes a fresh part with a stale one — a stale
+ * translation falls back as a whole, each English part's root carrying
+ * `lang="en"`. `note` is the "being updated" note, for the page to render once at
+ * the top. Asking for a part the document lacks throws.
+ */
+export async function renderDocsParts({
+  slug,
+  locale,
+  slots,
+  values = {},
+  root,
+}: DocsDocumentProps): Promise<{
+  parts: Record<string, ReactNode>
+  names: string[]
+  note: ReactNode | null
+  shownLocale: Locale
+}> {
+  const { document, fallback, shownLocale } = resolveDocsDocument(
+    slug,
+    locale,
+    root,
+  )
+  const rendered: Record<string, ReactNode> = {}
+  for (const part of splitParts(document.markdown)) {
+    const nodes = renderText(
+      part.text,
+      document,
+      locale,
+      slots,
+      values,
+      `${part.name}-`,
+    )
+    rendered[part.name] =
+      fallback === null ? <>{nodes}</> : <div lang="en">{nodes}</div>
+  }
+  const parts = new Proxy(rendered, {
+    get(target, key) {
+      if (typeof key === 'symbol' || key === 'then' || key in target) {
+        return Reflect.get(target, key)
+      }
+      throw new DocsDocumentError(
+        document.file,
+        `the document has no part named "${key}"`,
+      )
+    },
+  })
+  let note: ReactNode | null = null
+  if (fallback !== null) {
+    const copy = await getCopy(locale)
+    note = <TranslationUpdatingNote text={copy.docs.notes.beingUpdated} />
+  }
+  return { parts, names: Object.keys(rendered), note, shownLocale }
 }
 
 // Exported so the tests can assert the heading splitter's contract directly.
