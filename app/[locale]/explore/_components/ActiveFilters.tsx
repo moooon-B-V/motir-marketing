@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Search, Tag, TrendingUp } from 'lucide-react'
-import { copy, format } from '@/lib/copy'
+import { format, useCopy } from '@/lib/copy'
 import {
   buildExploreHref,
   hasActiveFilters,
@@ -26,6 +26,7 @@ export function ActiveFilters({
   query: ExploreQuery
   categoryLabel?: string
 }) {
+  const copy = useCopy()
   if (!hasActiveFilters(query)) return null
   const rankSummary =
     query.rank === 'trending'

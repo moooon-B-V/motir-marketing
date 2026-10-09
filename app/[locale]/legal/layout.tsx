@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { copy } from '@/lib/copy'
+import { englishCopy } from '@/lib/copy'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { SITE_HOST } from '@/lib/publicHost'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
@@ -24,21 +24,18 @@ import { enterLocale, type LocaleParams } from '@/i18n/locale'
  * still applies: a legal page that 500s because a database is unreachable is a
  * worse failure than a narrowed crawl surface.
  *
- * ── ENGLISH-ONLY, AND THAT IS ACCEPTED (MOTIR-4009) ─────────────────────────
- * motir-core carries `messages/en.json` AND `zh.json`, but `motir-marketing` is
- * English-only (`lib/copy.ts` imports `messages/en.json` directly, no locale
- * framework). So the SURROUNDING chrome labels — the breadcrumb, the version
- * line, the index title and intro — have no `zh` twin here. What is NOT lost is
- * the contract text itself: the documents were never translated (seven English
- * files, no `zh` variants), so only the labels around them drop a locale.
- * Adding an i18n framework to this site is a separate question no card here
- * owns, because nothing in this story depends on it.
+ * ── THE DOCUMENTS ARE ENGLISH-ONLY, AND THAT IS ACCEPTED (MOTIR-4009) ──────
+ * The SURROUNDING chrome labels — the breadcrumb, the version line, the index
+ * title and intro — are read through the page's locale (`getCopy`,
+ * MOTIR-7950), falling back to English per missing key. The contract text
+ * itself is not: the documents were never translated (seven English files, no
+ * `zh` variants), so a non-English page wraps an English document.
  */
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: copy.legal.metaTitle,
-    description: copy.legal.metaDescription,
+    title: englishCopy.legal.metaTitle,
+    description: englishCopy.legal.metaDescription,
     alternates: { canonical: '/legal' },
   }
 }

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import {
   AGENT_INSTALLS,
   CLAUDE_CODE_UPDATE,
@@ -26,8 +26,8 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleClaudeCodePlugin,
-  description: copy.docs.metaDescriptionClaudeCodePlugin,
+  title: englishCopy.docs.metaTitleClaudeCodePlugin,
+  description: englishCopy.docs.metaDescriptionClaudeCodePlugin,
 }
 
 const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'
@@ -35,7 +35,8 @@ const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'
 export default async function ClaudeCodePluginDocsPage({
   params,
 }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const claudeCode = AGENT_INSTALLS.find((agent) => agent.id === 'claude-code')!
   const [install] = claudeCode.blocks
   // The shared note goes on to the copy-only install, which this page does not

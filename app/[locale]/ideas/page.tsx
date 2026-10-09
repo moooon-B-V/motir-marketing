@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { ArrowDown } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy, format } from '@/lib/copy'
+import { englishCopy, format, getCopy } from '@/lib/copy'
+import { enterLocale, type LocaleParams } from '@/i18n/locale'
 import { SITE_HOST } from '@/lib/publicHost'
 import { siteUrl } from '@/lib/siteOrigin'
 import {
@@ -51,8 +52,6 @@ import { IdeasEmpty, IdeasUnavailable } from './_components/IdeaStates'
  * review, like the product pages.
  */
 
-const i = copy.ideas
-
 /** The whole view, or `null` for the list when motir-core did not answer. */
 async function loadList(params: IdeasParams) {
   try {
@@ -85,6 +84,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const params = parseIdeasParams(await searchParams)
   const open = await loadOpenIdea(params.idea, null)
+  const i = englishCopy.ideas
   return {
     title: open ? `${open.title} · ${i.metaTitle}` : i.metaTitle,
     description: open ? open.pitch : i.metaDescription,
@@ -98,10 +98,14 @@ export async function generateMetadata({
 }
 
 export default async function IdeasPage({
+  params: localeParams,
   searchParams,
 }: {
+  params: LocaleParams
   searchParams: Promise<RawSearchParams>
 }) {
+  const locale = await enterLocale(localeParams)
+  const i = (await getCopy(locale)).ideas
   const params = parseIdeasParams(await searchParams)
   const [list, tags] = await Promise.all([
     loadList(params),

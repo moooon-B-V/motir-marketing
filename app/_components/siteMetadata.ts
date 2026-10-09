@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 import { OG_LOCALE, type Locale } from '@/i18n/routing'
 

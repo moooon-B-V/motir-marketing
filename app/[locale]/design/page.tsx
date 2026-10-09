@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { copy } from '@/lib/copy'
+import { englishCopy } from '@/lib/copy'
 import { siteUrl } from '@/lib/siteOrigin'
 import { DesignShowcase } from '../../_components/DesignShowcase'
 import { SiteShell } from '../../_components/SiteShell'
@@ -31,15 +31,15 @@ export async function generateMetadata({
 }: LocalePageProps): Promise<Metadata> {
   const locale = await enterLocale(params)
   return {
-    title: copy.designShowcase.heading,
-    description: copy.designShowcase.subline,
+    title: englishCopy.designShowcase.heading,
+    description: englishCopy.designShowcase.subline,
     alternates: { canonical: '/design' },
     openGraph: {
       type: 'website',
       url: siteUrl('/design'),
       siteName: 'Motir',
-      title: copy.designShowcase.heading,
-      description: copy.designShowcase.subline,
+      title: englishCopy.designShowcase.heading,
+      description: englishCopy.designShowcase.subline,
       // The page's own locale (MOTIR-7948), as the root layout's `og:locale` is.
       locale: OG_LOCALE[locale],
     },

@@ -1,11 +1,12 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { MAIN_LANDMARK_ID, SiteShell } from '@/app/_components/SiteShell'
 import { SITE_HOST } from '@/lib/publicHost'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import { SITE_ROUTES } from '@/e2e/routes'
 
 /*

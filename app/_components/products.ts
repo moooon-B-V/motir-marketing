@@ -1,4 +1,4 @@
-import { copy } from '@/lib/copy'
+import type { Copy } from '@/lib/copy'
 import type { ProductSlug } from '@/lib/destinations'
 
 /*
@@ -10,50 +10,70 @@ import type { ProductSlug } from '@/lib/destinations'
 
 export type ProductItem = { slug: ProductSlug; name: string; blurb: string }
 
-const item = (
-  slug: ProductSlug,
-  key: keyof typeof copy.nav.productItems,
-): ProductItem => ({ slug, ...copy.nav.productItems[key] })
+type ItemKey = keyof Copy['nav']['productItems']
 
-export const productGroups: ReadonlyArray<{
-  label: string
-  items: ReadonlyArray<ProductItem>
+const GROUPS: ReadonlyArray<{
+  label: keyof Copy['nav']['productGroups']
+  items: ReadonlyArray<readonly [ProductSlug, ItemKey]>
 }> = [
   {
-    label: copy.nav.productGroups.ai,
+    label: 'ai',
     items: [
-      item('ai-planner', 'aiPlanner'),
-      item('project-management', 'projectManagement'),
-      item('project-manager', 'projectManager'),
-      item('ai-debugging', 'aiDebugging'),
+      ['ai-planner', 'aiPlanner'],
+      ['project-management', 'projectManagement'],
+      ['project-manager', 'projectManager'],
+      ['ai-debugging', 'aiDebugging'],
     ],
   },
   {
-    label: copy.nav.productGroups.tooling,
+    label: 'tooling',
     items: [
-      item('mcp', 'mcp'),
-      item('cli', 'cli'),
-      item('claude-code-connector', 'claudeCodeConnector'),
-      item('claude-code-plugin', 'claudeCodePlugin'),
+      ['mcp', 'mcp'],
+      ['cli', 'cli'],
+      ['claude-code-connector', 'claudeCodeConnector'],
+      ['claude-code-plugin', 'claudeCodePlugin'],
     ],
   },
   {
-    label: copy.nav.productGroups.infrastructure,
+    label: 'infrastructure',
     items: [
-      item('agent-fleet', 'agentFleet'),
-      item('agent-hosting', 'agentHosting'),
-      item('sandbox', 'sandbox'),
+      ['agent-fleet', 'agentFleet'],
+      ['agent-hosting', 'agentHosting'],
+      ['sandbox', 'sandbox'],
     ],
   },
 ]
 
-export const productItems: ReadonlyArray<ProductItem> = productGroups.flatMap(
-  (group) => group.items,
-)
+/*
+ * ⚠️ FUNCTIONS OF THE CATALOGUE, NOT CONSTANTS (MOTIR-7950). These were built
+ * from the English object when the module loaded, which no locale can reach:
+ * the Products menu would have stayed English on every page. The ORDER and the
+ * grouping are fixed here; the words come from whichever `Copy` the caller
+ * read (`useCopy()` or `getCopy(locale)`).
+ */
+export function productGroupsFor(copy: Copy): ReadonlyArray<{
+  label: string
+  items: ReadonlyArray<ProductItem>
+}> {
+  return GROUPS.map((group) => ({
+    label: copy.nav.productGroups[group.label],
+    items: group.items.map(([slug, key]) => ({
+      slug,
+      ...copy.nav.productItems[key],
+    })),
+  }))
+}
+
+export function productItemsFor(copy: Copy): ReadonlyArray<ProductItem> {
+  return productGroupsFor(copy).flatMap((group) => group.items)
+}
 
 /** A product by its slug, with the label of the group it belongs to. */
-export function productOf(slug: ProductSlug): ProductItem & { group: string } {
-  for (const group of productGroups) {
+export function productOf(
+  slug: ProductSlug,
+  copy: Copy,
+): ProductItem & { group: string } {
+  for (const group of productGroupsFor(copy)) {
     const found = group.items.find((product) => product.slug === slug)
     if (found) return { ...found, group: group.label }
   }

@@ -1,9 +1,16 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { describe, expect, it } from 'vitest'
 import DocsIndexPage from '@/app/[locale]/docs/(guides)/page'
-import { DOCS_INDEX, DOCS_ROUTES, DOCS_SURFACES } from '@/lib/docsSurfaces'
+import { englishCopy } from '@/lib/copy'
+import {
+  DOCS_INDEX_HREF,
+  DOCS_ROUTES,
+  docsSurfacesFor,
+} from '@/lib/docsSurfaces'
+
+const DOCS_SURFACES = docsSurfacesFor(englishCopy)
 import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
@@ -69,7 +76,7 @@ describe('the surfaces `/docs` documents', () => {
     const hrefs = await indexHrefs()
     // `/docs` is the page being rendered, so it is a rail row and not a row on
     // itself; everything else the list names is a destination the index owes.
-    const owed = DOCS_ROUTES.filter((route) => route !== DOCS_INDEX.href)
+    const owed = DOCS_ROUTES.filter((route) => route !== DOCS_INDEX_HREF)
     for (const route of owed) {
       expect(hrefs, route).toContain(route)
     }
@@ -79,7 +86,7 @@ describe('the surfaces `/docs` documents', () => {
     // The other direction, and it is the one that catches a row typed straight
     // into the page: a link the shared list has never heard of.
     expect([...new Set(await indexHrefs())].sort()).toEqual(
-      DOCS_ROUTES.filter((route) => route !== DOCS_INDEX.href).sort(),
+      DOCS_ROUTES.filter((route) => route !== DOCS_INDEX_HREF).sort(),
     )
   })
 

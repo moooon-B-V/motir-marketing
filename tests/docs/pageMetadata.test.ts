@@ -2,7 +2,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 
 /*
  * EVERY `/docs` PAGE PUBLISHES ITS OWN TITLE (MOTIR-4429).
@@ -73,9 +73,12 @@ describe('every /docs page publishes its own title and description', () => {
       const source = readFileSync(page, 'utf8')
       expect(source).toMatch(/export const metadata\s*=/)
       // Read from the catalogue, not typed into the page — the same rule every
-      // rendered string in this repository follows.
-      expect(source).toMatch(/title:\s*copy\.docs\.metaTitle/)
-      expect(source).toMatch(/description:\s*copy\.docs\.metaDescription/)
+      // rendered string in this repository follows. English by name until
+      // MOTIR-7956 localises metadata (MOTIR-7950).
+      expect(source).toMatch(/title:\s*englishCopy\.docs\.metaTitle/)
+      expect(source).toMatch(
+        /description:\s*englishCopy\.docs\.metaDescription/,
+      )
     })
   }
 

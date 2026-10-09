@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { copy, format } from '@/lib/copy'
+import { englishCopy, getCopy, format } from '@/lib/copy'
 import { getLegalDocument, legalDocumentSlugs } from '@/lib/legal/documents'
 import { MarkdownBody } from '../_components/MarkdownBody'
 import { enterLocale } from '@/i18n/locale'
@@ -34,7 +34,7 @@ export async function generateMetadata({
     title: doc.title,
     // The version rides the description so a search result distinguishes two
     // revisions of the same policy.
-    description: format(copy.legal.metaDocDescription, {
+    description: format(englishCopy.legal.metaDocDescription, {
       title: doc.title,
       version: doc.version,
     }),
@@ -46,7 +46,8 @@ export default async function LegalDocumentPage({
 }: {
   params: Promise<{ slug: string; locale: string }>
 }) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const { slug } = await params
   const doc = getLegalDocument(slug)
 

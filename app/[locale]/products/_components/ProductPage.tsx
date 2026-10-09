@@ -1,6 +1,6 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { productPath, type ProductSlug } from '@/lib/destinations'
 import { HeroWaves } from '../../../_components/landing/HeroWaves'
 import { HeroBrief } from '../../../_components/landing/HeroBrief'
@@ -74,7 +74,7 @@ export function ProductHero({
   art: React.ReactNode
   extra?: React.ReactNode
 }>) {
-  const product = productOf(slug)
+  const product = productOf(slug, useCopy())
   return (
     <section
       aria-labelledby="product-h"
@@ -205,6 +205,7 @@ export function PointGrid({
 }
 
 export function WorksWith({ slugs }: Readonly<{ slugs: ProductSlug[] }>) {
+  const copy = useCopy()
   return (
     <section
       aria-labelledby="works-with-h"
@@ -216,7 +217,7 @@ export function WorksWith({ slugs }: Readonly<{ slugs: ProductSlug[] }>) {
         </h2>
         <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-3">
           {slugs.map((slug) => {
-            const product = productOf(slug)
+            const product = productOf(slug, copy)
             return (
               <li key={slug}>
                 <a
@@ -252,6 +253,7 @@ export function ProductClose({
   body,
   extra,
 }: Readonly<{ headline: string; body: string; extra?: React.ReactNode }>) {
+  const copy = useCopy()
   return (
     <div
       className={cn(

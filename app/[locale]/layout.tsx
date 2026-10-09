@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
-import { hasLocale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { hasLocale, NextIntlClientProvider } from 'next-intl'
+import { getMessages, setRequestLocale } from 'next-intl/server'
+import { clientCopy } from '@/lib/copy'
 import { routing } from '@/i18n/routing'
 import { SiteDocument } from '../_components/SiteDocument'
 import { siteMetadata } from '../_components/siteMetadata'
@@ -45,5 +46,16 @@ export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
-  return <SiteDocument lang={locale}>{children}</SiteDocument>
+  // The provider hands the client components the catalogue `i18n/request.ts`
+  // resolved for this locale — the same merged object the server reads — so
+  // `useCopy()` in a `'use client'` module needs no locale prop (MOTIR-7950).
+  // Only the namespaces client modules read travel; see the constant.
+  const clientMessages = clientCopy(await getMessages())
+  return (
+    <SiteDocument lang={locale}>
+      <NextIntlClientProvider messages={clientMessages}>
+        {children}
+      </NextIntlClientProvider>
+    </SiteDocument>
+  )
 }

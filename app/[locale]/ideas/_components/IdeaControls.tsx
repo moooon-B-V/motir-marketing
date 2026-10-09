@@ -1,6 +1,6 @@
 import { ChevronDown, Search, Tag, X } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy, format } from '@/lib/copy'
+import { format, useCopy, type Copy } from '@/lib/copy'
 import {
   hasIdeaFilters,
   ideasHref,
@@ -20,8 +20,6 @@ import { CountLine, FilterLink, SearchForm } from './IdeasNav'
  * so the URL is the only state and a shared link opens the same view.
  */
 
-const f = copy.ideas.find
-
 const CHIP =
   'inline-flex min-h-[30px] items-center gap-1.5 whitespace-nowrap rounded-(--radius-badge) border px-(--spacing-chip-x) py-(--spacing-chip-y) text-[13px] font-medium no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--focus-ring-color)'
 const CHIP_OFF =
@@ -33,7 +31,11 @@ const PILL =
   'inline-flex items-center gap-1.5 rounded-(--radius-badge) px-(--spacing-chip-x) py-(--spacing-chip-y) text-[12px] font-medium text-(--el-text-strong) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--focus-ring-color)'
 
 /** The result count line, by how many ideas the view holds. */
-export function countLine(total: number, filtered: boolean): string {
+export function countLine(
+  total: number,
+  filtered: boolean,
+  f: Copy['ideas']['find'],
+): string {
   if (!filtered) return format(f.countAll, { n: total })
   if (total === 0) return f.countNone
   if (total === 1) return f.countMatchOne
@@ -52,6 +54,7 @@ export function IdeaControls({
   /** `null` when the tags read failed: the disclosure is then not drawn. */
   tags: PublicIdeaTagDto[] | null
 }) {
+  const f = useCopy().ideas.find
   const filtered = hasIdeaFilters(params)
   // A pressed category the response omits (no match under the other filters)
   // stays visible, so it can be un-pressed.
@@ -82,7 +85,7 @@ export function IdeaControls({
           {f.heading}
         </h2>
         <CountLine
-          text={countLine(total, filtered)}
+          text={countLine(total, filtered, f)}
           updating={f.updating}
           className="m-0 font-(family-name:--font-mono) text-[13px] text-(--el-text-secondary)"
         />

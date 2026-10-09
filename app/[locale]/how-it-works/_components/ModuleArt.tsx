@@ -1,5 +1,5 @@
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 
 /*
  * The "Module by module" pictures on "How Motir works" (2026-10 redesign): one
@@ -9,7 +9,6 @@ import { copy } from '@/lib/copy'
  * carry the meaning. Colours are the fixed artwork inks (`.landing-art`).
  */
 
-const a = copy.howItWorks.art
 const MONO = 'font-(family-name:--font-mono) tracking-[0.06em] uppercase'
 const FIELD =
   'relative h-[300px] overflow-hidden rounded-(--radius-card) p-(--spacing-card-padding) text-[12px] leading-[1.35] border border-(--el-border) shadow-(--shadow-card)'
@@ -26,6 +25,7 @@ function Cap({ children }: { children: string }) {
 }
 
 export function PlannerArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   return (
     <div
       data-tilt=""
@@ -88,6 +88,7 @@ export function PlannerArt({ cap }: { cap: string }) {
 }
 
 export function ApproveArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   return (
     <div
       data-tilt=""
@@ -168,6 +169,7 @@ const SQUARE: Record<string, string> = {
   '': 'bg-(--el-showcase-rule)',
 }
 export function BoardArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   return (
     <div
       data-tilt=""
@@ -230,6 +232,7 @@ export function BoardArt({ cap }: { cap: string }) {
 
 const FADERS = [6, 6, 14, 46, 80]
 export function RunArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   return (
     <div
       data-tilt=""
@@ -294,6 +297,7 @@ export function RunArt({ cap }: { cap: string }) {
 }
 
 export function ReviewArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   return (
     <div
       data-tilt=""
@@ -336,6 +340,7 @@ export function ReviewArt({ cap }: { cap: string }) {
 }
 
 export function RepairArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   const row = (what: string, command: string, on: boolean) => (
     <div
       data-tilt=""
@@ -395,6 +400,7 @@ export function RepairArt({ cap }: { cap: string }) {
 }
 
 export function LearningArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   const dots = Array.from({ length: 16 }, (_, n) => {
     const angle = (n / 16) * Math.PI * 2 - Math.PI / 2
     return {
@@ -473,6 +479,7 @@ const EVENTS: Array<[number, 's' | 'r' | 'd']> = [
   [86, 'r'],
 ]
 export function MemoryArt({ cap }: { cap: string }) {
+  const a = useCopy().howItWorks.art
   return (
     <div
       data-tilt=""

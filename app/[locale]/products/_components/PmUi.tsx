@@ -19,7 +19,7 @@ import {
   Video,
 } from 'lucide-react'
 import { Button, Pill, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy, type Copy } from '@/lib/copy'
 import {
   Frame,
   KIND_ICON,
@@ -41,8 +41,6 @@ import {
  * the visitor's theme, palette and style as the app does.
  */
 
-const u = copy.products.projectManagement.ui
-
 type CardData = {
   kind: string
   key: string
@@ -55,6 +53,7 @@ type CardData = {
 
 /** `BoardCard`'s exclusive slot: awaiting you › Blocked › priority. */
 function CardPill({ pill }: Readonly<{ pill: string }>) {
+  const u = useCopy().products.projectManagement.ui
   const label = u.pill[pill as keyof typeof u.pill]
   if (pill === 'awaiting')
     return (
@@ -80,6 +79,7 @@ function CardPill({ pill }: Readonly<{ pill: string }>) {
 }
 
 function BoardCard({ card }: Readonly<{ card: CardData }>) {
+  const u = useCopy().products.projectManagement.ui
   const Icon = KIND_ICON[card.kind as Kind]
   return (
     <div className="flex w-full flex-col gap-2 rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-(--spacing-card-padding) text-left shadow-(--shadow-subtle)">
@@ -128,13 +128,14 @@ function BoardCard({ card }: Readonly<{ card: CardData }>) {
 
 /** The board page: its header and a row of `BoardColumn`s. */
 export function BoardUi({
-  columns = u.columns,
+  columns,
   header = true,
 }: Readonly<{
   columns?: ReadonlyArray<{ name: string; cards: ReadonlyArray<CardData> }>
   header?: boolean
 }>) {
-  const shown = columns
+  const u = useCopy().products.projectManagement.ui
+  const shown = columns ?? u.columns
   return (
     <Frame className="bg-(--el-page-bg) p-5">
       {header ? (
@@ -194,6 +195,7 @@ const ROW_GLYPH: Record<string, React.ReactNode> = {
 
 /** The "Waiting on you" list: `ApprovalRow`s under their column headers. */
 export function ApprovalsUi() {
+  const u = useCopy().products.projectManagement.ui
   // The room's columns, less Details: the hero gives the list half a page.
   const grid = { gridTemplateColumns: 'minmax(0,1fr) 64px 96px' }
   return (
@@ -291,7 +293,12 @@ const STATUS_PILL: Record<string, { tint: string; Icon: typeof Check }> = {
   done: { tint: 'bg-(--el-tint-mint) text-(--el-text-strong)', Icon: Check },
 }
 
-function RoadmapNode({ node }: Readonly<{ node: (typeof u.roadmap)[number] }>) {
+function RoadmapNode({
+  node,
+}: Readonly<{
+  node: Copy['products']['projectManagement']['ui']['roadmap'][number]
+}>) {
+  const u = useCopy().products.projectManagement.ui
   const Icon = KIND_ICON[node.kind as Kind]
   const ready = node.status === 'ready'
   const done = node.status === 'done'
@@ -382,6 +389,7 @@ function edgePath(from: string, to: string) {
 
 /** `zoom` scales the canvas world to the column it sits in. */
 export function RoadmapUi({ zoom = 0.8 }: Readonly<{ zoom?: number }>) {
+  const u = useCopy().products.projectManagement.ui
   const doneKeys = new Set(
     u.roadmap.filter((n) => n.status === 'done').map((n) => n.key),
   )

@@ -1,8 +1,9 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SiteShell } from '@/app/_components/SiteShell'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import {
   DESIGN,
   DOCS,

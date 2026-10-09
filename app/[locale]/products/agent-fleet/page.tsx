@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { copy, format } from '@/lib/copy'
+import { englishCopy, format, getCopy } from '@/lib/copy'
 import { DOCS_DIFFICULTY } from '@/lib/destinations'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '../../../_components/SiteShell'
@@ -29,17 +29,17 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * review, like the placeholders.
  */
 
-const p = copy.products.agentFleet
-const product = productOf('agent-fleet')
-
 export const metadata: Metadata = {
-  title: format(copy.products.metaTitle, { name: product.name }),
-  description: p.metaDescription,
+  title: format(englishCopy.products.metaTitle, {
+    name: productOf('agent-fleet', englishCopy).name,
+  }),
+  description: englishCopy.products.agentFleet.metaDescription,
   robots: { index: false, follow: true },
 }
 
 export default async function AgentFleetPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const p = (await getCopy(locale)).products.agentFleet
   return (
     <SiteShell host={SITE_HOST} overlayHeader>
       <ProductHero

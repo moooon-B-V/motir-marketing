@@ -1,4 +1,4 @@
-import { copy } from '@/lib/copy'
+import { useCopy, type Copy } from '@/lib/copy'
 
 /*
  * The GEO FAQ block + its Q/A feed (MOTIR-4045). A concise, citable lead
@@ -11,7 +11,7 @@ export interface ExploreFaqItem {
   a: string
 }
 
-export function exploreFaqItems(): ExploreFaqItem[] {
+export function exploreFaqItems(copy: Copy): ExploreFaqItem[] {
   return [
     { q: copy.explore.faqQ1, a: copy.explore.faqA1 },
     { q: copy.explore.faqQ2, a: copy.explore.faqA2 },
@@ -20,7 +20,8 @@ export function exploreFaqItems(): ExploreFaqItem[] {
 }
 
 export function ExploreFaq() {
-  const items = exploreFaqItems()
+  const copy = useCopy()
+  const items = exploreFaqItems(copy)
   return (
     <section
       aria-labelledby="explore-faq-heading"

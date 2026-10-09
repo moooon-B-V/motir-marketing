@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ArrowUpRight, Tag } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import {
   hasText,
   ideasHref,
@@ -18,8 +18,6 @@ import { IdeaSheet } from './IdeaSheet'
  * the contract carries, in the design's order; a field that is null or an
  * empty string is not drawn (the seeded directions carry `whyMotir: ""`).
  */
-
-const d = copy.ideas.detail
 
 function Row({ heading, children }: { heading: string; children: ReactNode }) {
   return (
@@ -46,6 +44,8 @@ export function IdeaDetail({
   idea: PublicIdeaDto
   params: IdeasParams
 }) {
+  const copy = useCopy()
+  const d = copy.ideas.detail
   const titleId = `idea-title-${idea.slug}`
   const kind = idea.kind === 'motir_buys' ? d.kindBuys : d.kindDirection
   const [before, after] = d.foot.split('{key}')

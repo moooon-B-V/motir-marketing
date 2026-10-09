@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { ProjectHeader } from '@/app/[locale]/p/[identifier]/_components/ProjectHeader'
 import { MoreLink } from '@/app/[locale]/p/[identifier]/_components/Rows'
 import { ErrorState } from '@/app/[locale]/p/[identifier]/_components/States'

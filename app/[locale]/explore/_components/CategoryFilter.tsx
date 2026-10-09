@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Tag, X } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import {
   buildExploreHref,
   type ExploreQuery,
@@ -26,6 +26,7 @@ export function CategoryFilter({
   query: ExploreQuery
   categories: ProjectCategoryDto[]
 }) {
+  const copy = useCopy()
   const active = query.category
   const top = categories.slice(0, 6)
   if (active && !top.some((c) => c.slug === active)) {

@@ -1,4 +1,4 @@
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -24,8 +24,8 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleSentry,
-  description: copy.docs.metaDescriptionSentry,
+  title: englishCopy.docs.metaTitleSentry,
+  description: englishCopy.docs.metaDescriptionSentry,
 }
 
 const SCOPES: { scope: string; why: string }[] = [
@@ -48,7 +48,8 @@ const SCOPES: { scope: string; why: string }[] = [
 ]
 
 export default async function SentryDocsPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">

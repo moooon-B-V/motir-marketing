@@ -1,5 +1,5 @@
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import type { PublicHost } from '@/lib/publicHost'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
@@ -105,6 +105,7 @@ export function SiteShell({
    */
   overlayHeader?: boolean
 }>) {
+  const copy = useCopy()
   return (
     <div
       className={cn(

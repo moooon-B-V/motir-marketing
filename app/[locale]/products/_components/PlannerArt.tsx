@@ -1,5 +1,5 @@
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 
 /*
  * The lesson library picture on Motir AI Planner's page (2026-10 redesign), in
@@ -10,7 +10,6 @@ import { copy } from '@/lib/copy'
  * beside the copy that says the same thing.
  */
 
-const a = copy.products.aiPlanner
 const MONO = 'font-(family-name:--font-mono) tracking-[0.06em] uppercase'
 
 function Panel({
@@ -38,8 +37,16 @@ function Panel({
 }
 
 /** The lesson library every new plan reads first. */
+/*
+ * The lesson the planner has only just learned — its chip is highlighted. Its
+ * POSITION in `products.aiPlanner.learns.lessons`, not its text: the chip used
+ * to be picked by comparing the label to 'New', which no translation of that
+ * label would ever match (MOTIR-7950).
+ */
+const NEW_LESSON = 3
+
 export function LessonsArt() {
-  const l = a.learns
+  const l = useCopy().products.aiPlanner.learns
   return (
     <Panel
       showcase="wash"
@@ -54,7 +61,7 @@ export function LessonsArt() {
         {l.library}
       </p>
       <ul className="m-0 grid list-none gap-2 p-0">
-        {l.lessons.map(([lesson, used]) => (
+        {l.lessons.map(([lesson, used], index) => (
           <li
             key={lesson}
             className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-(--radius-control) bg-(--el-showcase-paper) px-(--spacing-control-x) py-(--spacing-control-y)"
@@ -64,7 +71,7 @@ export function LessonsArt() {
               className={cn(
                 MONO,
                 'rounded-(--radius-badge) px-(--spacing-chip-x) py-(--spacing-chip-y) text-[10px] whitespace-nowrap',
-                used === 'New'
+                index === NEW_LESSON
                   ? 'bg-(--el-showcase-decision) text-(--el-showcase-decision-text)'
                   : 'text-(--el-showcase-muted)',
               )}

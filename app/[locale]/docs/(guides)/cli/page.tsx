@@ -4,7 +4,8 @@ import {
   groupCliCommands,
   type CliCommandsDocument,
 } from '@/lib/docs'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { CodeBlock } from '../../_components/DocSchema'
 
 /*
@@ -70,8 +71,8 @@ import { CodeBlock } from '../../_components/DocSchema'
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: copy.docs.metaTitleCli,
-  description: copy.docs.metaDescriptionCli,
+  title: englishCopy.docs.metaTitleCli,
+  description: englishCopy.docs.metaDescriptionCli,
 }
 
 /** motir-core's own CLI reference — the authority beyond this page. */
@@ -121,7 +122,9 @@ function Command({
   )
 }
 
-export default async function CliPage() {
+export default async function CliPage({ params }: LocalePageProps) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   let catalogue: CliCommandsDocument
   try {
     catalogue = await fetchCliCommands()

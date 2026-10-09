@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { BrandMark } from '@motir/brand'
 import { Button, Pill, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import {
   Frame,
   KIND_ICON,
@@ -37,12 +37,9 @@ import {
  * its buttons can be reached; the copy beside it says what it shows.
  */
 
-const u = copy.products.aiPlanner.ui
-
 /** `PlanChangeRail`'s header: the live dot, the label and the mode chip. */
-export function RailHeader({
-  mode = u.modeFirstPlan,
-}: Readonly<{ mode?: string }>) {
+export function RailHeader({ mode }: Readonly<{ mode?: string }>) {
+  const u = useCopy().products.aiPlanner.ui
   return (
     <div className="flex items-center gap-2 border-b border-(--el-border-soft) px-4 py-3">
       <span className="size-2 rounded-full bg-(--el-success)" />
@@ -50,7 +47,7 @@ export function RailHeader({
         {u.railLabel}
       </span>
       <Pill tone="neutral" className="ml-auto">
-        {mode}
+        {mode ?? u.modeFirstPlan}
       </Pill>
     </div>
   )
@@ -66,6 +63,7 @@ export function Bubble({
   tone?: string
   children: React.ReactNode
 }>) {
+  const u = useCopy().products.aiPlanner.ui
   const isUser = role === 'user'
   return (
     <div className={cn('flex items-start gap-2', isUser && 'flex-row-reverse')}>
@@ -101,6 +99,7 @@ export function Bubble({
 }
 
 export function Composer() {
+  const u = useCopy().products.aiPlanner.ui
   return (
     <div className="border-t border-(--el-border) px-3 py-3">
       <div className="flex items-center gap-2 rounded-(--radius-input) border border-(--el-border) bg-(--el-page-bg) px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-(--el-text-secondary)">
@@ -115,6 +114,7 @@ export function Composer() {
 
 /** The hero picture: the planner asking until the "what" is clear. */
 export function PlannerChatUi() {
+  const u = useCopy().products.aiPlanner.ui
   return (
     <Frame className="mx-auto w-full max-w-[520px]">
       <div className="flex flex-col bg-(--el-surface)">
@@ -150,6 +150,7 @@ function ProposedCard({
   difficulty?: string
   manual?: boolean
 }>) {
+  const u = useCopy().products.aiPlanner.ui
   const Icon = KIND_ICON[kind]
   return (
     <div className="relative flex h-[124px] w-[280px] flex-col overflow-hidden rounded-(--radius-card) border border-dashed border-(--el-accent) bg-(--el-tint-lavender) p-3.5 shadow-(--shadow-card)">
@@ -238,6 +239,7 @@ function edgePath(from: number, to: number) {
  * roadmap's breadcrumb row; the cards are that epic's stories.
  */
 function PlanCanvas() {
+  const u = useCopy().products.aiPlanner.ui
   const cards = u.cards as ReadonlyArray<{
     kind: Kind
     title: string
@@ -305,6 +307,7 @@ function PlanCanvas() {
  * Approve), and the conversation rail beside it.
  */
 export function PlannerWorkspaceUi() {
+  const u = useCopy().products.aiPlanner.ui
   return (
     <Frame>
       <div className="flex items-center gap-3 border-b border-(--el-border-soft) bg-(--el-surface) px-4 py-2">

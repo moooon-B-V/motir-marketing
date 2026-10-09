@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { fetchMcpToolCatalogue, type McpToolCatalogue } from '@/lib/docs'
 import {
   CONNECTED_APPS_PATH,
@@ -62,8 +63,8 @@ import { CodeBlock } from '../../_components/DocSchema'
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: copy.docs.metaTitleMcp,
-  description: copy.docs.metaDescriptionMcp,
+  title: englishCopy.docs.metaTitleMcp,
+  description: englishCopy.docs.metaDescriptionMcp,
 }
 
 function H2({ children, id }: { children: React.ReactNode; id?: string }) {
@@ -207,7 +208,9 @@ function Scopes({ catalogue }: { catalogue: McpToolCatalogue | null }) {
   )
 }
 
-export default async function McpPage() {
+export default async function McpPage({ params }: LocalePageProps) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const facts = mcpTransportFacts()
   const clients = mcpClients(facts)
   const routes = claudeRoutes(facts)

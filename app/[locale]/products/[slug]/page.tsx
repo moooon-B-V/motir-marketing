@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { buttonVariants } from '@motir/design-system'
-import { copy, format } from '@/lib/copy'
+import { englishCopy, format, getCopy, type Copy } from '@/lib/copy'
 import {
   PRODUCT_DOCS,
   PRODUCT_SLUGS,
@@ -24,7 +24,7 @@ import { enterLocale } from '@/i18n/locale'
  * on.
  */
 
-const ITEM_KEY: Record<ProductSlug, keyof typeof copy.nav.productItems> = {
+const ITEM_KEY: Record<ProductSlug, keyof Copy['nav']['productItems']> = {
   'ai-planner': 'aiPlanner',
   'project-management': 'projectManagement',
   'project-manager': 'projectManager',
@@ -38,7 +38,7 @@ const ITEM_KEY: Record<ProductSlug, keyof typeof copy.nav.productItems> = {
   sandbox: 'sandbox',
 }
 
-function productFor(slug: string) {
+function productFor(slug: string, copy: Copy) {
   return (PRODUCT_SLUGS as readonly string[]).includes(slug)
     ? copy.nav.productItems[ITEM_KEY[slug as ProductSlug]]
     : null
@@ -66,10 +66,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const product = productFor((await params).slug)
+  const product = productFor((await params).slug, englishCopy)
   if (!product) return {}
   return {
-    title: format(copy.products.metaTitle, { name: product.name }),
+    title: format(englishCopy.products.metaTitle, { name: product.name }),
     description: product.blurb,
     robots: { index: false, follow: true },
   }
@@ -80,12 +80,13 @@ export default async function ProductPage({
 }: {
   params: Promise<{ slug: string; locale: string }>
 }) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const { slug } = await params
   // The tooling's page is its documentation: its address forwards there.
   const docs = PRODUCT_DOCS[slug as ProductSlug]
   if (docs) permanentRedirect(docs)
-  const product = productFor(slug)
+  const product = productFor(slug, copy)
   if (!product) notFound()
 
   return (

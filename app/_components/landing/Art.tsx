@@ -1,6 +1,6 @@
 import { Check, Play } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 
 /*
  * The landing's pictures (2026-10 redesign).
@@ -94,12 +94,12 @@ export function ArtTile({
   )
 }
 
-const art = copy.landing.art
 const MONO = 'font-(family-name:--font-mono) tracking-[0.06em] uppercase'
 
 /* ── Plan ─────────────────────────────────────────────────────────────── */
 const PLAN_FILL = [100, 60, 15, 0]
 export function PlanArt() {
+  const art = useCopy().landing.art
   return (
     <div className="grid content-start gap-2">
       <p className="mb-1 text-[20px] leading-[1.05] font-semibold tracking-[-0.02em]">
@@ -156,6 +156,7 @@ export function PlanArt() {
 
 /* ── Design: black ground, the yellow touch ───────────────────────────── */
 export function DesignArt() {
+  const art = useCopy().landing.art
   return (
     <div className="grid content-start gap-2.5">
       <div className="grid gap-[7px] rounded-(--radius-control) bg-(--el-showcase-ground-raised) p-[11px]">
@@ -236,6 +237,7 @@ export function DesignArt() {
 
 /* ── Product ──────────────────────────────────────────────────────────── */
 export function ProductArt() {
+  const art = useCopy().landing.art
   const p = art.product
   return (
     <div className="grid grid-cols-[128px_minmax(0,1fr)] gap-3.5">
@@ -295,6 +297,7 @@ export function ProductArt() {
 
 /* ── Documents ────────────────────────────────────────────────────────── */
 export function DocsArt() {
+  const art = useCopy().landing.art
   const d = art.docs
   const lines = (widths: number[]) =>
     widths.map((w) => (
@@ -344,6 +347,7 @@ export function DocsArt() {
 
 /* ── History ──────────────────────────────────────────────────────────── */
 export function HistoryArt() {
+  const art = useCopy().landing.art
   return (
     <div className="grid content-start gap-0.5">
       <p className="mb-1 text-[20px] leading-[1.05] font-semibold tracking-[-0.02em]">
@@ -377,6 +381,7 @@ export function HistoryArt() {
 
 /* ── Say it: a written brief, not a chat ─────────────────────────────── */
 export function SayArt() {
+  const art = useCopy().landing.art
   return (
     <div className="grid content-start gap-2.5">
       <p className="border-b-2 border-(--el-showcase-text) pb-2 text-[21px] leading-tight font-medium tracking-[-0.02em]">
@@ -436,6 +441,7 @@ function WatchMark({ state }: Readonly<{ state: WatchState }>) {
 }
 
 export function WatchArt() {
+  const art = useCopy().landing.art
   const w = art.watch
   return (
     <ol className="m-0 grid h-full list-none content-center gap-[7px] p-0">
@@ -485,6 +491,7 @@ export function WatchArt() {
  * marks on its timeline.
  */
 function AcceptanceVideo() {
+  const art = useCopy().landing.art
   const v = art.decide.video
   return (
     <div className="grid overflow-hidden rounded-(--radius-control) border border-(--el-showcase-rule) bg-(--el-showcase-ground) text-(--el-showcase-ground-text)">
@@ -528,6 +535,7 @@ function AcceptanceVideo() {
 }
 
 export function DecideArt() {
+  const art = useCopy().landing.art
   const d = art.decide
   return (
     <div className="grid h-full content-center">
@@ -560,6 +568,7 @@ export function DecideArt() {
 
 /* ── Welcome back ────────────────────────────────────────────────────── */
 export function ResumeArt() {
+  const art = useCopy().landing.art
   const r = art.resume
   return (
     <div className="grid gap-4">

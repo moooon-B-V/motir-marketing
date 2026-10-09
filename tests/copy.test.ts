@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { copy, format } from '@/lib/copy'
+import { englishCopy as copy, format } from '@/lib/copy'
 
 /*
  * ⚠️ THE TERMINOLOGY CHECK, MECHANISED. Yue's 2026-08-28 note on MOTIR-1152

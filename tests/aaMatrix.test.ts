@@ -1,4 +1,5 @@
-import { cleanup, render } from '@testing-library/react'
+import { cleanup } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import {
   PALETTE_IDS,
   STYLE_IDS,

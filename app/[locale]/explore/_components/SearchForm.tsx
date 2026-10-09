@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import {
   DEFAULT_PROJECT_SQUARE_RANK,
   DEFAULT_TRENDING_WINDOW,
@@ -21,6 +21,7 @@ export function ExploreSearchForm({
   query: ExploreQuery
   preserveCategory?: boolean
 }) {
+  const copy = useCopy()
   return (
     <form
       method="get"

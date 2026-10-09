@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { EN_PAGE } from '@/tests/helpers/locale'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import McpToolsPage from '@/app/[locale]/docs/(guides)/mcp/tools/page'
 import {
@@ -8,7 +9,7 @@ import {
   parseMcpToolCatalogue,
   toolHint,
 } from '@/lib/docs'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 
 /*
  * THE FETCH-VERSUS-RENDER GUARD, SECOND INSTANCE (MOTIR-4394) — the same shape
@@ -116,7 +117,7 @@ function missingFromRender(html: string, tokens: readonly string[]): string[] {
 describe('the tool catalogue RENDERS the arguments it fetches', () => {
   it('puts every fixture-only argument name on the page — the guard', async () => {
     stubCatalogueFetch(catalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     expect(
       missingFromRender(container.innerHTML, FIXTURE_TOKENS),
       'the page fetched the catalogue and did not render its arguments',
@@ -131,7 +132,7 @@ describe('the tool catalogue RENDERS the arguments it fetches', () => {
 
   it('marks required-ness and shows enum members', async () => {
     stubCatalogueFetch(catalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const html = container.innerHTML
     const requiredRow = html.slice(html.indexOf(FIXTURE_ONLY.requiredArg))
     expect(requiredRow.slice(0, 400)).toContain('required')
@@ -146,7 +147,7 @@ describe('the tool catalogue RENDERS the arguments it fetches', () => {
 describe('the THREE-WAY distinction — absent, empty, populated', () => {
   it('a tool that takes NONE says so, rather than rendering an empty block', async () => {
     stubCatalogueFetch(catalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const row = container.innerHTML.slice(
       container.innerHTML.indexOf('zqWithNoArguments'),
     )
@@ -155,7 +156,7 @@ describe('the THREE-WAY distinction — absent, empty, populated', () => {
 
   it('a tool whose SERVER publishes no schemas says THAT, which is a different fact', async () => {
     stubCatalogueFetch(catalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const row = container.innerHTML.slice(
       container.innerHTML.indexOf('zqFromAnOlderServer'),
     )
@@ -181,7 +182,7 @@ describe('the THREE-WAY distinction — absent, empty, populated', () => {
       })),
     }
     stubCatalogueFetch(older)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     expect(container.innerHTML).toContain('zqWithArguments')
     expect(container.innerHTML).toContain('does not publish')
   })
@@ -408,7 +409,7 @@ describe('the parse reads title and annotations, and refuses a wrong type', () =
 describe("/docs/mcp/tools renders each row's title and hint", () => {
   it('a row in each of the five states', async () => {
     stubCatalogueFetch(hintedCatalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const chipOf = (row: HTMLElement) =>
       row.querySelector('[data-hint]')?.textContent ?? null
 
@@ -443,7 +444,7 @@ describe("/docs/mcp/tools renders each row's title and hint", () => {
 
   it("carries the chips in the design's tints", async () => {
     stubCatalogueFetch(hintedCatalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const tint = (name: string) =>
       rowOf(container, name).querySelector('[data-hint]')!.className
     expect(tint('dispatch_prompt')).toContain('bg-(--el-tint-sky)')
@@ -453,7 +454,7 @@ describe("/docs/mcp/tools renders each row's title and hint", () => {
 
   it('says what the hints mean at the top of the page', async () => {
     stubCatalogueFetch(hintedCatalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain(copy.docs.mcpHintLedeIntro)
     expect(text).toContain(copy.docs.mcpHintDestructiveMeans)

@@ -2,7 +2,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { copy, format } from '@/lib/copy'
+import { englishCopy as copy, format } from '@/lib/copy'
 import { getLegalDocument, listLegalDocuments } from '@/lib/legal/documents'
 
 /**

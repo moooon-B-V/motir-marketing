@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { copy } from '@/lib/copy'
+import { englishCopy } from '@/lib/copy'
 
 /**
  * The project-square shell (MOTIR-4045). Composes the same chrome every
@@ -9,8 +9,8 @@ import { copy } from '@/lib/copy'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: copy.explore.metaTitle,
-    description: copy.explore.metaDescription,
+    title: englishCopy.explore.metaTitle,
+    description: englishCopy.explore.metaDescription,
   }
 }
 

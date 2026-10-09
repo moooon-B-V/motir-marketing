@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
-import { DOCS_INDEX, DOCS_ROUTES } from '@/lib/docsSurfaces'
+import { DOCS_INDEX_HREF, DOCS_ROUTES } from '@/lib/docsSurfaces'
 import { PROJECT_TABS, loadAllPublicProjects } from '@/lib/publicProject'
 import {
   currentHost,
@@ -129,7 +129,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       // The docs surfaces (MOTIR-4046). The API reference is dynamic (fetches
       // the served OpenAPI document) but is still a stable, crawlable URL.
-      url: siteUrl(DOCS_INDEX.href),
+      url: siteUrl(DOCS_INDEX_HREF),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
@@ -138,7 +138,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // in `lib/docsSurfaces.ts`, so it reaches the sitemap without an edit here.
     // This file carried the third hand-maintained copy of the nine routes, and
     // it happened to be the one MOTIR-4227 remembered.
-    ...DOCS_ROUTES.filter((path) => path !== DOCS_INDEX.href).map((path) => ({
+    ...DOCS_ROUTES.filter((path) => path !== DOCS_INDEX_HREF).map((path) => ({
       url: siteUrl(path),
       changeFrequency: 'monthly' as const,
       priority: 0.5,

@@ -1,15 +1,16 @@
 import { hasLocale } from 'next-intl'
 import { getRequestConfig } from 'next-intl/server'
+import { getCopy } from '@/lib/copy'
 import { routing } from './routing'
 
 /**
- * next-intl's per-request configuration (MOTIR-7948).
+ * next-intl's per-request configuration (MOTIR-7948, MOTIR-7950).
  *
- * ⚠️ EVERY LOCALE READS THE ENGLISH CATALOGUE FOR NOW. This card builds the
- * eleven addresses and nothing else; the catalogue-reader card replaces the
- * `messages` source below with a per-locale read that falls back to English.
- * Until then `/ja/` is a Japanese address rendering English words, which is
- * the scaffolding state the story plans for.
+ * `messages` is the locale's catalogue with English filled in per missing key
+ * (`getCopy`), so `useMessages()` — and through it `useCopy()` — returns the
+ * same complete object on the server and, via the locale layout's
+ * `NextIntlClientProvider`, in the browser. A locale with no catalogue file
+ * gets English whole.
  *
  * An unknown locale falls back to English rather than throwing: the
  * `[locale]` layout already answers 404 for a segment that is not one of the
@@ -22,6 +23,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
     : routing.defaultLocale
   return {
     locale,
-    messages: (await import('../messages/en.json')).default,
+    messages: await getCopy(locale),
   }
 })

@@ -1,9 +1,10 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SiteHeader } from '@/app/_components/SiteHeader'
 import { SITE_HOST } from '@/lib/publicHost'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import sitemap from '@/app/sitemap'
 import { siteUrl } from '@/lib/siteOrigin'
 

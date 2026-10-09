@@ -6,7 +6,8 @@ import {
   type ApiOperation,
 } from '@/lib/docs'
 import { APP_ORIGIN } from '@/lib/appOrigin'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy, useCopy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import {
   CodeBlock,
   MethodPill,
@@ -65,11 +66,12 @@ import {
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: copy.docs.metaTitleReference,
-  description: copy.docs.metaDescriptionReference,
+  title: englishCopy.docs.metaTitleReference,
+  description: englishCopy.docs.metaDescriptionReference,
 }
 
 function Operation({ operation }: { operation: ApiOperation }) {
+  const copy = useCopy()
   const id = operationAnchorId(operation)
   return (
     <section
@@ -196,7 +198,9 @@ function successSchema(operation: ApiOperation) {
   )?.schema
 }
 
-export default async function ApiReferencePage() {
+export default async function ApiReferencePage({ params }: LocalePageProps) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   let spec
   try {
     spec = await fetchOpenApiSpec()

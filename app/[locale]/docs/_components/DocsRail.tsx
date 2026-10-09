@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSitePathname } from '@/i18n/sitePathname'
-import { copy } from '@/lib/copy'
+import { type Copy, useCopy } from '@/lib/copy'
 import type { RailOperation } from '@/lib/docs'
-import { DOCS_INDEX, DOCS_SURFACES } from '@/lib/docsSurfaces'
+import { docsIndexFor, docsSurfacesFor } from '@/lib/docsSurfaces'
 
 /*
  * THE DOCS RAIL (MOTIR-4396) — built to `design/docs/design-notes.md`
@@ -50,9 +50,9 @@ import { DOCS_INDEX, DOCS_SURFACES } from '@/lib/docsSurfaces'
  * declaring it inside this client component is precisely what put it out of the
  * server-rendered index's reach.
  */
-const SURFACES: { href: string; label: string }[] = [
-  DOCS_INDEX,
-  ...DOCS_SURFACES,
+const surfacesFor = (copy: Copy): { href: string; label: string }[] => [
+  docsIndexFor(copy),
+  ...docsSurfacesFor(copy),
 ]
 
 /**
@@ -71,17 +71,20 @@ const SURFACES: { href: string; label: string }[] = [
  * pages gets a tier-2 group, so the rule above is applied by construction
  * rather than by an author remembering it for the next sub-area.
  */
-const SUB_PAGES: {
+const subPagesFor = (
+  copy: Copy,
+): {
   prefix: string
   heading: string
   pages: { href: string; label: string }[]
-}[] = DOCS_SURFACES.filter((surface) => surface.pages.length > 0).map(
-  (surface) => ({
-    prefix: surface.href,
-    heading: surface.label,
-    pages: surface.pages,
-  }),
-)
+}[] =>
+  docsSurfacesFor(copy)
+    .filter((surface) => surface.pages.length > 0)
+    .map((surface) => ({
+      prefix: surface.href,
+      heading: surface.label,
+      pages: surface.pages,
+    }))
 
 const METHOD_TINT: Record<string, string> = {
   GET: 'bg-(--el-tint-sky)',
@@ -111,6 +114,7 @@ export function DocsRail({
   /** The operation tier. Absent everywhere except under `/docs/api`. */
   operations?: readonly { group: string; operations: RailOperation[] }[]
 }) {
+  const copy = useCopy()
   const pathname = useSitePathname()
   const [query, setQuery] = useState('')
   const [narrowOpen, setNarrowOpen] = useState(false)
@@ -240,7 +244,7 @@ export function DocsRail({
 
         <GroupHeading>{copy.docs.indexTitle}</GroupHeading>
         <ul className="mb-1 list-none p-0">
-          {SURFACES.map((surface) => {
+          {surfacesFor(copy).map((surface) => {
             const current = pathname === surface.href
             return (
               <li key={surface.href}>
@@ -256,30 +260,33 @@ export function DocsRail({
           })}
         </ul>
 
-        {SUB_PAGES.filter(
-          (area) =>
-            pathname === area.prefix || pathname.startsWith(`${area.prefix}/`),
-        ).map((area) => (
-          <div key={area.prefix} className="mt-4.5">
-            <GroupHeading>{area.heading}</GroupHeading>
-            <ul className="mb-1 list-none p-0">
-              {area.pages.map((page) => {
-                const current = pathname === page.href
-                return (
-                  <li key={page.href}>
-                    <Link
-                      href={page.href}
-                      aria-current={current ? 'page' : undefined}
-                      className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
-                    >
-                      {page.label}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        ))}
+        {subPagesFor(copy)
+          .filter(
+            (area) =>
+              pathname === area.prefix ||
+              pathname.startsWith(`${area.prefix}/`),
+          )
+          .map((area) => (
+            <div key={area.prefix} className="mt-4.5">
+              <GroupHeading>{area.heading}</GroupHeading>
+              <ul className="mb-1 list-none p-0">
+                {area.pages.map((page) => {
+                  const current = pathname === page.href
+                  return (
+                    <li key={page.href}>
+                      <Link
+                        href={page.href}
+                        aria-current={current ? 'page' : undefined}
+                        className={`${ROW} ${current ? ROW_CURRENT : ROW_REST}`}
+                      >
+                        {page.label}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          ))}
 
         {/* Tier 3. Hidden below the docs breakpoint behind a disclosure, so the
           narrow layout does not open with forty-nine rows before its content

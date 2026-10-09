@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Fragment } from 'react'
 
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import {
   AGENT_INSTALLS,
   CHECKED_ON,
@@ -37,14 +37,15 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleSkills,
-  description: copy.docs.metaDescriptionSkills,
+  title: englishCopy.docs.metaTitleSkills,
+  description: englishCopy.docs.metaDescriptionSkills,
 }
 
 const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'
 
 export default async function SkillsDocsPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">

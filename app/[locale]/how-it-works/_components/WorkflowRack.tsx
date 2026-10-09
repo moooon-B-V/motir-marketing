@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 
 /*
  * The workflow drawing on "How Motir works" (2026-10 redesign): one work item,
@@ -22,10 +22,11 @@ import { copy } from '@/lib/copy'
  */
 
 const NS = 'http://www.w3.org/2000/svg'
-const r = copy.howItWorks.rack
 type Attrs = Record<string, string | number>
 
 export function WorkflowRack() {
+  const copy = useCopy()
+  const r = copy.howItWorks.rack
   const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
@@ -486,7 +487,7 @@ export function WorkflowRack() {
       off.forEach((fn) => fn())
       root.remove()
     }
-  }, [])
+  }, [r])
 
   return (
     <svg

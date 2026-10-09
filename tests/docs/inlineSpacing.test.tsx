@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import DocsIndexPage from '@/app/[locale]/docs/(guides)/page'
 import CliPage from '@/app/[locale]/docs/(guides)/cli/page'
@@ -133,14 +133,14 @@ describe('no /docs page runs a word into the element before it', async () => {
       '/docs/mcp',
       async () => {
         stub(catalogueFixture)
-        return render(await McpPage()).container
+        return render(await McpPage(EN_PAGE)).container
       },
     ],
     [
       '/docs/cli',
       async () => {
         stub(cliFixture)
-        return render(await CliPage()).container
+        return render(await CliPage(EN_PAGE)).container
       },
     ],
     ['/docs/sandbox', async () => render(await SandboxPage(EN_PAGE)).container],
@@ -166,10 +166,13 @@ describe('no /docs page runs a word into the element before it', async () => {
       '/docs/api/getting-started',
       async () => {
         stub(specFixture)
-        return render(await GettingStartedPage()).container
+        return render(await GettingStartedPage(EN_PAGE)).container
       },
     ],
-    ['/docs/api/stability', async () => render(<StabilityPage />).container],
+    [
+      '/docs/api/stability',
+      async () => render(await StabilityPage(EN_PAGE)).container,
+    ],
   ]
 
   for (const [route, mount] of cases) {

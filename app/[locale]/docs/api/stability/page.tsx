@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
  * The stability & deprecation policy (MOTIR-4046, RESTORED by MOTIR-4429).
@@ -33,8 +34,8 @@ import { copy } from '@/lib/copy'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleStability,
-  description: copy.docs.metaDescriptionStability,
+  title: englishCopy.docs.metaTitleStability,
+  description: englishCopy.docs.metaDescriptionStability,
 }
 
 /** Where the promise is DECIDED, as against this page, where it is published. */
@@ -112,7 +113,9 @@ function PolicyItem({ text }: { text: string }) {
   )
 }
 
-export default function StabilityPage() {
+export default async function StabilityPage({ params }: LocalePageProps) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">

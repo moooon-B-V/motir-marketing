@@ -1,3 +1,6 @@
+import { NextIntlClientProvider } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
+import { clientCopy, englishCopy } from '@/lib/copy'
 import { NotFoundRoom } from './_components/NotFoundRoom'
 import { SiteDocument } from './_components/SiteDocument'
 import { UNKNOWN_HOST } from '@/lib/publicHost'
@@ -135,9 +138,17 @@ import { UNKNOWN_HOST } from '@/lib/publicHost'
  * the 404 card's, from a locale-scoped boundary, not a reason to read one here.
  */
 export default function NotFound() {
+  // ⚠️ ENGLISH, NAMED RATHER THAN ASKED FOR (MOTIR-7950). The room's words are
+  // read through next-intl now, and next-intl with no locale set asks the
+  // REQUEST which one is in use — the read the paragraph above forbids. So the
+  // locale is set here, and the provider hands the client chrome the English
+  // catalogue. The room in each language is MOTIR-7955's.
+  setRequestLocale('en')
   return (
     <SiteDocument lang="en">
-      <NotFoundRoom host={UNKNOWN_HOST} />
+      <NextIntlClientProvider locale="en" messages={clientCopy(englishCopy)}>
+        <NotFoundRoom host={UNKNOWN_HOST} />
+      </NextIntlClientProvider>
     </SiteDocument>
   )
 }

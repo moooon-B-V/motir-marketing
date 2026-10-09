@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import { CodeBlock } from '../../_components/DocSchema'
 import { SetupSteps } from './SetupSteps'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
@@ -98,12 +98,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleSandbox,
-  description: copy.docs.metaDescriptionSandbox,
+  title: englishCopy.docs.metaTitleSandbox,
+  description: englishCopy.docs.metaDescriptionSandbox,
 }
 
 export default async function SandboxPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">

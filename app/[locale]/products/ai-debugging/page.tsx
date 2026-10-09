@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { copy, format } from '@/lib/copy'
+import { englishCopy, format, getCopy } from '@/lib/copy'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '../../../_components/SiteShell'
 import { productOf } from '../../../_components/products'
@@ -38,17 +38,17 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * review, like the placeholders.
  */
 
-const p = copy.products.aiDebugging
-const product = productOf('ai-debugging')
-
 export const metadata: Metadata = {
-  title: format(copy.products.metaTitle, { name: product.name }),
-  description: p.metaDescription,
+  title: format(englishCopy.products.metaTitle, {
+    name: productOf('ai-debugging', englishCopy).name,
+  }),
+  description: englishCopy.products.aiDebugging.metaDescription,
   robots: { index: false, follow: true },
 }
 
 export default async function AiDebuggingPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const p = (await getCopy(locale)).products.aiDebugging
   return (
     <SiteShell host={SITE_HOST} overlayHeader>
       <ProductHero

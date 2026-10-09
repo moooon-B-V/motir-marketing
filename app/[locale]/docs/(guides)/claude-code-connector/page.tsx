@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import {
   CONNECTED_APPS_PATH,
   claudeRoutes,
@@ -24,8 +24,8 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleClaudeCodeConnector,
-  description: copy.docs.metaDescriptionClaudeCodeConnector,
+  title: englishCopy.docs.metaTitleClaudeCodeConnector,
+  description: englishCopy.docs.metaDescriptionClaudeCodeConnector,
 }
 
 const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'
@@ -33,7 +33,8 @@ const linkClass = 'text-(--el-accent-on-surface) underline underline-offset-2'
 export default async function ClaudeCodeConnectorDocsPage({
   params,
 }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const facts = mcpTransportFacts()
   const routes = claudeRoutes(facts)
   const byId = (id: string) => routes.find((route) => route.id === id)!

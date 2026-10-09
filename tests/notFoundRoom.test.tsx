@@ -1,9 +1,10 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import NotFound from '@/app/not-found'
 import HostUnavailablePage from '@/app/[locale]/host-unavailable/page'
 import { NotFoundRoom } from '@/app/_components/NotFoundRoom'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
@@ -17,6 +18,15 @@ import { siteUrl } from '@/lib/siteOrigin'
 // document shell — which loads `next/font` and the stylesheet this lane cannot
 // evaluate, and an `<html>` jsdom cannot mount inside a container. The ROOM is
 // what these tests read, so the shell passes its children straight through.
+// ⚠️ THE 404 ROOM'S SERVER HALF, UNDER jsdom (MOTIR-7950). `app/not-found.tsx`
+// hands its provider only the namespaces client modules read; on the server
+// the room and the footer read the full catalogue from next-intl's request
+// config instead. jsdom has no server half — every component reads the
+// provider — so here the provider gets the whole English catalogue.
+vi.mock('@/lib/copy', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/copy')>()
+  return { ...actual, clientCopy: (copy: Record<string, unknown>) => copy }
+})
 vi.mock('@/app/_components/SiteDocument', () => ({
   SiteDocument: ({ children }: { children: React.ReactNode }) => children,
 }))

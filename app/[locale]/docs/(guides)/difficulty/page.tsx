@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -30,8 +30,8 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleDifficulty,
-  description: copy.docs.metaDescriptionDifficulty,
+  title: englishCopy.docs.metaTitleDifficulty,
+  description: englishCopy.docs.metaDescriptionDifficulty,
 }
 
 const AS_OF = '23 September 2026'
@@ -176,7 +176,8 @@ const SOURCES: { label: string; href: string }[] = [
 ]
 
 export default async function DifficultyDocsPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">

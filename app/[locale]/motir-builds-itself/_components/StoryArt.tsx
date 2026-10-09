@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, Check, CornerDownRight, RefreshCw } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { productPath, type ProductSlug } from '@/lib/destinations'
 import { productOf } from '@/app/_components/products'
 
@@ -14,7 +14,6 @@ import { productOf } from '@/app/_components/products'
  * same thing.
  */
 
-const b = copy.builtByMotirPage
 const MONO = 'font-(family-name:--font-mono) tracking-[0.06em] uppercase'
 
 /** One "what got lost" scene, by its index in `lost.items`. */
@@ -92,6 +91,7 @@ const LOST_TONES = [
 const LOST_SHOWCASE = ['wash-warm', 'wash', 'field', 'wash'] as const
 
 export function LostTiles() {
+  const b = useCopy().builtByMotirPage
   return (
     <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
       {b.lost.items.map((item, i) => (
@@ -121,6 +121,8 @@ export function LostTiles() {
 
 /** The three things we needed, each as a numbered row. */
 export function NeedList() {
+  const copy = useCopy()
+  const b = copy.builtByMotirPage
   return (
     <ol className="m-0 grid list-none gap-3 p-0">
       {b.missing.items.map((item, i) => (
@@ -148,7 +150,7 @@ export function NeedList() {
               href={productPath(item.product as ProductSlug)}
               className="col-start-2 mt-1 inline-flex items-center gap-1.5 justify-self-start text-[14px] font-semibold text-(--el-accent-on-surface) underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--el-accent-on-surface)"
             >
-              {productOf(item.product as ProductSlug).name}
+              {productOf(item.product as ProductSlug, copy).name}
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           ) : null}
@@ -163,6 +165,7 @@ export function NeedList() {
  * was built WITH — the step before it.
  */
 export function Staircase() {
+  const b = useCopy().builtByMotirPage
   const steps = b.bootstrap.steps
   return (
     <div className="grid gap-6">

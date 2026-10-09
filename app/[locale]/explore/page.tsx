@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { copy, format } from '@/lib/copy'
+import { englishCopy, format, getCopy, type Copy } from '@/lib/copy'
+import { enterLocale, type LocaleParams } from '@/i18n/locale'
 import { siteUrl } from '@/lib/siteOrigin'
 import {
   buildExploreHref,
@@ -47,13 +48,13 @@ export async function generateMetadata({
   const query = parseExploreSearchParams(await searchParams)
   const url = canonicalUrl(query)
   return {
-    title: copy.explore.metaTitle,
-    description: copy.explore.metaDescription,
+    title: englishCopy.explore.metaTitle,
+    description: englishCopy.explore.metaDescription,
     alternates: { canonical: url },
   }
 }
 
-function galleryHeading(query: ExploreQuery): string {
+function galleryHeading(query: ExploreQuery, copy: Copy): string {
   if (query.search)
     return format(copy.explore.galleryHeadingSearch, { query: query.search })
   if (query.rank === 'popular') return copy.explore.galleryHeadingPopular
@@ -62,13 +63,17 @@ function galleryHeading(query: ExploreQuery): string {
 }
 
 export default async function ExplorePage({
+  params,
   searchParams,
 }: {
+  params: LocaleParams
   searchParams: Promise<RawSearchParams>
 }) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const query = parseExploreSearchParams(await searchParams)
   const { page, categories, failed } = await loadSquare(query)
-  const heading = galleryHeading(query)
+  const heading = galleryHeading(query, copy)
 
   return (
     <SiteShell host={SITE_HOST} overlayHeader>
@@ -114,7 +119,7 @@ export default async function ExplorePage({
         name={copy.explore.metaTitle}
         description={copy.explore.metaDescription}
         cards={page?.items ?? []}
-        faq={exploreFaqItems()}
+        faq={exploreFaqItems(copy)}
       />
     </SiteShell>
   )

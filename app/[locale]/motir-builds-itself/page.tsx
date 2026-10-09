@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import {
   FREE_DOOR,
   HOW_IT_WORKS,
@@ -15,6 +15,7 @@ import { HeroWaves } from '../../_components/landing/HeroWaves'
 import { RoadmapUi } from '../products/_components/PmUi'
 import { Eyebrow, GUTTER, H2 } from '../products/_components/ProductPage'
 import { LostTiles, NeedList, Staircase } from './_components/StoryArt'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
  * "Motir builds itself" (2026-10 redesign) — the story behind the landing's
@@ -31,11 +32,9 @@ import { LostTiles, NeedList, Staircase } from './_components/StoryArt'
 
 export const dynamic = 'force-dynamic'
 
-const b = copy.builtByMotirPage
-
 export const metadata: Metadata = {
-  title: b.metaTitle,
-  description: b.metaDescription,
+  title: englishCopy.builtByMotirPage.metaTitle,
+  description: englishCopy.builtByMotirPage.metaDescription,
   robots: { index: false, follow: true },
 }
 
@@ -100,7 +99,11 @@ function Section({
   )
 }
 
-export default async function MotirBuildsItselfPage() {
+export default async function MotirBuildsItselfPage({
+  params,
+}: LocalePageProps) {
+  const locale = await enterLocale(params)
+  const b = (await getCopy(locale)).builtByMotirPage
   const [project, changelog] = await Promise.all([
     loadProject('MOTIR'),
     loadChangelog('MOTIR'),

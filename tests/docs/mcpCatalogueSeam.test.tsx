@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import McpToolsPage from '@/app/[locale]/docs/(guides)/mcp/tools/page'
 import SkillsDocsPage from '@/app/[locale]/docs/(guides)/skills/page'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import { fetchMcpToolCatalogue, toolHint, type McpToolHint } from '@/lib/docs'
 import { AGENT_INSTALLS, SKILLS_RELEASE_TAG } from '@/lib/skillsGuide'
 import { EN_PAGE } from '@/tests/helpers/locale'
@@ -120,7 +120,7 @@ describe('the seam: fetch → toolHint → the rendered page', () => {
 
   it('renders one row per tool, each with its title and the chip its hints give', async () => {
     stubCatalogueFetch(recorded.catalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const rows = renderedRows(container)
     expect(rows.size).toBe(recorded.catalogue.toolCount)
 
@@ -140,7 +140,7 @@ describe('the seam: fetch → toolHint → the rendered page', () => {
   it('an OLDER Motir — no titles, no annotations — renders the absent-hints line and no chip', async () => {
     const older = stripped()
     stubCatalogueFetch(older)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const rows = renderedRows(container)
     expect(rows.size).toBe(older.toolCount)
     for (const [name, row] of rows) {
@@ -155,7 +155,7 @@ describe('the seam: fetch → toolHint → the rendered page', () => {
 describe('GUARD: a write is never shown as a read', () => {
   it('no recorded row whose readOnlyHint is not true renders the Reads chip', async () => {
     stubCatalogueFetch(recorded.catalogue)
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const rows = renderedRows(container)
     const writes = recordedTools.filter(
       (tool) => tool.annotations?.readOnlyHint !== true,
@@ -174,7 +174,7 @@ describe('GUARD: a write is never shown as a read', () => {
 
   it('and none of the stripped rows renders Reads either', async () => {
     stubCatalogueFetch(stripped())
-    const { container } = render(await McpToolsPage())
+    const { container } = render(await McpToolsPage(EN_PAGE))
     const readsChips = [...container.querySelectorAll('li [data-hint="reads"]')]
     expect(readsChips).toEqual([])
   })

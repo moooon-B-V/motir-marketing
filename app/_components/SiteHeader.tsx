@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useSitePathname } from '@/i18n/sitePathname'
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
-import { PRODUCT_MARK, productGroups, productItems } from './products'
+import { type Copy, useCopy } from '@/lib/copy'
+import { PRODUCT_MARK, productGroupsFor, productItemsFor } from './products'
 import { BrandTile } from './BrandTile'
 import {
   DESIGN,
@@ -81,13 +81,14 @@ import { SetupPromptButton } from './SetupPromptButton'
  * and took three 404s before the visitor touched anything. Neither prefetching,
  * client routing nor `aria-current` means anything across origins.
  */
-const navItems = [
-  { path: EXPLORE, label: copy.nav.explore },
-  { path: IDEAS, label: copy.nav.ideas },
-  { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself, feature: true },
-  { path: DOCS, label: copy.nav.docs },
-  { path: DESIGN, label: copy.nav.design },
-] as const
+const navItemsFor = (copy: Copy) =>
+  [
+    { path: EXPLORE, label: copy.nav.explore },
+    { path: IDEAS, label: copy.nav.ideas },
+    { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself, feature: true },
+    { path: DOCS, label: copy.nav.docs },
+    { path: DESIGN, label: copy.nav.design },
+  ] as const
 
 /**
  * Whether an item is the page being read. Explore and Docs each cover their
@@ -112,6 +113,7 @@ const productHref = (host: PublicHost, slug: ProductSlug) =>
 const NEW_TAB = { target: '_blank', rel: 'noopener noreferrer' } as const
 
 function ProductsMenu({ host }: { host: PublicHost }) {
+  const copy = useCopy()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const onSite = host.kind === 'site'
@@ -158,7 +160,7 @@ function ProductsMenu({ host }: { host: PublicHost }) {
           role="group"
           className="absolute top-[calc(100%+12px)] left-[-14px] z-40 grid w-[min(920px,calc(100vw-32px))] gap-x-4 gap-y-3 rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-(--spacing-card-padding) shadow-(--shadow-elevated) md:grid-cols-3"
         >
-          {productGroups.map((group) => (
+          {productGroupsFor(copy).map((group) => (
             <div key={group.label} className="grid content-start gap-1">
               <p className="m-0 px-(--spacing-control-x) pb-1 font-(family-name:--font-mono) text-[11px] tracking-[0.1em] text-(--el-text-secondary) uppercase">
                 {group.label}
@@ -229,6 +231,7 @@ export function SiteHeader({
   /** Over the page's first section rather than above it (`SiteShell`). */
   overlay?: boolean
 }) {
+  const copy = useCopy()
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = useSitePathname()
   const onSite = host.kind === 'site'
@@ -262,7 +265,7 @@ export function SiteHeader({
             className="hidden items-center gap-5 md:flex"
           >
             <ProductsMenu host={host} />
-            {navItems.map((item) => {
+            {navItemsFor(copy).map((item) => {
               const current = isCurrent(host, item.path, pathname)
               return (
                 <ChromeLink
@@ -347,14 +350,14 @@ export function SiteHeader({
               open panel (panel 4) rather than describing it, for that
               reason. */}
           {[
-            ...productItems.map((product) => ({
+            ...productItemsFor(copy).map((product) => ({
               href: productHref(host, product.slug),
               label: product.name,
               internal: onSite && !PRODUCT_DOCS[product.slug],
               current: false,
               newTab: Boolean(PRODUCT_DOCS[product.slug]),
             })),
-            ...navItems.map((item) => ({
+            ...navItemsFor(copy).map((item) => ({
               href: siteLinkFor(host, item.path),
               label: item.label,
               internal: onSite,

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { describe, expect, it } from 'vitest'
 import SandboxPage from '@/app/[locale]/docs/(guides)/sandbox/page'
 import { EN_PAGE } from '@/tests/helpers/locale'

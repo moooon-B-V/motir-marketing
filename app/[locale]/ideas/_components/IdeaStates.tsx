@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { RefreshCw } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { MONO } from './IdeaCards'
 
 /*
@@ -12,7 +12,7 @@ import { MONO } from './IdeaCards'
  */
 
 export function IdeasEmpty() {
-  const e = copy.ideas.empty
+  const e = useCopy().ideas.empty
   return (
     <section
       aria-labelledby="empty-h"
@@ -35,7 +35,7 @@ export function IdeasEmpty() {
 }
 
 export function IdeasUnavailable({ retryHref }: { retryHref: string }) {
-  const e = copy.ideas.error
+  const e = useCopy().ideas.error
   return (
     <section
       role="status"

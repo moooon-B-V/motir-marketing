@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
 import { DOCS, SIGN_UP } from '@/lib/destinations'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '../../_components/SiteShell'
@@ -26,12 +26,11 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export const metadata: Metadata = {
-  title: copy.howItWorks.metaTitle,
-  description: copy.howItWorks.metaDescription,
+  title: englishCopy.howItWorks.metaTitle,
+  description: englishCopy.howItWorks.metaDescription,
   alternates: { canonical: '/how-it-works' },
 }
 
-const h = copy.howItWorks
 const GUTTER = 'px-[clamp(16px,3vw,48px)]'
 const H2 =
   'm-0 font-(family-name:--font-serif) text-[clamp(40px,5.4vw,84px)] leading-[0.95] font-bold tracking-[-0.04em] text-balance'
@@ -80,7 +79,8 @@ function Led({ warm }: { warm?: boolean }) {
 }
 
 export default async function HowItWorksPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const h = (await getCopy(locale)).howItWorks
   return (
     <>
       <SiteShell host={SITE_HOST} className="bg-(--el-surface)">

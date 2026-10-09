@@ -29,7 +29,7 @@ import {
   TypePicker,
 } from '@motir/design-system'
 import { RotateCcw } from 'lucide-react'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { useVisitAppearance } from '@/lib/useVisitAppearance'
 
 /*
@@ -111,6 +111,7 @@ export function DesignShowcase() {
  * it over all ten palettes in both themes rather than taking this on trust.
  */
 function AxisRail({ theme }: { theme: ReturnType<typeof useVisitAppearance> }) {
+  const copy = useCopy()
   const { offDefault, reset } = theme
 
   return (
@@ -257,6 +258,7 @@ function AxisRow({ children }: { children: React.ReactNode }) {
  * asks for; it is also the only version that cannot drift from the package.
  */
 function Specimen() {
+  const copy = useCopy()
   return (
     <>
       <div className="mx-auto max-w-[1080px] px-4 pt-10 pb-4 sm:px-7">

@@ -1,7 +1,7 @@
 import { readdirSync, statSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { EN_PAGE } from '@/tests/helpers/locale'

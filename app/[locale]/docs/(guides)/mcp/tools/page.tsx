@@ -8,7 +8,8 @@ import {
   type McpToolEntry,
   type McpToolHint,
 } from '@/lib/docs'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy, useCopy, type Copy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { SchemaTable } from '../../../_components/DocSchema'
 
 /*
@@ -69,8 +70,8 @@ import { SchemaTable } from '../../../_components/DocSchema'
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: copy.docs.metaTitleMcpTools,
-  description: copy.docs.metaDescriptionMcpTools,
+  title: englishCopy.docs.metaTitleMcpTools,
+  description: englishCopy.docs.metaDescriptionMcpTools,
 }
 
 /** How deep the argument tables render — stated, as the producer states what it emits. */
@@ -102,20 +103,22 @@ function ToolArguments({ tool }: { tool: McpToolEntry }) {
 }
 
 /** The chip recipe from `design/docs/design-notes.md` § The chips, per hint. */
-const HINT_CHIPS: Record<
+const hintChipsFor = (
+  copy: Copy,
+): Record<
   Exclude<McpToolHint, 'unpublished'>,
   { label: string; tint: string }
-> = {
+> => ({
   reads: { label: copy.docs.mcpHintReads, tint: 'bg-(--el-tint-sky)' },
   writes: { label: copy.docs.mcpHintWrites, tint: 'bg-(--el-tint-peach)' },
   destructive: {
     label: copy.docs.mcpHintDestructive,
     tint: 'bg-(--el-tint-rose)',
   },
-}
+})
 
 function HintChip({ hint }: { hint: Exclude<McpToolHint, 'unpublished'> }) {
-  const chip = HINT_CHIPS[hint]
+  const chip = hintChipsFor(useCopy())[hint]
   return (
     <span
       data-hint={hint}
@@ -147,7 +150,9 @@ function ToolHead({ tool }: { tool: McpToolEntry }) {
   )
 }
 
-export default async function McpToolsPage() {
+export default async function McpToolsPage({ params }: LocalePageProps) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   let catalogue: McpToolCatalogue
   try {
     catalogue = await fetchMcpToolCatalogue()

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Tag } from 'lucide-react'
-import { copy, format } from '@/lib/copy'
+import { format, useCopy } from '@/lib/copy'
 import type { ProjectCategoryDto } from '@/lib/explore'
 
 /*
@@ -14,6 +14,7 @@ export function CategoriesBrowse({
 }: {
   categories: ProjectCategoryDto[]
 }) {
+  const copy = useCopy()
   if (categories.length === 0) return null
   const max = Math.max(...categories.map((c) => c.projectCount), 1)
 

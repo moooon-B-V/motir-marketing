@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { copy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import { setupPrompt } from '@/lib/setupPrompt'
 import { SetupPromptButton } from '@/app/_components/SetupPromptButton'
-import { DOCS_SURFACES } from '@/lib/docsSurfaces'
+import { docsSurfacesFor } from '@/lib/docsSurfaces'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -18,7 +18,8 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export default async function DocsIndexPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
@@ -53,7 +54,7 @@ export default async function DocsIndexPage({ params }: LocalePageProps) {
         </details>
       </section>
 
-      {DOCS_SURFACES.map((surface) => (
+      {docsSurfacesFor(copy).map((surface) => (
         <section key={surface.href} className="mt-8">
           <h2 className="font-(family-name:--font-serif) text-lg font-semibold text-(--el-text)">
             {surface.label}

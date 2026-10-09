@@ -11,7 +11,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { Button, Pill } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { Bubble, Composer, RailHeader } from './PlannerUi'
 import { Frame } from './realUi'
 
@@ -27,9 +27,6 @@ import { Frame } from './realUi'
  * One wording change from the app: the app calls Sentry's records "issues";
  * motir.co's copy never says "issue", so here they are errors, as in the docs.
  */
-
-const u = copy.products.aiDebugging.ui
-const e = u.error
 
 /** `ContentSectionCard`'s header: title, gloss, an optional badge. */
 function SectionCard({
@@ -69,6 +66,8 @@ const LABEL =
 
 /** The bug's Errors section: one linked Sentry error, evidence open. */
 export function ErrorsUi() {
+  const u = useCopy().products.aiDebugging.ui
+  const e = u.error
   return (
     <Frame className="bg-(--el-page-bg) p-3">
       <SectionCard
@@ -154,6 +153,7 @@ export function ErrorsUi() {
 
 /** The bug as AI wrote it: its Explanation and its Description. */
 export function PlannedBugUi() {
+  const u = useCopy().products.aiDebugging.ui
   const drafted = (
     <Pill tone="neutral">
       <Sparkles className="h-3 w-3" />
@@ -216,6 +216,7 @@ function SwitchOn() {
 
 /** The Monitoring room with Sentry connected and one project monitored. */
 export function MonitoringUi() {
+  const u = useCopy().products.aiDebugging.ui
   return (
     <Frame className="bg-(--el-page-bg) p-5">
       <div className="flex flex-col gap-5">
@@ -336,6 +337,7 @@ function WorkItemChip({
 
 /** A debug turn in the Motir AI rail, finished: the acts, the diagnosis, the one write. */
 export function DebugTurnUi() {
+  const u = useCopy().products.aiDebugging.ui
   const g = u.debug
   return (
     <Frame className="mx-auto w-full max-w-[540px]">
@@ -379,6 +381,7 @@ export function DebugTurnUi() {
 
 /** A run's "What this run produced" strip (`RunFindings`), with the bug it filed. */
 export function RunFindingsUi() {
+  const u = useCopy().products.aiDebugging.ui
   const r = u.run
   return (
     <Frame className="bg-(--el-page-bg)">

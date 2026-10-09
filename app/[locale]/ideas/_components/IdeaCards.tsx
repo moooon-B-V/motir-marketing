@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy, format } from '@/lib/copy'
+import { format, useCopy } from '@/lib/copy'
 import {
   hasText,
   ideaCategoryMark,
@@ -19,7 +19,6 @@ import { OpenIdeaLink } from './IdeasNav'
  * place; a source link inside sits above that stretch.
  */
 
-const i = copy.ideas
 export const MONO = 'font-(family-name:--font-mono) tracking-[0.1em] uppercase'
 
 const STRETCH =
@@ -79,6 +78,7 @@ export function CategoryMark({
 }
 
 function OpenFoot({ className }: { className?: string }) {
+  const i = useCopy().ideas
   return (
     <span
       aria-hidden="true"
@@ -103,6 +103,7 @@ export function BuyCard({
   index: number
   params: IdeasParams
 }) {
+  const i = useCopy().ideas
   const tone = TONES[index % TONES.length]
   return (
     <li
@@ -196,6 +197,7 @@ export function DirectionCard({
   idea: PublicIdeaDto
   params: IdeasParams
 }) {
+  const i = useCopy().ideas
   const first = idea.evidence[0]
   const extra = idea.evidence.length - 1
   return (

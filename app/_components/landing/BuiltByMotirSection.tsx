@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import {
   MOTIR_BUILDS_ITSELF,
   MOTIR_PROJECT,
@@ -21,10 +21,10 @@ import {
  * ground as its one strong button. Card shape tokens, like the other panels.
  */
 
-const b = copy.landing.builtByMotir
 const MONO = 'font-(family-name:--font-mono) tracking-[0.1em] uppercase'
 
 export function BuiltByMotirSection() {
+  const b = useCopy().landing.builtByMotir
   return (
     <section
       aria-labelledby="built-by-motir-h"

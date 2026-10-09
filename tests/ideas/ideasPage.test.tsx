@@ -1,8 +1,9 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { cleanup, render, screen, within } from '@testing-library/react'
-import { copy } from '@/lib/copy'
+import { cleanup, screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { englishCopy as copy } from '@/lib/copy'
 import {
   ideasHref,
   parseIdeasParams,
@@ -105,7 +106,12 @@ async function open(query: string) {
       }),
     ),
   )
-  render(await IdeasPage({ searchParams }))
+  render(
+    await IdeasPage({
+      params: Promise.resolve({ locale: 'en' }),
+      searchParams,
+    }),
+  )
 }
 
 /** The titles of every idea card on the page, in order. */

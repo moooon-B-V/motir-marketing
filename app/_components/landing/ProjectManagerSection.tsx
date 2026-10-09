@@ -1,5 +1,5 @@
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { IMPORT_DOOR } from '@/lib/destinations'
 
 /*
@@ -15,10 +15,10 @@ import { IMPORT_DOOR } from '@/lib/destinations'
  * example, labelled as one for assistive technology.
  */
 
-const pm = copy.landing.projectManager
 const MONO = 'font-(family-name:--font-mono) tracking-[0.08em] uppercase'
 
 export function ProjectManagerSection() {
+  const pm = useCopy().landing.projectManager
   return (
     <section
       id="project-manager"
@@ -108,7 +108,7 @@ export function ProjectManagerSection() {
 }
 
 function WeeklyReport() {
-  const r = pm.report
+  const r = useCopy().landing.projectManager.report
   return (
     <figure
       aria-label={r.ariaLabel}

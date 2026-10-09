@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { EN_PAGE } from '@/tests/helpers/locale'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import ApiReferencePage from '@/app/[locale]/docs/api/page'
 import {
@@ -167,7 +168,7 @@ afterEach(() => {
 describe('the API reference RENDERS the document it fetches', () => {
   it('puts every fixture-only property on the page — the guard', async () => {
     stubSpecFetch(fixture)
-    const { container } = render(await ApiReferencePage())
+    const { container } = render(await ApiReferencePage(EN_PAGE))
     expect(
       missingFromRender(container.innerHTML, FIXTURE_TOKENS),
       'the page fetched the document and did not render it',
@@ -189,7 +190,7 @@ describe('the API reference RENDERS the document it fetches', () => {
 
   it('marks required and optional properties, not just their names', async () => {
     stubSpecFetch(fixture)
-    const { container } = render(await ApiReferencePage())
+    const { container } = render(await ApiReferencePage(EN_PAGE))
     const html = container.innerHTML
     // The row order is name → required-ness, so the required property's marker
     // follows it before the next property begins.
@@ -201,7 +202,7 @@ describe('the API reference RENDERS the document it fetches', () => {
 
   it('renders the response STATUS set and the permission', async () => {
     stubSpecFetch(fixture)
-    const { container } = render(await ApiReferencePage())
+    const { container } = render(await ApiReferencePage(EN_PAGE))
     expect(container.innerHTML).toContain('201')
     expect(container.innerHTML).toContain('422')
     expect(container.innerHTML).toContain('thing:edit')
@@ -209,7 +210,7 @@ describe('the API reference RENDERS the document it fetches', () => {
 
   it('renders a copyable example carrying the REQUIRED field and not the optional one', async () => {
     stubSpecFetch(fixture)
-    const { container } = render(await ApiReferencePage())
+    const { container } = render(await ApiReferencePage(EN_PAGE))
     const pre = container.querySelector('pre')
     expect(pre?.textContent).toContain('curl -X POST')
     expect(pre?.textContent).toContain(FIXTURE_ONLY.requiredProperty)
@@ -220,7 +221,7 @@ describe('the API reference RENDERS the document it fetches', () => {
 
   it('resolves every `$ref` — no pointer string reaches the reader', async () => {
     stubSpecFetch(fixture)
-    const { container } = render(await ApiReferencePage())
+    const { container } = render(await ApiReferencePage(EN_PAGE))
     expect(container.innerHTML).not.toContain('$ref')
     expect(container.innerHTML).not.toContain('#/components/schemas')
     // …and the thing behind the pointer is actually there.
@@ -232,7 +233,7 @@ describe('the API reference RENDERS the document it fetches', () => {
       'fetch',
       vi.fn(async () => new Response('nope', { status: 503 })),
     )
-    const { container } = render(await ApiReferencePage())
+    const { container } = render(await ApiReferencePage(EN_PAGE))
     expect(container.textContent).toContain('unreachable')
     expect(container.innerHTML).not.toContain(FIXTURE_ONLY.bodyProperty)
   })

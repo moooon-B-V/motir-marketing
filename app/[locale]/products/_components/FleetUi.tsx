@@ -1,6 +1,6 @@
 import { Plus, SquareTerminal } from 'lucide-react'
 import { Button, cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy, type Copy } from '@/lib/copy'
 import { Frame, KIND_ICON, KIND_ICON_COLOR, type Kind } from './realUi'
 
 /*
@@ -11,8 +11,6 @@ import { Frame, KIND_ICON, KIND_ICON_COLOR, type Kind } from './realUi'
  * element tokens. Agent Hosting's My agents room (`MyAgentsRoom`'s header
  * and table) is drawn here too, on the same `RunTonePill`.
  */
-
-const u = copy.products.agentFleet.ui
 
 type Tone = 'running' | 'implemented' | 'failed' | 'cancelled'
 const TONE_CLASS: Record<Tone, string> = {
@@ -45,7 +43,7 @@ function RunTonePill({
   )
 }
 
-type Row = (typeof u.live)[number]
+type Row = Copy['products']['agentFleet']['ui']['live'][number]
 const CELL = 'px-(--spacing-control-x) py-(--spacing-control-y)'
 
 function AgentCell({ agent }: Readonly<{ agent: string }>) {
@@ -67,6 +65,7 @@ function RunsSection({
   rows,
   compact,
 }: Readonly<{ heading: string; rows: ReadonlyArray<Row>; compact?: boolean }>) {
+  const u = useCopy().products.agentFleet.ui
   const show = (i: number) => !compact || COMPACT.has(i)
   return (
     <section className="flex flex-col gap-2">
@@ -154,6 +153,7 @@ export function RunsUi({
   sections = ['live'],
   compact,
 }: Readonly<{ sections?: ReadonlyArray<'live' | 'past'>; compact?: boolean }>) {
+  const u = useCopy().products.agentFleet.ui
   return (
     <Frame className="flex flex-col gap-6 bg-(--el-page-bg) p-5">
       <div className="flex min-w-0 flex-col gap-1">
@@ -176,6 +176,7 @@ export function RunsUi({
 
 /** The Ready list: what any agent may claim next. */
 export function ReadyUi() {
+  const u = useCopy().products.agentFleet.ui
   return (
     <Frame className="flex flex-col gap-4 bg-(--el-page-bg) p-5">
       <span className="font-(family-name:--font-serif) text-2xl font-semibold text-(--el-text)">
@@ -219,7 +220,7 @@ export function ReadyUi() {
  * for every row here) is left out.
  */
 export function MyAgentsUi() {
-  const m = copy.products.agentHosting.ui
+  const m = useCopy().products.agentHosting.ui
   return (
     <Frame className="flex flex-col gap-6 bg-(--el-page-bg) p-5">
       <div className="flex flex-wrap items-end justify-between gap-3">

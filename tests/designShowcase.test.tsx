@@ -1,9 +1,10 @@
-import { act, render, screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { THEME_STORAGE_KEYS } from '@motir/design-system'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { DesignShowcase } from '@/app/_components/DesignShowcase'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import { siteAppearanceAttributes } from '@/lib/siteDefaults'
 import { forgetVisitAppearance } from '@/lib/useVisitAppearance'
 

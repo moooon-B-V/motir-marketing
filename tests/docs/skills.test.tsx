@@ -1,7 +1,8 @@
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { describe, expect, it } from 'vitest'
 import SkillsDocsPage from '@/app/[locale]/docs/(guides)/skills/page'
-import { DOCS_SURFACES } from '@/lib/docsSurfaces'
+import { englishCopy } from '@/lib/copy'
+import { docsSurfacesFor } from '@/lib/docsSurfaces'
 import {
   AGENT_INSTALLS,
   CLAUDE_CODE_UPDATE,
@@ -281,6 +282,8 @@ describe('/docs/skills', () => {
   })
 
   it('is a surface the docs rail and index draw', () => {
-    expect(DOCS_SURFACES.map((s) => s.href)).toContain('/docs/skills')
+    expect(docsSurfacesFor(englishCopy).map((s) => s.href)).toContain(
+      '/docs/skills',
+    )
   })
 })

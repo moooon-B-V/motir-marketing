@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import {
   isOnPrimaryHost,
   publicUrlFor,

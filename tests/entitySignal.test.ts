@@ -10,7 +10,7 @@ import {
   SAME_AS,
   WEBSITE_ID,
 } from '@/app/_components/RootJsonLd'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 
 // `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
 // and `next/headers` throws outside a request scope. Empty headers read as

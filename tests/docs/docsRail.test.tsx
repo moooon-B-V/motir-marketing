@@ -1,7 +1,8 @@
 import { readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { readFileSync } from 'node:fs'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
@@ -11,7 +12,14 @@ import {
   railOperations,
   type OpenApiDocument,
 } from '@/lib/docs'
-import { DOCS_INDEX, DOCS_ROUTES, DOCS_SURFACES } from '@/lib/docsSurfaces'
+import { englishCopy } from '@/lib/copy'
+import {
+  DOCS_INDEX_HREF,
+  DOCS_ROUTES,
+  docsSurfacesFor,
+} from '@/lib/docsSurfaces'
+
+const DOCS_SURFACES = docsSurfacesFor(englishCopy)
 
 /*
  * THE DOCS RAIL (MOTIR-4396) — the navigation that makes forty-nine operations
@@ -174,7 +182,7 @@ describe('the three tiers, and what decides them', () => {
     const { container } = await renderRail('/docs/cli', false)
     // Derived from the list the rail reads (MOTIR-4507), not written out here:
     // a surface added to that file must appear without an edit to this one.
-    for (const href of [DOCS_INDEX.href, ...DOCS_SURFACES.map((s) => s.href)]) {
+    for (const href of [DOCS_INDEX_HREF, ...DOCS_SURFACES.map((s) => s.href)]) {
       expect(
         [...container.querySelectorAll('a')].map((a) => a.getAttribute('href')),
         href,

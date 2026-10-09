@@ -1,6 +1,6 @@
 import { ArrowUpRight, CheckCheck } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { MOTIR_PROJECT } from '@/lib/destinations'
 import type { ExploreQuery } from '@/lib/explore'
 import { HeroWaves } from '@/app/_components/landing/HeroWaves'
@@ -27,6 +27,7 @@ export function ExploreHero({
   basePath: string
   query: ExploreQuery
 }) {
+  const copy = useCopy()
   const f = copy.explore.featured
   return (
     <section

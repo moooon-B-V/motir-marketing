@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
-import { copy, format } from '@/lib/copy'
+import { englishCopy, format, getCopy, type Copy } from '@/lib/copy'
+import { enterLocale } from '@/i18n/locale'
 import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { siteUrl } from '@/lib/siteOrigin'
@@ -48,7 +49,11 @@ function canonicalUrl(slug: string, query: ExploreQuery): string {
   )
 }
 
-function galleryHeading(query: ExploreQuery, label: string): string {
+function galleryHeading(
+  query: ExploreQuery,
+  label: string,
+  copy: Copy,
+): string {
   if (query.search)
     return format(copy.explore.galleryHeadingSearch, { query: query.search })
   return `${label} projects`
@@ -58,9 +63,11 @@ export default async function TopicPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ locale: string; slug: string }>
   searchParams: Promise<RawSearchParams>
 }) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const { slug } = await params
   const query = topicQuery(slug, await searchParams)
   const { page, categories, failed } = await loadSquare(query)
@@ -123,7 +130,7 @@ export default async function TopicPage({
           basePath={basePathFor(slug)}
           query={query}
           page={page}
-          heading={galleryHeading(query, label)}
+          heading={galleryHeading(query, label, copy)}
         />
       </div>
 
@@ -144,7 +151,7 @@ export default async function TopicPage({
           topic: label,
         })}
         cards={page?.items ?? []}
-        faq={exploreFaqItems()}
+        faq={exploreFaqItems(copy)}
         breadcrumb={{
           topicLabel: label,
           topicUrl: siteUrl(basePathFor(slug)),
@@ -167,8 +174,10 @@ export async function generateMetadata({
   const { categories, failed } = await loadSquare(query)
   const label = (failed ? undefined : categoryLabel(categories, slug)) ?? slug
   return {
-    title: format(copy.explore.metaTitleTopic, { topic: label }),
-    description: format(copy.explore.metaDescriptionTopic, { topic: label }),
+    title: format(englishCopy.explore.metaTitleTopic, { topic: label }),
+    description: format(englishCopy.explore.metaDescriptionTopic, {
+      topic: label,
+    }),
     alternates: { canonical: canonicalUrl(slug, query) },
   }
 }

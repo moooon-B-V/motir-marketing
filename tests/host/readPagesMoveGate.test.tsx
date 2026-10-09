@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { cleanup, render } from '@testing-library/react'
+import { cleanup } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
   PUBLIC_HOST_HEADER,
@@ -303,7 +304,7 @@ const READ_HREF = /\/(board|items|tree|roadmap)(\/|\?|$)/
 async function renderPage(h: HostCase, page: () => Promise<React.ReactNode>) {
   headerScope.current = new Headers(h.headers)
   stubContract(h.primary)
-  const { container } = render(await page())
+  const { container } = render(<>{await page()}</>)
   return [...container.querySelectorAll('a[href]')].map((a) =>
     a.getAttribute('href')!,
   )

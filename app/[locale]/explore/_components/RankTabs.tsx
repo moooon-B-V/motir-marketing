@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { TrendingUp, Star, Clock } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import {
   buildExploreHref,
   PROJECT_SQUARE_RANKS,
@@ -61,6 +61,7 @@ export function RankTabs({
   basePath: string
   query: ExploreQuery
 }) {
+  const copy = useCopy()
   return (
     <div className="flex flex-wrap items-center gap-3">
       <div

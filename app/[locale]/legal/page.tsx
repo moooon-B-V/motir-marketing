@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { copy, format } from '@/lib/copy'
+import { getCopy, format } from '@/lib/copy'
 import { listLegalDocuments } from '@/lib/legal/documents'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
@@ -15,7 +15,8 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  */
 
 export default async function LegalIndexPage({ params }: LocalePageProps) {
-  await enterLocale(params)
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const documents = listLegalDocuments()
 
   return (

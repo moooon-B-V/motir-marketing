@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { copy } from '@/lib/copy'
+import { englishCopy } from '@/lib/copy'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { SITE_HOST } from '@/lib/publicHost'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
@@ -39,8 +39,8 @@ import { enterLocale, type LocaleParams } from '@/i18n/locale'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: copy.docs.metaTitle,
-    description: copy.docs.metaDescription,
+    title: englishCopy.docs.metaTitle,
+    description: englishCopy.docs.metaDescription,
   }
 }
 

@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { FREE_DOOR } from '@/lib/destinations'
 
 /*
@@ -8,7 +8,7 @@ import { FREE_DOOR } from '@/lib/destinations'
  * the app's "Build in public" switch, reached through a free account.
  */
 export function ExploreClose() {
-  const c = copy.explore.close
+  const c = useCopy().explore.close
   return (
     <section
       aria-labelledby="explore-close-h"

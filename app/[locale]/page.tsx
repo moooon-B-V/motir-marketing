@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { getCopy } from '@/lib/copy'
 import {
   FREE_DOOR,
   HOW_IT_WORKS,
@@ -73,8 +73,8 @@ async function loadExamples(): Promise<string[]> {
 }
 
 export default async function Page({ params }: LocalePageProps) {
-  await enterLocale(params)
-  const l = copy.landing
+  const locale = await enterLocale(params)
+  const l = (await getCopy(locale)).landing
   const examples = await loadExamples()
   return (
     <>

@@ -1,5 +1,5 @@
 import { buttonVariants } from '@motir/design-system'
-import { copy } from '@/lib/copy'
+import { useCopy } from '@/lib/copy'
 import { EXPLORE, SITE_ROOT } from '@/lib/destinations'
 import { siteLinkFor, type PublicHost } from '@/lib/publicHost'
 import { ChromeLink } from './ChromeLink'
@@ -34,6 +34,7 @@ import { SiteShell } from './SiteShell'
  * prerendering — the change is one argument and nothing here moves.
  */
 export function NotFoundRoom({ host }: { host: PublicHost }) {
+  const copy = useCopy()
   return (
     /* The box is the design's, verbatim. `max-w-[46rem]` is the shipped
        `/legal` measure, reused rather than re-chosen. */

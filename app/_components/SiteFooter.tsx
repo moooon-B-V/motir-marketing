@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { copy, format } from '@/lib/copy'
+import { type Copy, format, useCopy } from '@/lib/copy'
 import {
   DOCS,
   EXPLORE,
@@ -47,40 +47,42 @@ import { BrandTile } from './BrandTile'
  * host — the two `APP_ORIGIN` doors and the GitHub repository — so there is
  * nothing per-host to decide about them.
  */
-const columns = [
-  {
-    heading: copy.footer.productHeading,
-    items: [
-      { href: HOW_IT_WORKS, label: copy.footer.howItWorks, site: true },
-      { href: FREE_DOOR, label: copy.footer.startFree },
-      { href: SIGN_IN, label: copy.footer.signIn },
-    ],
-  },
-  {
-    heading: copy.footer.resourcesHeading,
-    items: [
-      { href: EXPLORE, label: copy.footer.explore, site: true },
-      { href: IDEAS, label: copy.footer.ideas, site: true },
-      {
-        href: MOTIR_BUILDS_ITSELF,
-        label: copy.footer.buildsItself,
-        site: true,
-      },
-      { href: DOCS, label: copy.footer.docs, site: true },
-      { href: SOURCE_REPO, label: copy.footer.github },
-    ],
-  },
-  {
-    heading: copy.footer.legalHeading,
-    items: [
-      { href: LEGAL_PRIVACY, label: copy.footer.privacy, site: true },
-      { href: LEGAL_TERMS, label: copy.footer.terms, site: true },
-      { href: LEGAL_INDEX, label: copy.footer.legalIndex, site: true },
-    ],
-  },
-] as const
+const columnsFor = (copy: Copy) =>
+  [
+    {
+      heading: copy.footer.productHeading,
+      items: [
+        { href: HOW_IT_WORKS, label: copy.footer.howItWorks, site: true },
+        { href: FREE_DOOR, label: copy.footer.startFree },
+        { href: SIGN_IN, label: copy.footer.signIn },
+      ],
+    },
+    {
+      heading: copy.footer.resourcesHeading,
+      items: [
+        { href: EXPLORE, label: copy.footer.explore, site: true },
+        { href: IDEAS, label: copy.footer.ideas, site: true },
+        {
+          href: MOTIR_BUILDS_ITSELF,
+          label: copy.footer.buildsItself,
+          site: true,
+        },
+        { href: DOCS, label: copy.footer.docs, site: true },
+        { href: SOURCE_REPO, label: copy.footer.github },
+      ],
+    },
+    {
+      heading: copy.footer.legalHeading,
+      items: [
+        { href: LEGAL_PRIVACY, label: copy.footer.privacy, site: true },
+        { href: LEGAL_TERMS, label: copy.footer.terms, site: true },
+        { href: LEGAL_INDEX, label: copy.footer.legalIndex, site: true },
+      ],
+    },
+  ] as const
 
 export function SiteFooter({ host }: { host: PublicHost }) {
+  const copy = useCopy()
   return (
     <footer
       aria-label={copy.footer.ariaLabel}
@@ -118,7 +120,7 @@ export function SiteFooter({ host }: { host: PublicHost }) {
         </p>
       </div>
 
-      {columns.map((column) => (
+      {columnsFor(copy).map((column) => (
         <div key={column.heading}>
           <h2 className="mb-2.5 text-[12px] font-semibold tracking-[0.04em] text-(--el-text-secondary) uppercase">
             {column.heading}

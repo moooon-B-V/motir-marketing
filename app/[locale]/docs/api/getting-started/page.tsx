@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { APP_ORIGIN } from '@/lib/appOrigin'
-import { copy } from '@/lib/copy'
+import { englishCopy, getCopy } from '@/lib/copy'
+import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { fetchOpenApiSpec } from '@/lib/docs'
 import { CodeBlock } from '../../_components/DocSchema'
 
@@ -44,8 +45,8 @@ import { CodeBlock } from '../../_components/DocSchema'
  */
 
 export const metadata = {
-  title: copy.docs.metaTitleGuide,
-  description: copy.docs.metaDescriptionGuide,
+  title: englishCopy.docs.metaTitleGuide,
+  description: englishCopy.docs.metaDescriptionGuide,
 }
 
 function H2({ children, id }: { children: React.ReactNode; id?: string }) {
@@ -94,7 +95,9 @@ function Mono({ children }: { children: React.ReactNode }) {
   )
 }
 
-export default async function GettingStartedPage() {
+export default async function GettingStartedPage({ params }: LocalePageProps) {
+  const locale = await enterLocale(params)
+  const copy = await getCopy(locale)
   const origin = APP_ORIGIN
 
   /*

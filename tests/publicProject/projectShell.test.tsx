@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import type { PublicProjectOverviewDto } from '@/lib/publicProject'

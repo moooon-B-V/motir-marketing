@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { fireEvent, render, screen, within } from '@testing-library/react'
-import { copy, format } from '@/lib/copy'
+import { fireEvent, screen, within } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { englishCopy as copy, format } from '@/lib/copy'
 import {
   IDEA_CATEGORY_SLUGS,
   hasText,
@@ -74,10 +75,10 @@ function controls(
 
 describe('countLine', () => {
   it('reads by how many ideas the view holds', () => {
-    expect(countLine(15, false)).toBe(format(f.countAll, { n: 15 }))
-    expect(countLine(0, true)).toBe(f.countNone)
-    expect(countLine(1, true)).toBe(f.countMatchOne)
-    expect(countLine(3, true)).toBe(format(f.countMatch, { n: 3 }))
+    expect(countLine(15, false, f)).toBe(format(f.countAll, { n: 15 }))
+    expect(countLine(0, true, f)).toBe(f.countNone)
+    expect(countLine(1, true, f)).toBe(f.countMatchOne)
+    expect(countLine(3, true, f)).toBe(format(f.countMatch, { n: 3 }))
   })
 })
 

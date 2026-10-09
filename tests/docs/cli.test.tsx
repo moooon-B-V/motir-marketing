@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
+import { EN_PAGE } from '@/tests/helpers/locale'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import CliPage from '@/app/[locale]/docs/(guides)/cli/page'
 import { groupCliCommands, parseCliCommands } from '@/lib/docs'
@@ -85,7 +86,7 @@ function missingFromRender(html: string, tokens: readonly string[]): string[] {
 describe('the CLI page is GENERATED from the catalogue it fetches', () => {
   it('puts every fixture-only command, flag and version on the page — the guard', async () => {
     stubCliFetch(catalogue)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     expect(
       missingFromRender(container.textContent ?? '', FIXTURE_TOKENS),
       'the page fetched the catalogue and did not render it',
@@ -102,7 +103,7 @@ describe('the CLI page is GENERATED from the catalogue it fetches', () => {
 
   it('renders EVERY command in the catalogue — a count, not a spot check', async () => {
     stubCliFetch(catalogue)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     for (const command of catalogue.commands) {
       expect(container.textContent, command.path).toContain(command.invocation)
     }
@@ -112,13 +113,13 @@ describe('the CLI page is GENERATED from the catalogue it fetches', () => {
 
   it('the INVOCATION carries the argument signature, so a scope is not lost', async () => {
     stubCliFetch(catalogue)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     expect(container.textContent).toContain('motir zqrun <zqscope>')
   })
 
   it('carries install and authentication as <pre> blocks — the page had ZERO', async () => {
     stubCliFetch(catalogue)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     const panes = [...container.querySelectorAll('pre')].map(
       (pane) => pane.textContent ?? '',
     )
@@ -160,7 +161,7 @@ describe('“Where Motir keeps things” is back (MOTIR-4429)', () => {
    */
   it('names all three paths, and which one holds the secret', async () => {
     stubCliFetch(catalogue)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     const text = container.textContent ?? ''
 
     expect(text).toContain('Where Motir keeps things')
@@ -178,7 +179,7 @@ describe('“Where Motir keeps things” is back (MOTIR-4429)', () => {
     // A path with no way to move it is half an answer on a machine whose
     // config directory is somewhere else.
     stubCliFetch(catalogue)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     const text = container.textContent ?? ''
     expect(text).toContain('MOTIR_CONFIG_HOME')
     expect(text).toContain('XDG_CONFIG_HOME')
@@ -190,7 +191,7 @@ describe('“Where Motir keeps things” is back (MOTIR-4429)', () => {
     // place for one to creep back in: it is prose about the CLI, beside a
     // generated table, written by hand.
     stubCliFetch(catalogue)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     expect(container.querySelectorAll('section ul > li').length).toBe(
       catalogue.commands.length,
     )
@@ -266,7 +267,7 @@ describe('the page keeps NO copy of what the catalogue carries', () => {
 describe('unreachable — the page says so, and still helps', () => {
   it('renders the introduction and a route out, never a stale list', async () => {
     stubCliFetch({}, 503)
-    const { container } = render(await CliPage())
+    const { container } = render(await CliPage(EN_PAGE))
     expect(container.textContent).toContain('temporarily unreachable')
     // ⚠️ The introduction SURVIVES. Between this page shipping and motir-core's
     // deploy landing, the route does not exist, so this is the state a reader

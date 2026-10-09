@@ -10,7 +10,7 @@ import {
   WifiOff,
 } from 'lucide-react'
 import { EmptyState, buttonVariants } from '@motir/design-system'
-import { copy, format } from '@/lib/copy'
+import { format, useCopy } from '@/lib/copy'
 import {
   buildExploreHref,
   hasActiveFilters,
@@ -47,6 +47,7 @@ function relativeAge(iso: string): string {
 }
 
 function ProjectCard({ card }: { card: ProjectSquareCardDto }) {
+  const copy = useCopy()
   const age = card.stats.lastActivityAt
     ? relativeAge(card.stats.lastActivityAt)
     : null
@@ -129,6 +130,7 @@ export function ExploreGallery({
   page: ProjectSquarePageDto | null
   heading: string
 }) {
+  const copy = useCopy()
   // Error state — the API is a network hop, so this is a real state.
   if (page === null) {
     return (

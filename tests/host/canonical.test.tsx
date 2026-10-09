@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { render } from '@testing-library/react'
+import { render } from '@/tests/helpers/withCopy'
 import { ProjectJsonLd } from '@/app/[locale]/p/[identifier]/_components/JsonLd'
 import type { PublicProjectOverviewDto } from '@/lib/publicProject'
 

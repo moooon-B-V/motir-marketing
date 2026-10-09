@@ -4,7 +4,7 @@ import {
   WAVE_BAND_PATH,
   WAVE_BAND_VIEW_BOX,
 } from '@motir/brand'
-import { copy } from '@/lib/copy'
+import { englishCopy as copy } from '@/lib/copy'
 import { loadOgFonts, OG_FONT_FAMILY } from './_brand/ogFonts'
 import { OG_TEXT_HEX, OG_TEXT_SECONDARY_HEX, OG_WASH } from './_brand/ogColours'
 
