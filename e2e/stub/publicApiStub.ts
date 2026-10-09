@@ -3,7 +3,7 @@ import {
   type IncomingMessage,
   type ServerResponse,
 } from 'node:http'
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -101,6 +101,8 @@ const ROUTES: Record<string, string> = {
   // MOTIR-7685 — the idea store, recorded from production on 2026-10-07. The
   // list fixture is the unfiltered store; `ideasList` below NARROWS it the way
   // motir-core does (MOTIR-7690), so a spec that filters sees a filtered page.
+  // These are the ENGLISH answers; a `?locale=` with recordings under
+  // `fixtures/ideas/<l>/` is answered by `localizedIdeas` first (MOTIR-7779).
   '/api/public/ideas': 'ideas.json',
   '/api/public/ideas/tags': 'ideas-tags.json',
   '/api/public/ideas/stop-returns-before-they-happen':
@@ -213,10 +215,11 @@ interface StubIdea {
   tags: { slug: string; label: string }[]
 }
 
-function ideasList(search: URLSearchParams): string {
-  const store = JSON.parse(fixture('ideas.json')) as {
+function ideasList(search: URLSearchParams, file = 'ideas.json'): string {
+  const store = JSON.parse(fixture(file)) as {
     items: StubIdea[]
     categories: { slug: string; label: string; count: number }[]
+    locale?: string
   }
   const category = search.get('category')
   const tags = search.getAll('tag')
@@ -239,7 +242,64 @@ function ideasList(search: URLSearchParams): string {
       count: countable.filter((i) => i.category.slug === c.slug).length,
     }))
     .filter((c) => c.count > 0)
-  return JSON.stringify({ items, categories, total: items.length })
+  return JSON.stringify({
+    items,
+    categories,
+    total: items.length,
+    locale: store.locale ?? 'en',
+  })
+}
+
+/**
+ * THE IDEA STORE BY LOCALE (Story MOTIR-7772 · MOTIR-7779) — `?locale=<l>`
+ * selects the fixture, the way motir-core serves each locale its own text.
+ *
+ * ⚠️ A STUB THAT IGNORED THE QUERY WOULD MAKE A BROKEN PAGE LOOK CORRECT: it
+ * would answer one fixture to every locale, so a page that forgot to send
+ * `locale` would still render. So the locale is READ here, and only a locale
+ * with recordings under `e2e/fixtures/ideas/<l>/` is served its own text:
+ *
+ * - no `locale`, or one with no recordings → the English fixtures, `locale:
+ *   'en'` — what motir-core answers for an unknown locale;
+ * - a recorded locale → its list (NARROWED by `q` and the filters exactly as
+ *   the English list is, so a search finds only the words that locale's text
+ *   holds), its tags, and each idea recorded by slug;
+ * - a recorded locale and a slug with no recording → the loud 404, naming the
+ *   locale, never another language's idea.
+ *
+ * Returns `null` when the request is not a locale read (the English path).
+ */
+const IDEA_LOCALES_DIR = join(FIXTURE_DIR, 'ideas')
+
+function localizedIdeas(url: URL): { status: number; body: string } | null {
+  const locale = url.searchParams.get('locale')
+  if (
+    !locale ||
+    !/^[a-z]{2}$/.test(locale) ||
+    !existsSync(join(IDEA_LOCALES_DIR, locale))
+  )
+    return null
+  const dir = `ideas/${locale}`
+  if (url.pathname === '/api/public/ideas')
+    return {
+      status: 200,
+      body: ideasList(url.searchParams, `${dir}/ideas.json`),
+    }
+  if (url.pathname === '/api/public/ideas/tags')
+    return { status: 200, body: fixture(`${dir}/ideas-tags.json`) }
+  const slug = url.pathname.slice('/api/public/ideas/'.length)
+  const file = `${dir}/${slug}.json`
+  if (/^[a-z0-9-]+$/.test(slug) && existsSync(join(FIXTURE_DIR, file)))
+    return { status: 200, body: fixture(file) }
+  return {
+    status: 404,
+    body: JSON.stringify({
+      code: 'STUB_NO_FIXTURE',
+      path: url.pathname,
+      locale,
+      q: url.searchParams.get('q'),
+    }),
+  }
 }
 
 function fixture(name: string): string {
@@ -305,6 +365,12 @@ function handle(req: IncomingMessage, res: ServerResponse): void {
     if (ideasFailing) {
       res.writeHead(500, { 'content-type': 'application/json' })
       res.end(JSON.stringify({ code: 'STUB_FORCED_FAILURE' }))
+      return
+    }
+    const localized = localizedIdeas(url)
+    if (localized) {
+      res.writeHead(localized.status, { 'content-type': 'application/json' })
+      res.end(localized.body)
       return
     }
     if (url.pathname === '/api/public/ideas') {

@@ -1,9 +1,10 @@
 // @vitest-environment node
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   IDEA_CATEGORY_SLUGS,
   IDEA_KINDS,
+  IDEA_TRANSLATABLE_FIELDS,
   IDEAS_QUERY_MAX,
   IDEAS_REVALIDATE_SECONDS,
   IdeasUnavailableError,
@@ -21,8 +22,10 @@ import {
   type IdeasParams,
   type PublicIdeaDto,
   type PublicIdeaListDto,
+  type PublicIdeaListWire,
   type PublicIdeaTagDto,
   type PublicIdeaTagListDto,
+  type PublicIdeaTagListWire,
   type PublicIdeaWire,
 } from '@/lib/ideas'
 import ideasFixture from '../e2e/fixtures/ideas.json'
@@ -570,6 +573,50 @@ describe('ideaTextLang', () => {
     expect(ideaFieldLang('ja', idea, 'title')).toBeUndefined()
     expect(ideaFieldLang('en', idea, 'pitch')).toBeUndefined()
   })
+})
+
+/*
+ * The LOCALIZED recordings (Story MOTIR-7772 · MOTIR-7779) against the same
+ * contract: every file under `e2e/fixtures/ideas/<locale>/` passes through the
+ * page's coercers UNCHANGED — so a field the coercer would drop fails here —
+ * and says the locale its directory names.
+ */
+describe('the localized E2E fixtures match the contract', () => {
+  const DIR = 'e2e/fixtures/ideas'
+  const locales = readdirSync(DIR)
+  const read = (path: string): unknown =>
+    JSON.parse(readFileSync(`${DIR}/${path}`, 'utf8'))
+
+  it('covers the four locales the acceptance walk reads', () => {
+    expect([...locales].sort()).toEqual(['de', 'ja', 'ko', 'pl'])
+  })
+
+  it.each(locales)(
+    '%s: the list, the tags and each idea survive the coercers',
+    (locale) => {
+      const list = read(`${locale}/ideas.json`) as PublicIdeaListWire
+      expect(toPublicIdeaList(list)).toEqual(list)
+      expect(list.locale).toBe(locale)
+      const tags = read(`${locale}/ideas-tags.json`) as PublicIdeaTagListWire
+      expect(toPublicIdeaTagList(tags)).toEqual(tags)
+      expect(tags.locale).toBe(locale)
+      for (const file of readdirSync(`${DIR}/${locale}`)) {
+        if (file.startsWith('ideas')) continue
+        const idea = read(`${locale}/${file}`) as PublicIdeaWire
+        expect(toPublicIdea(idea)).toEqual(idea)
+        expect(idea.locale).toBe(locale)
+        expect(`${idea.slug}.json`).toBe(file)
+      }
+      for (const idea of list.items) {
+        expect(IDEA_CATEGORY_SLUGS).toContain(idea.category.slug)
+        expect(
+          (idea.fallbackFields ?? []).every((f) =>
+            IDEA_TRANSLATABLE_FIELDS.includes(f),
+          ),
+        ).toBe(true)
+      }
+    },
+  )
 })
 
 describe('no database client', () => {

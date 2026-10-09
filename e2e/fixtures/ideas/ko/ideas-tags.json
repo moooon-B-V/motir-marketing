@@ -1,0 +1,53 @@
+{
+  "tags": [
+    {
+      "slug": "ai-agents",
+      "label": "AI 에이전트",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "b2b-saas",
+      "label": "B2B 소프트웨어",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "compliance",
+      "label": "컴플라이언스",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "eu-ai-act",
+      "label": "EU AI법",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "healthcare",
+      "label": "의료",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "count": 1,
+      "labelFallback": true
+    },
+    {
+      "slug": "smb",
+      "label": "소상공인",
+      "count": 2,
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "업종 특화 소프트웨어",
+      "count": 2,
+      "labelFallback": false
+    }
+  ],
+  "locale": "ko"
+}

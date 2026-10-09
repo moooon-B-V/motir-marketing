@@ -1,0 +1,53 @@
+{
+  "tags": [
+    {
+      "slug": "ai-agents",
+      "label": "Agenci AI",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "b2b-saas",
+      "label": "Oprogramowanie B2B",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "compliance",
+      "label": "Zgodność z przepisami",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "eu-ai-act",
+      "label": "Unijny akt o AI",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "healthcare",
+      "label": "Opieka zdrowotna",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "count": 1,
+      "labelFallback": true
+    },
+    {
+      "slug": "smb",
+      "label": "Małe firmy",
+      "count": 2,
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "Oprogramowanie branżowe",
+      "count": 2,
+      "labelFallback": false
+    }
+  ],
+  "locale": "pl"
+}

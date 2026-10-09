@@ -1,0 +1,50 @@
+{
+  "slug": "treatment-options-for-vet-clinics",
+  "title": "Opcje leczenia dla klinik weterynaryjnych",
+  "pitch": "W trakcie wizyty zamienia jedną diagnozę w dwa lub trzy wycenione plany leczenia z ratami, aby zwierzę dostało opiekę, na którą stać właściciela.",
+  "kind": "direction",
+  "category": {
+    "slug": "pets",
+    "label": "Pets"
+  },
+  "tags": [
+    {
+      "slug": "healthcare",
+      "label": "Opieka zdrowotna",
+      "labelFallback": false
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "labelFallback": true
+    },
+    {
+      "slug": "smb",
+      "label": "Małe firmy",
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "Oprogramowanie branżowe",
+      "labelFallback": false
+    }
+  ],
+  "capabilities": [],
+  "evidence": [
+    {
+      "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+      "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+      "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+      "sourceDate": "2025-01-01",
+      "claimFallback": true
+    }
+  ],
+  "gap": "AI dla weterynarzy pisze notatki z wizyt, a oprogramowanie gabinetu umawia wizyty. Żadne nie zamienia przypadku w wycenione opcje.",
+  "whyNow": null,
+  "whyMotir": null,
+  "whoElse": null,
+  "addedAt": "2026-10-06T23:59:47.000Z",
+  "lastReviewedAt": null,
+  "locale": "pl",
+  "fallbackFields": []
+}
