@@ -12,7 +12,7 @@ import {
   type IdeasParams,
   type PublicIdeaDto,
   type PublicIdeaListDto,
-  type PublicIdeaTagDto,
+  type PublicIdeaTagListDto,
 } from '@/lib/ideas'
 import {
   IdeaControls,
@@ -47,7 +47,7 @@ vi.mock('next/navigation', () => ({
 }))
 
 const list = ideasFixture as PublicIdeaListDto
-const tags = (tagsFixture as { tags: PublicIdeaTagDto[] }).tags
+const tags = tagsFixture as PublicIdeaTagListDto
 const EMPTY: IdeasParams = { tags: [] }
 const buy = list.items.find((i) => i.kind === 'motir_buys') as PublicIdeaDto
 const direction = list.items.find(
@@ -59,7 +59,7 @@ beforeEach(() => push.mockReset())
 
 function controls(
   params: IdeasParams,
-  over: Partial<{ tags: PublicIdeaTagDto[] | null; total: number }> = {},
+  over: Partial<{ tags: PublicIdeaTagListDto | null; total: number }> = {},
 ) {
   return render(
     <IdeasNavProvider>

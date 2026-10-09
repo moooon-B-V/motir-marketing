@@ -1,0 +1,53 @@
+{
+  "tags": [
+    {
+      "slug": "ai-agents",
+      "label": "KI-Agenten",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "b2b-saas",
+      "label": "B2B-Software",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "compliance",
+      "label": "Compliance",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "eu-ai-act",
+      "label": "EU-KI-Verordnung",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "healthcare",
+      "label": "Gesundheitswesen",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "count": 1,
+      "labelFallback": true
+    },
+    {
+      "slug": "smb",
+      "label": "Kleine Unternehmen",
+      "count": 2,
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "Branchensoftware",
+      "count": 2,
+      "labelFallback": false
+    }
+  ],
+  "locale": "de"
+}

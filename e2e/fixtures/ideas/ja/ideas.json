@@ -1,0 +1,159 @@
+{
+  "items": [
+    {
+      "slug": "an-ai-legal-team-for-software-companies",
+      "title": "ソフトウェア企業のためのAI法務チーム",
+      "pitch": "利用規約、プライバシーポリシー、データ処理契約、顧客データに触れるすべての委託先の記録を、起草し、最新に保ち、弁護士が確認します。",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "legal",
+        "label": "Legal"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "AIエージェント",
+          "labelFallback": false
+        },
+        {
+          "slug": "b2b-saas",
+          "label": "B2Bソフトウェア",
+          "labelFallback": false
+        },
+        {
+          "slug": "compliance",
+          "label": "コンプライアンス",
+          "labelFallback": false
+        },
+        {
+          "slug": "eu-ai-act",
+          "label": "EU AI法",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [
+        "製品の変化に合わせて利用規約、プライバシーポリシー、データ処理契約を起草・更新する",
+        "委託先や顧客との契約を確認し、弁護士が必要な点を示す",
+        "EU AI法などの新しい規則を追い、それぞれが何を変えるかを伝える"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Motir が追加するモデル提供者ごとに、データ処理契約と、顧客データを送る法的根拠の記録が必要です。今は時間のかかる手作業です。",
+      "whoElse": "顧客データを扱うすべてのソフトウェア企業、つまり全社です。",
+      "addedAt": "2026-10-07T00:00:00.000Z",
+      "lastReviewedAt": null,
+      "locale": "ja",
+      "fallbackFields": []
+    },
+    {
+      "slug": "stop-returns-before-they-happen",
+      "title": "返品を未然に防ぐ",
+      "pitch": "Spots the order bought in three sizes to send two back, answers the fit question before checkout, and scores each return for fraud.",
+      "kind": "direction",
+      "category": {
+        "slug": "ecommerce",
+        "label": "E-commerce"
+      },
+      "tags": [
+        {
+          "slug": "smb",
+          "label": "中小企業",
+          "labelFallback": false
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "業種特化ソフトウェア",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "2025年に買い物客は8,499億ドル相当の商品を返品すると見込まれ、これはオンライン売上の19.3%にあたり、返品の9%は不正です。",
+          "sourceName": "National Retail Federation and Happy Returns, October 2025",
+          "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
+          "sourceDate": "2025-10-01",
+          "claimFallback": false
+        }
+      ],
+      "gap": "返品プラットフォームは返品が始まってから対応します。企業規模に満たない店舗向けに返品を防ぐ仕組みは、ほとんどありません。",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:53.000Z",
+      "lastReviewedAt": null,
+      "locale": "ja",
+      "fallbackFields": ["pitch"]
+    },
+    {
+      "slug": "treatment-options-for-vet-clinics",
+      "title": "動物病院向けの治療プラン",
+      "pitch": "診察中に、ひとつの診断を価格付きの治療プラン2〜3案に変え、分割払いも添えて、飼い主が払える治療をペットに届けます。",
+      "kind": "direction",
+      "category": {
+        "slug": "pets",
+        "label": "Pets"
+      },
+      "tags": [
+        {
+          "slug": "healthcare",
+          "label": "医療",
+          "labelFallback": false
+        },
+        {
+          "slug": "pricing-and-billing",
+          "label": "Pricing and billing",
+          "labelFallback": true
+        },
+        {
+          "slug": "smb",
+          "label": "中小企業",
+          "labelFallback": false
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "業種特化ソフトウェア",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+          "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+          "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+          "sourceDate": "2025-01-01",
+          "claimFallback": true
+        }
+      ],
+      "gap": "動物病院向けのAIは診療記録を書き、病院の業務ソフトは予約を取ります。症例を価格付きの選択肢に変えるものはありません。",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:47.000Z",
+      "lastReviewedAt": null,
+      "locale": "ja",
+      "fallbackFields": []
+    }
+  ],
+  "categories": [
+    {
+      "slug": "legal",
+      "label": "Legal",
+      "count": 1
+    },
+    {
+      "slug": "ecommerce",
+      "label": "E-commerce",
+      "count": 1
+    },
+    {
+      "slug": "pets",
+      "label": "Pets",
+      "count": 1
+    }
+  ],
+  "total": 3,
+  "locale": "ja"
+}

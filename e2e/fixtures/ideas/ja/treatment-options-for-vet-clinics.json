@@ -1,0 +1,50 @@
+{
+  "slug": "treatment-options-for-vet-clinics",
+  "title": "動物病院向けの治療プラン",
+  "pitch": "診察中に、ひとつの診断を価格付きの治療プラン2〜3案に変え、分割払いも添えて、飼い主が払える治療をペットに届けます。",
+  "kind": "direction",
+  "category": {
+    "slug": "pets",
+    "label": "Pets"
+  },
+  "tags": [
+    {
+      "slug": "healthcare",
+      "label": "医療",
+      "labelFallback": false
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "labelFallback": true
+    },
+    {
+      "slug": "smb",
+      "label": "中小企業",
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "業種特化ソフトウェア",
+      "labelFallback": false
+    }
+  ],
+  "capabilities": [],
+  "evidence": [
+    {
+      "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+      "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+      "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+      "sourceDate": "2025-01-01",
+      "claimFallback": true
+    }
+  ],
+  "gap": "動物病院向けのAIは診療記録を書き、病院の業務ソフトは予約を取ります。症例を価格付きの選択肢に変えるものはありません。",
+  "whyNow": null,
+  "whyMotir": null,
+  "whoElse": null,
+  "addedAt": "2026-10-06T23:59:47.000Z",
+  "lastReviewedAt": null,
+  "locale": "ja",
+  "fallbackFields": []
+}

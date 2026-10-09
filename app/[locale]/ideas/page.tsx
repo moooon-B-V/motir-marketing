@@ -12,6 +12,7 @@ import {
   ideasHref,
   IdeasUnavailableError,
   parseIdeasParams,
+  type IdeaLocale,
   type IdeasParams,
   type PublicIdeaDto,
   type RawSearchParams,
@@ -46,16 +47,18 @@ import { IdeasEmpty, IdeasUnavailable } from './_components/IdeaStates'
  *
  * Read server-side through the public API (`lib/ideas.ts`, revalidated hourly)
  * — no database client, and no copy of an idea in `messages/en.json`: the store
- * is the only place an idea lives.
+ * is the only place an idea lives. Every read asks for the page's locale
+ * (Story MOTIR-7772 · MOTIR-7777), and each field the store served in English
+ * is marked `lang="en"` where it is drawn.
  *
  * Kept out of the index (`robots: noindex`) and the sitemap while it is in
  * review, like the product pages.
  */
 
 /** The whole view, or `null` for the list when motir-core did not answer. */
-async function loadList(params: IdeasParams) {
+async function loadList(params: IdeasParams, locale: IdeaLocale) {
   try {
-    return await fetchIdeas(params)
+    return await fetchIdeas(params, locale)
   } catch (error) {
     if (error instanceof IdeasUnavailableError) return null
     throw error
@@ -70,11 +73,12 @@ async function loadList(params: IdeasParams) {
 async function loadOpenIdea(
   slug: string | undefined,
   items: PublicIdeaDto[] | null,
+  locale: IdeaLocale,
 ): Promise<PublicIdeaDto | null> {
   if (!slug) return null
   const listed = items?.find((idea) => idea.slug === slug)
   if (listed) return listed
-  return fetchIdea(slug).catch(() => null)
+  return fetchIdea(slug, locale).catch(() => null)
 }
 
 export async function generateMetadata({
@@ -85,7 +89,8 @@ export async function generateMetadata({
   searchParams: Promise<RawSearchParams>
 }): Promise<Metadata> {
   const params = parseIdeasParams(await searchParams)
-  const open = await loadOpenIdea(params.idea, null)
+  const locale = await enterLocale(localeParams)
+  const open = await loadOpenIdea(params.idea, null, locale)
   return localePageMetadata(
     localeParams,
     ideasHref(open ? params : { ...params, idea: undefined }),
@@ -108,13 +113,13 @@ export default async function IdeasPage({
   const i = (await getCopy(locale)).ideas
   const params = parseIdeasParams(await searchParams)
   const [list, tags] = await Promise.all([
-    loadList(params),
-    fetchIdeaTags().catch(() => null),
+    loadList(params, locale),
+    fetchIdeaTags(locale).catch(() => null),
   ])
   const items = list?.items ?? []
   const buys = items.filter((idea) => idea.kind === 'motir_buys')
   const directions = items.filter((idea) => idea.kind === 'direction')
-  const open = list ? await loadOpenIdea(params.idea, items) : null
+  const open = list ? await loadOpenIdea(params.idea, items, locale) : null
 
   return (
     <SiteShell host={SITE_HOST} overlayHeader>

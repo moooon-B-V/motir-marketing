@@ -1,0 +1,159 @@
+{
+  "items": [
+    {
+      "slug": "an-ai-legal-team-for-software-companies",
+      "title": "Zespół prawny AI dla firm programistycznych",
+      "pitch": "Regulaminy, polityki prywatności, umowy powierzenia danych i rejestr każdego dostawcy, który ma dostęp do danych klientów: przygotowane, aktualne i sprawdzone przez prawnika.",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "legal",
+        "label": "Legal"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "Agenci AI",
+          "labelFallback": false
+        },
+        {
+          "slug": "b2b-saas",
+          "label": "Oprogramowanie B2B",
+          "labelFallback": false
+        },
+        {
+          "slug": "compliance",
+          "label": "Zgodność z przepisami",
+          "labelFallback": false
+        },
+        {
+          "slug": "eu-ai-act",
+          "label": "Unijny akt o AI",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [
+        "Przygotowuje i aktualizuje regulaminy, polityki prywatności i umowy powierzenia, gdy zmienia się produkt",
+        "Sprawdza umowy z dostawcami i klientami i wskazuje, co wymaga prawnika",
+        "Śledzi nowe przepisy, takie jak unijny akt o AI, i mówi, co każdy z nich zmienia"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Każdy dostawca modeli dodany przez Motir wymaga umowy powierzenia danych i zapisanej podstawy prawnej przekazywania danych klientów. Dziś to powolna, ręczna praca.",
+      "whoElse": "Każda firma programistyczna, która przetwarza dane klientów, czyli wszystkie.",
+      "addedAt": "2026-10-07T00:00:00.000Z",
+      "lastReviewedAt": null,
+      "locale": "pl",
+      "fallbackFields": []
+    },
+    {
+      "slug": "stop-returns-before-they-happen",
+      "title": "Zapobiegaj zwrotom, zanim się wydarzą",
+      "pitch": "Spots the order bought in three sizes to send two back, answers the fit question before checkout, and scores each return for fraud.",
+      "kind": "direction",
+      "category": {
+        "slug": "ecommerce",
+        "label": "E-commerce"
+      },
+      "tags": [
+        {
+          "slug": "smb",
+          "label": "Małe firmy",
+          "labelFallback": false
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "Oprogramowanie branżowe",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "W 2025 roku kupujący mieli zwrócić towary warte 849,9 mld $, czyli 19.3% sprzedaży online, a 9% zwrotów to oszustwa.",
+          "sourceName": "National Retail Federation and Happy Returns, October 2025",
+          "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
+          "sourceDate": "2025-10-01",
+          "claimFallback": false
+        }
+      ],
+      "gap": "Platformy zwrotów obsługują zwrot, gdy już się zaczął. Zapobieganie zwrotom w sklepach mniejszych niż korporacje prawie nie istnieje.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:53.000Z",
+      "lastReviewedAt": null,
+      "locale": "pl",
+      "fallbackFields": ["pitch"]
+    },
+    {
+      "slug": "treatment-options-for-vet-clinics",
+      "title": "Opcje leczenia dla klinik weterynaryjnych",
+      "pitch": "W trakcie wizyty zamienia jedną diagnozę w dwa lub trzy wycenione plany leczenia z ratami, aby zwierzę dostało opiekę, na którą stać właściciela.",
+      "kind": "direction",
+      "category": {
+        "slug": "pets",
+        "label": "Pets"
+      },
+      "tags": [
+        {
+          "slug": "healthcare",
+          "label": "Opieka zdrowotna",
+          "labelFallback": false
+        },
+        {
+          "slug": "pricing-and-billing",
+          "label": "Pricing and billing",
+          "labelFallback": true
+        },
+        {
+          "slug": "smb",
+          "label": "Małe firmy",
+          "labelFallback": false
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "Oprogramowanie branżowe",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+          "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+          "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+          "sourceDate": "2025-01-01",
+          "claimFallback": true
+        }
+      ],
+      "gap": "AI dla weterynarzy pisze notatki z wizyt, a oprogramowanie gabinetu umawia wizyty. Żadne nie zamienia przypadku w wycenione opcje.",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-06T23:59:47.000Z",
+      "lastReviewedAt": null,
+      "locale": "pl",
+      "fallbackFields": []
+    }
+  ],
+  "categories": [
+    {
+      "slug": "legal",
+      "label": "Legal",
+      "count": 1
+    },
+    {
+      "slug": "ecommerce",
+      "label": "E-commerce",
+      "count": 1
+    },
+    {
+      "slug": "pets",
+      "label": "Pets",
+      "count": 1
+    }
+  ],
+  "total": 3,
+  "locale": "pl"
+}

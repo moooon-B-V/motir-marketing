@@ -9,7 +9,7 @@ import {
   parseIdeasParams,
   type PublicIdeaDto,
   type PublicIdeaListDto,
-  type PublicIdeaTagDto,
+  type PublicIdeaTagListDto,
 } from '@/lib/ideas'
 import IdeasPage, { generateMetadata } from '@/app/[locale]/ideas/page'
 import ideasFixture from '../../e2e/fixtures/ideas.json'
@@ -35,7 +35,7 @@ vi.mock('next/navigation', () => ({
 
 const API = 'https://app.test.motir.co/api/public/ideas'
 const LIST = ideasFixture as PublicIdeaListDto
-const TAGS = (tagsFixture as { tags: PublicIdeaTagDto[] }).tags
+const TAGS = tagsFixture as PublicIdeaTagListDto
 const ONE = ideaFixture as PublicIdeaDto
 
 function narrow(search: URLSearchParams): PublicIdeaListDto {
@@ -60,7 +60,7 @@ function narrow(search: URLSearchParams): PublicIdeaListDto {
       count: countable.filter((i) => i.category.slug === c.slug).length,
     }))
     .filter((c) => c.count > 0)
-  return { items, categories, total: items.length }
+  return { items, categories, total: items.length, locale: 'en' }
 }
 
 type Mode = 'ok' | 'down' | 'tags-down'
@@ -84,7 +84,7 @@ beforeEach(() => {
     const rest = url.pathname.slice(new URL(API).pathname.length)
     if (rest === '') return json(narrow(url.searchParams))
     if (rest === '/tags')
-      return mode === 'tags-down' ? json({}, 503) : json({ tags: TAGS })
+      return mode === 'tags-down' ? json({}, 503) : json(TAGS)
     const slug = decodeURIComponent(rest.slice(1))
     if (slug === ONE.slug) return json(ONE)
     const listed = LIST.items.find((i) => i.slug === slug)
@@ -145,7 +145,9 @@ describe('every filter combination', () => {
       await open(query)
       const expected = narrow(new URLSearchParams(query))
       // The page asked the contract for exactly this view…
-      expect(calls).toContain(query ? `${API}?${query}` : API)
+      expect(calls).toContain(
+        query ? `${API}?${query}&locale=en` : `${API}?locale=en`,
+      )
       // …and rendered those ideas and no others, Motir-would-buy first.
       const buys = expected.items.filter((i) => i.kind === 'motir_buys')
       const rest = expected.items.filter((i) => i.kind === 'direction')
@@ -205,13 +207,13 @@ describe('the idea open in place', () => {
     expect(sheet).toHaveTextContent(ONE.evidence[0].claim)
     expect(cardTitles()).toContain(ONE.title)
     // Read from the list: no second request for the idea.
-    expect(calls.filter((c) => c.endsWith(`/${ONE.slug}`))).toEqual([])
+    expect(calls.filter((c) => c.includes(`/${ONE.slug}`))).toEqual([])
   })
 
   it('an idea outside the current filters is read by its slug', async () => {
     await open(`category=legal&idea=${ONE.slug}`)
     expect(screen.getByRole('dialog', { name: ONE.title })).toBeTruthy()
-    expect(calls).toContain(`${API}/${ONE.slug}`)
+    expect(calls).toContain(`${API}/${ONE.slug}?locale=en`)
     expect(
       within(screen.getByRole('dialog')).getByRole('link', {
         name: copy.ideas.detail.close,
@@ -332,14 +334,22 @@ describe('the guards', () => {
       'whyNow',
       'whyMotir',
       'whoElse',
+      'locale',
+      'fallbackFields',
     ]
     for (const idea of [...LIST.items, ONE]) {
       for (const key of keys) expect(idea).toHaveProperty(key)
       for (const e of idea.evidence) {
         expect(Object.keys(e).sort()).toEqual(
-          ['claim', 'sourceDate', 'sourceName', 'url'].sort(),
+          ['claim', 'claimFallback', 'sourceDate', 'sourceName', 'url'].sort(),
         )
       }
+      for (const t of idea.tags)
+        expect(Object.keys(t).sort()).toEqual([
+          'label',
+          'labelFallback',
+          'slug',
+        ])
     }
   })
 })

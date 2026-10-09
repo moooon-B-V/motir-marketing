@@ -1,0 +1,50 @@
+{
+  "slug": "treatment-options-for-vet-clinics",
+  "title": "동물병원 치료 선택지",
+  "pitch": "진료 중에 하나의 진단을 가격이 붙은 치료 계획 두세 가지로 바꾸고 분할 결제를 붙여, 보호자가 감당할 수 있는 치료를 반려동물이 받게 합니다.",
+  "kind": "direction",
+  "category": {
+    "slug": "pets",
+    "label": "Pets"
+  },
+  "tags": [
+    {
+      "slug": "healthcare",
+      "label": "의료",
+      "labelFallback": false
+    },
+    {
+      "slug": "pricing-and-billing",
+      "label": "Pricing and billing",
+      "labelFallback": true
+    },
+    {
+      "slug": "smb",
+      "label": "소상공인",
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "업종 특화 소프트웨어",
+      "labelFallback": false
+    }
+  ],
+  "capabilities": [],
+  "evidence": [
+    {
+      "claim": "94% of vets say cost stops recommended care, and 81% say they offer alternatives, yet 73% of pet owners say they were never offered a cheaper plan.",
+      "sourceName": "Gallup and PetSmart Charities, survey of 933 vets, 2025",
+      "url": "https://news.gallup.com/poll/700115/veterinarians-say-cost-main-driver-declined-care.aspx",
+      "sourceDate": "2025-01-01",
+      "claimFallback": true
+    }
+  ],
+  "gap": "수의사용 AI는 진료 기록을 쓰고 병원 관리 소프트웨어는 예약을 받습니다. 사례를 가격이 붙은 선택지로 바꾸는 것은 없습니다.",
+  "whyNow": null,
+  "whyMotir": null,
+  "whoElse": null,
+  "addedAt": "2026-10-06T23:59:47.000Z",
+  "lastReviewedAt": null,
+  "locale": "ko",
+  "fallbackFields": []
+}
