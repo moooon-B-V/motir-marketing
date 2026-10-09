@@ -630,7 +630,7 @@ describe('invariants cover values and parts', () => {
 })
 
 describe('DOCS_CATALOGUE_ONLY_ROUTES', () => {
-  it('exists and ships empty', () => {
-    expect(DOCS_CATALOGUE_ONLY_ROUTES).toEqual([])
+  it('lists exactly /docs, whose text is all catalogue copy (MOTIR-8035)', () => {
+    expect(DOCS_CATALOGUE_ONLY_ROUTES).toEqual(['/docs'])
   })
 })

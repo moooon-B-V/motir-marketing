@@ -126,6 +126,12 @@ function components(
         {fill(children, nodes)}
       </li>
     ),
+    // The callout: a Markdown blockquote on the yellow tint, `--el-text-strong` ink.
+    blockquote: ({ children }) => (
+      <blockquote className="mt-4 max-w-[68ch] rounded-(--radius-card) bg-(--el-tint-yellow) px-4 py-3 text-[14px] text-(--el-text-strong) [&_p]:mt-0">
+        {fill(children, nodes)}
+      </blockquote>
+    ),
     strong: ({ children }) => (
       <strong className="font-semibold text-(--el-text)">
         {fill(children, nodes)}

@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { render } from '@/tests/helpers/withCopy'
 import { EN_PAGE } from '@/tests/helpers/locale'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -207,6 +207,15 @@ describe('the page keeps NO copy of what the catalogue carries', () => {
       'utf8',
     )
     expect(source).not.toContain('https://app.motir.co')
+    // MOTIR-8035: the prose moved into the page's documents, so the guard reads
+    // every one of them as well — a translation could restate the server too.
+    for (const file of readdirSync('content/docs/cli').filter((name) =>
+      name.endsWith('.md'),
+    )) {
+      const text = readFileSync(`content/docs/cli/${file}`, 'utf8')
+      expect(text, file).not.toContain('https://app.motir.co')
+      expect(text, file).not.toMatch(/https?:\/\//)
+    }
   })
 
   it('hand-maintains NO command list — the reference is generated, and only the first-run procedure is typed', () => {

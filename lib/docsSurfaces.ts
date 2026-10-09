@@ -191,9 +191,14 @@ export const DOCS_ROUTES: string[] = [
 
 /**
  * Routes whose human text is entirely catalogue copy (`copy.*`) and which therefore
- * have NO per-language document (MOTIR-8054). It ships empty: each move item adds
+ * have NO per-language document (MOTIR-8054). Each move item adds
  * a route here only after verifying the route has no authored prose, and the
  * coverage gate exempts exactly these from "every route has a document per
  * locale". Directive-free, so a client component may import it.
  */
-export const DOCS_CATALOGUE_ONLY_ROUTES: string[] = []
+export const DOCS_CATALOGUE_ONLY_ROUTES: string[] = [
+  // `/docs` renders `docs.indexTitle`, `docs.indexIntro`, `setupPrompt.*` and each
+  // surface's `docs` label and description, plus the copyable setup prompt (a payload,
+  // not prose): no authored prose (MOTIR-8035).
+  '/docs',
+]
