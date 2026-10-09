@@ -197,6 +197,13 @@ test('the ideas on motir.co in Japanese, Korean, German and Polish, as Story MOT
       const sheet = page.getByRole('dialog', { name: opened.title })
       await expect(sheet).toBeVisible()
       await expect(sheet).toContainText(opened.pitch)
+      // The head reads the opened idea on its own (`fetchIdea`), not from the
+      // list, so its title is the one assertion that reaches that read.
+      await expect(page).toHaveTitle(
+        new RegExp(
+          `^${opened.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} · `,
+        ),
+      )
       await settleFonts(page)
       // Sources, URLs and figures are never translated.
       for (const [n, e] of english.evidence.entries()) {
