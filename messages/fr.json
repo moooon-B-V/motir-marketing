@@ -747,6 +747,9 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "La traduction de cette page est en cours de mise à jour. Le texte anglais s’affiche en attendant."
+    },
     "operationCount": "{count} opérations",
     "metaTitle": "Documentation · Motir",
     "metaDescription": "Documentation de l’API et du serveur MCP de Motir : le contrat de lecture public, le serveur qu’appellent les agents, et la CLI.",

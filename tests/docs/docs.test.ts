@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   McpToolCatalogueShapeError,
@@ -122,9 +122,30 @@ describe('the reference consumes the published spec, never a copied one', () => 
   })
 
   it('commits no copied spec artifact under content/docs/', () => {
-    expect(existsSync('content/docs')).toBe(false)
+    expect(contentDocsStrays()).toEqual([])
   })
 })
+
+/*
+ * MOTIR-8032 amends the two "no copied artifact under content/docs/" assertions
+ * on the record. `content/docs/` now holds the per-language DOCUMENTS (the
+ * authored prose, `<slug>/<locale>.md`), their ledgers (`<slug>/revisions.json`)
+ * and one README. What the assertions exist to forbid is unchanged: a copied
+ * OpenAPI document or a copied command / tool catalogue. So they now assert that
+ * nothing else lives there, which is stricter about content and no longer
+ * breaks on the document form.
+ */
+function contentDocsStrays(dir = 'content/docs', prefix = ''): string[] {
+  if (!existsSync(dir)) return []
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const rel = `${prefix}${entry.name}`
+    if (entry.isDirectory())
+      return contentDocsStrays(`${dir}/${entry.name}`, `${rel}/`)
+    const allowed =
+      rel === 'README.md' || /(^|\/)([a-z]{2}\.md|revisions\.json)$/.test(rel)
+    return allowed ? [] : [rel]
+  })
+}
 
 /*
  * ── The MCP tool catalogue (MOTIR-4195) ────────────────────────────────────
@@ -357,7 +378,7 @@ describe('the catalogue is consumed, never copied', () => {
   it('commits no catalogue artifact under content/docs/', () => {
     // The same assertion the spec limb makes, for the second registry: neither
     // published document may arrive as a file in this repository.
-    expect(existsSync('content/docs')).toBe(false)
+    expect(contentDocsStrays()).toEqual([])
   })
 
   it('reads the published catalogue path out of the ONE configured origin', () => {

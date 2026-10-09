@@ -137,6 +137,10 @@ export default defineConfig({
         'app/fonts.ts',
         'app/?locale?/not-found.tsx',
         'scripts/i18n/*.ts',
+        // MOTIR-8032 — the per-language /docs document form, added WITH its tests.
+        'lib/docsDocuments.ts',
+        'app/?locale?/docs/_components/DocsDocument.tsx',
+        'app/?locale?/docs/_components/TranslationUpdatingNote.tsx',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -172,6 +176,19 @@ export default defineConfig({
        */
       thresholds: {
         'lib/publicProject.ts': { lines: 90, functions: 90, branches: 90 },
+        // MOTIR-8032 — measured first under `tests/docs/docsDocuments.test.ts`,
+        // then pinned at the floor.
+        'lib/docsDocuments.ts': { lines: 90, functions: 90, branches: 85 },
+        'app/?locale?/docs/_components/DocsDocument.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 80,
+        },
+        'app/?locale?/docs/_components/TranslationUpdatingNote.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 85,
+        },
         // MEASURED FIRST, then pinned at the floor — the same rule the entries
         // beside it follow. On this branch: `publicHost` and `tenantDomain` 100
         // lines, `hostResolution` and `proxy` 100 lines.

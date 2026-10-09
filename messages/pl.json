@@ -738,6 +738,9 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "Tłumaczenie tej strony jest w trakcie aktualizacji. Do czasu jej ukończenia wyświetlany jest tekst angielski."
+    },
     "operationCount": "Operacje: {count}",
     "metaTitle": "Dokumentacja · Motir",
     "metaDescription": "Dokumentacja API i serwera MCP Motir — publiczny kontrakt odczytu, serwer, który wywołują agenci, oraz CLI.",

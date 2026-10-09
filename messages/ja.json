@@ -738,6 +738,9 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "このページの翻訳は更新中です。準備が整うまで、英語のテキストを表示しています。"
+    },
     "operationCount": "{count}件のオペレーション",
     "metaTitle": "ドキュメント · Motir",
     "metaDescription": "Motir API と MCP サーバーのドキュメント。公開の読み取り契約、エージェントが呼び出すサーバー、そして CLI について説明します。",

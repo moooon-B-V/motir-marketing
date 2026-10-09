@@ -733,6 +733,9 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "De vertaling van deze pagina wordt bijgewerkt. Tot die klaar is, wordt de Engelse tekst getoond."
+    },
     "operationCount": "{count} operaties",
     "metaTitle": "Docs · Motir",
     "metaDescription": "Documentatie voor de Motir-API en de MCP-server — het openbare leescontract, de server die agents aanroepen en de CLI.",

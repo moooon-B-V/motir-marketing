@@ -723,6 +723,9 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "本页的翻译正在更新中。在翻译完成之前，将显示英文内容。"
+    },
     "operationCount": "{count} 个操作",
     "metaTitle": "文档 · Motir",
     "metaDescription": "Motir API 与 MCP 服务器的文档——公开读取契约、智能体调用的服务器，以及 CLI。",

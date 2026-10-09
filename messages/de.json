@@ -738,6 +738,9 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "Die Übersetzung dieser Seite wird gerade aktualisiert. Bis sie fertig ist, wird der englische Text angezeigt."
+    },
     "operationCount": "{count} Operationen",
     "metaTitle": "Doku · Motir",
     "metaDescription": "Dokumentation für die Motir-API und den MCP-Server – der öffentliche Lesevertrag, der Server, den Agenten aufrufen, und die CLI.",

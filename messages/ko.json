@@ -726,6 +726,9 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "이 페이지의 번역을 업데이트하고 있습니다. 준비될 때까지 영어 텍스트를 표시합니다."
+    },
     "operationCount": "작업 {count}개",
     "metaTitle": "문서 · Motir",
     "metaDescription": "Motir API와 MCP 서버 문서 — 공개 읽기 계약, 에이전트가 호출하는 서버, 그리고 CLI.",
