@@ -762,7 +762,12 @@ follows the glossary. The tool-hint chips in panel F keep the shipped chip words
 ### The access path
 
 Footer/header language switcher (`LanguageSwitcher.tsx`) → pick a language → the same `/docs/…` path in
-that locale. Panel A draws the open menu on its own access strip. The notes never carry a link to the
+that locale. Panel A draws the open menu on its own access strip.
+**The globe is the LAST control on the bar, at every width** (the language-switcher design's revision 2,
+`design/marketing/design-notes.md`): wide is brand · nav · Sign in · Start free · **globe**, so it sits at the
+far right; narrow is brand · Start free · **globe** · Menu, so it stays on the bar and never folds into the
+Menu panel. The open list is end-aligned to the globe. (A first version of this mock put the globe before
+Sign in and dropped it from the narrow bar; the review asked for it to stay on the far right — 2026-10-09.) The notes never carry a link to the
 English page: the language menu is the way back.
 
 ### What the code cards build from this
