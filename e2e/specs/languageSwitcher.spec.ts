@@ -12,11 +12,12 @@ import { HEADER_LADDER } from '../../i18n/routing'
  * itself or a rendered attribute, never a timeout.
  */
 
-const globe = (page: Page) => page.getByRole('button', { name: /^Language: / })
+// By the menu it controls, not by its name: the name is the catalogue's, so
+// it reads « Langue : Français » on a French page now that fr.json exists.
+const globe = (page: Page) =>
+  page.locator('header button[aria-controls="language-menu"]')
 const entry = (page: Page, name: string) =>
-  page
-    .getByRole('group', { name: 'Choose a language' })
-    .getByRole('link', { name, exact: true })
+  page.locator('#language-menu').getByRole('link', { name, exact: true })
 
 test('choosing Français moves to the same page in French and remembers it', async ({
   page,
@@ -73,7 +74,7 @@ test('on a phone the globe stays on the bar and switches the page', async ({
   await expect(page.locator('#site-menu [hreflang]')).toHaveCount(0)
 
   await globe(page).click()
-  const group = page.getByRole('group', { name: 'Choose a language' })
+  const group = page.locator('#language-menu')
   await expect(group.getByRole('link')).toHaveCount(11)
   // It hangs from the globe and stays inside the viewport.
   const box = (await group.boundingBox())!

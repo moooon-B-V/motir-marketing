@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { SITE_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
+import { t } from '../support/catalogue'
 
 /*
  * A FRENCH READER STAYS FRENCH (MOTIR-7971), in a real browser.
@@ -83,8 +84,8 @@ test('on a tenant host, motir.co is French and the project is not prefixed', asy
   await expect(footerDocs).toHaveAttribute('href', 'https://motir.co/fr/docs')
 
   const overview = page
-    .getByRole('navigation', { name: 'Project' })
-    .getByRole('link', { name: 'Overview' })
+    .getByRole('navigation', { name: t('fr', 'publicProject.header.navAria') })
+    .getByRole('link', { name: t('fr', 'publicProject.tabs.overview') })
   await expect(overview).toHaveAttribute('href', '/ACME')
   await context.close()
 })
