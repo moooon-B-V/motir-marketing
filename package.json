@@ -24,6 +24,7 @@
     "brand:icons": "node scripts/brand/generate-brand-icons.ts",
     "brand:og-fonts": "node scripts/brand/subset-og-fonts.ts",
     "design:render": "node scripts/design/render-design-mock.ts",
+    "i18n:check-prerender": "node scripts/i18n/check-prerender.ts",
     "i18n:extract": "node scripts/i18n/catalogue.ts extract",
     "i18n:merge": "node scripts/i18n/catalogue.ts merge",
     "i18n:status": "node scripts/i18n/catalogue.ts status",

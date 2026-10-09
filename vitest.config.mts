@@ -124,6 +124,19 @@ export default defineConfig({
         // `tests/ideas/ideasPage.test.tsx` awaits it against the recorded
         // contract, which is the integration gate the story asked for.
         'app/?locale?/ideas/**/*.tsx',
+        // MOTIR-7967 — every non-route module Story MOTIR-7737 (eleven
+        // languages) added or rewrote, measured first and pinned below.
+        'i18n/*.ts',
+        'lib/copy.ts',
+        'lib/localeDetection.ts',
+        'lib/languageSwitch.ts',
+        'lib/localeMetadata.ts',
+        'app/_components/LanguageSwitcher.tsx',
+        'app/_components/NotFoundRoom.tsx',
+        'app/_components/products.ts',
+        'app/fonts.ts',
+        'app/?locale?/not-found.tsx',
+        'scripts/i18n/*.ts',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -197,6 +210,36 @@ export default defineConfig({
           functions: 90,
           branches: 90,
         },
+        // MOTIR-7967 — the eleven-languages story's modules, MEASURED FIRST
+        // (the summary is on its pull request) and pinned at the story's
+        // floor. A glob key aggregates the files it matches.
+        'i18n/*.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/copy.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/localeDetection.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/languageSwitch.ts': { lines: 90, functions: 90, branches: 90 },
+        'lib/localeMetadata.ts': { lines: 90, functions: 90, branches: 90 },
+        'app/_components/LanguageSwitcher.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/_components/NotFoundRoom.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/_components/products.ts': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/fonts.ts': { lines: 90, functions: 90, branches: 90 },
+        'app/?locale?/not-found.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'scripts/i18n/*.ts': { lines: 90, functions: 90, branches: 90 },
       },
     },
   },

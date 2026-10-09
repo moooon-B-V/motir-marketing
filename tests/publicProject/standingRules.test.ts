@@ -192,7 +192,9 @@ describe('THE COVERAGE LIST IS NOT A PLACE TO FORGET A FILE', () => {
       expect(include, `the coverage include lost ${entry}`).toContain(entry)
     }
 
-    const literals = [...include.matchAll(/'([^'*]+\.tsx?)'/g)].map(
+    // A `?` entry is a glob too (`app/?locale?/…`); `tests/coverageConfig.test.ts`
+    // holds every glob to a match.
+    const literals = [...include.matchAll(/'([^'*?]+\.tsx?)'/g)].map(
       (m) => m[1]!,
     )
     expect(literals.length).toBeGreaterThan(1)

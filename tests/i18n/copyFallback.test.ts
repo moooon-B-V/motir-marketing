@@ -95,9 +95,14 @@ describe('getCopy', () => {
     expect(await getCopy('en')).toBe(englishCopy)
   })
 
-  it('is English, whole, for a locale with no catalogue file', async () => {
-    // No `messages/ja.json` exists while this card ships; the real loader runs.
-    expect(await getCopy('ja')).toEqual(en)
+  it('reads the real catalogue file for a translated locale', async () => {
+    // Written while no `messages/ja.json` existed, this asserted English; the
+    // catalogue cards (MOTIR-7957 … 7966) shipped every file, so the real
+    // loader now reads one. A MISSING file is still English — the
+    // "module not found" cases below drive that through the loader seam.
+    const ja = (await import('@/messages/ja.json')).default
+    expect(await getCopy('ja')).toEqual(resolveCopy(ja))
+    expect((await getCopy('ja')).meta.title).toBe(ja.meta.title)
   })
 
   it('reads a catalogue a loader returns, with English filled in', async () => {
