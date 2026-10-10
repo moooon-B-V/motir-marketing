@@ -3,6 +3,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   McpToolCatalogueShapeError,
+  catalogueTextLocale,
   countCatalogueTools,
   fetchMcpToolCatalogue,
   listOperations,
@@ -307,6 +308,64 @@ describe('parseMcpToolCatalogue', () => {
   }
 })
 
+interface LocaleDoc {
+  locale?: unknown
+  groups: { textLocale?: unknown; tools: { summaryLocale?: unknown }[] }[]
+}
+
+describe('parseMcpToolCatalogue locale fields (MOTIR-8050)', () => {
+  const localized = () => {
+    const doc = structuredClone(catalogueFixture) as LocaleDoc
+    doc.locale = 'ko'
+    doc.groups[0].textLocale = 'en'
+    doc.groups[0].tools[0].summaryLocale = 'ko'
+    return doc
+  }
+
+  it('keeps the three fields when present', () => {
+    const parsed = parseMcpToolCatalogue(localized())
+    expect(parsed.locale).toBe('ko')
+    expect(parsed.groups[0]!.textLocale).toBe('en')
+    expect(parsed.groups[0]!.tools[0]!.summaryLocale).toBe('ko')
+  })
+
+  it('leaves them absent when absent', () => {
+    const parsed = parseMcpToolCatalogue(catalogueFixture)
+    expect('locale' in parsed).toBe(false)
+    expect('textLocale' in parsed.groups[0]!).toBe(false)
+    expect('summaryLocale' in parsed.groups[0]!.tools[0]!).toBe(false)
+  })
+
+  it.each([
+    ['locale', (d: LocaleDoc) => (d.locale = 5), 'document.locale'],
+    [
+      'textLocale',
+      (d: LocaleDoc) => (d.groups[0].textLocale = ''),
+      'groups[0].textLocale',
+    ],
+    [
+      'summaryLocale',
+      (d: LocaleDoc) => (d.groups[0].tools[0].summaryLocale = null),
+      'groups[0].tools[0].summaryLocale',
+    ],
+  ])(
+    'throws a shape error naming the path for a bad %s',
+    (_n, break_, path) => {
+      const doc = localized()
+      break_(doc)
+      expect(() => parseMcpToolCatalogue(doc)).toThrow(
+        McpToolCatalogueShapeError,
+      )
+      expect(() => parseMcpToolCatalogue(doc)).toThrow(path)
+    },
+  )
+
+  it('catalogueTextLocale returns the served value, else en', () => {
+    expect(catalogueTextLocale('ko', 'ko')).toBe('ko')
+    expect(catalogueTextLocale(undefined, 'ko')).toBe('en')
+  })
+})
+
 describe('countCatalogueTools', () => {
   it('counts the rows the page is about to render, not the served scalar', () => {
     // The producer computes `toolCount` the same way and the two agree. Counting
@@ -346,6 +405,25 @@ describe('the catalogue is consumed, never copied', () => {
     expect(String(fetchMock.mock.calls[0]![0])).toBe(
       'https://app.test.motir.co/api/docs/mcp-tools.json',
     )
+  })
+
+  it('requests the English URL with no query, and ?locale= for another locale', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => catalogueFixture,
+    })
+    const base = 'https://app.test.motir.co/api/docs/mcp-tools.json'
+    await fetchMcpToolCatalogue()
+    await fetchMcpToolCatalogue('en')
+    await fetchMcpToolCatalogue('ko')
+    expect(fetchMock.mock.calls.map((call) => String(call[0]))).toEqual([
+      base,
+      base,
+      `${base}?locale=ko`,
+    ])
+    expect(fetchMock.mock.calls[0]![1]).toEqual({ next: { revalidate: 0 } })
+    expect(fetchMock.mock.calls[2]![1]).toEqual({ next: { revalidate: 0 } })
   })
 
   it('THROWS when the artifact is unreachable — there is no fallback list', async () => {

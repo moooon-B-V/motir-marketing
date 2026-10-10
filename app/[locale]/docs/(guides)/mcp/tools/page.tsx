@@ -2,6 +2,7 @@ import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import {
+  catalogueTextLocale,
   countCatalogueTools,
   describeSchema,
   fetchMcpToolCatalogue,
@@ -178,7 +179,7 @@ export default async function McpToolsPage({ params }: LocalePageProps) {
   )
   let catalogue: McpToolCatalogue
   try {
-    catalogue = await fetchMcpToolCatalogue()
+    catalogue = await fetchMcpToolCatalogue(locale)
   } catch {
     return (
       <>
@@ -197,6 +198,17 @@ export default async function McpToolsPage({ params }: LocalePageProps) {
   }
 
   const total = countCatalogueTools(catalogue)
+  /*
+   * `lang` only where a region's language differs from the page's — a region in
+   * the page language inherits it. Panel F (design/docs/design-notes.md §
+   * `docs--localized-notes.*`, decision F): a summary that fell back to English
+   * stays English under lang="en" with NO per-row marker; the reference note
+   * already explains it.
+   */
+  const regionLang = (served: string | undefined) => {
+    const resolved = catalogueTextLocale(served, locale)
+    return resolved === locale ? undefined : resolved
+  }
 
   return (
     <>
@@ -224,18 +236,32 @@ export default async function McpToolsPage({ params }: LocalePageProps) {
           ),
           catalogue: catalogue.groups.map((group) => (
             <section key={group.permission} className="mt-8">
-              <h2 className="font-(family-name:--font-serif) text-lg font-semibold text-(--el-text)">
-                {group.label}
-              </h2>
-              <p className="mt-1 max-w-[40rem] text-[13px] text-(--el-text-secondary)">
-                {group.gates}
-                {group.grantedByDefault ? copy.docs.mcpGrantedByDefault : ''}
-              </p>
+              <div lang={regionLang(group.textLocale)}>
+                <h2 className="font-(family-name:--font-serif) text-lg font-semibold text-(--el-text)">
+                  {group.label}
+                </h2>
+                <p className="mt-1 max-w-[40rem] text-[13px] text-(--el-text-secondary)">
+                  {group.gates}
+                  {group.grantedByDefault ? (
+                    // The suffix is page-language copy inside an English region.
+                    <span
+                      lang={regionLang(group.textLocale) ? locale : undefined}
+                    >
+                      {copy.docs.mcpGrantedByDefault}
+                    </span>
+                  ) : (
+                    ''
+                  )}
+                </p>
+              </div>
               <ul className="mt-3 flex flex-col divide-y divide-(--el-border) border-y border-(--el-border)">
                 {group.tools.map((tool) => (
                   <li key={tool.name} className="py-4">
                     <ToolHead tool={tool} />
-                    <p className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
+                    <p
+                      lang={regionLang(tool.summaryLocale)}
+                      className="mt-1 max-w-[68ch] text-[13px] text-(--el-text-secondary)"
+                    >
                       {tool.summary}
                     </p>
                     {toolHint(tool) === 'unpublished' ? (
