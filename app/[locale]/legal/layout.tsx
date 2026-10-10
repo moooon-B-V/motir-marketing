@@ -24,12 +24,16 @@ import { enterLocale, type LocaleParams } from '@/i18n/locale'
  * still applies: a legal page that 500s because a database is unreachable is a
  * worse failure than a narrowed crawl surface.
  *
- * ── THE DOCUMENTS ARE ENGLISH-ONLY, AND THAT IS ACCEPTED (MOTIR-4009) ──────
+ * ── THE DOCUMENTS STAY ENGLISH, BY DECISION (MOTIR-4009, MOTIR-7740) ────────
  * The SURROUNDING chrome labels — the breadcrumb, the version line, the index
  * title and intro — are read through the page's locale (`getCopy`,
- * MOTIR-7950), falling back to English per missing key. The contract text
- * itself is not: the documents were never translated (seven English files, no
- * `zh` variants), so a non-English page wraps an English document.
+ * MOTIR-7950). The contract text itself is never translated: a non-English
+ * page wraps the English document, and the binding-English note above it says
+ * so in the reader's language and links to the English text
+ * (`_components/BindingEnglishNote.tsx`, design
+ * `design/legal/design-notes.md` § `legal--binding-english-note.*`). Search
+ * engines are pointed at English too: every language version of a document is
+ * canonical to the unprefixed English address (MOTIR-8086).
  */
 
 /*

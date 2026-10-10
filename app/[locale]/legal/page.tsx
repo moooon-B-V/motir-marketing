@@ -2,6 +2,8 @@ import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
 import { getCopy, format } from '@/lib/copy'
 import { listLegalDocuments } from '@/lib/legal/documents'
+import { DEFAULT_LOCALE } from '@/i18n/routing'
+import { BindingEnglishNote } from './_components/BindingEnglishNote'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
@@ -33,7 +35,7 @@ export default async function LegalIndexPage({ params }: LocalePageProps) {
 
   return (
     /* The width box and the `main` landmark this page used to open with both
-       live in `app/legal/layout.tsx`'s `SiteShell` now (MOTIR-4169). */
+       live in `app/[locale]/legal/layout.tsx`'s `SiteShell` now (MOTIR-4169). */
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.legal.indexTitle}
@@ -42,7 +44,19 @@ export default async function LegalIndexPage({ params }: LocalePageProps) {
         {copy.legal.indexIntro}
       </p>
 
-      <ul className="mt-8 flex flex-col border-y border-(--el-border)">
+      {/* Between the intro and the list, its own plural sentence and no link
+          (design decision B): each row opens a document whose note links to
+          its English text. Nothing in English. */}
+      <BindingEnglishNote
+        locale={locale}
+        copy={copy}
+        variant="index"
+        className="mt-6"
+      />
+
+      <ul
+        className={`${locale === DEFAULT_LOCALE ? 'mt-8' : 'mt-6'} flex flex-col border-y border-(--el-border)`}
+      >
         {documents.map((doc) => (
           <li
             key={doc.slug}
@@ -52,7 +66,12 @@ export default async function LegalIndexPage({ params }: LocalePageProps) {
               href={localizedPath(locale, `/legal/${doc.slug}`)}
               className="flex flex-col gap-1 py-4 hover:bg-(--el-surface-soft)"
             >
-              <span className="text-[14px] font-semibold text-(--el-text)">
+              {/* English front matter, so `lang="en"` — on the title only,
+                  never on the row link, whose version line is translated. */}
+              <span
+                lang="en"
+                className="text-[14px] font-semibold text-(--el-text)"
+              >
                 {doc.title}
               </span>
               <span className="text-[13px] text-(--el-text-secondary)">

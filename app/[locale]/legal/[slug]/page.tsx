@@ -6,6 +6,8 @@ import { getCopy, format } from '@/lib/copy'
 import { englishOnlyAlternates, localePageMetadata } from '@/lib/localeMetadata'
 import { getLegalDocument, legalDocumentSlugs } from '@/lib/legal/documents'
 import { MarkdownBody } from '../_components/MarkdownBody'
+import { BindingEnglishNote } from '../_components/BindingEnglishNote'
+import { englishLegalPath } from '@/lib/legal/englishAddress'
 import { enterLocale } from '@/i18n/locale'
 
 /**
@@ -65,7 +67,7 @@ export default async function LegalDocumentPage({
 
   return (
     /* The width box and the `main` landmark this page used to open with both
-       live in `app/legal/layout.tsx`'s `SiteShell` now (MOTIR-4169). */
+       live in `app/[locale]/legal/layout.tsx`'s `SiteShell` now (MOTIR-4169). */
     <>
       <nav aria-label={copy.legal.breadcrumbAria} className="mb-6">
         <Link
@@ -76,8 +78,23 @@ export default async function LegalDocumentPage({
         </Link>
       </nav>
 
+      {/* Above the English `h1`, so it is read before the first English word
+          (design decision A). Nothing in English. */}
+      <BindingEnglishNote
+        locale={locale}
+        copy={copy}
+        variant="document"
+        href={englishLegalPath(slug)}
+        className="mb-6"
+      />
+
       <header className="mb-8 border-b border-(--el-border) pb-6">
-        <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
+        {/* The title is English front matter (`lang="en"`); the version line
+            below it is the page's own catalogue sentence and carries none. */}
+        <h1
+          lang="en"
+          className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)"
+        >
           {doc.title}
         </h1>
         <p className="mt-2 text-[13px] text-(--el-text-secondary)">
@@ -101,7 +118,7 @@ export default async function LegalDocumentPage({
         </p>
       </header>
 
-      <MarkdownBody value={doc.body} locale={locale} />
+      <MarkdownBody value={doc.body} locale={locale} lang="en" />
     </>
   )
 }

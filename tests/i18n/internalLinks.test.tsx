@@ -104,6 +104,11 @@ const ALLOWED: { target: string; reason: string }[] = [
     target: '/p/ACME/changelog.xml',
     reason: 'a feed, not a page: one address whatever the reader’s language',
   },
+  {
+    target: '/en/legal/',
+    reason:
+      'the binding-English note’s deliberate link to the binding text in English (MOTIR-8088); the unprefixed English address would be bounced back to the reader’s language by the proxy',
+  },
 ]
 
 const allowed = (target: string) =>
