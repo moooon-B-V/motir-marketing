@@ -51,6 +51,16 @@ import { PRODUCTION_CATALOGUE, SPEC } from './fixtures/apiMoveCases'
 
 const OTHER_LOCALES = LOCALES.filter((locale) => locale !== 'en')
 
+/*
+ * ⚠️ THE ENGLISH WARM-UP RENDERS EVERY ROUTE INSIDE ONE TEST (MOTIR-8145). Cases
+ * 6 and 8 open with an aggregate that captures all of `DOCS_ROUTES` in English
+ * through the serial `snapshot()` queue, so its cost grows with the page count
+ * and outgrew vitest's 5 s default. A timeout there is worse than a red test:
+ * the file's `afterEach` unstubs the clipboard while a capture is still in
+ * flight. The timeout is sized to the population, not to a guess at one test.
+ */
+vi.setConfig({ testTimeout: 60_000 })
+
 afterEach(() => {
   vi.unstubAllGlobals()
 })
@@ -96,6 +106,9 @@ function snapshot(route: string, locale: Locale): Promise<Snapshot> {
   if (!pending) {
     pending = queue.then(() => capture(route, locale))
     queue = pending.catch(() => undefined)
+    // A failed capture is not a snapshot: caching it would hand a later case a
+    // partial page that fails somewhere unrelated to the cause.
+    pending.catch(() => snapshots.delete(key))
     snapshots.set(key, pending)
   }
   return pending
@@ -131,11 +144,18 @@ async function capture(route: string, locale: Locale): Promise<Snapshot> {
     ids: [...container.querySelectorAll('[id]')].map((e) => e.id),
     copied: [],
   }
-  for (const button of container.querySelectorAll('button[data-state]')) {
+  const buttons = [...container.querySelectorAll('button[data-state]')]
+  for (const button of buttons) {
     await act(async () => {
       fireEvent.click(button)
     })
   }
+  // The clipboard stub can be removed under a running capture (the file's
+  // `afterEach` unstubs globals); a click then writes nowhere. Say so here.
+  expect(
+    written,
+    `${locale} ${route}: copy controls wrote nowhere`,
+  ).toHaveLength(buttons.length)
   result.copied = written
   page.unmount()
   vi.unstubAllGlobals()
