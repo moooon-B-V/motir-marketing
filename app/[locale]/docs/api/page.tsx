@@ -8,8 +8,12 @@ import {
   type ApiOperation,
 } from '@/lib/docs'
 import { APP_ORIGIN } from '@/lib/appOrigin'
-import { getCopy, useCopy } from '@/lib/copy'
+import { formatIcu, getCopy, useCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { DocsDocument } from '../_components/DocsDocument'
+import { GeneratedReferenceNote } from '../_components/GeneratedReferenceNote'
+import { resolveDocsDocument } from '@/lib/docsDocuments'
+import { DEFAULT_LOCALE, type Locale } from '@/i18n/routing'
 import {
   CodeBlock,
   MethodPill,
@@ -76,8 +80,17 @@ export function generateMetadata({
   }))
 }
 
-function Operation({ operation }: { operation: ApiOperation }) {
+function Operation({
+  operation,
+  locale,
+}: {
+  operation: ApiOperation
+  locale: Locale
+}) {
   const copy = useCopy()
+  // The generated text is English wherever the page is not (MOTIR-8049); omitted
+  // in English as redundant. Never on an element that holds catalogue words.
+  const generatedLang = locale === DEFAULT_LOCALE ? undefined : 'en'
   const id = operationAnchorId(operation)
   return (
     <section
@@ -96,11 +109,17 @@ function Operation({ operation }: { operation: ApiOperation }) {
         ) : null}
       </div>
 
-      <h2 className="mb-1 text-[16px] font-semibold text-(--el-text)">
+      <h2
+        lang={generatedLang}
+        className="mb-1 text-[16px] font-semibold text-(--el-text)"
+      >
         {operation.summary}
       </h2>
       {operation.description ? (
-        <p className="mb-5 max-w-[68ch] text-[14px] leading-relaxed whitespace-pre-line text-(--el-text-secondary)">
+        <p
+          lang={generatedLang}
+          className="mb-5 max-w-[68ch] text-[14px] leading-relaxed whitespace-pre-line text-(--el-text-secondary)"
+        >
           {operation.description}
         </p>
       ) : null}
@@ -113,6 +132,7 @@ function Operation({ operation }: { operation: ApiOperation }) {
           <ParameterTable
             parameters={operation.parameters}
             labelledBy={`${id}-request`}
+            descriptionLang={generatedLang}
           />
         </>
       ) : null}
@@ -121,13 +141,17 @@ function Operation({ operation }: { operation: ApiOperation }) {
         <>
           <SectionLabel id={`${id}-body`}>{copy.docs.sectionBody}</SectionLabel>
           {operation.requestBody.description ? (
-            <p className="mb-2 max-w-[68ch] text-[13px] text-(--el-text-secondary)">
+            <p
+              lang={generatedLang}
+              className="mb-2 max-w-[68ch] text-[13px] text-(--el-text-secondary)"
+            >
               {operation.requestBody.description}
             </p>
           ) : null}
           <SchemaTable
             schema={operation.requestBody.schema}
             labelledBy={`${id}-body`}
+            descriptionLang={generatedLang}
           />
         </>
       ) : null}
@@ -168,7 +192,10 @@ function Operation({ operation }: { operation: ApiOperation }) {
                     <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top">
                       <StatusPill status={response.status} />
                     </td>
-                    <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)">
+                    <td
+                      lang={generatedLang}
+                      className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)"
+                    >
                       {response.description ?? ''}
                     </td>
                   </tr>
@@ -189,6 +216,7 @@ function Operation({ operation }: { operation: ApiOperation }) {
           <SchemaTable
             schema={successSchema(operation)}
             labelledBy={`${id}-response-schema`}
+            descriptionLang={generatedLang}
           />
         </>
       ) : null}
@@ -207,58 +235,84 @@ function successSchema(operation: ApiOperation) {
 export default async function ApiReferencePage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)
   const copy = await getCopy(locale)
+  const heading = (
+    <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
+      {copy.docs.api}
+    </h1>
+  )
   let spec
   try {
     spec = await fetchOpenApiSpec()
   } catch {
     return (
       <>
-        <h1 className="font-(family-name:--font-serif) text-[30px] font-bold text-(--el-text)">
-          {copy.docs.api}
-        </h1>
+        {heading}
         <p className="mt-4 text-[14px] text-(--el-text-secondary)">
-          The API reference is temporarily unreachable. Please try again in a
-          moment.
+          {copy.docs.apiUnreachable}
         </p>
       </>
     )
   }
 
   const operations = listOperations(spec)
+  // Panel E: a page whose own document is the English fallback is English top to
+  // bottom, so only the being-updated note (DocsDocument's) describes it.
+  const ownDocument = resolveDocsDocument('api', locale).fallback === null
 
   return (
     <>
-      <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
-        {copy.docs.api}
-      </h1>
-      <p className="mt-2 text-[13px] text-(--el-text-secondary)">
-        {spec.info.title} · version {spec.info.version} · {operations.length}{' '}
-        operations ·{' '}
-        {/* ⚠️ THE DOCUMENT ITSELF, RESTORED (MOTIR-4429). The deleted
-            motir-core page linked the spec path beside this line; the move
-            dropped it, so a reader who wanted to point a code generator at the
-            contract had to guess its URL. It is built from the ONE configured
-            origin, like every other door out of this repository. */}
-        <a
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-          href={`${APP_ORIGIN}/api/openapi/v1.json`}
-          rel="noreferrer noopener"
-        >
-          /api/openapi/v1.json
-        </a>
-      </p>
-      <p className="mt-4 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-        {copy.docs.apiIntro}
-      </p>
-
-      <div className="mt-2 flex flex-col">
-        {operations.map((operation) => (
-          <Operation
-            key={`${operation.method} ${operation.path}`}
-            operation={operation}
-          />
-        ))}
-      </div>
+      {heading}
+      <DocsDocument
+        slug="api"
+        locale={locale}
+        slots={{
+          'spec-summary': (
+            <p className="mt-2 text-[13px] text-(--el-text-secondary)">
+              {formatIcu(locale, copy.docs.apiSpecSummary, {
+                title: spec.info.title,
+                version: spec.info.version,
+                count: operations.length,
+                path: '/api/openapi/v1.json',
+                /* ⚠️ THE DOCUMENT ITSELF, RESTORED (MOTIR-4429). The deleted
+                   motir-core page linked the spec path beside this line; the
+                   move dropped it, so a reader who wanted to point a code
+                   generator at the contract had to guess its URL. It is built
+                   from the ONE configured origin, like every other door out of
+                   this repository. */
+                link: (chunks) => (
+                  <a
+                    className="text-(--el-accent-on-surface) underline underline-offset-2"
+                    href={`${APP_ORIGIN}/api/openapi/v1.json`}
+                    rel="noreferrer noopener"
+                  >
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </p>
+          ),
+          operations: (
+            <>
+              {ownDocument ? (
+                <GeneratedReferenceNote
+                  source="openapi"
+                  locale={locale}
+                  copy={copy}
+                />
+              ) : null}
+              <div className="mt-2 flex flex-col">
+                {operations.map((operation) => (
+                  <Operation
+                    key={`${operation.method} ${operation.path}`}
+                    operation={operation}
+                    locale={locale}
+                  />
+                ))}
+              </div>
+            </>
+          ),
+        }}
+      />
     </>
   )
 }

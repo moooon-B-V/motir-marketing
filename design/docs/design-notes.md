@@ -710,3 +710,85 @@ Claude_ section both link here, the latter at the sentence saying Claude asks be
 **MOTIR-7080** — `lib/docs.ts`'s catalogue parser reads `title` and `annotations` (both optional, so
 either merge order is safe), and `app/docs/(guides)/mcp/tools/page.tsx` renders the row above, the
 page-top line, and the absent-hints line, with the mapping table as the rule.
+
+## `docs--localized-notes.*` — the two notes on a translated /docs page (a delta)
+
+**Amends** the `docs.*` section above and its mock `docs.mock.html`. **Mock:**
+`design/docs/docs--localized-notes.mock.html` (MOTIR-8030, story MOTIR-7739). It draws only what changes
+when `/docs` is read in one of the ten non-English locales; the page itself, the rail and the English
+reading are unchanged and are not redrawn beyond one reference panel (G).
+
+**Design-system verdict — ON MOTIR DESIGN.** Every colour is a `--el-*` token and every shape a
+shape token. Files read: `DocsShell.tsx`, `DocsRail.tsx`, `DocSchema.tsx`, `CopyControls.tsx`,
+`cli/page.tsx`, `api/page.tsx`, `LanguageSwitcher.tsx`, `lib/docsSurfaces.ts`, `lib/siteDefaults.ts`,
+`app/globals.css`. Installed `@motir/design-system` **0.13.0**. ⚠️ **Axes:** the site runs
+`hand-drawn-indie` + `grotesk` (`lib/siteDefaults.ts`); like the two earlier docs mocks this one is
+composed on `data-style="warm-editorial" data-palette="motir"`, so wonky radii and the grotesk face are
+NOT drawn. The build takes its radii from the token names, so it picks up the real shape at render time.
+Nothing here depends on a particular radius value. The live page could not be rendered in the design
+environment (fonts host unreachable), so no screenshot or pixel measurement is claimed; chrome is
+composed from the source files listed.
+
+### Placement
+
+| note                                      | where                                                                                                                                                                                          | when                                                       |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Reference note** (`.note.reference`)    | after the intro paragraph of a page that has generated English text (`/docs/api`, `/docs/cli`, `/docs/mcp/tools`, `/docs/sentry` if it has generated blocks), before the first generated block | locale ≠ `en` and the page contains generated English      |
+| **Being-updated note** (`.note.updating`) | the FIRST element of the column, above the `h1`                                                                                                                                                | the page's translation is stale; the English text is shown |
+| **No translation**                        | no note; English page, access path as today                                                                                                                                                    | locale has no catalogue entry (panel D)                    |
+| neither                                   | English locale                                                                                                                                                                                 | panel G                                                    |
+
+- Reference note: `--el-surface` fill, `--el-border` hairline, `--el-text-secondary` 13.5px ink,
+  `--radius-card`, info glyph. Being-updated note: `--el-tint-yellow` fill, `--el-text-strong` ink.
+- Both are in the page language and carry no `lang` override. **The English text they sit above keeps
+  `lang="en"`**: the carrying elements are the generated headings, table cells, command lists and tool
+  summaries (`lang="en"` on each island), so CJK pages restore the Latin faces on them (`:lang()` rules
+  in `app/globals.css`).
+- A stale page and a generated page stack: the being-updated note first, the reference note later in
+  the column (panel E shows the being-updated note alone).
+
+### Copy
+
+| key                             | de                                                                                                                                                                     | fr                                                                                                                                             | it                                                                                                                    | ja                                                                                                                  | ko  |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --- |
+| `docs.notes.generatedReference` | Die Operationsbeschreibungen sowie die Tabellen mit Parametern und Feldern unten werden aus dem OpenAPI-Dokument von Motir generiert und bleiben deshalb auf Englisch. | Les descriptions des commandes et des options ci-dessous sont le texte qu’affiche la commande motir installée ; elles restent donc en anglais. | — (not drawn, same shape)                                                                                             | 以下のコマンドとオプションの説明は、インストール済みの motir コマンドが表示するテキストであるため、英語のままです。 | —   |
+| `docs.notes.beingUpdated`       | Die Übersetzung dieser Seite wird gerade aktualisiert. Bis sie fertig ist, wird der englische Text angezeigt.                                                          | La traduction de cette page est en cours de mise à jour. Le texte anglais s’affiche en attendant.                                              | La traduzione di questa pagina è in aggiornamento. Fino a quando non sarà pronta, viene mostrato il testo in inglese. | このページの翻訳は更新中です。準備が整うまで、英語のテキストを表示しています。                                      | —   |
+
+The reference note's wording is per surface (OpenAPI document for the API, the installed `motir` command
+for the CLI); the translation card owns the other locales' text and the other surfaces' wording and
+follows the glossary. The tool-hint chips in panel F keep the shipped chip words in the page language
+(`읽기` …); a summary with no translation stays English with `lang="en"` and no extra marker.
+
+### The access path
+
+Footer/header language switcher (`LanguageSwitcher.tsx`) → pick a language → the same `/docs/…` path in
+that locale. Panel A draws the open menu on its own access strip.
+**The globe is the LAST control on the bar, at every width** (the language-switcher design's revision 2,
+`design/marketing/design-notes.md`): wide is brand · nav · Sign in · Start free · **globe**, so it sits at the
+far right; narrow is brand · Start free · **globe** · Menu, so it stays on the bar and never folds into the
+Menu panel. The open list is end-aligned to the globe. (A first version of this mock put the globe before
+Sign in and dropped it from the narrow bar; the review asked for it to stay on the far right — 2026-10-09.) The notes never carry a link to the
+English page: the language menu is the way back.
+
+### What the code cards build from this
+
+- **GIVES (8032, 8049, 8050):** the two note blocks and their placement; the `lang` rule above.
+- **TAKES / gaps found while drawing, not drawn as English chrome:** `DocSchema.tsx` hard-codes English
+  table headings; `CopyControls.tsx` hard-codes `Copy` / `Copied` / `Copy failed`; `cli/page.tsx` builds
+  its "N commands" count line in English. The mock draws these in the page language, which the build
+  must supply from the `docs` namespace.
+- **Sizing:** a note wraps to at most three lines at 390px in German and Italian (the longest); the
+  Japanese and Korean notes wrap earlier. The being-updated note pushes the `h1` down, it never overlays.
+
+### Decisions
+
+- **D** — Italian has no `sentry` translation: no note, English page (panel D).
+- **E** — a stale page shows ONLY the being-updated note; the reference note is withheld because the
+  whole page is English anyway.
+- **F** — one untranslated tool summary inside a translated page stays English under `lang="en"` with
+  no per-row marker; the reference note already explains it.
+
+### Ink
+
+`--el-text`, `--el-text-secondary` and `--el-text-strong` on the yellow tint — nothing else.
+`tests/design/inkContrast.test.ts` discovers the mock from the tree and measures it (passes).

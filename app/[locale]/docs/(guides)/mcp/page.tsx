@@ -1,21 +1,23 @@
-import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import type { ReactNode } from 'react'
 import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 import { fetchMcpToolCatalogue, type McpToolCatalogue } from '@/lib/docs'
+import { guideDate } from '@/lib/docsGuideValues'
 import {
   CONNECTED_APPS_PATH,
+  MCP_CLIENT_FORMATS_CHECKED_ON,
+  MCP_CODEX_TOKEN_KEY,
   MCP_REFERENCE_URL,
   claudeRoutes,
+  mcpClaudeCodeTokenCommand,
   mcpClients,
-  mcpForkRows,
-  mcpTransportFactRows,
   mcpTransportFacts,
   mcpVerifyCommand,
 } from '@/lib/mcpWiring'
 import { CodeBlock } from '../../_components/DocSchema'
+import { renderDocsParts } from '../../_components/DocsDocument'
 
 /*
  * The MCP server guide (MOTIR-4046, RESTORED by MOTIR-4429) — how to wire a
@@ -56,6 +58,17 @@ import { CodeBlock } from '../../_components/DocSchema'
  * `#check` anchors so inbound links still land. The Claude steps are data in
  * `lib/mcpWiring.ts` (`claudeRoutes`), interpolated from the same facts.
  *
+ * ── THE PROSE LIVES IN `content/docs/mcp/<locale>.md` (MOTIR-8055) ─────────
+ * Every sentence the page and `lib/mcpWiring.ts` used to carry — the Claude
+ * routes' steps and notes, each client's note, the fork table, the four-facts
+ * table, the unreachable paragraph — is in the document. This file keeps what a
+ * reader copies (the code blocks, the commands), what is generated (the scope
+ * table) and the values the prose must not restate. The document's parts: `body`
+ * is the page from its introduction to the scopes paragraph; `what-next` is the
+ * closing section, placed after the scope table; `column-*`, `granted` and
+ * `off-by-default` are the labels the generated table wears; `unreachable`
+ * renders only when the catalogue cannot be fetched.
+ *
  * ⚠️ AND THIS FILE NAMES NO TOOL AND NO VENDOR CONFIG KEY.
  * `tests/docs/docs.test.ts` scans this source for a lowercase underscore-joined
  * identifier — the shape every Motir MCP tool name has — because this
@@ -74,63 +87,49 @@ export function generateMetadata({
   }))
 }
 
-function H2({ children, id }: { children: React.ReactNode; id?: string }) {
-  return (
-    <h2
-      id={id}
-      className="mt-9 scroll-mt-6 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)"
-    >
-      {children}
-    </h2>
-  )
-}
+/** `claude-code` to `ClaudeCode`: the suffix of a value name built from an id. */
+const pascal = (id: string) =>
+  id
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('')
 
-/** A numbered step heading — the ordinal carried in the margin, as prior art. */
-function StepHeading({
-  index,
-  title,
-  id,
-}: {
-  index: number
-  title: string
-  id: string
-}) {
+/**
+ * A short label from the document set in a table cell. The renderer wraps a
+ * part in a paragraph with its own measure and ink; inside a cell the cell's
+ * type is the right one, so the paragraph is flattened to inherit it.
+ */
+function Label({ children }: { children: ReactNode }) {
   return (
-    <H2 id={id}>
-      <span className="mr-2 font-(family-name:--font-mono) text-(--el-text-secondary)">
-        {index}
-      </span>
-      {title}
-    </H2>
-  )
-}
-
-function Prose({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
+    <div className="[&_p]:mt-0 [&_p]:max-w-none [&_p]:text-[length:inherit] [&_p]:leading-[inherit] [&_p]:text-inherit">
       {children}
-    </p>
+    </div>
   )
 }
 
 /**
- * A two- or three-column table. Scrolls in its own box, as the asset specifies
- * — three columns of prose do not fit a phone, and dropping one hides exactly
- * the fact the reader came to compare.
+ * The scope legend, derived from the published catalogue. Its column headings
+ * and its Granted / Off by default cells are parts of the document.
  */
-function DocTable({
-  columns,
-  rows,
-  caption,
+function Scopes({
+  catalogue,
+  labels,
+  gatesLang,
 }: {
-  columns: string[]
-  rows: React.ReactNode[][]
-  caption: string
+  catalogue: McpToolCatalogue
+  /** `en` on a translated page: this page reads the unlocalized catalogue, so each
+   * served `gates` sentence is English inside a page in another language. */
+  gatesLang?: string
+  labels: Record<
+    'scope' | 'gates' | 'default' | 'granted' | 'offByDefault',
+    ReactNode
+  >
 }) {
+  const columns = [labels.scope, labels.gates, labels.default]
   return (
     <div
       role="region"
-      aria-label={caption}
+      aria-labelledby="scopes"
       tabIndex={0}
       className="mt-3 mb-4 overflow-x-auto"
     >
@@ -139,26 +138,41 @@ function DocTable({
           <tr>
             {columns.map((heading, index) => (
               <th
-                key={`${heading}-${index}`}
+                key={index}
                 scope="col"
                 className="border-b border-(--el-border) px-2.5 py-1.5 text-left text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase"
               >
-                {heading}
+                <Label>{heading}</Label>
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map((cells, rowIndex) => (
-            <tr key={rowIndex}>
-              {cells.map((cell, cellIndex) => (
-                <td
-                  key={cellIndex}
-                  className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)"
-                >
-                  {cell}
-                </td>
-              ))}
+          {catalogue.groups.map((group) => (
+            <tr key={group.permission}>
+              {/* ⚠️ `whitespace-nowrap`, not a wrapping code. A scope is ONE
+                  token and breaking it mid-word — `project:brow` / `se` —
+                  turns a name a reader is about to type into two strings. The
+                  table scrolls in its own box, so a column that refuses to
+                  wrap costs nothing. */}
+              <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)">
+                <code className="font-(family-name:--font-mono) text-[12.5px] whitespace-nowrap text-(--el-text)">
+                  {group.permission}
+                </code>
+              </td>
+              <td
+                lang={gatesLang}
+                className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)"
+              >
+                {group.gates}
+              </td>
+              <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top whitespace-nowrap text-(--el-text-secondary)">
+                <Label>
+                  {group.grantedByDefault
+                    ? labels.granted
+                    : labels.offByDefault}
+                </Label>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -167,61 +181,13 @@ function DocTable({
   )
 }
 
-function Mono({ children }: { children: React.ReactNode }) {
-  return (
-    <code className="font-(family-name:--font-mono) text-[12.5px] break-all text-(--el-text) whitespace-nowrap">
-      {children}
-    </code>
-  )
-}
-
-/** The scope legend, derived from the published catalogue. */
-function Scopes({ catalogue }: { catalogue: McpToolCatalogue | null }) {
-  if (!catalogue) {
-    return (
-      <Prose>
-        The scope table is temporarily unreachable. It is derived from the
-        catalogue Motir publishes and is never copied here, so there is nothing
-        to show you in the meantime — a{' '}
-        <code className="rounded-(--radius-kbd) bg-(--el-muted) px-1.5 py-0.5 font-(family-name:--font-mono) text-[13px]">
-          tools/list
-        </code>{' '}
-        handshake with your own token answers the same question for that token.
-      </Prose>
-    )
-  }
-
-  return (
-    <DocTable
-      caption="Token scopes"
-      columns={['Scope', 'What it gates', 'Default']}
-      rows={catalogue.groups.map((group) => [
-        /* ⚠️ `whitespace-nowrap`, not the shared `Mono`. A scope is ONE token
-           and breaking it mid-word — `project:brow` / `se` — turns a name a
-           reader is about to type into two strings. The table scrolls in its
-           own box, so a column that refuses to wrap costs nothing. */
-        <code
-          key="scope"
-          className="font-(family-name:--font-mono) text-[12.5px] whitespace-nowrap text-(--el-text)"
-        >
-          {group.permission}
-        </code>,
-        group.gates,
-        <span key="default" className="whitespace-nowrap">
-          {group.grantedByDefault ? 'Granted' : 'Off by default'}
-        </span>,
-      ])}
-    />
-  )
-}
-
 export default async function McpPage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)
   const copy = await getCopy(locale)
+  const labels = copy.docs.guideLabels
   const facts = mcpTransportFacts()
   const clients = mcpClients(facts)
   const routes = claudeRoutes(facts)
-  const connectedAppsUrl = `${facts.origin}${CONNECTED_APPS_PATH}`
 
   /*
    * ⚠️ THE FETCH IS CAUGHT, and only this one section depends on it. The
@@ -238,261 +204,114 @@ export default async function McpPage({ params }: LocalePageProps) {
     catalogue = null
   }
 
+  const routeCaptions: Record<string, { caption: string; copyLabel: string }> =
+    {
+      'claude-ai': {
+        caption: labels.captionMcpServerUrl,
+        copyLabel: labels.copyMcpServerUrl,
+      },
+      'claude-desktop': {
+        caption: labels.captionMcpServerUrl,
+        copyLabel: labels.copyMcpServerUrl,
+      },
+      'claude-code': {
+        caption: labels.captionYourTerminal,
+        copyLabel: labels.copyClaudeCodeCommand,
+      },
+    }
+  const clientCaption = (id: string, file: string | null) =>
+    id === 'cursor'
+      ? labels.captionCursorConfig
+      : id === 'other' || file === null
+        ? labels.captionOtherClientConfig
+        : file
+
+  const slots: Record<string, ReactNode> = {
+    verify: (
+      <div className="mt-3">
+        <CodeBlock
+          caption={labels.captionYourMachine}
+          code={mcpVerifyCommand(facts)}
+        />
+      </div>
+    ),
+  }
+  const values: Record<string, ReactNode> = {
+    mcpPage: copy.docs.mcp,
+    apiPage: copy.docs.api,
+    cliPage: copy.docs.cli,
+    skillsPage: copy.docs.skills,
+    mcpToolsPage: copy.docs.mcpTools,
+    endpointPath: facts.path,
+    url: facts.url,
+    authHeader: facts.authHeader,
+    authScheme: facts.authScheme,
+    tokenPlaceholder: facts.tokenPlaceholder,
+    tokenEnvVar: facts.tokenEnvVar,
+    codexTokenKey: MCP_CODEX_TOKEN_KEY,
+    claudeCodeTokenCommand: mcpClaudeCodeTokenCommand(facts),
+    connectedAppsUrl: `${facts.origin}${CONNECTED_APPS_PATH}`,
+    referenceUrl: MCP_REFERENCE_URL,
+    clientsCheckedOn: guideDate(locale, MCP_CLIENT_FORMATS_CHECKED_ON),
+  }
+  for (const route of routes) {
+    slots[route.id] = (
+      <div className="mt-3">
+        <CodeBlock
+          caption={routeCaptions[route.id]!.caption}
+          code={route.code}
+          copyLabel={routeCaptions[route.id]!.copyLabel}
+        />
+      </div>
+    )
+    values[`route${pascal(route.id)}DocsUrl`] = route.docsUrl
+    values[`route${pascal(route.id)}CheckedOn`] = guideDate(
+      locale,
+      route.checkedOn,
+    )
+  }
+  for (const client of clients) {
+    slots[`client-${client.id}`] = (
+      <div className="mt-3">
+        <CodeBlock
+          caption={clientCaption(client.id, client.file)}
+          code={client.config}
+        />
+      </div>
+    )
+    values[`client${pascal(client.id)}DocsUrl`] = client.docsUrl
+  }
+
+  const { parts, note } = await renderDocsParts({
+    slug: 'mcp',
+    locale,
+    slots,
+    values,
+  })
+
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.mcp}
       </h1>
-      <p className="mt-4 max-w-[68ch] text-[15px] leading-relaxed text-(--el-text)">
-        Motir exposes a Model Context Protocol server — one streamable-HTTP
-        endpoint that agents and the CLI call to read and drive the
-        project-management core. It is the same surface the hosted agents use to
-        execute a plan. Adding it to Claude takes one sign-in and no token; any
-        other client, or a pipeline, connects with a token in three steps.
-      </p>
-
-      <H2 id="claude">Add Motir to Claude</H2>
-      <Prose>
-        You sign in with your Motir account, pick one workspace and approve what
-        Claude may do there. Nothing is copied or pasted — there is no token to
-        mint or keep safe.
-      </Prose>
-
-      {routes.map((route) => (
-        <div key={route.id} id={route.id} className="mt-6 scroll-mt-6">
-          <h3 className="mb-1.5 text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase">
-            {route.label}
-          </h3>
-          <ol className="mt-1 max-w-[68ch] list-decimal space-y-1 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
-            {route.steps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-          <div className="mt-3">
-            <CodeBlock
-              caption={route.caption}
-              code={route.code}
-              copyLabel={route.copyLabel}
-            />
-          </div>
-          <p className="mt-1.5 max-w-[68ch] text-[12px] leading-relaxed text-(--el-text-secondary)">
-            {route.note} ·{' '}
-            <a
-              className="text-(--el-accent-on-surface) underline underline-offset-2"
-              href={route.docsUrl}
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              Anthropic’s {route.label} documentation
-            </a>{' '}
-            · steps checked {route.checkedOn}
-          </p>
-        </div>
-      ))}
-
-      <h3
-        id="consent"
-        className="mt-8 mb-1.5 scroll-mt-6 text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase"
-      >
-        What you approve, and how to take it back
-      </h3>
-      <Prose>
-        The sign-in page on Motir names the app that is asking, has you choose
-        one workspace, and lists the permissions it wants. Claude then acts as
-        you in that workspace, within what you approved — never beyond what your
-        own role allows.
-      </Prose>
-      <Prose>
-        When claude.ai connects with Claude’s published identity, Motir checks
-        that claude.ai publishes it, and shows claude.ai as a verified domain on
-        the sign-in page and in Connected apps. Any other MCP client that
-        registers itself reads Unverified: the name it shows is one it chose,
-        and Motir cannot check it.
-      </Prose>
-      <Prose>
-        Claude asks before it uses a tool that changes anything: every tool says
-        whether it only reads, writes or deletes, and{' '}
-        <Link
-          href={localizedPath(locale, '/docs/mcp/tools')}
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.mcpTools}
-        </Link>{' '}
-        shows which is which. Want the plugin for Claude Code instead? It brings
-        this server with it —{' '}
-        <Link
-          href={localizedPath(locale, '/docs/skills')}
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.skills}
-        </Link>
-        .
-      </Prose>
-      <Prose>
-        Every app you connect is listed under{' '}
-        <a
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-          href={connectedAppsUrl}
-        >
-          Connected apps
-        </a>
-        , on Settings → Account → Tokens in Motir, with its workspace,
-        permissions and when it was last used. Revoke ends its access at its
-        next request.
-      </Prose>
-
-      <H2 id="token-route">Other clients and CI: use a token</H2>
-      <Prose>
-        Choose this route for a client without OAuth sign-in, a headless agent,
-        or a CI pipeline. It is the same server; a personal access token stands
-        in for the sign-in.
-      </Prose>
-
-      <H2 id="fork">This server, or the REST API?</H2>
-      <Prose>
-        Both speak to the same data and take the same credential. They are built
-        for different consumers, and the difference that matters is what each
-        promises about changing under you.
-      </Prose>
-      <DocTable
-        caption="MCP server compared with the REST API"
-        columns={['', copy.docs.mcp, copy.docs.api]}
-        rows={mcpForkRows(facts).map((row) => [
-          <strong key="axis" className="text-(--el-text)">
-            {row.axis}
-          </strong>,
-          row.mcp,
-          row.rest,
-        ])}
-      />
-      <Prose>
-        Wiring an agent? Stay here. Writing software other people install? The{' '}
-        <Link
-          href={localizedPath(locale, '/docs/api')}
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.api}
-        </Link>{' '}
-        is the other half — it is the one that promises not to change under you.
-      </Prose>
-
-      <StepHeading index={1} id="token" title="Mint a token" />
-      <Prose>
-        Every request carries a personal access token, minted in Motir under
-        Settings → Account → Tokens. Choose the workspace it is bound to and
-        grant it the narrowest scope set that does the job — the table at the
-        bottom of this page says what each scope gates. A grant narrows your own
-        role and never widens it, so a token can never do something you could
-        not.
-      </Prose>
-      <Prose>
-        The secret is shown once, when the token is created. Copy it then; there
-        is no way to read it again, and a lost token is replaced rather than
-        recovered.
-      </Prose>
-
-      <StepHeading index={2} id="wire" title="Wire your client" />
-      <Prose>
-        Every client needs the same four facts under whatever names it gives
-        them.
-      </Prose>
-      <DocTable
-        caption="What every client needs"
-        columns={['', '']}
-        rows={mcpTransportFactRows(facts).map((row) => [
-          <strong key="label" className="text-(--el-text)">
-            {row.label}
-          </strong>,
-          <Mono key="value">{row.value}</Mono>,
-        ])}
-      />
-      <Prose>
-        Keep the token out of a file your repository tracks. Where a client can
-        read it from your environment or prompt you for it, the block below uses
-        that instead of a literal — which is why two of them name{' '}
-        <Mono>{facts.tokenEnvVar}</Mono> rather than a secret.
-      </Prose>
-
-      {clients.map((client) => (
-        <div key={client.id} className="mt-6">
-          <h3 className="mb-1.5 text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase">
-            {client.label}
-          </h3>
-          <CodeBlock caption={client.file} code={client.config} />
-          <p className="mt-1.5 max-w-[68ch] text-[12px] leading-relaxed text-(--el-text-secondary)">
-            {client.note} ·{' '}
-            <a
-              className="text-(--el-accent-on-surface) underline underline-offset-2"
-              href={client.docsUrl}
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              {client.label} documentation
-            </a>{' '}
-            · format checked {client.checkedOn}
-          </p>
-        </div>
-      ))}
-
-      <StepHeading index={3} id="check" title="Check the connection" />
-      <Prose>
-        Restart the client and ask it what tools it has; the server answers with
-        the whole catalogue, scoped to your grant. To check the endpoint itself
-        before involving a client, ask it directly — this is the same handshake,
-        with the token in your environment.
-      </Prose>
-      <div className="mt-3">
-        <CodeBlock caption="your machine" code={mcpVerifyCommand(facts)} />
-      </div>
-      <Prose>
-        <strong className="text-(--el-text)">
-          An unauthorized answer is about the TOKEN, not the wiring.
-        </strong>{' '}
-        A missing, malformed, unknown, revoked or expired token all return the
-        same refusal, deliberately — distinguishing them would turn the endpoint
-        into an oracle that answers whether a secret exists. Check that the
-        header is spelled <Mono>{facts.authHeader}</Mono>, that the value begins{' '}
-        <Mono>{facts.authScheme}</Mono>, and that the token has not been revoked
-        in Motir.
-      </Prose>
-
-      <H2 id="scopes">What a connection may call</H2>
-      <Prose>
-        Every tool is gated by a scope. The permissions you approved for a
-        connected app, or the grant a token carries, decide which tools it may
-        call — so the list your client shows is already scoped to you. These are
-        read from Motir itself when this page is requested, so they are whatever
-        the server ships right now.
-      </Prose>
-      <Scopes catalogue={catalogue} />
-
-      <H2 id="what-next">What next</H2>
-      <Prose>
-        <Link
-          href={localizedPath(locale, '/docs/mcp/tools')}
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.mcpTools}
-        </Link>{' '}
-        lists every tool the server exposes with the arguments it takes.{' '}
-        <a
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-          href={MCP_REFERENCE_URL}
-          rel="noreferrer noopener"
-          target="_blank"
-        >
-          The full reference
-        </a>{' '}
-        in motir-core carries each tool’s complete description. Driving the same
-        data from a terminal instead is the{' '}
-        <Link
-          href={localizedPath(locale, '/docs/cli')}
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.cli}
-        </Link>
-        .
-      </Prose>
+      {note}
+      {parts.body}
+      {catalogue ? (
+        <Scopes
+          catalogue={catalogue}
+          gatesLang={locale === 'en' ? undefined : 'en'}
+          labels={{
+            scope: parts['column-scope'],
+            gates: parts['column-gates'],
+            default: parts['column-default'],
+            granted: parts.granted,
+            offByDefault: parts['off-by-default'],
+          }}
+        />
+      ) : (
+        parts.unreachable
+      )}
+      {parts['what-next']}
     </>
   )
 }

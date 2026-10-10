@@ -1,4 +1,5 @@
 import { render } from '@/tests/helpers/withCopy'
+import { resolveAsync } from '@/tests/helpers/resolveAsync'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import DocsIndexPage from '@/app/[locale]/docs/(guides)/page'
 import CliPage from '@/app/[locale]/docs/(guides)/cli/page'
@@ -10,6 +11,8 @@ import DifficultyPage from '@/app/[locale]/docs/(guides)/difficulty/page'
 import SkillsPage from '@/app/[locale]/docs/(guides)/skills/page'
 import ClaudeCodePluginPage from '@/app/[locale]/docs/(guides)/claude-code-plugin/page'
 import ClaudeCodeConnectorPage from '@/app/[locale]/docs/(guides)/claude-code-connector/page'
+import ApiReferencePage from '@/app/[locale]/docs/api/page'
+import McpToolsPage from '@/app/[locale]/docs/(guides)/mcp/tools/page'
 import GettingStartedPage from '@/app/[locale]/docs/api/getting-started/page'
 import StabilityPage from '@/app/[locale]/docs/api/stability/page'
 import { EN_PAGE } from '@/tests/helpers/locale'
@@ -148,30 +151,70 @@ describe('no /docs page runs a word into the element before it', async () => {
       '/docs/public-address',
       async () => render(await PublicAddressPage(EN_PAGE)).container,
     ],
-    ['/docs/sentry', async () => render(await SentryPage(EN_PAGE)).container],
+    [
+      '/docs/sentry',
+      async () =>
+        render((await resolveAsync(await SentryPage(EN_PAGE))) as never)
+          .container,
+    ],
     [
       '/docs/difficulty',
-      async () => render(await DifficultyPage(EN_PAGE)).container,
+      async () =>
+        render((await resolveAsync(await DifficultyPage(EN_PAGE))) as never)
+          .container,
     ],
-    ['/docs/skills', async () => render(await SkillsPage(EN_PAGE)).container],
+    [
+      '/docs/skills',
+      async () =>
+        render((await resolveAsync(await SkillsPage(EN_PAGE))) as never)
+          .container,
+    ],
     [
       '/docs/claude-code-plugin',
-      async () => render(await ClaudeCodePluginPage(EN_PAGE)).container,
+      async () =>
+        render(
+          (await resolveAsync(await ClaudeCodePluginPage(EN_PAGE))) as never,
+        ).container,
     ],
     [
       '/docs/claude-code-connector',
-      async () => render(await ClaudeCodeConnectorPage(EN_PAGE)).container,
+      async () =>
+        render(
+          (await resolveAsync(await ClaudeCodeConnectorPage(EN_PAGE))) as never,
+        ).container,
+    ],
+    [
+      '/docs/api',
+      async () => {
+        stub(specFixture)
+        return render(
+          (await resolveAsync(await ApiReferencePage(EN_PAGE))) as never,
+        ).container
+      },
+    ],
+    [
+      '/docs/mcp/tools',
+      async () => {
+        stub(catalogueFixture)
+        return render(
+          (await resolveAsync(await McpToolsPage(EN_PAGE))) as never,
+        ).container
+      },
     ],
     [
       '/docs/api/getting-started',
       async () => {
         stub(specFixture)
-        return render(await GettingStartedPage(EN_PAGE)).container
+        return render(
+          (await resolveAsync(await GettingStartedPage(EN_PAGE))) as never,
+        ).container
       },
     ],
     [
       '/docs/api/stability',
-      async () => render(await StabilityPage(EN_PAGE)).container,
+      async () =>
+        render((await resolveAsync(await StabilityPage(EN_PAGE))) as never)
+          .container,
     ],
   ]
 

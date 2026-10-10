@@ -733,6 +733,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "De vertaling van deze pagina wordt bijgewerkt. Tot die klaar is, wordt de Engelse tekst getoond.",
+      "generatedReference": {
+        "openapi": "De beschrijvingen van de operaties en de tabellen met parameters en velden hieronder worden gegenereerd uit het OpenAPI-document van Motir, daarom blijven ze in het Engels.",
+        "cli": "De beschrijvingen van de commando’s en opties hieronder zijn de tekst die het geïnstalleerde commando motir toont, daarom blijven ze in het Engels."
+      }
+    },
     "operationCount": "{count} operaties",
     "metaTitle": "Docs · Motir",
     "metaDescription": "Documentatie voor de Motir-API en de MCP-server — het openbare leescontract, de server die agents aanroepen en de CLI.",
@@ -799,7 +806,13 @@
     "descSkills": "Installeer de skills van Motir in je agent, en wat je zegt om elke skill te gebruiken.",
     "descClaudeCodeConnector": "Koppel Motir aan Claude Code met je Motir-account en zonder token, vanaf claude.ai of met één commando.",
     "descClaudeCodePlugin": "Eén installatie in Claude Code levert de skills, de MCP-server en de CLI van Motir, ingelogd zonder token.",
-    "apiIntro": "Elke operatie die de API aanbiedt, gegenereerd uit het OpenAPI-document dat Motir publiceert en opgehaald wanneer deze pagina wordt opgevraagd — dus precies wat de server nu levert. Bij elke operatie staan de parameters, de body die ze accepteert, een request om te kopiëren en elke status waarmee ze kan antwoorden.",
+    "apiSpecSummary": "{title} · versie {version} · {count, plural, one {# operatie} other {# operaties}} · <link>{path}</link>",
+    "apiUnreachable": "De API-referentie is tijdelijk niet bereikbaar. Probeer het over een moment opnieuw.",
+    "mcpToolsSummary": "{count, plural, one {# tool} other {# tools}} op <code>{endpoint}</code>, gegroepeerd per machtiging die de toegang regelt",
+    "mcpToolsUnreachable": "De toolcatalogus is tijdelijk niet bereikbaar. De lijst die deze pagina toont, wordt door Motir zelf gepubliceerd en nooit hier gekopieerd, dus er is voorlopig niets om je te laten zien. Open een <code>tools/list</code>-handshake tegen het endpoint of probeer het over een moment opnieuw.",
+    "mcpArgsUnpublished": "Deze Motir-versie publiceert de argumenten van deze tool niet. Een <code>tools/list</code>-handshake tegen het endpoint bevat ze.",
+    "mcpNoArguments": "Heeft geen argumenten.",
+    "mcpGrantedByDefault": " · standaard verleend",
     "sectionRequest": "Request",
     "sectionBody": "Request-body",
     "sectionExample": "Voorbeeld",
@@ -808,7 +821,42 @@
     "thStatus": "Status",
     "thCondition": "Voorwaarde",
     "filterOperations": "Operaties filteren",
-    "filterEmpty": "Geen operatie voldoet aan dat filter."
+    "filterEmpty": "Geen operatie voldoet aan dat filter.",
+    "guideLabels": {
+      "candidateModel": "Model",
+      "candidatePrice": "Prijs per 1 mln tokens",
+      "candidateCost": "Kosten per taak",
+      "costBasisPrice": "naar prijs",
+      "costBasisSamePrice": "zelfde prijs",
+      "captionInClaudeCode": "in Claude Code",
+      "captionCopySkillsOnly": "of kopieer alleen de skills, in een terminal",
+      "captionInTerminal": "in een terminal",
+      "captionYourTerminal": "je terminal",
+      "captionMcpServerUrl": "URL van de externe MCP-server",
+      "captionYourMachine": "je computer",
+      "captionCursorConfig": "~/.cursor/mcp.json — of .cursor/mcp.json voor één project",
+      "captionOtherClientConfig": "hoe je client zijn configuratie ook noemt",
+      "copyClaudeCodePlugin": "De opdrachten voor de Claude Code-plugin kopiëren",
+      "copyClaudeCodeCopy": "De opdrachten voor de kopieerinstallatie van Claude Code kopiëren",
+      "copyClaudeCodeUpdate": "De updateopdrachten voor Claude Code kopiëren",
+      "copyCodex": "De installatieopdrachten voor Codex kopiëren",
+      "copyCursor": "De installatieopdrachten voor Cursor kopiëren",
+      "copyGeminiCli": "De installatieopdrachten voor Gemini CLI kopiëren",
+      "copyCopilot": "De installatieopdrachten voor GitHub Copilot kopiëren",
+      "copyOpenCode": "De installatieopdrachten voor OpenCode kopiëren",
+      "copyMcpServerUrl": "De URL van de Motir MCP-server kopiëren",
+      "copyClaudeCodeCommand": "De Claude Code-opdracht kopiëren",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "je computer — in de map die je koppelt",
+      "captionInContainer": "in de container",
+      "captionSandboxGrant": "de rechten die een via een apparaat uitgegeven token heeft",
+      "copySandboxDevcontainer": "De opdracht voor de dev-containerconfiguratie kopiëren",
+      "copySandboxSignIn": "De inlogopdracht kopiëren",
+      "copySandboxLink": "De koppelopdracht kopiëren",
+      "copySandboxCheck": "De controleopdracht kopiëren",
+      "sandboxAgentProfile": "Agentprofiel"
+    }
   },
   "notFound": {
     "eyebrow": "404",

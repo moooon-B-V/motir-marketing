@@ -68,11 +68,13 @@ export interface SandboxOption {
   mounts: readonly string[]
   /** Environment variables the run must forward. Only `aider` has any. */
   env?: readonly string[]
-  /**
-   * The one-line caveat this profile needs on step 2, or `undefined` when it
-   * behaves like the majority. Rendered as the step's per-profile note.
+  /*
+   * ⚠️ NO HUMAN NOTE LIVES HERE (MOTIR-8056). A profile's caveat on step 2 is
+   * prose, so it is a part of `content/docs/sandbox/<locale>.md` named
+   * `note-<id>`, and the profile carries only its id. `label` stays because it
+   * is the vendor's own name and is also spelled into the dev container's
+   * `name` — a literal the parity guard reads.
    */
-  note?: string
 }
 
 /** One of the EIGHT agents. `base` is a `SandboxOption` and never one of these. */
@@ -96,7 +98,6 @@ export const SANDBOX_PROFILES: readonly SandboxProfile[] = [
     label: 'OpenCode',
     tier: 1,
     mounts: ['~/.config/opencode', '~/.local/share/opencode'],
-    note: 'OpenCode keeps configuration and credentials in two places, so it takes two -v lines. Both are needed.',
   },
   { id: 'kimi', label: 'Kimi Code CLI', tier: 1, mounts: ['~/.kimi-code'] },
   {
@@ -104,7 +105,6 @@ export const SANDBOX_PROFILES: readonly SandboxProfile[] = [
     label: 'Antigravity CLI',
     tier: 2,
     mounts: [],
-    note: 'Antigravity keeps its token in the OS keyring, which has no portable file to bind — so there is no -v line for it, and you sign in INSIDE the container rather than before you start. This is the one profile for which the second precondition above does not apply.',
   },
   {
     id: 'cursor',
@@ -118,7 +118,6 @@ export const SANDBOX_PROFILES: readonly SandboxProfile[] = [
     tier: 2,
     mounts: ['~/.aider.conf.yml'],
     env: ['ANTHROPIC_API_KEY'],
-    note: 'Aider’s credential is a model API key it reads from the environment, so this is the only profile that adds an -e line. The bind is a FILE, which must exist — even empty — or docker creates a directory in its place.',
   },
   { id: 'goose', label: 'Goose', tier: 2, mounts: ['~/.config/goose'] },
 ]
@@ -129,7 +128,6 @@ export const SANDBOX_BASE: SandboxOption = {
   label: 'no agent (base)',
   tier: 0,
   mounts: [],
-  note: 'The base image carries the Motir CLI and no agent at all — nothing to mount, and nothing to sign in to beyond Motir itself.',
 }
 
 /** Everything the picker offers: the eight profiles, then the agent-less image. */

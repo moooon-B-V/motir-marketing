@@ -742,6 +742,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "A tradução desta página está sendo atualizada. Até ficar pronta, o texto em inglês é exibido.",
+      "generatedReference": {
+        "openapi": "As descrições das operações e as tabelas de parâmetros e campos abaixo são geradas a partir do documento OpenAPI do Motir, por isso permanecem em inglês.",
+        "cli": "As descrições dos comandos e das opções abaixo são o texto que o comando motir instalado exibe, por isso permanecem em inglês."
+      }
+    },
     "operationCount": "{count} operações",
     "metaTitle": "Documentação · Motir",
     "metaDescription": "Documentação da API e do servidor MCP do Motir — o contrato público de leitura, o servidor que os agentes chamam e a CLI.",
@@ -808,7 +815,13 @@
     "descSkills": "Instale as skills do Motir no seu agente e saiba o que dizer para usar cada uma.",
     "descClaudeCodeConnector": "Conecte o Motir ao Claude Code com sua conta do Motir e sem token, pelo claude.ai ou com um único comando.",
     "descClaudeCodePlugin": "Uma única instalação no Claude Code traz as skills do Motir, seu servidor MCP e sua CLI, já conectados sem token.",
-    "apiIntro": "Todas as operações que a API oferece, geradas a partir do documento OpenAPI que o Motir publica e buscadas quando esta página é solicitada — portanto, é exatamente o que o servidor entrega agora. Cada uma lista seus parâmetros, o corpo que aceita, uma requisição que você pode copiar e todos os status com que pode responder.",
+    "apiSpecSummary": "{title} · versão {version} · {count, plural, one {# operação} many {# de operações} other {# operações}} · <link>{path}</link>",
+    "apiUnreachable": "A referência da API está temporariamente indisponível. Tente novamente em instantes.",
+    "mcpToolsSummary": "{count, plural, one {# ferramenta} many {# de ferramentas} other {# ferramentas}} em <code>{endpoint}</code>, agrupadas pela permissão que as controla",
+    "mcpToolsUnreachable": "O catálogo de ferramentas está temporariamente indisponível. A lista exibida por esta página é publicada pelo próprio Motir e nunca é copiada aqui, então não há nada para mostrar por enquanto. Abra um handshake <code>tools/list</code> no endpoint ou tente novamente em instantes.",
+    "mcpArgsUnpublished": "Esta versão do Motir não publica os argumentos desta ferramenta. Um handshake <code>tools/list</code> no endpoint os inclui.",
+    "mcpNoArguments": "Não recebe argumentos.",
+    "mcpGrantedByDefault": " · concedido por padrão",
     "sectionRequest": "Requisição",
     "sectionBody": "Corpo da requisição",
     "sectionExample": "Exemplo",
@@ -817,7 +830,42 @@
     "thStatus": "Status",
     "thCondition": "Condição",
     "filterOperations": "Filtrar operações",
-    "filterEmpty": "Nenhuma operação corresponde a esse filtro."
+    "filterEmpty": "Nenhuma operação corresponde a esse filtro.",
+    "guideLabels": {
+      "candidateModel": "Modelo",
+      "candidatePrice": "Preço por 1 milhão de tokens",
+      "candidateCost": "Custo por tarefa",
+      "costBasisPrice": "pelo preço",
+      "costBasisSamePrice": "mesmo preço",
+      "captionInClaudeCode": "no Claude Code",
+      "captionCopySkillsOnly": "ou copie apenas as skills, em um terminal",
+      "captionInTerminal": "em um terminal",
+      "captionYourTerminal": "seu terminal",
+      "captionMcpServerUrl": "URL do servidor MCP remoto",
+      "captionYourMachine": "seu computador",
+      "captionCursorConfig": "~/.cursor/mcp.json — ou .cursor/mcp.json para um só projeto",
+      "captionOtherClientConfig": "como quer que seu cliente chame a própria configuração",
+      "copyClaudeCodePlugin": "Copiar os comandos do plugin do Claude Code",
+      "copyClaudeCodeCopy": "Copiar os comandos da instalação por cópia do Claude Code",
+      "copyClaudeCodeUpdate": "Copiar os comandos de atualização do Claude Code",
+      "copyCodex": "Copiar os comandos de instalação do Codex",
+      "copyCursor": "Copiar os comandos de instalação do Cursor",
+      "copyGeminiCli": "Copiar os comandos de instalação do Gemini CLI",
+      "copyCopilot": "Copiar os comandos de instalação do GitHub Copilot",
+      "copyOpenCode": "Copiar os comandos de instalação do OpenCode",
+      "copyMcpServerUrl": "Copiar a URL do servidor Motir MCP",
+      "copyClaudeCodeCommand": "Copiar o comando do Claude Code",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "sua máquina — na pasta que você monta",
+      "captionInContainer": "no contêiner",
+      "captionSandboxGrant": "as permissões que um token emitido por um dispositivo carrega",
+      "copySandboxDevcontainer": "Copiar o comando de configuração do dev container",
+      "copySandboxSignIn": "Copiar o comando de login",
+      "copySandboxLink": "Copiar o comando de vinculação",
+      "copySandboxCheck": "Copiar o comando de verificação",
+      "sandboxAgentProfile": "Perfil do agente"
+    }
   },
   "notFound": {
     "eyebrow": "404",

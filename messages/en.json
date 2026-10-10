@@ -733,6 +733,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "The translation of this page is being updated. Until it is ready, the English text is shown.",
+      "generatedReference": {
+        "openapi": "The operation descriptions and the parameter and field tables below are generated from Motir’s OpenAPI document, so they stay in English.",
+        "cli": "The command and option descriptions below are the text the installed motir command prints, so they stay in English."
+      }
+    },
     "operationCount": "{count} operations",
     "metaTitle": "Docs · Motir",
     "metaDescription": "Documentation for the Motir API and MCP server — the public read contract, the server that agents call, and the CLI.",
@@ -799,7 +806,13 @@
     "descSkills": "Install Motir’s skills in your agent, and what to say to use each one.",
     "descClaudeCodeConnector": "Connect Motir to Claude Code with your Motir account and no token, from claude.ai or with one command.",
     "descClaudeCodePlugin": "One install in Claude Code brings Motir’s skills, its MCP server and its CLI, signed in without a token.",
-    "apiIntro": "Every operation the API serves, generated from the OpenAPI document Motir publishes and fetched when this page is requested — so it is exactly what the server ships right now. Each one lists its parameters, the body it accepts, a request you can copy, and every status it can answer with.",
+    "apiSpecSummary": "{title} · version {version} · {count, plural, one {# operation} other {# operations}} · <link>{path}</link>",
+    "apiUnreachable": "The API reference is temporarily unreachable. Please try again in a moment.",
+    "mcpToolsSummary": "{count, plural, one {# tool} other {# tools}} at <code>{endpoint}</code>, grouped by the permission that gates them",
+    "mcpToolsUnreachable": "The tool catalogue is temporarily unreachable. The list this page renders is published by Motir itself and is never copied here, so there is nothing to show you in the meantime — open a <code>tools/list</code> handshake against the endpoint, or try again in a moment.",
+    "mcpArgsUnpublished": "This Motir version does not publish this tool's arguments. A <code>tools/list</code> handshake against the endpoint carries them.",
+    "mcpNoArguments": "Takes no arguments.",
+    "mcpGrantedByDefault": " · granted by default",
     "sectionRequest": "Request",
     "sectionBody": "Request body",
     "sectionExample": "Example",
@@ -808,7 +821,42 @@
     "thStatus": "Status",
     "thCondition": "Condition",
     "filterOperations": "Filter operations",
-    "filterEmpty": "No operation matches that filter."
+    "filterEmpty": "No operation matches that filter.",
+    "guideLabels": {
+      "candidateModel": "Model",
+      "candidatePrice": "Price per 1M tokens",
+      "candidateCost": "Cost per task",
+      "costBasisPrice": "by price",
+      "costBasisSamePrice": "same price",
+      "captionInClaudeCode": "in Claude Code",
+      "captionCopySkillsOnly": "or copy the skills only, in a terminal",
+      "captionInTerminal": "in a terminal",
+      "captionYourTerminal": "your terminal",
+      "captionMcpServerUrl": "Remote MCP server URL",
+      "captionYourMachine": "your machine",
+      "captionCursorConfig": "~/.cursor/mcp.json — or .cursor/mcp.json for one project",
+      "captionOtherClientConfig": "whatever your client calls its config",
+      "copyClaudeCodePlugin": "Copy the Claude Code plugin commands",
+      "copyClaudeCodeCopy": "Copy the Claude Code copy-install commands",
+      "copyClaudeCodeUpdate": "Copy the Claude Code update commands",
+      "copyCodex": "Copy the Codex install commands",
+      "copyCursor": "Copy the Cursor install commands",
+      "copyGeminiCli": "Copy the Gemini CLI install commands",
+      "copyCopilot": "Copy the GitHub Copilot install commands",
+      "copyOpenCode": "Copy the OpenCode install commands",
+      "copyMcpServerUrl": "Copy the Motir MCP server URL",
+      "copyClaudeCodeCommand": "Copy the Claude Code command",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "your machine — in the folder you are mounting",
+      "captionInContainer": "in the container",
+      "captionSandboxGrant": "the grant a device-minted token carries",
+      "copySandboxDevcontainer": "Copy the dev container config command",
+      "copySandboxSignIn": "Copy the sign-in command",
+      "copySandboxLink": "Copy the link command",
+      "copySandboxCheck": "Copy the check command",
+      "sandboxAgentProfile": "Agent profile"
+    }
   },
   "notFound": {
     "eyebrow": "404",

@@ -1,8 +1,9 @@
 // @vitest-environment node
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   McpToolCatalogueShapeError,
+  catalogueTextLocale,
   countCatalogueTools,
   fetchMcpToolCatalogue,
   listOperations,
@@ -122,9 +123,30 @@ describe('the reference consumes the published spec, never a copied one', () => 
   })
 
   it('commits no copied spec artifact under content/docs/', () => {
-    expect(existsSync('content/docs')).toBe(false)
+    expect(contentDocsStrays()).toEqual([])
   })
 })
+
+/*
+ * MOTIR-8032 amends the two "no copied artifact under content/docs/" assertions
+ * on the record. `content/docs/` now holds the per-language DOCUMENTS (the
+ * authored prose, `<slug>/<locale>.md`), their ledgers (`<slug>/revisions.json`)
+ * and one README. What the assertions exist to forbid is unchanged: a copied
+ * OpenAPI document or a copied command / tool catalogue. So they now assert that
+ * nothing else lives there, which is stricter about content and no longer
+ * breaks on the document form.
+ */
+function contentDocsStrays(dir = 'content/docs', prefix = ''): string[] {
+  if (!existsSync(dir)) return []
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const rel = `${prefix}${entry.name}`
+    if (entry.isDirectory())
+      return contentDocsStrays(`${dir}/${entry.name}`, `${rel}/`)
+    const allowed =
+      rel === 'README.md' || /(^|\/)([a-z]{2}\.md|revisions\.json)$/.test(rel)
+    return allowed ? [] : [rel]
+  })
+}
 
 /*
  * ── The MCP tool catalogue (MOTIR-4195) ────────────────────────────────────
@@ -286,6 +308,64 @@ describe('parseMcpToolCatalogue', () => {
   }
 })
 
+interface LocaleDoc {
+  locale?: unknown
+  groups: { textLocale?: unknown; tools: { summaryLocale?: unknown }[] }[]
+}
+
+describe('parseMcpToolCatalogue locale fields (MOTIR-8050)', () => {
+  const localized = () => {
+    const doc = structuredClone(catalogueFixture) as LocaleDoc
+    doc.locale = 'ko'
+    doc.groups[0].textLocale = 'en'
+    doc.groups[0].tools[0].summaryLocale = 'ko'
+    return doc
+  }
+
+  it('keeps the three fields when present', () => {
+    const parsed = parseMcpToolCatalogue(localized())
+    expect(parsed.locale).toBe('ko')
+    expect(parsed.groups[0]!.textLocale).toBe('en')
+    expect(parsed.groups[0]!.tools[0]!.summaryLocale).toBe('ko')
+  })
+
+  it('leaves them absent when absent', () => {
+    const parsed = parseMcpToolCatalogue(catalogueFixture)
+    expect('locale' in parsed).toBe(false)
+    expect('textLocale' in parsed.groups[0]!).toBe(false)
+    expect('summaryLocale' in parsed.groups[0]!.tools[0]!).toBe(false)
+  })
+
+  it.each([
+    ['locale', (d: LocaleDoc) => (d.locale = 5), 'document.locale'],
+    [
+      'textLocale',
+      (d: LocaleDoc) => (d.groups[0].textLocale = ''),
+      'groups[0].textLocale',
+    ],
+    [
+      'summaryLocale',
+      (d: LocaleDoc) => (d.groups[0].tools[0].summaryLocale = null),
+      'groups[0].tools[0].summaryLocale',
+    ],
+  ])(
+    'throws a shape error naming the path for a bad %s',
+    (_n, break_, path) => {
+      const doc = localized()
+      break_(doc)
+      expect(() => parseMcpToolCatalogue(doc)).toThrow(
+        McpToolCatalogueShapeError,
+      )
+      expect(() => parseMcpToolCatalogue(doc)).toThrow(path)
+    },
+  )
+
+  it('catalogueTextLocale returns the served value, else en', () => {
+    expect(catalogueTextLocale('ko', 'ko')).toBe('ko')
+    expect(catalogueTextLocale(undefined, 'ko')).toBe('en')
+  })
+})
+
 describe('countCatalogueTools', () => {
   it('counts the rows the page is about to render, not the served scalar', () => {
     // The producer computes `toolCount` the same way and the two agree. Counting
@@ -327,6 +407,25 @@ describe('the catalogue is consumed, never copied', () => {
     )
   })
 
+  it('requests the English URL with no query, and ?locale= for another locale', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => catalogueFixture,
+    })
+    const base = 'https://app.test.motir.co/api/docs/mcp-tools.json'
+    await fetchMcpToolCatalogue()
+    await fetchMcpToolCatalogue('en')
+    await fetchMcpToolCatalogue('ko')
+    expect(fetchMock.mock.calls.map((call) => String(call[0]))).toEqual([
+      base,
+      base,
+      `${base}?locale=ko`,
+    ])
+    expect(fetchMock.mock.calls[0]![1]).toEqual({ next: { revalidate: 0 } })
+    expect(fetchMock.mock.calls[2]![1]).toEqual({ next: { revalidate: 0 } })
+  })
+
   it('THROWS when the artifact is unreachable — there is no fallback list', async () => {
     // The one thing this page must never do. A committed default rendered here
     // would be stale exactly when it is displayed and unreachable by every guard,
@@ -357,7 +456,7 @@ describe('the catalogue is consumed, never copied', () => {
   it('commits no catalogue artifact under content/docs/', () => {
     // The same assertion the spec limb makes, for the second registry: neither
     // published document may arrive as a file in this repository.
-    expect(existsSync('content/docs')).toBe(false)
+    expect(contentDocsStrays()).toEqual([])
   })
 
   it('reads the published catalogue path out of the ONE configured origin', () => {
@@ -402,5 +501,25 @@ describe('the MCP pages name no tools, because nothing here could check them', (
     it(`names no tool in ${page}`, () => {
       expect(toolNameLiterals(readFileSync(page, 'utf8'))).toEqual([])
     })
+  }
+
+  // MOTIR-8037 / MOTIR-8055: the pages' prose is a document per language now, so
+  // the guard follows it there. Every `content/docs/mcp/*.md` and
+  // `content/docs/mcp/tools/*.md` — the English source and any translation — is
+  // scanned by glob, so a translation that types a tool name (or a vendor key
+  // with the same shape, which `lib/mcpWiring.ts` hands over as a value) fails
+  // exactly as the page source would.
+  for (const dir of ['content/docs/mcp', 'content/docs/mcp/tools']) {
+    const documents = readdirSync(dir).filter((name) => name.endsWith('.md'))
+    it(`finds the ${dir} documents it is meant to scan`, () => {
+      expect(documents).toContain('en.md')
+    })
+    for (const name of documents) {
+      it(`names no tool in ${dir}/${name}`, () => {
+        expect(
+          toolNameLiterals(readFileSync(`${dir}/${name}`, 'utf8')),
+        ).toEqual([])
+      })
+    }
   }
 })

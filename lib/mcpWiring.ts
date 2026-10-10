@@ -104,53 +104,34 @@ export function mcpTransportFacts(
   }
 }
 
-/** One row of the "every client needs these four" table. */
-export interface McpTransportFactRow {
-  label: string
-  value: string
-}
-
-export function mcpTransportFactRows(
-  facts: McpTransportFacts = mcpTransportFacts(),
-): McpTransportFactRow[] {
-  return [
-    { label: 'URL', value: facts.url },
-    {
-      label: 'Transport',
-      value: 'Streamable HTTP — not SSE, and not a stdio command',
-    },
-    {
-      label: 'Header',
-      value: `${facts.authHeader}: ${facts.authScheme} <token>, on every request`,
-    },
-    {
-      label: 'Token',
-      value: `${facts.tokenPlaceholder} — the one you minted in step 1`,
-    },
-  ]
-}
-
-/** One client's wiring block. Everything except `config` is the VENDOR's. */
+/**
+ * One client's wiring block: code, paths, URLs and a date, and no sentence
+ * (MOTIR-8055). The client's name, the note on its secret and the words of its
+ * caption are prose and live in `content/docs/mcp/<locale>.md`; the page joins
+ * them to this by `id`.
+ */
 export interface McpClient {
-  /** Stable id — the React key and the section anchor. */
+  /** Stable id — the section anchor's suffix and the key the page joins prose to. */
   id: string
-  /** How the client is known to its users. */
-  label: string
-  /** Where the snippet goes — becomes the code pane's caption. */
-  file: string
+  /**
+   * Where the snippet goes — a path, the first half of the code pane's caption.
+   * `null` for the generic block, whose caption is a sentence in the catalogue.
+   */
+  file: string | null
   /** The snippet, built by interpolating {@link McpTransportFacts}. */
   config: string
-  /**
-   * One line on what this vendor does about the secret, or what to watch for.
-   * REQUIRED: every block has something worth saying, and an optional field
-   * bought nothing but a dead branch in the page that renders it.
-   */
-  note: string
   /** That vendor's own MCP documentation — the authority when a block is stale. */
   docsUrl: string
   /** When the FORMAT was last read from `docsUrl`. */
   checkedOn: string
 }
+
+/**
+ * The key Codex CLI's TOML reads the secret from. It is the VENDOR's spelling,
+ * and it has the shape of a tool name (see the block above), so it is exported
+ * here for the page to hand a document as a value rather than typed in prose.
+ */
+export const MCP_CODEX_TOKEN_KEY = 'bearer_token_env_var'
 
 /**
  * The date the vendor formats below were read from their own documentation.
@@ -176,7 +157,6 @@ export function mcpClients(
   return [
     {
       id: 'claude-code',
-      label: 'Claude Code',
       file: '.mcp.json',
       config: [
         '{',
@@ -189,14 +169,12 @@ export function mcpClients(
         '  }',
         '}',
       ].join('\n'),
-      note: `Or one command: claude mcp add --transport http motir ${facts.url} --header "${facts.authHeader}: ${bearer}"`,
       docsUrl: 'https://docs.claude.com/en/docs/claude-code/mcp',
       checkedOn: MCP_CLIENT_FORMATS_CHECKED_ON,
     },
     {
       id: 'cursor',
-      label: 'Cursor',
-      file: '~/.cursor/mcp.json — or .cursor/mcp.json for one project',
+      file: '~/.cursor/mcp.json',
       config: [
         '{',
         '  "mcpServers": {',
@@ -207,13 +185,11 @@ export function mcpClients(
         '  }',
         '}',
       ].join('\n'),
-      note: `Cursor interpolates \${env:…}, so the token stays in your environment and out of the file.`,
       docsUrl: 'https://cursor.com/docs/context/mcp',
       checkedOn: MCP_CLIENT_FORMATS_CHECKED_ON,
     },
     {
       id: 'vscode',
-      label: 'VS Code',
       file: '.vscode/mcp.json',
       config: [
         '{',
@@ -234,34 +210,29 @@ export function mcpClients(
         '  }',
         '}',
       ].join('\n'),
-      note: 'VS Code prompts for the token the first time the server starts and stores it securely — nothing secret is written to the file.',
       docsUrl:
         'https://code.visualstudio.com/docs/agents/reference/mcp-configuration',
       checkedOn: MCP_CLIENT_FORMATS_CHECKED_ON,
     },
     {
       id: 'codex',
-      label: 'Codex CLI',
       file: '~/.codex/config.toml',
       config: [
         '[mcp_servers.motir]',
         `url = "${facts.url}"`,
-        `bearer_token_env_var = "${facts.tokenEnvVar}"`,
+        `${MCP_CODEX_TOKEN_KEY} = "${facts.tokenEnvVar}"`,
       ].join('\n'),
-      note: 'bearer_token_env_var takes the variable’s NAME, not the token.',
       docsUrl: 'https://developers.openai.com/codex/mcp',
       checkedOn: MCP_CLIENT_FORMATS_CHECKED_ON,
     },
     {
       id: 'other',
-      label: 'Any other streamable-HTTP client',
-      file: 'whatever your client calls its config',
+      file: null,
       config: [
         'Transport:  streamable HTTP',
         `URL:        ${facts.url}`,
         `Header:     ${facts.authHeader}: ${bearer}`,
       ].join('\n'),
-      note: 'Windsurf, Zed, Cline, Goose, or something you wrote yourself — the same four facts under different key names.',
       docsUrl:
         'https://modelcontextprotocol.io/docs/develop/connect-local-servers',
       checkedOn: MCP_CLIENT_FORMATS_CHECKED_ON,
@@ -297,21 +268,17 @@ export const CLAUDE_AI_ROUTE_CHECKED_ON = '2026-10-02'
 /** The Account → Tokens page, where the Connected apps card lists and revokes grants. */
 export const CONNECTED_APPS_PATH = '/settings/account/tokens#connected-apps'
 
-/** One Claude client's route to the connector. Everything but `code` is Anthropic's. */
+/**
+ * One Claude client's route to the connector: what to paste or run, Anthropic's
+ * page and the date it was read — and no sentence (MOTIR-8055). The steps, the
+ * note, the client's name and the pane's caption and copy label are prose, in
+ * `content/docs/mcp/<locale>.md` and the catalogue.
+ */
 export interface ClaudeRoute {
-  /** Stable id — the React key and the sub-anchor. */
+  /** Stable id — the section anchor and the key the page joins prose to. */
   id: string
-  label: string
-  /** The steps, in order, as plain sentences. */
-  steps: string[]
   /** What to paste or run — always built from the facts. */
   code: string
-  /** The pane caption for `code`. */
-  caption: string
-  /** The copy control's accessible name. */
-  copyLabel: string
-  /** One line after the steps — what to know that is not a step. */
-  note: string
   /** Anthropic's page the steps were read from. */
   docsUrl: string
   checkedOn: string
@@ -323,50 +290,34 @@ export function claudeRoutes(
   return [
     {
       id: 'claude-ai',
-      label: 'claude.ai',
-      steps: [
-        'Open Customize → Connectors.',
-        'Click “+”, then Add custom connector, and paste the server URL below. Under OAuth client, choose Use Claude’s published identity — claude.ai marks it Detected, because Motir supports it. Leave the OAuth client ID and secret empty — Motir needs neither.',
-        'Click Add, then Connect. Claude sends you to app.motir.co to sign in and approve.',
-      ],
       code: facts.url,
-      caption: 'Remote MCP server URL',
-      copyLabel: 'Copy the Motir MCP server URL',
-      note: 'On a Team or Enterprise plan an Owner adds the connector once, under Organization settings → Connectors → Add → Custom → Web, and each member then clicks Connect under Customize → Connectors with their own Motir account.',
       docsUrl:
         'https://claude.com/docs/connectors/custom/remote-mcp#choose-authentication-settings',
       checkedOn: CLAUDE_AI_ROUTE_CHECKED_ON,
     },
     {
       id: 'claude-desktop',
-      label: 'Claude desktop app',
-      steps: [
-        'If you already connected Motir on claude.ai, there is nothing to add: a connected connector is available in your conversations on the web, the desktop app and mobile.',
-        'To add it from the desktop app instead, select Customize in the sidebar, then Connectors, and follow the claude.ai steps with the same URL.',
-        'The Motir sign-in page opens in your browser; approve there and return to the app.',
-      ],
       code: facts.url,
-      caption: 'Remote MCP server URL',
-      copyLabel: 'Copy the Motir MCP server URL',
-      note: 'This is a remote connector, not a local desktop extension: Claude reaches Motir from Anthropic’s cloud, so nothing is installed on your machine.',
       docsUrl: 'https://claude.com/docs/connectors/overview',
       checkedOn: CLAUDE_ROUTES_CHECKED_ON,
     },
     {
       id: 'claude-code',
-      label: 'Claude Code',
-      steps: [
-        'Add the server with the command below — no header and no token.',
-        'In Claude Code, run /mcp, select motir and follow the sign-in in your browser.',
-      ],
       code: `claude mcp add --transport http motir ${facts.url}`,
-      caption: 'your terminal',
-      copyLabel: 'Copy the Claude Code command',
-      note: 'If you signed Claude Code in with your Claude account, a connector you connected on claude.ai is already available there. The Motir plugin for Claude Code brings this server with it, beside the skills.',
       docsUrl: 'https://code.claude.com/docs/en/mcp',
       checkedOn: CLAUDE_ROUTES_CHECKED_ON,
     },
   ]
+}
+
+/**
+ * The one-command form of the Claude Code CLIENT block, header and all — the
+ * token route's twin of the headerless command in {@link claudeRoutes}.
+ */
+export function mcpClaudeCodeTokenCommand(
+  facts: McpTransportFacts = mcpTransportFacts(),
+): string {
+  return `claude mcp add --transport http motir ${facts.url} --header "${facts.authHeader}: ${facts.authScheme} ${facts.tokenPlaceholder}"`
 }
 
 /** How a reader verifies the connection, once the config is in place. */
@@ -380,41 +331,6 @@ export function mcpVerifyCommand(
     `  -H "Accept: application/json, text/event-stream" \\`,
     `  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'`,
   ].join('\n')
-}
-
-/** One row of the reader's fork — MCP server, or the REST API? */
-export interface McpForkRow {
-  axis: string
-  mcp: string
-  rest: string
-}
-
-export function mcpForkRows(
-  facts: McpTransportFacts = mcpTransportFacts(),
-): McpForkRow[] {
-  return [
-    { axis: 'Endpoint', mcp: `POST ${facts.path}`, rest: '/api/v1/…' },
-    {
-      axis: 'Built for',
-      mcp: 'An agent you control — it reads tool descriptions at run time.',
-      rest: 'A client you ship — code written once against a fixed shape.',
-    },
-    {
-      axis: 'Stability',
-      mcp: 'Expected to change. Rewording a description or renaming an argument is how an agent’s behaviour gets tuned.',
-      rest: 'Additive only. A breaking change mints /api/v2; v1 keeps its promise.',
-    },
-    {
-      axis: 'Shape',
-      mcp: 'The same. MCP payloads are derived from the v1 response schemas, so the two describe provably identical objects.',
-      rest: 'The same, and it is the source the MCP derives from.',
-    },
-    {
-      axis: 'Auth',
-      mcp: 'One personal access token, one scope set.',
-      rest: 'The same credential works on both.',
-    },
-  ]
 }
 
 /** motir-core's own MCP reference — the authority beyond this page. */

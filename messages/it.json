@@ -733,6 +733,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "La traduzione di questa pagina è in aggiornamento. Fino a quando non sarà pronta, viene mostrato il testo in inglese.",
+      "generatedReference": {
+        "openapi": "Le descrizioni delle operazioni e le tabelle di parametri e campi qui sotto sono generate dal documento OpenAPI di Motir, quindi restano in inglese.",
+        "cli": "Le descrizioni dei comandi e delle opzioni qui sotto sono il testo che mostra il comando motir installato, quindi restano in inglese."
+      }
+    },
     "operationCount": "{count} operazioni",
     "metaTitle": "Documentazione · Motir",
     "metaDescription": "Documentazione per l’API e il server MCP di Motir: il contratto pubblico di lettura, il server che gli agenti chiamano e la CLI.",
@@ -799,7 +806,13 @@
     "descSkills": "Installa le skill di Motir nel tuo agente, e cosa dire per usare ciascuna.",
     "descClaudeCodeConnector": "Collega Motir a Claude Code con il tuo account Motir e senza token, da claude.ai o con un solo comando.",
     "descClaudeCodePlugin": "Una sola installazione in Claude Code porta le skill di Motir, il suo server MCP e la sua CLI, con l’accesso già fatto e senza token.",
-    "apiIntro": "Ogni operazione servita dall’API, generata dal documento OpenAPI pubblicato da Motir e recuperata quando viene richiesta questa pagina: è quindi esattamente ciò che il server offre in questo momento. Per ciascuna trovi i parametri, il corpo che accetta, una richiesta da copiare e ogni stato con cui può rispondere.",
+    "apiSpecSummary": "{title} · versione {version} · {count, plural, one {# operazione} many {# di operazioni} other {# operazioni}} · <link>{path}</link>",
+    "apiUnreachable": "Il riferimento API non è raggiungibile temporaneamente. Riprova tra un attimo.",
+    "mcpToolsSummary": "{count, plural, one {# strumento} many {# di strumenti} other {# strumenti}} su <code>{endpoint}</code>, raggruppati in base al permesso che li controlla",
+    "mcpToolsUnreachable": "Il catalogo degli strumenti non è raggiungibile temporaneamente. L’elenco che questa pagina mostra è pubblicato da Motir stesso e non viene mai copiato qui, quindi per ora non c’è nulla da mostrarti: apri un handshake <code>tools/list</code> verso l’endpoint oppure riprova tra un attimo.",
+    "mcpArgsUnpublished": "Questa versione di Motir non pubblica gli argomenti di questo strumento. Un handshake <code>tools/list</code> verso l’endpoint li include.",
+    "mcpNoArguments": "Non accetta argomenti.",
+    "mcpGrantedByDefault": " · concesso per impostazione predefinita",
     "sectionRequest": "Richiesta",
     "sectionBody": "Corpo della richiesta",
     "sectionExample": "Esempio",
@@ -808,7 +821,42 @@
     "thStatus": "Stato",
     "thCondition": "Condizione",
     "filterOperations": "Filtra le operazioni",
-    "filterEmpty": "Nessuna operazione corrisponde a questo filtro."
+    "filterEmpty": "Nessuna operazione corrisponde a questo filtro.",
+    "guideLabels": {
+      "candidateModel": "Modello",
+      "candidatePrice": "Prezzo per 1 M di token",
+      "candidateCost": "Costo per attività",
+      "costBasisPrice": "in base al prezzo",
+      "costBasisSamePrice": "stesso prezzo",
+      "captionInClaudeCode": "in Claude Code",
+      "captionCopySkillsOnly": "oppure copia solo le skill, in un terminale",
+      "captionInTerminal": "in un terminale",
+      "captionYourTerminal": "il tuo terminale",
+      "captionMcpServerUrl": "URL del server MCP remoto",
+      "captionYourMachine": "il tuo computer",
+      "captionCursorConfig": "~/.cursor/mcp.json — oppure .cursor/mcp.json per un solo progetto",
+      "captionOtherClientConfig": "comunque il tuo client chiami la propria configurazione",
+      "copyClaudeCodePlugin": "Copia i comandi del plugin di Claude Code",
+      "copyClaudeCodeCopy": "Copia i comandi dell’installazione per copia di Claude Code",
+      "copyClaudeCodeUpdate": "Copia i comandi di aggiornamento di Claude Code",
+      "copyCodex": "Copia i comandi di installazione di Codex",
+      "copyCursor": "Copia i comandi di installazione di Cursor",
+      "copyGeminiCli": "Copia i comandi di installazione di Gemini CLI",
+      "copyCopilot": "Copia i comandi di installazione di GitHub Copilot",
+      "copyOpenCode": "Copia i comandi di installazione di OpenCode",
+      "copyMcpServerUrl": "Copia l’URL del server Motir MCP",
+      "copyClaudeCodeCommand": "Copia il comando di Claude Code",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "la tua macchina — nella cartella che monti",
+      "captionInContainer": "nel container",
+      "captionSandboxGrant": "i permessi che porta un token emesso da un dispositivo",
+      "copySandboxDevcontainer": "Copia il comando di configurazione del dev container",
+      "copySandboxSignIn": "Copia il comando di accesso",
+      "copySandboxLink": "Copia il comando di collegamento",
+      "copySandboxCheck": "Copia il comando di verifica",
+      "sandboxAgentProfile": "Profilo dell’agente"
+    }
   },
   "notFound": {
     "eyebrow": "404",

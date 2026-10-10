@@ -1,0 +1,651 @@
+{
+  "source": "motir-core GET /api/docs/cli-commands.json (cliCommandsDocument())",
+  "repository": "moooon-B-V/motir-core",
+  "sha": "ee837e0c0eb0010a58194e1fb64c398c3de9a639",
+  "command": "npx tsx -e \"import('./lib/apiDocs/cli').then(m => { const f = m.cliCommandsDocument ?? m.default.cliCommandsDocument; console.log(JSON.stringify(f())) })\"",
+  "recordedAt": "2026-10-10T01:39:39Z",
+  "recordedBy": "MOTIR-8052",
+  "document": {
+    "packageName": "@motir/cli",
+    "packageVersion": "0.12.0",
+    "installCommand": "npm install -g @motir/cli",
+    "nodeRequirement": ">=22",
+    "defaultServer": "https://app.motir.co",
+    "commandCount": 32,
+    "commands": [
+      {
+        "path": "login",
+        "signature": "",
+        "invocation": "motir login",
+        "description": "Connect this terminal: shows a code, opens Motir, waits for your approval.",
+        "helpGroup": "SETUP COMMANDS:",
+        "options": [
+          {
+            "flags": "--server <url>",
+            "description": "Server base URL, e.g. https://app.motir.co"
+          },
+          {
+            "flags": "--no-browser",
+            "description": "Do not launch a browser — just print the code and the URL to open anywhere."
+          }
+        ]
+      },
+      {
+        "path": "logout",
+        "signature": "",
+        "invocation": "motir logout",
+        "description": "Disconnect this terminal: remove the stored token for a server.",
+        "helpGroup": "SETUP COMMANDS:",
+        "options": [
+          {
+            "flags": "--server <url>",
+            "description": "Server to log out of (defaults to the linked / single server)."
+          }
+        ]
+      },
+      {
+        "path": "auth",
+        "signature": "",
+        "invocation": "motir auth",
+        "description": "Authenticate to a Motir server with a PAT.",
+        "helpGroup": "SETUP COMMANDS:",
+        "options": []
+      },
+      {
+        "path": "auth login",
+        "signature": "",
+        "invocation": "motir auth login",
+        "description": "Validate and store a personal access token for a server.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--server <url>",
+            "description": "Server base URL, e.g. https://app.motir.co"
+          },
+          {
+            "flags": "--token <pat>",
+            "description": "Personal access token (or set MOTIR_TOKEN; prompted if omitted)."
+          }
+        ]
+      },
+      {
+        "path": "auth status",
+        "signature": "",
+        "invocation": "motir auth status",
+        "description": "Show the resolved server, token prefix, and owning user.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--server <url>",
+            "description": "Server to report (defaults to the linked / single server)."
+          }
+        ]
+      },
+      {
+        "path": "auth logout",
+        "signature": "",
+        "invocation": "motir auth logout",
+        "description": "Remove the stored token for a server.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--server <url>",
+            "description": "Server to log out of (defaults to the linked / single server)."
+          }
+        ]
+      },
+      {
+        "path": "link",
+        "signature": "",
+        "invocation": "motir link",
+        "description": "Bind this workspace-root folder to a project, and clone the repositories it is missing.",
+        "helpGroup": "SETUP COMMANDS:",
+        "options": [
+          {
+            "flags": "--server <url>",
+            "description": "Server base URL (defaults to the existing link / single server)."
+          },
+          {
+            "flags": "--workspace <slug>",
+            "description": "Workspace slug (defaults to the token’s active workspace)."
+          },
+          {
+            "flags": "--project <key>",
+            "description": "Project key, e.g. ACME. Omit it and the workspace’s only project is used."
+          },
+          {
+            "flags": "--repo <name>",
+            "description": "Mark THIS directory as a single repo’s checkout (writes a \".\" override)."
+          },
+          {
+            "flags": "--no-clone",
+            "description": "Bind only — do not clone the project’s missing checkouts."
+          }
+        ]
+      },
+      {
+        "path": "link add",
+        "signature": "<repo> <path>",
+        "invocation": "motir link add <repo> <path>",
+        "description": "Add a repo checkout-path override (relative to the link root, or absolute).",
+        "helpGroup": null,
+        "options": []
+      },
+      {
+        "path": "link remove",
+        "signature": "<repo>",
+        "invocation": "motir link remove <repo>",
+        "description": "Remove a repo checkout-path override.",
+        "helpGroup": null,
+        "options": []
+      },
+      {
+        "path": "ready",
+        "signature": "",
+        "invocation": "motir ready",
+        "description": "List the linked project’s ready leaves, grouped under their runnable containers — or, with --parent / --bug, the other two ready lanes.",
+        "helpGroup": "READ COMMANDS:",
+        "options": [
+          {
+            "flags": "--kinds <list>",
+            "description": "Comma-separated kinds: epic,story,task,bug,subtask."
+          },
+          {
+            "flags": "--parent",
+            "description": "List the runnable containers — what `motir next --parent` runs."
+          },
+          {
+            "flags": "--bug",
+            "description": "List the ready bugs instead of the leaves."
+          },
+          {
+            "flags": "--assignee <id>",
+            "description": "Filter by assignee: a user id, \"me\", or \"unassigned\"."
+          },
+          { "flags": "--json", "description": "Emit the ready items as JSON." }
+        ]
+      },
+      {
+        "path": "status",
+        "signature": "",
+        "invocation": "motir status",
+        "description": "Show the project pulse: ready / in-flight counts + the active sprint.",
+        "helpGroup": "READ COMMANDS:",
+        "options": [
+          { "flags": "--json", "description": "Emit the pulse as JSON." }
+        ]
+      },
+      {
+        "path": "sprints",
+        "signature": "",
+        "invocation": "motir sprints",
+        "description": "List the project’s sprints: state, item count, points, window.",
+        "helpGroup": "READ COMMANDS:",
+        "options": [
+          {
+            "flags": "--state <state>",
+            "description": "Only sprints in this state: planned, active, or complete."
+          },
+          { "flags": "--json", "description": "Emit the sprint rows as JSON." }
+        ]
+      },
+      {
+        "path": "sprint",
+        "signature": "[ref]",
+        "invocation": "motir sprint [ref]",
+        "description": "List ONE sprint’s work items (defaults to the active sprint).",
+        "helpGroup": "READ COMMANDS:",
+        "options": [
+          {
+            "flags": "--kinds <list>",
+            "description": "Comma-separated kinds: epic,story,task,bug,subtask."
+          },
+          {
+            "flags": "--json",
+            "description": "Emit the sprint and its items as JSON."
+          }
+        ]
+      },
+      {
+        "path": "show",
+        "signature": "<key>",
+        "invocation": "motir show <key>",
+        "description": "Read one work item (e.g. ACME-7): fields, readiness, children, edges, body.",
+        "helpGroup": "READ COMMANDS:",
+        "options": [
+          {
+            "flags": "--json",
+            "description": "Emit the get_work_item payload as JSON."
+          },
+          {
+            "flags": "--activity",
+            "description": "Also print the activity stream: comments and history, one page."
+          },
+          {
+            "flags": "--comments",
+            "description": "Also print the comment threads only, one page."
+          }
+        ]
+      },
+      {
+        "path": "doctor",
+        "signature": "",
+        "invocation": "motir doctor",
+        "description": "Preflight your BYOK setup: auth, project link, agent binary, credential presence.",
+        "helpGroup": "SETUP COMMANDS:",
+        "options": [
+          {
+            "flags": "--agent <cmd>",
+            "description": "Check THIS agent command instead of the configured one."
+          },
+          {
+            "flags": "--json",
+            "description": "Emit the check results as JSON."
+          }
+        ]
+      },
+      {
+        "path": "open",
+        "signature": "<key>",
+        "invocation": "motir open <key>",
+        "description": "Open a work item (e.g. ACME-7) in the browser; prints the URL.",
+        "helpGroup": "READ COMMANDS:",
+        "options": [
+          {
+            "flags": "--print",
+            "description": "Print the URL only; do not launch a browser."
+          }
+        ]
+      },
+      {
+        "path": "next",
+        "signature": "",
+        "invocation": "motir next",
+        "description": "Dispatch the next ready leaf (never a bug): claim it and deliver its prompt. --parent runs the next runnable container; --bug takes the next bug.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--kinds <list>",
+            "description": "Comma-separated kinds: epic,story,task,bug,subtask."
+          },
+          {
+            "flags": "--parent",
+            "description": "Run the next runnable container (a story, task or bug whose children are all leaves) as a parent run — as `motir run <KEY>` would."
+          },
+          {
+            "flags": "--bug",
+            "description": "Take the next ready bug instead of the next leaf."
+          },
+          {
+            "flags": "--print",
+            "description": "Print the prompt to stdout INSTEAD of launching an agent (default). Not --print-prompt."
+          },
+          {
+            "flags": "--print-prompt",
+            "description": "ALSO echo the assembled prompt to stderr as it is sent, and still run the agent."
+          },
+          {
+            "flags": "--agent <cmd>",
+            "description": "Run THIS agent command on the prompt (overrides MOTIR_AGENT)."
+          },
+          {
+            "flags": "--reset",
+            "description": "Clear this project’s session exclude list before picking."
+          },
+          {
+            "flags": "--disable-log-bug",
+            "description": "Do not let the agent file a bug for a defect it finds elsewhere; it comments instead."
+          },
+          {
+            "flags": "--disable-replan",
+            "description": "Do not let the agent submit a re-plan for a wrong work item; it comments and stops."
+          },
+          {
+            "flags": "--auto-approve-replan",
+            "description": "Not supported — approving a submitted re-plan and continuing is a `motir auto` flag."
+          },
+          {
+            "flags": "--report-log",
+            "description": "ALSO send your agent’s output to Motir, so a failed run shows its tail on the run page. OFF by default — only the lifecycle is sent, never file contents, paths or diffs."
+          }
+        ]
+      },
+      {
+        "path": "run",
+        "signature": "<scope>",
+        "invocation": "motir run <scope>",
+        "description": "Run a scope: one work item, a whole story, or `sprint` for the active one.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--print",
+            "description": "Print the prompt to stdout INSTEAD of launching an agent (default). One item; not --print-prompt."
+          },
+          {
+            "flags": "--print-prompt",
+            "description": "Echo each assembled prompt to stderr as it is sent, alongside the run (2> prompts.log)."
+          },
+          {
+            "flags": "--agent <cmd>",
+            "description": "Run THIS agent command on the prompt (overrides MOTIR_AGENT)."
+          },
+          {
+            "flags": "--force",
+            "description": "Dispatch even though the item is not ready (dependencies unmet). One work item only."
+          },
+          {
+            "flags": "--allow-soft-block",
+            "description": "Run an item held only by an ancestor's block (a SOFT block). Still refuses one with its own open blocker (a HARD block — only --force passes that)."
+          },
+          {
+            "flags": "--disable-log-bug",
+            "description": "Do not let the agent file a bug for a defect it finds elsewhere; it comments instead."
+          },
+          {
+            "flags": "--disable-replan",
+            "description": "Do not let the agent submit a re-plan for a wrong work item; it comments and stops."
+          },
+          {
+            "flags": "--auto-approve-replan",
+            "description": "Not supported — approving a submitted re-plan and continuing is a `motir auto` flag."
+          },
+          {
+            "flags": "--max <n>",
+            "description": "Stop after dispatching n work items from the scope."
+          },
+          {
+            "flags": "--keep-going",
+            "description": "Continue past a failed agent instead of halting on the first one."
+          },
+          {
+            "flags": "--include-planning",
+            "description": "Trigger an AI expansion for an unexpanded story instead of refusing it. Never waits: the plan needs your approval."
+          },
+          {
+            "flags": "--kinds <list>",
+            "description": "Not supported — a scoped run drains the whole claimed set, not a filtered subset."
+          },
+          {
+            "flags": "--report-log",
+            "description": "ALSO send your agent’s output to Motir, so a failed run shows its tail on the run page. OFF by default — only the lifecycle is sent, never file contents, paths or diffs."
+          },
+          {
+            "flags": "--run-id <id>",
+            "description": "Adopt a run Motir already opened (a hosted run) instead of opening one. Env: MOTIR_DISPATCH_RUN_ID."
+          }
+        ]
+      },
+      {
+        "path": "fix",
+        "signature": "<key>",
+        "invocation": "motir fix <key>",
+        "description": "Hand a work item whose pull requests are failing, whose merge could not land because of its code, or whose acceptance video was sent back to re-run, to your agent, on their own branches.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--agent <cmd>",
+            "description": "Run THIS agent command on the fix (overrides MOTIR_AGENT)."
+          },
+          {
+            "flags": "--report-log",
+            "description": "ALSO send your agent’s output to Motir, so a failed run shows its tail on the run page. OFF by default — only the lifecycle is sent, never file contents, paths or diffs."
+          }
+        ]
+      },
+      {
+        "path": "continue",
+        "signature": "<key>",
+        "invocation": "motir continue <key>",
+        "description": "Carry on a work item whose last run died, on the branch it left — from any machine, without starting it over.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--agent <cmd>",
+            "description": "Run THIS agent command on the continue (overrides MOTIR_AGENT)."
+          },
+          {
+            "flags": "--max <n>",
+            "description": "A parent: stop after dispatching n more work items."
+          },
+          {
+            "flags": "--keep-going",
+            "description": "A parent: continue past a failed agent instead of halting."
+          },
+          {
+            "flags": "--report-log",
+            "description": "ALSO send your agent’s output to Motir, so a failed run shows its tail on the run page. OFF by default — only the lifecycle is sent, never file contents, paths or diffs."
+          }
+        ]
+      },
+      {
+        "path": "review",
+        "signature": "<key>",
+        "invocation": "motir review <key>",
+        "description": "Hosted only: review a work item’s pull requests at the version under review and submit ONE verdict — never pushes, never posts to GitHub.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": []
+      },
+      {
+        "path": "auto",
+        "signature": "",
+        "invocation": "motir auto",
+        "description": "Drain the ready set unattended: one item at a time onto a session branch.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--agent <cmd>",
+            "description": "Run THIS agent command on every prompt (overrides MOTIR_AGENT)."
+          },
+          {
+            "flags": "--kinds <list>",
+            "description": "Comma-separated kinds: epic,story,task,bug,subtask."
+          },
+          {
+            "flags": "--max <n>",
+            "description": "Stop after dispatching n work items."
+          },
+          {
+            "flags": "--keep-going",
+            "description": "Continue past a failed agent instead of halting on the first one."
+          },
+          {
+            "flags": "--reset",
+            "description": "Clear this project’s session exclude list before starting."
+          },
+          {
+            "flags": "--include-planning",
+            "description": "Trigger an AI expansion for each unexpanded epic/story instead of skipping it. Never waits: the plan needs your approval."
+          },
+          {
+            "flags": "--print",
+            "description": "Not supported — an unattended loop has nobody to paste a prompt. --print-prompt IS."
+          },
+          {
+            "flags": "--print-prompt",
+            "description": "Echo each assembled prompt to stderr as it is sent, alongside the run (2> prompts.log)."
+          },
+          {
+            "flags": "--disable-log-bug",
+            "description": "Do not let the agent file a bug for a defect it finds elsewhere; it comments instead."
+          },
+          {
+            "flags": "--disable-replan",
+            "description": "Do not let the agent submit a re-plan for a wrong work item; it comments and stops."
+          },
+          {
+            "flags": "--auto-approve-replan",
+            "description": "Approve a re-plan the agent submitted and keep looping, instead of stopping for you."
+          },
+          {
+            "flags": "--report-log",
+            "description": "ALSO send your agent’s output to Motir, so a failed run shows its tail on the run page. OFF by default — only the lifecycle is sent, never file contents, paths or diffs."
+          }
+        ]
+      },
+      {
+        "path": "batch",
+        "signature": "",
+        "invocation": "motir batch",
+        "description": "Implement a FROZEN snapshot of the ready set: one pull request per item.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--agent <cmd>",
+            "description": "Run THIS agent command on every prompt (overrides MOTIR_AGENT)."
+          },
+          {
+            "flags": "--kinds <list>",
+            "description": "Comma-separated kinds: epic,story,task,bug,subtask."
+          },
+          {
+            "flags": "--max <n>",
+            "description": "Stop after dispatching n work items."
+          },
+          {
+            "flags": "--keep-going",
+            "description": "Continue past a failed agent instead of halting on the first one."
+          },
+          {
+            "flags": "--reset",
+            "description": "Clear this project’s session exclude list before snapshotting."
+          },
+          {
+            "flags": "--print",
+            "description": "Not supported — a frozen snapshot has nobody to paste a prompt. --print-prompt IS."
+          },
+          {
+            "flags": "--print-prompt",
+            "description": "Echo each assembled prompt to stderr as it is sent, alongside the run (2> prompts.log)."
+          },
+          {
+            "flags": "--disable-log-bug",
+            "description": "Do not let the agent file a bug for a defect it finds elsewhere; it comments instead."
+          },
+          {
+            "flags": "--disable-replan",
+            "description": "Do not let the agent submit a re-plan for a wrong work item; it comments and stops."
+          },
+          {
+            "flags": "--auto-approve-replan",
+            "description": "Not supported — approving a submitted re-plan and continuing is a `motir auto` flag."
+          },
+          {
+            "flags": "--report-log",
+            "description": "ALSO send your agent’s output to Motir, so a failed run shows its tail on the run page. OFF by default — only the lifecycle is sent, never file contents, paths or diffs."
+          }
+        ]
+      },
+      {
+        "path": "plan",
+        "signature": "[args...]",
+        "invocation": "motir plan [args...]",
+        "description": "Plan by talking: resume the project’s planning conversation, add turns, submit.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--detach",
+            "description": "Submit and return with the job/plan ids; do not wait for the planner."
+          }
+        ]
+      },
+      {
+        "path": "done",
+        "signature": "[key]",
+        "invocation": "motir done [key]",
+        "description": "Close out a merged item — or a whole merged session branch.",
+        "helpGroup": "WORK LOOP COMMANDS:",
+        "options": [
+          {
+            "flags": "--session <branch>",
+            "description": "Bulk close-out: flip every item on this session branch."
+          },
+          {
+            "flags": "--via <status>",
+            "description": "Move through this status first (e.g. in_review)."
+          }
+        ]
+      },
+      {
+        "path": "agent-terminal",
+        "signature": "",
+        "invocation": "motir agent-terminal",
+        "description": "The terminal server inside a Motir agent image.",
+        "helpGroup": "ADDITIONAL COMMANDS:",
+        "options": []
+      },
+      {
+        "path": "agent-terminal serve",
+        "signature": "",
+        "invocation": "motir agent-terminal serve",
+        "description": "Serve this agent’s shell to Motir’s relay over WebSocket.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--port <port>",
+            "description": "Port to listen on, on every interface (default 7681)."
+          }
+        ]
+      },
+      {
+        "path": "agent-terminal run",
+        "signature": "<key>",
+        "invocation": "motir agent-terminal run <key>",
+        "description": "Open a run session for a card in this agent’s terminal server, and return its id at once.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--run-id <id>",
+            "description": "The run to open a session for (its credentials are read on stdin)."
+          }
+        ]
+      },
+      {
+        "path": "agent-terminal stop",
+        "signature": "",
+        "invocation": "motir agent-terminal stop",
+        "description": "Stop a run’s session: SIGTERM, then SIGKILL after 10 seconds.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--run-id <id>",
+            "description": "The run whose session to stop."
+          }
+        ]
+      },
+      {
+        "path": "agent-terminal status",
+        "signature": "",
+        "invocation": "motir agent-terminal status",
+        "description": "Report whether a run’s session is running, or how it exited.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--run-id <id>",
+            "description": "The run whose session to report."
+          }
+        ]
+      },
+      {
+        "path": "agent-terminal signin",
+        "signature": "",
+        "invocation": "motir agent-terminal signin",
+        "description": "Print whether this agent’s coding agent is signed in, as JSON.",
+        "helpGroup": null,
+        "options": [
+          {
+            "flags": "--json",
+            "description": "Print JSON (the only format; accepted for scripts that ask for it)."
+          }
+        ]
+      },
+      {
+        "path": "help",
+        "signature": "[command...]",
+        "invocation": "motir help [command...]",
+        "description": "Show help for a command, or read a help topic.",
+        "helpGroup": "HELP TOPICS:",
+        "options": []
+      }
+    ]
+  }
+}

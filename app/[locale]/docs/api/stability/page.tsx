@@ -1,10 +1,8 @@
-import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
-import { POLICY_ADDITIVE, POLICY_FORBIDDEN } from './policy'
+import { DocsDocument } from '../../_components/DocsDocument'
 
 /*
  * The stability & deprecation policy (MOTIR-4046, RESTORED by MOTIR-4429).
@@ -28,10 +26,11 @@ import { POLICY_ADDITIVE, POLICY_FORBIDDEN } from './policy'
  * never reaches it, so a phrase-matching structure copied across would be a
  * check that cannot go red — worse than no check, because it looks like one.
  *
- * What is here instead is honest about which half it is: the lists below are
- * the PUBLISHED sentences, and `tests/docs/apiGuide.test.tsx` pins their
- * MEMBERSHIP, so a silent edit that quietly widens what may change fails a
- * test. Holding them against §8 itself belongs in `tests/seam/`, the one lane
+ * What is here instead is honest about which half it is: the two lists in
+ * `content/docs/api/stability/en.md` are the PUBLISHED sentences (they were
+ * `policy.ts`'s constants until MOTIR-8037 moved them into the document), and
+ * `tests/docs/apiGuide.test.tsx` pins their MEMBERSHIP by reading that file,
+ * so a silent edit that quietly widens what may change fails a test. Holding them against §8 itself belongs in `tests/seam/`, the one lane
  * licensed to reach motir-core — and it needs §8 published as an artifact
  * first, which it is not. That is stated here rather than left as a gap
  * somebody rediscovers.
@@ -46,57 +45,6 @@ export function generateMetadata({
   }))
 }
 
-/** Where the promise is DECIDED, as against this page, where it is published. */
-const ADR_URL =
-  'https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md'
-
-function H2({ children, id }: { children: React.ReactNode; id?: string }) {
-  return (
-    <h2
-      id={id}
-      className="mt-9 scroll-mt-6 font-(family-name:--font-serif) text-[20px] font-semibold text-(--el-text)"
-    >
-      {children}
-    </h2>
-  )
-}
-
-function Prose({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mt-2 max-w-[68ch] text-[14px] leading-relaxed text-(--el-text-secondary)">
-      {children}
-    </p>
-  )
-}
-
-function Mono({ children }: { children: React.ReactNode }) {
-  return (
-    <code className="font-(family-name:--font-mono) text-[12.5px] text-(--el-text) whitespace-nowrap">
-      {children}
-    </code>
-  )
-}
-
-/**
- * A policy item, rendered with its `code` spans. The stored sentences carry
- * backticks so the two lists stay comparable as plain strings — which is what
- * the membership test reads — and this is where they become markup.
- */
-function PolicyItem({ text }: { text: string }) {
-  const parts = text.split(/`([^`]+)`/g)
-  return (
-    <li>
-      {parts.map((part, index) =>
-        index % 2 === 1 ? (
-          <Mono key={index}>{part}</Mono>
-        ) : (
-          <span key={index}>{part}</span>
-        ),
-      )}
-    </li>
-  )
-}
-
 export default async function StabilityPage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)
   const copy = await getCopy(locale)
@@ -105,110 +53,7 @@ export default async function StabilityPage({ params }: LocalePageProps) {
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.apiStability}
       </h1>
-      <p className="mt-4 max-w-[68ch] text-[15px] leading-relaxed text-(--el-text)">
-        The public read API is versioned. The contract version travels in the
-        served OpenAPI document’s <Mono>info.version</Mono> field, and a change
-        that breaks a client is a version bump, not a silent edit.
-      </p>
-
-      <H2 id="the-guarantee">
-        What <Mono>v1</Mono> guarantees
-      </H2>
-      <Prose>
-        While <Mono>v1</Mono> lives, its paths do not move, an error{' '}
-        <Mono>code</Mono> does not change meaning, an existing condition does
-        not change status, and a field does not change type or nullability.
-        Anything that would break those is a <Mono>v2</Mono>, not a{' '}
-        <Mono>v1</Mono> release.
-      </Prose>
-
-      <h3 className="mt-6 text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase">
-        Allowed inside <Mono>v1</Mono>, without notice
-      </h3>
-      <ul className="mt-2 max-w-[68ch] list-disc space-y-1.5 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
-        {POLICY_ADDITIVE.map((text) => (
-          <PolicyItem key={text} text={text} />
-        ))}
-      </ul>
-
-      <h3 className="mt-6 text-[11px] font-semibold tracking-wide text-(--el-text-secondary) uppercase">
-        Needs a new major
-      </h3>
-      <ul className="mt-2 max-w-[68ch] list-disc space-y-1.5 pl-5 text-[14px] leading-relaxed text-(--el-text-secondary)">
-        {POLICY_FORBIDDEN.map((text) => (
-          <PolicyItem key={text} text={text} />
-        ))}
-      </ul>
-
-      <H2 id="your-obligation">Your side of the promise</H2>
-      <Prose>
-        <strong className="text-(--el-text)">
-          A client MUST tolerate unknown fields and unknown values, and MUST NOT
-          parse the human <Mono>error</Mono> sentence.
-        </strong>{' '}
-        This is the other half of the promise, and without it the guarantee
-        above does not hold: a client that rejects a field it does not recognise
-        will break on a change this page calls safe, and a client that parses{' '}
-        <Mono>error</Mono> will break on a reworded sentence. Branch on{' '}
-        <Mono>code</Mono>, ignore what you do not know, and every additive
-        change is free for you.
-      </Prose>
-
-      <H2 id="deprecation">Deprecation</H2>
-      <Prose>
-        A deprecated operation or field is marked <Mono>deprecated: true</Mono>{' '}
-        <strong className="text-(--el-text)">in the specification</strong>, and
-        carries the reason and its replacement in its description. The
-        specification is the announcement channel because it is the one artifact
-        every client already reads — so a code generator surfaces the
-        deprecation without anyone having to have seen a blog post.
-      </Prose>
-      <Prose>
-        The old behaviour keeps working for the announced window. A field is
-        never removed as a surprise.
-      </Prose>
-
-      <H2 id="how-v2-arrives">
-        How a <Mono>v2</Mono> would arrive
-      </H2>
-      <Prose>
-        As a SECOND document at a second path, served alongside <Mono>v1</Mono>{' '}
-        — not as a rewrite of it. <Mono>v1</Mono> does not stop working the day{' '}
-        <Mono>v2</Mono> ships, and deprecating <Mono>v1</Mono> is itself an
-        announcement under the same window.
-      </Prose>
-      <Prose>
-        The <Mono>info.version</Mono> in the specification is the API contract’s
-        version, not the app’s release number: its major is the path version,
-        its minor increments on an additive change from the list above, and its
-        patch on a documentation-only correction. Read it off any response as{' '}
-        <Mono>X-Motir-Api-Version</Mono> —{' '}
-        <Link
-          href={localizedPath(locale, '/docs/api/getting-started')}
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          {copy.docs.apiGettingStarted}
-        </Link>{' '}
-        shows where.
-      </Prose>
-      <Prose>
-        {/* The deleted page named the ADR as a PATH in prose, because it sat in
-            the repository that holds it. From here it is a link, which is the
-            same information a reader can actually follow — motir-core is open
-            source, and §8 is where this promise is decided rather than
-            published. */}
-        This page is the published commitment. The internal record it is written
-        from is{' '}
-        <a
-          href={ADR_URL}
-          rel="noreferrer noopener"
-          target="_blank"
-          className="text-(--el-accent-on-surface) underline underline-offset-2"
-        >
-          the API decision record
-        </a>
-        , §8.
-      </Prose>
+      <DocsDocument slug="api/stability" locale={locale} slots={{}} />
     </>
   )
 }

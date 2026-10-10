@@ -1,3 +1,4 @@
+import { join } from 'node:path'
 import { defineConfig, devices } from '@playwright/test'
 import {
   SITE_ORIGIN,
@@ -143,6 +144,18 @@ export default defineConfig({
         // above; `e2e/stub/origin.ts` carries the full note.
         NEXT_PUBLIC_MOTIR_TENANT_DOMAIN: 'localhost',
         NEXT_TELEMETRY_DISABLED: '1',
+        // ⚠️ THE LANE READS /docs FROM THE REPOSITORY, PER REQUEST (MOTIR-8072).
+        // Set for the build AND the server, like the origin above: at build time
+        // it turns every /docs page dynamic (`DocsDocument` calls `connection()`
+        // when it is set), and at run time it points the standalone server — which
+        // `chdir`s into `.next/standalone` and would read the copy traced there —
+        // at the repository's own `content/docs`. So the acceptance walk's step 8
+        // can edit `sentry/en.md` and see `/de/docs/sentry` go stale. The image and
+        // CI's `build` job never set it, so production stays prerendered; this is
+        // the one place the lane deliberately renders /docs differently from what
+        // ships, and `lib/docsDocuments.ts` (`liveDocsContentRoot`) says why.
+        // `process.cwd()` is the repository root, as for `e2e/support/catalogue.ts`.
+        MOTIR_DOCS_LIVE_CONTENT_ROOT: join(process.cwd(), 'content', 'docs'),
         // The standalone server reads its own port and host; `next start`'s
         // `--port` flag does not reach it.
         PORT: String(SITE_PORT),

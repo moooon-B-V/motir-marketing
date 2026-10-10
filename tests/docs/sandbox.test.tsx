@@ -100,8 +100,15 @@ describe('the sandbox guide is instructions, not a definition', () => {
     // Code route is 2a–2c. `Before you start` is still on the page as an
     // eyebrow rather than an `<h2>` — a heading above a three-item list, in a
     // page whose spine is now the numbered sequence.
+    // ⚠️ RE-POINTED BY MOTIR-8056. The two eyebrows ('Before you start', 'Why it
+    // looks like this') were paragraphs in the JSX; in the page's document they
+    // are headings, because a document has no eyebrow that is not an `##` (the
+    // renderer draws every `##` as the eyebrow), and a heading carries the
+    // `{#id}` a translation keeps. The list stays EXACT.
     expect(headings).toEqual([
+      'Before you start',
       'Set it up',
+      'Why it looks like this',
       'What it confines — and what it does not',
       'What the environment gives you',
       'What the token may do — and what it refuses',

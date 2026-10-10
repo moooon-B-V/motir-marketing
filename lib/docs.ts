@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { APP_ORIGIN } from '@/lib/appOrigin'
+import type { Locale } from '@/i18n/routing'
 
 /**
  * The `/docs` data layer (MOTIR-4046, corrected by MOTIR-4180).
@@ -450,6 +451,12 @@ export interface McpToolEntry {
   permission: string
   summary: string
   /**
+   * The language `summary` is written in, as served: the requested locale or
+   * `'en'` (MOTIR-8050). Absent on an unlocalized document and on an older
+   * server — read it through `catalogueTextLocale`, never directly.
+   */
+  summaryLocale?: string
+  /**
    * The tool's ARGUMENTS — the draft-07 JSON Schema `tools/list` serves for it,
    * as motir-core publishes it (MOTIR-4389 / MOTIR-4394).
    *
@@ -532,6 +539,8 @@ export interface McpToolGroup {
   label: string
   gates: string
   grantedByDefault: boolean
+  /** The language `label` and `gates` are written in, as served (they fall back together). */
+  textLocale?: string
   tools: McpToolEntry[]
 }
 
@@ -540,6 +549,8 @@ export interface McpToolCatalogue {
   endpoint: string
   toolCount: number
   groups: McpToolGroup[]
+  /** The locale the document was served in; absent on an unlocalized document. */
+  locale?: string
 }
 
 const CATALOGUE_URL = `${APP_ORIGIN}/api/docs/mcp-tools.json`
@@ -611,6 +622,27 @@ function readTitle(
   return raw === '' ? undefined : raw
 }
 
+/**
+ * Read a locale marker (`locale` / `textLocale` / `summaryLocale`). Absent ⇒
+ * `undefined`; present but not a non-empty string ⇒ the shape error. These decide
+ * which language a region is marked as, so they are shape contract (the same
+ * reasoning as `readAnnotations`), while an older server simply omits them.
+ */
+function readLocaleField(
+  holder: Record<string, unknown>,
+  key: string,
+  where: string,
+): string | undefined {
+  const raw = holder[key]
+  if (raw === undefined) return undefined
+  if (typeof raw !== 'string' || raw === '') {
+    throw new McpToolCatalogueShapeError(
+      `has a ${where}.${key} that is not a non-empty string`,
+    )
+  }
+  return raw
+}
+
 function requireString(
   holder: Record<string, unknown>,
   key: string,
@@ -680,6 +712,7 @@ export function parseMcpToolCatalogue(value: unknown): McpToolCatalogue {
       label: requireString(raw, 'label', where),
       gates: requireString(raw, 'gates', where),
       grantedByDefault: raw.grantedByDefault,
+      ...optionalField('textLocale', readLocaleField(raw, 'textLocale', where)),
       tools: raw.tools.map((entry, position) => {
         const at = `${where}.tools[${position}]`
         if (!isRecord(entry)) {
@@ -691,6 +724,10 @@ export function parseMcpToolCatalogue(value: unknown): McpToolCatalogue {
           name: requireString(entry, 'name', at),
           permission: requireString(entry, 'permission', at),
           summary: requireString(entry, 'summary', at),
+          ...optionalField(
+            'summaryLocale',
+            readLocaleField(entry, 'summaryLocale', at),
+          ),
           // Read when present, absent when not — never invented. A value that
           // is present but not an object is treated as absent rather than as a
           // parse failure: this field is outside the shape contract (see
@@ -705,14 +742,47 @@ export function parseMcpToolCatalogue(value: unknown): McpToolCatalogue {
     }
   })
 
-  return { endpoint, toolCount: value.toolCount, groups }
+  return {
+    endpoint,
+    toolCount: value.toolCount,
+    groups,
+    ...optionalField(
+      'locale',
+      readLocaleField(value, 'locale', 'the document'),
+    ),
+  }
 }
 
-/** Fetch the published catalogue. Throws when the artifact is unreachable. */
-export async function fetchMcpToolCatalogue(): Promise<McpToolCatalogue> {
-  const res = await fetch(CATALOGUE_URL, { next: { revalidate: 0 } })
+/**
+ * Fetch the published catalogue. Throws when the artifact is unreachable.
+ *
+ * No argument or `'en'` requests exactly `CATALOGUE_URL`; any other locale adds
+ * `?locale=` (MOTIR-8050). The code comes from the closed `LOCALES` set, so it
+ * needs no encoding. An older server ignores the query and answers English.
+ */
+export async function fetchMcpToolCatalogue(
+  locale?: Locale,
+): Promise<McpToolCatalogue> {
+  const url =
+    locale === undefined || locale === 'en'
+      ? CATALOGUE_URL
+      : `${CATALOGUE_URL}?locale=${locale}`
+  const res = await fetch(url, { next: { revalidate: 0 } })
   if (!res.ok) throw new Error(`mcp tool catalogue ${res.status}`)
   return parseMcpToolCatalogue(await res.json())
+}
+
+/**
+ * The language a served text region is in. A present marker is returned as
+ * served; an absent one means the server did not localize that text, so it is
+ * English — on the English page too, where it is simply the page's own language.
+ */
+export function catalogueTextLocale(
+  served: string | undefined,
+  pageLocale: Locale,
+): string {
+  void pageLocale
+  return served ?? 'en'
 }
 
 /**

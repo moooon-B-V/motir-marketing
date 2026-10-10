@@ -723,6 +723,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "本页的翻译正在更新中。在翻译完成之前，将显示英文内容。",
+      "generatedReference": {
+        "openapi": "下方的操作说明以及参数和字段表格由 Motir 的 OpenAPI 文档生成，因此保持英文。",
+        "cli": "下方的命令和选项说明是已安装的 motir 命令输出的文本，因此保持英文。"
+      }
+    },
     "operationCount": "{count} 个操作",
     "metaTitle": "文档 · Motir",
     "metaDescription": "Motir API 与 MCP 服务器的文档——公开读取契约、智能体调用的服务器，以及 CLI。",
@@ -789,7 +796,13 @@
     "descSkills": "在你的智能体中安装 Motir 的技能，以及使用每个技能时该说什么。",
     "descClaudeCodeConnector": "用你的 Motir 账户、无需令牌，从 claude.ai 或通过一条命令把 Motir 连接到 Claude Code。",
     "descClaudeCodePlugin": "在 Claude Code 中一次安装，即可获得 Motir 的技能、MCP 服务器和 CLI，无需令牌即已登录。",
-    "apiIntro": "API 提供的每一个操作，均由 Motir 发布的 OpenAPI 文档生成，并在请求本页时实时获取——因此与服务器当前提供的内容完全一致。每个操作都列出了它的参数、接受的请求体、一个可复制的请求，以及它可能返回的每一个状态码。",
+    "apiSpecSummary": "{title} · 版本 {version} · {count, plural, other {# 个操作}} · <link>{path}</link>",
+    "apiUnreachable": "API 参考暂时无法访问。请稍后再试。",
+    "mcpToolsSummary": "<code>{endpoint}</code> 上共有 {count, plural, other {# 个工具}}，按控制它们的权限分组",
+    "mcpToolsUnreachable": "工具目录暂时无法访问。此页面显示的列表由 Motir 自身发布，从不在此处复制，因此目前没有可展示的内容。请对该端点发起 <code>tools/list</code> 握手，或稍后再试。",
+    "mcpArgsUnpublished": "此 Motir 版本未发布该工具的参数。针对该端点的 <code>tools/list</code> 握手会返回这些参数。",
+    "mcpNoArguments": "不接受参数。",
+    "mcpGrantedByDefault": " · 默认授予",
     "sectionRequest": "请求",
     "sectionBody": "请求体",
     "sectionExample": "示例",
@@ -798,7 +811,42 @@
     "thStatus": "状态码",
     "thCondition": "条件",
     "filterOperations": "筛选操作",
-    "filterEmpty": "没有符合该筛选条件的操作。"
+    "filterEmpty": "没有符合该筛选条件的操作。",
+    "guideLabels": {
+      "candidateModel": "模型",
+      "candidatePrice": "每百万 token 价格",
+      "candidateCost": "每个任务的成本",
+      "costBasisPrice": "按价格折算",
+      "costBasisSamePrice": "同价",
+      "captionInClaudeCode": "在 Claude Code 中",
+      "captionCopySkillsOnly": "或仅复制技能，在终端中",
+      "captionInTerminal": "在终端中",
+      "captionYourTerminal": "你的终端",
+      "captionMcpServerUrl": "远程 MCP 服务器 URL",
+      "captionYourMachine": "你的电脑",
+      "captionCursorConfig": "~/.cursor/mcp.json — 若只用于一个项目，则为 .cursor/mcp.json",
+      "captionOtherClientConfig": "你的客户端所称的配置文件",
+      "copyClaudeCodePlugin": "复制 Claude Code 插件命令",
+      "copyClaudeCodeCopy": "复制 Claude Code 复制安装命令",
+      "copyClaudeCodeUpdate": "复制 Claude Code 更新命令",
+      "copyCodex": "复制 Codex 安装命令",
+      "copyCursor": "复制 Cursor 安装命令",
+      "copyGeminiCli": "复制 Gemini CLI 安装命令",
+      "copyCopilot": "复制 GitHub Copilot 安装命令",
+      "copyOpenCode": "复制 OpenCode 安装命令",
+      "copyMcpServerUrl": "复制 Motir MCP 服务器 URL",
+      "copyClaudeCodeCommand": "复制 Claude Code 命令",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "你的机器 — 在你挂载的文件夹中",
+      "captionInContainer": "在容器中",
+      "captionSandboxGrant": "通过设备签发的令牌所带有的授权",
+      "copySandboxDevcontainer": "复制开发容器配置命令",
+      "copySandboxSignIn": "复制登录命令",
+      "copySandboxLink": "复制关联命令",
+      "copySandboxCheck": "复制检查命令",
+      "sandboxAgentProfile": "智能体配置文件"
+    }
   },
   "notFound": {
     "eyebrow": "404",

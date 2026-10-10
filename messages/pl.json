@@ -738,6 +738,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "Tłumaczenie tej strony jest w trakcie aktualizacji. Do czasu jej ukończenia wyświetlany jest tekst angielski.",
+      "generatedReference": {
+        "openapi": "Opisy operacji oraz tabele parametrów i pól poniżej są generowane z dokumentu OpenAPI Motir, dlatego pozostają po angielsku.",
+        "cli": "Opisy poleceń i opcji poniżej to tekst wyświetlany przez zainstalowane polecenie motir, dlatego pozostają po angielsku."
+      }
+    },
     "operationCount": "Operacje: {count}",
     "metaTitle": "Dokumentacja · Motir",
     "metaDescription": "Dokumentacja API i serwera MCP Motir — publiczny kontrakt odczytu, serwer, który wywołują agenci, oraz CLI.",
@@ -804,7 +811,13 @@
     "descSkills": "Zainstaluj umiejętności Motir w swoim agencie i dowiedz się, co powiedzieć, by użyć każdej z nich.",
     "descClaudeCodeConnector": "Połącz Motir z Claude Code kontem Motir, bez tokenu — z claude.ai lub jednym poleceniem.",
     "descClaudeCodePlugin": "Jedna instalacja w Claude Code daje umiejętności Motir, jego serwer MCP i CLI, zalogowane bez tokenu.",
-    "apiIntro": "Każda operacja obsługiwana przez API, wygenerowana z dokumentu OpenAPI publikowanego przez Motir i pobierana przy żądaniu tej strony — więc to dokładnie to, co serwer udostępnia w tej chwili. Przy każdej znajdziesz parametry, przyjmowaną treść, żądanie do skopiowania i każdy status, którym może odpowiedzieć.",
+    "apiSpecSummary": "{title} · wersja {version} · {count, plural, one {# operacja} few {# operacje} many {# operacji} other {# operacji}} · <link>{path}</link>",
+    "apiUnreachable": "Dokumentacja API jest tymczasowo niedostępna. Spróbuj ponownie za chwilę.",
+    "mcpToolsSummary": "Narzędzia pod adresem <code>{endpoint}</code> ({count, plural, one {# narzędzie} few {# narzędzia} many {# narzędzi} other {# narzędzia}}), pogrupowane według uprawnienia, które je kontroluje",
+    "mcpToolsUnreachable": "Katalog narzędzi jest tymczasowo niedostępny. Lista wyświetlana na tej stronie jest publikowana przez Motir i nigdy tu nie kopiowana, więc na razie nie ma nic do pokazania. Otwórz handshake <code>tools/list</code> względem endpointu albo spróbuj ponownie za chwilę.",
+    "mcpArgsUnpublished": "Ta wersja Motir nie publikuje argumentów tego narzędzia. Handshake <code>tools/list</code> względem endpointu je zawiera.",
+    "mcpNoArguments": "Nie przyjmuje argumentów.",
+    "mcpGrantedByDefault": " · domyślnie przyznawane",
     "sectionRequest": "Żądanie",
     "sectionBody": "Treść żądania",
     "sectionExample": "Przykład",
@@ -813,7 +826,42 @@
     "thStatus": "Status",
     "thCondition": "Warunek",
     "filterOperations": "Filtruj operacje",
-    "filterEmpty": "Żadna operacja nie pasuje do tego filtra."
+    "filterEmpty": "Żadna operacja nie pasuje do tego filtra.",
+    "guideLabels": {
+      "candidateModel": "Model",
+      "candidatePrice": "Cena za 1 mln tokenów",
+      "candidateCost": "Koszt na zadanie",
+      "costBasisPrice": "wg ceny",
+      "costBasisSamePrice": "ta sama cena",
+      "captionInClaudeCode": "w Claude Code",
+      "captionCopySkillsOnly": "albo skopiuj tylko umiejętności, w terminalu",
+      "captionInTerminal": "w terminalu",
+      "captionYourTerminal": "Twój terminal",
+      "captionMcpServerUrl": "Adres URL zdalnego serwera MCP",
+      "captionYourMachine": "Twój komputer",
+      "captionCursorConfig": "~/.cursor/mcp.json — albo .cursor/mcp.json dla jednego projektu",
+      "captionOtherClientConfig": "jakkolwiek Twój klient nazywa swoją konfigurację",
+      "copyClaudeCodePlugin": "Skopiuj polecenia wtyczki Claude Code",
+      "copyClaudeCodeCopy": "Skopiuj polecenia instalacji przez kopiowanie dla Claude Code",
+      "copyClaudeCodeUpdate": "Skopiuj polecenia aktualizacji Claude Code",
+      "copyCodex": "Skopiuj polecenia instalacji Codex",
+      "copyCursor": "Skopiuj polecenia instalacji Cursor",
+      "copyGeminiCli": "Skopiuj polecenia instalacji Gemini CLI",
+      "copyCopilot": "Skopiuj polecenia instalacji GitHub Copilot",
+      "copyOpenCode": "Skopiuj polecenia instalacji OpenCode",
+      "copyMcpServerUrl": "Skopiuj adres URL serwera Motir MCP",
+      "copyClaudeCodeCommand": "Skopiuj polecenie Claude Code",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "Twój komputer — w folderze, który montujesz",
+      "captionInContainer": "w kontenerze",
+      "captionSandboxGrant": "uprawnienia, które ma token wydany z urządzenia",
+      "copySandboxDevcontainer": "Skopiuj polecenie konfiguracji dev containera",
+      "copySandboxSignIn": "Skopiuj polecenie logowania",
+      "copySandboxLink": "Skopiuj polecenie powiązania",
+      "copySandboxCheck": "Skopiuj polecenie sprawdzenia",
+      "sandboxAgentProfile": "Profil agenta"
+    }
   },
   "notFound": {
     "eyebrow": "404",

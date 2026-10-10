@@ -1,11 +1,12 @@
+import { readFileSync } from 'node:fs'
 import { render } from '@/tests/helpers/withCopy'
+import { resolveAsync } from '@/tests/helpers/resolveAsync'
 import { describe, expect, it } from 'vitest'
 import SkillsDocsPage from '@/app/[locale]/docs/(guides)/skills/page'
 import { englishCopy } from '@/lib/copy'
 import { docsSurfacesFor } from '@/lib/docsSurfaces'
 import {
   AGENT_INSTALLS,
-  CLAUDE_CODE_UPDATE,
   RELEASE_SKILLS,
   SKILL_NAMES,
   SKILL_USAGE,
@@ -40,7 +41,30 @@ const AGENTS = [
 ]
 
 async function page() {
-  return render(await SkillsDocsPage(EN_PAGE)).container
+  return render((await resolveAsync(await SkillsDocsPage(EN_PAGE))) as never)
+    .container
+}
+
+/** The prose of `content/docs/skills/en.md`, which is where the usage lives now. */
+const DOCUMENT = readFileSync('content/docs/skills/en.md', 'utf8')
+
+/**
+ * Everything under a heading, up to the next heading of any level. The page is a
+ * flat run of siblings (a document, not nested sections), so a section is read
+ * by walking from its heading.
+ */
+function section(container: HTMLElement, id: string): HTMLElement {
+  const heading = container.querySelector(`#${id}`)
+  expect(heading, `the heading #${id}`).not.toBeNull()
+  const holder = document.createElement('div')
+  for (
+    let node = heading!.nextElementSibling;
+    node && !/^H[1-6]$/.test(node.tagName);
+    node = node.nextElementSibling
+  ) {
+    holder.append(node.cloneNode(true))
+  }
+  return holder
 }
 
 function headings(container: HTMLElement, level: 'h2' | 'h3'): string[] {
@@ -71,6 +95,31 @@ describe('/docs/skills', () => {
     expect(SKILL_USAGE.map((s) => s.name)).toEqual([...SKILL_NAMES])
   })
 
+  it('keeps a usage heading in the document for every skill, and every phrase to say as inline code', () => {
+    // Prose moved out of `lib/skillsGuide.ts` (MOTIR-8036): what is left there is
+    // the phrase a reader types, and the document must carry each one verbatim.
+    for (const skill of SKILL_NAMES) {
+      expect(DOCUMENT, skill).toContain(`### \`${skill}\` {#${skill}}`)
+    }
+    for (const usage of SKILL_USAGE) {
+      for (const phrase of usage.say) {
+        expect(DOCUMENT, phrase).toContain(`\`${phrase}\``)
+      }
+    }
+  })
+
+  it('reads every skill’s prose from the rendered page, not from the data', async () => {
+    const container = await page()
+    for (const usage of SKILL_USAGE) {
+      const text = section(container, usage.name).textContent ?? ''
+      expect(text, usage.name).toContain('What happens')
+      expect(text, usage.name).toContain('What you see in Motir')
+      for (const phrase of usage.say) expect(text, phrase).toContain(phrase)
+      // The phrases are the only thing the data still holds for a skill.
+      expect(Object.keys(usage).sort()).toEqual(['name', 'say'])
+    }
+  })
+
   it('documents only skills the pinned release carries, and names every one it installs', async () => {
     // A release can carry a skill before its usage section lands, so the
     // documented set is a subset and the install copy names the whole.
@@ -83,11 +132,7 @@ describe('/docs/skills', () => {
 
   it('tells a manual-card reader what motir-guide does and shows them', async () => {
     const container = await page()
-    const section = container
-      .querySelector('h3#motir-guide')
-      ?.closest('section')
-    expect(section, 'the motir-guide section').not.toBeNull()
-    const text = section?.textContent ?? ''
+    const text = section(container, 'motir-guide').textContent ?? ''
     // Outline 1 — what to say.
     expect(text).toContain('motir guide ACME-12')
     // Outline 2 — one step, a checked tick, a failed check left unticked,
@@ -102,11 +147,7 @@ describe('/docs/skills', () => {
   })
 
   it('tells a reader with a red pull request what motir-fix does and shows them', async () => {
-    const section = (await page())
-      .querySelector('h3#motir-fix')
-      ?.closest('section')
-    expect(section, 'the motir-fix section').not.toBeNull()
-    const text = section?.textContent ?? ''
+    const text = section(await page(), 'motir-fix').textContent ?? ''
     // What to say: one work item, named.
     expect(text).toContain('motir fix ACME-12')
     // What it does: claims the repair, fixes on the pull request's own
@@ -121,11 +162,7 @@ describe('/docs/skills', () => {
   })
 
   it('tells a reader whose run died what motir-continue does, and when to use fix or run instead', async () => {
-    const section = (await page())
-      .querySelector('h3#motir-continue')
-      ?.closest('section')
-    expect(section, 'the motir-continue section').not.toBeNull()
-    const text = section?.textContent ?? ''
+    const text = section(await page(), 'motir-continue').textContent ?? ''
     // What to say: one work item, named.
     expect(text).toContain('motir continue ACME-12')
     // What it does: claims the continue, carries on the branch the dead run
@@ -148,11 +185,7 @@ describe('/docs/skills', () => {
   })
 
   it('tells a Bugs-folder reader what motir-fix-bugs does and shows them', async () => {
-    const section = (await page())
-      .querySelector('h3#motir-fix-bugs')
-      ?.closest('section')
-    expect(section, 'the motir-fix-bugs section').not.toBeNull()
-    const text = section?.textContent ?? ''
+    const text = section(await page(), 'motir-fix-bugs').textContent ?? ''
     // Outline 1 — what to say, with and without a limit.
     expect(text).toContain('motir fix bugs')
     expect(text).toContain('motir fix bugs 3')
@@ -214,10 +247,8 @@ describe('/docs/skills', () => {
 
   it('says the Claude Code plugin brings three things, and links the MCP sign-in', async () => {
     const container = await page()
-    const section = container
-      .querySelector('h3#claude-code')!
-      .closest('section')!
-    const items = [...section.querySelectorAll('li')].map(
+    const claudeCode = section(container, 'claude-code')
+    const items = [...claudeCode.querySelectorAll('li')].map(
       (li) => li.textContent ?? '',
     )
     expect(items).toHaveLength(3)
@@ -226,10 +257,15 @@ describe('/docs/skills', () => {
     expect(items[1]).toContain('no token')
     expect(items[2]).toContain('The motir runner')
     expect(items[2]).toContain('Node.js 22 or newer')
-    expect(section.querySelector('a[href="/docs/mcp#claude"]')).not.toBeNull()
+    expect(
+      claudeCode.querySelector('a[href="/docs/mcp#claude"]'),
+    ).not.toBeNull()
     // Only Claude Code's install brings more than skills.
     for (const agent of AGENT_INSTALLS.filter((a) => a.id !== 'claude-code')) {
-      expect(agent.brings, agent.id).toBeUndefined()
+      expect(
+        section(container, agent.id).querySelector('li'),
+        agent.id,
+      ).toBeNull()
     }
   })
 
@@ -278,7 +314,7 @@ describe('/docs/skills', () => {
     )
     expect(names.length).toBeGreaterThan(0)
     expect(new Set(names).size).toBe(names.length)
-    expect(names).toContain(CLAUDE_CODE_UPDATE.copyLabel)
+    expect(names).toContain(englishCopy.docs.guideLabels.copyClaudeCodeUpdate)
   })
 
   it('is a surface the docs rail and index draw', () => {

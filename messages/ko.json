@@ -726,6 +726,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "이 페이지의 번역을 업데이트하고 있습니다. 준비될 때까지 영어 텍스트를 표시합니다.",
+      "generatedReference": {
+        "openapi": "아래의 오퍼레이션 설명과 파라미터 및 필드 표는 Motir의 OpenAPI 문서에서 생성되므로 영어로 유지됩니다.",
+        "cli": "아래의 명령과 옵션 설명은 설치된 motir 명령이 출력하는 텍스트이므로 영어로 유지됩니다."
+      }
+    },
     "operationCount": "작업 {count}개",
     "metaTitle": "문서 · Motir",
     "metaDescription": "Motir API와 MCP 서버 문서 — 공개 읽기 계약, 에이전트가 호출하는 서버, 그리고 CLI.",
@@ -792,7 +799,13 @@
     "descSkills": "에이전트에 Motir 스킬을 설치하는 방법과 각 스킬을 쓰기 위해 할 말.",
     "descClaudeCodeConnector": "claude.ai에서 또는 명령 한 줄로, 토큰 없이 Motir 계정으로 Motir를 Claude Code에 연결합니다.",
     "descClaudeCodePlugin": "Claude Code에 한 번 설치하면 Motir의 스킬, MCP 서버, CLI가 토큰 없이 로그인된 상태로 준비됩니다.",
-    "apiIntro": "API가 제공하는 모든 작업입니다. Motir가 공개하는 OpenAPI 문서에서 생성되며 이 페이지를 요청할 때 가져오므로, 지금 서버가 제공하는 내용과 정확히 일치합니다. 각 작업에는 매개변수, 받는 본문, 복사할 수 있는 요청, 응답 가능한 모든 상태가 나와 있습니다.",
+    "apiSpecSummary": "{title} · 버전 {version} · {count, plural, other {#개 오퍼레이션}} · <link>{path}</link>",
+    "apiUnreachable": "API 참조를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+    "mcpToolsSummary": "<code>{endpoint}</code>의 도구 {count, plural, other {#개}}, 접근을 제어하는 권한별로 그룹화되어 있습니다",
+    "mcpToolsUnreachable": "도구 카탈로그를 일시적으로 사용할 수 없습니다. 이 페이지에 표시되는 목록은 Motir가 직접 게시하며 여기에 복사되지 않으므로, 지금은 보여 드릴 내용이 없습니다. 엔드포인트에 <code>tools/list</code> 핸드셰이크를 열거나 잠시 후 다시 시도해 주세요.",
+    "mcpArgsUnpublished": "이 Motir 버전은 이 도구의 인자를 공개하지 않습니다. 엔드포인트에 대한 <code>tools/list</code> 핸드셰이크에 포함되어 있습니다.",
+    "mcpNoArguments": "인자가 없습니다.",
+    "mcpGrantedByDefault": " · 기본으로 부여됨",
     "sectionRequest": "요청",
     "sectionBody": "요청 본문",
     "sectionExample": "예시",
@@ -801,7 +814,42 @@
     "thStatus": "상태",
     "thCondition": "조건",
     "filterOperations": "작업 필터링",
-    "filterEmpty": "해당 필터와 일치하는 작업이 없습니다."
+    "filterEmpty": "해당 필터와 일치하는 작업이 없습니다.",
+    "guideLabels": {
+      "candidateModel": "모델",
+      "candidatePrice": "100만 토큰당 가격",
+      "candidateCost": "작업당 비용",
+      "costBasisPrice": "가격 기준",
+      "costBasisSamePrice": "동일 가격",
+      "captionInClaudeCode": "Claude Code에서",
+      "captionCopySkillsOnly": "또는 스킬만 터미널에서 복사",
+      "captionInTerminal": "터미널에서",
+      "captionYourTerminal": "사용 중인 터미널",
+      "captionMcpServerUrl": "원격 MCP 서버 URL",
+      "captionYourMachine": "사용 중인 컴퓨터",
+      "captionCursorConfig": "~/.cursor/mcp.json — 프로젝트 하나에만 적용하려면 .cursor/mcp.json",
+      "captionOtherClientConfig": "사용 중인 클라이언트가 설정 파일이라고 부르는 것",
+      "copyClaudeCodePlugin": "Claude Code 플러그인 명령 복사",
+      "copyClaudeCodeCopy": "Claude Code 복사 설치 명령 복사",
+      "copyClaudeCodeUpdate": "Claude Code 업데이트 명령 복사",
+      "copyCodex": "Codex 설치 명령 복사",
+      "copyCursor": "Cursor 설치 명령 복사",
+      "copyGeminiCli": "Gemini CLI 설치 명령 복사",
+      "copyCopilot": "GitHub Copilot 설치 명령 복사",
+      "copyOpenCode": "OpenCode 설치 명령 복사",
+      "copyMcpServerUrl": "Motir MCP 서버 URL 복사",
+      "copyClaudeCodeCommand": "Claude Code 명령 복사",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "내 컴퓨터 — 마운트하는 폴더에서",
+      "captionInContainer": "컨테이너 안에서",
+      "captionSandboxGrant": "기기에서 발급한 토큰이 갖는 권한",
+      "copySandboxDevcontainer": "Dev Container 구성 명령 복사",
+      "copySandboxSignIn": "로그인 명령 복사",
+      "copySandboxLink": "연결 명령 복사",
+      "copySandboxCheck": "확인 명령 복사",
+      "sandboxAgentProfile": "에이전트 프로필"
+    }
   },
   "notFound": {
     "eyebrow": "404",

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
 /*
  * `/docs/skills`, AS A READER REACHES IT (MOTIR-6719).
@@ -21,6 +21,25 @@ import { expect, test } from '@playwright/test'
  */
 
 const PAGE = '/docs/skills'
+
+/**
+ * The text under a heading, up to the next heading. The page is a document
+ * (MOTIR-8036), a flat run of siblings, so there is no <section> to scope to.
+ */
+async function sectionText(page: Page, id: string): Promise<string> {
+  return page.evaluate((headingId) => {
+    const heading = document.getElementById(headingId)
+    let text = ''
+    for (
+      let node = heading?.nextElementSibling;
+      node && !/^H[1-6]$/.test(node.tagName);
+      node = node.nextElementSibling
+    ) {
+      text += `${node.textContent}\n`
+    }
+    return text
+  }, id)
+}
 
 /** The `motir-skills` release every install command must fetch. */
 const RELEASE_TAG = 'v0.7.0'
@@ -145,12 +164,10 @@ test('the motir-guide section says what to type and what the reader will see', a
     exact: true,
   })
   await expect(heading).toBeVisible()
-  const section = page.locator('section', { has: heading })
-  await expect(
-    section.getByText('motir guide ACME-12', { exact: true }),
-  ).toBeVisible()
-  await expect(section).toContainText('one step at a time')
-  await expect(section).toContainText('To-do list')
+  const section = await sectionText(page, 'motir-guide')
+  expect(section).toContain('motir guide ACME-12')
+  expect(section).toContain('one step at a time')
+  expect(section).toContain('To-do list')
 })
 
 test('the motir-fix-bugs section says what to type and what the reader will see', async ({
@@ -163,12 +180,10 @@ test('the motir-fix-bugs section says what to type and what the reader will see'
     exact: true,
   })
   await expect(heading).toBeVisible()
-  const section = page.locator('section', { has: heading })
-  await expect(
-    section.getByText('motir fix bugs', { exact: true }),
-  ).toBeVisible()
-  await expect(section).toContainText('one bug at a time, oldest first')
-  await expect(section).toContainText('with a blocked by link')
+  const section = await sectionText(page, 'motir-fix-bugs')
+  expect(section).toContain('motir fix bugs')
+  expect(section).toContain('one bug at a time, oldest first')
+  expect(section).toContain('with a blocked by link')
 })
 
 test('the motir-fix section says what to type and how it differs from motir fix bugs', async ({
@@ -181,12 +196,10 @@ test('the motir-fix section says what to type and how it differs from motir fix 
     exact: true,
   })
   await expect(heading).toBeVisible()
-  const section = page.locator('section', { has: heading })
-  await expect(
-    section.getByText('motir fix ACME-12', { exact: true }),
-  ).toBeVisible()
-  await expect(section).toContainText('never a new one')
-  await expect(section).toContainText('Not the same as motir fix bugs')
+  const section = await sectionText(page, 'motir-fix')
+  expect(section).toContain('motir fix ACME-12')
+  expect(section).toContain('never a new one')
+  expect(section).toContain('Not the same as motir fix bugs')
 })
 
 test('the motir-continue section says what to type, and to use motir fix for a red pull request', async ({
@@ -199,12 +212,10 @@ test('the motir-continue section says what to type, and to use motir fix for a r
     exact: true,
   })
   await expect(heading).toBeVisible()
-  const section = page.locator('section', { has: heading })
-  await expect(
-    section.getByText('motir continue ACME-12', { exact: true }),
-  ).toBeVisible()
-  await expect(section).toContainText('whose run died')
-  await expect(section).toContainText(
+  const section = await sectionText(page, 'motir-continue')
+  expect(section).toContain('motir continue ACME-12')
+  expect(section).toContain('whose run died')
+  expect(section).toContain(
     'Use motir fix ACME-12 instead when the work item already has a pull request that is red',
   )
 })

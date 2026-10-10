@@ -158,6 +158,7 @@ export function SectionLabel({
 export function ParameterTable({
   parameters,
   labelledBy,
+  descriptionLang,
 }: {
   parameters: {
     name: string
@@ -167,6 +168,8 @@ export function ParameterTable({
     schema?: OpenApiSchema
   }[]
   labelledBy: string
+  /** Marks the description cells (generated text) and nothing else. */
+  descriptionLang?: string
 }) {
   return (
     <div
@@ -205,7 +208,10 @@ export function ParameterTable({
               <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top font-(family-name:--font-mono) text-[11.5px] text-(--el-text-secondary)">
                 {parameter.location}
               </td>
-              <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)">
+              <td
+                lang={descriptionLang}
+                className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)"
+              >
                 {parameter.description ?? ''}
               </td>
             </tr>
@@ -228,9 +234,12 @@ export function ParameterTable({
 export function SchemaTable({
   schema,
   labelledBy,
+  descriptionLang,
 }: {
   schema: OpenApiSchema | undefined
   labelledBy: string
+  /** Marks the description cells (generated text) and nothing else. */
+  descriptionLang?: string
 }) {
   const fields = describeSchema(schema)
   if (fields.length === 0) {
@@ -285,7 +294,10 @@ export function SchemaTable({
                   </>
                 ) : null}
               </td>
-              <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)">
+              <td
+                lang={descriptionLang}
+                className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)"
+              >
                 {field.description ?? ''}
               </td>
             </tr>

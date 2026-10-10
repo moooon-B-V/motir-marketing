@@ -738,6 +738,13 @@
     }
   },
   "docs": {
+    "notes": {
+      "beingUpdated": "このページの翻訳は更新中です。準備が整うまで、英語のテキストを表示しています。",
+      "generatedReference": {
+        "openapi": "以下のオペレーションの説明、およびパラメーターとフィールドの表は、Motir の OpenAPI ドキュメントから生成されるため、英語のままです。",
+        "cli": "以下のコマンドとオプションの説明は、インストール済みの motir コマンドが表示するテキストであるため、英語のままです。"
+      }
+    },
     "operationCount": "{count}件のオペレーション",
     "metaTitle": "ドキュメント · Motir",
     "metaDescription": "Motir API と MCP サーバーのドキュメント。公開の読み取り契約、エージェントが呼び出すサーバー、そして CLI について説明します。",
@@ -804,7 +811,13 @@
     "descSkills": "Motir のスキルをエージェントにインストールする方法と、それぞれを使うための伝え方。",
     "descClaudeCodeConnector": "claude.ai から、または 1 つのコマンドで、トークンなしに Motir アカウントで Motir を Claude Code に接続します。",
     "descClaudeCodePlugin": "Claude Code に一度インストールするだけで、Motir のスキル、MCP サーバー、CLI が揃い、トークンなしでサインインできます。",
-    "apiIntro": "API が提供するすべてのオペレーションを、Motir が公開する OpenAPI ドキュメントから生成し、このページのリクエスト時に取得しています。そのため、サーバーが今まさに提供している内容そのものです。各オペレーションには、パラメーター、受け付けるボディ、コピーできるリクエスト、返し得るすべてのステータスが載っています。",
+    "apiSpecSummary": "{title} · バージョン {version} · {count, plural, other {#件のオペレーション}} · <link>{path}</link>",
+    "apiUnreachable": "API リファレンスは一時的に利用できません。しばらくしてからもう一度お試しください。",
+    "mcpToolsSummary": "<code>{endpoint}</code> の{count, plural, other {#個のツール}}を、アクセスを制御する権限ごとにグループ化しています",
+    "mcpToolsUnreachable": "ツールカタログは一時的に利用できません。このページが表示する一覧は Motir 自身が公開しているもので、ここにコピーされることはないため、今のところお見せできるものがありません。エンドポイントに対して <code>tools/list</code> ハンドシェイクを実行するか、しばらくしてからもう一度お試しください。",
+    "mcpArgsUnpublished": "この Motir のバージョンは、このツールの引数を公開していません。エンドポイントに対する <code>tools/list</code> ハンドシェイクで取得できます。",
+    "mcpNoArguments": "引数はありません。",
+    "mcpGrantedByDefault": " · デフォルトで付与",
     "sectionRequest": "リクエスト",
     "sectionBody": "リクエストボディ",
     "sectionExample": "例",
@@ -813,7 +826,42 @@
     "thStatus": "ステータス",
     "thCondition": "条件",
     "filterOperations": "オペレーションを絞り込む",
-    "filterEmpty": "その条件に一致するオペレーションはありません。"
+    "filterEmpty": "その条件に一致するオペレーションはありません。",
+    "guideLabels": {
+      "candidateModel": "モデル",
+      "candidatePrice": "100万トークンあたりの価格",
+      "candidateCost": "タスクあたりのコスト",
+      "costBasisPrice": "価格換算",
+      "costBasisSamePrice": "同価格",
+      "captionInClaudeCode": "Claude Code で",
+      "captionCopySkillsOnly": "またはスキルだけをターミナルでコピー",
+      "captionInTerminal": "ターミナルで",
+      "captionYourTerminal": "お使いのターミナル",
+      "captionMcpServerUrl": "リモート MCP サーバーの URL",
+      "captionYourMachine": "お使いのマシン",
+      "captionCursorConfig": "~/.cursor/mcp.json — 1 つのプロジェクトだけなら .cursor/mcp.json",
+      "captionOtherClientConfig": "お使いのクライアントが設定ファイルと呼んでいるもの",
+      "copyClaudeCodePlugin": "Claude Code プラグインのコマンドをコピー",
+      "copyClaudeCodeCopy": "Claude Code のコピーインストールのコマンドをコピー",
+      "copyClaudeCodeUpdate": "Claude Code のアップデートのコマンドをコピー",
+      "copyCodex": "Codex のインストールコマンドをコピー",
+      "copyCursor": "Cursor のインストールコマンドをコピー",
+      "copyGeminiCli": "Gemini CLI のインストールコマンドをコピー",
+      "copyCopilot": "GitHub Copilot のインストールコマンドをコピー",
+      "copyOpenCode": "OpenCode のインストールコマンドをコピー",
+      "copyMcpServerUrl": "Motir MCP サーバーの URL をコピー",
+      "copyClaudeCodeCommand": "Claude Code のコマンドをコピー",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "お使いのマシン — マウントするフォルダー内",
+      "captionInContainer": "コンテナー内",
+      "captionSandboxGrant": "デバイス経由で発行されたトークンが持つ権限",
+      "copySandboxDevcontainer": "Dev Container 設定コマンドをコピー",
+      "copySandboxSignIn": "サインインコマンドをコピー",
+      "copySandboxLink": "リンクコマンドをコピー",
+      "copySandboxCheck": "確認コマンドをコピー",
+      "sandboxAgentProfile": "エージェントのプロファイル"
+    }
   },
   "notFound": {
     "eyebrow": "404",

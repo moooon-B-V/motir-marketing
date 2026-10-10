@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { createElement, Fragment, type ReactNode } from 'react'
-import { hasLocale, useLocale, useMessages } from 'next-intl'
+import { createTranslator, hasLocale, useLocale, useMessages } from 'next-intl'
 import { claimedLocale } from '@/i18n/claim'
 import { DEFAULT_LOCALE, LOCALES, type Locale } from '@/i18n/routing'
 import en from '@/messages/en.json'
@@ -267,4 +267,30 @@ export function formatRich(
         ? createElement(Fragment, { key: index }, values[key])
         : part
     })
+}
+
+/** A value an ICU sentence is filled with: text, a number, or a tag's renderer. */
+export type IcuValue = string | number | ((chunks: ReactNode) => ReactNode)
+
+/**
+ * Render an ICU catalogue sentence — `{count, plural, one {…} other {…}}`, `{name}`
+ * and `<tag>…</tag>` — in `locale` (MOTIR-8037). `format()` and `formatRich()` fill
+ * a bare `{name}` only; a count line or a sentence with an inline `<code>` needs
+ * the full syntax so that a translator can inflect the noun for their language and
+ * move the element where their grammar puts it. A tag's value is a function that
+ * wraps its content.
+ */
+export function formatIcu(
+  locale: Locale,
+  template: string,
+  values: Record<string, IcuValue>,
+): ReactNode {
+  const translate = createTranslator({
+    locale,
+    messages: { message: template },
+    onError: (error) => {
+      throw error
+    },
+  })
+  return translate.rich('message', values)
 }

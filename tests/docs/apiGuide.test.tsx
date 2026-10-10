@@ -1,13 +1,10 @@
 import { readFileSync } from 'node:fs'
 import { render } from '@/tests/helpers/withCopy'
 import { EN_PAGE } from '@/tests/helpers/locale'
+import { resolveAsync } from '@/tests/helpers/resolveAsync'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import GettingStartedPage from '@/app/[locale]/docs/api/getting-started/page'
 import StabilityPage from '@/app/[locale]/docs/api/stability/page'
-import {
-  POLICY_ADDITIVE,
-  POLICY_FORBIDDEN,
-} from '@/app/[locale]/docs/api/stability/policy'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 
 /*
@@ -46,9 +43,33 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+/** The list items under one heading of `content/docs/api/stability/en.md`. */
+function listUnder(markdown: string, anchor: string): string[] {
+  const lines = markdown.split('\n')
+  const start = lines.findIndex((line) => line.endsWith(`{#${anchor}}`))
+  expect(start, `no heading {#${anchor}}`).toBeGreaterThanOrEqual(0)
+  const items: string[] = []
+  for (const line of lines.slice(start + 1)) {
+    if (/^#{1,6}\s/.test(line)) break
+    const item = /^- (.*)$/.exec(line)
+    if (item) items.push(item[1]!)
+  }
+  return items
+}
+
+function policyLists() {
+  const markdown = readFileSync('content/docs/api/stability/en.md', 'utf8')
+  return {
+    additive: listUnder(markdown, 'allowed-inside-v1'),
+    forbidden: listUnder(markdown, 'needs-a-new-major'),
+  }
+}
+
 /** Every `<pre>` the page renders, as text. */
 async function panes(): Promise<string[]> {
-  const { container } = render(await GettingStartedPage(EN_PAGE))
+  const { container } = render(
+    (await resolveAsync(await GettingStartedPage(EN_PAGE))) as never,
+  )
   return [...container.querySelectorAll('pre')].map(
     (pane) => pane.textContent ?? '',
   )
@@ -116,7 +137,9 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
 
   it('UNREACHABLE shows a placeholder, never an invented version', async () => {
     stubSpec({}, 503)
-    const { container } = render(await GettingStartedPage(EN_PAGE))
+    const { container } = render(
+      (await resolveAsync(await GettingStartedPage(EN_PAGE))) as never,
+    )
     const all = [...container.querySelectorAll('pre')]
       .map((pane) => pane.textContent ?? '')
       .join('\n')
@@ -125,7 +148,7 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
     // The walkthrough itself does not depend on the fetch and still renders.
     expect(all).toContain('/api/v1/me')
     expect(container.textContent).toContain(
-      'The specification was unreachable when this page was rendered',
+      'the specification was unreachable when this page was rendered',
     )
   })
 
@@ -133,16 +156,18 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
     // The restore ADDS to the five-step spine rather than replacing it — the
     // page's structure was not the defect.
     stubSpec(catalogueFixture)
-    const { container } = render(await GettingStartedPage(EN_PAGE))
+    const { container } = render(
+      (await resolveAsync(await GettingStartedPage(EN_PAGE))) as never,
+    )
     const headings = [...container.querySelectorAll('h2')].map(
       (heading) => heading.textContent ?? '',
     )
     expect(headings).toEqual([
-      '1Mint a token',
-      '2Your first authenticated call',
-      '3Paginate a collection',
-      '4Read an error',
-      '5Read the response headers',
+      '1. Mint a token',
+      '2. Your first authenticated call',
+      '3. Paginate a collection',
+      '4. Read an error',
+      '5. Read the response headers',
       'What next',
     ])
   })
@@ -150,7 +175,9 @@ describe('/docs/api/getting-started is a walkthrough, not a summary', () => {
 
 describe('/docs/api/stability publishes BOTH halves of the promise', () => {
   it('states the client’s own obligations — the section that went missing', async () => {
-    const { container } = render(await StabilityPage(EN_PAGE))
+    const { container } = render(
+      (await resolveAsync(await StabilityPage(EN_PAGE))) as never,
+    )
     const text = container.textContent ?? ''
     expect(text).toContain('Your side of the promise')
     expect(text).toMatch(/MUST tolerate unknown fields/)
@@ -158,7 +185,9 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
   })
 
   it('states how a new major would arrive — `v2` appeared ZERO times before', async () => {
-    const { container } = render(await StabilityPage(EN_PAGE))
+    const { container } = render(
+      (await resolveAsync(await StabilityPage(EN_PAGE))) as never,
+    )
     const text = container.textContent ?? ''
     expect(text).toContain('How a v2 would arrive')
     expect(text).toContain('served alongside v1')
@@ -167,7 +196,9 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
   })
 
   it('renders all four sections, in the deleted page’s order', async () => {
-    const { container } = render(await StabilityPage(EN_PAGE))
+    const { container } = render(
+      (await resolveAsync(await StabilityPage(EN_PAGE))) as never,
+    )
     expect(
       [...container.querySelectorAll('h2')].map((h) => h.textContent ?? ''),
     ).toEqual([
@@ -191,10 +222,16 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
      * Silently adding a row to the additive list widens what may change under
      * a client without a version bump, and that is the edit worth failing on.
      */
-    const { container } = render(await StabilityPage(EN_PAGE))
+    const { container } = render(
+      (await resolveAsync(await StabilityPage(EN_PAGE))) as never,
+    )
     const text = container.textContent ?? ''
 
-    expect(POLICY_ADDITIVE).toEqual([
+    // The lists live in the document now (MOTIR-8037): read them from the file,
+    // as the sentences a reader is shown — the items under each list's heading.
+    const { additive, forbidden } = policyLists()
+
+    expect(additive).toEqual([
       'A new endpoint.',
       'A new OPTIONAL query parameter.',
       'A new field on a response object.',
@@ -202,7 +239,7 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
       'A new value on a field documented as open-ended.',
       'A raised rate-limit budget.',
     ])
-    expect(POLICY_FORBIDDEN).toEqual([
+    expect(forbidden).toEqual([
       'Removing a field.',
       'Renaming a field.',
       'Changing a field’s type or nullability.',
@@ -214,7 +251,7 @@ describe('/docs/api/stability publishes BOTH halves of the promise', () => {
 
     // …and every one of them actually reaches the page. A list nothing renders
     // is a constant, not a policy.
-    for (const item of [...POLICY_ADDITIVE, ...POLICY_FORBIDDEN]) {
+    for (const item of [...additive, ...forbidden]) {
       expect(text, item).toContain(item.replaceAll('`', ''))
     }
   })

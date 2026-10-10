@@ -1,10 +1,10 @@
-import { localizedPath } from '@/i18n/localizedPath'
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
 import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
+import { guideDate } from '@/lib/docsGuideValues'
+import { DocsDocument } from '../../_components/DocsDocument'
 
 /*
  * The DIFFICULTY guide — what each of a leaf's four difficulty levels means,
@@ -30,6 +30,13 @@ import { enterLocale, type LocalePageProps } from '@/i18n/locale'
  * (`lib/issues/difficulty.ts`). Motir states a leaf's difficulty in the
  * dispatch prompt; it does NOT pick the model — the reader does, and the page
  * says that rather than implying a router that has not shipped.
+ *
+ * THE PROSE LIVES IN `content/docs/difficulty/<locale>.md` (MOTIR-8036). This
+ * file keeps the NUMBERS: every candidate cell is a number, a symbol or a model
+ * name, so no cell holds an English word. The two words a cost basis needs
+ * ("by price", "same price") and the column headers are catalogue copy
+ * (`docs.guideLabels.*`). Each level's range, and the date the numbers were
+ * read, reach the document as values; the date is formatted per locale.
  */
 
 export function generateMetadata({
@@ -41,20 +48,25 @@ export function generateMetadata({
   }))
 }
 
-const AS_OF = '23 September 2026'
+/** The day the prices and scores below were read (ISO; the page formats it per locale). */
+const AS_OF = '2026-09-23'
+
+/** Which relation a not-measured cost has to the measured model it scales. */
+type CostBasis = { model: string; by: 'price' | 'samePrice' }
 
 type Candidate = {
   model: string
   price: string
   sweBenchPro: string
   sweRebench: string
+  /** A number, `≈ ` and a number, or `—`. */
   costPerTask: string
+  costBasis?: CostBasis
 }
 
 type Level = {
-  level: string
-  means: string
-  examples: string
+  level: 'trivial' | 'low' | 'medium' | 'high'
+  /** The range only; "about" and "and up" are the document's words. */
   costRange: string
   candidates: Candidate[]
 }
@@ -62,10 +74,7 @@ type Level = {
 const LEVELS: Level[] = [
   {
     level: 'trivial',
-    means:
-      'Mechanical work with an unambiguous spec and no judgement calls. The change is fully described by the work item.',
-    examples: 'A rename, a copy change, a config flip, bumping a version.',
-    costRange: 'about $0.05–0.15',
+    costRange: '$0.05–0.15',
     candidates: [
       {
         model: 'DeepSeek V4 Pro',
@@ -86,17 +95,14 @@ const LEVELS: Level[] = [
         price: '$0.14 / $0.28',
         sweBenchPro: '52.6',
         sweRebench: '—',
-        costPerTask: '≈ $0.05 (V4 Pro, by price)',
+        costPerTask: '≈ $0.05',
+        costBasis: { model: 'V4 Pro', by: 'price' },
       },
     ],
   },
   {
     level: 'low',
-    means:
-      'Routine work that follows a pattern the codebase already has. Some reading is needed, but the right answer is clear once it is found.',
-    examples:
-      'A new field through an existing form, an endpoint shaped like its neighbours, a contained bug with a clear reproduction.',
-    costRange: 'about $0.85–1.45',
+    costRange: '$0.85–1.45',
     candidates: [
       {
         model: 'GPT-5.6 Sol',
@@ -123,18 +129,15 @@ const LEVELS: Level[] = [
   },
   {
     level: 'medium',
-    means:
-      'Work with real design choices: several files or services, trade-offs to weigh, or a spec that leaves room for interpretation.',
-    examples:
-      'A feature across the API and the interface, a refactor with callers to migrate, a bug whose cause is not yet known.',
-    costRange: 'about $2.80–3.50',
+    costRange: '$2.80–3.50',
     candidates: [
       {
         model: 'Claude Opus 5.5',
         price: '$4 / $20',
         sweBenchPro: '89.9',
         sweRebench: '—',
-        costPerTask: '≈ $2.80 (Opus 5, by price)',
+        costPerTask: '≈ $2.80',
+        costBasis: { model: 'Opus 5', by: 'price' },
       },
       {
         model: 'Claude Opus 5',
@@ -147,18 +150,15 @@ const LEVELS: Level[] = [
   },
   {
     level: 'high',
-    means:
-      'Work where a subtle mistake is costly: concurrency, security, data migrations, authentication, or a design with no precedent to follow.',
-    examples:
-      'Lock ordering, a permission model change, a schema migration on live data, a new subsystem.',
-    costRange: 'about $4.40 and up',
+    costRange: '$4.40',
     candidates: [
       {
         model: 'Claude Fable 5.1',
         price: '$10 / $50',
         sweBenchPro: '81.2',
         sweRebench: '—',
-        costPerTask: '≈ $4.40 (Fable 5, same price)',
+        costPerTask: '≈ $4.40',
+        costBasis: { model: 'Fable 5', by: 'samePrice' },
       },
       {
         model: 'GPT-6 Astra',
@@ -171,211 +171,82 @@ const LEVELS: Level[] = [
   },
 ]
 
-const SOURCES: { label: string; href: string }[] = [
-  {
-    label: 'SWE-bench Pro leaderboard (BenchLM, 22 September 2026)',
-    href: 'https://benchlm.ai/benchmarks/swe-bench-pro',
-  },
-  {
-    label: 'SWE-rebench leaderboard (tasks from 15 May to 1 July 2026)',
-    href: 'https://swe-rebench.com/',
-  },
-]
+const cellClass = 'border-b border-(--el-border) py-2'
 
 export default async function DifficultyDocsPage({ params }: LocalePageProps) {
   const locale = await enterLocale(params)
   const copy = await getCopy(locale)
+  const labels = copy.docs.guideLabels
+  const basis = {
+    price: labels.costBasisPrice,
+    samePrice: labels.costBasisSamePrice,
+  }
+
+  const slots = Object.fromEntries(
+    LEVELS.map((level) => [
+      level.level,
+      <div key={level.level} className="overflow-x-auto">
+        <table className="mt-2 w-full border-collapse text-left text-[14px]">
+          <thead>
+            <tr className="text-[13px] text-(--el-text-secondary)">
+              <th className={`${cellClass} pr-4 font-medium`}>
+                {labels.candidateModel}
+              </th>
+              <th className={`${cellClass} pr-4 font-medium`}>
+                {labels.candidatePrice}
+              </th>
+              <th className={`${cellClass} pr-4 font-medium`}>SWE-bench Pro</th>
+              <th className={`${cellClass} pr-4 font-medium`}>SWE-rebench</th>
+              <th className={`${cellClass} font-medium`}>
+                {labels.candidateCost}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {level.candidates.map((c) => (
+              <tr key={c.model} className="align-top">
+                <td className={`${cellClass} pr-4 whitespace-nowrap`}>
+                  {c.model}
+                </td>
+                <td className={`${cellClass} pr-4 whitespace-nowrap`}>
+                  {c.price}
+                </td>
+                <td className={`${cellClass} pr-4 whitespace-nowrap`}>
+                  {c.sweBenchPro}
+                </td>
+                <td className={`${cellClass} pr-4 whitespace-nowrap`}>
+                  {c.sweRebench}
+                </td>
+                <td className={`${cellClass} text-(--el-text-secondary)`}>
+                  {c.costBasis
+                    ? `${c.costPerTask} (${c.costBasis.model}, ${basis[c.costBasis.by]})`
+                    : c.costPerTask}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>,
+    ]),
+  )
+
   return (
     <>
       <h1 className="font-(family-name:--font-serif) text-[30px] leading-[1.2] font-bold tracking-[-0.01em] text-(--el-text)">
         {copy.docs.difficulty}
       </h1>
-
-      <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-(--el-text)">
-        <p>
-          A task, subtask or bug can carry a <strong>difficulty</strong>: how
-          much reasoning the work demands, not how much of it there is. Story
-          points and estimates measure size. Difficulty says how hard the work
-          is to get right, so a one-line change to lock ordering can be{' '}
-          <Mono>high</Mono> while a large, mechanical rename is{' '}
-          <Mono>trivial</Mono>.
-        </p>
-        <p>
-          Motir states a work item’s difficulty in the prompt it hands to your
-          agent. Motir does not choose the model for you: use the levels below
-          to decide which model to run each work item on. Epics and stories do
-          not carry a difficulty.
-        </p>
-
-        <H2>The four levels</H2>
-        <ul className="list-disc space-y-2 pl-6">
-          {LEVELS.map((l) => (
-            <li key={l.level}>
-              <strong>
-                <Mono>{l.level}</Mono>
-              </strong>{' '}
-              — {l.means}{' '}
-              <span className="text-(--el-text-secondary)">
-                For example: {l.examples}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p>
-          When no difficulty is set, treat the work item as <Mono>medium</Mono>.
-          An unset level means nobody has judged it yet, and that is not a
-          reason to send it to the cheapest model.
-        </p>
-
-        <H2 id="models">Suggested models for each level</H2>
-        <p>
-          Each level lists its candidates in order. Take the first one your
-          project is allowed to use. The table shows each model’s price per
-          million tokens (input / output), its score on two coding benchmarks,
-          and what one task cost on SWE-rebench. That benchmark uses fresh tasks
-          a model cannot have trained on, so its cost per task is the closest
-          public figure to what one of your subtasks will cost.
-        </p>
-
-        {LEVELS.map((l) => (
-          <div key={l.level} className="pt-2">
-            <h3 className="text-[16px] font-bold text-(--el-text-strong)">
-              <Mono>{l.level}</Mono>{' '}
-              <span className="font-normal text-(--el-text-secondary)">
-                · {l.costRange} per task
-              </span>
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="mt-2 w-full border-collapse text-left text-[14px]">
-                <thead>
-                  <tr className="text-[13px] text-(--el-text-secondary)">
-                    <Th>Model</Th>
-                    <Th>Price per 1M tokens</Th>
-                    <Th>SWE-bench Pro</Th>
-                    <Th>SWE-rebench</Th>
-                    <Th last>Cost per task</Th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {l.candidates.map((c) => (
-                    <tr key={c.model} className="align-top">
-                      <Td>{c.model}</Td>
-                      <Td>{c.price}</Td>
-                      <Td>{c.sweBenchPro}</Td>
-                      <Td>{c.sweRebench}</Td>
-                      <Td last>{c.costPerTask}</Td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ))}
-        <p className="text-[14px] text-(--el-text-secondary)">
-          A cost marked ≈ has not been measured. It takes a measured model from
-          the same family and scales it by the difference in token price. A dash
-          means no public score or cost exists yet.
-        </p>
-
-        <H2>Reading the numbers</H2>
-        <ul className="list-disc space-y-2 pl-6">
-          <li>
-            <strong>
-              The two benchmarks disagree, so neither decides alone.
-            </strong>{' '}
-            SWE-bench Pro covers more models, but about 30% of its public tasks
-            are known to be broken. SWE-rebench is harder to game, and it is the
-            reason DeepSeek V4 Pro and GPT-5.6 Luna sit in <Mono>trivial</Mono>:
-            both score 15 to 19 points lower on its fresh tasks.
-          </li>
-          <li>
-            <strong>
-              Compare cost per finished task, not price per token.
-            </strong>{' '}
-            A cheaper model that fails and has to be run again costs more than a
-            stronger one that succeeds the first time. GPT-5.6 Sol and Claude
-            Sonnet 5 cost the same per token, but Sol finished more tasks at a
-            lower cost per task.
-          </li>
-          <li>
-            <strong>Move up one level when a run fails.</strong> If a work
-            item’s checks fail or its review is refused, run it again on the
-            next level up rather than on the same model.
-          </li>
-          <li>
-            <strong>Check where your data may go.</strong> Not every provider
-            can be used for every project. See{' '}
-            <Link
-              href={localizedPath(locale, '/legal/model-providers')}
-              className="text-(--el-link) underline underline-offset-2"
-            >
-              Model providers
-            </Link>{' '}
-            for how each one treats the content it is sent.
-          </li>
-        </ul>
-
-        <H2>How current this is</H2>
-        <p>
-          Prices and scores on this page were read on {AS_OF}. Token prices come
-          from Motir’s model gateway, which refreshes them from OpenRouter;
-          Claude Opus 5.5 was added from OpenRouter directly because it launched
-          after the gateway’s last refresh. Models change every few months, so
-          treat the candidates as a starting point and keep the ones that finish
-          your own work items.
-        </p>
-        <ul className="list-disc space-y-1 pl-6">
-          {SOURCES.map((s) => (
-            <li key={s.href}>
-              <a
-                href={s.href}
-                className="text-(--el-link) underline underline-offset-2"
-              >
-                {s.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <DocsDocument
+        slug="difficulty"
+        locale={locale}
+        slots={slots}
+        values={{
+          costRangeTrivial: LEVELS[0]!.costRange,
+          costRangeLow: LEVELS[1]!.costRange,
+          costRangeMedium: LEVELS[2]!.costRange,
+          costRangeHigh: LEVELS[3]!.costRange,
+          asOf: guideDate(locale, AS_OF),
+        }}
+      />
     </>
-  )
-}
-
-function H2({ children, id }: { children: React.ReactNode; id?: string }) {
-  return (
-    <h2
-      id={id}
-      className="pt-4 font-(family-name:--font-serif) text-[20px] leading-snug font-bold text-(--el-text-strong)"
-    >
-      {children}
-    </h2>
-  )
-}
-
-function Th({ children, last }: { children: React.ReactNode; last?: boolean }) {
-  return (
-    <th
-      className={`border-b border-(--el-border) py-2 font-medium ${last ? '' : 'pr-4'}`}
-    >
-      {children}
-    </th>
-  )
-}
-
-function Td({ children, last }: { children: React.ReactNode; last?: boolean }) {
-  return (
-    <td
-      className={`border-b border-(--el-border) py-2 ${last ? 'text-(--el-text-secondary)' : 'pr-4 whitespace-nowrap'}`}
-    >
-      {children}
-    </td>
-  )
-}
-
-function Mono({ children }: { children: React.ReactNode }) {
-  return (
-    <code className="font-(family-name:--font-mono) text-[13px] whitespace-nowrap">
-      {children}
-    </code>
   )
 }

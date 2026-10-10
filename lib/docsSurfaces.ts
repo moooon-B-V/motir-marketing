@@ -78,7 +78,8 @@ export function docsIndexFor(copy: Copy): Omit<DocsPage, 'description'> {
  * the `docs` keys instead, and `docsSurfacesFor(copy)` reads them from the
  * caller's catalogue. The ROUTES need no words and stay a constant.
  */
-type DocsKey = keyof Copy['docs']
+// The string-valued keys: `notes` and `guideLabels` are nested objects (the document notes, MOTIR-8032; the guide slot labels, MOTIR-8036).
+type DocsKey = Exclude<keyof Copy['docs'], 'notes' | 'guideLabels'>
 type PageKeys = { href: string; label: DocsKey; description: DocsKey }
 type SurfaceKeys = PageKeys & { pages: PageKeys[] }
 
@@ -186,4 +187,18 @@ export const DOCS_ROUTES: string[] = [
     surface.href,
     ...surface.pages.map((page) => page.href),
   ]),
+]
+
+/**
+ * Routes whose human text is entirely catalogue copy (`copy.*`) and which therefore
+ * have NO per-language document (MOTIR-8054). Each move item adds
+ * a route here only after verifying the route has no authored prose, and the
+ * coverage gate exempts exactly these from "every route has a document per
+ * locale". Directive-free, so a client component may import it.
+ */
+export const DOCS_CATALOGUE_ONLY_ROUTES: string[] = [
+  // `/docs` renders `docs.indexTitle`, `docs.indexIntro`, `setupPrompt.*` and each
+  // surface's `docs` label and description, plus the copyable setup prompt (a payload,
+  // not prose): no authored prose (MOTIR-8035).
+  '/docs',
 ]

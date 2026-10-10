@@ -85,12 +85,14 @@ test.describe('the receipt', () => {
       ['claude-code', 'Claude Code'],
     ] as const) {
       chapter(`The ${client} steps`)
-      const block = page.locator(`#${id}`)
-      await block.scrollIntoViewIfNeeded()
-      await expect(
-        block.getByRole('heading', { level: 3, name: client, exact: true }),
-      ).toBeVisible()
-      await expect(block).toContainText(SERVER_URL)
+      // The document form puts the id on the h3 itself (MOTIR-8055); the steps and
+      // the config block follow it, so the block is the first <pre> after it.
+      const heading = page.locator(`h3#${id}`)
+      await heading.scrollIntoViewIfNeeded()
+      await expect(heading).toHaveText(client)
+      await expect(heading.locator('xpath=following::pre[1]')).toContainText(
+        SERVER_URL,
+      )
       await beat(page, 2400)
     }
 
@@ -156,15 +158,24 @@ test.describe('the receipt', () => {
     // does not turn MOTIR-6976's receipt red (MOTIR-7268 moved it to v0.5.0).
     chapter('/docs/skills — the plugin brings three things, from a release tag')
     await page.goto(`${SITE_ORIGIN}/docs/skills`)
-    const claudeCode = page.locator('section', {
-      has: page.getByRole('heading', { level: 3, name: 'Claude Code' }),
+    // The page is a document (MOTIR-8036): the Claude Code heading, its three
+    // list items and its first command pane are siblings, not a <section>.
+    const claudeCode = page.getByRole('heading', {
+      level: 3,
+      name: 'Claude Code',
     })
     await claudeCode.scrollIntoViewIfNeeded()
-    await expect(claudeCode.getByRole('listitem')).toHaveCount(3)
-    await expect(claudeCode).toContainText('The Motir MCP server')
-    await expect(claudeCode).toContainText('The motir runner')
+    for (const item of [
+      'The seven skills',
+      'The Motir MCP server',
+      'The motir runner',
+    ]) {
+      await expect(
+        page.getByRole('listitem').filter({ hasText: item }),
+      ).toHaveCount(1)
+    }
     await expect(
-      claudeCode.locator('pre', { hasText: '/plugin marketplace add' }),
+      page.locator('pre', { hasText: '/plugin marketplace add' }).first(),
     ).toContainText(/moooon-B-V\/motir-skills#v\d+\.\d+\.\d+\b/)
     await beat(page, 3200)
 
