@@ -739,7 +739,11 @@
   },
   "docs": {
     "notes": {
-      "beingUpdated": "Die Übersetzung dieser Seite wird gerade aktualisiert. Bis sie fertig ist, wird der englische Text angezeigt."
+      "beingUpdated": "Die Übersetzung dieser Seite wird gerade aktualisiert. Bis sie fertig ist, wird der englische Text angezeigt.",
+      "generatedReference": {
+        "openapi": "Die Beschreibungen der Operationen sowie die Tabellen mit Parametern und Feldern unten werden aus dem OpenAPI-Dokument von Motir generiert und bleiben deshalb auf Englisch.",
+        "cli": "Die Beschreibungen der Befehle und Optionen unten sind der Text, den der installierte Befehl motir ausgibt, und bleiben deshalb auf Englisch."
+      }
     },
     "operationCount": "{count} Operationen",
     "metaTitle": "Doku · Motir",

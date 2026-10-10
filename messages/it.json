@@ -734,7 +734,11 @@
   },
   "docs": {
     "notes": {
-      "beingUpdated": "La traduzione di questa pagina è in aggiornamento. Fino a quando non sarà pronta, viene mostrato il testo in inglese."
+      "beingUpdated": "La traduzione di questa pagina è in aggiornamento. Fino a quando non sarà pronta, viene mostrato il testo in inglese.",
+      "generatedReference": {
+        "openapi": "Le descrizioni delle operazioni e le tabelle di parametri e campi qui sotto sono generate dal documento OpenAPI di Motir, quindi restano in inglese.",
+        "cli": "Le descrizioni dei comandi e delle opzioni qui sotto sono il testo che mostra il comando motir installato, quindi restano in inglese."
+      }
     },
     "operationCount": "{count} operazioni",
     "metaTitle": "Documentazione · Motir",

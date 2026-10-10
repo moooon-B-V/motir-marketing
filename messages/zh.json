@@ -724,7 +724,11 @@
   },
   "docs": {
     "notes": {
-      "beingUpdated": "本页的翻译正在更新中。在翻译完成之前，将显示英文内容。"
+      "beingUpdated": "本页的翻译正在更新中。在翻译完成之前，将显示英文内容。",
+      "generatedReference": {
+        "openapi": "下方的操作说明以及参数和字段表格由 Motir 的 OpenAPI 文档生成，因此保持英文。",
+        "cli": "下方的命令和选项说明是已安装的 motir 命令输出的文本，因此保持英文。"
+      }
     },
     "operationCount": "{count} 个操作",
     "metaTitle": "文档 · Motir",

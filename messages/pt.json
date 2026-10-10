@@ -743,7 +743,11 @@
   },
   "docs": {
     "notes": {
-      "beingUpdated": "A tradução desta página está sendo atualizada. Até ficar pronta, o texto em inglês é exibido."
+      "beingUpdated": "A tradução desta página está sendo atualizada. Até ficar pronta, o texto em inglês é exibido.",
+      "generatedReference": {
+        "openapi": "As descrições das operações e as tabelas de parâmetros e campos abaixo são geradas a partir do documento OpenAPI do Motir, por isso permanecem em inglês.",
+        "cli": "As descrições dos comandos e das opções abaixo são o texto que o comando motir instalado exibe, por isso permanecem em inglês."
+      }
     },
     "operationCount": "{count} operações",
     "metaTitle": "Documentação · Motir",

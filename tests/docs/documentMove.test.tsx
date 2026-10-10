@@ -262,9 +262,15 @@ describe('NO ENGLISH SENTENCE LIVES IN THE TSX — a current German document sho
       const container = await renderPage(slug, {
         params: Promise.resolve({ locale: 'de' }),
       } as never)
-      // The document, not the fallback: no "being updated" note, no lang="en".
-      expect(container.querySelector('[role="note"]')).toBeNull()
-      expect(container.querySelector('[lang="en"]')).toBeNull()
+      // The document, not the fallback: no "being updated" note and no English
+      // wrapper. /docs/cli alone carries the generated-reference note (MOTIR-8049)
+      // and `lang="en"` on exactly its generated descriptions.
+      const notes = [...container.querySelectorAll('[role="note"]')]
+      expect(notes).toHaveLength(slug === 'cli' ? 1 : 0)
+      const english = [...container.querySelectorAll('[lang="en"]')]
+      expect(english.map((el) => el.tagName)).toEqual(
+        slug === 'cli' ? ['P', 'DD'] : [],
+      )
       expect(container.textContent).toContain('zqwort')
 
       // A copy payload is a command, and is English by design.

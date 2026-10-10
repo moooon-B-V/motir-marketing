@@ -734,7 +734,11 @@
   },
   "docs": {
     "notes": {
-      "beingUpdated": "De vertaling van deze pagina wordt bijgewerkt. Tot die klaar is, wordt de Engelse tekst getoond."
+      "beingUpdated": "De vertaling van deze pagina wordt bijgewerkt. Tot die klaar is, wordt de Engelse tekst getoond.",
+      "generatedReference": {
+        "openapi": "De beschrijvingen van de operaties en de tabellen met parameters en velden hieronder worden gegenereerd uit het OpenAPI-document van Motir, daarom blijven ze in het Engels.",
+        "cli": "De beschrijvingen van de commando’s en opties hieronder zijn de tekst die het geïnstalleerde commando motir toont, daarom blijven ze in het Engels."
+      }
     },
     "operationCount": "{count} operaties",
     "metaTitle": "Docs · Motir",

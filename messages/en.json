@@ -734,7 +734,11 @@
   },
   "docs": {
     "notes": {
-      "beingUpdated": "The translation of this page is being updated. Until it is ready, the English text is shown."
+      "beingUpdated": "The translation of this page is being updated. Until it is ready, the English text is shown.",
+      "generatedReference": {
+        "openapi": "The operation descriptions and the parameter and field tables below are generated from Motir’s OpenAPI document, so they stay in English.",
+        "cli": "The command and option descriptions below are the text the installed motir command prints, so they stay in English."
+      }
     },
     "operationCount": "{count} operations",
     "metaTitle": "Docs · Motir",

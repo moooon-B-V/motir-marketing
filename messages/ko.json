@@ -727,7 +727,11 @@
   },
   "docs": {
     "notes": {
-      "beingUpdated": "이 페이지의 번역을 업데이트하고 있습니다. 준비될 때까지 영어 텍스트를 표시합니다."
+      "beingUpdated": "이 페이지의 번역을 업데이트하고 있습니다. 준비될 때까지 영어 텍스트를 표시합니다.",
+      "generatedReference": {
+        "openapi": "아래의 오퍼레이션 설명과 파라미터 및 필드 표는 Motir의 OpenAPI 문서에서 생성되므로 영어로 유지됩니다.",
+        "cli": "아래의 명령과 옵션 설명은 설치된 motir 명령이 출력하는 텍스트이므로 영어로 유지됩니다."
+      }
     },
     "operationCount": "작업 {count}개",
     "metaTitle": "문서 · Motir",
