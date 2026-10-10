@@ -12,7 +12,8 @@ import {
   railOperations,
   type OpenApiDocument,
 } from '@/lib/docs'
-import { englishCopy } from '@/lib/copy'
+import { englishCopy, type Copy } from '@/lib/copy'
+import esMessages from '@/messages/es.json'
 import {
   DOCS_INDEX_HREF,
   DOCS_ROUTES,
@@ -84,12 +85,19 @@ afterEach(() => {
 })
 
 /** Re-import the rail under a stubbed pathname. */
-async function renderRail(pathname: string, withOperations = true) {
+async function renderRail(
+  pathname: string,
+  withOperations = true,
+  copyOptions: { locale?: 'es'; messages?: Copy } = {},
+) {
   stubPath(pathname)
   vi.resetModules()
   const { DocsRail: Rail } =
     await import('@/app/[locale]/docs/_components/DocsRail')
-  return render(<Rail operations={withOperations ? RAIL : undefined} />)
+  return render(
+    <Rail operations={withOperations ? RAIL : undefined} />,
+    copyOptions,
+  )
 }
 
 describe('the fixture really is the size the defect is about', () => {
@@ -142,6 +150,21 @@ describe('an operation is reachable in at most TWO interactions', () => {
     // ⚠️ A filter that hides its own selectivity is how a reader concludes an
     // operation does not exist. The count must say "N of 49", never just "N".
     expect(container.textContent).toMatch(/\d+ of 49 operations/)
+  })
+
+  it('the COUNT line comes from the catalogue — Spanish reads "de", never the English "of" (MOTIR-8073)', async () => {
+    const user = userEvent.setup()
+    const { container } = await renderRail('/docs/api', true, {
+      locale: 'es',
+      messages: esMessages as unknown as Copy,
+    })
+    const count = () =>
+      container.querySelector('[aria-live="polite"]')?.textContent ?? ''
+    expect(count()).toBe('49 operaciones')
+
+    await user.type(screen.getByLabelText('Filtrar operaciones'), 'sprints')
+    expect(count()).toMatch(/^\d+ de 49 operaciones$/)
+    expect(count()).not.toMatch(/\bof\b|operations/)
   })
 
   it('says so when the filter matches nothing, rather than showing an empty rail', async () => {

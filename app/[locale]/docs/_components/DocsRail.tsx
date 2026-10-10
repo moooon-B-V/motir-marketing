@@ -239,8 +239,11 @@ export function DocsRail({
               className="mt-2 mb-3.5 px-0.5 text-[11.5px] text-(--el-text-secondary)"
             >
               {shownCount === total
-                ? `${total} operations`
-                : `${shownCount} of ${total} operations`}
+                ? format(copy.docs.operationCount, { count: total })
+                : format(copy.docs.operationCountFiltered, {
+                    shown: shownCount,
+                    total,
+                  })}
             </p>
           </>
         ) : null}

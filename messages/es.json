@@ -750,6 +750,7 @@
       }
     },
     "operationCount": "{count} operaciones",
+    "operationCountFiltered": "{shown} de {total} operaciones",
     "metaTitle": "Documentación · Motir",
     "metaDescription": "Documentación de la API y del servidor MCP de Motir: el contrato público de lectura, el servidor al que llaman los agentes y la CLI.",
     "metaTitleReference": "Referencia de la API · Documentación de Motir",

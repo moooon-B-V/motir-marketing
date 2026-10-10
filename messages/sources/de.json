@@ -511,6 +511,7 @@
   "docs.notes.generatedReference.openapi": "The operation descriptions and the parameter and field tables below are generated from Motir’s OpenAPI document, so they stay in English.",
   "docs.notes.generatedReference.cli": "The command and option descriptions below are the text the installed motir command prints, so they stay in English.",
   "docs.operationCount": "{count} operations",
+  "docs.operationCountFiltered": "{shown} of {total} operations",
   "docs.metaTitle": "Docs · Motir",
   "docs.metaDescription": "Documentation for the Motir API and MCP server — the public read contract, the server that agents call, and the CLI.",
   "docs.metaTitleReference": "API reference · Motir docs",

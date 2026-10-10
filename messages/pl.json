@@ -746,6 +746,7 @@
       }
     },
     "operationCount": "Operacje: {count}",
+    "operationCountFiltered": "Operacje: {shown} z {total}",
     "metaTitle": "Dokumentacja · Motir",
     "metaDescription": "Dokumentacja API i serwera MCP Motir — publiczny kontrakt odczytu, serwer, który wywołują agenci, oraz CLI.",
     "metaTitleReference": "Dokumentacja API · Motir",
