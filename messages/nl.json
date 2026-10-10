@@ -734,6 +734,7 @@
   },
   "docs": {
     "operationCount": "{count} operaties",
+    "operationCountFiltered": "{shown} van {total} operaties",
     "metaTitle": "Docs · Motir",
     "metaDescription": "Documentatie voor de Motir-API en de MCP-server — het openbare leescontract, de server die agents aanroepen en de CLI.",
     "metaTitleReference": "API-referentie · Motir-docs",

@@ -508,6 +508,7 @@
   "explore.close.body": "Turn any Motir project into a public page with one switch. Show what you're building, take feature requests and upvotes, and keep internal details private.",
   "explore.close.cta": "Start free",
   "docs.operationCount": "{count} operations",
+  "docs.operationCountFiltered": "{shown} of {total} operations",
   "docs.metaTitle": "Docs · Motir",
   "docs.metaDescription": "Documentation for the Motir API and MCP server — the public read contract, the server that agents call, and the CLI.",
   "docs.metaTitleReference": "API reference · Motir docs",

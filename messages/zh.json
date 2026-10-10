@@ -724,6 +724,7 @@
   },
   "docs": {
     "operationCount": "{count} 个操作",
+    "operationCountFiltered": "共 {total} 个操作，显示 {shown} 个",
     "metaTitle": "文档 · Motir",
     "metaDescription": "Motir API 与 MCP 服务器的文档——公开读取契约、智能体调用的服务器，以及 CLI。",
     "metaTitleReference": "API 参考 · Motir 文档",

@@ -727,6 +727,7 @@
   },
   "docs": {
     "operationCount": "작업 {count}개",
+    "operationCountFiltered": "작업 {total}개 중 {shown}개",
     "metaTitle": "문서 · Motir",
     "metaDescription": "Motir API와 MCP 서버 문서 — 공개 읽기 계약, 에이전트가 호출하는 서버, 그리고 CLI.",
     "metaTitleReference": "API 참조 · Motir 문서",

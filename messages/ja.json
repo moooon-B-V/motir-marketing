@@ -739,6 +739,7 @@
   },
   "docs": {
     "operationCount": "{count}件のオペレーション",
+    "operationCountFiltered": "{total}件中{shown}件のオペレーション",
     "metaTitle": "ドキュメント · Motir",
     "metaDescription": "Motir API と MCP サーバーのドキュメント。公開の読み取り契約、エージェントが呼び出すサーバー、そして CLI について説明します。",
     "metaTitleReference": "API リファレンス · Motir ドキュメント",
