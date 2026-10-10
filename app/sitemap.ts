@@ -1,6 +1,10 @@
 import type { MetadataRoute } from 'next'
 import { siteUrl } from '@/lib/siteOrigin'
-import { languageAlternates, localizedPath } from '@/lib/localeMetadata'
+import {
+  englishOnlyCanonical,
+  languageAlternates,
+  localizedPath,
+} from '@/lib/localeMetadata'
 import { DEFAULT_LOCALE, LOCALES } from '@/i18n/routing'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
 import { DOCS_INDEX_HREF, DOCS_ROUTES } from '@/lib/docsSurfaces'
@@ -77,10 +81,27 @@ import {
  * (`lib/localeMetadata.ts`), so the two cannot disagree. A tenant host is not
  * multiplied: one URL there serves every language by cookie and
  * `Accept-Language`, and an alternate can only name a distinct URL.
+ *
+ * ⚠️ EXCEPT A LEGAL DOCUMENT, WHICH APPEARS ONCE (MOTIR-8086). Its body, title,
+ * version and date are the same English in every language version — only the
+ * chrome around them is translated — so each version is canonical to the
+ * unprefixed English document and carries no `hreflang` set. The sitemap says
+ * the same thing the page head does: one entry, at the English address, no
+ * alternates, spelled by the same `englishOnlyCanonical`. The `/legal` INDEX
+ * is not an exception: its title, intro and contact line are genuinely
+ * translated, so it stays eleven entries like every other page.
  */
 export const dynamic = 'force-dynamic'
 
 type Entry = MetadataRoute.Sitemap[number]
+
+/** ONE entry for a motir.co path whose binding content is English only (legal documents). */
+function englishOnly(
+  path: string,
+  rest: Omit<Entry, 'url' | 'alternates'>,
+): MetadataRoute.Sitemap {
+  return [{ url: englishOnlyCanonical(path), ...rest }]
+}
 
 /** One entry per locale for a motir.co path, each carrying the alternates. */
 function everyLanguage(
@@ -177,8 +198,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // reads the same directory the routes do rather than carrying a second list
     // that could drift from it. `legalDocumentSlugs()` is the glob the routes
     // use, so a document added later reaches the sitemap without an edit here.
+    // Once each, at the English address (the note above `dynamic`).
     ...legalDocumentSlugs().flatMap((slug) =>
-      everyLanguage(`/legal/${slug}`, {
+      englishOnly(`/legal/${slug}`, {
         changeFrequency: 'monthly',
         priority: 0.4,
       }),

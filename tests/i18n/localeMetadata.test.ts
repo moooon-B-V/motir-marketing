@@ -168,11 +168,8 @@ const PAGES: { module: string; path: string; params?: object }[] = [
     params: { slug: 'project-manager' },
   },
   { module: '@/app/[locale]/legal/page', path: '/legal' },
-  {
-    module: '@/app/[locale]/legal/[slug]/page',
-    path: `/legal/${legalDocumentSlugs()[0]}`,
-    params: { slug: legalDocumentSlugs()[0] },
-  },
+  // A legal DOCUMENT is not here: every language version of it is canonical to
+  // the English document (MOTIR-8086), the English-only arm below.
   { module: '@/app/[locale]/explore/page', path: '/explore' },
   { module: '@/app/[locale]/ideas/page', path: '/ideas' },
 ]
@@ -201,6 +198,20 @@ describe('every converted page canonicalises to its own language address', () =>
       })
     }
   }
+
+  it('a legal document is the exception: every language version is canonical to the English document, with no hreflang set (MOTIR-8086)', async () => {
+    const slug = legalDocumentSlugs()[0]!
+    const { generateMetadata } =
+      await import('@/app/[locale]/legal/[slug]/page')
+    for (const locale of ['en', 'fr'] as const) {
+      const meta = await generateMetadata({
+        params: Promise.resolve({ locale, slug }),
+      })
+      expect(canonicalOf(meta)).toBe(siteUrl(`/legal/${slug}`))
+      expect(meta.alternates?.languages).toBeUndefined()
+      expect(meta.title).toBeTruthy()
+    }
+  })
 
   it('no canonical resolves to the root except the English landing’s', () => {
     const roots = PAGES.filter(({ path }) => path === '/')

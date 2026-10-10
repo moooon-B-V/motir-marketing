@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getCopy, format } from '@/lib/copy'
-import { localePageMetadata } from '@/lib/localeMetadata'
+import { englishOnlyAlternates, localePageMetadata } from '@/lib/localeMetadata'
 import { getLegalDocument, legalDocumentSlugs } from '@/lib/legal/documents'
 import { MarkdownBody } from '../_components/MarkdownBody'
 import { enterLocale } from '@/i18n/locale'
@@ -40,6 +40,12 @@ export async function generateMetadata({
       title: doc.title,
       version: doc.version,
     }),
+    // Every language version of a document is canonical to the unprefixed
+    // ENGLISH document, with no `hreflang` set (MOTIR-8086): the binding text
+    // is English in all eleven, so the others are duplicates of it, not
+    // alternates. `localeMetadata` spreads this AFTER its own `alternates`, so
+    // it replaces the self-canonical and the twelve languages wholesale.
+    alternates: englishOnlyAlternates(`/legal/${slug}`),
   }))
 }
 
