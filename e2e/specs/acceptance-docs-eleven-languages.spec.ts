@@ -558,7 +558,7 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
 /*
  * ── 8 · A GERMAN PAGE WHOSE ENGLISH MOVED ON — SKIPPED, NOT WEAKENED ──────
  *
- * The card's own precondition for this case does not hold, measured on this
+ * Filed as MOTIR-8072. The card's own precondition for this case does not hold, measured on this
  * build, and it says what to do then: skip it, name the bug, do not weaken it.
  * The case needs `/de/docs/sentry` to read `content/docs/sentry/` PER REQUEST,
  * so that appending a sentence to `en.md` and running `pnpm docs:revisions
@@ -582,6 +582,6 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
  * steps 1-7 rather than a run that ended early; when the bug is fixed, this body
  * becomes the eighth chapter of the walk.
  */
-test.skip('a German page whose English moved on shows the English under its note', () => {
+test.skip('a German page whose English moved on shows the English under its note (skipped: MOTIR-8072)', () => {
   // intentionally empty — see the comment above for why this is skipped.
 })
