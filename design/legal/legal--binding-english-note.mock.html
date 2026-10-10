@@ -1,0 +1,2614 @@
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-style="hand-drawn-indie"
+  data-palette="motir"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      motir.co/legal — the binding-English note on a non-English legal page ·
+      MOTIR-8085
+    </title>
+    <style>
+      /* ----------------------------------------------------------------------
+         TOKEN BLOCK — the RESOLVED values of `--el-*` and the shape tokens,
+         read off the RUNNING site (the French Terms page, `hand-drawn-indie` style,
+         `motir` palette, light and dark) on 2026-10-10 with
+         `getComputedStyle(document.documentElement)`. Standalone, as every
+         asset in this repository is. Re-defines no semantics and invents no
+         hue; the only raw values outside this block are the annotation
+         scaffold's own sheet and the non-semantic frame shadow.
+      ---------------------------------------------------------------------- */
+      :root {
+        --el-page-bg: #ffffff;
+        --el-surface: #eef0f3;
+        --el-surface-soft: #f8f9fa;
+        --el-muted: #eef0f3;
+        --el-text: #16191d;
+        --el-text-strong: #20242a;
+        --el-text-secondary: #565c64;
+        --el-text-faint: #8a8f98;
+        --el-border: #e2e4e9;
+        --el-border-strong: #c8ccd3;
+        --el-accent: #1a1d21;
+        --el-accent-text: #ffffff;
+        --el-accent-on-surface: #155bc4;
+        --el-link: #155bc4;
+        --el-link-pressed: #114a9e;
+        --el-logo-mark: #155bc4;
+        --el-logo-tile: color-mix(
+          in srgb,
+          var(--el-logo-mark) 28%,
+          var(--el-page-bg)
+        );
+        --radius-card: 18px 58px 22px 48px / 48px 20px 54px 24px;
+        --radius-btn: 14px 40px 12px 36px / 36px 14px 38px 16px;
+        --radius-control: 10px 26px 12px 22px / 22px 12px 24px 10px;
+        --spacing-card-padding: 26px;
+        --spacing-control-x: 12px;
+        --spacing-control-y: 8px;
+        --spacing-btn-x: 20px;
+        --height-btn-md: 40px;
+        --shadow-subtle: 1px 2px 4px -1px #261e161a;
+        --shadow-elevated: 0 8px 24px rgba(15, 15, 15, 0.12);
+        --font-sans-source: 'Space Grotesk';
+        --font-mono-source: 'JetBrains Mono';
+        --font-sans:
+          var(--font-sans-source), ui-sans-serif, system-ui, -apple-system,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif: var(--font-sans);
+        --font-mono:
+          var(--font-mono-source), ui-monospace, SFMono-Regular, Menlo,
+          monospace;
+      }
+
+      .dark {
+        color-scheme: dark;
+        --el-page-bg: #0c0d0f;
+        --el-surface: #18191c;
+        --el-surface-soft: #141517;
+        --el-muted: #18191c;
+        --el-text: #edeef0;
+        --el-text-strong: #d7d9dd;
+        --el-text-secondary: #a9adb5;
+        --el-text-faint: #696e77;
+        --el-border: #282a2e;
+        --el-border-strong: #3a3d42;
+        --el-accent: #edeef0;
+        --el-accent-text: #0c0d0f;
+        --el-accent-on-surface: color-mix(
+          in srgb,
+          var(--el-link) 82%,
+          var(--el-text)
+        );
+        --el-link: #7db1ff;
+        --el-link-pressed: #a3c8ff;
+        --el-logo-mark: #7db1ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f4f3f1;
+        color: var(--el-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══ the page-language rule, drawn ═══════════════════════════════
+         The shipped site sets each script's faces through `:lang()` rules in
+         `app/globals.css`; a standalone mock draws the same thing by
+         redefining the face variables on the element carrying the language.
+         So the English islands inside a Japanese page come back to Latin. */
+      [lang='ja'] {
+        --font-sans:
+          var(--font-sans-source), 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic',
+          -apple-system, sans-serif;
+        --font-serif: var(--font-sans);
+      }
+      [lang='en'] {
+        --font-sans:
+          var(--font-sans-source), ui-sans-serif, system-ui, -apple-system,
+          'Segoe UI', Roboto, sans-serif;
+        --font-serif: var(--font-sans);
+      }
+      [lang] {
+        font-family: var(--font-sans);
+      }
+
+      /* ═══ doc scaffold — ANNOTATION ONLY, never product UI ═══════════ */
+      .sheet {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 36px 28px 72px;
+      }
+      .sheet-head h1 {
+        font: 700 26px/1.2 var(--font-sans);
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .sheet-head p {
+        margin: 0;
+        color: var(--el-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+        max-width: 92ch;
+      }
+      .sheet-head .refs {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ref {
+        font: 600 11px var(--font-mono);
+        color: var(--el-text-strong);
+        background: var(--el-page-bg);
+        border: 1px solid var(--el-border-strong);
+        border-radius: 9999px;
+        padding: 3px 9px;
+      }
+      .ref.muted {
+        color: var(--el-text-secondary);
+        border-color: var(--el-border);
+      }
+      .panel {
+        margin-top: 44px;
+      }
+      .panel-cap {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-cap .n {
+        font: 700 12px var(--font-mono);
+        color: var(--el-accent-text);
+        background: var(--el-accent);
+        border-radius: 6px;
+        padding: 2px 7px;
+      }
+      .panel-cap h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .panel-cap .note-cap {
+        flex-basis: 100%;
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--el-text-secondary);
+        max-width: 96ch;
+      }
+      .panel-cap code,
+      .sheet-head code {
+        font: 12px var(--font-mono);
+      }
+      .frame-wrap {
+        min-width: 0;
+      }
+      .frame-cap {
+        margin: 0 0 6px;
+        font: 600 11px var(--font-mono);
+        color: var(--el-text-secondary);
+      }
+      .frame {
+        border: 1px solid var(--el-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(15, 15, 15, 0.08);
+        background: var(--el-page-bg);
+        color: var(--el-text);
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+      .pair.narrow-pair {
+        grid-template-columns: 390px 390px;
+      }
+      .states {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      /* The lang="en" marking, drawn: a dashed outline on each element that
+         carries it, plus a small tag. Annotation, not product UI. */
+      .doc-head h1[lang='en'],
+      .doc-body.en-region,
+      .index .t[lang='en'] {
+        outline: 1px dashed var(--el-border-strong);
+        outline-offset: 3px;
+      }
+      .lang-tag {
+        display: inline-block;
+        margin-left: 10px;
+        vertical-align: middle;
+        font: 600 10px var(--font-mono);
+        color: var(--el-text-secondary);
+        border: 1px dashed var(--el-border-strong);
+        border-radius: 4px;
+        padding: 1px 5px;
+        letter-spacing: 0;
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE CHROME — COMPOSED from the shipped `SiteHeader` / `SiteFooter`
+         as they render on the French Terms page below 1314px (brand · Start free
+         · language · Menu; the nav folds behind Menu), with the language
+         switcher from `design/docs/docs--localized-notes.mock.html`. Class
+         names follow `legal.mock.html`. Nothing here is new.
+      ═══════════════════════════════════════════════════════════════ */
+      .site {
+        background: var(--el-page-bg);
+        color: var(--el-text);
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px var(--spacing-card-padding);
+      }
+      .brand-lockup {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        text-decoration: none;
+        flex: none;
+      }
+      .brand-glyph {
+        flex: none;
+        display: block;
+      }
+      .brand-glyph .tile {
+        fill: var(--el-logo-tile);
+      }
+      .brand-glyph .mark {
+        fill: var(--el-logo-mark);
+      }
+      .brand-word {
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: 20px;
+        line-height: 1;
+        color: var(--el-text);
+      }
+      .brand-word.sm {
+        font-size: 16px;
+      }
+      .bar-cta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font: 500 15px/1 var(--font-sans);
+        border-radius: var(--radius-btn);
+        padding: 0 var(--spacing-btn-x);
+        height: var(--height-btn-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn svg {
+        width: 14px;
+        height: 14px;
+      }
+      .btn.primary {
+        background: var(--el-accent);
+        color: var(--el-accent-text);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--el-text);
+      }
+      .switcher {
+        position: relative;
+      }
+      .btn.globe {
+        width: var(--height-btn-md);
+        padding: 0;
+        color: var(--el-text);
+      }
+      .btn.globe svg {
+        width: 18px;
+        height: 18px;
+      }
+      .btn.globe.menu {
+        width: 32px;
+      }
+      /* The shipped bar below the sm breakpoint: px-4 py-3. */
+      .site.narrow .topbar {
+        padding: 12px 16px;
+      }
+      /* SCAFFOLD COMPROMISE, not a spec: a standalone mock cannot load Space
+         Grotesk, and its fallback face sets the button label ~20px wider than
+         the shipped bar does, which would push the Menu button out of a 390
+         frame the real bar fits. The real button keeps --spacing-btn-x. */
+      .site.narrow .btn.primary {
+        padding: 0 12px;
+        font-size: 14px;
+      }
+      .btn.globe.open {
+        background: var(--el-surface-soft);
+      }
+      .lang-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        z-index: 5;
+        display: grid;
+        min-width: 13rem;
+        padding: 4px;
+        border: 1px solid var(--el-border);
+        border-radius: var(--radius-card);
+        background: var(--el-page-bg);
+        box-shadow: var(--shadow-elevated);
+      }
+      .lang-menu a {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 16px;
+        align-items: center;
+        gap: 12px;
+        padding: var(--spacing-control-y) var(--spacing-control-x);
+        border-radius: var(--radius-control);
+        font-size: 15px;
+        color: var(--el-text);
+        text-decoration: none;
+      }
+      .lang-menu a.cur {
+        font-weight: 600;
+        color: var(--el-accent-on-surface);
+      }
+      .foot {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid var(--el-border);
+        background: var(--el-surface-soft);
+        padding: 40px var(--spacing-card-padding);
+      }
+      .foot h2 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--el-text-secondary);
+      }
+      .foot ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .foot li a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .foot li a:hover,
+      .foot li a.door {
+        color: var(--el-link);
+      }
+      .foot li a.door {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .foot .tag {
+        margin: 10px 0 0;
+        max-width: 30rem;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .foot .legal {
+        grid-column: 1 / -1;
+        margin: 0;
+        border-top: 1px solid var(--el-border);
+        padding-top: 16px;
+        font-size: 12px;
+        color: var(--el-text-secondary);
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE ROOM — `legal.mock.html`'s, class for class: `max-w-[46rem]`,
+         the breadcrumb, the document header with its rule, the body, the
+         index rows and the contact line.
+      ═══════════════════════════════════════════════════════════════ */
+      .room {
+        flex: 1;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 46rem;
+        padding: 40px var(--spacing-card-padding);
+      }
+      .room.short {
+        min-height: 300px;
+      }
+      .room.tight {
+        padding: 20px;
+      }
+      .room h1 {
+        font-family: var(--font-serif);
+        font-size: 30px;
+        line-height: 1.2;
+        font-weight: 700;
+        margin: 0;
+        color: var(--el-text);
+        letter-spacing: -0.01em;
+      }
+      .intro {
+        margin: 8px 0 0;
+        max-width: 34rem;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--el-text-secondary);
+      }
+      .index {
+        margin: 32px 0 0;
+        list-style: none;
+        padding: 0;
+        border-top: 1px solid var(--el-border);
+        border-bottom: 1px solid var(--el-border);
+      }
+      .index li {
+        border-bottom: 1px solid var(--el-border);
+      }
+      .index li:last-child {
+        border-bottom: 0;
+      }
+      .index a {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 16px 0;
+        text-decoration: none;
+      }
+      .index a:hover {
+        background: var(--el-surface-soft);
+      }
+      .index .t {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--el-text);
+      }
+      .index .v {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .index .lang-tag {
+        margin-left: 0;
+      }
+      .contact {
+        margin: 32px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .crumb {
+        margin: 0 0 24px;
+      }
+      .crumb a {
+        font-size: 13px;
+        color: var(--el-text-secondary);
+        text-decoration: none;
+      }
+      .crumb a:hover {
+        color: var(--el-link);
+      }
+      .doc-head {
+        border-bottom: 1px solid var(--el-border);
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      .doc-head .vline {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--el-text-secondary);
+      }
+      .doc-body {
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--el-text);
+      }
+      .doc-body h2 {
+        font-family: var(--font-serif);
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 0 12px;
+        color: var(--el-text-strong);
+        letter-spacing: -0.01em;
+      }
+      .doc-body h2 + p {
+        margin-top: 0;
+      }
+      .doc-body p {
+        margin: 0 0 14px;
+      }
+      .doc-body hr {
+        border: 0;
+        border-top: 1px solid var(--el-border);
+        margin: 24px 0;
+      }
+      .doc-body hr + h2 {
+        margin-top: 0;
+      }
+      .doc-body strong {
+        color: var(--el-text-strong);
+      }
+      .doc-body code {
+        font: 13px var(--font-mono);
+        background: var(--el-surface);
+        border-radius: 6px;
+        padding: 1px 5px;
+      }
+
+      /* ═══════════════════════════════════════════════════════════════
+         THE NOTE — `.note.reference` from
+         `design/docs/docs--localized-notes.mock.html`, unchanged: the quiet
+         `--el-surface` fill, the `--el-border` hairline, the info glyph and
+         the page's secondary ink — a PERMANENT explanation of why English
+         appears on a translated page. The ONE addition is the inline link.
+      ═══════════════════════════════════════════════════════════════ */
+      .note {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin: 0 0 24px;
+        max-width: 68ch;
+        padding: calc(var(--spacing-control-y) * 2)
+          calc(var(--spacing-control-x) * 1.5);
+        border-radius: var(--radius-card);
+        border: 1px solid transparent;
+        font-size: 13.5px;
+        line-height: 1.55;
+      }
+      .note svg {
+        flex: none;
+        width: 16px;
+        height: 16px;
+        margin-top: 2px;
+      }
+      .note p {
+        margin: 0;
+        min-width: 0;
+        overflow-wrap: break-word;
+        hyphens: auto;
+      }
+      .note.reference {
+        background: var(--el-surface);
+        border-color: var(--el-border);
+        color: var(--el-text-secondary);
+      }
+      /* On the index the note sits between the intro and the list. */
+      .intro + .note {
+        margin: 24px 0 0;
+      }
+      .intro + .note + .index {
+        margin-top: 24px;
+      }
+      /* The link: --el-link on the note's --el-surface fill, ALWAYS underlined
+         — the link ink is only ~1.07:1 against the note's own secondary ink, so
+         colour alone cannot mark it (WCAG 1.4.1). Hover deepens to
+         --el-link-pressed; keyboard focus draws the shipped header's focus
+         outline in --el-accent-on-surface. */
+      .note a {
+        color: var(--el-link);
+        font-weight: 500;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        border-radius: 2px;
+      }
+      .note a:hover,
+      .note a.is-hover {
+        color: var(--el-link-pressed);
+        text-decoration-thickness: 2px;
+      }
+      .note a:focus-visible,
+      .note a.is-focus {
+        outline: 2px solid var(--el-accent-on-surface);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <header class="sheet-head">
+        <h1>motir.co/legal — the binding-English note</h1>
+        <p>
+          A delta of <code>design/legal/legal.mock.html</code>. In the ten
+          non-English locales, a legal document and the legal index open under a
+          short note in the page’s language: the documents are published in
+          English only, the English text is the binding version, and (on a
+          document) a link to that document’s English address. English shows no
+          note. Only the panels that change are drawn; the chrome and the
+          reading column are composed from the base asset and from the shipped
+          header and footer.
+        </p>
+        <div class="refs">
+          <span class="ref">MOTIR-8085</span
+          ><span class="ref">story MOTIR-7740</span>
+          <span class="ref muted"
+            >amends design/legal/legal.mock.html (MOTIR-4005)</span
+          >
+          <span class="ref muted"
+            >note shape from design/docs/docs--localized-notes.mock.html
+            (MOTIR-8030)</span
+          >
+        </div>
+      </header>
+
+      <section class="panel" id="panel-a">
+        <div class="panel-cap">
+          <span class="n">A</span>
+          <h2>French Terms (/fr/legal/terms), desktop 1280</h2>
+          <span class="note-cap"
+            >The note sits
+            <b>between the breadcrumb and the document header</b>, so it is read
+            before the first word of English, which is the <code>h1</code>.
+            Dashed outlines mark the elements that carry <code>lang="en"</code>:
+            the <code>h1</code> and the body wrapper. The version line between
+            them is French and carries no <code>lang</code>.</span
+          >
+        </div>
+        <div class="frame-wrap">
+          <div class="frame">
+            <div class="site" lang="fr">
+              <header class="topbar">
+                <a class="brand-lockup" href="/" aria-label="Motir — accueil"
+                  ><svg
+                    class="brand-glyph"
+                    viewBox="0 0 32 32"
+                    width="28"
+                    height="28"
+                    aria-hidden="true"
+                  >
+                    <rect width="32" height="32" rx="7" class="tile" />
+                    <g transform="translate(6.32 6.32) scale(0.8067)">
+                      <path
+                        class="mark"
+                        d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      />
+                    </g></svg
+                  ><span class="brand-word">Motir</span></a
+                >
+                <div class="bar-cta">
+                  <a class="btn primary" href="https://app.motir.co/sign-up"
+                    >Commencer gratuitement<svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" /></svg
+                  ></a>
+                  <div class="switcher">
+                    <button
+                      type="button"
+                      class="btn ghost globe"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      aria-label="Langue : Français"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20" />
+                        <path
+                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn ghost globe menu"
+                    aria-label="Menu"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 6h16" />
+                      <path d="M4 12h16" />
+                      <path d="M4 18h16" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              <main class="room">
+                <nav class="crumb" aria-label="Documents juridiques">
+                  <a href="/legal">← Tous les documents juridiques</a>
+                </nav>
+                <div class="note reference" role="note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                  </svg>
+                  <p>
+                    Ce document est publié uniquement en anglais. Le texte
+                    anglais est la version qui fait foi.
+                    <a href="/legal/terms">Ouvrir la version anglaise</a>
+                  </p>
+                </div>
+                <header class="doc-head">
+                  <h1 lang="en">
+                    Terms of Service<span class="lang-tag">lang="en"</span>
+                  </h1>
+                  <p class="vline">Version 1.0.0 · pas encore en vigueur</p>
+                </header>
+                <div class="doc-body en-region" lang="en">
+                  <h2>Terms of Service</h2>
+                  <p>
+                    <strong
+                      >These terms govern the hosted Motir service at
+                      <code>app.motir.co</code>, operated by moooon B.V.</strong
+                    >
+                  </p>
+                  <p>
+                    <strong
+                      >They do not govern a self-hosted installation.</strong
+                    >
+                    Motir’s project-management core is open source under the
+                    GPL-3.0, and running it yourself is covered by that licence,
+                    not by this agreement. Nothing here restricts what you may
+                    do with the open-source software.
+                  </p>
+                  <hr />
+                  <h2>1. Who you are contracting with</h2>
+                  <p>
+                    <strong>moooon B.V.</strong>, Menkemaborg 65, 8226 TB
+                    Lelystad, Netherlands, registered with the Dutch Chamber of
+                    Commerce under KvK 97763144 (“<strong>we</strong>”,
+                    “<strong>us</strong>”). You are the individual or
+                    organisation that creates an account
+                    (“<strong>you</strong>”).
+                  </p>
+                </div>
+              </main>
+              <footer class="foot" aria-label="Pied de page">
+                <div>
+                  <a class="brand-lockup" href="/" aria-label="Motir — accueil"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="22"
+                      height="22"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word sm">Motir</span></a
+                  >
+                  <p class="tag">
+                    La plateforme de planification IA, de gestion de projet et
+                    d’orchestration d’agents.
+                  </p>
+                </div>
+                <div>
+                  <h2>Produit</h2>
+                  <ul>
+                    <li>
+                      <a href="/how-it-works">Comment fonctionne Motir</a>
+                    </li>
+                    <li>
+                      <a href="https://app.motir.co/sign-up"
+                        >Commencer gratuitement</a
+                      >
+                    </li>
+                    <li>
+                      <a href="https://app.motir.co/sign-in">Se connecter</a>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Ressources</h2>
+                  <ul>
+                    <li><a href="/explore">Projets construits en public</a></li>
+                    <li><a href="/ideas">Idées à construire</a></li>
+                    <li>
+                      <a href="/motir-builds-itself"
+                        >Motir se construit lui-même</a
+                      >
+                    </li>
+                    <li><a href="/docs">Documentation</a></li>
+                    <li>
+                      <a href="https://github.com/moooon-B-V/motir-core"
+                        >GitHub</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Mentions légales</h2>
+                  <ul>
+                    <li>
+                      <a href="/legal/privacy">Politique de confidentialité</a>
+                    </li>
+                    <li><a href="/legal/terms">Conditions d’utilisation</a></li>
+                    <li><a href="/legal">Tous les documents juridiques</a></li>
+                  </ul>
+                </div>
+                <p class="legal">
+                  © 2026 moooon B.V. · Motir est un produit de moooon B.V.
+                </p>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-b">
+        <div class="panel-cap">
+          <span class="n">B</span>
+          <h2>French index (/fr/legal), desktop 1280</h2>
+          <span class="note-cap"
+            >The index note sits between the intro and the list. It uses its
+            <b>own plural sentence</b> and <b>no link</b>: each row already
+            opens a document whose note links to its English text, and switching
+            the whole index to English is the language menu’s job. Each row’s
+            title span carries <code>lang="en"</code> (marked on the first row);
+            the French version line does not.</span
+          >
+        </div>
+        <div class="frame-wrap">
+          <div class="frame">
+            <div class="site" lang="fr">
+              <header class="topbar">
+                <a class="brand-lockup" href="/" aria-label="Motir — accueil"
+                  ><svg
+                    class="brand-glyph"
+                    viewBox="0 0 32 32"
+                    width="28"
+                    height="28"
+                    aria-hidden="true"
+                  >
+                    <rect width="32" height="32" rx="7" class="tile" />
+                    <g transform="translate(6.32 6.32) scale(0.8067)">
+                      <path
+                        class="mark"
+                        d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      />
+                    </g></svg
+                  ><span class="brand-word">Motir</span></a
+                >
+                <div class="bar-cta">
+                  <a class="btn primary" href="https://app.motir.co/sign-up"
+                    >Commencer gratuitement<svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" /></svg
+                  ></a>
+                  <div class="switcher">
+                    <button
+                      type="button"
+                      class="btn ghost globe"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      aria-label="Langue : Français"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20" />
+                        <path
+                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn ghost globe menu"
+                    aria-label="Menu"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 6h16" />
+                      <path d="M4 12h16" />
+                      <path d="M4 18h16" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              <main class="room">
+                <h1>Mentions légales</h1>
+                <p class="intro">
+                  Tout ce que moooon B.V. publie au sujet du service Motir
+                  hébergé : ce que vous acceptez, ce que nous faisons de vos
+                  données et à qui d’autre elles parviennent. Si vous hébergez
+                  Motir vous-même, vous êtes votre propre responsable de
+                  traitement, et ces documents décrivent notre service, pas le
+                  vôtre.
+                </p>
+                <div class="note reference" role="note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                  </svg>
+                  <p>
+                    Ces documents sont publiés uniquement en anglais. Pour
+                    chacun, le texte anglais est la version qui fait foi.
+                  </p>
+                </div>
+                <ul class="index">
+                  <li>
+                    <a href="/legal/terms"
+                      ><span class="t" lang="en">Terms of Service</span
+                      ><span class="lang-tag">lang="en"</span
+                      ><span class="v"
+                        >Version 1.0.0 · pas encore en vigueur</span
+                      ></a
+                    >
+                  </li>
+                  <li>
+                    <a href="/legal/privacy"
+                      ><span class="t" lang="en">Privacy Policy</span
+                      ><span class="v"
+                        >Version 1.2.0 · pas encore en vigueur</span
+                      ></a
+                    >
+                  </li>
+                  <li>
+                    <a href="/legal/cookies"
+                      ><span class="t" lang="en">Cookie Policy</span
+                      ><span class="v"
+                        >Version 1.0.0 · pas encore en vigueur</span
+                      ></a
+                    >
+                  </li>
+                  <li>
+                    <a href="/legal/acceptable-use"
+                      ><span class="t" lang="en">Acceptable Use Policy</span
+                      ><span class="v"
+                        >Version 1.1.0 · pas encore en vigueur</span
+                      ></a
+                    >
+                  </li>
+                  <li>
+                    <a href="/legal/dpa"
+                      ><span class="t" lang="en">Data Processing Agreement</span
+                      ><span class="v"
+                        >Version 1.0.0 · pas encore en vigueur</span
+                      ></a
+                    >
+                  </li>
+                  <li>
+                    <a href="/legal/subprocessors"
+                      ><span class="t" lang="en">Subprocessors</span
+                      ><span class="v"
+                        >Version 1.0.2 · pas encore en vigueur</span
+                      ></a
+                    >
+                  </li>
+                  <li>
+                    <a href="/legal/model-providers"
+                      ><span class="t" lang="en">Model providers</span
+                      ><span class="v"
+                        >Version 1.0.3 · pas encore en vigueur</span
+                      ></a
+                    >
+                  </li>
+                </ul>
+                <p class="contact">
+                  Pour toute question sur ces documents : legal@motir.co
+                </p>
+              </main>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-c">
+        <div class="panel-cap">
+          <span class="n">C</span>
+          <h2>
+            Where the link lands: /legal/terms in English, and /legal in English
+          </h2>
+          <span class="note-cap"
+            >The same document with no note. This is also the English locale’s
+            state: in <code>en</code> neither surface shows a note and nothing
+            carries a <code>lang</code> override, because the page is already
+            English.</span
+          >
+        </div>
+        <div class="pair">
+          <div class="frame-wrap">
+            <p class="frame-cap">/legal/terms (en)</p>
+            <div class="frame">
+              <div class="site" lang="en">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir — home"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >Start free<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="Language: English"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="Menu"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <nav class="crumb" aria-label="Legal documents">
+                    <a href="/legal">← All legal documents</a>
+                  </nav>
+                  <header class="doc-head">
+                    <h1>Terms of Service</h1>
+                    <p class="vline">Version 1.0.0 · not yet in effect</p>
+                  </header>
+                  <div class="doc-body">
+                    <h2>Terms of Service</h2>
+                    <p>
+                      <strong
+                        >These terms govern the hosted Motir service at
+                        <code>app.motir.co</code>, operated by moooon
+                        B.V.</strong
+                      >
+                    </p>
+                    <p>
+                      <strong
+                        >They do not govern a self-hosted installation.</strong
+                      >
+                      Motir’s project-management core is open source under the
+                      GPL-3.0, and running it yourself is covered by that
+                      licence, not by this agreement. Nothing here restricts
+                      what you may do with the open-source software.
+                    </p>
+                    <hr />
+                    <h2>1. Who you are contracting with</h2>
+                    <p>
+                      <strong>moooon B.V.</strong>, Menkemaborg 65, 8226 TB
+                      Lelystad, Netherlands, registered with the Dutch Chamber
+                      of Commerce under KvK 97763144 (“<strong>we</strong>”,
+                      “<strong>us</strong>”). You are the individual or
+                      organisation that creates an account
+                      (“<strong>you</strong>”).
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame-wrap">
+            <p class="frame-cap">/legal (en), first four rows</p>
+            <div class="frame">
+              <div class="site" lang="en">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir — home"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >Start free<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="Language: English"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="Menu"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <h1>Legal</h1>
+                  <p class="intro">
+                    Everything moooon B.V. publishes about the hosted Motir
+                    service — what you agree to, what we do with your data, and
+                    who else it reaches. If you run Motir yourself, you are your
+                    own controller and these describe our service, not yours.
+                  </p>
+                  <ul class="index">
+                    <li>
+                      <a href="/legal/terms"
+                        ><span class="t">Terms of Service</span
+                        ><span class="v"
+                          >Version 1.0.0 · not yet in effect</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/privacy"
+                        ><span class="t">Privacy Policy</span
+                        ><span class="v"
+                          >Version 1.2.0 · not yet in effect</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/cookies"
+                        ><span class="t">Cookie Policy</span
+                        ><span class="v"
+                          >Version 1.0.0 · not yet in effect</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/acceptable-use"
+                        ><span class="t">Acceptable Use Policy</span
+                        ><span class="v"
+                          >Version 1.1.0 · not yet in effect</span
+                        ></a
+                      >
+                    </li>
+                  </ul>
+                  <p class="contact">
+                    Questions about any of these: legal@motir.co
+                  </p>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-d">
+        <div class="panel-cap">
+          <span class="n">D</span>
+          <h2>Japanese and Polish Privacy, desktop</h2>
+          <span class="note-cap"
+            >The note in a CJK script set in the Japanese face, and a long Latin
+            sentence. The English <code>h1</code> and body switch back to the
+            Latin face through their <code>lang="en"</code>; the Japanese
+            breadcrumb, note and version line stay in the Japanese face.</span
+          >
+        </div>
+        <div class="pair">
+          <div class="frame-wrap">
+            <p class="frame-cap">ja · Privacy</p>
+            <div class="frame">
+              <div class="site" lang="ja">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir — ホーム"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >無料で始める<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="言語：日本語"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="メニュー"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <nav class="crumb" aria-label="法務文書">
+                    <a href="/legal">← すべての法務文書</a>
+                  </nav>
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      この文書は英語版のみを公開しています。法的拘束力を持つのは英語の本文です。
+                      <a href="/legal/privacy">英語版を開く</a>
+                    </p>
+                  </div>
+                  <header class="doc-head">
+                    <h1 lang="en">
+                      Privacy Policy<span class="lang-tag">lang="en"</span>
+                    </h1>
+                    <p class="vline">
+                      バージョン1.2.0 · まだ有効ではありません
+                    </p>
+                  </header>
+                  <div class="doc-body en-region" lang="en">
+                    <h2>Privacy Policy</h2>
+                    <p>
+                      <strong
+                        >This policy covers the hosted Motir service at
+                        <code>app.motir.co</code>, operated by moooon
+                        B.V.</strong
+                      >
+                    </p>
+                    <p>
+                      <strong
+                        >It does not cover a self-hosted installation.</strong
+                      >
+                      Motir’s project-management core is open source, and anyone
+                      can run it on their own infrastructure. If you are using
+                      such an install,
+                      <strong>your data never reaches moooon B.V.</strong>, the
+                      operator of that install is the controller, and this
+                      document does not describe what they do. Ask them.
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame-wrap">
+            <p class="frame-cap">pl · Privacy</p>
+            <div class="frame">
+              <div class="site" lang="pl">
+                <header class="topbar">
+                  <a
+                    class="brand-lockup"
+                    href="/"
+                    aria-label="Motir — strona główna"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >Zacznij za darmo<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="Język: Polski"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="Menu"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <nav class="crumb" aria-label="Dokumenty prawne">
+                    <a href="/legal">← Wszystkie dokumenty prawne</a>
+                  </nav>
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      Ten dokument jest publikowany wyłącznie w języku
+                      angielskim. Wiążąca jest wersja angielska.
+                      <a href="/legal/privacy">Otwórz wersję angielską</a>
+                    </p>
+                  </div>
+                  <header class="doc-head">
+                    <h1 lang="en">
+                      Privacy Policy<span class="lang-tag">lang="en"</span>
+                    </h1>
+                    <p class="vline">Wersja 1.2.0 · jeszcze nie obowiązuje</p>
+                  </header>
+                  <div class="doc-body en-region" lang="en">
+                    <h2>Privacy Policy</h2>
+                    <p>
+                      <strong
+                        >This policy covers the hosted Motir service at
+                        <code>app.motir.co</code>, operated by moooon
+                        B.V.</strong
+                      >
+                    </p>
+                    <p>
+                      <strong
+                        >It does not cover a self-hosted installation.</strong
+                      >
+                      Motir’s project-management core is open source, and anyone
+                      can run it on their own infrastructure. If you are using
+                      such an install,
+                      <strong>your data never reaches moooon B.V.</strong>, the
+                      operator of that install is the controller, and this
+                      document does not describe what they do. Ask them.
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-e">
+        <div class="panel-cap">
+          <span class="n">E</span>
+          <h2>Narrow (390 × 844): Polish document, Japanese index</h2>
+          <span class="note-cap"
+            >The note reflows to the full column width under the collapsed
+            chrome (the shipped bar at 390: 16px gutters, brand · Start free ·
+            language · Menu). The Polish note wraps to four lines at 390 with
+            its link inside the last one. (Drawn in Polish and Japanese because
+            the shipped French and German bars do not fit 390 today: their Start
+            free label overlaps the brand. That is a defect in the shipped
+            header, recorded in the notes, and not part of this delta.)</span
+          >
+        </div>
+        <div class="pair narrow-pair">
+          <div class="frame-wrap">
+            <p class="frame-cap">pl · Terms · 390</p>
+            <div class="frame" style="max-width: 390px">
+              <div class="site narrow" lang="pl" style="min-height: 844px">
+                <header class="topbar">
+                  <a
+                    class="brand-lockup"
+                    href="/"
+                    aria-label="Motir — strona główna"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >Zacznij za darmo<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="Język: Polski"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="Menu"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <nav class="crumb" aria-label="Dokumenty prawne">
+                    <a href="/legal">← Wszystkie dokumenty prawne</a>
+                  </nav>
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      Ten dokument jest publikowany wyłącznie w języku
+                      angielskim. Wiążąca jest wersja angielska.
+                      <a href="/legal/terms">Otwórz wersję angielską</a>
+                    </p>
+                  </div>
+                  <header class="doc-head">
+                    <h1 lang="en">
+                      Terms of Service<span class="lang-tag">lang="en"</span>
+                    </h1>
+                    <p class="vline">Wersja 1.0.0 · jeszcze nie obowiązuje</p>
+                  </header>
+                  <div class="doc-body en-region" lang="en">
+                    <h2>Terms of Service</h2>
+                    <p>
+                      <strong
+                        >These terms govern the hosted Motir service at
+                        <code>app.motir.co</code>, operated by moooon
+                        B.V.</strong
+                      >
+                    </p>
+                    <p>
+                      <strong
+                        >They do not govern a self-hosted installation.</strong
+                      >
+                      Motir’s project-management core is open source under the
+                      GPL-3.0, and running it yourself is covered by that
+                      licence, not by this agreement. Nothing here restricts
+                      what you may do with the open-source software.
+                    </p>
+                    <hr />
+                    <h2>1. Who you are contracting with</h2>
+                    <p>
+                      <strong>moooon B.V.</strong>, Menkemaborg 65, 8226 TB
+                      Lelystad, Netherlands, registered with the Dutch Chamber
+                      of Commerce under KvK 97763144 (“<strong>we</strong>”,
+                      “<strong>us</strong>”). You are the individual or
+                      organisation that creates an account
+                      (“<strong>you</strong>”).
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame-wrap">
+            <p class="frame-cap">ja · index · 390, first four rows</p>
+            <div class="frame" style="max-width: 390px">
+              <div class="site narrow" lang="ja" style="min-height: 844px">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir — ホーム"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >無料で始める<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="言語：日本語"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="メニュー"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <h1>法務</h1>
+                  <p class="intro">
+                    ホスト型 Motir サービスについて moooon B.V.
+                    が公開しているすべての文書です。あなたが同意する内容、私たちがあなたのデータをどう扱うか、そしてデータが誰に届くかを記載しています。Motir
+                    を自分で運用する場合は、あなた自身が管理者となり、これらの文書はあなたのサービスではなく私たちのサービスについて述べたものになります。
+                  </p>
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      これらの文書は英語版のみを公開しています。いずれも、法的拘束力を持つのは英語の本文です。
+                    </p>
+                  </div>
+                  <ul class="index">
+                    <li>
+                      <a href="/legal/terms"
+                        ><span class="t" lang="en">Terms of Service</span
+                        ><span class="lang-tag">lang="en"</span
+                        ><span class="v"
+                          >バージョン1.0.0 · まだ有効ではありません</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/privacy"
+                        ><span class="t" lang="en">Privacy Policy</span
+                        ><span class="v"
+                          >バージョン1.2.0 · まだ有効ではありません</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/cookies"
+                        ><span class="t" lang="en">Cookie Policy</span
+                        ><span class="v"
+                          >バージョン1.0.0 · まだ有効ではありません</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/acceptable-use"
+                        ><span class="t" lang="en">Acceptable Use Policy</span
+                        ><span class="v"
+                          >バージョン1.1.0 · まだ有効ではありません</span
+                        ></a
+                      >
+                    </li>
+                  </ul>
+                  <p class="contact">これらに関するご質問：legal@motir.co</p>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-f">
+        <div class="panel-cap">
+          <span class="n">F</span>
+          <h2>Dark theme: French document and index</h2>
+          <span class="note-cap"
+            >The same tokens under the dark theme. The note keeps its surface
+            fill and hairline; the link keeps its underline.</span
+          >
+        </div>
+        <div class="pair">
+          <div class="frame-wrap">
+            <p class="frame-cap">fr · Terms · dark</p>
+            <div class="frame dark">
+              <div class="site" lang="fr">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir — accueil"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >Commencer gratuitement<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="Langue : Français"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="Menu"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <nav class="crumb" aria-label="Documents juridiques">
+                    <a href="/legal">← Tous les documents juridiques</a>
+                  </nav>
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      Ce document est publié uniquement en anglais. Le texte
+                      anglais est la version qui fait foi.
+                      <a href="/legal/terms">Ouvrir la version anglaise</a>
+                    </p>
+                  </div>
+                  <header class="doc-head">
+                    <h1 lang="en">
+                      Terms of Service<span class="lang-tag">lang="en"</span>
+                    </h1>
+                    <p class="vline">Version 1.0.0 · pas encore en vigueur</p>
+                  </header>
+                  <div class="doc-body en-region" lang="en">
+                    <h2>Terms of Service</h2>
+                    <p>
+                      <strong
+                        >These terms govern the hosted Motir service at
+                        <code>app.motir.co</code>, operated by moooon
+                        B.V.</strong
+                      >
+                    </p>
+                    <p>
+                      <strong
+                        >They do not govern a self-hosted installation.</strong
+                      >
+                      Motir’s project-management core is open source under the
+                      GPL-3.0, and running it yourself is covered by that
+                      licence, not by this agreement. Nothing here restricts
+                      what you may do with the open-source software.
+                    </p>
+                    <hr />
+                    <h2>1. Who you are contracting with</h2>
+                    <p>
+                      <strong>moooon B.V.</strong>, Menkemaborg 65, 8226 TB
+                      Lelystad, Netherlands, registered with the Dutch Chamber
+                      of Commerce under KvK 97763144 (“<strong>we</strong>”,
+                      “<strong>us</strong>”). You are the individual or
+                      organisation that creates an account
+                      (“<strong>you</strong>”).
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame-wrap">
+            <p class="frame-cap">fr · index · dark, first four rows</p>
+            <div class="frame dark">
+              <div class="site" lang="fr">
+                <header class="topbar">
+                  <a class="brand-lockup" href="/" aria-label="Motir — accueil"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="28"
+                      height="28"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word">Motir</span></a
+                  >
+                  <div class="bar-cta">
+                    <a class="btn primary" href="https://app.motir.co/sign-up"
+                      >Commencer gratuitement<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" /></svg
+                    ></a>
+                    <div class="switcher">
+                      <button
+                        type="button"
+                        class="btn ghost globe"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="Langue : Français"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn ghost globe menu"
+                      aria-label="Menu"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16" />
+                        <path d="M4 12h16" />
+                        <path d="M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </header>
+                <main class="room">
+                  <h1>Mentions légales</h1>
+                  <p class="intro">
+                    Tout ce que moooon B.V. publie au sujet du service Motir
+                    hébergé : ce que vous acceptez, ce que nous faisons de vos
+                    données et à qui d’autre elles parviennent. Si vous hébergez
+                    Motir vous-même, vous êtes votre propre responsable de
+                    traitement, et ces documents décrivent notre service, pas le
+                    vôtre.
+                  </p>
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      Ces documents sont publiés uniquement en anglais. Pour
+                      chacun, le texte anglais est la version qui fait foi.
+                    </p>
+                  </div>
+                  <ul class="index">
+                    <li>
+                      <a href="/legal/terms"
+                        ><span class="t" lang="en">Terms of Service</span
+                        ><span class="lang-tag">lang="en"</span
+                        ><span class="v"
+                          >Version 1.0.0 · pas encore en vigueur</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/privacy"
+                        ><span class="t" lang="en">Privacy Policy</span
+                        ><span class="v"
+                          >Version 1.2.0 · pas encore en vigueur</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/cookies"
+                        ><span class="t" lang="en">Cookie Policy</span
+                        ><span class="v"
+                          >Version 1.0.0 · pas encore en vigueur</span
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a href="/legal/acceptable-use"
+                        ><span class="t" lang="en">Acceptable Use Policy</span
+                        ><span class="v"
+                          >Version 1.1.0 · pas encore en vigueur</span
+                        ></a
+                      >
+                    </li>
+                  </ul>
+                  <p class="contact">
+                    Pour toute question sur ces documents : legal@motir.co
+                  </p>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-g">
+        <div class="panel-cap">
+          <span class="n">G</span>
+          <h2>The access path, and the link’s three states</h2>
+          <span class="note-cap"
+            >No new door. A reader reaches a legal page through the shipped
+            language menu (open here, French current) and the footer’s legal
+            column (Terms highlighted), or from a consent link in the app, which
+            opens in whatever language detection picks. Below: the note’s link
+            at rest, on hover, and with keyboard focus.</span
+          >
+        </div>
+        <div class="frame-wrap">
+          <p class="frame-cap">
+            fr · header with the language menu open · footer legal column
+          </p>
+          <div class="frame">
+            <div class="site" lang="fr">
+              <header class="topbar">
+                <a class="brand-lockup" href="/" aria-label="Motir — accueil"
+                  ><svg
+                    class="brand-glyph"
+                    viewBox="0 0 32 32"
+                    width="28"
+                    height="28"
+                    aria-hidden="true"
+                  >
+                    <rect width="32" height="32" rx="7" class="tile" />
+                    <g transform="translate(6.32 6.32) scale(0.8067)">
+                      <path
+                        class="mark"
+                        d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                      />
+                    </g></svg
+                  ><span class="brand-word">Motir</span></a
+                >
+                <div class="bar-cta">
+                  <a class="btn primary" href="https://app.motir.co/sign-up"
+                    >Commencer gratuitement<svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" /></svg
+                  ></a>
+                  <div class="switcher">
+                    <button
+                      type="button"
+                      class="btn ghost globe open"
+                      aria-haspopup="true"
+                      aria-expanded="true"
+                      aria-label="Langue : Français"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20" />
+                        <path
+                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="lang-menu"
+                      role="group"
+                      aria-label="Langue : Français"
+                    >
+                      <a href="#" lang="en" hreflang="en">English</a
+                      ><a href="#" lang="zh" hreflang="zh">中文</a
+                      ><a href="#" lang="ja" hreflang="ja">日本語</a
+                      ><a href="#" lang="ko" hreflang="ko">한국어</a
+                      ><a href="#" lang="de" hreflang="de">Deutsch</a
+                      ><a
+                        href="#"
+                        lang="fr"
+                        hreflang="fr"
+                        aria-current="true"
+                        class="cur"
+                        >Français<svg
+                          viewBox="0 0 24 24"
+                          width="16"
+                          height="16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M20 6 9 17l-5-5" /></svg></a
+                      ><a href="#" lang="es" hreflang="es">Español</a
+                      ><a href="#" lang="it" hreflang="it">Italiano</a
+                      ><a href="#" lang="nl" hreflang="nl">Nederlands</a
+                      ><a href="#" lang="pl" hreflang="pl">Polski</a
+                      ><a href="#" lang="pt" hreflang="pt">Português</a>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn ghost globe menu"
+                    aria-label="Menu"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 6h16" />
+                      <path d="M4 12h16" />
+                      <path d="M4 18h16" />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+              <main class="room short"></main>
+              <footer class="foot" aria-label="Pied de page">
+                <div>
+                  <a class="brand-lockup" href="/" aria-label="Motir — accueil"
+                    ><svg
+                      class="brand-glyph"
+                      viewBox="0 0 32 32"
+                      width="22"
+                      height="22"
+                      aria-hidden="true"
+                    >
+                      <rect width="32" height="32" rx="7" class="tile" />
+                      <g transform="translate(6.32 6.32) scale(0.8067)">
+                        <path
+                          class="mark"
+                          d="M0 0Q7 15.5 13 4.1875Q17.5 -4.2969 21.4375 4.3398Q24 9.9606 24 12L24 24Q19 5.125 13 18.5625Q8.5 28.6406 3.4375 19.9102Q0 13.9821 0 12Z"
+                        />
+                      </g></svg
+                    ><span class="brand-word sm">Motir</span></a
+                  >
+                  <p class="tag">
+                    La plateforme de planification IA, de gestion de projet et
+                    d’orchestration d’agents.
+                  </p>
+                </div>
+                <div>
+                  <h2>Produit</h2>
+                  <ul>
+                    <li>
+                      <a href="/how-it-works">Comment fonctionne Motir</a>
+                    </li>
+                    <li>
+                      <a href="https://app.motir.co/sign-up"
+                        >Commencer gratuitement</a
+                      >
+                    </li>
+                    <li>
+                      <a href="https://app.motir.co/sign-in">Se connecter</a>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Ressources</h2>
+                  <ul>
+                    <li><a href="/explore">Projets construits en public</a></li>
+                    <li><a href="/ideas">Idées à construire</a></li>
+                    <li>
+                      <a href="/motir-builds-itself"
+                        >Motir se construit lui-même</a
+                      >
+                    </li>
+                    <li><a href="/docs">Documentation</a></li>
+                    <li>
+                      <a href="https://github.com/moooon-B-V/motir-core"
+                        >GitHub</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h2>Mentions légales</h2>
+                  <ul>
+                    <li>
+                      <a href="/legal/privacy">Politique de confidentialité</a>
+                    </li>
+                    <li>
+                      <a href="/legal/terms" class="door"
+                        >Conditions d’utilisation</a
+                      >
+                    </li>
+                    <li><a href="/legal">Tous les documents juridiques</a></li>
+                  </ul>
+                </div>
+                <p class="legal">
+                  © 2026 moooon B.V. · Motir est un produit de moooon B.V.
+                </p>
+              </footer>
+            </div>
+          </div>
+        </div>
+        <div class="states">
+          <div class="frame-wrap">
+            <p class="frame-cap">rest</p>
+            <div class="frame">
+              <div class="site" lang="fr">
+                <main class="room tight">
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      Ce document est publié uniquement en anglais. Le texte
+                      anglais est la version qui fait foi.
+                      <a href="/legal/terms">Ouvrir la version anglaise</a>
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame-wrap">
+            <p class="frame-cap">hover</p>
+            <div class="frame">
+              <div class="site" lang="fr">
+                <main class="room tight">
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      Ce document est publié uniquement en anglais. Le texte
+                      anglais est la version qui fait foi.
+                      <a href="/legal/terms" class="is-hover"
+                        >Ouvrir la version anglaise</a
+                      >
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+          <div class="frame-wrap">
+            <p class="frame-cap">focus</p>
+            <div class="frame">
+              <div class="site" lang="fr">
+                <main class="room tight">
+                  <div class="note reference" role="note">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    <p>
+                      Ce document est publié uniquement en anglais. Le texte
+                      anglais est la version qui fait foi.
+                      <a href="/legal/terms" class="is-focus"
+                        >Ouvrir la version anglaise</a
+                      >
+                    </p>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

@@ -226,3 +226,183 @@ already agree with the allocation.
 - **The chrome is MOTIR-3880's.** This asset composes it.
 - **The application surface** (app.motir.co's sign-up notice, rail, re-consent) is MOTIR-3909's.
 - **This asset ships three files and no code.**
+- **`legal--binding-english-note.*` (MOTIR-8085) supersedes nothing above.** It is a delta: it adds
+  one note to the index and the document page in the ten non-English locales and redraws neither
+  surface. Every decision in this file stands; the section below cites the paths as they are today
+  (`app/[locale]/legal/…`, since MOTIR-7948 moved the pages under the locale segment) rather than
+  editing the citations above.
+
+---
+
+## `legal--binding-english-note.*` — the binding-English note on a non-English legal page (a delta)
+
+**Card:** MOTIR-8085 (`type: design`) · **Story:** MOTIR-7740 (_Legal pages stay English_) ·
+**Mock:** `design/legal/legal--binding-english-note.mock.html` (panels A–G). **Amends** this area's
+base asset `legal.mock.html` (MOTIR-4005) by adding one element; it does not edit that file or
+`legal.png`.
+
+In the ten non-English locales, a legal document and the legal index show translated chrome around
+English text. That is deliberate (the documents are never translated), but nothing on the page says
+so, and an English contract under French navigation reads like an unfinished translation. This delta
+adds one short note in the page's language: the documents are published in English only, the English
+text is the binding version, and, on a document, a link to that document in English. **English shows
+no note.**
+
+### What it was drawn against — rendered, not remembered
+
+The live pages were rendered before anything was drawn (`next dev` on this repository at `4f9033e`,
+Playwright chromium: French Terms and the French index at 1280, the Japanese index at 390, and the
+English `/legal`), and the mock's
+token block holds the values `getComputedStyle` returned there, light and dark. Three facts from that
+render changed the drawing:
+
+- **The site runs `hand-drawn-indie` + Space Grotesk**, not the `warm-editorial` serif the base mock
+  draws, so this mock carries the live colour and shape tokens (the base mock's values are stale).
+- **At 1280 the nav is folded behind Menu** (`app/_components/SiteHeader.tsx` shows it at 1314px and
+  up): the bar is brand · Start free · language · Menu. The panels draw it that way.
+- **The French and German bars do not fit 390 today**: the Start free label paints over the logo.
+  That is a shipped defect, filed as **MOTIR-8135** (in the `Bugs` folder, `relates_to` this card),
+  and not part of this delta. Panel E is drawn in Polish and Japanese, whose bars fit.
+
+The note composes `.note.reference` from `design/docs/docs--localized-notes.mock.html` (MOTIR-8030),
+shipped as `app/[locale]/docs/_components/GeneratedReferenceNote.tsx`: same fill, hairline, ink,
+radius, glyph, `role="note"`, and nothing in `en`. Both notes are permanent explanations of why
+English appears on a translated page, so they look like the same idea. The only addition is the
+inline link.
+
+### Panels
+
+- **A** — French Terms, desktop 1280: the note above the English `h1`.
+- **B** — French index, desktop 1280: the index note between the intro and the list.
+- **C** — the link's arrival, `/legal/terms` in English, plus `/legal` in English: no note. This is
+  also the `en` state for both surfaces.
+- **D** — Japanese and Polish Privacy: a CJK note in the Japanese face, a long Latin note, and the
+  English islands returning to the Latin face through `lang="en"`.
+- **E** — narrow 390 × 844: Polish document, Japanese index.
+- **F** — dark theme, French document and index.
+- **G** — the access path (the shipped language menu open on French, the footer's legal column with
+  Terms marked) and the link at rest, on hover and with keyboard focus. **No new door is drawn.** A
+  link from the app opens in whatever language the existing detection picks, and the note follows.
+
+Not drawn: an unknown slug. It stays the site-wide room (§ _The 404_ above), with no note.
+
+### Placement (decisions A and B)
+
+| surface                                    | where the note sits                                                                                           | when                        |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **document page** `/<locale>/legal/<slug>` | **between the breadcrumb and the document header**, so above the English `h1`; 24px below it, then the header | the ten non-English locales |
+| **index** `/<locale>/legal`                | **between the intro and the list**; 24px above and below                                                      | the ten non-English locales |
+| both, in `en`                              | no note                                                                                                       | —                           |
+
+- **Decision A — above the `h1`, not between the rule and the body.** The `h1` is English front
+  matter, so the first English words on the page are the title. A note placed under the header would
+  explain the body after the reader had already met an English title with nothing said about it, and
+  it would sit between the version line and the text it describes. Above the `h1` the reading order
+  is: French breadcrumb, French note, then everything English. The cost is that the title moves down
+  about 100px (measured below).
+- **Decision B — the index note has its own sentence and no link.** The document sentence says
+  "this document", which is wrong over a list of seven, so the index gets a plural variant that says
+  the same two things. It carries **no link**: every row already opens a document whose own note
+  links to its English text, and a link to the English index would only switch the page chrome to
+  English, which is the language menu's job (the /docs notes take the same line: _the language menu
+  is the way back_). So the index costs one extra catalogue key and no extra href.
+
+### Copy (the catalogue card translates these)
+
+| proposed key                 | English source                                                                                                               | notes                                                                                                                                                                                           |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `legal.bindingNote.document` | `This document is published in English only. The English text is the binding version. <link>Open the English version</link>` | ONE message. The link is an ICU rich-text tag (the `<link>…</link>` form `docs.apiSpecSummary` already uses), so each language can place it where its grammar needs. Rendered with `formatIcu`. |
+| `legal.bindingNote.index`    | `These documents are published in English only. For each one, the English text is the binding version.`                      | the index variant (decision B). No tag, no link.                                                                                                                                                |
+
+It says the documents are published **in English only** and that **the English text is binding**,
+and it promises no translation later. It keeps "Motir" out entirely (nothing to translate) and uses
+none of "issue", "card", "tracker" or "coding agent". "Binding version" is the source; each language
+uses its own legal idiom for it (_fait foi_, _maßgeblich_, _以英文版为准_ …), which the catalogue
+card decides. The French, Japanese, Polish and German sentences in the mock are illustrative
+renderings so the panels can be measured; they are not the translations.
+
+### The link destination rule
+
+The document note's link goes to **the same document in English**. On a non-English page that must
+actually serve English to a reader whose remembered language is French, and must leave that
+remembered language unchanged. How the href is spelled to do that (the proxy moves an unprefixed
+address to the remembered locale) belongs to the render card; the design names only the
+destination. The mock's hrefs use the English address `/legal/terms` because this file cannot name a
+locale-prefixed address. The index note has no link.
+
+**Treatment.** `--el-link` on the note's `--el-surface` fill, weight 500, **always underlined**: the
+link ink is only 1.07:1 against the note's own `--el-text-secondary`, so colour alone cannot mark it
+as a link (WCAG 1.4.1). Hover: `--el-link-pressed` and a 2px underline. Keyboard focus: a 2px
+`--el-accent-on-surface` outline at 2px offset, the shipped header's focus treatment.
+
+### The `lang` rule
+
+On a non-English page, `lang="en"` goes on exactly the English regions:
+
+| page     | carries `lang="en"`                                | carries no `lang` (page language)                                                                        |
+| -------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| document | the `h1` (`doc.title`); the `MarkdownBody` wrapper | the breadcrumb `nav`; **the version line** (a translated catalogue sentence, not front matter); the note |
+| index    | each row's title `span`                            | the `h1` and intro; the row link; the row's version `span`; the contact line; the note                   |
+
+So the mark goes on those elements, never on the whole `header` (it holds the French version line)
+or the whole row link (it holds the French version span). In `en` nothing carries a `lang` override.
+The mock outlines each marked element with a dashed annotation and a `lang="en"` tag; neither is
+product UI.
+
+### The fold, re-measured
+
+Measured on the live pages (`next dev`, Playwright chromium) with the note injected at the panel-A
+and panel-B positions using the note's own tokens and the French and Japanese sentences, reading
+`getBoundingClientRect()` from the viewport top. **The base asset's fold table above is stale**: it
+was measured on the base mock's serif and spacing, and today's index already sits lower.
+
+| surface           | viewport   | before (no note)                                      | with the note                                   | below the fold with the note                                                         |
+| ----------------- | ---------- | ----------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------ |
+| document, fr      | 1280 × 900 | `h1` 160–196 · body from 281                          | note 160–236 · `h1` 260–296 · body from 380     | nothing that matters: title, version line and the first body paragraph are all above |
+| document, fr / ja | 390 × 844  | `h1` 152–188 · body from 273                          | note 152–249 · `h1` 273–309 · body from 393     | the same                                                                             |
+| index, fr         | 1280 × 900 | last row 768–844 · contact 877–897 (**3px** headroom) | note 294–370 · rows 395–936 · contact 969–989   | the seventh row (partly) and the contact line                                        |
+| index, ja         | 1280 × 900 | contact 888–908 (already 8px **below**)               | note 305–381 · rows 406–947 · contact 980–1000  | the seventh row (partly) and the contact line                                        |
+| index, fr / ja    | 390 × 844  | last row 805–882 and contact 915+ already **below**   | note 331–428 · first row 453 · last row 918–995 | rows six and seven and the contact line (five rows show)                             |
+
+**Accepted.** On a document the note costs about 100px and nothing important moves below the fold.
+On the index the note pushes the last row and the contact line below at 1280, which at 390 was
+already true before this change. The index is a list of links read by scrolling, and the note is the
+one statement this story exists to add, so it goes above the list rather than below it.
+
+### AA contrast
+
+The design lane (`pnpm test:design`, `tests/design/inkContrast.test.ts`) discovers the new mock from
+the tree and passes it at rest and in its hover / focus state arm. A summary of what it measures, on
+the live `motir` palette:
+
+| element                       | ink                      | surface        | light | dark  |
+| ----------------------------- | ------------------------ | -------------- | ----- | ----- |
+| note text                     | `--el-text-secondary`    | `--el-surface` | 5.91  | 7.81  |
+| note link, rest               | `--el-link`              | `--el-surface` | 5.53  | 8.04  |
+| note link, hover              | `--el-link-pressed`      | `--el-surface` | 7.37  | 10.26 |
+| focus outline (non-text, 3:1) | `--el-accent-on-surface` | `--el-surface` | 5.53  | ≥ 3   |
+
+### GIVES / TAKES
+
+`grep -oE 'MOTIR-[0-9]+' design/legal/*`, bounded by MOTIR-7740's children:
+
+- **MOTIR-8088 (render)** — **GIVES** panels A–G, the placement table and decisions A and B, the link
+  destination rule and treatment, and the `lang` rule. The card already allows an index note with no
+  link (`href` optional) and a link inside one sentence through `formatIcu`, which is the shape chosen.
+  The component it builds sits in the legal tree (`app/[locale]/legal/_components/…`).
+  **TAKES nothing.**
+- **MOTIR-8087 (catalogue)** — **GIVES** the copy table: two keys, `legal.bindingNote.document` (one
+  message with a `<link>` tag) and `legal.bindingNote.index`. The card was written for "the text, the
+  link label, and an index variant only if panel B chose one"; panel B chose one, and the link label
+  rides inside the document message as a tag, so the count is **two messages, not three**. Size
+  unchanged. **TAKES nothing.**
+- **MOTIR-8089 (coverage gate)** — **GIVES** the expected states. Its "link serves English" cases
+  apply to the document note only; its index case is already written "a link if the design chose
+  one", and the design chose none. **TAKES nothing.**
+- **MOTIR-8090 (story E2E)** — **GIVES** the picture for steps 1–5; step 3's index link is already
+  conditional on the design. **TAKES nothing.**
+- **MOTIR-8086 (crawl data)** — nothing drawn, nothing given or taken.
+- **MOTIR-8030 / MOTIR-4005** — composed, not redrawn; nothing taken.
+- **MOTIR-8135** — a shipped header defect found while rendering (see above); not this delta's.
+
+No consumer's criteria are falsified by these decisions, so no work item was amended.
