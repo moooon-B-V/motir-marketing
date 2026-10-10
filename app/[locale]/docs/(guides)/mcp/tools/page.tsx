@@ -116,7 +116,13 @@ function ToolArguments({ tool }: { tool: McpToolEntry }) {
 
   return (
     <div className="mt-2">
-      <SchemaTable schema={tool.inputSchema} labelledBy={`tool-${tool.name}`} />
+      <SchemaTable
+        schema={tool.inputSchema}
+        labelledBy={`tool-${tool.name}`}
+        // Argument descriptions come from the server's schema and are never
+        // translated (only summaries and group text are): English on every page.
+        descriptionLang={locale === 'en' ? undefined : 'en'}
+      />
     </div>
   )
 }

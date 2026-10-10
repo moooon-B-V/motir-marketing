@@ -114,8 +114,12 @@ function Label({ children }: { children: ReactNode }) {
 function Scopes({
   catalogue,
   labels,
+  gatesLang,
 }: {
   catalogue: McpToolCatalogue
+  /** `en` on a translated page: this page reads the unlocalized catalogue, so each
+   * served `gates` sentence is English inside a page in another language. */
+  gatesLang?: string
   labels: Record<
     'scope' | 'gates' | 'default' | 'granted' | 'offByDefault',
     ReactNode
@@ -156,7 +160,10 @@ function Scopes({
                   {group.permission}
                 </code>
               </td>
-              <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)">
+              <td
+                lang={gatesLang}
+                className="border-b border-(--el-border-soft) px-2.5 py-2 align-top text-(--el-text-secondary)"
+              >
                 {group.gates}
               </td>
               <td className="border-b border-(--el-border-soft) px-2.5 py-2 align-top whitespace-nowrap text-(--el-text-secondary)">
@@ -292,6 +299,7 @@ export default async function McpPage({ params }: LocalePageProps) {
       {catalogue ? (
         <Scopes
           catalogue={catalogue}
+          gatesLang={locale === 'en' ? undefined : 'en'}
           labels={{
             scope: parts['column-scope'],
             gates: parts['column-gates'],

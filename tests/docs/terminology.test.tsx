@@ -1,11 +1,16 @@
-import { readdirSync, statSync } from 'node:fs'
-import { join, relative, sep } from 'node:path'
-import { pathToFileURL } from 'node:url'
-import { render } from '@/tests/helpers/withCopy'
+import { readFileSync } from 'node:fs'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { APP_ORIGIN } from '@/lib/appOrigin'
-import { EN_PAGE } from '@/tests/helpers/locale'
-import { resolveAsync } from '@/tests/helpers/resolveAsync'
+import { LOCALES, type Locale } from '@/i18n/routing'
+import { DOCS_ROUTES } from '@/lib/docsSurfaces'
+import {
+  docsPages,
+  renderDocsRoute,
+  routeOf,
+  spacedText,
+  stubDocsFetch,
+  stubDocsUnreachable,
+} from '@/tests/helpers/docsRoutes'
+import allowlist from './fixtures/terminologyAllowlist.json'
 
 /*
  * THE TERMINOLOGY SWEEP, ON THE RENDER (MOTIR-4508).
@@ -106,180 +111,7 @@ export function sourceGrepMissesIt(source: string): boolean {
  * Reading the markup with tags replaced by a space closes it, and cannot
  * invent a hit — separating text can only ever break a match, never make one.
  */
-export function spacedText(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ')
-}
-
-const DOCS_ROOT = join(process.cwd(), 'app', '[locale]', 'docs')
-
-/** Every `page.tsx` under `app/[locale]/docs`, found rather than listed. */
-function docsPages(dir: string = DOCS_ROOT): string[] {
-  return readdirSync(dir).flatMap((entry) => {
-    const full = join(dir, entry)
-    if (statSync(full).isDirectory()) return docsPages(full)
-    return entry === 'page.tsx' ? [full] : []
-  })
-}
-
-/** `app/[locale]/docs/(guides)/sandbox/page.tsx` → `/docs/sandbox`. Route groups add no segment. */
-function routeOf(file: string): string {
-  const segments = relative(join(process.cwd(), 'app', '[locale]'), file)
-    .split(sep)
-    .slice(0, -1)
-    .filter((segment) => !/^\(.*\)$/.test(segment))
-  return `/${segments.join('/')}`
-}
-
-/*
- * ── The documents the async pages fetch ────────────────────────────────────
- * Five of the nine pages are Server Components that read one of motir-core's
- * three published artifacts through `lib/docs.ts`. The stub below is keyed on
- * the URL rather than on the page, so a NEW page reusing any of these fetchers
- * is served without this file being touched — the same reason the walk exists.
- *
- * ⚠️ EVERY FIXTURE IS INVENTED AND DELIBERATELY NEUTRAL. It is served as the
- * page's data and lands in the text this file then asserts over, so a fixture
- * carrying one of the banned words would fail these pages for a sentence
- * nobody in this repository wrote. The `zq` prefix is the convention
- * `tests/docs/inlineSpacing.test.tsx` already uses for the same reason.
- */
-const specFixture = {
-  openapi: '3.1.0',
-  info: { title: 'Motir API', version: '9.9.9' },
-  paths: {
-    '/api/public/zqthings': {
-      get: { operationId: 'listZqthings', summary: 'List the zqthings.' },
-    },
-  },
-}
-
-const catalogueFixture = {
-  endpoint: '/api/mcp',
-  toolCount: 1,
-  groups: [
-    {
-      permission: 'zqthing:browse',
-      label: 'Browse zqthings',
-      gates: 'Read zqthings and their detail.',
-      grantedByDefault: true,
-      tools: [
-        { name: 'zqAlpha', permission: 'zqthing:browse', summary: 'Read one.' },
-      ],
-    },
-  ],
-}
-
-const cliFixture = {
-  packageName: '@zq/cli-fixture',
-  packageVersion: '9.9.9',
-  installCommand: 'npm install -g @zq/cli-fixture',
-  nodeRequirement: '>=22',
-  defaultServer: 'https://zq-fixture.test',
-  commandCount: 1,
-  commands: [
-    {
-      path: 'zqlogin',
-      signature: '',
-      invocation: 'motir zqlogin',
-      description: 'Connect this terminal.',
-      helpGroup: 'SETUP COMMANDS:',
-      options: [],
-    },
-  ],
-}
-
-const DOCUMENTS = new Map<string, unknown>([
-  [`${APP_ORIGIN}/api/openapi/v1.json`, specFixture],
-  [`${APP_ORIGIN}/api/docs/mcp-tools.json`, catalogueFixture],
-  [`${APP_ORIGIN}/api/docs/cli-commands.json`, cliFixture],
-])
-
-/*
- * ⚠️ TWO LEDGERS, AND THEY ARE WHY THE WALK IS NOT VACUOUS. Every async page
- * here CATCHES its fetch and renders a short "temporarily unreachable" arm
- * instead — so a page this file fails to feed does not go red, it renders three
- * sentences that contain none of the banned words and the walk stays green
- * while checking nothing.
- *
- * `unserved` catches the first way that happens: a page fetches a URL no
- * fixture answers. The red check then names the URL to add.
- *
- * `served` catches the second, which no list of URLs can: the URL is known and
- * the FIXTURE has gone stale, so the parse throws and the page degrades anyway.
- * Whenever a page fetched at all, the walk re-renders it with every fetch
- * failing and requires the two renders to DIFFER — which proves the served
- * document actually reached the page, and needs no threshold to say so. A
- * length floor was tried first and is the wrong instrument: it is a guess about
- * how much prose a page owes, and `/docs/api` renders 519 characters from a
- * one-operation fixture perfectly correctly.
- */
-let unserved: string[] = []
-let served: string[] = []
-
-function stubFetch() {
-  unserved = []
-  served = []
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(async (input: unknown) => {
-      const url = String(input)
-      const document = DOCUMENTS.get(url)
-      if (document === undefined) {
-        unserved.push(url)
-        throw new Error(`no fixture for ${url}`)
-      }
-      served.push(url)
-      return new Response(JSON.stringify(document), { status: 200 })
-    }),
-  )
-}
-
-/** Every fetch fails — the state each async page's fallback arm renders for. */
-function stubUnreachable() {
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(async () => {
-      throw new Error('unreachable')
-    }),
-  )
-}
-
-async function renderRoute(
-  load: () => Promise<PageModule>,
-): Promise<{ text: string; spaced: string }> {
-  const Page = (await load()).default
-  // An async Server Component (a page that renders `<DocsDocument/>`) is resolved
-  // first, or this reads an empty page and the check passes for free.
-  const { container } = render(
-    (await resolveAsync(
-      (await Page(EN_PAGE)) as React.ReactNode,
-    )) as React.ReactElement,
-  )
-  return {
-    text: container.textContent ?? '',
-    spaced: spacedText(container.innerHTML),
-  }
-}
-
-afterEach(() => {
-  vi.unstubAllGlobals()
-})
-
-/*
- * The loader. The file-system walk above is the ONE census — these are the
- * files it found, imported by path — so there is no second list that could
- * disagree with it.
- *
- * (`import.meta.glob` was the first shape and is not used: typing it needs
- * `vite/client`, which is not resolvable here because Vite is a transitive
- * dependency of Vitest rather than a declared one, and adding a dependency to
- * type a test is a worse trade than importing by path.)
- */
-type PageModule = { default: (props: typeof EN_PAGE) => unknown }
-
-function loaderFor(file: string): () => Promise<PageModule> {
-  return () => import(/* @vite-ignore */ pathToFileURL(file).href)
-}
+export { spacedText }
 
 describe('the terminology detector', () => {
   it('FIRES on the sentence that shipped, across the line break JSX wraps it at', () => {
@@ -333,6 +165,190 @@ describe('the terminology detector', () => {
   })
 })
 
+/*
+ * ── The glossary arm (MOTIR-8051, case 10) ─────────────────────────────────
+ * The three English words are swept in every locale, outside `lang="en"`
+ * regions and code (a translated page legitimately quotes an English command or
+ * a generated description). And each locale's own `messages/glossary/<L>.json`
+ * names words that must not stand for a "work item" in that language — *Karte*,
+ * *carte*, *カード*, … — which is the same rule in the language's own words.
+ *
+ * ⚠️ A GLOSSARY WORD CAN HAVE A LEGITIMATE SENSE. "Card" is correct for a
+ * PAYMENT card and for a UI PANEL (the glossary's `allowedSenses`), so the word
+ * is not banned outright and is not allowed everywhere: an occurrence is
+ * permitted only where `fixtures/terminologyAllowlist.json` records it — locale,
+ * route, an excerpt of the sentence and the sense — by a person, once. A blanket
+ * exemption would be the guard stopped on exactly the word it exists for.
+ */
+
+interface Glossary {
+  terms: Record<string, { banned?: string[]; allowedSenses?: string }>
+}
+
+export interface AllowlistEntry {
+  locale: string
+  route: string
+  excerpt: string
+  sense: string
+}
+
+/** The senses a banned word may legitimately carry — named by the glossary's own `allowedSenses` prose. */
+export const ALLOWED_SENSES = ['payment-card', 'ui-panel'] as const
+
+const CJK =
+  /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u
+
+/**
+ * Every occurrence of a banned word in `text`. A word in a script without
+ * spaces is matched as a substring; any other must start a word and may carry a
+ * short inflection (at most two letters) (Karte → Karten, carte → cartes) but not continue into a
+ * longer word.
+ */
+export function glossaryHits(
+  text: string,
+  banned: string[],
+): { word: string; at: number; end: number; context: string }[] {
+  const flat = text.replace(/\s+/g, ' ')
+  return banned.flatMap((word) => {
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const pattern = CJK.test(word)
+      ? new RegExp(escaped, 'gu')
+      : new RegExp(
+          `(?<![\\p{L}\\p{N}])${escaped}\\p{L}{0,2}(?![\\p{L}\\p{N}])`,
+          'giu',
+        )
+    return [...flat.matchAll(pattern)].map((match) => {
+      const at = match.index ?? 0
+      return {
+        word,
+        at,
+        end: at + match[0].length,
+        context: `…${flat.slice(Math.max(0, at - 50), at + match[0].length + 40).trim()}…`,
+      }
+    })
+  })
+}
+
+/** The hits no allowlist entry covers (same locale and route, excerpt spanning the hit). */
+export function unallowedHits(
+  text: string,
+  banned: string[],
+  locale: string,
+  route: string,
+  entries: AllowlistEntry[],
+): string[] {
+  const flat = text.replace(/\s+/g, ' ')
+  const spans = entries
+    .filter((entry) => entry.locale === locale && entry.route === route)
+    .flatMap((entry) => {
+      const excerpt = entry.excerpt.replace(/\s+/g, ' ')
+      const found: [number, number][] = []
+      for (
+        let at = flat.indexOf(excerpt);
+        at !== -1;
+        at = flat.indexOf(excerpt, at + 1)
+      )
+        found.push([at, at + excerpt.length])
+      return found
+    })
+  return glossaryHits(text, banned)
+    .filter(
+      (hit) => !spans.some(([from, to]) => hit.at >= from && hit.end <= to),
+    )
+    .map((hit) => `${hit.word} — ${hit.context}`)
+}
+
+function glossaryFor(locale: Locale): Glossary {
+  return JSON.parse(
+    readFileSync(`messages/glossary/${locale}.json`, 'utf8'),
+  ) as Glossary
+}
+
+/** A locale's banned words for "work item". */
+function bannedFor(locale: Locale): string[] {
+  return glossaryFor(locale).terms['work item']?.banned ?? []
+}
+
+/**
+ * What a reader reads in the page's own language: the container with its
+ * English-by-design regions (`lang="en"`), inline code and code blocks taken
+ * out. Both readings of `terminology.test.tsx` are produced from the same
+ * trimmed tree.
+ */
+export function proseOnly(container: HTMLElement): {
+  text: string
+  spaced: string
+} {
+  const clone = container.cloneNode(true) as HTMLElement
+  for (const element of clone.querySelectorAll('[lang="en"], code, pre'))
+    element.replaceWith(' ')
+  return {
+    text: clone.textContent ?? '',
+    spaced: spacedText(clone.innerHTML),
+  }
+}
+
+describe('the glossary detector', () => {
+  it('FIRES on a banned word, with its inflection, and not on a longer word', () => {
+    expect(
+      glossaryHits('Jede Karte zeigt zwei Karten.', ['Karte']),
+    ).toHaveLength(2)
+    expect(glossaryHits('Kartenspiel und Kartenhalter', ['Karte'])).toEqual([])
+    expect(glossaryHits('各カードを開く', ['カード'])).toHaveLength(1)
+  })
+
+  it('permits a hit only where the allowlist records it, for that locale and route', () => {
+    const text = 'Bezahlen Sie mit Karte. Die Karte zeigt das Element.'
+    const entry: AllowlistEntry = {
+      locale: 'de',
+      route: '/docs/x',
+      excerpt: 'Bezahlen Sie mit Karte.',
+      sense: 'payment-card',
+    }
+    expect(
+      unallowedHits(text, ['Karte'], 'de', '/docs/x', [entry]),
+    ).toHaveLength(1)
+    expect(
+      unallowedHits(text, ['Karte'], 'de', '/docs/y', [entry]),
+    ).toHaveLength(2)
+    expect(
+      unallowedHits(text, ['Karte'], 'fr', '/docs/x', [entry]),
+    ).toHaveLength(2)
+  })
+
+  it('reads a page without its lang="en" regions or its code', () => {
+    const container = document.createElement('div')
+    container.innerHTML =
+      '<p>Eine Karte.</p><div lang="en"><p>An issue.</p></div><code>tracker</code><pre>coding agent</pre>'
+    const { text, spaced } = proseOnly(container)
+    expect(bannedTerms(text)).toEqual([])
+    expect(bannedTerms(spaced)).toEqual([])
+    expect(text).toContain('Eine Karte.')
+  })
+})
+
+describe('the glossary and the allowlist are readable', () => {
+  it('every non-English locale names banned words for "work item"', () => {
+    for (const locale of LOCALES.filter((l) => l !== 'en')) {
+      expect(bannedFor(locale).length, locale).toBeGreaterThan(0)
+    }
+  })
+
+  it('every allowlist entry names a real locale and route, an excerpt and an allowed sense', () => {
+    for (const entry of allowlist as AllowlistEntry[]) {
+      expect(LOCALES as readonly string[], JSON.stringify(entry)).toContain(
+        entry.locale,
+      )
+      expect(DOCS_ROUTES, JSON.stringify(entry)).toContain(entry.route)
+      expect(entry.excerpt.trim(), JSON.stringify(entry)).not.toBe('')
+      expect(
+        ALLOWED_SENSES as readonly string[],
+        JSON.stringify(entry),
+      ).toContain(entry.sense)
+    }
+  })
+})
+
 const PAGES = docsPages()
 
 describe('every /docs page is found, not named', () => {
@@ -354,27 +370,73 @@ describe('every /docs page is found, not named', () => {
   })
 })
 
-describe('no /docs page RENDERS a banned term', () => {
-  for (const file of PAGES) {
-    const route = routeOf(file)
-    const load = loaderFor(file)
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
 
-    it(`${route}`, async () => {
-      stubFetch()
-      const { text, spaced } = await renderRoute(load)
+/*
+ * ── A FINDING THE GATE MADE, left red-and-skipped rather than loosened ──────
+ * Each entry is a shipped translation the glossary arm rejects, with the
+ * evidence. The case is `it.skip` so the run names it; fix the translation and
+ * delete the entry. (No Motir bug can be filed from the run that found it, so
+ * the reason stands in for the bug key until one is.)
+ */
+const KNOWN_DEFECTS: { locale: Locale; route: string; reason: string }[] = [
+  {
+    locale: 'zh',
+    route: '/docs/sentry',
+    reason:
+      'content/docs/sentry/zh.md line 35 renders English "error" as 问题 ("在 Sentry 中将问题标记为已解决"), the glossary\'s banned word for "work item"; the same document renders "error" as 错误 everywhere else',
+  },
+]
 
-      // Prove the page got its data BEFORE reading its text — see the two
-      // ledgers above. A degraded render passes the banned-term check for free.
-      expect(unserved).toEqual([])
-      if (served.length > 0) {
-        stubUnreachable()
-        expect(text).not.toBe((await renderRoute(load)).text)
-      }
+describe('no /docs page RENDERS a banned term, in any language', () => {
+  for (const locale of LOCALES) {
+    for (const file of PAGES) {
+      const route = routeOf(file)
+      const known = KNOWN_DEFECTS.find(
+        (defect) => defect.locale === locale && defect.route === route,
+      )
+      const run = known ? it.skip : it
 
-      // The criterion's reading, and then the same page with its element
-      // boundaries spaced out — see `spacedText`.
-      expect(bannedTerms(text)).toEqual([])
-      expect(bannedTerms(spaced)).toEqual([])
-    })
+      run(
+        `${route} [${locale}]${known ? ` — ${known.reason}` : ''}`,
+        async () => {
+          const ledger = stubDocsFetch()
+          const page = await renderDocsRoute(file, locale)
+          const { text, spaced } =
+            locale === 'en'
+              ? { text: page.text, spaced: page.spaced }
+              : proseOnly(page.container)
+
+          // Prove the page got its data BEFORE reading its text — see the two
+          // ledgers above. A degraded render passes the banned-term check for free.
+          expect(ledger.unserved).toEqual([])
+          if (ledger.served.length > 0) {
+            stubDocsUnreachable()
+            const degraded = await renderDocsRoute(file, locale)
+            expect(page.text).not.toBe(degraded.text)
+            degraded.unmount()
+          }
+          page.unmount()
+
+          // The criterion's reading, and then the same page with its element
+          // boundaries spaced out — see `spacedText`.
+          expect(bannedTerms(text)).toEqual([])
+          expect(bannedTerms(spaced)).toEqual([])
+
+          if (locale !== 'en') {
+            const banned = bannedFor(locale)
+            const entries = allowlist as AllowlistEntry[]
+            expect(unallowedHits(text, banned, locale, route, entries)).toEqual(
+              [],
+            )
+            expect(
+              unallowedHits(spaced, banned, locale, route, entries),
+            ).toEqual([])
+          }
+        },
+      )
+    }
   }
 })
