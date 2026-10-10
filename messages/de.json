@@ -666,7 +666,11 @@
     "versionNotYetEffective": "Version {version} · noch nicht in Kraft",
     "indexTitle": "Rechtliches",
     "indexIntro": "Alles, was die moooon B.V. über den gehosteten Motir-Dienst veröffentlicht – was Sie vereinbaren, was wir mit Ihren Daten tun und wen sie sonst noch erreichen. Wenn Sie Motir selbst betreiben, sind Sie Ihr eigener Verantwortlicher, und diese Dokumente beschreiben unseren Dienst, nicht Ihren.",
-    "indexContact": "Fragen zu einem dieser Dokumente: legal@motir.co"
+    "indexContact": "Fragen zu einem dieser Dokumente: legal@motir.co",
+    "bindingNote": {
+      "document": "Dieses Dokument wird nur auf Englisch veröffentlicht. Maßgeblich ist der englische Text. <link>Englische Fassung öffnen</link>",
+      "index": "Diese Dokumente werden nur auf Englisch veröffentlicht. Maßgeblich ist jeweils der englische Text."
+    }
   },
   "explore": {
     "topicNavAria": "Projektplatz",

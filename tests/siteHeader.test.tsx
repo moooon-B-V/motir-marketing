@@ -116,12 +116,13 @@ describe('app/sitemap.ts', () => {
     // what remains — see `tests/entitySignal.test.ts` for that arm's own case.
     // Each page is listed once per locale since MOTIR-7956; its English entry
     // is the one its own `en` alternate names, and the list of those is the
-    // list of pages.
-    const english = (await sitemap()).filter(
-      (entry) =>
-        (entry.alternates?.languages as Record<string, string> | undefined)
-          ?.en === entry.url,
-    )
+    // list of pages. A legal document is listed ONCE, at its English address
+    // and with no alternates (MOTIR-8086), so that one entry is its English one.
+    const english = (await sitemap()).filter((entry) => {
+      const languages = entry.alternates?.languages as
+        Record<string, string> | undefined
+      return languages === undefined || languages.en === entry.url
+    })
     expect(english.map((entry) => entry.url)).toEqual([
       siteUrl('/'),
       // 2026-10 redesign — "How Motir works", the developer page.

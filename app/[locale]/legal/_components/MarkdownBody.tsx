@@ -30,6 +30,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href)
 export function MarkdownBody({
   value,
   locale,
+  lang,
 }: {
   value: string
   /**
@@ -39,9 +40,15 @@ export function MarkdownBody({
    * Markdown: their links are whatever they wrote, and stay as written.
    */
   locale?: Locale
+  /**
+   * The body's language when it differs from the page's — `en` for a legal
+   * document inside a non-English page (MOTIR-8088), so assistive technology
+   * and font fallback read it as English. Omitted, the wrapper carries none.
+   */
+  lang?: string
 }) {
   return (
-    <div className="text-[15px] leading-[1.7] text-(--el-text)">
+    <div className="text-[15px] leading-[1.7] text-(--el-text)" lang={lang}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={locale ? siteComponents(locale) : components}

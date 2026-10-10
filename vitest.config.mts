@@ -141,6 +141,15 @@ export default defineConfig({
         'lib/docsDocuments.ts',
         'app/?locale?/docs/_components/DocsDocument.tsx',
         'app/?locale?/docs/_components/TranslationUpdatingNote.tsx',
+        // MOTIR-8089 — the files Story MOTIR-7740 (legal pages stay English)
+        // changed, added WITH the gate that awaits them
+        // (`tests/legal/bindingEnglishNoteGate.test.tsx`). The two pages ARE
+        // measured, as `ideas`'s are: the gate awaits them per locale.
+        'app/?locale?/legal/_components/BindingEnglishNote.tsx',
+        'app/?locale?/legal/_components/MarkdownBody.tsx',
+        'app/?locale?/legal/page.tsx',
+        'app/?locale?/legal/?slug?/page.tsx',
+        'lib/legal/englishAddress.ts',
       ],
       /*
        * ⚠️ EVERY EXCLUSION HAS A REASON, and the reasons are different — a list
@@ -188,6 +197,41 @@ export default defineConfig({
           lines: 90,
           functions: 90,
           branches: 85,
+        },
+        // MOTIR-8089 — MEASURED FIRST under `tests/legal/` on this branch: the
+        // note and the English-address helper 100 across, `MarkdownBody` 96
+        // lines / 95.7 functions / 100 branches, both pages 100 lines and
+        // functions. The pages' BRANCHES are 75 (index) and 83.3 (document),
+        // and the gap is one dead arm each: the version line's
+        // `doc.effectiveDate ? versionAndEffective : versionNotYetEffective`,
+        // whose first arm cannot run while every `content/legal/*.md` says
+        // `effectiveDate: TBD` (`lib/legal/documents.ts` maps that to null).
+        // Pinned at the measured floor rather than reached with a fixture
+        // document; raise it when the first document takes effect.
+        'app/?locale?/legal/_components/BindingEnglishNote.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/?locale?/legal/_components/MarkdownBody.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
+        },
+        'app/?locale?/legal/page.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 75,
+        },
+        'app/?locale?/legal/?slug?/page.tsx': {
+          lines: 90,
+          functions: 90,
+          branches: 80,
+        },
+        'lib/legal/englishAddress.ts': {
+          lines: 90,
+          functions: 90,
+          branches: 90,
         },
         // MEASURED FIRST, then pinned at the floor — the same rule the entries
         // beside it follow. On this branch: `publicHost` and `tenantDomain` 100

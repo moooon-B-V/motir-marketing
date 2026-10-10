@@ -654,7 +654,11 @@
     "versionNotYetEffective": "버전 {version} · 아직 시행 전",
     "indexTitle": "법률",
     "indexIntro": "moooon B.V.가 호스팅 Motir 서비스에 대해 게시하는 모든 문서입니다. 동의하는 내용, 데이터 처리 방식, 데이터를 받는 다른 주체를 다룹니다. Motir를 직접 운영한다면 당신이 데이터 관리자이며, 이 문서들은 당신의 서비스가 아닌 우리 서비스를 설명합니다.",
-    "indexContact": "이 문서들에 관한 문의: legal@motir.co"
+    "indexContact": "이 문서들에 관한 문의: legal@motir.co",
+    "bindingNote": {
+      "document": "이 문서는 영어로만 게시됩니다. 영어 원문이 구속력 있는 버전입니다. <link>영어 버전 열기</link>",
+      "index": "이 문서들은 영어로만 게시됩니다. 각 문서는 영어 원문이 구속력 있는 버전입니다."
+    }
   },
   "explore": {
     "topicNavAria": "프로젝트 광장",

@@ -38,6 +38,31 @@ export function languageAlternates(path: string): Record<string, string> {
 }
 
 /**
+ * The canonical of a page whose BINDING content exists in English only
+ * (MOTIR-8086): the unprefixed English address, from every language version.
+ *
+ * A legal document is the case. Its body, title, version and effective date are
+ * the same English in all eleven versions, and only the chrome around them is
+ * translated, so each language version is a DUPLICATE of the English document
+ * rather than a localized alternate of it. Its canonical is therefore the
+ * English address, and it carries NO `hreflang` set: a set of alternates that
+ * all canonicalize elsewhere contradicts itself (Search Central, "Tell Google
+ * about localized versions of your page" — keep canonical and hreflang
+ * consistent). The page head and the sitemap both spell the address here, so
+ * they cannot disagree.
+ */
+export function englishOnlyCanonical(path: string): string {
+  return siteUrl(localizedPath(DEFAULT_LOCALE, path))
+}
+
+/** A page head's `alternates` for an English-only page: the canonical alone, no `languages`. */
+export function englishOnlyAlternates(
+  path: string,
+): NonNullable<Metadata['alternates']> {
+  return { canonical: englishOnlyCanonical(path) }
+}
+
+/**
  * The share card, named on every page that sets `openGraph`: a child
  * `openGraph` REPLACES its parent's whole, and the file-based image goes with
  * it (measured in MOTIR-7948; `siteMetadata.ts` has the note).

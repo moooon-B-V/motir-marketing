@@ -661,7 +661,11 @@
     "versionNotYetEffective": "Versie {version} · nog niet van kracht",
     "indexTitle": "Juridisch",
     "indexIntro": "Alles wat moooon B.V. publiceert over de gehoste Motir-dienst — waarmee je akkoord gaat, wat we met je gegevens doen en bij wie ze nog meer terechtkomen. Draai je Motir zelf, dan ben je je eigen verwerkingsverantwoordelijke en beschrijven deze documenten onze dienst, niet de jouwe.",
-    "indexContact": "Vragen over een van deze documenten: legal@motir.co"
+    "indexContact": "Vragen over een van deze documenten: legal@motir.co",
+    "bindingNote": {
+      "document": "Dit document wordt alleen in het Engels gepubliceerd. De Engelse tekst is bindend. <link>Engelse versie openen</link>",
+      "index": "Deze documenten worden alleen in het Engels gepubliceerd. Van elk document is de Engelse tekst bindend."
+    }
   },
   "explore": {
     "topicNavAria": "Projectplein",

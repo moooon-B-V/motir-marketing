@@ -73,13 +73,17 @@ describe('sitemap', () => {
     entries = await sitemap()
   })
 
-  /** The English entry of each page — the one its own `en` alternate names. */
+  /**
+   * The English entry of each page — the one its own `en` alternate names, or,
+   * for a legal document, its ONE entry: it is listed once, at the English
+   * address, with no alternates (MOTIR-8086).
+   */
   const english = () =>
-    entries.filter(
-      (entry) =>
-        (entry.alternates?.languages as Record<string, string> | undefined)
-          ?.en === entry.url,
-    )
+    entries.filter((entry) => {
+      const languages = entry.alternates?.languages as
+        Record<string, string> | undefined
+      return languages === undefined || languages.en === entry.url
+    })
 
   it('lists every page the site serves, absolutely', () => {
     // `/design` joined the root in MOTIR-1043; `/legal` and the seven documents
@@ -118,17 +122,27 @@ describe('sitemap', () => {
     ])
   })
 
-  it('lists each of them once per locale, every entry with the twelve alternates (MOTIR-7956)', () => {
+  it('lists each of them once per locale, every entry with the twelve alternates (MOTIR-7956) — except a legal document, once (MOTIR-8086)', () => {
     // The static count is computed from the same sources the sitemap reads,
     // so the assertion moves with them: the fixed pages, the docs routes and
-    // the legal glob.
-    const staticPaths =
+    // the legal glob. A legal document is the one exception to "×11": its
+    // binding text is English in every language version, so it is listed once,
+    // at its English address, with no alternates.
+    const localizedPaths =
       ['/', '/how-it-works', '/design', '/explore', '/legal'].length +
-      DOCS_ROUTES.length +
-      legalDocumentSlugs().length
-    expect(entries).toHaveLength(staticPaths * LOCALES.length)
-    expect(english()).toHaveLength(staticPaths)
-    for (const entry of entries) {
+      DOCS_ROUTES.length
+    const englishOnlyPaths = legalDocumentSlugs().length
+    expect(entries).toHaveLength(
+      localizedPaths * LOCALES.length + englishOnlyPaths,
+    )
+    expect(english()).toHaveLength(localizedPaths + englishOnlyPaths)
+    const documentUrls = legalDocumentSlugs().map(
+      (slug) => `https://motir.co/legal/${slug}`,
+    )
+    for (const entry of entries.filter((e) => documentUrls.includes(e.url))) {
+      expect(entry.alternates, entry.url).toBeUndefined()
+    }
+    for (const entry of entries.filter((e) => !documentUrls.includes(e.url))) {
       const languages = entry.alternates?.languages as Record<string, string>
       expect(Object.keys(languages).sort(), entry.url).toEqual(
         [...LOCALES, 'x-default'].sort(),
@@ -137,7 +151,11 @@ describe('sitemap', () => {
       expect(languages['x-default']).toBe(languages.en)
     }
     expect(entries.map((entry) => entry.url)).toContain('https://motir.co/ja')
+    // The legal INDEX is translated chrome, so it stays ×11; its documents do not.
     expect(entries.map((entry) => entry.url)).toContain(
+      'https://motir.co/fr/legal',
+    )
+    expect(entries.map((entry) => entry.url)).not.toContain(
       'https://motir.co/fr/legal/privacy',
     )
   })
