@@ -1,3 +1,4 @@
+import { englishOnlyRoot } from '@/tests/helpers/englishOnlyDocs'
 import {
   cpSync,
   mkdirSync,
@@ -27,10 +28,16 @@ import { SPEC } from './fixtures/apiMoveCases'
  */
 vi.mock('@/lib/docsDocuments', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/lib/docsDocuments')>()
+  const { englishOnlyRoot } = await import('@/tests/helpers/englishOnlyDocs')
+  const englishOnly = englishOnlyRoot()
   return {
     ...real,
     resolveDocsDocument: (slug: string, locale: never, root?: string) =>
-      real.resolveDocsDocument(slug, locale, root ?? process.env.DOCS_FIXTURE),
+      real.resolveDocsDocument(
+        slug,
+        locale,
+        root ?? process.env.DOCS_FIXTURE ?? englishOnly,
+      ),
   }
 })
 
@@ -240,11 +247,19 @@ describe('a stale page (panel E)', () => {
     ])
   })
 
-  it('a locale with no translation (the repository today) is the same fallback', async () => {
-    const c = await renderApi('de', 'content/docs')
+  it('a locale with no translation is the same fallback', async () => {
+    const c = await renderApi('de', englishOnlyRoot())
     expect(notes(c)).toHaveLength(1)
     expect(notes(c)[0]!.textContent).toBe(
       (await getCopy('de')).docs.notes.beingUpdated,
+    )
+  })
+
+  it('the shipped German translation is current: the reference note shows and the being-updated note does not', async () => {
+    const c = await renderApi('de', 'content/docs')
+    expect(notes(c)).toHaveLength(1)
+    expect(notes(c)[0]!.textContent).toBe(
+      (await getCopy('de')).docs.notes.generatedReference.openapi,
     )
   })
 })

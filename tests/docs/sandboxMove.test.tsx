@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ts from 'typescript'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import SandboxPage from '@/app/[locale]/docs/(guides)/sandbox/page'
 import {
   ProfileLabel,
@@ -17,6 +17,19 @@ import { render } from '@/tests/helpers/withCopy'
 import { EN_PAGE } from '@/tests/helpers/locale'
 import { normalise } from './fixtures/apiMoveCases'
 import baseline from './fixtures/sandbox-move-baseline.json'
+
+// The ten translations are in the repository now; this file asserts the page when a
+// translation is MISSING, so `resolveDocsDocument` reads an English-only copy.
+vi.mock('@/lib/docsDocuments', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/docsDocuments')>()
+  const { englishOnlyRoot } = await import('@/tests/helpers/englishOnlyDocs')
+  const englishOnly = englishOnlyRoot()
+  return {
+    ...real,
+    resolveDocsDocument: (slug: string, locale: never, root?: string) =>
+      real.resolveDocsDocument(slug, locale, root ?? englishOnly),
+  }
+})
 
 /*
  * MOTIR-8056 — /docs/sandbox moves from JSX prose (the page and the client

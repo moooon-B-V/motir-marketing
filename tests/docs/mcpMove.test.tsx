@@ -14,6 +14,19 @@ import {
   stubFetch,
 } from './fixtures/apiMoveCases'
 
+// The ten translations are in the repository now; this file asserts the page when a
+// translation is MISSING, so `resolveDocsDocument` reads an English-only copy.
+vi.mock('@/lib/docsDocuments', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/docsDocuments')>()
+  const { englishOnlyRoot } = await import('@/tests/helpers/englishOnlyDocs')
+  const englishOnly = englishOnlyRoot()
+  return {
+    ...real,
+    resolveDocsDocument: (slug: string, locale: never, root?: string) =>
+      real.resolveDocsDocument(slug, locale, root ?? englishOnly),
+  }
+})
+
 /*
  * MOTIR-8055 — /docs/mcp moves from JSX prose and `lib/mcpWiring.ts` strings to
  * `content/docs/mcp/en.md`.

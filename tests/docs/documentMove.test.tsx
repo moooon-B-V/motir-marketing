@@ -29,10 +29,16 @@ import { EN_PAGE } from '@/tests/helpers/locale'
 // A `de.md` fixture tree: `resolveDocsDocument` is pointed at it when a test asks.
 vi.mock('@/lib/docsDocuments', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/lib/docsDocuments')>()
+  const { englishOnlyRoot } = await import('@/tests/helpers/englishOnlyDocs')
+  const englishOnly = englishOnlyRoot()
   return {
     ...real,
     resolveDocsDocument: (slug: string, locale: never, root?: string) =>
-      real.resolveDocsDocument(slug, locale, root ?? process.env.DOCS_FIXTURE),
+      real.resolveDocsDocument(
+        slug,
+        locale,
+        root ?? process.env.DOCS_FIXTURE ?? englishOnly,
+      ),
   }
 })
 
