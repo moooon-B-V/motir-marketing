@@ -61,8 +61,8 @@ test.afterEach(({}, testInfo) => {
 
 const html = (page: Page) => page.locator('html')
 const note = (page: Page) => page.locator('[role="note"]')
-/** A catalogue sentence as the page shows it: rich-text tags stripped. */
-const plain = (sentence: string) => sentence.replace(/<\/?[a-z]+>/g, '')
+/** A catalogue sentence as the page shows it: its one `<link>` tag stripped. */
+const plain = (sentence: string) => sentence.replace(/<\/?link>/g, '')
 
 /** Every request the page makes from here on asks for `language`. */
 async function browserLanguage(page: Page, language: string) {

@@ -102,8 +102,8 @@ function indexPage(locale: Locale): Promise<HTMLElement> {
   return indexes.get(locale)!
 }
 
-/** A catalogue sentence as the page shows it: rich-text tags stripped. */
-const plain = (template: string) => template.replace(/<\/?[a-z]+>/g, '')
+/** A catalogue sentence as the page shows it: its one `<link>` tag stripped. */
+const plain = (template: string) => template.replace(/<\/?link>/g, '')
 
 const precedes = (a: Element, b: Element) =>
   Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING)
