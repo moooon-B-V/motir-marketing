@@ -1,4 +1,6 @@
-import { writeFileSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+import { readFileSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { expect, test, type Locator, type Page } from '@playwright/test'
 import { SITE_ORIGIN, STUB_ORIGIN } from '../stub/origin'
 import { DOCS_ROUTES } from '../../lib/docsSurfaces'
@@ -42,7 +44,13 @@ import {
  * `/ko/docs/mcp/tools` shows Korean summaries only because the stub has
  * motir-core's Korean recording.
  *
- * ── STEP 8 IS SKIPPED, AND THE REASON IS A MEASUREMENT (see the bottom) ─────
+ * ── STEP 8 EDITS THE REPOSITORY, AND PUTS IT BACK ─────────────────────────
+ * It appends a sentence to `content/docs/sentry/en.md` and records the revision,
+ * so `/de/docs/sentry` goes stale WHILE THE SERVER RUNS. That works only because
+ * the lane builds and serves with `MOTIR_DOCS_LIVE_CONTENT_ROOT` set to the
+ * repository's `content/docs` (`playwright.config.ts`, MOTIR-8072): every /docs
+ * page is then rendered per request from that directory. Both files are read
+ * into memory first and written back byte for byte in a `finally`.
  */
 
 // Eight journeys, one of them walking every docs page twice, at a watchable pace.
@@ -553,35 +561,65 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
   await expect(target).toBeInViewport()
   expect(await pathText(page)).toBe(englishPath)
   await beat(page, 1800)
-})
 
-/*
- * ── 8 · A GERMAN PAGE WHOSE ENGLISH MOVED ON — SKIPPED, NOT WEAKENED ──────
- *
- * Filed as MOTIR-8072. The card's own precondition for this case does not hold, measured on this
- * build, and it says what to do then: skip it, name the bug, do not weaken it.
- * The case needs `/de/docs/sentry` to read `content/docs/sentry/` PER REQUEST,
- * so that appending a sentence to `en.md` and running `pnpm docs:revisions
- * record sentry` makes the German page stale while the server runs. It does not:
- *
- *  · `/[locale]/docs/sentry` is PRERENDERED. The page has no
- *    `dynamic = 'force-dynamic'` (only `/docs/api`, `/docs/cli`, `/docs/mcp` and
- *    `/docs/mcp/tools` do), the locale layout's `generateStaticParams` builds all
- *    eleven, and `resolveDocsDocument` runs at BUILD time — an edit afterwards
- *    changes nothing the server sends.
- *  · and the lane's server is `node .next/standalone/server.js`, which `chdir`s
- *    into `.next/standalone`, so `DOCS_CONTENT_ROOT` (`process.cwd()/content/
- *    docs`) is not the repository's directory either.
- *
- * `readLedger` and `resolveDocsDocument` do not memoize (they read the files on
- * every call), so the staleness the case needs is the PAGE's to give, not theirs.
- * The stale fallback itself is proved below the browser by
- * `tests/docs/docsDocuments.test.ts` and `tests/docs/localeRender.test.tsx`.
- *
- * It is a separate, skipped test so the passing walk above is a complete clip of
- * steps 1-7 rather than a run that ended early; when the bug is fixed, this body
- * becomes the eighth chapter of the walk.
- */
-test.skip('a German page whose English moved on shows the English under its note (skipped: MOTIR-8072)', () => {
-  // intentionally empty — see the comment above for why this is skipped.
+  // ── 8 · A GERMAN PAGE WHOSE ENGLISH MOVED ON ────────────────────────────
+  chapter(
+    'A German page whose English moved on, shown in English under its note',
+  )
+  const sentryDir = join(process.cwd(), 'content', 'docs', 'sentry')
+  const englishFile = join(sentryDir, 'en.md')
+  const ledgerFile = join(sentryDir, 'revisions.json')
+  const sentryHeading = () => page.getByRole('heading', { level: 1 })
+  const germanRail = () =>
+    page.getByRole('navigation', { name: t('de', 'docs.indexTitle') })
+
+  // The German page as it ships: its own translation, no note.
+  await freshVisitor(page, 'de-DE,de')
+  await page.goto('/de/docs/sentry')
+  await expect(html(page)).toHaveAttribute('lang', 'de')
+  await expect(page.getByRole('note')).toHaveCount(0)
+  const germanIntro = await firstParagraph(page)
+  await beat(page)
+
+  const appended =
+    'This sentence was added by the acceptance walk, so the German translation now trails the English.'
+  const englishBytes = readFileSync(englishFile)
+  const ledgerBytes = readFileSync(ledgerFile)
+  try {
+    // One sentence onto the page's first paragraph, then the revision recorded,
+    // exactly as an author would: `de.md`'s `source` is now an older entry.
+    const lines = englishBytes.toString('utf8').split('\n')
+    lines[0] = `${lines[0]} ${appended}`
+    writeFileSync(englishFile, lines.join('\n'))
+    execFileSync('pnpm', ['docs:revisions', 'record', 'sentry'], {
+      stdio: 'pipe',
+    })
+    expect(JSON.parse(readFileSync(ledgerFile, 'utf8'))).toHaveLength(
+      JSON.parse(ledgerBytes.toString('utf8')).length + 1,
+    )
+
+    await page.goto('/de/docs/sentry')
+    await expect(html(page)).toHaveAttribute('lang', 'de')
+    await expect(page.getByRole('note')).toHaveText(
+      t('de', 'docs.notes.beingUpdated'),
+    )
+    const englishBody = main(page).locator('[lang="en"]')
+    await expect(englishBody).toHaveCount(1)
+    await expect(englishBody).toContainText(appended)
+    await expect(sentryHeading()).toHaveText(t('de', 'docs.sentry'))
+    await expect(germanRail()).toBeVisible()
+    await beat(page, 1800)
+  } finally {
+    writeFileSync(englishFile, englishBytes)
+    writeFileSync(ledgerFile, ledgerBytes)
+  }
+
+  // Put back, the lane is as it was found: German again, and no note.
+  await page.goto('/de/docs/sentry')
+  await expect(html(page)).toHaveAttribute('lang', 'de')
+  await expect(page.getByRole('note')).toHaveCount(0)
+  await expect(main(page).locator('[lang="en"]')).toHaveCount(0)
+  expect(await firstParagraph(page)).toBe(germanIntro)
+  await expect(sentryHeading()).toHaveText(t('de', 'docs.sentry'))
+  await beat(page, 1800)
 })

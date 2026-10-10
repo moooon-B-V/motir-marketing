@@ -1,11 +1,13 @@
 import { Children, Fragment, type ComponentProps, type ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { connection } from 'next/server'
 import { localizedPath } from '@/i18n/localizedPath'
 import type { Locale } from '@/i18n/routing'
 import { getCopy } from '@/lib/copy'
 import {
   DocsDocumentError,
+  liveDocsContentRoot,
   resolveDocsDocument,
   splitParts,
   splitSlots,
@@ -224,6 +226,16 @@ interface DocsDocumentProps {
   root?: string
 }
 
+/**
+ * In the browser lane only, render the page per request so a document edited
+ * while the server runs is what the reader is sent (MOTIR-8072; the live root
+ * is explained in `lib/docsDocuments.ts`). Unset — production — this is a no-op
+ * and the page stays prerendered.
+ */
+async function readPerRequestInTheLane(): Promise<void> {
+  if (liveDocsContentRoot() !== undefined) await connection()
+}
+
 export async function DocsDocument({
   slug,
   locale,
@@ -231,6 +243,7 @@ export async function DocsDocument({
   values = {},
   root,
 }: DocsDocumentProps) {
+  await readPerRequestInTheLane()
   const { document, fallback } = resolveDocsDocument(slug, locale, root)
   // One flowing body: every part, in order, with the markers dropped.
   const body = splitParts(document.markdown).flatMap((part) =>
@@ -267,6 +280,7 @@ export async function renderDocsParts({
   note: ReactNode | null
   shownLocale: Locale
 }> {
+  await readPerRequestInTheLane()
   const { document, fallback, shownLocale } = resolveDocsDocument(
     slug,
     locale,
