@@ -283,7 +283,7 @@ export function SiteHeader({
           </nav>
         </div>
 
-        <div className="flex min-w-0 items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2 sm:flex-none">
           {/* The first thing to leave the bar (rung B); narrower viewports
               reach it in the Products menu. */}
           <SetupPromptButton look="header" className={ladder.setup} />
