@@ -283,7 +283,7 @@ export function SiteHeader({
           </nav>
         </div>
 
-        <div className="flex flex-none items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2 sm:flex-none">
           {/* The first thing to leave the bar (rung B); narrower viewports
               reach it in the Products menu. */}
           <SetupPromptButton look="header" className={ladder.setup} />
@@ -303,10 +303,18 @@ export function SiteHeader({
               route in from the public web. */}
           <a
             href={FREE_DOOR}
-            className={cn(buttonVariants({ size: 'md' }), 'text-[15px]')}
+            className={cn(
+              buttonVariants({ size: 'md' }),
+              'text-[15px]',
+              // Below `sm` the label may wrap onto two lines and drops its
+              // arrow, so the longest catalogue label (fr "Commencer
+              // gratuitement") fits beside the brand, language and Menu at
+              // 390px instead of painting over the brand (MOTIR-8135).
+              'max-sm:h-auto max-sm:min-h-(--height-btn-md) max-sm:min-w-0 max-sm:py-1 max-sm:leading-tight max-sm:whitespace-normal',
+            )}
           >
             {copy.nav.startFree}
-            <ArrowRight aria-hidden="true" className="size-3.5" />
+            <ArrowRight aria-hidden="true" className="size-3.5 max-sm:hidden" />
           </a>
           {/* The language switcher (MOTIR-7953): the bar's LAST control, after
               the account pair, and on the bar at EVERY width — a 40px square
@@ -321,7 +329,7 @@ export function SiteHeader({
             onClick={() => setMenuOpen((open) => !open)}
             className={cn(
               buttonVariants({ variant: 'ghost', size: 'sm' }),
-              'w-8 px-0',
+              'w-8 shrink-0 px-0',
               ladder.menu,
             )}
           >

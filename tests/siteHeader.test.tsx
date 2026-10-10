@@ -109,6 +109,28 @@ describe('the Design nav entry', () => {
   })
 })
 
+describe('the Start free button on a phone-width bar (MOTIR-8135)', () => {
+  it('may wrap and drop its arrow below sm, so a long label never paints over the brand', () => {
+    render(<SiteHeader host={SITE_HOST} />)
+    const link = screen.getByRole('link', { name: copy.nav.startFree })
+    expect(link.className).toContain('max-sm:whitespace-normal')
+    expect(link.className).toContain('max-sm:min-w-0')
+    expect(link.querySelector('svg')?.getAttribute('class')).toContain(
+      'max-sm:hidden',
+    )
+  })
+})
+
+describe("the bar's right group keeps its give-way ladder from sm up (MOTIR-8135)", () => {
+  it('shrinks only below sm — from sm up it is flex-none, or the stored rung widths overflow', () => {
+    render(<SiteHeader host={SITE_HOST} />)
+    const group = screen.getByRole('link', { name: copy.nav.startFree })
+      .parentElement as HTMLElement
+    expect(group.className).toContain('min-w-0')
+    expect(group.className).toContain('sm:flex-none')
+  })
+})
+
 describe('app/sitemap.ts', () => {
   it('gains the /legal, /explore and /docs lines in the same changes that add the routes', async () => {
     // Awaited since MOTIR-4118 made the route dynamic. No API in this
