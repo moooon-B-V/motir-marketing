@@ -661,7 +661,11 @@
     "versionNotYetEffective": "Versione {version} · non ancora in vigore",
     "indexTitle": "Note legali",
     "indexIntro": "Tutto ciò che moooon B.V. pubblica sul servizio Motir in hosting: cosa accetti, cosa facciamo con i tuoi dati e chi altro li riceve. Se gestisci Motir in autonomia, il titolare del trattamento sei tu e questi documenti descrivono il nostro servizio, non il tuo.",
-    "indexContact": "Domande su uno di questi documenti: legal@motir.co"
+    "indexContact": "Domande su uno di questi documenti: legal@motir.co",
+    "bindingNote": {
+      "document": "Questo documento è pubblicato solo in inglese. Fa fede il testo in lingua inglese. <link>Apri la versione inglese</link>",
+      "index": "Questi documenti sono pubblicati solo in inglese. Per ciascuno fa fede il testo in lingua inglese."
+    }
   },
   "explore": {
     "topicNavAria": "Piazza dei progetti",

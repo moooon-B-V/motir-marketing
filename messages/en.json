@@ -661,7 +661,11 @@
     "versionNotYetEffective": "Version {version} · not yet in effect",
     "indexTitle": "Legal",
     "indexIntro": "Everything moooon B.V. publishes about the hosted Motir service — what you agree to, what we do with your data, and who else it reaches. If you run Motir yourself, you are your own controller and these describe our service, not yours.",
-    "indexContact": "Questions about any of these: legal@motir.co"
+    "indexContact": "Questions about any of these: legal@motir.co",
+    "bindingNote": {
+      "document": "This document is published in English only. The English text is the binding version. <link>Open the English version</link>",
+      "index": "These documents are published in English only. For each one, the English text is the binding version."
+    }
   },
   "explore": {
     "topicNavAria": "Project square",

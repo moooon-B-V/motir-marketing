@@ -651,7 +651,11 @@
     "versionNotYetEffective": "版本 {version} · 尚未生效",
     "indexTitle": "法律",
     "indexIntro": "moooon B.V. 就 Motir 托管服务发布的全部内容——你同意的条款、我们如何处理你的数据，以及数据还会到达哪些地方。如果你自行运行 Motir，你就是自己的数据控制者，这些文件描述的是我们的服务，而不是你的。",
-    "indexContact": "对其中任何内容有疑问，请联系：legal@motir.co"
+    "indexContact": "对其中任何内容有疑问，请联系：legal@motir.co",
+    "bindingNote": {
+      "document": "本文件仅以英文发布，以英文版本为准。<link>打开英文版本</link>",
+      "index": "这些文件仅以英文发布，每份文件均以英文版本为准。"
+    }
   },
   "explore": {
     "topicNavAria": "项目广场",

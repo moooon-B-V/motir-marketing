@@ -670,7 +670,11 @@
     "versionNotYetEffective": "Versão {version} · ainda não está em vigor",
     "indexTitle": "Jurídico",
     "indexIntro": "Tudo o que a moooon B.V. publica sobre o serviço hospedado do Motir — com o que você concorda, o que fazemos com seus dados e quem mais tem acesso a eles. Se você executa o Motir por conta própria, você é o seu próprio controlador, e estes documentos descrevem o nosso serviço, não o seu.",
-    "indexContact": "Dúvidas sobre qualquer um deles: legal@motir.co"
+    "indexContact": "Dúvidas sobre qualquer um deles: legal@motir.co",
+    "bindingNote": {
+      "document": "Este documento é publicado apenas em inglês. O texto em inglês é a versão vinculante. <link>Abrir a versão em inglês</link>",
+      "index": "Estes documentos são publicados apenas em inglês. Em cada um, o texto em inglês é a versão vinculante."
+    }
   },
   "explore": {
     "topicNavAria": "Praça de projetos",

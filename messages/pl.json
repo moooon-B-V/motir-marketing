@@ -666,7 +666,11 @@
     "versionNotYetEffective": "Wersja {version} · jeszcze nie obowiązuje",
     "indexTitle": "Informacje prawne",
     "indexIntro": "Wszystko, co moooon B.V. publikuje o hostowanej usłudze Motir — na co się zgadzasz, co robimy z Twoimi danymi i do kogo jeszcze trafiają. Jeśli uruchamiasz Motir samodzielnie, jesteś własnym administratorem danych, a te dokumenty opisują naszą usługę, nie Twoją.",
-    "indexContact": "Pytania dotyczące tych dokumentów: legal@motir.co"
+    "indexContact": "Pytania dotyczące tych dokumentów: legal@motir.co",
+    "bindingNote": {
+      "document": "Ten dokument jest publikowany wyłącznie w języku angielskim. Wiążąca jest wersja angielska. <link>Otwórz wersję angielską</link>",
+      "index": "Te dokumenty są publikowane wyłącznie w języku angielskim. W każdym z nich wiążąca jest wersja angielska."
+    }
   },
   "explore": {
     "topicNavAria": "Plac projektów",

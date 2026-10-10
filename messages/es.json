@@ -670,7 +670,11 @@
     "versionNotYetEffective": "Versión {version} · aún no está en vigor",
     "indexTitle": "Legal",
     "indexIntro": "Todo lo que moooon B.V. publica sobre el servicio alojado de Motir: lo que aceptas, lo que hacemos con tus datos y a quién más llegan. Si ejecutas Motir por tu cuenta, eres tu propio responsable del tratamiento y estos documentos describen nuestro servicio, no el tuyo.",
-    "indexContact": "Si tienes dudas sobre cualquiera de ellos: legal@motir.co"
+    "indexContact": "Si tienes dudas sobre cualquiera de ellos: legal@motir.co",
+    "bindingNote": {
+      "document": "Este documento solo se publica en inglés. El texto en inglés es la versión vinculante. <link>Abrir la versión en inglés</link>",
+      "index": "Estos documentos solo se publican en inglés. En cada uno, el texto en inglés es la versión vinculante."
+    }
   },
   "explore": {
     "topicNavAria": "Plaza de proyectos",

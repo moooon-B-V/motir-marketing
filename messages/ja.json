@@ -666,7 +666,11 @@
     "versionNotYetEffective": "バージョン{version} · まだ有効ではありません",
     "indexTitle": "法務",
     "indexIntro": "ホスト型 Motir サービスについて moooon B.V. が公開しているすべての文書です。あなたが同意する内容、私たちがあなたのデータをどう扱うか、そしてデータが誰に届くかを記載しています。Motir を自分で運用する場合は、あなた自身が管理者となり、これらの文書はあなたのサービスではなく私たちのサービスについて述べたものになります。",
-    "indexContact": "これらに関するご質問：legal@motir.co"
+    "indexContact": "これらに関するご質問：legal@motir.co",
+    "bindingNote": {
+      "document": "この文書は英語版のみを公開しています。法的拘束力を持つのは英語の本文です。<link>英語版を開く</link>",
+      "index": "これらの文書は英語版のみを公開しています。いずれも、法的拘束力を持つのは英語の本文です。"
+    }
   },
   "explore": {
     "topicNavAria": "プロジェクト広場",

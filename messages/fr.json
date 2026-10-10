@@ -675,7 +675,11 @@
     "versionNotYetEffective": "Version {version} · pas encore en vigueur",
     "indexTitle": "Mentions légales",
     "indexIntro": "Tout ce que moooon B.V. publie au sujet du service Motir hébergé : ce que vous acceptez, ce que nous faisons de vos données et à qui d’autre elles parviennent. Si vous hébergez Motir vous-même, vous êtes votre propre responsable de traitement, et ces documents décrivent notre service, pas le vôtre.",
-    "indexContact": "Pour toute question sur ces documents : legal@motir.co"
+    "indexContact": "Pour toute question sur ces documents : legal@motir.co",
+    "bindingNote": {
+      "document": "Ce document est publié uniquement en anglais. Le texte anglais est la version qui fait foi. <link>Ouvrir la version anglaise</link>",
+      "index": "Ces documents sont publiés uniquement en anglais. Pour chacun, le texte anglais est la version qui fait foi."
+    }
   },
   "explore": {
     "topicNavAria": "Place des projets",

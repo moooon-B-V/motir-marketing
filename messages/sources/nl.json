@@ -444,6 +444,8 @@
   "legal.indexTitle": "Legal",
   "legal.indexIntro": "Everything moooon B.V. publishes about the hosted Motir service — what you agree to, what we do with your data, and who else it reaches. If you run Motir yourself, you are your own controller and these describe our service, not yours.",
   "legal.indexContact": "Questions about any of these: legal@motir.co",
+  "legal.bindingNote.document": "This document is published in English only. The English text is the binding version. <link>Open the English version</link>",
+  "legal.bindingNote.index": "These documents are published in English only. For each one, the English text is the binding version.",
   "explore.topicNavAria": "Project square",
   "explore.topicHeading": "{topic} projects",
   "explore.metaTitle": "Build in public · Projects on Motir",
