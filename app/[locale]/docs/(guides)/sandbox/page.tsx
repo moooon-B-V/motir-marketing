@@ -5,12 +5,8 @@ import { getCopy } from '@/lib/copy'
 import { SANDBOX_AUTH_VOLUME, SANDBOX_PROFILES } from '@/lib/sandboxProfiles'
 import { CodeBlock } from '../../_components/DocSchema'
 import { renderDocsParts } from '../../_components/DocsDocument'
-import {
-  ProfileLabel,
-  SetupSteps,
-  STEP_IDS,
-  type SetupStepsText,
-} from './SetupSteps'
+import { ProfileLabel, SetupSteps, type SetupStepsText } from './SetupSteps'
+import { STEP_IDS } from './stepIds'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*

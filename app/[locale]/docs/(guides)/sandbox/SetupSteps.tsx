@@ -11,6 +11,7 @@ import {
   sandboxPullCommand,
   sandboxRunCommand,
 } from '@/lib/sandboxProfiles'
+import type { StepId } from './stepIds'
 
 /*
  * THE STEPPED SETUP SEQUENCE (MOTIR-4993) — built to
@@ -56,10 +57,6 @@ import {
  */
 
 type StepKind = 'command' | 'ui'
-
-/** The step ids, in page order. A numeral or a letter, never a word. */
-export const STEP_IDS = ['1', '2', '2a', '2b', '2c', '3', '4', '5'] as const
-export type StepId = (typeof STEP_IDS)[number]
 
 /**
  * ⚠️ EVERY HUMAN STRING IS HERE AS A PROP (MOTIR-8056). The words of this

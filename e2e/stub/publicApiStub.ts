@@ -163,19 +163,44 @@ const NON_JSON: Record<string, [string, string]> = {
 type CatalogueMode = 'recorded' | 'stripped' | 'failing'
 let catalogueMode: CatalogueMode = 'recorded'
 
-const RECORDED_CATALOGUE = join(
+const DOCS_FIXTURES = join(
   fileURLToPath(new URL('.', import.meta.url)),
   '..',
   '..',
   'tests',
   'docs',
   'fixtures',
-  'mcp-tools.production.json',
 )
 
-function mcpToolCatalogue(mode: Exclude<CatalogueMode, 'failing'>): string {
-  const catalogue = JSON.parse(readFileSync(RECORDED_CATALOGUE, 'utf8'))
-    .catalogue as {
+const RECORDED_CATALOGUE = join(DOCS_FIXTURES, 'mcp-tools.production.json')
+
+/**
+ * THE CATALOGUE BY LOCALE (MOTIR-8052) — `?locale=<l>` selects the recording,
+ * the way motir-core serves each locale its own summaries.
+ *
+ * ⚠️ A STUB THAT IGNORED THE QUERY COULD NOT SHOW A KOREAN PAGE: the page
+ * fetches server-side, so nothing about the browser's request reaches it. Only a
+ * locale with a recording at `tests/docs/fixtures/mcp-tools.production.<l>.json`
+ * is answered from it; no `locale`, `en`, and a locale with no recording are all
+ * answered with the unlocalized recording above — which is what motir-core does
+ * for a locale it has no translations for. The recordings are motir-core's own
+ * `mcpToolCatalogueDocument(<l>)` output, not hand-written.
+ */
+function recordedCatalogueFile(locale: string | null): string {
+  if (locale && /^[a-z]{2}$/.test(locale)) {
+    const localized = join(DOCS_FIXTURES, `mcp-tools.production.${locale}.json`)
+    if (existsSync(localized)) return localized
+  }
+  return RECORDED_CATALOGUE
+}
+
+function mcpToolCatalogue(
+  mode: Exclude<CatalogueMode, 'failing'>,
+  locale: string | null = null,
+): string {
+  const catalogue = JSON.parse(
+    readFileSync(recordedCatalogueFile(locale), 'utf8'),
+  ).catalogue as {
     groups: { tools: Record<string, unknown>[] }[]
   }
   if (mode === 'stripped') {
@@ -187,6 +212,25 @@ function mcpToolCatalogue(mode: Exclude<CatalogueMode, 'failing'>): string {
     }
   }
   return JSON.stringify(catalogue)
+}
+
+/**
+ * THE OPENAPI DOCUMENT AND THE CLI CATALOGUE (MOTIR-8052) — what `/docs/api` and
+ * `/docs/cli` fetch server-side. Until the docs walk needed them the stub had no
+ * route for either, so both pages rendered their "unreachable" state in this
+ * lane. Each is a motir-core recording under `tests/docs/fixtures/` in the same
+ * `{ …provenance, document }` wrapper the catalogue recording uses; the wrapper's
+ * `document` is what is served.
+ */
+const DOCS_DOCUMENTS: Record<string, string> = {
+  '/api/openapi/v1.json': 'openapi-v1.production.json',
+  '/api/docs/cli-commands.json': 'cli-commands.production.json',
+}
+
+function docsDocument(file: string): string {
+  return JSON.stringify(
+    JSON.parse(readFileSync(join(DOCS_FIXTURES, file), 'utf8')).document,
+  )
 }
 
 /**
@@ -344,7 +388,14 @@ function handle(req: IncomingMessage, res: ServerResponse): void {
       return
     }
     res.writeHead(200, { 'content-type': 'application/json' })
-    res.end(mcpToolCatalogue(catalogueMode))
+    res.end(mcpToolCatalogue(catalogueMode, url.searchParams.get('locale')))
+    return
+  }
+
+  const docsFile = DOCS_DOCUMENTS[url.pathname]
+  if (docsFile !== undefined) {
+    res.writeHead(200, { 'content-type': 'application/json' })
+    res.end(docsDocument(docsFile))
     return
   }
 

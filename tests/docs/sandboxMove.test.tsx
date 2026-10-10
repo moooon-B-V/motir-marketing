@@ -8,9 +8,9 @@ import SandboxPage from '@/app/[locale]/docs/(guides)/sandbox/page'
 import {
   ProfileLabel,
   SetupSteps,
-  STEP_IDS,
   type SetupStepsText,
 } from '@/app/[locale]/docs/(guides)/sandbox/SetupSteps'
+import { STEP_IDS } from '@/app/[locale]/docs/(guides)/sandbox/stepIds'
 import { documentInvariants } from '@/lib/docsDocuments'
 import { SANDBOX_PICKER_OPTIONS } from '@/lib/sandboxProfiles'
 import { render } from '@/tests/helpers/withCopy'

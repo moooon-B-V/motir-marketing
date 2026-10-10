@@ -85,12 +85,14 @@ test.describe('the receipt', () => {
       ['claude-code', 'Claude Code'],
     ] as const) {
       chapter(`The ${client} steps`)
-      const block = page.locator(`#${id}`)
-      await block.scrollIntoViewIfNeeded()
-      await expect(
-        block.getByRole('heading', { level: 3, name: client, exact: true }),
-      ).toBeVisible()
-      await expect(block).toContainText(SERVER_URL)
+      // The document form puts the id on the h3 itself (MOTIR-8055); the steps and
+      // the config block follow it, so the block is the first <pre> after it.
+      const heading = page.locator(`h3#${id}`)
+      await heading.scrollIntoViewIfNeeded()
+      await expect(heading).toHaveText(client)
+      await expect(heading.locator('xpath=following::pre[1]')).toContainText(
+        SERVER_URL,
+      )
       await beat(page, 2400)
     }
 
