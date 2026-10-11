@@ -19,7 +19,12 @@ import type { Locale } from '@/i18n/routing'
  * the `IdeaCategory` / `IdeaKind` enums in `prisma/schema.prisma`, as they
  * stand at motir-core `0ee9f99` (2026-10-07), widened with the per-locale
  * fields of motir-core `03c9c32` (Story MOTIR-7772 · MOTIR-7775: `locale`,
- * `fallbackFields`, `claimFallback`, `labelFallback`). The contract is guarded
+ * `fallbackFields`, `claimFallback`, `labelFallback`). The nine categories of
+ * Story MOTIR-8273 (`entertainment_media` … `local_services` among the
+ * verticals, `social_community` · `silver_economy` · `independent_work` among
+ * the consumer group) are mirrored here AHEAD of motir-core's enum, which gains
+ * them in that story's sibling work item, so motir.co can type, filter and mark
+ * them before the store can hold one. The contract is guarded
  * in the PRODUCING repository and changes additively only; when it changes,
  * these follow. `e2e/fixtures/ideas*.json` are recorded responses of it, and a
  * test type-checks them against these interfaces.
@@ -52,9 +57,18 @@ export const IDEA_CATEGORY_SLUGS = [
   'pets',
   'family_care',
   'public_sector',
+  'entertainment_media',
+  'hospitality_travel',
+  'mobility',
+  'energy_climate',
+  'manufacturing',
+  'local_services',
   'personal_growth',
   'personal_finance',
   'health_wellness',
+  'social_community',
+  'silver_economy',
+  'independent_work',
   'ai_infrastructure',
 ] as const
 export type IdeaCategory = (typeof IDEA_CATEGORY_SLUGS)[number]
@@ -528,10 +542,19 @@ const MARK_BY_CATEGORY: Record<IdeaCategory, IdeaMark> = {
   pets: 'decision',
   family_care: 'decision',
   public_sector: 'decision',
+  entertainment_media: 'decision',
+  hospitality_travel: 'decision',
+  mobility: 'decision',
+  energy_climate: 'decision',
+  manufacturing: 'decision',
+  local_services: 'decision',
   // consumer
   personal_growth: 'record',
   personal_finance: 'record',
   health_wellness: 'record',
+  social_community: 'record',
+  silver_economy: 'record',
+  independent_work: 'record',
   // platform
   ai_infrastructure: 'ground',
 }

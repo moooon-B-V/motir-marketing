@@ -112,12 +112,12 @@ The mark is a decorative 9 px square (`aria-hidden`), one of the showcase fills,
 category's **group** in motir-core's enum, so a new category inherits its group's mark with no
 change here and a palette swap re-tints them all:
 
-| Group              | Categories                                                                                                                                | Mark                     |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| Business functions | legal, finance, security_compliance, customer_support, localization, growth_marketing, sales, people_hr, operations, engineering          | `--el-showcase-field`    |
-| Verticals          | ecommerce, healthcare, education, financial_services, real_estate, logistics, construction, agriculture, pets, family_care, public_sector | `--el-showcase-decision` |
-| Consumer           | personal_growth, personal_finance, health_wellness                                                                                        | `--el-showcase-record`   |
-| Platform           | ai_infrastructure                                                                                                                         | `--el-showcase-ground`   |
+| Group              | Categories                                                                                                                                                                                                                                  | Mark                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| Business functions | legal, finance, security_compliance, customer_support, localization, growth_marketing, sales, people_hr, operations, engineering                                                                                                            | `--el-showcase-field`    |
+| Verticals          | ecommerce, healthcare, education, financial_services, real_estate, logistics, construction, agriculture, pets, family_care, public_sector, entertainment_media, hospitality_travel, mobility, energy_climate, manufacturing, local_services | `--el-showcase-decision` |
+| Consumer           | personal_growth, personal_finance, health_wellness, social_community, silver_economy, independent_work                                                                                                                                      | `--el-showcase-record`   |
+| Platform           | ai_infrastructure                                                                                                                                                                                                                           | `--el-showcase-ground`   |
 
 An unknown future category (one `lib/ideas.ts` does not yet list) takes the platform mark.
 
