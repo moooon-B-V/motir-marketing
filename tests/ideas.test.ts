@@ -222,6 +222,61 @@ describe('ideasHref', () => {
   })
 })
 
+/*
+ * The nine categories of Story MOTIR-8273 (MOTIR-8279): the URL model keeps
+ * each, round-trips it, and still drops a slug it does not list — and the list
+ * holds them at the grouped positions motir-core's enum shares.
+ */
+const NEW_VERTICALS = [
+  'entertainment_media',
+  'hospitality_travel',
+  'mobility',
+  'energy_climate',
+  'manufacturing',
+  'local_services',
+] as const
+const NEW_CONSUMER = [
+  'social_community',
+  'silver_economy',
+  'independent_work',
+] as const
+
+describe('the nine categories of Story MOTIR-8273', () => {
+  it.each([...NEW_VERTICALS, ...NEW_CONSUMER])(
+    'parseIdeasParams keeps %s and ideasHref round-trips it',
+    (slug) => {
+      expect(parseIdeasParams({ category: slug }).category).toBe(slug)
+      const href = ideasHref({ category: slug, tags: [] })
+      expect(href).toBe(`/ideas?category=${slug}`)
+      expect(
+        parseIdeasParams(new URLSearchParams(href.split('?')[1])).category,
+      ).toBe(slug)
+    },
+  )
+
+  it('still drops an unknown slug and a near-miss of a new one', () => {
+    expect(parseIdeasParams({ category: 'astrology' }).category).toBeUndefined()
+    expect(
+      parseIdeasParams({ category: 'silver-economy' }).category,
+    ).toBeUndefined()
+  })
+
+  it('lists 34 unique slugs with the nine at their grouped positions', () => {
+    const slugs: readonly string[] = IDEA_CATEGORY_SLUGS
+    expect(slugs).toHaveLength(34)
+    expect(new Set(slugs).size).toBe(34)
+    const afterPublicSector = slugs.indexOf('public_sector') + 1
+    expect(
+      slugs.slice(afterPublicSector, afterPublicSector + NEW_VERTICALS.length),
+    ).toEqual(NEW_VERTICALS)
+    const afterHealth = slugs.indexOf('health_wellness') + 1
+    expect(slugs.slice(afterHealth, afterHealth + NEW_CONSUMER.length)).toEqual(
+      NEW_CONSUMER,
+    )
+    expect(slugs[afterHealth + NEW_CONSUMER.length]).toBe('ai_infrastructure')
+  })
+})
+
 describe('the reads', () => {
   afterEach(() => {
     vi.unstubAllGlobals()
