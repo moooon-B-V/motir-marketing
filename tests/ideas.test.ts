@@ -642,8 +642,8 @@ describe('the localized E2E fixtures match the contract', () => {
   const read = (path: string): unknown =>
     JSON.parse(readFileSync(`${DIR}/${path}`, 'utf8'))
 
-  it('covers the four locales the acceptance walk reads', () => {
-    expect([...locales].sort()).toEqual(['de', 'ja', 'ko', 'pl'])
+  it('covers the five locales the acceptance walks read', () => {
+    expect([...locales].sort()).toEqual(['de', 'ja', 'ko', 'pl', 'zh'])
   })
 
   it.each(locales)(

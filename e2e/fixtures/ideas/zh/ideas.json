@@ -1,0 +1,171 @@
+{
+  "items": [
+    {
+      "slug": "an-ai-legal-desk-for-software-going-global",
+      "title": "为出海软件公司打造的AI法务台",
+      "pitch": "起草并持续更新服务条款、隐私政策和数据处理协议，记录每一个接触客户数据的供应商，并由律师把关。",
+      "kind": "motir_buys",
+      "category": {
+        "slug": "legal",
+        "label": "法务"
+      },
+      "tags": [
+        {
+          "slug": "ai-agents",
+          "label": "AI智能体",
+          "labelFallback": false
+        },
+        {
+          "slug": "compliance",
+          "label": "合规",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [
+        "随产品变化起草和更新服务条款、隐私政策与数据处理协议",
+        "审阅供应商和客户合同，标出需要律师处理的条款",
+        "跟踪各地新出台的数据法规，并说明每一条改变了什么"
+      ],
+      "evidence": [],
+      "gap": null,
+      "whyNow": null,
+      "whyMotir": "Motir 每接入一家模型服务商，都需要一份数据处理协议和传输客户数据的法律依据记录，如今这仍是耗时的手工活。",
+      "whoElse": "所有处理客户数据的软件公司——也就是每一家。",
+      "addedAt": "2026-10-10T00:00:00.000Z",
+      "lastReviewedAt": null,
+      "locale": "zh",
+      "fallbackFields": []
+    },
+    {
+      "slug": "catch-livestream-returns-before-they-ship",
+      "title": "在发货前拦住直播带货的退货",
+      "pitch": "在直播下单后、发货之前，识别冲动下单和尺码犹豫的订单，主动答疑或建议换码，并为每一笔退货申请评估欺诈风险。",
+      "kind": "direction",
+      "category": {
+        "slug": "ecommerce",
+        "label": "电子商务"
+      },
+      "tags": [
+        {
+          "slug": "smb",
+          "label": "中小企业",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "预计2025年消费者将退回价值约8499亿美元的商品，占线上销售额的19.3%，其中9%的退货属于欺诈。",
+          "sourceName": "National Retail Federation and Happy Returns, October 2025",
+          "url": "https://nrf.com/media-center/press-releases/consumers-expected-to-return-nearly-850-billion-in-merchandise-in-2025",
+          "sourceDate": "2025-10-01",
+          "claimFallback": false
+        }
+      ],
+      "gap": "退货平台在退货发生之后才介入；面向中小店铺、在退货发生之前就拦住它的工具几乎没有。",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-10T00:00:01.000Z",
+      "lastReviewedAt": null,
+      "locale": "zh",
+      "fallbackFields": []
+    },
+    {
+      "slug": "a-daily-companion-for-elders-living-alone",
+      "title": "独居老人的每日陪伴助手",
+      "pitch": "每天用语音和老人聊几句，提醒吃药和复诊，留意作息的异常变化，并在需要时通知子女或社区。",
+      "kind": "direction",
+      "category": {
+        "slug": "silver_economy",
+        "label": "银发经济"
+      },
+      "tags": [
+        {
+          "slug": "aging",
+          "label": "老龄化",
+          "labelFallback": false
+        },
+        {
+          "slug": "consumer-apps",
+          "label": "消费应用",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [
+        {
+          "claim": "2023年末，中国60岁及以上人口为29697万人，占全国人口的21.1%。",
+          "sourceName": "National Bureau of Statistics of China, February 2024",
+          "url": "https://www.stats.gov.cn/",
+          "sourceDate": "2024-02-01",
+          "claimFallback": false
+        }
+      ],
+      "gap": "现有的养老产品多是一次性的硬件或紧急呼叫按钮，很少有能长期陪伴、又能把变化及时告诉家人的服务。",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-10T00:00:02.000Z",
+      "lastReviewedAt": null,
+      "locale": "zh",
+      "fallbackFields": []
+    },
+    {
+      "slug": "bookings-and-reminders-for-neighbourhood-repair-shops",
+      "title": "社区维修店的预约与提醒",
+      "pitch": "让家电、手机和自行车维修店在微信里接受预约、报价和取件提醒，不再靠电话和纸本记账。",
+      "kind": "direction",
+      "category": {
+        "slug": "local_services",
+        "label": "本地生活服务"
+      },
+      "tags": [
+        {
+          "slug": "smb",
+          "label": "中小企业",
+          "labelFallback": false
+        },
+        {
+          "slug": "vertical-saas",
+          "label": "垂直行业软件",
+          "labelFallback": false
+        }
+      ],
+      "capabilities": [],
+      "evidence": [],
+      "gap": "大型平台服务的是连锁门店；街边的小维修店仍在用电话、便签和记忆来管理每一单生意。",
+      "whyNow": null,
+      "whyMotir": null,
+      "whoElse": null,
+      "addedAt": "2026-10-10T00:00:03.000Z",
+      "lastReviewedAt": null,
+      "locale": "zh",
+      "fallbackFields": []
+    }
+  ],
+  "categories": [
+    {
+      "slug": "legal",
+      "label": "法务",
+      "count": 1
+    },
+    {
+      "slug": "ecommerce",
+      "label": "电子商务",
+      "count": 1
+    },
+    {
+      "slug": "local_services",
+      "label": "本地生活服务",
+      "count": 1
+    },
+    {
+      "slug": "silver_economy",
+      "label": "银发经济",
+      "count": 1
+    }
+  ],
+  "total": 4,
+  "locale": "zh"
+}
