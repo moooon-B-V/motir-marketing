@@ -1,0 +1,41 @@
+{
+  "tags": [
+    {
+      "slug": "aging",
+      "label": "老龄化",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "ai-agents",
+      "label": "AI智能体",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "compliance",
+      "label": "合规",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "consumer-apps",
+      "label": "消费应用",
+      "count": 1,
+      "labelFallback": false
+    },
+    {
+      "slug": "smb",
+      "label": "中小企业",
+      "count": 2,
+      "labelFallback": false
+    },
+    {
+      "slug": "vertical-saas",
+      "label": "垂直行业软件",
+      "count": 1,
+      "labelFallback": false
+    }
+  ],
+  "locale": "zh"
+}

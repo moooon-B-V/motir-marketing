@@ -327,6 +327,76 @@ describe('the cards', () => {
   })
 })
 
+describe('a new category of Story MOTIR-8273', () => {
+  const silver: PublicIdeaDto = {
+    ...direction,
+    slug: 'silver-test-idea',
+    category: { slug: 'silver_economy', label: 'Silver economy' },
+  }
+  const factory: PublicIdeaDto = {
+    ...direction,
+    slug: 'factory-test-idea',
+    category: { slug: 'manufacturing', label: 'Manufacturing' },
+  }
+
+  it('a direction card in silver_economy draws the record mark, one in manufacturing the decision mark', () => {
+    render(
+      <ul>
+        <DirectionCard idea={silver} params={EMPTY} />
+        <DirectionCard idea={factory} params={EMPTY} />
+      </ul>,
+    )
+    const silverCard = document.getElementById('idea-silver-test-idea')!
+    expect(silverCard.querySelector('[data-mark]')).toHaveAttribute(
+      'data-mark',
+      'record',
+    )
+    expect(silverCard).toHaveTextContent('Silver economy')
+    const factoryCard = document.getElementById('idea-factory-test-idea')!
+    expect(factoryCard.querySelector('[data-mark]')).toHaveAttribute(
+      'data-mark',
+      'decision',
+    )
+  })
+
+  function withSilver(params: IdeasParams) {
+    return render(
+      <IdeasNavProvider>
+        <IdeaControls
+          params={params}
+          total={1}
+          categories={[
+            ...list.categories,
+            { slug: 'silver_economy', label: 'Silver economy', count: 1 },
+          ]}
+          tags={tags}
+        />
+      </IdeasNavProvider>,
+    )
+  }
+
+  it('draws a Silver economy chip linking to its filter view', () => {
+    withSilver(EMPTY)
+    const group = screen.getByRole('group', { name: f.categoryGroup })
+    const chip = within(group).getByRole('link', { name: /Silver economy/ })
+    expect(chip).toHaveAttribute('href', '/ideas?category=silver_economy')
+    expect(chip).toHaveTextContent('Silver economy1')
+    expect(chip).not.toHaveAttribute('aria-current')
+  })
+
+  it('presses the chip and shows its pill when that category is chosen', () => {
+    withSilver({ category: 'silver_economy', tags: [] })
+    const group = screen.getByRole('group', { name: f.categoryGroup })
+    const on = within(group).getByRole('link', { current: true })
+    expect(on).toHaveTextContent('Silver economy')
+    expect(
+      screen.getByRole('link', {
+        name: new RegExp(format(f.pillCategory, { label: 'Silver economy' })),
+      }),
+    ).toHaveAttribute('href', '/ideas')
+  })
+})
+
 describe('the states', () => {
   it('no match: a way back to every idea', () => {
     render(<IdeasEmpty />)
@@ -369,6 +439,26 @@ describe('the helpers the page leans on', () => {
     expect(ideaCategoryMark('ai_infrastructure')).toBe('ground')
     expect(ideaCategoryMark('astrology')).toBe('ground')
     render(<CategoryMark slug="pets" />)
+  })
+
+  it('gives the nine categories of Story MOTIR-8273 their group marks', () => {
+    for (const slug of [
+      'entertainment_media',
+      'hospitality_travel',
+      'mobility',
+      'energy_climate',
+      'manufacturing',
+      'local_services',
+    ]) {
+      expect(ideaCategoryMark(slug)).toBe('decision')
+    }
+    for (const slug of [
+      'social_community',
+      'silver_economy',
+      'independent_work',
+    ]) {
+      expect(ideaCategoryMark(slug)).toBe('record')
+    }
   })
 
   it('reads a source date as its month, and nothing for none', () => {

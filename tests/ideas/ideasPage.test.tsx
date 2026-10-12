@@ -38,6 +38,9 @@ const LIST = ideasFixture as PublicIdeaListDto
 const TAGS = tagsFixture as PublicIdeaTagListDto
 const ONE = ideaFixture as PublicIdeaDto
 
+/** The store the stub narrows — the recording, unless a block widens it. */
+let source: PublicIdeaListDto = LIST
+
 function narrow(search: URLSearchParams): PublicIdeaListDto {
   const category = search.get('category')
   const tags = search.getAll('tag')
@@ -52,9 +55,9 @@ function narrow(search: URLSearchParams): PublicIdeaListDto {
         .join('\n')
         .toLowerCase()
         .includes(q))
-  const items = LIST.items.filter((i) => matches(i, true))
-  const countable = LIST.items.filter((i) => matches(i, false))
-  const categories = LIST.categories
+  const items = source.items.filter((i) => matches(i, true))
+  const countable = source.items.filter((i) => matches(i, false))
+  const categories = source.categories
     .map((c) => ({
       ...c,
       count: countable.filter((i) => i.category.slug === c.slug).length,
@@ -76,6 +79,7 @@ function json(body: unknown, status = 200): Response {
 
 beforeEach(() => {
   mode = 'ok'
+  source = LIST
   calls.length = 0
   vi.stubGlobal('fetch', async (input: string) => {
     calls.push(input)
@@ -87,7 +91,7 @@ beforeEach(() => {
       return mode === 'tags-down' ? json({}, 503) : json(TAGS)
     const slug = decodeURIComponent(rest.slice(1))
     if (slug === ONE.slug) return json(ONE)
-    const listed = LIST.items.find((i) => i.slug === slug)
+    const listed = source.items.find((i) => i.slug === slug)
     return listed ? json(listed) : json({ code: 'not_found' }, 404)
   })
 })
@@ -181,6 +185,64 @@ describe('every filter combination', () => {
       'href',
       `/ideas?category=ecommerce&tag=smb&idea=${ONE.slug}`,
     )
+  })
+})
+
+describe('a new category of Story MOTIR-8273', () => {
+  const direction = LIST.items.find(
+    (i) => i.kind === 'direction',
+  ) as PublicIdeaDto
+  const silver: PublicIdeaDto = {
+    ...direction,
+    slug: 'silver-test-idea',
+    title: 'A silver-economy test idea',
+    category: { slug: 'silver_economy', label: 'Silver economy' },
+  }
+
+  beforeEach(() => {
+    source = {
+      ...LIST,
+      items: [...LIST.items, silver],
+      categories: [
+        ...LIST.categories,
+        { slug: 'silver_economy', label: 'Silver economy', count: 1 },
+      ],
+      total: LIST.total + 1,
+    }
+  })
+
+  function categoryGroup() {
+    return screen.getByRole('group', { name: copy.ideas.find.categoryGroup })
+  }
+
+  it('the unfiltered page shows its chip with count 1 and its card with the record mark', async () => {
+    await open('')
+    const chip = within(categoryGroup()).getByRole('link', {
+      name: /Silver economy/,
+    })
+    expect(chip).toHaveTextContent('Silver economy1')
+    expect(chip).toHaveAttribute('href', '/ideas?category=silver_economy')
+    const card = document.getElementById('idea-silver-test-idea')!
+    expect(card).toHaveTextContent('Silver economy')
+    expect(card.querySelector('[data-mark]')).toHaveAttribute(
+      'data-mark',
+      'record',
+    )
+  })
+
+  it('?category=silver_economy asks for that category and shows only that idea', async () => {
+    await open('category=silver_economy')
+    expect(calls).toContain(`${API}?category=silver_economy&locale=en`)
+    expect(cardTitles()).toEqual([silver.title])
+  })
+
+  it('?category=space_travel is ignored: no category asked for, the whole list shown', async () => {
+    await open('category=space_travel')
+    expect(calls).toContain(`${API}?locale=en`)
+    expect(calls.some((c) => c.includes('category='))).toBe(false)
+    const buys = source.items.filter((i) => i.kind === 'motir_buys')
+    const rest = source.items.filter((i) => i.kind === 'direction')
+    expect(cardTitles()).toEqual([...buys, ...rest].map((i) => i.title))
   })
 })
 
