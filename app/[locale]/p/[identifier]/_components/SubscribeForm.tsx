@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { PUBLIC_API_BASE } from '@/lib/publicProject'
-import { useCopy } from '@/lib/copy'
+import { useCopy, usePageLocale } from '@/lib/copy'
 
 /**
  * SUBSCRIBE BY EMAIL (MOTIR-4119) — AMENDMENT 4 row 3, the one act that stays
@@ -23,6 +23,13 @@ import { useCopy } from '@/lib/copy'
  * form that said "you were already subscribed" would rebuild the oracle in the
  * client. So there is ONE success message, and it is deliberately vague about
  * which of the three happened.
+ *
+ * ⚠️ IT SENDS THE PAGE'S LANGUAGE, NOT THE BROWSER'S (MOTIR-8735). An
+ * email-only follow has no account to hold a language, so motir-core records
+ * the body's `locale` on the follow and renders that follower's emails in it.
+ * Without it the route falls back to the request's own language — and this
+ * request carries no cookie, so that is `Accept-Language`, not the `/[locale]`
+ * of the page the visitor was reading.
  */
 
 type State =
@@ -43,6 +50,7 @@ type State =
 export function SubscribeForm({ identifier }: { identifier: string }) {
   const copy = useCopy()
   const subscribe = copy.publicProject.subscribe
+  const locale = usePageLocale()
   const [email, setEmail] = useState('')
   const [state, setState] = useState<State>({ kind: 'idle' })
 
@@ -56,7 +64,7 @@ export function SubscribeForm({ identifier }: { identifier: string }) {
         {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email, locale }),
         },
       )
 

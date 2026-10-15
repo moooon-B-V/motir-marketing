@@ -32,7 +32,7 @@ const fill = async (email = 'reader@example.test') => {
 }
 
 describe('the request it makes', () => {
-  it('posts to the APP origin, with the email as JSON', async () => {
+  it('posts to the APP origin, with the email and the page locale as JSON', async () => {
     fetchMock.mockResolvedValue({ status: 202 })
 
     await fill()
@@ -42,6 +42,24 @@ describe('the request it makes', () => {
     expect(init.method).toBe('POST')
     expect(JSON.parse(String(init.body))).toEqual({
       email: 'reader@example.test',
+      locale: 'en',
+    })
+  })
+
+  it("sends the PAGE's locale, so an email-only follow is recorded in it (MOTIR-8735)", async () => {
+    // The request is cross-origin and carries no cookie, so without this the
+    // core route falls back to `Accept-Language` — the browser's language, not
+    // the language of the `/[locale]` page the visitor was reading.
+    fetchMock.mockResolvedValue({ status: 202 })
+    const user = userEvent.setup()
+    render(<SubscribeForm identifier="ACME" />, { locale: 'it' })
+    await user.type(screen.getByRole('textbox'), 'lettore@example.test')
+    await user.click(screen.getByRole('button'))
+
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit]
+    expect(JSON.parse(String(init.body))).toEqual({
+      email: 'lettore@example.test',
+      locale: 'it',
     })
   })
 
