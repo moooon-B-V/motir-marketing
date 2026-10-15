@@ -74,7 +74,9 @@ env:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    # The runner is chosen by the MOTIR_RUNNER org variable, which the /admin fleet switch writes
+    # (Story MOTIR-8699); unset means GitHub-hosted. Never hard-code a runner label here again.
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
@@ -89,7 +91,7 @@ jobs:
 
   typecheck:
     name: Typecheck
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
@@ -103,7 +105,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
@@ -130,7 +132,7 @@ jobs:
   # by inspection".
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
@@ -159,7 +161,7 @@ jobs:
   # browser, which is all `chromium.launch()` needs here.
   design-guards:
     name: Design guards
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
@@ -194,7 +196,7 @@ jobs:
   # `--only-shell` takes the headless shell, as `design-guards` above does.
   e2e:
     name: E2E
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
@@ -250,7 +252,7 @@ jobs:
   # neither is sufficient alone.
   subprocessor-seam:
     name: Subprocessor seam (live)
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
@@ -268,7 +270,7 @@ jobs:
 
   deploy:
     name: Deploy to Fly
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     needs: [lint, typecheck, build, test, design-guards, e2e, subprocessor-seam]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # A release must NOT be cancelled mid-flight by a newer push — the
