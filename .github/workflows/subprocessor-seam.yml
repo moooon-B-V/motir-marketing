@@ -65,7 +65,7 @@ env:
 jobs:
   seam:
     name: Subprocessor seam (live)
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     permissions:
       contents: read
