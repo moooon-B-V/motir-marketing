@@ -3,6 +3,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   DOCS_REVALIDATE_SECONDS,
+  docsFetchInit,
   McpToolCatalogueShapeError,
   catalogueTextLocale,
   countCatalogueTools,
@@ -541,6 +542,15 @@ describe('the generated reference pages are ISR, never per request', () => {
     'app/[locale]/docs/(guides)/mcp/tools/page.tsx',
     'app/[locale]/docs/(guides)/cli/page.tsx',
   ]
+
+  it('fetches on the shared window, and per request only in the browser lane', () => {
+    expect(docsFetchInit(undefined)).toEqual({
+      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+    })
+    expect(docsFetchInit('/repo/content/docs')).toEqual({
+      next: { revalidate: 0 },
+    })
+  })
 
   it.each(PAGES)('%s revalidates on the shared window', (page) => {
     const source = readFileSync(page, 'utf8')
