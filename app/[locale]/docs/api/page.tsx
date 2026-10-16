@@ -69,7 +69,9 @@ import {
  * committed default rendered when the fetch fails is stale exactly when it is
  * displayed and invisible exactly when it is wrong.
  */
-export const dynamic = 'force-dynamic'
+// ISR, not per request — see DOCS_REVALIDATE_SECONDS in `lib/docs.ts` (a literal,
+// because Next reads this export statically).
+export const revalidate = 300
 
 export function generateMetadata({
   params,

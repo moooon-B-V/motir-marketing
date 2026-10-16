@@ -51,6 +51,10 @@ primary_region = "iad"               # beside motir-core and motir-ai.
 
 [env]
   PORT = "8080"
+  # Below the 1 GB VM (`[[vm]]` at the bottom) so V8 collects before the kernel
+  # OOM-kills the machine: a heap exhaustion is a clean SIGABRT and restart, an
+  # OOM kill is an exit 137 with whatever was in flight lost.
+  NODE_OPTIONS = "--max-old-space-size=768"
   # HOSTNAME=0.0.0.0 is set in the Dockerfile, not here — see the ⚠️ on it there.
 
 [http_service]
@@ -116,7 +120,17 @@ primary_region = "iad"               # beside motir-core and motir-ai.
 # sizes the BASELINE and says nothing about load — it is recorded so the trigger
 # below has something to fire against. TRIGGER: a VmRSS reading above ~350 MB,
 # or an OOM in the machine's events.
+#
+# ⚠️ THE TRIGGER FIRED ON 2026-10-16, AND THIS IS NOW 1 GB. Traffic rose ~4x
+# from 2026-10-15 20:00Z (≈1k → 3–6k requests/hour, almost all 200s, mostly via
+# `iad`), machine memory went from a steady ~300 MB to 420–440 MB peaks
+# (`fly_instance_memory_mem_*`), and both machines died repeatedly — exit 137
+# `oom_killed=true` on d893299a5d4708, `JavaScript heap out of memory` SIGABRTs
+# on 85761d2a4134e8 — which is what made motir.co slow: requests queued or were
+# reset on every restart. The /docs reference pages rendering per request were
+# the main load; they are ISR now (`lib/docs.ts`). 1 GB is the headroom while
+# that is confirmed. TRIGGER to revise: the same series above ~700 MB.
 [[vm]]
   size   = "shared-cpu-1x"
-  memory = "512mb"
+  memory = "1gb"
   cpus   = 1

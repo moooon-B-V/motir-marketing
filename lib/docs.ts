@@ -33,7 +33,23 @@ import type { Locale } from '@/i18n/routing'
  * The guide / policy / MCP / CLI / sandbox pages are committed PROSE — authored
  * documentation rather than a registry, which is why they are allowed to live
  * here at all.
+ *
+ * ⚠️ "FRESH" MEANS AT MOST {@link DOCS_REVALIDATE_SECONDS} OLD, NOT PER REQUEST.
+ * The three artifacts change when motir-core DEPLOYS, not between two page
+ * views, and reading them per request was measured to cost the site its uptime:
+ * on 2026-10-16 a ~4x crawl of `/docs` in eleven locales parsed the 720 KB spec
+ * on every hit and both 512 MB machines died of `JavaScript heap out of memory`
+ * over and over, which is what made motir.co slow. The pages that read them are
+ * ISR now (`export const revalidate`), so one render per locale per window does
+ * the work and every other request gets the cached HTML.
  */
+
+/**
+ * How long a fetched artifact — and the page rendered from it — may be served
+ * before the next request re-reads it. The pages' segment `revalidate` must be
+ * the same literal, because Next reads that export statically.
+ */
+export const DOCS_REVALIDATE_SECONDS = 300
 
 /**
  * One JSON Schema node of the document. Deliberately open: the spec carries
@@ -147,7 +163,9 @@ const SPEC_URL = `${APP_ORIGIN}/api/openapi/v1.json`
  * rail's anchors be guaranteed to match the page's section ids.
  */
 export const fetchOpenApiSpec = cache(async (): Promise<OpenApiDocument> => {
-  const res = await fetch(SPEC_URL, { next: { revalidate: 0 } })
+  const res = await fetch(SPEC_URL, {
+    next: { revalidate: DOCS_REVALIDATE_SECONDS },
+  })
   if (!res.ok) throw new Error(`openapi spec ${res.status}`)
   return (await res.json()) as OpenApiDocument
 })
@@ -767,7 +785,9 @@ export async function fetchMcpToolCatalogue(
     locale === undefined || locale === 'en'
       ? CATALOGUE_URL
       : `${CATALOGUE_URL}?locale=${locale}`
-  const res = await fetch(url, { next: { revalidate: 0 } })
+  const res = await fetch(url, {
+    next: { revalidate: DOCS_REVALIDATE_SECONDS },
+  })
   if (!res.ok) throw new Error(`mcp tool catalogue ${res.status}`)
   return parseMcpToolCatalogue(await res.json())
 }
@@ -945,7 +965,9 @@ export function parseCliCommands(value: unknown): CliCommandsDocument {
 
 /** Fetch the published catalogue. Throws when the artifact is unreachable. */
 export async function fetchCliCommands(): Promise<CliCommandsDocument> {
-  const res = await fetch(CLI_COMMANDS_URL, { next: { revalidate: 0 } })
+  const res = await fetch(CLI_COMMANDS_URL, {
+    next: { revalidate: DOCS_REVALIDATE_SECONDS },
+  })
   if (!res.ok) throw new Error(`cli command catalogue ${res.status}`)
   return parseCliCommands(await res.json())
 }
