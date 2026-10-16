@@ -547,6 +547,9 @@ describe('the generated reference pages are ISR, never per request', () => {
     expect(docsFetchInit(undefined)).toEqual({
       next: { revalidate: DOCS_REVALIDATE_SECONDS },
     })
+    expect(docsFetchInit('')).toEqual({
+      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+    })
     expect(docsFetchInit('/repo/content/docs')).toEqual({
       next: { revalidate: 0 },
     })

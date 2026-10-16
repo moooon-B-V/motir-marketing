@@ -1,7 +1,6 @@
 import { cache } from 'react'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import type { Locale } from '@/i18n/routing'
-import { liveDocsContentRoot } from '@/lib/docsDocuments'
 
 /**
  * The `/docs` data layer (MOTIR-4046, corrected by MOTIR-4180).
@@ -60,14 +59,17 @@ export const DOCS_REVALIDATE_SECONDS = 300
  * expects the very next page view to show it. The lane already renders `/docs`
  * per request under `MOTIR_DOCS_LIVE_CONTENT_ROOT` (MOTIR-8072), but a page
  * rendered per request still reads Next's DATA cache — so the same switch turns
- * the fetch cache off too. Unset, as in production, it is the shared window.
+ * the fetch cache off too. Unset or empty, as in production, it is the shared
+ * window — the rule `liveDocsContentRoot` (`lib/docsDocuments.ts`) applies.
+ *
+ * ⚠️ IT READS THE VARIABLE ITSELF rather than importing `liveDocsContentRoot`:
+ * `lib/docsDocuments.ts` imports `node:fs` and `node:crypto`, and a client
+ * bundle reaches this module, so that import fails `next build`.
  */
 export function docsFetchInit(
-  live: string | undefined = liveDocsContentRoot(),
+  live: string | undefined = process.env['MOTIR_DOCS_LIVE_CONTENT_ROOT'],
 ): { next: { revalidate: number } } {
-  return {
-    next: { revalidate: live === undefined ? DOCS_REVALIDATE_SECONDS : 0 },
-  }
+  return { next: { revalidate: live ? 0 : DOCS_REVALIDATE_SECONDS } }
 }
 
 /**
