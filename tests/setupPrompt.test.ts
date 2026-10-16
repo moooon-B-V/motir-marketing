@@ -21,6 +21,13 @@ describe('the setup prompt', () => {
     )
   })
 
+  it('has Claude Code check the plugin is the latest and install from Motir directly if not', () => {
+    const version = SKILLS_RELEASE_TAG.replace(/^v/, '')
+    expect(prompt).toContain(`whether it is the latest release, ${version}`)
+    expect(prompt).toContain("install it from Motir's own")
+    expect(prompt).toContain('/plugin uninstall motir')
+  })
+
   it('names the current release and the MCP address', () => {
     expect(prompt).toContain(`Use release ${SKILLS_RELEASE_TAG}`)
     expect(prompt).toContain(mcpTransportFacts().url)
