@@ -1,7 +1,11 @@
 import { APP_ORIGIN } from './appOrigin'
 import { mcpTransportFacts } from './mcpWiring'
 import { siteUrl } from './siteOrigin'
-import { AGENT_INSTALLS, SKILLS_RELEASE_TAG } from './skillsGuide'
+import {
+  AGENT_INSTALLS,
+  CLAUDE_CODE_UPDATE,
+  SKILLS_RELEASE_TAG,
+} from './skillsGuide'
 
 /*
  * THE SETUP PROMPT (2026-10 redesign) — one block of text a visitor copies
@@ -21,6 +25,7 @@ import { AGENT_INSTALLS, SKILLS_RELEASE_TAG } from './skillsGuide'
 export function setupPrompt(): string {
   const claudeCode = AGENT_INSTALLS.find((agent) => agent.id === 'claude-code')
   const pluginCommands = claudeCode?.blocks[0]?.code ?? ''
+  const updateCommands = CLAUDE_CODE_UPDATE.code
   const version = SKILLS_RELEASE_TAG.replace(/^v/, '')
   const { url: mcpUrl } = mcpTransportFacts()
   const docs = (path: string) => siteUrl(path)
@@ -32,11 +37,15 @@ export function setupPrompt(): string {
     '',
     '## If you are Claude Code',
     '',
-    `First check whether the motir plugin is already installed (/plugin) and whether it is the latest release, ${version}. A copy from another marketplace, such as Claude's own, can be older. If motir is installed at ${version}, keep it and skip the install. If it is missing or older, do not install it from that marketplace: install it from Motir's own, directly from the motir-skills release. Run these two commands (if an older copy is installed, run /plugin uninstall motir first):`,
+    `First check whether the motir plugin is already installed (/plugin) and whether it is the latest release, ${version}. A marketplace added at an older release keeps serving that release, so an existing copy can be behind. If motir is installed at ${version}, keep it and skip the rest of this step. If it is not installed, run these two commands:`,
     '',
     pluginCommands,
     '',
-    `That one install brings the skills, the Motir MCP server and a runner for the CLI (the runner needs Node.js 22 or newer). Then run /mcp, pick motir, choose Authenticate, and I will finish the sign-in in my browser. Check it worked: /plugin shows motir at ${version} (if it still shows an older version, repeat the install above), and /mcp lists motir. Details: ${docs('/docs/claude-code-plugin')}`,
+    'If it is installed but older, do not leave it: update it from Motir directly by removing the motir-skills marketplace and adding it again at the latest release. Run these three commands:',
+    '',
+    updateCommands,
+    '',
+    `That one install brings the skills, the Motir MCP server and a runner for the CLI (the runner needs Node.js 22 or newer). Then run /mcp, pick motir, choose Authenticate, and I will finish the sign-in in my browser. Check it worked: /plugin shows motir at ${version} (if it still shows an older version, run the update above), and /mcp lists motir. Details: ${docs('/docs/claude-code-plugin')}`,
     '',
     '## Any other agent',
     '',
