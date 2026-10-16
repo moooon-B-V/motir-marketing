@@ -1,5 +1,6 @@
 import { join } from 'node:path'
 import { defineConfig, devices } from '@playwright/test'
+import { SKILLS_RELEASE_PIN } from './lib/skillsRelease'
 import {
   SITE_ORIGIN,
   SITE_PORT,
@@ -144,6 +145,11 @@ export default defineConfig({
         // above; `e2e/stub/origin.ts` carries the full note.
         NEXT_PUBLIC_MOTIR_TENANT_DOMAIN: 'localhost',
         NEXT_TELEMETRY_DISABLED: '1',
+        // The docs install commands name the committed floor in this lane
+        // (MOTIR-8802): `scripts/skills/resolve-release.ts` honours a value
+        // already set, so the build never reaches GitHub and the spec's
+        // expected tag cannot drift under it.
+        SKILLS_RELEASE_TAG: SKILLS_RELEASE_PIN,
         // ⚠️ THE LANE READS /docs FROM THE REPOSITORY, PER REQUEST (MOTIR-8072).
         // Set for the build AND the server, like the origin above: at build time
         // it turns every /docs page dynamic (`DocsDocument` calls `connection()`

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { SKILLS_RELEASE_PIN } from '../../lib/skillsRelease'
 
 /*
  * `/docs/skills`, AS A READER REACHES IT (MOTIR-6719).
@@ -41,8 +42,11 @@ async function sectionText(page: Page, id: string): Promise<string> {
   }, id)
 }
 
-/** The `motir-skills` release every install command must fetch. */
-const RELEASE_TAG = 'v0.7.0'
+/**
+ * The `motir-skills` release every install command must fetch: the lane builds
+ * with `SKILLS_RELEASE_TAG` set to the floor (`playwright.config.ts`).
+ */
+const RELEASE_TAG = SKILLS_RELEASE_PIN
 
 /** Each agent the page documents, and the domain its own docs live on. */
 const AGENTS: { label: string; host: string }[] = [

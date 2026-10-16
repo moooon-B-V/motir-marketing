@@ -46,7 +46,10 @@ ENV NEXT_PUBLIC_MOTIR_APP_ORIGIN=${NEXT_PUBLIC_MOTIR_APP_ORIGIN}
 ARG NEXT_PUBLIC_MOTIR_TENANT_DOMAIN
 ENV NEXT_PUBLIC_MOTIR_TENANT_DOMAIN=${NEXT_PUBLIC_MOTIR_TENANT_DOMAIN}
 
-RUN pnpm next build --webpack
+# The `motir-skills` release the docs install commands name (MOTIR-8802): the
+# latest GitHub release, resolved here so a rebuild is all a release needs. A
+# network failure falls back to the committed floor rather than failing the image.
+RUN SKILLS_RELEASE_TAG="$(node scripts/skills/resolve-release.ts)" pnpm next build --webpack
 
 # ── runner ──────────────────────────────────────────────────────────────────
 FROM node:22-slim AS runner

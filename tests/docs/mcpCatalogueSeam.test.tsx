@@ -210,9 +210,10 @@ describe('GUARD: every install command names the current release', () => {
     for (const line of commands) expect(line).toContain(SKILLS_RELEASE_TAG)
   })
 
-  it('SKILLS_RELEASE_TAG equals the E2E spec’s RELEASE_TAG', () => {
+  it('the E2E lane builds with the floor the spec expects', () => {
     const spec = readFileSync('e2e/specs/docs-skills.spec.ts', 'utf8')
-    const match = /const RELEASE_TAG = '([^']+)'/.exec(spec)
-    expect(match?.[1]).toBe(SKILLS_RELEASE_TAG)
+    const config = readFileSync('playwright.config.ts', 'utf8')
+    expect(spec).toContain('const RELEASE_TAG = SKILLS_RELEASE_PIN')
+    expect(config).toContain('SKILLS_RELEASE_TAG: SKILLS_RELEASE_PIN')
   })
 })
