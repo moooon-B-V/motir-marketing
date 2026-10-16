@@ -2,6 +2,8 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
+  DOCS_REVALIDATE_SECONDS,
+  docsFetchInit,
   McpToolCatalogueShapeError,
   catalogueTextLocale,
   countCatalogueTools,
@@ -422,8 +424,12 @@ describe('the catalogue is consumed, never copied', () => {
       base,
       `${base}?locale=ko`,
     ])
-    expect(fetchMock.mock.calls[0]![1]).toEqual({ next: { revalidate: 0 } })
-    expect(fetchMock.mock.calls[2]![1]).toEqual({ next: { revalidate: 0 } })
+    expect(fetchMock.mock.calls[0]![1]).toEqual({
+      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+    })
+    expect(fetchMock.mock.calls[2]![1]).toEqual({
+      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+    })
   })
 
   it('THROWS when the artifact is unreachable — there is no fallback list', async () => {
@@ -522,4 +528,38 @@ describe('the MCP pages name no tools, because nothing here could check them', (
       })
     }
   }
+})
+
+describe('the generated reference pages are ISR, never per request', () => {
+  // A per-request render of these pages is what took motir.co down on
+  // 2026-10-16 (see `DOCS_REVALIDATE_SECONDS` in `lib/docs.ts`). Next reads the
+  // segment export statically, so the pages repeat the number as a literal —
+  // this keeps the four copies equal to the constant and keeps
+  // `force-dynamic` from coming back.
+  const PAGES = [
+    'app/[locale]/docs/api/page.tsx',
+    'app/[locale]/docs/(guides)/mcp/page.tsx',
+    'app/[locale]/docs/(guides)/mcp/tools/page.tsx',
+    'app/[locale]/docs/(guides)/cli/page.tsx',
+  ]
+
+  it('fetches on the shared window, and per request only in the browser lane', () => {
+    expect(docsFetchInit(undefined)).toEqual({
+      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+    })
+    expect(docsFetchInit('')).toEqual({
+      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+    })
+    expect(docsFetchInit('/repo/content/docs')).toEqual({
+      next: { revalidate: 0 },
+    })
+  })
+
+  it.each(PAGES)('%s revalidates on the shared window', (page) => {
+    const source = readFileSync(page, 'utf8')
+    expect(source).toContain(
+      `export const revalidate = ${DOCS_REVALIDATE_SECONDS}\n`,
+    )
+    expect(source).not.toContain('force-dynamic')
+  })
 })

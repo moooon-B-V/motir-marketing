@@ -76,7 +76,9 @@ import { renderDocsParts } from '../../_components/DocsDocument'
  * spell their keys that way too, which is exactly why the blocks live in
  * `lib/mcpWiring.ts`; see the ⚠️ block there.
  */
-export const dynamic = 'force-dynamic'
+// ISR, not per request — see DOCS_REVALIDATE_SECONDS in `lib/docs.ts` (a literal,
+// because Next reads this export statically).
+export const revalidate = 300
 
 export function generateMetadata({
   params,

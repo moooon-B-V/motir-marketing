@@ -73,7 +73,9 @@ import { DEFAULT_LOCALE, type Locale } from '@/i18n/routing'
  * only version that is true. Recorded because a later reader diffing this
  * against `95a2d4468^` will find one row that was never there.
  */
-export const dynamic = 'force-dynamic'
+// ISR, not per request — see DOCS_REVALIDATE_SECONDS in `lib/docs.ts` (a literal,
+// because Next reads this export statically).
+export const revalidate = 300
 
 export function generateMetadata({
   params,
