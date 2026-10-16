@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { mcpTransportFacts } from '@/lib/mcpWiring'
 import { setupPrompt } from '@/lib/setupPrompt'
-import { AGENT_INSTALLS, SKILLS_RELEASE_TAG } from '@/lib/skillsGuide'
+import {
+  AGENT_INSTALLS,
+  CLAUDE_CODE_UPDATE,
+  SKILLS_RELEASE_TAG,
+} from '@/lib/skillsGuide'
 
 /*
  * The setup prompt carries no fact of its own: the Claude Code plugin
@@ -19,6 +23,13 @@ describe('the setup prompt', () => {
     expect(prompt).toContain(
       `/plugin marketplace add moooon-B-V/motir-skills#${SKILLS_RELEASE_TAG}`,
     )
+  })
+
+  it('has Claude Code check the plugin is the latest and update it from Motir directly if not', () => {
+    const version = SKILLS_RELEASE_TAG.replace(/^v/, '')
+    expect(prompt).toContain(`whether it is the latest release, ${version}`)
+    expect(prompt).toContain(CLAUDE_CODE_UPDATE.code)
+    expect(prompt).toContain('/plugin marketplace remove motir-skills')
   })
 
   it('names the current release and the MCP address', () => {

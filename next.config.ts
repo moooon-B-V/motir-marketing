@@ -32,6 +32,18 @@ const nextConfig: NextConfig = {
   output: 'standalone',
 
   /*
+   * The `motir-skills` release every install command names (MOTIR-8802).
+   * `scripts/skills/resolve-release.ts` prints the latest GitHub release and
+   * `pnpm build` / the Dockerfile put it in `SKILLS_RELEASE_TAG`; inlining it
+   * here makes the server components read the same value the build resolved.
+   * Unset (tests, `next dev`) the key is omitted and `lib/skillsRelease.ts`'s
+   * committed floor applies.
+   */
+  env: process.env.SKILLS_RELEASE_TAG
+    ? { SKILLS_RELEASE_TAG: process.env.SKILLS_RELEASE_TAG }
+    : {},
+
+  /*
    * The OG card's font BYTES (MOTIR-1154). `app/_brand/ogFonts.ts` reads three
    * `.ttf` files through `process.cwd()`, which a WEBPACK dependency trace
    * cannot see — so the directory is named here for it.

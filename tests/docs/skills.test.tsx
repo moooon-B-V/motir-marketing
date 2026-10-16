@@ -12,6 +12,7 @@ import {
   SKILL_USAGE,
   SKILLS_RELEASE_TAG,
 } from '@/lib/skillsGuide'
+import { SKILLS_RELEASE_PIN } from '@/lib/skillsRelease'
 import { EN_PAGE } from '@/tests/helpers/locale'
 
 /*
@@ -220,13 +221,12 @@ describe('/docs/skills', () => {
     ).not.toBeNull()
   })
 
-  it('installs v0.7.0 — the release whose motir-guide corrects a step on your yes', () => {
-    // A literal on purpose: the constant moving is the change being made, so a
-    // test that read the constant back would agree with any tag. v0.5.0 was the
-    // first to carry motir-continue (MOTIR-7268); v0.6.0 made a decision work
-    // item publish its page, and v0.7.0 lets motir-guide correct a step
-    // (MOTIR-7552). Every skill is still the seven of v0.5.0.
-    expect(SKILLS_RELEASE_TAG).toBe('v0.7.0')
+  it('installs the latest release resolved at build, never below the pin', () => {
+    // The tag is resolved by `scripts/skills/resolve-release.ts` (MOTIR-8802),
+    // so there is no literal to assert here: under test the environment is
+    // unset and the floor applies. `tests/skillsRelease.test.ts` feeds newer
+    // tags and watches every command change.
+    expect(SKILLS_RELEASE_TAG).toBe(SKILLS_RELEASE_PIN)
     expect(RELEASE_SKILLS).toContain('motir-continue')
   })
 

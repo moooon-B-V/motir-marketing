@@ -8,7 +8,7 @@
  * depending on which section was copied. So the tag is `SKILLS_RELEASE_TAG`,
  * every command below interpolates it, and `tests/docs/skills.test.tsx`
  * asserts that every tag-shaped string on the rendered page equals it. A new
- * release is one edit here.
+ * release needs NO edit here: the tag is resolved at build time (MOTIR-8802).
  *
  * ⚠️ EVERY PATH WAS READ FROM THAT AGENT'S OWN DOCUMENTATION, on `CHECKED_ON`,
  * and the page links the source beside each section. These move fast: an
@@ -29,8 +29,15 @@
  * Motir, which is what they need, and never which tool produced it.
  */
 
-/** The `motir-skills` release every command on the page installs. */
-export const SKILLS_RELEASE_TAG = 'v0.7.0'
+import { pickSkillsReleaseTag } from './skillsRelease'
+
+/**
+ * The `motir-skills` release every command on the page installs — the latest
+ * GitHub release at build time, never below the pin (`lib/skillsRelease.ts`).
+ */
+export const SKILLS_RELEASE_TAG = pickSkillsReleaseTag(
+  process.env.SKILLS_RELEASE_TAG,
+)
 
 /** The public repository, as `owner/name`. */
 export const SKILLS_REPO = 'moooon-B-V/motir-skills'

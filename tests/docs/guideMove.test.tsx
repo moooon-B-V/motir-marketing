@@ -11,6 +11,7 @@ import ConnectorPage from '@/app/[locale]/docs/(guides)/claude-code-connector/pa
 import PluginPage from '@/app/[locale]/docs/(guides)/claude-code-plugin/page'
 import { documentInvariants } from '@/lib/docsDocuments'
 import { guideDate } from '@/lib/docsGuideValues'
+import { SKILLS_RELEASE_TAG } from '@/lib/skillsGuide'
 import { EN_PAGE } from '@/tests/helpers/locale'
 import baseline from './fixtures/guide-move-baseline.json'
 
@@ -50,7 +51,11 @@ vi.mock('@/lib/docsDocuments', async (importOriginal) => {
  *  2. Nothing else. In particular the two formatting changes the card allows
  *     (a command that was plain text becoming inline code, and a secondary-colour
  *     span becoming body text) leave the TEXT unchanged, so they need no rule.
- *  3. ONE value differs by design: the connector's two "steps checked" dates were
+ *  3. The `motir-skills` release the baseline was captured at (v0.7.0) is read
+ *     as the CURRENT release (`withCurrentRelease` below). The tag is resolved at
+ *     build now (MOTIR-8802), so a literal in this record would go red on every
+ *     release — the fixture stays what it was, and only that one value maps.
+ *  4. ONE value differs by design: the connector's two "steps checked" dates were
  *     ISO strings in the old JSX and are now formatted for the reader's locale
  *     (`guideDate`). The baseline's ISO date is mapped through the same function.
  */
@@ -81,6 +86,15 @@ async function renderPage(slug: Slug, params: unknown = EN_PAGE) {
 const read = (slug: string) =>
   readFileSync(join('content/docs', slug, 'en.md'), 'utf8')
 
+/** The release the baseline pages were captured at, as a tag and as a version. */
+const BASELINE_RELEASE = 'v0.7.0'
+
+function withCurrentRelease(text: string): string {
+  return text
+    .replaceAll(BASELINE_RELEASE, SKILLS_RELEASE_TAG)
+    .replaceAll(BASELINE_RELEASE.slice(1), SKILLS_RELEASE_TAG.slice(1))
+}
+
 const fixture = baseline as Record<
   string,
   { text: string; ids: string[]; payloads: string[] }
@@ -91,7 +105,7 @@ describe('the five guides read the same after the move', () => {
     describe(slug, () => {
       it('has the body text it had before, word for word', async () => {
         const container = await renderPage(slug)
-        const expected = fixture[slug]!.text.replace(
+        const expected = withCurrentRelease(fixture[slug]!.text).replace(
           /steps checked (\d{4}-\d{2}-\d{2})/g,
           (_, iso: string) => `steps checked ${guideDate('en', iso)}`,
         )
@@ -111,7 +125,9 @@ describe('the five guides read the same after the move', () => {
         const payloads = [...container.querySelectorAll('pre')].map(
           (pre) => pre.textContent,
         )
-        expect(payloads).toEqual(fixture[slug]!.payloads)
+        expect(payloads).toEqual(
+          fixture[slug]!.payloads.map(withCurrentRelease),
+        )
       })
 
       it('has a document with no fenced block and an {#id} on every heading', () => {

@@ -41,6 +41,16 @@ on:
   push:
     branches: [main]
   pull_request:
+  # A new `motir-skills` release re-releases the site (MOTIR-8802): every install
+  # command on motir.co names the latest release, resolved at BUILD
+  # (`scripts/skills/resolve-release.ts`). `motir-skills`' release workflow can
+  # send `repository_dispatch` with type `motir-skills-release` for an immediate
+  # rebuild; the daily schedule is the backstop that needs nothing from that
+  # repository, so the site is never more than a day behind a release.
+  repository_dispatch:
+    types: [motir-skills-release]
+  schedule:
+    - cron: '17 5 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -254,7 +264,7 @@ jobs:
     name: Subprocessor seam (live)
     runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
@@ -272,7 +282,7 @@ jobs:
     name: Deploy to Fly
     runs-on: ${{ vars.MOTIR_RUNNER || 'ubuntu-latest' }}
     needs: [lint, typecheck, build, test, design-guards, e2e, subprocessor-seam]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     # A release must NOT be cancelled mid-flight by a newer push — the
     # workflow-level `cancel-in-progress` above is right for a test run and
     # wrong for a deploy, so this group overrides it. It is also its OWN group

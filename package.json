@@ -10,7 +10,7 @@
   "packageManager": "pnpm@11.2.2",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "SKILLS_RELEASE_TAG=$(node scripts/skills/resolve-release.ts) next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
