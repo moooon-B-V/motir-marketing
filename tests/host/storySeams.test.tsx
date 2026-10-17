@@ -152,7 +152,7 @@ describe('the crawl index’s primaryHost, driven into the sitemap', () => {
       headers: async () => new Headers(headers),
     }))
     vi.stubGlobal('fetch', async () => Response.json(INDEX))
-    const sitemap = (await import('@/app/sitemap')).default
+    const sitemap = (await import('@/tests/helpers/sitemap')).default
     const entries = await sitemap()
     vi.doUnmock('next/headers')
     return entries.map((e) => e.url)

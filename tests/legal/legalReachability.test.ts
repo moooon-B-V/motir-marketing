@@ -7,7 +7,7 @@ import {
   legalDocumentSlugs,
   listLegalDocuments,
 } from '@/lib/legal/documents'
-import sitemap from '@/app/sitemap'
+import sitemap from '@/tests/helpers/sitemap'
 
 // `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
 // and `next/headers` throws outside a request scope. Empty headers read as

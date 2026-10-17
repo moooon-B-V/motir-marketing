@@ -65,8 +65,16 @@ import {
 // beside the branch that has to RECOGNISE them — see `alreadyRouted`.
 const { notFound: NOT_FOUND_PATH, unavailable: UNAVAILABLE_PATH } = ROUTER_PATHS
 
-/** Where a tenant host's `/robots.txt` is rewritten to (`app/robots-tenant.txt`). */
-const TENANT_ROBOTS_PATH = '/robots-tenant.txt'
+/**
+ * The two root files that are motir.co's own, built once, and whose tenant
+ * answer therefore lives in a route handler of its own (MOTIR-8842): a tenant's
+ * `robots.txt` names its own host and sitemap, and its `sitemap.xml` is its
+ * project half alone.
+ */
+const TENANT_ROOT_FILES: Readonly<Record<string, string>> = {
+  '/robots.txt': '/robots-tenant.txt',
+  '/sitemap.xml': '/sitemap-projects.xml',
+}
 
 /**
  * next-intl's locale router (MOTIR-7948), run on the SITE host only.
@@ -400,15 +408,14 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       return NextResponse.redirect(destination, 301)
     }
     case 'forward':
-      // A tenant's `robots.txt` names that tenant's own host and sitemap, so it
-      // is the one root file answered per request — by a route handler, because
-      // `app/robots.ts` is motir.co's static file (MOTIR-8842).
-      if (request.nextUrl.pathname === '/robots.txt') {
+      // A tenant's `robots.txt` and `sitemap.xml` are the two root files
+      // answered per request, by route handlers: motir.co's own are built.
+      if (TENANT_ROOT_FILES[request.nextUrl.pathname]) {
         return forwardWithHost(
           request,
           kindOf(read.data),
           host,
-          TENANT_ROBOTS_PATH,
+          TENANT_ROOT_FILES[request.nextUrl.pathname],
         )
       }
       // The router's own rewrite, coming back around. The headers are SET again

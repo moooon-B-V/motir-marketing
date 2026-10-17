@@ -52,7 +52,7 @@ async function crawlSurfaceAs(headers: Record<string, string>) {
   }))
   vi.stubGlobal('fetch', async () => Response.json(INDEX))
 
-  const sitemap = (await import('@/app/sitemap')).default
+  const sitemap = (await import('@/tests/helpers/sitemap')).default
   const robots = (await import('@/app/robots')).default
   const tenantRobots = (await import('@/app/robots-tenant.txt/route')).GET
   return {
@@ -236,7 +236,7 @@ describe('a failed index read', () => {
     vi.stubGlobal('fetch', async () => {
       throw new Error('ECONNREFUSED')
     })
-    const sitemap = (await import('@/app/sitemap')).default
+    const sitemap = (await import('@/tests/helpers/sitemap')).default
     const entries = await sitemap()
 
     expect(entries.map((e) => e.url)).toContain('https://motir.co/')
@@ -252,7 +252,7 @@ describe('a failed index read', () => {
     vi.stubGlobal('fetch', async () => {
       throw new Error('ECONNREFUSED')
     })
-    const sitemap = (await import('@/app/sitemap')).default
+    const sitemap = (await import('@/tests/helpers/sitemap')).default
 
     expect(await sitemap()).toEqual([])
   })

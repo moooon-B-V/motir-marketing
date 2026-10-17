@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
-import sitemap from '@/app/sitemap'
+import sitemap from '@/tests/helpers/sitemap'
 import { generateMetadata as generateDocumentMetadata } from '@/app/[locale]/legal/[slug]/page'
 import { generateMetadata as generateIndexMetadata } from '@/app/[locale]/legal/page'
 import { format, getCopy } from '@/lib/copy'

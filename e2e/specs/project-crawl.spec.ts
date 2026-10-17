@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { TENANT_ORIGIN } from '../stub/origin'
+import { readSitemap } from '../support/sitemap'
 
 /*
  * The CRAWL SURFACE (MOTIR-4118) — everything on /p/* that a machine consumes.
@@ -50,7 +51,7 @@ test('the feed 404s for a project that is not public — and NOT for an outage',
 test('the sitemap lists every project whose CANONICAL is this host — its page and changelog', async ({
   request,
 }) => {
-  const xml = await (await request.get('/sitemap.xml')).text()
+  const xml = await readSitemap(request)
 
   expect(xml).toContain('https://motir.co/p/MOTIR</loc>')
   expect(xml).toContain('https://motir.co/p/MOTIR/changelog</loc>')
@@ -72,7 +73,7 @@ test('and OMITS one whose canonical has moved to a tenant host', async ({
   // from here and appears in that host's sitemap, which the test below walks.
   // Listing it in both is the duplication *make primary* exists to prevent;
   // listing it in neither loses it.
-  const xml = await (await request.get('/sitemap.xml')).text()
+  const xml = await readSitemap(request)
 
   expect(xml).not.toContain('/p/ACME')
 })
@@ -104,7 +105,7 @@ test('the sitemap does NOT list the noindex hand-off doorway', async ({
 }) => {
   // A sitemap that listed `/requests/new` would ask a crawler to index a page
   // that refuses to be indexed — a contradiction the crawler resolves against us.
-  const xml = await (await request.get('/sitemap.xml')).text()
+  const xml = await readSitemap(request)
 
   expect(xml).not.toContain('/requests/new')
 })

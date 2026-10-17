@@ -3,7 +3,7 @@ import path from 'node:path'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { BRAND_GLYPH_HEX, waveBandSvg } from '@motir/brand'
 import robots from '@/app/robots'
-import sitemap from '@/app/sitemap'
+import sitemap from '@/tests/helpers/sitemap'
 import {
   buildRootJsonLd,
   ORGANIZATION_ID,

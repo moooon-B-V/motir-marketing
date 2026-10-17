@@ -7,6 +7,8 @@ import {
   pageRoutes,
   staticPageRoutes,
   underLocale,
+  REQUEST_RENDERED_ALLOWLIST,
+  unlistedDynamicRoutes,
   type BaseList,
   type PrerenderManifest,
 } from '@/scripts/i18n/check-prerender'
@@ -36,6 +38,7 @@ function manifest(drop: string[] = []): PrerenderManifest {
   for (const l of LOCALES) {
     routes[`/${l}`] = { srcRoute: '/[locale]' }
     routes[`/${l}/design`] = { srcRoute: '/[locale]/design' }
+    routes[`/${l}/opengraph-image`] = { srcRoute: '/[locale]/opengraph-image' }
     for (const slug of ['mcp', 'cli'])
       routes[`/${l}/products/${slug}`] = {
         srcRoute: '/[locale]/products/[slug]',
@@ -90,6 +93,7 @@ describe('checkPrerender', () => {
       base,
     })
     expect(problems).toEqual([
+      '/[locale]/design: rendered per request and not on the request-rendered allowlist (scripts/i18n/check-prerender.ts)',
       '/design: static before the story, now not prerendered (/[locale]/design)',
     ])
   })
@@ -160,5 +164,44 @@ describe('the committed base list', () => {
     expect(list.sha).toMatch(/^[0-9a-f]{40}$/)
     expect(list.routes).toContain('/')
     expect(list.routes).toContain('/products/[slug]')
+  })
+})
+
+describe('the request-rendered allowlist (MOTIR-8842)', () => {
+  it('passes the fixture build: its dynamic routes are all on the list', () => {
+    expect(unlistedDynamicRoutes(appPathRoutes, manifest())).toEqual([])
+  })
+
+  it('fails a route that renders per request and is not listed, naming it', () => {
+    const { problems } = checkPrerender({
+      appPathRoutes: {
+        ...appPathRoutes,
+        '/[locale]/pricing/page': '/[locale]/pricing',
+      },
+      prerender: manifest(),
+      locales: LOCALES,
+      base,
+    })
+    expect(problems).toEqual([
+      '/[locale]/pricing: rendered per request and not on the request-rendered allowlist (scripts/i18n/check-prerender.ts)',
+    ])
+  })
+
+  it('does not mistake a prerendered route for a dynamic one', () => {
+    expect(
+      unlistedDynamicRoutes(
+        { '/[locale]/pricing/page': '/[locale]/pricing' },
+        {
+          routes: {
+            '/en/pricing': { srcRoute: '/[locale]/pricing' },
+          },
+        },
+      ),
+    ).toEqual([])
+  })
+
+  it('gives every entry a reason', () => {
+    for (const entry of REQUEST_RENDERED_ALLOWLIST)
+      expect(entry.why.length, String(entry.pattern)).toBeGreaterThan(20)
   })
 })

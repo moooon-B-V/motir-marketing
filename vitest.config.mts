@@ -109,8 +109,15 @@ export default defineConfig({
         'lib/tenantDomain.ts',
         'proxy.ts',
         // MOTIR-4222 — the per-host crawl surface.
-        'app/sitemap.ts',
+        // MOTIR-8842 — the sitemap is two halves under an index, and robots is
+        // a built file plus a tenant route. Added WITH the files.
+        'lib/sitemapEntries.ts',
+        'lib/sitemapXml.ts',
         'app/robots.ts',
+        'app/robots-tenant.txt/route.ts',
+        'app/sitemap.xml/route.ts',
+        'app/sitemap-site.xml/route.ts',
+        'app/sitemap-projects.xml/route.ts',
         // MOTIR-7083 — the docs data modules Story MOTIR-6976 changed, added
         // WITH their top-up tests rather than after them. Before this story no
         // docs file was measured at all.
@@ -240,8 +247,25 @@ export default defineConfig({
         'lib/hostResolution.ts': { lines: 90, functions: 90, branches: 85 },
         'lib/tenantDomain.ts': { lines: 90, functions: 90, branches: 85 },
         'proxy.ts': { lines: 90, functions: 90, branches: 85 },
-        'app/sitemap.ts': { lines: 90, functions: 90, branches: 85 },
+        'lib/sitemapEntries.ts': { lines: 90, functions: 90, branches: 85 },
+        'lib/sitemapXml.ts': { lines: 90, functions: 90, branches: 85 },
         'app/robots.ts': { lines: 90, functions: 90, branches: 85 },
+        'app/robots-tenant.txt/route.ts': {
+          lines: 90,
+          functions: 90,
+          branches: 85,
+        },
+        'app/sitemap.xml/route.ts': { lines: 90, functions: 90, branches: 85 },
+        'app/sitemap-site.xml/route.ts': {
+          lines: 90,
+          functions: 90,
+          branches: 85,
+        },
+        'app/sitemap-projects.xml/route.ts': {
+          lines: 90,
+          functions: 90,
+          branches: 85,
+        },
         // MOTIR-6743 — measured first: the five redirect handlers are 100
         // across under `tests/publicProject/readPageRedirects.test.ts`.
         'app/?locale?/p/**/route.ts': {

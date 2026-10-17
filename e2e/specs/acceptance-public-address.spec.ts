@@ -1,4 +1,5 @@
 import { writeFileSync } from 'node:fs'
+import { readSitemap } from '../support/sitemap'
 import { expect, test } from '@playwright/test'
 import {
   ALIAS_ORIGIN,
@@ -211,7 +212,7 @@ test('the crawl surface belongs to the host that asks for it', async ({
   expect(custom).not.toContain(`${CUSTOM_ORIGIN}/board</loc>`)
   expect(custom).not.toContain('ACME')
 
-  const site = await (await request.get(`${SITE_ORIGIN}/sitemap.xml`)).text()
+  const site = await readSitemap(request, SITE_ORIGIN)
   expect(site).toContain('https://motir.co/p/MOTIR</loc>')
   expect(site).not.toContain('ACME')
   expect(site).not.toContain('ROAD')
