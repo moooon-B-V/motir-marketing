@@ -65,6 +65,9 @@ import {
 // beside the branch that has to RECOGNISE them — see `alreadyRouted`.
 const { notFound: NOT_FOUND_PATH, unavailable: UNAVAILABLE_PATH } = ROUTER_PATHS
 
+/** Where a tenant host's `/robots.txt` is rewritten to (`app/robots-tenant.txt`). */
+const TENANT_ROBOTS_PATH = '/robots-tenant.txt'
+
 /**
  * next-intl's locale router (MOTIR-7948), run on the SITE host only.
  *
@@ -397,6 +400,17 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       return NextResponse.redirect(destination, 301)
     }
     case 'forward':
+      // A tenant's `robots.txt` names that tenant's own host and sitemap, so it
+      // is the one root file answered per request — by a route handler, because
+      // `app/robots.ts` is motir.co's static file (MOTIR-8842).
+      if (request.nextUrl.pathname === '/robots.txt') {
+        return forwardWithHost(
+          request,
+          kindOf(read.data),
+          host,
+          TENANT_ROBOTS_PATH,
+        )
+      }
       // The router's own rewrite, coming back around. The headers are SET again
       // rather than assumed to have survived, so the page reads them whichever
       // pass produced the request it renders.

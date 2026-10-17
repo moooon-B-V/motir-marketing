@@ -2,6 +2,7 @@ import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import {
+  failBuildIfPrerendering,
   catalogueTextLocale,
   countCatalogueTools,
   describeSchema,
@@ -77,10 +78,6 @@ import { SchemaTable } from '../../../_components/DocSchema'
  * ⚠️ NO FALLBACK, DELIBERATELY. Unreachable or unreadable ⇒ this page SAYS SO.
  * A committed default is stale exactly when it is displayed.
  */
-// ISR, not per request — see DOCS_REVALIDATE_SECONDS in `lib/docs.ts` (a literal,
-// because Next reads this export statically).
-export const revalidate = 300
-
 export function generateMetadata({
   params,
 }: LocalePageProps): Promise<Metadata> {
@@ -188,7 +185,8 @@ export default async function McpToolsPage({ params }: LocalePageProps) {
   let catalogue: McpToolCatalogue
   try {
     catalogue = await fetchMcpToolCatalogue(locale)
-  } catch {
+  } catch (error) {
+    failBuildIfPrerendering(error)
     return (
       <>
         {heading}

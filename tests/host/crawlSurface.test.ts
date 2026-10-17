@@ -54,7 +54,12 @@ async function crawlSurfaceAs(headers: Record<string, string>) {
 
   const sitemap = (await import('@/app/sitemap')).default
   const robots = (await import('@/app/robots')).default
-  return { entries: await sitemap(), robots: await robots() }
+  const tenantRobots = (await import('@/app/robots-tenant.txt/route')).GET
+  return {
+    entries: await sitemap(),
+    robots: robots(),
+    tenantRobotsText: await (await tenantRobots()).text(),
+  }
 }
 
 const asWorkspace = {
@@ -179,26 +184,49 @@ describe('the sitemap on a customer domain', () => {
 })
 
 describe('robots names THIS host’s sitemap', () => {
-  it.each([
-    ['motir.co', {}, 'https://motir.co'],
-    ['a workspace subdomain', asWorkspace, 'https://acme.motir.site'],
-    ['a customer domain', asCustom, 'https://roadmap.acme.com'],
-  ])('%s', async (_label, headers, origin) => {
-    // A customer domain whose robots.txt pointed at motir.co/sitemap.xml would
-    // hand a crawler a document listing URLs on a host it did not ask about —
-    // which the sitemap protocol refuses outright.
-    const { robots } = await crawlSurfaceAs(headers)
+  it('motir.co serves a STATIC file that reads nothing from the request (MOTIR-8842)', async () => {
+    // `app/robots.ts` is prerendered by `next build`, so it is called with no
+    // request scope at all — no `next/headers` mock, nothing to read.
+    vi.resetModules()
+    const robots = (await import('@/app/robots')).default
+    const result = robots()
 
-    expect(robots.sitemap).toBe(`${origin}/sitemap.xml`)
-    expect(robots.host).toBe(`${origin}/`)
-    expect(robots.rules).toEqual({ userAgent: '*', allow: '/' })
+    expect(result.sitemap).toBe('https://motir.co/sitemap.xml')
+    expect(result.host).toBe('https://motir.co/')
+    expect(result.rules).toEqual({ userAgent: '*', allow: '/' })
     // MOTIR-6747: nor does it name a read path, allowed or disallowed — they
     // are redirects into the app, not pages of this host.
-    // (The origin is cut first: `roadmap.acme.com` is a HOST, not a path.)
-    expect(JSON.stringify(robots).replaceAll(origin, '')).not.toMatch(
-      /\/(board|items|tree|roadmap)\b/,
-    )
+    expect(
+      JSON.stringify(result).replaceAll('https://motir.co', ''),
+    ).not.toMatch(/\/(board|items|tree|roadmap)\b/)
   })
+
+  it.each([
+    ['a workspace subdomain', asWorkspace, 'https://acme.motir.site'],
+    ['a customer domain', asCustom, 'https://roadmap.acme.com'],
+  ])(
+    '%s gets its own, from the tenant route',
+    async (_label, headers, origin) => {
+      // A customer domain whose robots.txt pointed at motir.co/sitemap.xml would
+      // hand a crawler a document listing URLs on a host it did not ask about —
+      // which the sitemap protocol refuses outright.
+      const { tenantRobotsText } = await crawlSurfaceAs(headers)
+
+      expect(tenantRobotsText).toBe(
+        [
+          'User-Agent: *',
+          'Allow: /',
+          '',
+          `Host: ${origin}/`,
+          `Sitemap: ${origin}/sitemap.xml`,
+          '',
+        ].join('\n'),
+      )
+      expect(tenantRobotsText.replaceAll(origin, '')).not.toMatch(
+        /\/(board|items|tree|roadmap)\b/,
+      )
+    },
+  )
 })
 
 describe('a failed index read', () => {
@@ -236,22 +264,26 @@ describe('the origin the router carries', () => {
     // `http://acme.localhost:4318`; a `robots.txt` built as `https://${host}`
     // names `https://acme.localhost/sitemap.xml`, which resolves nowhere — in
     // the one file whose entire job is to hand a crawler a working address.
-    const { robots, entries } = await crawlSurfaceAs({
+    const { tenantRobotsText, entries } = await crawlSurfaceAs({
       [PUBLIC_ADDRESS_KIND_HEADER]: 'workspace',
       [PUBLIC_HOST_HEADER]: 'acme.localhost',
       [PUBLIC_ORIGIN_HEADER]: 'http://acme.localhost:4318',
     })
 
-    expect(robots.sitemap).toBe('http://acme.localhost:4318/sitemap.xml')
+    expect(tenantRobotsText).toContain(
+      'Sitemap: http://acme.localhost:4318/sitemap.xml',
+    )
     expect(entries.map((e) => e.url)).toEqual([])
   })
 
   it('falls back to https for a tenant host that arrives without one', async () => {
-    const { robots } = await crawlSurfaceAs({
+    const { tenantRobotsText } = await crawlSurfaceAs({
       [PUBLIC_ADDRESS_KIND_HEADER]: 'workspace',
       [PUBLIC_HOST_HEADER]: 'acme.motir.site',
     })
-    expect(robots.sitemap).toBe('https://acme.motir.site/sitemap.xml')
+    expect(tenantRobotsText).toContain(
+      'Sitemap: https://acme.motir.site/sitemap.xml',
+    )
   })
 
   it('and REFUSES a value that is not an origin', async () => {
@@ -259,11 +291,13 @@ describe('the origin the router carries', () => {
     // request it never handled arrives with whatever was sent — and this value
     // ends up in a robots.txt and a sitemap, where a malformed one is worse
     // than the fallback it replaced.
-    const { robots } = await crawlSurfaceAs({
+    const { tenantRobotsText } = await crawlSurfaceAs({
       [PUBLIC_ADDRESS_KIND_HEADER]: 'workspace',
       [PUBLIC_HOST_HEADER]: 'acme.motir.site',
       [PUBLIC_ORIGIN_HEADER]: 'javascript:alert(1)',
     })
-    expect(robots.sitemap).toBe('https://acme.motir.site/sitemap.xml')
+    expect(tenantRobotsText).toContain(
+      'Sitemap: https://acme.motir.site/sitemap.xml',
+    )
   })
 })

@@ -34,33 +34,43 @@ import type { Locale } from '@/i18n/routing'
  * documentation rather than a registry, which is why they are allowed to live
  * here at all.
  *
- * ⚠️ "FRESH" MEANS AT MOST {@link DOCS_REVALIDATE_SECONDS} OLD, NOT PER REQUEST.
- * The three artifacts change when motir-core DEPLOYS, not between two page
- * views, and reading them per request was measured to cost the site its uptime:
- * on 2026-10-16 a ~4x crawl of `/docs` in eleven locales parsed the 720 KB spec
- * on every hit and both 512 MB machines died of `JavaScript heap out of memory`
- * over and over, which is what made motir.co slow. The pages that read them are
- * ISR now (`export const revalidate`), so one render per locale per window does
- * the work and every other request gets the cached HTML.
+ * ⚠️ THE ARTIFACTS ARE READ ONCE PER BUILD, NOT PER REQUEST AND NOT PER WINDOW
+ * (MOTIR-8842, per the MOTIR-8838 decision). The three artifacts change when
+ * motir-core DEPLOYS, not between two page views. Reading them per request cost
+ * the site its uptime on 2026-10-16 (a ~4x crawl of `/docs` in eleven locales
+ * parsed the 1 MB spec on every hit and both machines died of `JavaScript heap
+ * out of memory`), and ISR (`revalidate = 300`) only made the same renders
+ * rarer: a restart loop followed on 2026-10-17 with the fix deployed. So the
+ * four pages that read them are prerendered by `next build`, which fetches each
+ * artifact once ({@link docsFetchInit} is `force-cache`), and a fresh artifact
+ * arrives with the next build.
  */
 
 /**
- * How long a fetched artifact — and the page rendered from it — may be served
- * before the next request re-reads it. The pages' segment `revalidate` must be
- * the same literal, because Next reads that export statically.
- */
-export const DOCS_REVALIDATE_SECONDS = 300
-
-/**
- * The `next` fetch option every artifact read uses.
+ * The fetch options every artifact read uses.
+ *
+ * ⚠️ `force-cache` IN PRODUCTION IS WHAT KEEPS THE PAGES STATIC. Next 15+ does
+ * not cache `fetch` by default, and an uncached fetch makes the page that awaits
+ * it dynamic — so removing the segment `revalidate` without this would have
+ * turned the four pages back into request-time renders, which is worse than the
+ * ISR they replace. The build's data cache serves the one fetch to all eleven
+ * locales.
  *
  * ⚠️ PER REQUEST IN THE BROWSER LANE, AND ONLY THERE. The lane swaps the stub's
  * catalogue between journeys (`POST /__stub/mcp-tools?mode=stripped`) and
  * expects the very next page view to show it. The lane already renders `/docs`
- * per request under `MOTIR_DOCS_LIVE_CONTENT_ROOT` (MOTIR-8072), but a page
- * rendered per request still reads Next's DATA cache — so the same switch turns
- * the fetch cache off too. Unset or empty, as in production, it is the shared
- * window — the rule `liveDocsContentRoot` (`lib/docsDocuments.ts`) applies.
+ * per request under `MOTIR_DOCS_LIVE_CONTENT_ROOT` (MOTIR-8072: `DocsDocument`
+ * awaits `connection()`), and a page rendered per request still reads Next's
+ * DATA cache — so the same switch turns the fetch cache off too. Unset or
+ * empty, as in production, the read is the cached build-time one — the rule
+ * `liveDocsContentRoot` (`lib/docsDocuments.ts`) applies.
+ *
+ * ⚠️ THE FOUR PAGES DO NOT EXPORT `dynamic = 'force-static'`, and that is
+ * deliberate. `force-static` makes `connection()` a no-op, which would freeze
+ * the lane's per-request read at its build-time catalogue. They are static
+ * without it: nothing they await is dynamic once the fetch is `force-cache`,
+ * and `tests/docs/docs.test.ts` plus `i18n:check-prerender` fail if one stops
+ * being prerendered.
  *
  * ⚠️ IT READS THE VARIABLE ITSELF rather than importing `liveDocsContentRoot`:
  * `lib/docsDocuments.ts` imports `node:fs` and `node:crypto`, and a client
@@ -68,8 +78,28 @@ export const DOCS_REVALIDATE_SECONDS = 300
  */
 export function docsFetchInit(
   live: string | undefined = process.env['MOTIR_DOCS_LIVE_CONTENT_ROOT'],
-): { next: { revalidate: number } } {
-  return { next: { revalidate: live ? 0 : DOCS_REVALIDATE_SECONDS } }
+): { cache: 'force-cache' } | { next: { revalidate: 0 } } {
+  return live ? { next: { revalidate: 0 } } : { cache: 'force-cache' }
+}
+
+/**
+ * What a page does when an artifact read fails.
+ *
+ * ⚠️ AT BUILD, THE FAILURE FAILS THE BUILD (MOTIR-8842). The four pages catch a
+ * failed read and render "unreachable" — the right answer to a visitor when the
+ * page is rendered for them. Prerendered, the same catch would BAKE that
+ * paragraph into every locale's HTML and ship it as a 200 until the next build,
+ * which is the stale-and-invisible default the no-fallback rule above exists to
+ * refuse. So the catch calls this first: during `next build` it rethrows, and
+ * the deploy stops on the red build rather than serving an empty reference.
+ * Everywhere else — `next dev`, a render at request time, the browser lane,
+ * whose `failing` journey asserts the unreachable state — it returns and the
+ * page says so.
+ */
+export function failBuildIfPrerendering(error: unknown): void {
+  if (process.env['NEXT_PHASE'] !== 'phase-production-build') return
+  if (process.env['MOTIR_DOCS_LIVE_CONTENT_ROOT']) return
+  throw error
 }
 
 /**

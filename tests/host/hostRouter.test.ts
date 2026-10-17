@@ -113,6 +113,43 @@ describe('the site’s own host', () => {
   })
 })
 
+describe('a tenant host’s robots.txt (MOTIR-8842)', () => {
+  // motir.co's `robots.txt` is a static file (`app/robots.ts`) and says
+  // motir.co. A tenant host must name ITS OWN host and sitemap, which only a
+  // request render can do — so the router sends it to `app/robots-tenant.txt`,
+  // with the host headers set, once the host has resolved.
+  it.each([
+    ['a workspace subdomain', WORKSPACE, 'https://acme.motir.site'],
+    ['a customer domain', CUSTOM, 'https://roadmap.acme.com'],
+  ])('rewrites %s onto the tenant route', async (_label, read, origin) => {
+    resolveHost.mockResolvedValue(read)
+    const res = await proxy(request(`${origin}/robots.txt`))
+
+    expect(rewriteOf(res)).toBe('/robots-tenant.txt')
+    expect(forwarded(res, 'x-motir-public-origin')).toBe(origin)
+    expect(forwarded(res, 'x-motir-public-host')).toBe(new URL(origin).host)
+  })
+
+  it('serves the tenant route itself as it is, so the rewrite does not loop', async () => {
+    resolveHost.mockResolvedValue(WORKSPACE)
+    const res = await proxy(
+      request('https://acme.motir.site/robots-tenant.txt'),
+    )
+
+    expect(rewriteOf(res)).toBeNull()
+    expect(res.headers.get('x-middleware-next')).toBe('1')
+    expect(forwarded(res, 'x-motir-public-host')).toBe('acme.motir.site')
+  })
+
+  it('leaves motir.co’s own /robots.txt to the static file', async () => {
+    const res = await proxy(request('https://motir.co/robots.txt'))
+
+    expect(rewriteOf(res)).toBeNull()
+    expect(res.headers.get('x-middleware-next')).toBe('1')
+    expect(resolveHost).not.toHaveBeenCalled()
+  })
+})
+
 describe('the base domain itself', () => {
   it('is not a tenant address, and is answered without a hop', async () => {
     // It has no row, so the contract would 404 it anyway — but answering here

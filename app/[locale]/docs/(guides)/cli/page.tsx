@@ -1,6 +1,7 @@
 import { localePageMetadata } from '@/lib/localeMetadata'
 import type { Metadata } from 'next'
 import {
+  failBuildIfPrerendering,
   fetchCliCommands,
   groupCliCommands,
   type CliCommandsDocument,
@@ -73,10 +74,6 @@ import { DEFAULT_LOCALE, type Locale } from '@/i18n/routing'
  * only version that is true. Recorded because a later reader diffing this
  * against `95a2d4468^` will find one row that was never there.
  */
-// ISR, not per request — see DOCS_REVALIDATE_SECONDS in `lib/docs.ts` (a literal,
-// because Next reads this export statically).
-export const revalidate = 300
-
 export function generateMetadata({
   params,
 }: LocalePageProps): Promise<Metadata> {
@@ -167,7 +164,8 @@ export default async function CliPage({ params }: LocalePageProps) {
   let catalogue: CliCommandsDocument
   try {
     catalogue = await fetchCliCommands()
-  } catch {
+  } catch (error) {
+    failBuildIfPrerendering(error)
     // Nothing the catalogue carries exists here: the document still resolves
     // whole (so a stale translation falls back as one), with those slots empty.
     const { parts, note } = await renderDocsParts({

@@ -1,4 +1,5 @@
 import {
+  failBuildIfPrerendering,
   fetchOpenApiSpec,
   listOperations,
   railOperations,
@@ -35,7 +36,8 @@ export default async function DocsApiLayout({
   let operations: { group: string; operations: RailOperation[] }[]
   try {
     operations = railOperations(listOperations(await fetchOpenApiSpec()))
-  } catch {
+  } catch (error) {
+    failBuildIfPrerendering(error)
     operations = []
   }
   return <DocsShell operations={operations}>{children}</DocsShell>

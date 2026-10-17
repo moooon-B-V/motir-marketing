@@ -125,7 +125,9 @@ describe('ONE CANONICAL PER PAGE — MOTIR-4222', () => {
     // may only list URLs on its own host. Asserted at the source because the
     // behavioural half needs a request scope — `tests/host/crawlSurface.test.ts`
     // supplies one and asks all three.
-    for (const file of ['app/sitemap.ts', 'app/robots.ts']) {
+    // `app/robots.ts` is motir.co's static file now (MOTIR-8842); the tenant
+    // half of robots is the route handler `proxy.ts` rewrites to.
+    for (const file of ['app/sitemap.ts', 'app/robots-tenant.txt/route.ts']) {
       expect(read(file), `${file} answers as motir.co on every host`).toContain(
         'requestPublicHost',
       )
