@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SiteHeader } from '@/app/_components/SiteHeader'
 import { SITE_HOST } from '@/lib/publicHost'
 import { englishCopy as copy } from '@/lib/copy'
-import sitemap from '@/app/sitemap'
+import sitemap from '@/tests/helpers/sitemap'
 import { siteUrl } from '@/lib/siteOrigin'
 
 // `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
@@ -131,7 +131,7 @@ describe("the bar's right group keeps its give-way ladder from sm up (MOTIR-8135
   })
 })
 
-describe('app/sitemap.ts', () => {
+describe('the sitemap', () => {
   it('gains the /legal, /explore and /docs lines in the same changes that add the routes', async () => {
     // Awaited since MOTIR-4118 made the route dynamic. No API in this
     // environment, so the project entries are absent and the static list is

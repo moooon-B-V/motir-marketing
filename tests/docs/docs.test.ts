@@ -2,8 +2,8 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
-  DOCS_REVALIDATE_SECONDS,
   docsFetchInit,
+  failBuildIfPrerendering,
   McpToolCatalogueShapeError,
   catalogueTextLocale,
   countCatalogueTools,
@@ -425,10 +425,10 @@ describe('the catalogue is consumed, never copied', () => {
       `${base}?locale=ko`,
     ])
     expect(fetchMock.mock.calls[0]![1]).toEqual({
-      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+      cache: 'force-cache',
     })
     expect(fetchMock.mock.calls[2]![1]).toEqual({
-      next: { revalidate: DOCS_REVALIDATE_SECONDS },
+      cache: 'force-cache',
     })
   })
 
@@ -530,12 +530,12 @@ describe('the MCP pages name no tools, because nothing here could check them', (
   }
 })
 
-describe('the generated reference pages are ISR, never per request', () => {
-  // A per-request render of these pages is what took motir.co down on
-  // 2026-10-16 (see `DOCS_REVALIDATE_SECONDS` in `lib/docs.ts`). Next reads the
-  // segment export statically, so the pages repeat the number as a literal —
-  // this keeps the four copies equal to the constant and keeps
-  // `force-dynamic` from coming back.
+describe('the generated reference pages are built at deploy, never rendered in the serving process', () => {
+  // A request-time render of these pages is what took motir.co down on
+  // 2026-10-16/17. They are prerendered by `next build` (MOTIR-8842): the
+  // artifacts are read once, with `force-cache`, and neither `revalidate` nor
+  // `dynamic` is exported — `force-static` is left off on purpose, because it
+  // would turn the browser lane's `connection()` into a no-op.
   const PAGES = [
     'app/[locale]/docs/api/page.tsx',
     'app/[locale]/docs/(guides)/mcp/page.tsx',
@@ -543,23 +543,44 @@ describe('the generated reference pages are ISR, never per request', () => {
     'app/[locale]/docs/(guides)/cli/page.tsx',
   ]
 
-  it('fetches on the shared window, and per request only in the browser lane', () => {
-    expect(docsFetchInit(undefined)).toEqual({
-      next: { revalidate: DOCS_REVALIDATE_SECONDS },
-    })
-    expect(docsFetchInit('')).toEqual({
-      next: { revalidate: DOCS_REVALIDATE_SECONDS },
-    })
+  it('reads the artifacts from the build cache, and per request only in the browser lane', () => {
+    expect(docsFetchInit(undefined)).toEqual({ cache: 'force-cache' })
+    expect(docsFetchInit('')).toEqual({ cache: 'force-cache' })
     expect(docsFetchInit('/repo/content/docs')).toEqual({
       next: { revalidate: 0 },
     })
   })
 
-  it.each(PAGES)('%s revalidates on the shared window', (page) => {
+  it.each(PAGES)('%s exports no revalidate and no dynamic', (page) => {
     const source = readFileSync(page, 'utf8')
-    expect(source).toContain(
-      `export const revalidate = ${DOCS_REVALIDATE_SECONDS}\n`,
+    expect(source).not.toMatch(/export const (revalidate|dynamic)\b/)
+  })
+
+  it.each(PAGES)('%s lets a failed read fail the build', (page) => {
+    expect(readFileSync(page, 'utf8')).toContain(
+      'failBuildIfPrerendering(error)',
     )
-    expect(source).not.toContain('force-dynamic')
+  })
+
+  describe('failBuildIfPrerendering', () => {
+    const boom = new Error('openapi spec 502')
+    afterEach(() => vi.unstubAllEnvs())
+
+    it('rethrows during `next build`', () => {
+      vi.stubEnv('NEXT_PHASE', 'phase-production-build')
+      vi.stubEnv('MOTIR_DOCS_LIVE_CONTENT_ROOT', '')
+      expect(() => failBuildIfPrerendering(boom)).toThrow(boom)
+    })
+
+    it('returns at request time, so the page says the artifact is unreachable', () => {
+      vi.stubEnv('NEXT_PHASE', 'phase-production-server')
+      expect(() => failBuildIfPrerendering(boom)).not.toThrow()
+    })
+
+    it('returns in the browser lane’s build, whose `failing` journey asserts the unreachable state', () => {
+      vi.stubEnv('NEXT_PHASE', 'phase-production-build')
+      vi.stubEnv('MOTIR_DOCS_LIVE_CONTENT_ROOT', '/repo/content/docs')
+      expect(() => failBuildIfPrerendering(boom)).not.toThrow()
+    })
   })
 })

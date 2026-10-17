@@ -3,7 +3,11 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
-import { fetchMcpToolCatalogue, type McpToolCatalogue } from '@/lib/docs'
+import {
+  failBuildIfPrerendering,
+  fetchMcpToolCatalogue,
+  type McpToolCatalogue,
+} from '@/lib/docs'
 import { guideDate } from '@/lib/docsGuideValues'
 import {
   CONNECTED_APPS_PATH,
@@ -76,10 +80,6 @@ import { renderDocsParts } from '../../_components/DocsDocument'
  * spell their keys that way too, which is exactly why the blocks live in
  * `lib/mcpWiring.ts`; see the ⚠️ block there.
  */
-// ISR, not per request — see DOCS_REVALIDATE_SECONDS in `lib/docs.ts` (a literal,
-// because Next reads this export statically).
-export const revalidate = 300
-
 export function generateMetadata({
   params,
 }: LocalePageProps): Promise<Metadata> {
@@ -202,7 +202,8 @@ export default async function McpPage({ params }: LocalePageProps) {
   let catalogue: McpToolCatalogue | null = null
   try {
     catalogue = await fetchMcpToolCatalogue()
-  } catch {
+  } catch (error) {
+    failBuildIfPrerendering(error)
     catalogue = null
   }
 

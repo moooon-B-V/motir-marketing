@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { currentOrigin, requestPublicHost } from '@/lib/publicHost'
+import { SITE_ORIGIN } from '@/lib/siteOrigin'
 
 /*
  * motir.co's `robots.txt` (MOTIR-1154 · 8.3.7).
@@ -21,23 +21,21 @@ import { currentOrigin, requestPublicHost } from '@/lib/publicHost'
  * spec requires an absolute URL there, which is the reason `SITE_ORIGIN` exists
  * as a module rather than as a literal in two files.
  *
- * ⚠️ DYNAMIC NOW, AND PER-HOST (MOTIR-4222). This file is served at every
- * address the renderer answers for, and each one must name ITS OWN sitemap and
- * ITS OWN host: a customer domain whose `robots.txt` pointed at
- * `motir.co/sitemap.xml` would be handing a crawler a document listing URLs on
- * a host it did not ask about — which is the one thing the sitemap protocol
- * refuses outright, and the reason `app/sitemap.ts` filters by `primaryHost`.
- *
- * `force-dynamic` for the same reason the sitemap is: the answer depends on the
- * request's host, which a prerender does not have.
+ * ⚠️ STATIC, AND motir.co'S ALONE (MOTIR-8842). It was request-rendered and
+ * per-host (MOTIR-4222), and a request render is exactly what a crawler's hit
+ * on `/robots.txt` should never cost: on 2026-10-17 it answered in 189.8 s while
+ * the process was under. This file now reads nothing from the request, so
+ * `next build` writes it once and the machine serves a file. A tenant address —
+ * `acme.motir.site`, a customer domain — still needs its OWN host named in its
+ * `robots.txt` and its own sitemap (a sitemap may only list URLs on its own
+ * host), so `proxy.ts` rewrites `/robots.txt` on those hosts to
+ * `app/robots-tenant.txt/route.ts`, which is the per-host half and the only
+ * robots answer that still renders per request.
  */
-export const dynamic = 'force-dynamic'
-
-export default async function robots(): Promise<MetadataRoute.Robots> {
-  const origin = currentOrigin(await requestPublicHost())
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: '*', allow: '/' },
-    sitemap: `${origin}/sitemap.xml`,
-    host: `${origin}/`,
+    sitemap: `${SITE_ORIGIN}/sitemap.xml`,
+    host: `${SITE_ORIGIN}/`,
   }
 }

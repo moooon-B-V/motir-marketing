@@ -66,6 +66,17 @@ import {
 const { notFound: NOT_FOUND_PATH, unavailable: UNAVAILABLE_PATH } = ROUTER_PATHS
 
 /**
+ * The two root files that are motir.co's own, built once, and whose tenant
+ * answer therefore lives in a route handler of its own (MOTIR-8842): a tenant's
+ * `robots.txt` names its own host and sitemap, and its `sitemap.xml` is its
+ * project half alone.
+ */
+const TENANT_ROOT_FILES: Readonly<Record<string, string>> = {
+  '/robots.txt': '/robots-tenant.txt',
+  '/sitemap.xml': '/sitemap-projects.xml',
+}
+
+/**
  * next-intl's locale router (MOTIR-7948), run on the SITE host only.
  *
  * With `as-needed` it rewrites an unprefixed path onto the English tree
@@ -397,6 +408,16 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       return NextResponse.redirect(destination, 301)
     }
     case 'forward':
+      // A tenant's `robots.txt` and `sitemap.xml` are the two root files
+      // answered per request, by route handlers: motir.co's own are built.
+      if (TENANT_ROOT_FILES[request.nextUrl.pathname]) {
+        return forwardWithHost(
+          request,
+          kindOf(read.data),
+          host,
+          TENANT_ROOT_FILES[request.nextUrl.pathname],
+        )
+      }
       // The router's own rewrite, coming back around. The headers are SET again
       // rather than assumed to have survived, so the page reads them whichever
       // pass produced the request it renders.

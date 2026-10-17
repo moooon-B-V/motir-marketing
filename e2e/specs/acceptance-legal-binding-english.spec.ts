@@ -1,4 +1,5 @@
 import { writeFileSync } from 'node:fs'
+import { readSitemap } from '../support/sitemap'
 import { expect, test, type Page } from '@playwright/test'
 import { SITE_ORIGIN } from '../stub/origin'
 import { t } from '../support/catalogue'
@@ -252,7 +253,9 @@ test('legal pages stay English, as Story MOTIR-7740 asks to be accepted', async 
   chapter('7 · The sitemap lists Terms once, at its English address')
   const sitemap = await page.goto('/sitemap.xml')
   expect(sitemap?.status()).toBe(200)
-  const xml = await sitemap!.text()
+  // motir.co's `/sitemap.xml` is an index since MOTIR-8842: the page above is
+  // the index, and the Terms entries live in the site half it points at.
+  const xml = await readSitemap(page.request)
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]!)
   expect(locs.filter((loc) => loc.endsWith('/legal/terms'))).toEqual([
     `${CRAWL_ORIGIN}/legal/terms`,

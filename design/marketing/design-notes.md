@@ -1766,7 +1766,7 @@ live only in motir-core and are unreachable here, exactly as the card says.
   `TypePicker` already render them, keyboard behaviour included (arrow keys move within the
   radiogroup, and only the selected chip is in the tab order).
 - **Reset** sets all four axes back to `THEME_DEFAULTS` and is conditional on any being off default.
-- `app/sitemap.ts` gains its `/design` line in the same change — the file's own comment asks for it.
+- `lib/sitemapEntries.ts` (the sitemap moved here in MOTIR-8844) gains its `/design` line in the same change — the file's own comment asks for it.
 - **Before the AA matrix can pass, MOTIR-3872 must land.** Assert the contrast harness against a
   known pair first (see _How this asset was measured_).
 

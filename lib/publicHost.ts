@@ -241,7 +241,7 @@ export function publicPathWithQuery(
  * page live on this host — and the two together are the whole of the per-host
  * address model. A tenant host serves that workspace's projects and nothing
  * else, so `/explore`, `/docs`, `/design` and `/legal` are 404 there: the same
- * rule `app/sitemap.ts` states in its own header, that **a tenant host is a
+ * rule `lib/sitemapEntries.ts` states in its own header, that **a tenant host is a
  * project's address, not a copy of the marketing site**.
  *
  * ⚠️ THE FAILURE IT REMOVES IS NOT ONLY A DEAD CLICK. These paths are rendered

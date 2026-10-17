@@ -13,11 +13,20 @@ import {
   currentHost,
   currentOrigin,
   publicPathFor,
-  requestPublicHost,
+  type PublicHost,
 } from '@/lib/publicHost'
 
 /*
  * motir.co's sitemap (MOTIR-1154 · 8.3.7), served at `/sitemap.xml`.
+ *
+ * ⚠️ IT IS TWO HALVES NOW (MOTIR-8842), AND `/sitemap.xml` IS AN INDEX OVER THEM
+ * on motir.co: `/sitemap-site.xml` ({@link siteSitemapEntries}) is the marketing
+ * site's own pages and reads nothing from the request, so it is built once;
+ * `/sitemap-projects.xml` ({@link projectSitemapEntries}) is the per-host half
+ * and the only part that renders per request. A TENANT host's `/sitemap.xml` is
+ * `proxy.ts` rewriting onto `/sitemap-projects.xml` — its whole sitemap IS its
+ * project half. The rest of this note was written for the single file and still
+ * describes the entries.
  *
  * ⚠️ NEW HERE, AND NOT motir-core's. That repository has an `app/sitemap.ts`
  * of its own and this card must not touch it: it lists the APPLICATION's public
@@ -91,8 +100,6 @@ import {
  * is not an exception: its title, intro and contact line are genuinely
  * translated, so it stays eleven entries like every other page.
  */
-export const dynamic = 'force-dynamic'
-
 type Entry = MetadataRoute.Sitemap[number]
 
 /** ONE entry for a motir.co path whose binding content is English only (legal documents). */
@@ -116,8 +123,14 @@ function everyLanguage(
   }))
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const host = await requestPublicHost()
+/**
+ * The PROJECT half: every crawlable project URL THIS HOST has, and nothing else.
+ * Request-rendered, because which host asked decides which projects are listed
+ * and the index behind them is a network read (`/sitemap-projects.xml`).
+ */
+export async function projectSitemapEntries(
+  host: PublicHost,
+): Promise<MetadataRoute.Sitemap> {
   const origin = currentOrigin(host)
   const thisHost = currentHost(host)
 
@@ -155,7 +168,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: tab.segment ? 0.5 : 0.8,
           }
           // On motir.co a project page has eleven language addresses; on a
-          // tenant host, one (the note above `dynamic`).
+          // tenant host, one (the note above).
           return host.kind === 'site'
             ? everyLanguage(path, rest)
             : [{ url: `${origin}${path}`, ...rest }]
@@ -163,12 +176,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       )
     })
 
-  // A tenant host's sitemap ENDS here: the static entries below are this
-  // marketing site's own pages.
-  if (host.kind !== 'site') return projectEntries
+  return projectEntries
+}
 
+/**
+ * The SITE half: motir.co's own pages. It reads nothing from the request, so
+ * `/sitemap-site.xml` is written once by `next build` (MOTIR-8842). A tenant
+ * host never serves it — a tenant host is a project's address, not a copy of
+ * the marketing site, and listing this site's pages in a customer's sitemap
+ * would ask a crawler to attribute them to that host.
+ */
+export function siteSitemapEntries(): MetadataRoute.Sitemap {
   return [
-    ...projectEntries,
     ...everyLanguage('/', { changeFrequency: 'weekly', priority: 1 }),
     ...everyLanguage('/how-it-works', {
       changeFrequency: 'monthly',
@@ -198,7 +217,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // reads the same directory the routes do rather than carrying a second list
     // that could drift from it. `legalDocumentSlugs()` is the glob the routes
     // use, so a document added later reaches the sitemap without an edit here.
-    // Once each, at the English address (the note above `dynamic`).
+    // Once each, at the English address (the note above).
     ...legalDocumentSlugs().flatMap((slug) =>
       englishOnly(`/legal/${slug}`, {
         changeFrequency: 'monthly',

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { APP_ORIGIN } from '@/lib/appOrigin'
 import { getCopy } from '@/lib/copy'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
-import { fetchOpenApiSpec } from '@/lib/docs'
+import { failBuildIfPrerendering, fetchOpenApiSpec } from '@/lib/docs'
 import { DocsDocument } from '../../_components/DocsDocument'
 import { CodeBlock } from '../../_components/DocSchema'
 
@@ -69,7 +69,8 @@ export default async function GettingStartedPage({ params }: LocalePageProps) {
   let contractVersion: string | null = null
   try {
     contractVersion = (await fetchOpenApiSpec()).info.version
-  } catch {
+  } catch (error) {
+    failBuildIfPrerendering(error)
     contractVersion = null
   }
 
