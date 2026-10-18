@@ -96,15 +96,51 @@ primary_region = "iad"               # beside motir-core and motir-ai.
   # and that is the line that costs money.
   min_machines_running = 1
 
-  # ⚠️ NOT MEASURED. A Next standalone server has never been measured on this
-  # box for this workload, and these are motir-core's numbers scaled down rather
-  # than a reading. Labelled as an estimate so nobody quotes it back as one.
-  # TRIGGER to revise: the first sustained request-concurrency reading from Fly
-  # metrics.
+  # ⚠️ MEASURED ON 2026-10-18, AND LOWERED FROM 100 / 150. Those were motir-core's
+  # numbers scaled down, never a reading, and 150 requests in flight is more than
+  # this server holds in 1 GB. Measured on a standalone build of this repository
+  # (heap capped as `[env]` caps it), peak RSS for a burst of request-time pages
+  # — `/p/<key>` for 3,000 distinct keys, and the same keys' social cards:
+  #
+  #   in flight    25        50        150
+  #   peak RSS     350 MB    410 MB    700 MB    (cards, after the
+  #                                               `ogRenderGate.ts` fix: 720 /
+  #                                               — / 776 MB)
+  #
+  # One process served ~180 req/s at 50 in flight; the busiest hour on record is
+  # ~16k requests (≈4.4 req/s). Past `hard_limit` the proxy queues the request
+  # or hands it to the other machine, which costs a queued request a few
+  # milliseconds instead of costing the machine its memory.
+  # TRIGGER to revise: `fly_app_hard_limit_reached_count` climbing while
+  # `fly_instance_memory_mem_available` stays above ~400 MB.
   [http_service.concurrency]
     type       = "requests"
-    soft_limit = 100
-    hard_limit = 150
+    soft_limit = 25
+    hard_limit = 50
+
+  # ⚠️ WITHOUT THIS A FROZEN MACHINE KEEPS ITS TRAFFIC. On 2026-10-18 both
+  # machines ran out of memory drawing `/p/*` social cards and stopped answering,
+  # but neither crashed, so Fly kept calling them `started` and kept routing to
+  # them: every request waited 60 s for a 503 until they were restarted by hand.
+  # A failing check takes a machine out of the proxy's rotation, so the other one
+  # answers. It does NOT restart the machine — the cure for the freeze is
+  # `app/_brand/ogRenderGate.ts`; this only stops one frozen machine taking the
+  # site with it. `/robots.txt` is a static file: it fails only when the server
+  # itself cannot answer.
+  #
+  # ⚠️ THE HOST HEADER IS PINNED. Fly addresses a check to the machine's private
+  # IP, and `proxy.ts` treats any host that is not the site's own as a TENANT
+  # host — it would resolve the IP against motir-core on every check and answer
+  # the tenant `robots.txt`, so the check would fail on motir-core's health
+  # instead of this server's.
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval     = "15s"
+    timeout      = "5s"
+    method       = "GET"
+    path         = "/robots.txt"
+    [http_service.checks.headers]
+      Host = "motir.co"
 
 # ⚠️ THE VM SIZE WAS A GUESS AND IS NOW A MEASUREMENT. 512 MB was chosen as the
 # smallest size with plausible headroom, on the reasoning that motir-core needs

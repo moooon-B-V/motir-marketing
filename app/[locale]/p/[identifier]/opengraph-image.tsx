@@ -1,10 +1,14 @@
-import { ImageResponse } from 'next/og'
 import {
   BRAND_GLYPH_HEX,
   WAVE_BAND_PATH,
   WAVE_BAND_VIEW_BOX,
 } from '@motir/brand'
 import { loadOgFonts, OG_FONT_FAMILY } from '@/app/_brand/ogFonts'
+import {
+  cachedOgImage,
+  drawOgImage,
+  OG_CACHE_SECONDS,
+} from '@/app/_brand/ogRenderGate'
 import {
   OG_TEXT_HEX,
   OG_TEXT_SECONDARY_HEX,
@@ -50,6 +54,24 @@ import { loadProject } from '@/lib/publicProject'
  * everybody who was ever sent the link.
  */
 
+/*
+ * ── ⚠️ THE CARD IS DRAWN ONCE PER WINDOW, NOT ONCE PER REQUEST ────────────
+ *
+ * Every `/p/*` page advertises this card, so every crawler and link unfurler
+ * that reads a project page fetches it too — and a draw is the most expensive
+ * thing this host does, in memory that sits off the V8 heap
+ * (`app/_brand/ogRenderGate.ts` has the measurements). Drawn per request it
+ * took motir.co down on 2026-10-18. So the drawn card is kept for
+ * `OG_CACHE_SECONDS`, keyed by the project, its project read is cached on the
+ * same window, and the draws that do happen go through the gate. Not segment
+ * ISR: this route is request-time because its page is, and Next does not cache
+ * it — the gate's header says how that was checked. A card an hour behind a
+ * renamed project is a fair price; a social card is not a live view.
+ *
+ * The key is the identifier alone: the card draws no locale-specific text, so
+ * `/en/p/MOTIR/opengraph-image` and `/de/p/MOTIR/opengraph-image` are one card.
+ */
+
 export const runtime = 'nodejs'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
@@ -58,20 +80,27 @@ export const alt = 'A public project on Motir'
 export default async function ProjectOpengraphImage({
   params,
 }: {
-  params: { identifier: string }
+  params: Promise<{ identifier: string }>
 }) {
+  const { identifier } = await params
+  return cachedOgImage(`p/${identifier}`, () => drawProjectCard(identifier))
+}
+
+async function drawProjectCard(
+  identifier: string,
+): Promise<{ response: Response; keep: boolean }> {
   const [fonts, read] = await Promise.all([
     loadOgFonts(),
-    loadProject(params.identifier),
+    loadProject(identifier, OG_CACHE_SECONDS),
   ])
 
   const project = read.status === 'ok' ? read.data : null
-  const name = project?.name ?? params.identifier
+  const name = project?.name ?? identifier
   const tagline =
     project?.publicTagline ??
     'A project built in public on Motir — watch it being built.'
 
-  return new ImageResponse(
+  const response = await drawOgImage(
     <div
       style={{
         width: '100%',
@@ -111,7 +140,7 @@ export default async function ProjectOpengraphImage({
             letterSpacing: '0.04em',
           }}
         >
-          {project?.workspaceName ?? params.identifier}
+          {project?.workspaceName ?? identifier}
         </div>
         <div
           style={{
@@ -138,4 +167,7 @@ export default async function ProjectOpengraphImage({
     </div>,
     { ...size, fonts },
   )
+  // A card drawn from the fallback is not kept: the read failed, and the next
+  // request should try it again rather than serve the plain card for an hour.
+  return { response, keep: read.status !== 'failed' }
 }

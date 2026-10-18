@@ -1,6 +1,6 @@
 // @vitest-environment node
 import type { ReactElement, ReactNode } from 'react'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { BRAND_ACCENT_HEX, BRAND_GLYPH_HEX } from '@motir/brand'
 import {
   OG_TEXT_HEX,
@@ -27,6 +27,13 @@ vi.mock('next/og', () => ({
   ImageResponse: class {
     constructor(element: ReactElement) {
       captured.push(element)
+    }
+    // The per-project card draws through `app/_brand/ogRenderGate.ts`, which
+    // reads the body to bytes.
+    status = 200
+    headers = new Headers()
+    async arrayBuffer() {
+      return new ArrayBuffer(0)
     }
   },
 }))
@@ -77,6 +84,12 @@ function paints(
   return out
 }
 
+// The per-project card keeps what it draws (`app/_brand/ogRenderGate.ts`), so a
+// second render in the same module graph would be served without a draw.
+beforeEach(() => {
+  vi.resetModules()
+})
+
 async function renderRoute(
   load: () => Promise<{ default: (a: never) => unknown }>,
   arg?: unknown,
@@ -122,7 +135,7 @@ describe.each([
   [
     'the per-project card',
     () => import('@/app/[locale]/p/[identifier]/opengraph-image'),
-    { params: { identifier: 'ACME' } },
+    { params: Promise.resolve({ identifier: 'ACME' }) },
   ],
 ] as const)('%s', (_name, load, arg) => {
   it('paints the glyph in BRAND_GLYPH_HEX, never the ink tile colour', async () => {
