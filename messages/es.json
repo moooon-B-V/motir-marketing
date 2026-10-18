@@ -659,7 +659,8 @@
     "copyright": "© {year} moooon B.V.",
     "howItWorks": "Cómo funciona Motir",
     "ideas": "Ideas para construir",
-    "buildsItself": "Motir se construye a sí mismo"
+    "buildsItself": "Motir se construye a sí mismo",
+    "howToUse": "Cómo usar Motir"
   },
   "legal": {
     "metaTitle": "Legal",
@@ -2503,6 +2504,112 @@
       "headline": "Construye el tuyo de la misma manera.",
       "body": "Empieza con una idea. Motir la planifica, la construye y mantiene todo el proyecto unido.",
       "cta": "Empezar gratis"
+    }
+  },
+  "howToUse": {
+    "metaTitle": "Cómo usar Motir: una parte, dos o las tres",
+    "metaDescription": "Motir tiene tres partes: un planificador, la herramienta de gestión de proyectos en el centro y un ejecutor de agentes. Usa el centro con tu propio planificador y tus agentes por MCP, añade el planificador de Motir o deja que Motir se encargue de las tres.",
+    "eyebrow": "Cómo usar Motir",
+    "headline": "Usa una parte, dos o las tres.",
+    "lede": "Motir tiene tres partes. La herramienta de gestión de proyectos está en el centro y guarda el plan. El planificador vuelca el plan en ella. El ejecutor de agentes toma tareas de ella y las construye. Cualquier parte que prefieras gestionar tú, puedes hacerlo.",
+    "parts": [
+      {
+        "lead": "Planifica",
+        "name": "Planificador Motir AI",
+        "body": "Convierte tu idea en épicas, historias y tareas, y las crea en el proyecto en cuanto las apruebas."
+      },
+      {
+        "lead": "Guarda el plan",
+        "name": "Gestión de proyectos Motir",
+        "body": "El tablero, el backlog, los sprints y la hoja de ruta. Todos los planificadores y todos los agentes, tuyos o de Motir, trabajan a través de ella."
+      },
+      {
+        "lead": "Construye",
+        "name": "Flota de agentes Motir",
+        "body": "Toma cada tarea lista, ejecuta un agente sobre ella en su propia máquina, en paralelo con los demás, y abre la pull request."
+      }
+    ],
+    "waysHeadline": "Tres formas de usarlo",
+    "youRun": "Lo gestionas tú",
+    "motirRuns": "Lo gestiona Motir",
+    "ways": [
+      {
+        "label": "1 · Solo gestión de proyectos",
+        "title": "Tu planificador, tus agentes y Motir en el centro.",
+        "paras": [
+          "Usa Motir como herramienta de gestión de proyectos y mantén todo lo demás como tuyo.",
+          "La planificación por MCP está abierta. Escribe tu propio planificador, un script o un agente, y volcará el plan en Motir con las mismas herramientas que usa el planificador de Motir: `create_plan`, `add_plan_items` y `validate_plan`. Antes de que existiera el Planificador Motir AI, Motir también se planificaba a sí mismo así, con un script llamado plan.py.",
+          "Tus agentes se conectan por MCP. Cada uno toma la siguiente tarea lista con `claim_next_ready`, la ejecuta e informa del resultado con `close_work_item_run`. Motir lleva el control de quién tiene cada tarea y qué se ha entregado."
+        ],
+        "you": [
+          "Tu planificador",
+          "Tus agentes, y cuándo se ejecuta cada uno",
+          "Aprobar el plan"
+        ],
+        "motir": [
+          "El tablero, el backlog, los sprints y la hoja de ruta",
+          "Una revisión de cada plan antes de que entre",
+          "Quién tiene cada tarea y qué se ha entregado"
+        ],
+        "links": ["Conectar por MCP", "Todas las herramientas MCP"]
+      },
+      {
+        "label": "2 · Planificador y gestión de proyectos",
+        "title": "Motir planifica. Tus agentes construyen.",
+        "paras": [
+          "Añade el Planificador Motir AI. Cuéntale tu idea: te pregunta lo que necesita saber, organiza el trabajo en épicas, historias y tareas, y crea el plan en el proyecto en cuanto lo apruebas.",
+          "La construcción sigue siendo cosa tuya. Tu propia orquestación toma las tareas listas de Motir por MCP, entrega cada una a un agente e informa del resultado."
+        ],
+        "you": ["Aprobar el plan", "Tus agentes, y cuándo se ejecuta cada uno"],
+        "motir": [
+          "La planificación a partir de tu idea",
+          "El tablero, el backlog, los sprints y la hoja de ruta",
+          "Quién tiene cada tarea y qué se ha entregado"
+        ],
+        "links": ["Conectar por MCP", "Motir CLI"]
+      },
+      {
+        "label": "3 · Las tres partes",
+        "title": "Escribe la idea. Mira cómo se planifica. Mira cómo se construye.",
+        "paras": [
+          "Motir se encarga de todo lo que hay entre medias. El planificador convierte tu idea en un plan para que lo apruebes. El plan aprobado pasa al tablero. La Flota de agentes Motir toma cada tarea lista, ejecuta un agente sobre ella y abre la pull request.",
+          "Tú decides en los puntos de control: apruebas el plan y luego revisas lo que se fusiona."
+        ],
+        "you": ["La idea", "Aprobar el plan y las pull requests"],
+        "motir": [
+          "La planificación",
+          "El tablero, el backlog, los sprints y la hoja de ruta",
+          "La ejecución de los agentes"
+        ],
+        "links": ["Empezar gratis", "Cómo funciona Motir"]
+      }
+    ],
+    "art": {
+      "planner": "Planificador",
+      "pm": "Gestión de proyectos",
+      "runner": "Ejecutor",
+      "motir": "Motir",
+      "yours": "Tuyo",
+      "plannerName": "Planificador Motir AI",
+      "pmName": "Gestión de proyectos Motir",
+      "fleetName": "Flota de agentes Motir",
+      "plannerLcd": "Épica › historia › tarea",
+      "pmSub": "El plan, en el tablero",
+      "fleetLcd": "Agentes en paralelo",
+      "yourPlanner": "Tu planificador",
+      "yourPlannerSub": "Un script o un agente",
+      "yourAgents": "Tus agentes",
+      "yourAgentsSub": "Tu orquestación, cualquier cliente MCP",
+      "orchestration": "your-orchestrator",
+      "columns": ["Listo", "En ejecución", "Hecho"],
+      "plan": "Plan",
+      "tasks": "Tareas",
+      "results": "Resultados",
+      "you": "Tú",
+      "idea": "Tu idea",
+      "approve": "Aprobar el plan",
+      "outputs": "Código · Diseño · Docs · Vídeo",
+      "mcp": "MCP"
     }
   }
 }

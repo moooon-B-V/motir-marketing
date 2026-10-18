@@ -149,6 +149,8 @@ describe('the sitemap', () => {
       siteUrl('/'),
       // 2026-10 redesign — "How Motir works", the developer page.
       siteUrl('/how-it-works'),
+      // 2026-10 — "How to use Motir".
+      siteUrl('/how-to-use'),
       siteUrl('/design'),
       siteUrl('/explore'),
       siteUrl('/docs'),
