@@ -6,9 +6,10 @@ import { useCanvas } from './canvas'
  * The first drawing on "How Motir works": vibe coding as a toy. One knob, a
  * prompt in — and out of it a heap of files: scattered, tangled in imports,
  * one circular import among them, and a single changed line in one file that
- * breaks seven others. No plan, no board, no review, no memory. Scrolling
- * past it swaps it for the full instrument (`RackStage`), so the page opens
- * on the difference between the two.
+ * breaks seven others. No plan, no board, no review, no memory. It sits in
+ * a frame of its own above Motir's scroll stage (`RackStage`) and takes no
+ * part in its animation: the page opens on it, and scrolling down brings up
+ * Motir.
  *
  * Unlike the other drawings it does NOT spread across a wider canvas: it
  * stays the same size in the middle of the frame. Same inks as the rack

@@ -776,17 +776,19 @@ body {
 }
 
 /*
- * The stage that holds the three drawings (`RackStage`). By default — narrow
- * screens, reduced motion — they stack, each with its caption. On a wide
- * screen that allows motion they share one frame pinned to the viewport, and
- * the script's `--open` / `--zoom` (0–1) open the case, then zoom into the
- * rack until the schematic replaces it.
+ * The drawings at the top of "How Motir works" (`RackStage`): the vibe coding
+ * toy in a plain frame of its own (`.hiw-solo`), then the stage that holds
+ * Motir's three drawings. By default — narrow screens, reduced motion — they
+ * all stack, each with its caption. On a wide screen that allows motion
+ * Motir's three share one frame pinned to the viewport, and the script's
+ * `--open` / `--zoom` (0–1) open the case, then zoom into the rack until the
+ * schematic replaces it. The toy never moves: the page scrolls past it.
  */
 .hiw-stage {
-  --swap: 0;
   --open: 0;
   --zoom: 0;
 }
+.hiw-drawings,
 .hiw-layers {
   display: grid;
   gap: clamp(28px, 4vw, 56px);
@@ -824,6 +826,7 @@ body {
    it to the section's room (`--turn-w` along the long side, `--turn-h`
    across). Static — nothing moves as the page scrolls. */
 @media (max-width: 1099px) {
+  .hiw-drawings,
   .hiw-layers {
     gap: 0;
   }
@@ -848,7 +851,7 @@ body {
     height: var(--turn-h, 100%);
     translate: -50% -50%;
   }
-  .hiw-stage[data-turn='upright'] .hiw-turn {
+  .hiw-drawings[data-turn='upright'] .hiw-turn {
     rotate: 90deg;
   }
   .hiw-turn .hiw-frame,
@@ -875,7 +878,7 @@ body {
     flex-direction: column;
     justify-content: center;
   }
-  .hiw-cap {
+  .hiw-stage .hiw-cap {
     display: none;
   }
   .hiw-caps {
@@ -889,7 +892,6 @@ body {
     pointer-events: none;
     transition: opacity 0.3s;
   }
-  .hiw-stage[data-phase='toy'] .hiw-caps [data-for='toy'],
   .hiw-stage[data-phase='shell'] .hiw-caps [data-for='shell'],
   .hiw-stage[data-phase='rack'] .hiw-caps [data-for='rack'],
   .hiw-stage[data-phase='schematic'] .hiw-caps [data-for='schematic'] {
@@ -904,7 +906,7 @@ body {
     width: 100%;
     height: calc(100vh - 120px);
   }
-  .hiw-layer,
+  .hiw-stage .hiw-layer,
   .hiw-layer .hiw-frame,
   .hiw-layer .hiw-scroll,
   .hiw-art,
@@ -918,9 +920,17 @@ body {
   .hiw-layer .hiw-scroll {
     overflow: hidden;
   }
+  /* The toy's frame matches the stage's in size, so its canvas has the same
+     shape; it just stays where it is as the page scrolls. */
+  .hiw-solo .hiw-room {
+    height: calc(100vh - 120px);
+  }
+  .hiw-solo .hiw-turn {
+    height: 100%;
+  }
   /* The frame takes the drawings' own ground, so a drawing smaller than its
      frame mid-zoom has no visible edge. */
-  .hiw-layer .hiw-frame {
+  .hiw-stage .hiw-frame {
     background: var(--el-surface-soft);
   }
   .hiw-art {
@@ -934,14 +944,6 @@ body {
     text-rendering: geometricPrecision;
   }
 
-  /* The toy shrinks away and fades; the full instrument grows in behind it. */
-  .hiw-layer[data-layer='toy'] {
-    z-index: 4;
-    pointer-events: none;
-    transform: scale(calc(1 - var(--swap) * 0.35));
-    opacity: clamp(0, calc(1 - var(--swap) * 2.2), 1);
-  }
-
   /* The case: its front panel swings up and toward you on a hinge along its
      top edge, and is gone by the time it stands edge-on. */
   .hiw-layer[data-layer='shell'] {
@@ -949,16 +951,13 @@ body {
     pointer-events: none;
     transform-origin: 50% 0;
     transform: perspective(2400px) rotateX(calc(var(--open) * 82deg))
-      translateY(calc(var(--open) * -4%)) scale(calc(0.9 + var(--swap) * 0.1));
-    opacity: min(
-      clamp(0, calc((1 - var(--open)) * 7), 1),
-      clamp(0, calc((var(--swap) - 0.35) * 2.2), 1)
-    );
+      translateY(calc(var(--open) * -4%));
+    opacity: clamp(0, calc((1 - var(--open)) * 7), 1);
   }
   /* The rack shows as the case opens; the zoom then pushes into the agent run
      module until the rack dissolves. */
   /* Hidden until the lid starts to lift, so it never shows through the
-     case while the toy swaps out. */
+     closed case. */
   .hiw-layer[data-layer='rack'] {
     z-index: 1;
     opacity: min(

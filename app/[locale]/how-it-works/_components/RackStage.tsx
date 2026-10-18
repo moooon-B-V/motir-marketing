@@ -14,11 +14,12 @@ import { WorkflowRack } from './WorkflowRack'
  * the rack of modules inside it, and the components and signal lines inside
  * the modules.
  *
- * On a wide screen that allows motion, the drawings share one frame pinned to
- * the viewport while the page scrolls past it: first the toy shrinks away and
- * the full instrument takes its place (`--swap`), then the case's front panel
- * swings up and away to show the rack, then the view zooms into the rack until
- * the schematic takes its place. The frame fills the screen's height and the
+ * The toy is not part of the scroll effect: it is a plain frame above the
+ * stage, and scrolling down past it brings Motir up. On a wide screen that
+ * allows motion, Motir's three drawings share one frame pinned to the
+ * viewport while the page scrolls past it: the case's front panel swings up
+ * and away to show the rack, then the view zooms into the rack until the
+ * schematic takes its place. The frame fills the screen's height and the
  * page's width: the canvas widens to the frame's shape (`CanvasWidth`) and
  * each drawing spreads its layout across it, its text and parts at the size
  * the height gives them. Scroll position drives two numbers, `--open`
@@ -26,7 +27,7 @@ import { WorkflowRack } from './WorkflowRack'
  * the first paint is already right before this script runs.
  *
  * Everywhere else — narrow screens, `prefers-reduced-motion` — the same three
- * drawings simply stack, each in its own frame, with nothing pinned or moving.
+ * drawings simply stack under the toy, each in its own frame, with nothing pinned or moving.
  * On a phone or small tablet (`SMALL`) each drawing gets a full-screen
  * section of its own; held upright, the frame is turned 90° so the whole
  * drawing fills the portrait screen, as if the phone were held sideways. The
@@ -35,9 +36,9 @@ import { WorkflowRack } from './WorkflowRack'
  * Both layouts come from the same markup; the media query that picks one lives
  * in globals.css and is repeated here as `ANIMATED`.
  *
- * Each drawing has an anchor a link can share: `#instrument`, `#modules`,
- * `#components`. Stacked, they are plain ids on the drawings. Pinned, all
- * three share one frame, so the script turns a hash into the scroll position
+ * Each drawing has an anchor a link can share: `#vibe-coding`, `#instrument`,
+ * `#modules`, `#components`. Stacked, and for the toy always, they are plain
+ * ids on the drawings. Pinned, Motir's three share one frame, so the script turns a hash into the scroll position
  * where that drawing is fully shown (`AT`), and writes the hash of the drawing
  * on screen back into the address bar while the page scrolls through the
  * stage. The captions are the links.
@@ -47,38 +48,34 @@ const ANIMATED =
   '(min-width: 1100px) and (prefers-reduced-motion: no-preference)'
 const SMALL = '(max-width: 1099px)'
 
-// The pinned scroll, in viewport heights: rest on the toy, swap it for the
-// case, rest on the case, open it, rest on the rack, zoom in, rest on the
-// schematic. globals.css sizes the stage to 100vh plus their sum.
-const REST_TOY = 0.35
-const SWAP = 0.8
+// The pinned scroll, in viewport heights: rest on the case, open it, rest on
+// the rack, zoom in, rest on the schematic. globals.css sizes the stage to
+// 100vh plus their sum.
 const REST_SHELL = 0.35
 const OPEN = 1
 const REST_RACK = 1.25
 const ZOOM = 1
 const REST_SCHEMATIC = 0.4
-const BEFORE_OPEN = REST_TOY + SWAP + REST_SHELL
-const RUN = BEFORE_OPEN + OPEN + REST_RACK + ZOOM + REST_SCHEMATIC
+const RUN = REST_SHELL + OPEN + REST_RACK + ZOOM + REST_SCHEMATIC
 
 type LayerName = 'toy' | 'shell' | 'rack' | 'schematic'
-const LAYERS: readonly LayerName[] = ['toy', 'shell', 'rack', 'schematic']
+type StageLayer = Exclude<LayerName, 'toy'>
+const STAGE_LAYERS: readonly StageLayer[] = ['shell', 'rack', 'schematic']
 const ANCHOR: Record<LayerName, string> = {
   toy: 'vibe-coding',
   shell: 'instrument',
   rack: 'modules',
   schematic: 'components',
 }
-// Where each drawing is fully shown, in viewport heights into the stage.
-const AT: Record<LayerName, number> = {
-  toy: 0,
-  shell: REST_TOY + SWAP + REST_SHELL / 2,
-  rack: BEFORE_OPEN + OPEN + REST_RACK * 0.25,
+// Where each pinned drawing is fully shown, in viewport heights into the
+// stage. The toy's anchor is a plain id: it sits above the stage.
+const AT: Record<StageLayer, number> = {
+  shell: 0,
+  rack: REST_SHELL + OPEN + REST_RACK * 0.25,
   schematic: RUN - REST_SCHEMATIC / 2,
 }
 const layerOf = (hash: string) =>
-  (Object.keys(ANCHOR) as LayerName[]).find(
-    (name) => `#${ANCHOR[name]}` === hash,
-  )
+  STAGE_LAYERS.find((name) => `#${ANCHOR[name]}` === hash)
 
 // The widest canvas a drawing spreads across, so an ultra-wide screen does
 // not pull its parts apart into a sparse line.
@@ -124,25 +121,27 @@ function Layer({
 
 export function RackStage() {
   const h = useCopy().howItWorks
+  const rootRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const [canvas, setCanvas] = useState(BASE_WIDTH)
 
   useEffect(() => {
+    const root = rootRef.current
     const stage = stageRef.current
-    if (!stage) return
+    if (!root || !stage) return
     const frameBox = stage.querySelector<HTMLElement>('.hiw-layers')!
     const mq = window.matchMedia(ANIMATED)
     const small = window.matchMedia(SMALL)
-    const room = stage.querySelector<HTMLElement>('.hiw-room')!
+    const room = root.querySelector<HTMLElement>('.hiw-room')!
     let frame = 0
     const update = () => {
       frame = 0
       if (!mq.matches) {
-        for (const name of ['--swap', '--open', '--zoom'])
+        for (const name of ['--open', '--zoom'])
           stage.style.removeProperty(name)
-        stage.dataset.phase = 'toy'
+        stage.dataset.phase = 'shell'
         if (!small.matches) {
-          delete stage.dataset.turn
+          delete root.dataset.turn
           setCanvas(BASE_WIDTH)
           return
         }
@@ -151,9 +150,9 @@ export function RackStage() {
         const upright = height > width
         const long = Math.max(width, height)
         const short = Math.max(1, Math.min(width, height))
-        stage.dataset.turn = upright ? 'upright' : 'flat'
-        stage.style.setProperty('--turn-w', `${long}px`)
-        stage.style.setProperty('--turn-h', `${short}px`)
+        root.dataset.turn = upright ? 'upright' : 'flat'
+        root.style.setProperty('--turn-w', `${long}px`)
+        root.style.setProperty('--turn-h', `${short}px`)
         setCanvas(
           Math.min(
             MAX_WIDTH,
@@ -173,22 +172,14 @@ export function RackStage() {
       )
       const box = stage.getBoundingClientRect()
       const scrolled = Math.max(0, -box.top) / vh
-      const swap = ease(clamp((scrolled - REST_TOY) / SWAP))
-      const open = ease(clamp((scrolled - BEFORE_OPEN) / OPEN))
+      const open = ease(clamp((scrolled - REST_SHELL) / OPEN))
       const zoom = ease(
-        clamp((scrolled - BEFORE_OPEN - OPEN - REST_RACK) / ZOOM),
+        clamp((scrolled - REST_SHELL - OPEN - REST_RACK) / ZOOM),
       )
-      stage.style.setProperty('--swap', swap.toFixed(4))
       stage.style.setProperty('--open', open.toFixed(4))
       stage.style.setProperty('--zoom', zoom.toFixed(4))
-      const phase: LayerName =
-        zoom > 0.5
-          ? 'schematic'
-          : open > 0.5
-            ? 'rack'
-            : swap > 0.5
-              ? 'shell'
-              : 'toy'
+      const phase: StageLayer =
+        zoom > 0.5 ? 'schematic' : open > 0.5 ? 'rack' : 'shell'
       stage.dataset.phase = phase
       // Keep the address bar on the drawing in view, inside the stage only;
       // past it, drop our hash so a shared link is not stale.
@@ -251,52 +242,56 @@ export function RackStage() {
   }, [])
 
   return (
-    <div
-      ref={stageRef}
-      className="hiw-stage"
-      data-phase="toy"
-      style={{ ['--run' as string]: RUN }}
-    >
-      <div className="hiw-pin">
-        <p className="hiw-caps" aria-hidden="true">
-          {LAYERS.map((name) => (
-            <a
-              key={name}
-              data-for={name}
-              href={`#${ANCHOR[name]}`}
-              tabIndex={-1}
-            >
-              {
-                {
-                  toy: h.stage.toyCaption,
-                  shell: h.stage.shellCaption,
-                  rack: h.stage.rackCaption,
-                  schematic: h.stage.schematicCaption,
-                }[name]
-              }
-            </a>
-          ))}
-        </p>
-        <CanvasWidth.Provider value={canvas}>
-          <div className="hiw-layers">
-            <Layer name="toy" caption={h.stage.toyCaption}>
-              <ToyPanel />
-            </Layer>
-            <Layer name="shell" caption={h.stage.shellCaption}>
-              <ShellPanel />
-            </Layer>
-            <Layer name="rack" caption={h.stage.rackCaption}>
-              <WorkflowRack />
-            </Layer>
-            <Layer name="schematic" caption={h.stage.schematicCaption}>
-              <Schematic />
-            </Layer>
+    <CanvasWidth.Provider value={canvas}>
+      <div ref={rootRef} className="hiw-drawings">
+        {/* Vibe coding stands apart, above the stage: scroll past it to Motir. */}
+        <div className="hiw-solo">
+          <Layer name="toy" caption={h.stage.toyCaption}>
+            <ToyPanel />
+          </Layer>
+        </div>
+        <div
+          ref={stageRef}
+          className="hiw-stage"
+          data-phase="shell"
+          style={{ ['--run' as string]: RUN }}
+        >
+          <div className="hiw-pin">
+            <p className="hiw-caps" aria-hidden="true">
+              {STAGE_LAYERS.map((name) => (
+                <a
+                  key={name}
+                  data-for={name}
+                  href={`#${ANCHOR[name]}`}
+                  tabIndex={-1}
+                >
+                  {
+                    {
+                      shell: h.stage.shellCaption,
+                      rack: h.stage.rackCaption,
+                      schematic: h.stage.schematicCaption,
+                    }[name]
+                  }
+                </a>
+              ))}
+            </p>
+            <div className="hiw-layers">
+              <Layer name="shell" caption={h.stage.shellCaption}>
+                <ShellPanel />
+              </Layer>
+              <Layer name="rack" caption={h.stage.rackCaption}>
+                <WorkflowRack />
+              </Layer>
+              <Layer name="schematic" caption={h.stage.schematicCaption}>
+                <Schematic />
+              </Layer>
+            </div>
+            <p className="hiw-hint" aria-hidden="true">
+              {h.stage.scrollHint}
+            </p>
           </div>
-        </CanvasWidth.Provider>
-        <p className="hiw-hint" aria-hidden="true">
-          {h.stage.scrollHint}
-        </p>
+        </div>
       </div>
-    </div>
+    </CanvasWidth.Provider>
   )
 }
