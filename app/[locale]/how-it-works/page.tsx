@@ -102,7 +102,7 @@ export default async function HowItWorksPage({ params }: LocalePageProps) {
             </p>
             <h1 className="m-0 font-(family-name:--font-serif) text-[clamp(48px,7vw,112px)] leading-[0.92] font-bold tracking-[-0.045em] text-balance [word-break:auto-phrase]">
               <span className="mb-[0.12em] block text-[0.5em] tracking-[-0.035em] text-(--el-text-secondary)">
-                {h.headlineNot}
+                <s className="decoration-[0.07em]">{h.headlineNot}</s>
               </span>
               <span className="block">{h.headline}</span>
             </h1>

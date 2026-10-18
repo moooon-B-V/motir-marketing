@@ -1829,7 +1829,7 @@
     "metaTitle": "Comment fonctionne Motir",
     "metaDescription": "Le workflow derrière « vibe the project » : la planification IA, la validation du plan, les exécutions d’agents, la validation avant fusion, la réparation, la boucle d’apprentissage et la mémoire du projet.",
     "eyebrow": "Comment fonctionne Motir · pour les développeurs",
-    "headlineNot": "Pas du vibe coding.",
+    "headlineNot": "Vibe coding",
     "headline": "Vibe the project.",
     "lede": "Chaque projet Motir passe par le même instrument. Les modules sont Motir et ses agents. Les boutons et les interrupteurs sont à vous : rien n’avance tant qu’une personne ne les a pas actionnés.",
     "legendMotir": "Motir et les agents",

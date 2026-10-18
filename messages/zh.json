@@ -1777,7 +1777,7 @@
     "metaTitle": "Motir 的工作方式",
     "metaDescription": "“vibe the project”背后的工作流程：AI 规划、计划关口、智能体运行、合并关口、修复、学习循环，以及项目的记忆。",
     "eyebrow": "Motir 的工作方式 · 面向开发者",
-    "headlineNot": "不是 vibe coding。",
+    "headlineNot": "Vibe coding",
     "headline": "Vibe the project。",
     "lede": "每个 Motir 项目都运行在同一台“仪器”上。模块是 Motir 和它的智能体，旋钮和开关属于你：在有人拨动它们之前，什么都不会往前走。",
     "legendMotir": "Motir 与智能体",

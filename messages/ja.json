@@ -1808,7 +1808,7 @@
     "metaTitle": "Motir の仕組み",
     "metaDescription": "「vibe the project」を支えるワークフロー。AI による計画、計画ゲート、エージェントの実行、マージゲート、修復、学習ループ、そしてプロジェクトの記憶。",
     "eyebrow": "Motir の仕組み · 開発者向け",
-    "headlineNot": "Vibe coding ではなく、",
+    "headlineNot": "Vibe coding",
     "headline": "Vibe the project。",
     "lede": "すべての Motir プロジェクトは、同じ 1 台の楽器を通ります。モジュールは Motir とそのエージェント。つまみとスイッチはあなたのものです。人が回すまで、何も先へは進みません。",
     "legendMotir": "Motir とエージェント",
