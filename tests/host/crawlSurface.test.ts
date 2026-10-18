@@ -193,7 +193,11 @@ describe('robots names THIS host’s sitemap', () => {
 
     expect(result.sitemap).toBe('https://motir.co/sitemap.xml')
     expect(result.host).toBe('https://motir.co/')
-    expect(result.rules).toEqual({ userAgent: '*', allow: '/' })
+    // The rule set itself is `tests/entitySignal.test.ts`'s; here, only that
+    // every crawler is still let in at `/`.
+    expect([result.rules].flat()).toContainEqual(
+      expect.objectContaining({ userAgent: '*', allow: '/' }),
+    )
     // MOTIR-6747: nor does it name a read path, allowed or disallowed — they
     // are redirects into the app, not pages of this host.
     expect(

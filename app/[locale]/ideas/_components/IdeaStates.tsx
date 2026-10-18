@@ -1,4 +1,5 @@
 import { localizedPath } from '@/i18n/localizedPath'
+import { filterLinkRel } from '@/lib/crawlPolicy'
 import Link from 'next/link'
 import { RefreshCw } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
@@ -64,6 +65,7 @@ export function IdeasUnavailable({ retryHref }: { retryHref: string }) {
       </p>
       <a
         href={retryHref}
+        rel={filterLinkRel(retryHref)}
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'md' }),
           'gap-2',

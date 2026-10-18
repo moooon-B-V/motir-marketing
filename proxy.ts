@@ -4,6 +4,8 @@ import { DEFAULT_LOCALE, LOCALES, routing } from '@/i18n/routing'
 import { chooseLocale, LOCALE_COOKIE } from '@/lib/localeDetection'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 import { TENANT_DOMAIN } from '@/lib/tenantDomain'
+import { isRefusedCrawler } from '@/lib/crawlPolicy'
+import { logRequest } from '@/lib/requestLog'
 import {
   PUBLIC_ADDRESS_KIND_HEADER,
   PUBLIC_HOST_HEADER,
@@ -297,7 +299,39 @@ function kindOf(resolution: PublicHostResolution): 'workspace' | 'project' {
   return resolution.kind === 'workspace' ? 'workspace' : 'project'
 }
 
+/** The header next-intl's rewrite carries back into this proxy. */
+const INTL_REWRITE_HEADER = 'x-next-intl-locale'
+
+/**
+ * The entry point: refuse the crawlers `lib/crawlPolicy.ts` names, log the
+ * request (`lib/requestLog.ts`), then route it.
+ *
+ * ⚠️ A REFUSED CRAWLER STILL GETS `robots.txt`. The 403 is for the ones that
+ * ignore it; the ones that read it should find the `Disallow: /` that names
+ * them, and stop asking.
+ *
+ * ⚠️ ONE LINE PER VISITOR REQUEST, NOT PER PASS. The English rewrite comes back
+ * through this proxy as `/en/…` (see `inDefaultLocaleTree`), and the path
+ * cannot tell it from a visitor who typed `/en/…` — both are served. What
+ * marks the second pass is the request header next-intl sets on its rewrite,
+ * `x-next-intl-locale` (read off a standalone build: absent on a visitor's
+ * `/en/explore`, present on the rewritten one). That pass is not logged.
+ */
 export async function proxy(request: NextRequest): Promise<NextResponse> {
+  const host =
+    normaliseHost(request.headers.get('x-forwarded-host')) ??
+    normaliseHost(request.headers.get('host'))
+  const refused =
+    isRefusedCrawler(request.headers.get('user-agent')) &&
+    request.nextUrl.pathname !== '/robots.txt'
+  if (!request.headers.has(INTL_REWRITE_HEADER)) {
+    logRequest(request, host, refused)
+  }
+  if (refused) return new NextResponse(null, { status: 403 })
+  return route(request)
+}
+
+async function route(request: NextRequest): Promise<NextResponse> {
   // ⚠️ THE FORWARDED VALUE WINS. Fly terminates TLS and proxies to the machine,
   // so `Host` is the internal address and `x-forwarded-host` is what the visitor
   // typed. Reading `Host` first would make every tenant request look like the

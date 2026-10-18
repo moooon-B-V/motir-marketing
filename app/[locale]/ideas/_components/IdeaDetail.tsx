@@ -107,6 +107,8 @@ export function IdeaDetail({
           {idea.tags.map((t) => (
             <li key={t.slug}>
               <Link
+                // Always a filtered address: a tag added to the list.
+                rel="nofollow"
                 href={localizedPath(
                   locale,
                   ideasHref(params, {

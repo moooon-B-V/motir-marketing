@@ -3,6 +3,7 @@ import path from 'node:path'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { BRAND_GLYPH_HEX, waveBandSvg } from '@motir/brand'
 import robots from '@/app/robots'
+import { FILTER_DISALLOW, REFUSED_CRAWLERS } from '@/lib/crawlPolicy'
 import sitemap from '@/tests/helpers/sitemap'
 import {
   buildRootJsonLd,
@@ -48,8 +49,26 @@ describe('robots', () => {
   it('ALLOWS crawl — this file existing is not the deliverable, the flip is', () => {
     // MOTIR-1455 shipped it as `disallow: /` on purpose and named this card as
     // the one that opens it. A regression here re-hides the whole site.
-    expect(result.rules).toEqual({ userAgent: '*', allow: '/' })
-    expect(JSON.stringify(result)).not.toContain('disallow')
+    //
+    // Every crawler still gets `/`: the `*` group disallows only the filter
+    // URLs, and `Disallow: /` is reserved for the refused crawlers' own group
+    // (`lib/crawlPolicy.ts`).
+    const rules = [result.rules].flat()
+    const everyone = rules.find((rule) => rule.userAgent === '*')
+    expect(everyone).toEqual({
+      userAgent: '*',
+      allow: '/',
+      disallow: [...FILTER_DISALLOW],
+    })
+    for (const path of [everyone!.disallow].flat()) {
+      expect(path, 'the * group never blocks a plain page').toContain('?')
+    }
+    expect(rules.filter((rule) => rule.disallow === '/')).toEqual([
+      { userAgent: [...REFUSED_CRAWLERS], disallow: '/' },
+    ])
+    for (const crawler of ['Googlebot', 'bingbot', 'GPTBot', 'ClaudeBot']) {
+      expect(REFUSED_CRAWLERS, crawler).not.toContain(crawler)
+    }
   })
 
   it('references the sitemap ABSOLUTELY', () => {

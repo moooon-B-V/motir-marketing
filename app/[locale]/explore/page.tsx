@@ -4,7 +4,6 @@ import { localePageMetadata, localizedPath } from '@/lib/localeMetadata'
 import { siteUrl } from '@/lib/siteOrigin'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
 import {
-  buildExploreHref,
   categoryLabel,
   loadSquare,
   parseExploreSearchParams,
@@ -36,20 +35,28 @@ export const dynamic = 'force-dynamic'
 
 const BASE = '/explore'
 
-/** The canonical path in English (cursor dropped — deep pages consolidate). */
-function canonicalPath(query: ExploreQuery): string {
-  return buildExploreHref(BASE, { ...query, cursor: undefined })
+/**
+ * The canonical path in English: the square itself, whatever its filters.
+ *
+ * ⚠️ NOT THE FILTER STATE (`lib/crawlPolicy.ts`). Each filter state used to be
+ * its own canonical, so every rank × window × topic × search combination was a
+ * page a crawler was told to index — the same square, re-sorted. A topic has a
+ * page that is worth ranking, `/explore/topic/<slug>`; the rest consolidate
+ * here.
+ */
+function canonicalPath(): string {
+  return BASE
 }
 
+// `searchParams` is read by the page, not the head: the canonical is the bare
+// square whatever the filters (see `canonicalPath`).
 export async function generateMetadata({
   params,
-  searchParams,
 }: {
   params: LocaleParams
-  searchParams: Promise<RawSearchParams>
+  searchParams?: Promise<RawSearchParams>
 }): Promise<Metadata> {
-  const query = parseExploreSearchParams(await searchParams)
-  return localePageMetadata(params, canonicalPath(query), (copy) => ({
+  return localePageMetadata(params, canonicalPath(), (copy) => ({
     title: copy.explore.metaTitle,
     description: copy.explore.metaDescription,
   }))
@@ -119,7 +126,7 @@ export default async function ExplorePage({
         </div>
       </div>
       <ExploreJsonLd
-        pageUrl={siteUrl(localizedPath(locale, canonicalPath(query)))}
+        pageUrl={siteUrl(localizedPath(locale, canonicalPath()))}
         name={copy.explore.metaTitle}
         description={copy.explore.metaDescription}
         cards={page?.items ?? []}
