@@ -207,7 +207,7 @@
       "errorRetry": "Spróbuj ponownie",
       "errorFallback": "Przejdź do aplikacji Motir",
       "existingProject": "Masz już projekt?",
-      "existingProjectLink": "Jego też zvibe’ujemy"
+      "existingProjectLink": "Importuj projekt"
     },
     "projectManager": {
       "eyebrow": "Kierownik projektu Motir",

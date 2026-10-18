@@ -105,7 +105,7 @@ export const LOCALE_ENDONYMS: Record<Locale, string> = {
  * Tailwind can see, and `tests/headerLadder.test.ts` holds the two together.
  */
 export const HEADER_LADDER: Record<Locale, { a: number; b: number }> = {
-  en: { a: 1507, b: 1290 },
+  en: { a: 1483, b: 1266 },
   zh: { a: 1373, b: 1192 },
   ja: { a: 1589, b: 1288 },
   ko: { a: 1368, b: 1173 },

@@ -14,7 +14,9 @@ import type { Locale } from '@/i18n/routing'
  *   nav   — the nav, shown from `b`
  *   wide  — Sign in, shown from `b`
  *   menu  — the Menu button and its panel, gone from `b`
- *   bar   — the nav's text size and spacing. The full 17px everywhere but
+ *   bar   — the nav's text size and spacing. English sits its items a little
+ *           closer (gap-4) so its bar keeps the full nav at 1280px. The full
+ *           17px everywhere but
  *           the five languages whose nav runs longest (es, fr, it, pl, pt),
  *           which keep their own words ("Documentazione", not "Docs") and
  *           set them smaller instead, so their bar folds near the others'.
@@ -29,11 +31,11 @@ export interface LadderClasses {
 
 export const LADDER_CLASSES: Record<Locale, LadderClasses> = {
   en: {
-    bar: 'gap-5 text-[17px]',
-    setup: 'hidden min-[1507px]:inline-flex',
-    nav: 'hidden min-[1290px]:flex',
-    wide: 'hidden min-[1290px]:inline-flex',
-    menu: 'min-[1290px]:hidden',
+    bar: 'gap-4 text-[17px]',
+    setup: 'hidden min-[1483px]:inline-flex',
+    nav: 'hidden min-[1266px]:flex',
+    wide: 'hidden min-[1266px]:inline-flex',
+    menu: 'min-[1266px]:hidden',
   },
   zh: {
     bar: 'gap-5 text-[17px]',

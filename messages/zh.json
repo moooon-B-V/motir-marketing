@@ -207,7 +207,7 @@
       "errorRetry": "重试",
       "errorFallback": "继续前往 Motir",
       "existingProject": "已经有项目了？",
-      "existingProjectLink": "它同样可以 Vibe"
+      "existingProjectLink": "导入项目"
     },
     "projectManager": {
       "eyebrow": "Motir 项目经理",

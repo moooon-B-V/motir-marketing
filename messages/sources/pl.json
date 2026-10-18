@@ -135,7 +135,7 @@
   "landing.hero.errorRetry": "Try again",
   "landing.hero.errorFallback": "Continue to Motir",
   "landing.hero.existingProject": "Already have a project?",
-  "landing.hero.existingProjectLink": "We can vibe it too",
+  "landing.hero.existingProjectLink": "Import project",
   "landing.projectManager.eyebrow": "Motir Project Manager",
   "landing.projectManager.headline": "Already have a project? Hand it to Motir Project Manager.",
   "landing.projectManager.lede": "You're the product owner. Motir Project Manager reads the project you already have, plans what's next, puts agents to work and reports back. It runs the project. You decide what ships.",

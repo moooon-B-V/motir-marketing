@@ -207,7 +207,7 @@
       "errorRetry": "もう一度試す",
       "errorFallback": "Motir へ進む",
       "existingProject": "すでにプロジェクトをお持ちですか？",
-      "existingProjectLink": "それもバイブで進められます"
+      "existingProjectLink": "プロジェクトをインポート"
     },
     "projectManager": {
       "eyebrow": "Motir プロジェクトマネージャー",

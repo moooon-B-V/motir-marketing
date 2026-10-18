@@ -207,7 +207,7 @@
       "errorRetry": "Try again",
       "errorFallback": "Continue to Motir",
       "existingProject": "Already have a project?",
-      "existingProjectLink": "We can vibe it too"
+      "existingProjectLink": "Import project"
     },
     "projectManager": {
       "eyebrow": "Motir Project Manager",

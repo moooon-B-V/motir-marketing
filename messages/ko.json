@@ -207,7 +207,7 @@
       "errorRetry": "다시 시도",
       "errorFallback": "Motir로 계속",
       "existingProject": "이미 프로젝트가 있으신가요?",
-      "existingProjectLink": "그것도 바이브할 수 있습니다"
+      "existingProjectLink": "프로젝트 가져오기"
     },
     "projectManager": {
       "eyebrow": "Motir 프로젝트 매니저",

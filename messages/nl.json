@@ -207,7 +207,7 @@
       "errorRetry": "Opnieuw proberen",
       "errorFallback": "Doorgaan naar Motir",
       "existingProject": "Heb je al een project?",
-      "existingProjectLink": "Dat kunnen we ook viben"
+      "existingProjectLink": "Project importeren"
     },
     "projectManager": {
       "eyebrow": "Motir Projectmanager",

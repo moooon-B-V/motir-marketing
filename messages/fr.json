@@ -207,7 +207,7 @@
       "errorRetry": "Réessayer",
       "errorFallback": "Continuer vers Motir",
       "existingProject": "Vous avez déjà un projet ?",
-      "existingProjectLink": "Celui-là aussi, nous pouvons le viber"
+      "existingProjectLink": "Importer un projet"
     },
     "projectManager": {
       "eyebrow": "Chef de projet Motir",
