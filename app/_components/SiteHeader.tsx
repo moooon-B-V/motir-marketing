@@ -155,6 +155,7 @@ function ProductsMenu({ host }: { host: PublicHost }) {
           id="products-menu"
           aria-label={copy.nav.productsMenuLabel}
           role="group"
+          data-surface="popover"
           className="absolute top-[calc(100%+12px)] left-[-14px] z-40 grid w-[min(920px,calc(100vw-32px))] gap-x-4 gap-y-3 rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-(--spacing-card-padding) shadow-(--shadow-elevated) md:grid-cols-3"
         >
           {productGroupsFor(copy).map((group) => (
@@ -360,6 +361,7 @@ export function SiteHeader({
         <nav
           id="site-menu"
           aria-label={copy.nav.ariaLabel}
+          data-surface="popover"
           className={cn(
             'flex flex-col gap-3 border-t border-(--el-border) bg-(--el-page-bg) px-4 py-3 shadow-(--shadow-elevated)',
             ladder.menu,

@@ -85,6 +85,7 @@ export function LanguageSwitcher({ host }: { host: PublicHost }) {
           id="language-menu"
           role="group"
           aria-label={copy.nav.language.menuLabel}
+          data-surface="popover"
           className="absolute top-[calc(100%+8px)] right-0 z-40 grid min-w-[13rem] rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-1 shadow-(--shadow-elevated)"
         >
           {LOCALES.map((locale) => {

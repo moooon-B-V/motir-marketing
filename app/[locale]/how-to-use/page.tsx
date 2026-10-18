@@ -37,10 +37,14 @@ const MONO =
 
 // The part cards wear their part's tint, as the drawings do (`PART_TINT`).
 // Written out so Tailwind can see the classes.
+// A style that repaints every card (glassmorphism's frosted fill, retrofuturism's
+// chrome) fills it from `--el-page-bg` / `--el-surface`, so each card points
+// those at its tint too: the style draws its own material, in the part's colour.
 const TINT_BG: Record<(typeof PART_TINT)[number], string> = {
-  lavender: 'bg-(--el-tint-lavender)',
-  sky: 'bg-(--el-tint-sky)',
-  mint: 'bg-(--el-tint-mint)',
+  lavender:
+    'bg-(--el-tint-lavender) [--el-page-bg:var(--el-tint-lavender)] [--el-surface:var(--el-tint-lavender)]',
+  sky: 'bg-(--el-tint-sky) [--el-page-bg:var(--el-tint-sky)] [--el-surface:var(--el-tint-sky)]',
+  mint: 'bg-(--el-tint-mint) [--el-page-bg:var(--el-tint-mint)] [--el-surface:var(--el-tint-mint)]',
 }
 
 // The ways, in the catalogue's order: each one's anchor and its links.
