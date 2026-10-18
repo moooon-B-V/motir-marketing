@@ -37,10 +37,10 @@ export const LADDER_CLASSES: Record<Locale, LadderClasses> = {
   },
   zh: {
     bar: 'gap-5 text-[17px]',
-    setup: 'hidden min-[1240px]:inline-flex',
-    nav: 'hidden min-[1059px]:flex',
-    wide: 'hidden min-[1059px]:inline-flex',
-    menu: 'min-[1059px]:hidden',
+    setup: 'hidden min-[1373px]:inline-flex',
+    nav: 'hidden min-[1192px]:flex',
+    wide: 'hidden min-[1192px]:inline-flex',
+    menu: 'min-[1192px]:hidden',
   },
   ja: {
     bar: 'gap-5 text-[17px]',

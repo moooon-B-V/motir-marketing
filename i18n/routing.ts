@@ -106,7 +106,7 @@ export const LOCALE_ENDONYMS: Record<Locale, string> = {
  */
 export const HEADER_LADDER: Record<Locale, { a: number; b: number }> = {
   en: { a: 1507, b: 1290 },
-  zh: { a: 1240, b: 1059 },
+  zh: { a: 1373, b: 1192 },
   ja: { a: 1589, b: 1288 },
   ko: { a: 1368, b: 1173 },
   de: { a: 1652, b: 1358 },
