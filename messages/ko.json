@@ -125,6 +125,7 @@
     "skipToContent": "본문으로 건너뛰기",
     "menu": "메뉴",
     "howItWorks": "Motir 작동 방식",
+    "howToUse": "사용 방법",
     "explore": "공개 개발",
     "ideas": "아이디어",
     "buildsItself": "Motir는 Motir로 만듭니다",
@@ -206,7 +207,7 @@
       "errorRetry": "다시 시도",
       "errorFallback": "Motir로 계속",
       "existingProject": "이미 프로젝트가 있으신가요?",
-      "existingProjectLink": "그것도 바이브할 수 있습니다"
+      "existingProjectLink": "프로젝트 가져오기"
     },
     "projectManager": {
       "eyebrow": "Motir 프로젝트 매니저",
@@ -643,7 +644,8 @@
     "copyright": "© {year} moooon B.V.",
     "howItWorks": "Motir 작동 방식",
     "ideas": "만들 만한 아이디어",
-    "buildsItself": "Motir는 Motir로 만듭니다"
+    "buildsItself": "Motir는 Motir로 만듭니다",
+    "howToUse": "Motir 사용 방법"
   },
   "legal": {
     "metaTitle": "법률",
@@ -2437,6 +2439,104 @@
       "headline": "당신의 프로젝트도 같은 방식으로 만드세요.",
       "body": "아이디어로 시작하세요. Motir가 계획하고, 만들고, 프로젝트 전체를 하나로 유지합니다.",
       "cta": "무료로 시작"
+    }
+  },
+  "howToUse": {
+    "metaTitle": "Motir 사용 방법: 하나만, 둘, 또는 셋 모두",
+    "metaDescription": "Motir는 플래너, 가운데의 프로젝트 관리 도구, 에이전트 러너의 세 부분으로 이루어져 있습니다. 가운데 도구만 MCP로 내 플래너와 에이전트에 연결해 쓰거나, Motir 플래너를 더하거나, 세 가지 모두를 Motir에 맡길 수 있습니다.",
+    "eyebrow": "Motir 사용 방법",
+    "headline": "하나만, 둘, 또는 셋 모두.",
+    "lede": "Motir는 세 부분으로 이루어져 있습니다. 가운데에는 계획을 담는 프로젝트 관리 도구가 있습니다. 플래너는 이곳에 계획을 채우고, 에이전트 러너는 이곳에서 작업을 가져가 구축합니다. 원하는 부분은 직접 운영할 수 있습니다.",
+    "parts": [
+      {
+        "lead": "계획",
+        "name": "Motir AI 플래너",
+        "body": "아이디어를 에픽, 스토리, 작업으로 나누고, 승인하면 프로젝트에 등록합니다."
+      },
+      {
+        "lead": "계획 보관",
+        "name": "Motir 프로젝트 관리",
+        "body": "보드, 백로그, Sprint, 로드맵. 직접 만든 것이든 Motir가 제공하는 것이든, 모든 플래너와 에이전트는 이곳을 통해 작동합니다."
+      },
+      {
+        "lead": "구축",
+        "name": "Motir 에이전트 플릿",
+        "body": "준비된 작업마다 전용 머신에서 에이전트를 병렬로 실행하고, 풀 리퀘스트를 엽니다."
+      }
+    ],
+    "waysHeadline": "세 가지 사용 방법",
+    "youRun": "내가 맡는 부분",
+    "motirRuns": "Motir가 맡는 부분",
+    "ways": [
+      {
+        "label": "1 · 프로젝트 관리만",
+        "title": "내 플래너, 내 에이전트, 가운데에는 Motir.",
+        "paras": [
+          "Motir를 프로젝트 관리 도구로 사용하고, 나머지는 기존에 쓰던 도구를 그대로 유지하세요.",
+          "MCP를 통한 계획 기능은 누구에게나 열려 있습니다. 스크립트든 에이전트든 직접 플래너를 만들면, Motir 플래너와 같은 도구인 `create_plan`, `add_plan_items`, `validate_plan`으로 Motir에 계획을 등록할 수 있습니다. Motir AI 플래너가 나오기 전에는 Motir 역시 plan.py라는 스크립트로 같은 방식으로 자체 계획을 세웠습니다.",
+          "내 에이전트는 MCP로 연결합니다. 각 에이전트는 `claim_next_ready`로 다음 준비된 작업을 가져가 실행하고, `close_work_item_run`으로 결과를 보고합니다. 누가 어떤 작업을 맡았는지, 무엇이 출시되었는지는 Motir가 추적합니다."
+        ],
+        "you": ["플래너", "에이전트와 실행 시점", "계획 승인"],
+        "motir": [
+          "보드, 백로그, Sprint, 로드맵",
+          "등록 전 모든 계획 검사",
+          "작업 담당자와 출시 내역"
+        ],
+        "links": ["MCP로 연결하기", "모든 MCP 도구"]
+      },
+      {
+        "label": "2 · 플래너와 프로젝트 관리",
+        "title": "계획은 Motir가, 구축은 내 에이전트가.",
+        "paras": [
+          "Motir AI 플래너를 추가하세요. 아이디어를 입력하면 필요한 내용을 질문하고, 업무를 에픽, 스토리, 작업으로 구성한 뒤, 승인하면 계획을 프로젝트에 등록합니다.",
+          "구축은 직접 관리합니다. 자체 오케스트레이션이 MCP를 통해 Motir에서 준비된 작업을 가져와 각각 에이전트에 전달하고, 결과를 보고합니다."
+        ],
+        "you": ["계획 승인", "에이전트와 실행 시점"],
+        "motir": [
+          "아이디어 기반 계획",
+          "보드, 백로그, Sprint, 로드맵",
+          "작업 담당자와 출시 내역"
+        ],
+        "links": ["MCP로 연결하기", "Motir CLI"]
+      },
+      {
+        "label": "3 · 세 부분 모두",
+        "title": "아이디어를 입력하고, 계획과 구축 과정을 지켜보세요.",
+        "paras": [
+          "그 사이의 모든 일은 Motir가 처리합니다. 플래너가 아이디어를 계획으로 만들어 승인을 요청합니다. 승인된 계획은 보드에 올라갑니다. Motir 에이전트 플릿이 준비된 작업을 하나씩 가져가 에이전트를 실행하고 풀 리퀘스트를 엽니다.",
+          "결정은 승인 단계에서만 내립니다. 계획을 승인한 뒤, 병합할 내용을 검토합니다."
+        ],
+        "you": ["아이디어", "계획과 풀 리퀘스트 승인"],
+        "motir": ["계획", "보드, 백로그, Sprint, 로드맵", "에이전트 실행"],
+        "links": ["무료로 시작", "Motir 작동 방식"]
+      }
+    ],
+    "art": {
+      "planner": "플래너",
+      "pm": "프로젝트 관리",
+      "runner": "에이전트 러너",
+      "motir": "Motir",
+      "yours": "내 것",
+      "plannerName": "Motir AI 플래너",
+      "pmName": "Motir 프로젝트 관리",
+      "fleetName": "Motir 에이전트 플릿",
+      "plannerLcd": "에픽 › 스토리 › 작업",
+      "pmSub": "보드 위의 계획",
+      "fleetLcd": "병렬 에이전트",
+      "yourPlanner": "내 플래너",
+      "yourPlannerSub": "스크립트 또는 에이전트",
+      "yourAgents": "내 에이전트",
+      "yourAgentsSub": "내 오케스트레이션, 모든 MCP 클라이언트",
+      "orchestration": "your-orchestrator",
+      "columns": ["준비됨", "실행 중", "완료"],
+      "plan": "계획",
+      "tasks": "작업",
+      "results": "결과",
+      "you": "나",
+      "idea": "내 아이디어",
+      "approve": "계획 승인",
+      "outputs": "코드 · 디자인 · 문서 · 영상",
+      "mcp": "MCP"
     }
   }
 }

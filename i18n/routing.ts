@@ -98,22 +98,22 @@ export const LOCALE_ENDONYMS: Record<Locale, string> = {
  * locale rather than set by shared breakpoints, which overflowed the English
  * bar between 768px and ~1100px. Each is the bar's own width in that locale's
  * catalogue, with the nav labels on one line, plus 16px to spare (re-measured
- * 2026-10-18, when "How Motir works" joined the nav). Change a nav label and
+ * 2026-10-18, when "How Motir works" and "How to use" joined the nav). Change a nav label and
  * measure again: a bar narrower than its width wraps its labels.
  *
  * `app/_components/headerLadder.ts` turns these into the static class strings
  * Tailwind can see, and `tests/headerLadder.test.ts` holds the two together.
  */
 export const HEADER_LADDER: Record<Locale, { a: number; b: number }> = {
-  en: { a: 1396, b: 1179 },
-  zh: { a: 1152, b: 971 },
-  ja: { a: 1518, b: 1217 },
-  ko: { a: 1281, b: 1086 },
-  de: { a: 1562, b: 1268 },
-  fr: { a: 1718, b: 1396 },
-  es: { a: 1597, b: 1289 },
-  it: { a: 1513, b: 1197 },
-  nl: { a: 1480, b: 1212 },
-  pl: { a: 1533, b: 1240 },
-  pt: { a: 1584, b: 1281 },
+  en: { a: 1483, b: 1266 },
+  zh: { a: 1373, b: 1192 },
+  ja: { a: 1589, b: 1288 },
+  ko: { a: 1368, b: 1173 },
+  de: { a: 1652, b: 1358 },
+  fr: { a: 1744, b: 1422 },
+  es: { a: 1691, b: 1383 },
+  it: { a: 1618, b: 1302 },
+  nl: { a: 1562, b: 1294 },
+  pl: { a: 1634, b: 1341 },
+  pt: { a: 1656, b: 1353 },
 }

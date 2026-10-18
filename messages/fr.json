@@ -125,10 +125,11 @@
     "skipToContent": "Aller au contenu",
     "menu": "Menu",
     "howItWorks": "Comment fonctionne Motir",
+    "howToUse": "Utilisation",
     "explore": "Construire en public",
     "ideas": "Idées",
     "buildsItself": "Motir se construit seul",
-    "docs": "Docs",
+    "docs": "Documentation",
     "design": "Design",
     "signIn": "Se connecter",
     "startFree": "Commencer gratuitement",
@@ -206,7 +207,7 @@
       "errorRetry": "Réessayer",
       "errorFallback": "Continuer vers Motir",
       "existingProject": "Vous avez déjà un projet ?",
-      "existingProjectLink": "Celui-là aussi, nous pouvons le viber"
+      "existingProjectLink": "Importer un projet"
     },
     "projectManager": {
       "eyebrow": "Chef de projet Motir",
@@ -664,7 +665,8 @@
     "copyright": "© {year} moooon B.V.",
     "howItWorks": "Comment fonctionne Motir",
     "ideas": "Idées à construire",
-    "buildsItself": "Motir se construit lui-même"
+    "buildsItself": "Motir se construit lui-même",
+    "howToUse": "Comment utiliser Motir"
   },
   "legal": {
     "metaTitle": "Mentions légales",
@@ -2506,6 +2508,115 @@
       "headline": "Construisez le vôtre de la même façon.",
       "body": "Partez d’une idée. Motir la planifie, la construit et garde tout le projet cohérent.",
       "cta": "Commencer gratuitement"
+    }
+  },
+  "howToUse": {
+    "metaTitle": "Comment utiliser Motir : une partie, deux ou les trois",
+    "metaDescription": "Motir se compose de trois parties : un planificateur, l’outil de gestion de projet au centre et un exécuteur d’agents. Utilisez le centre avec votre propre planificateur et vos agents via MCP, ajoutez le planificateur Motir, ou laissez Motir gérer les trois.",
+    "eyebrow": "Comment utiliser Motir",
+    "headline": "Utilisez une partie, deux ou les trois.",
+    "lede": "Motir se compose de trois parties. L’outil de gestion de projet est au centre et contient le plan. Le planificateur l’alimente. L’exécuteur d’agents y puise les tâches et les réalise. Vous pouvez gérer vous-même chacune de ces parties si vous le préférez.",
+    "parts": [
+      {
+        "lead": "Planifie",
+        "name": "Planificateur Motir AI",
+        "body": "Transforme votre idée en Epics, Stories et Tâches, puis les ajoute au projet après votre approbation."
+      },
+      {
+        "lead": "Contient le plan",
+        "name": "Gestion de projet Motir",
+        "body": "Le tableau, le Backlog, les Sprints et la feuille de route. Chaque planificateur et chaque agent, les vôtres comme ceux de Motir, s’appuie sur cet outil."
+      },
+      {
+        "lead": "Réalise",
+        "name": "Flotte d’agents Motir",
+        "body": "Prend chaque tâche prête, la confie à un agent sur une machine dédiée, en parallèle des autres, et ouvre la pull request."
+      }
+    ],
+    "waysHeadline": "Trois façons de l’utiliser",
+    "youRun": "Vous gérez",
+    "motirRuns": "Motir gère",
+    "ways": [
+      {
+        "label": "1 · Gestion de projet seule",
+        "title": "Votre planificateur, vos agents, Motir au centre.",
+        "paras": [
+          "Utilisez Motir comme outil de gestion de projet et gardez la maîtrise de tout le reste.",
+          "La planification via MCP reste ouverte. Écrivez votre propre planificateur, script ou agent, qui déposera le plan dans Motir avec les mêmes outils que le planificateur de Motir : `create_plan`, `add_plan_items` et `validate_plan`. Avant l’arrivée du Planificateur Motir AI, Motir était lui-même planifié de cette façon, avec un script nommé plan.py.",
+          "Vos agents se connectent via MCP. Chacun prend la prochaine tâche prête avec `claim_next_ready`, l’exécute et rend compte avec `close_work_item_run`. Motir suit qui a quelle tâche et ce qui a été livré."
+        ],
+        "you": [
+          "Votre planificateur",
+          "Vos agents et le moment de leur exécution",
+          "L’approbation du plan"
+        ],
+        "motir": [
+          "Le tableau, le Backlog, les Sprints et la feuille de route",
+          "Une vérification de chaque plan avant son intégration",
+          "Qui a quelle tâche, et ce qui a été livré"
+        ],
+        "links": ["Se connecter via MCP", "Tous les outils MCP"]
+      },
+      {
+        "label": "2 · Planificateur et gestion de projet",
+        "title": "Motir planifie. Vos agents réalisent.",
+        "paras": [
+          "Ajoutez le Planificateur Motir AI. Confiez-lui votre idée : il pose les questions nécessaires, organise le travail en Epics, Stories et Tâches, et ajoute le plan au projet dès que vous l’avez approuvé.",
+          "La réalisation reste entre vos mains. Votre propre orchestration prend les tâches prêtes dans Motir via MCP, confie chacune à un agent et renvoie le résultat."
+        ],
+        "you": [
+          "L’approbation du plan",
+          "Vos agents et le moment de leur exécution"
+        ],
+        "motir": [
+          "La planification à partir de votre idée",
+          "Le tableau, le Backlog, les Sprints et la feuille de route",
+          "Qui a quelle tâche, et ce qui a été livré"
+        ],
+        "links": ["Se connecter via MCP", "Le Motir CLI"]
+      },
+      {
+        "label": "3 · Les trois parties",
+        "title": "Saisissez votre idée. Suivez sa planification, puis sa réalisation.",
+        "paras": [
+          "Motir prend en charge toutes les étapes intermédiaires. Le planificateur transforme votre idée en un plan à approuver. Le plan approuvé arrive sur le tableau. La Flotte d’agents Motir prend chaque tâche prête, la confie à un agent et ouvre la pull request.",
+          "Vous décidez aux étapes clés : approuver le plan, puis relire ce qui sera fusionné."
+        ],
+        "you": ["L’idée", "L’approbation du plan et des pull requests"],
+        "motir": [
+          "La planification",
+          "Le tableau, le Backlog, les Sprints et la feuille de route",
+          "L’exécution des agents"
+        ],
+        "links": ["Commencer gratuitement", "Comment fonctionne Motir"]
+      }
+    ],
+    "art": {
+      "planner": "Planificateur",
+      "pm": "Gestion de projet",
+      "runner": "Exécuteur",
+      "motir": "Motir",
+      "yours": "À vous",
+      "plannerName": "Planificateur Motir AI",
+      "pmName": "Gestion de projet Motir",
+      "fleetName": "Flotte d’agents Motir",
+      "plannerLcd": "Epic › Story › Tâche",
+      "pmSub": "Le plan, sur le tableau",
+      "fleetLcd": "Agents en parallèle",
+      "yourPlanner": "Votre planificateur",
+      "yourPlannerSub": "Un script ou un agent",
+      "yourAgents": "Vos agents",
+      "yourAgentsSub": "Votre orchestration, tout client MCP",
+      "orchestration": "your-orchestrator",
+      "columns": ["Prêt", "En cours", "Terminé"],
+      "plan": "Plan",
+      "tasks": "Tâches",
+      "results": "Résultats",
+      "you": "Vous",
+      "idea": "Votre idée",
+      "approve": "Approuver le plan",
+      "outputs": "Code · Design · Docs · Vidéo",
+      "mcp": "MCP"
     }
   }
 }

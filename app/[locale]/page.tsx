@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { localizedPath } from '@/i18n/localizedPath'
 import { ArrowRight } from 'lucide-react'
-import { cn } from '@motir/design-system'
+import { buttonVariants, cn } from '@motir/design-system'
 import { getCopy } from '@/lib/copy'
 import {
   FREE_DOOR,
@@ -114,18 +114,24 @@ export default async function Page({ params }: LocalePageProps) {
           <div className="mt-[18px] flex w-full justify-center">
             <HeroBrief examples={examples} />
           </div>
-          {/* The way down to Motir Project Manager, for a visitor who arrives
-              with a project rather than an idea. */}
+          {/* For a visitor who arrives with a project rather than an idea: the
+              import door, the same one the close offers. */}
           <p
             data-hero-existing
-            className="m-0 text-[17px] text-(--el-text-secondary)"
+            className="m-0 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[17px] text-(--el-text-secondary)"
           >
             <strong className="font-semibold text-(--el-text-strong)">
               {l.hero.existingProject}
-            </strong>{' '}
+            </strong>
             <a
-              href="#project-manager"
-              className="font-semibold text-(--el-accent-on-surface) underline underline-offset-2 hover:no-underline"
+              href={IMPORT_DOOR}
+              className={cn(
+                buttonVariants({ size: 'md' }),
+                // The palette's warm decision fill and its own ink — the colour
+                // the close's developers' door wears — so it reads apart from
+                // the ink Start above it.
+                'border-transparent bg-(--el-showcase-decision) text-[15px] text-(--el-showcase-decision-text) hover:bg-(--el-showcase-decision) hover:brightness-105',
+              )}
             >
               {l.hero.existingProjectLink}
             </a>

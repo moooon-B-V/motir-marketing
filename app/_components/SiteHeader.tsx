@@ -16,6 +16,7 @@ import {
   DOCS,
   EXPLORE,
   HOW_IT_WORKS,
+  HOW_TO_USE,
   IDEAS,
   MOTIR_BUILDS_ITSELF,
   FREE_DOOR,
@@ -91,8 +92,9 @@ const navItemsFor = (copy: Copy) =>
     // How Motir works stands where Build in public stood until projects are
     // built in public on Motir (2026-10-18); /explore itself is unchanged.
     { path: HOW_IT_WORKS, label: copy.nav.howItWorks },
-    { path: IDEAS, label: copy.nav.ideas },
+    { path: HOW_TO_USE, label: copy.nav.howToUse },
     { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself, feature: true },
+    { path: IDEAS, label: copy.nav.ideas },
     { path: DOCS, label: copy.nav.docs },
     { path: DESIGN, label: copy.nav.design },
   ] as const
@@ -153,6 +155,7 @@ function ProductsMenu({ host }: { host: PublicHost }) {
           id="products-menu"
           aria-label={copy.nav.productsMenuLabel}
           role="group"
+          data-surface="popover"
           className="absolute top-[calc(100%+12px)] left-[-14px] z-40 grid w-[min(920px,calc(100vw-32px))] gap-x-4 gap-y-3 rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) p-(--spacing-card-padding) shadow-(--shadow-elevated) md:grid-cols-3"
         >
           {productGroupsFor(copy).map((group) => (
@@ -208,7 +211,9 @@ const isCurrent = (host: PublicHost, path: string, pathname: string) =>
       ? pathname === path || pathname.startsWith(`${path}/`)
       : pathname === path
 
-const NAV_ITEM = 'text-[17px] font-medium whitespace-nowrap'
+// The bar's nav sets its own text size per locale (`ladder.bar`); the Menu
+// panel's items keep the full size.
+const NAV_ITEM = 'font-medium whitespace-nowrap'
 const NAV_REST = 'text-(--el-text) hover:text-(--el-accent-on-surface)'
 const NAV_CURRENT = 'font-semibold text-(--el-accent-on-surface)'
 /** "Motir builds itself" is live: square and words walk the wave hues (`.mk-live`, globals.css). */
@@ -261,7 +266,7 @@ export function SiteHeader({
 
           <nav
             aria-label={copy.nav.ariaLabel}
-            className={cn('items-center gap-5', ladder.nav)}
+            className={cn('items-center', ladder.bar, ladder.nav)}
           >
             <ProductsMenu host={host} />
             {navItemsFor(copy).map((item) => {
@@ -356,6 +361,7 @@ export function SiteHeader({
         <nav
           id="site-menu"
           aria-label={copy.nav.ariaLabel}
+          data-surface="popover"
           className={cn(
             'flex flex-col gap-3 border-t border-(--el-border) bg-(--el-page-bg) px-4 py-3 shadow-(--shadow-elevated)',
             ladder.menu,
@@ -396,6 +402,7 @@ export function SiteHeader({
               {...('newTab' in item && item.newTab ? NEW_TAB : {})}
               className={cn(
                 NAV_ITEM,
+                'text-[17px]',
                 item.current ? NAV_CURRENT : NAV_REST,
                 'feature' in item && item.feature && LIVE_ITEM,
               )}

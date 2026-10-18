@@ -14,8 +14,15 @@ import type { Locale } from '@/i18n/routing'
  *   nav   — the nav, shown from `b`
  *   wide  — Sign in, shown from `b`
  *   menu  — the Menu button and its panel, gone from `b`
+ *   bar   — the nav's text size and spacing. English sits its items a little
+ *           closer (gap-4) so its bar keeps the full nav at 1280px. The full
+ *           17px everywhere but
+ *           the five languages whose nav runs longest (es, fr, it, pl, pt),
+ *           which keep their own words ("Documentazione", not "Docs") and
+ *           set them smaller instead, so their bar folds near the others'.
  */
 export interface LadderClasses {
+  bar: string
   setup: string
   nav: string
   wide: string
@@ -24,69 +31,80 @@ export interface LadderClasses {
 
 export const LADDER_CLASSES: Record<Locale, LadderClasses> = {
   en: {
-    setup: 'hidden min-[1396px]:inline-flex',
-    nav: 'hidden min-[1179px]:flex',
-    wide: 'hidden min-[1179px]:inline-flex',
-    menu: 'min-[1179px]:hidden',
+    bar: 'gap-4 text-[17px]',
+    setup: 'hidden min-[1483px]:inline-flex',
+    nav: 'hidden min-[1266px]:flex',
+    wide: 'hidden min-[1266px]:inline-flex',
+    menu: 'min-[1266px]:hidden',
   },
   zh: {
-    setup: 'hidden min-[1152px]:inline-flex',
-    nav: 'hidden min-[971px]:flex',
-    wide: 'hidden min-[971px]:inline-flex',
-    menu: 'min-[971px]:hidden',
+    bar: 'gap-5 text-[17px]',
+    setup: 'hidden min-[1373px]:inline-flex',
+    nav: 'hidden min-[1192px]:flex',
+    wide: 'hidden min-[1192px]:inline-flex',
+    menu: 'min-[1192px]:hidden',
   },
   ja: {
-    setup: 'hidden min-[1518px]:inline-flex',
-    nav: 'hidden min-[1217px]:flex',
-    wide: 'hidden min-[1217px]:inline-flex',
-    menu: 'min-[1217px]:hidden',
+    bar: 'gap-5 text-[17px]',
+    setup: 'hidden min-[1589px]:inline-flex',
+    nav: 'hidden min-[1288px]:flex',
+    wide: 'hidden min-[1288px]:inline-flex',
+    menu: 'min-[1288px]:hidden',
   },
   ko: {
-    setup: 'hidden min-[1281px]:inline-flex',
-    nav: 'hidden min-[1086px]:flex',
-    wide: 'hidden min-[1086px]:inline-flex',
-    menu: 'min-[1086px]:hidden',
+    bar: 'gap-5 text-[17px]',
+    setup: 'hidden min-[1368px]:inline-flex',
+    nav: 'hidden min-[1173px]:flex',
+    wide: 'hidden min-[1173px]:inline-flex',
+    menu: 'min-[1173px]:hidden',
   },
   de: {
-    setup: 'hidden min-[1562px]:inline-flex',
-    nav: 'hidden min-[1268px]:flex',
-    wide: 'hidden min-[1268px]:inline-flex',
-    menu: 'min-[1268px]:hidden',
+    bar: 'gap-5 text-[17px]',
+    setup: 'hidden min-[1652px]:inline-flex',
+    nav: 'hidden min-[1358px]:flex',
+    wide: 'hidden min-[1358px]:inline-flex',
+    menu: 'min-[1358px]:hidden',
   },
   fr: {
-    setup: 'hidden min-[1718px]:inline-flex',
-    nav: 'hidden min-[1396px]:flex',
-    wide: 'hidden min-[1396px]:inline-flex',
-    menu: 'min-[1396px]:hidden',
+    bar: 'gap-4 text-[14px]',
+    setup: 'hidden min-[1744px]:inline-flex',
+    nav: 'hidden min-[1422px]:flex',
+    wide: 'hidden min-[1422px]:inline-flex',
+    menu: 'min-[1422px]:hidden',
   },
   es: {
-    setup: 'hidden min-[1597px]:inline-flex',
-    nav: 'hidden min-[1289px]:flex',
-    wide: 'hidden min-[1289px]:inline-flex',
-    menu: 'min-[1289px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1691px]:inline-flex',
+    nav: 'hidden min-[1383px]:flex',
+    wide: 'hidden min-[1383px]:inline-flex',
+    menu: 'min-[1383px]:hidden',
   },
   it: {
-    setup: 'hidden min-[1513px]:inline-flex',
-    nav: 'hidden min-[1197px]:flex',
-    wide: 'hidden min-[1197px]:inline-flex',
-    menu: 'min-[1197px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1618px]:inline-flex',
+    nav: 'hidden min-[1302px]:flex',
+    wide: 'hidden min-[1302px]:inline-flex',
+    menu: 'min-[1302px]:hidden',
   },
   nl: {
-    setup: 'hidden min-[1480px]:inline-flex',
-    nav: 'hidden min-[1212px]:flex',
-    wide: 'hidden min-[1212px]:inline-flex',
-    menu: 'min-[1212px]:hidden',
+    bar: 'gap-5 text-[17px]',
+    setup: 'hidden min-[1562px]:inline-flex',
+    nav: 'hidden min-[1294px]:flex',
+    wide: 'hidden min-[1294px]:inline-flex',
+    menu: 'min-[1294px]:hidden',
   },
   pl: {
-    setup: 'hidden min-[1533px]:inline-flex',
-    nav: 'hidden min-[1240px]:flex',
-    wide: 'hidden min-[1240px]:inline-flex',
-    menu: 'min-[1240px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1634px]:inline-flex',
+    nav: 'hidden min-[1341px]:flex',
+    wide: 'hidden min-[1341px]:inline-flex',
+    menu: 'min-[1341px]:hidden',
   },
   pt: {
-    setup: 'hidden min-[1584px]:inline-flex',
-    nav: 'hidden min-[1281px]:flex',
-    wide: 'hidden min-[1281px]:inline-flex',
-    menu: 'min-[1281px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1656px]:inline-flex',
+    nav: 'hidden min-[1353px]:flex',
+    wide: 'hidden min-[1353px]:inline-flex',
+    menu: 'min-[1353px]:hidden',
   },
 }

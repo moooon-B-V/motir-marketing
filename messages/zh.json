@@ -125,8 +125,9 @@
     "skipToContent": "跳到正文",
     "menu": "菜单",
     "howItWorks": "Motir 的工作方式",
+    "howToUse": "如何使用 Motir",
     "explore": "公开构建",
-    "ideas": "想法",
+    "ideas": "值得构建的想法",
     "buildsItself": "Motir 构建自身",
     "docs": "文档",
     "design": "设计",
@@ -206,7 +207,7 @@
       "errorRetry": "重试",
       "errorFallback": "继续前往 Motir",
       "existingProject": "已经有项目了？",
-      "existingProjectLink": "它同样可以 Vibe"
+      "existingProjectLink": "导入项目"
     },
     "projectManager": {
       "eyebrow": "Motir 项目经理",
@@ -640,7 +641,8 @@
     "copyright": "© {year} moooon B.V.",
     "howItWorks": "Motir 的工作方式",
     "ideas": "值得构建的想法",
-    "buildsItself": "Motir 构建自身"
+    "buildsItself": "Motir 构建自身",
+    "howToUse": "如何使用 Motir"
   },
   "legal": {
     "metaTitle": "法律",
@@ -2427,6 +2429,104 @@
       "headline": "用同样的方式构建你的项目。",
       "body": "从一个想法开始。Motir 负责规划、构建，并让整个项目井井有条。",
       "cta": "免费开始"
+    }
+  },
+  "howToUse": {
+    "metaTitle": "如何使用 Motir：选用一部分、两部分或全部三部分",
+    "metaDescription": "Motir 由三部分组成：规划器、居中的项目管理工具，以及智能体运行器。你可以只用中间的项目管理，通过 MCP 接入自己的规划器和智能体；也可以加上 Motir 的规划器；或者让 Motir 包揽全部三部分。",
+    "eyebrow": "如何使用 Motir",
+    "headline": "选用一部分、两部分，或全部三部分。",
+    "lede": "Motir 由三部分组成。项目管理工具居中，承载整个计划；规划器将工作规划到其中；智能体运行器从中领取任务并完成构建。其中任何一部分，都可以由你自行运行。",
+    "parts": [
+      {
+        "lead": "规划",
+        "name": "Motir AI 规划器",
+        "body": "把你的想法拆解为篇章、故事和任务，经你批准后录入项目。"
+      },
+      {
+        "lead": "承载计划",
+        "name": "Motir 项目管理",
+        "body": "面板、待办列表、Sprint 与路线图。所有规划器和智能体，无论来自你还是 Motir，都通过它协同工作。"
+      },
+      {
+        "lead": "构建",
+        "name": "Motir 智能体集群",
+        "body": "逐一领取就绪的任务，在独立的机器上为每个任务运行智能体，多个任务并行推进，并提交拉取请求。"
+      }
+    ],
+    "waysHeadline": "三种使用方式",
+    "youRun": "由你负责",
+    "motirRuns": "由 Motir 负责",
+    "ways": [
+      {
+        "label": "1 · 仅项目管理",
+        "title": "你的规划器，你的智能体，Motir 居中。",
+        "paras": [
+          "把 Motir 当作项目管理工具，周边的一切都由你自己掌控。",
+          "通过 MCP 进行规划的方式始终开放。你可以自行编写规划器（脚本或智能体均可），用与 Motir 规划器相同的工具将计划录入 Motir：`create_plan`、`add_plan_items` 和 `validate_plan`。在 Motir AI 规划器问世之前，Motir 自身也采用这种方式规划，使用的是名为 plan.py 的脚本。",
+          "你的智能体通过 MCP 接入。每个智能体用 `claim_next_ready` 领取下一个就绪的任务，执行完成后用 `close_work_item_run` 汇报结果。Motir 会记录每个任务由谁领取、哪些已经交付。"
+        ],
+        "you": ["你的规划器", "你的智能体，以及各自何时运行", "批准计划"],
+        "motir": [
+          "面板、待办列表、Sprint 与路线图",
+          "每个计划落地前的检查",
+          "任务由谁领取，哪些已经交付"
+        ],
+        "links": ["通过 MCP 接入", "全部 MCP 工具"]
+      },
+      {
+        "label": "2 · 规划器与项目管理",
+        "title": "Motir 规划，你的智能体构建。",
+        "paras": [
+          "添加 Motir AI 规划器。把想法交给它：它会询问需要了解的信息，将工作拆解为篇章、故事和任务，并在你批准后把计划录入项目。",
+          "构建仍由你掌控。你自己的编排系统通过 MCP 从 Motir 领取就绪的任务，将每个任务交给一个智能体，并回报结果。"
+        ],
+        "you": ["批准计划", "你的智能体，以及各自何时运行"],
+        "motir": [
+          "根据你的想法进行规划",
+          "面板、待办列表、Sprint 与路线图",
+          "任务由谁领取，哪些已经交付"
+        ],
+        "links": ["通过 MCP 接入", "Motir CLI"]
+      },
+      {
+        "label": "3 · 全部三部分",
+        "title": "写下想法，见证它从规划到构建。",
+        "paras": [
+          "一切都交给 Motir。规划器将你的想法拆解为计划，供你批准；批准后的计划进入面板；Motir 智能体集群逐一领取就绪的任务，交由智能体执行，并提交拉取请求。",
+          "关键节点由你决定：先批准计划，再审核要合并的内容。"
+        ],
+        "you": ["想法", "批准计划和拉取请求"],
+        "motir": ["规划", "面板、待办列表、Sprint 与路线图", "运行智能体"],
+        "links": ["免费开始", "Motir 的工作方式"]
+      }
+    ],
+    "art": {
+      "planner": "规划器",
+      "pm": "项目管理",
+      "runner": "智能体运行器",
+      "motir": "Motir",
+      "yours": "你的",
+      "plannerName": "Motir AI 规划器",
+      "pmName": "Motir 项目管理",
+      "fleetName": "Motir 智能体集群",
+      "plannerLcd": "篇章 › 故事 › 任务",
+      "pmSub": "面板上的计划",
+      "fleetLcd": "智能体并行运行",
+      "yourPlanner": "你的规划器",
+      "yourPlannerSub": "脚本或智能体",
+      "yourAgents": "你的智能体",
+      "yourAgentsSub": "你的编排，任意 MCP 客户端",
+      "orchestration": "your-orchestrator",
+      "columns": ["就绪", "运行中", "已完成"],
+      "plan": "计划",
+      "tasks": "任务",
+      "results": "结果",
+      "you": "你",
+      "idea": "你的想法",
+      "approve": "批准计划",
+      "outputs": "代码 · 设计 · 文档 · 视频",
+      "mcp": "MCP"
     }
   }
 }

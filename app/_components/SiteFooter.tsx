@@ -7,6 +7,7 @@ import {
   IDEAS,
   MOTIR_BUILDS_ITSELF,
   HOW_IT_WORKS,
+  HOW_TO_USE,
   FREE_DOOR,
   LEGAL_INDEX,
   LEGAL_PRIVACY,
@@ -54,6 +55,7 @@ const columnsFor = (copy: Copy) =>
       heading: copy.footer.productHeading,
       items: [
         { href: HOW_IT_WORKS, label: copy.footer.howItWorks, site: true },
+        { href: HOW_TO_USE, label: copy.footer.howToUse, site: true },
         { href: FREE_DOOR, label: copy.footer.startFree },
         { href: SIGN_IN, label: copy.footer.signIn },
       ],
