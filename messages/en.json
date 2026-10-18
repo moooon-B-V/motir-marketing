@@ -125,6 +125,7 @@
     "skipToContent": "Skip to content",
     "menu": "Menu",
     "howItWorks": "How Motir works",
+    "howToUse": "How to use",
     "explore": "Build in public",
     "ideas": "Ideas to build",
     "buildsItself": "Motir builds itself",
@@ -206,7 +207,7 @@
       "errorRetry": "Try again",
       "errorFallback": "Continue to Motir",
       "existingProject": "Already have a project?",
-      "existingProjectLink": "We can vibe it too"
+      "existingProjectLink": "Import project"
     },
     "projectManager": {
       "eyebrow": "Motir Project Manager",
@@ -650,7 +651,8 @@
     "copyright": "© {year} moooon B.V.",
     "howItWorks": "How Motir works",
     "ideas": "Ideas to build",
-    "buildsItself": "Motir builds itself"
+    "buildsItself": "Motir builds itself",
+    "howToUse": "How to use Motir"
   },
   "legal": {
     "metaTitle": "Legal",
@@ -2462,6 +2464,112 @@
       "headline": "Build yours the same way.",
       "body": "Start with an idea. Motir plans it, builds it and keeps the whole project together.",
       "cta": "Start free"
+    }
+  },
+  "howToUse": {
+    "metaTitle": "How to use Motir: one part, two, or all three",
+    "metaDescription": "Motir has three parts: a planner, the project management tool in the middle, and an agent runner. Use the middle with your own planner and agents over MCP, add the Motir planner, or let Motir run all three.",
+    "eyebrow": "How to use Motir",
+    "headline": "Use one part, two, or all three.",
+    "lede": "Motir has three parts. The project management tool sits in the middle and holds the plan. The planner plans into it. The agent runner takes tasks from it and builds them. Any part you'd rather run yourself, you can.",
+    "parts": [
+      {
+        "lead": "Plans",
+        "name": "Motir AI Planner",
+        "body": "Turns your idea into epics, stories and tasks, and files them into the project once you approve."
+      },
+      {
+        "lead": "Holds the plan",
+        "name": "Motir Project Management",
+        "body": "The board, backlog, sprints and roadmap. Every planner and every agent, yours or Motir's, works through it."
+      },
+      {
+        "lead": "Builds",
+        "name": "Motir Agent Fleet",
+        "body": "Takes each ready task, runs an agent on it on its own machine, in parallel with the others, and opens the pull request."
+      }
+    ],
+    "waysHeadline": "Three ways to use it",
+    "youRun": "You run",
+    "motirRuns": "Motir runs",
+    "ways": [
+      {
+        "label": "1 · Project management only",
+        "title": "Your planner, your agents, Motir in the middle.",
+        "paras": [
+          "Use Motir as the project management tool and keep everything around it your own.",
+          "Planning over MCP stays open. Write your own planner, a script or an agent, and it files the plan into Motir with the same tools Motir's planner uses: `create_plan`, `add_plan_items` and `validate_plan`. Before Motir AI Planner was built, Motir planned itself this way too, with a script called plan.py.",
+          "Your agents connect over MCP. Each one takes the next ready task with `claim_next_ready`, runs it, and reports back with `close_work_item_run`. Motir keeps track of who has which task and what shipped."
+        ],
+        "you": [
+          "Your planner",
+          "Your agents, and when each one runs",
+          "Approving the plan"
+        ],
+        "motir": [
+          "The board, backlog, sprints and roadmap",
+          "A check on every plan before it lands",
+          "Who has which task, and what shipped"
+        ],
+        "links": ["Connect over MCP", "Every MCP tool"]
+      },
+      {
+        "label": "2 · Planner and project management",
+        "title": "Motir plans. Your agents build.",
+        "paras": [
+          "Add Motir AI Planner. Give it your idea: it asks what it needs to know, lays the work out as epics, stories and tasks, and files the plan into the project once you approve it.",
+          "The building stays yours. Your own orchestration takes ready tasks from Motir over MCP, hands each one to an agent, and reports the result back."
+        ],
+        "you": ["Approving the plan", "Your agents, and when each one runs"],
+        "motir": [
+          "Planning from your idea",
+          "The board, backlog, sprints and roadmap",
+          "Who has which task, and what shipped"
+        ],
+        "links": ["Connect over MCP", "The Motir CLI"]
+      },
+      {
+        "label": "3 · All three parts",
+        "title": "Type the idea. Watch it get planned. Watch it get built.",
+        "paras": [
+          "Motir takes care of everything in between. The planner turns your idea into a plan for you to approve. The approved plan goes onto the board. Motir Agent Fleet takes each ready task, runs an agent on it, and opens the pull request.",
+          "You decide at the gates: approve the plan, then review what gets merged."
+        ],
+        "you": ["The idea", "Approving the plan and the pull requests"],
+        "motir": [
+          "Planning",
+          "The board, backlog, sprints and roadmap",
+          "Running the agents"
+        ],
+        "links": ["Start free", "How Motir works"]
+      }
+    ],
+    "art": {
+      "planner": "Planner",
+      "pm": "Project management",
+      "runner": "Agent runner",
+      "motir": "Motir",
+      "yours": "Yours",
+      "plannerName": "Motir AI Planner",
+      "pmName": "Motir Project Management",
+      "fleetName": "Motir Agent Fleet",
+      "plannerLcd": "Epic › story › task",
+      "pmSub": "The plan, on the board",
+      "fleetLcd": "Agents in parallel",
+      "yourPlanner": "Your planner",
+      "yourPlannerSub": "A script or an agent",
+      "yourAgents": "Your agents",
+      "yourAgentsSub": "Your orchestration, any MCP client",
+      "orchestration": "your-orchestrator",
+      "columns": ["Ready", "Running", "Done"],
+      "plan": "Plan",
+      "tasks": "Tasks",
+      "results": "Results",
+      "you": "You",
+      "idea": "Your idea",
+      "approve": "Approve the plan",
+      "outputs": "Code · Design · Docs · Video",
+      "mcp": "MCP"
     }
   }
 }

@@ -92,6 +92,8 @@ describe('sitemap', () => {
       'https://motir.co/',
       // 2026-10 redesign — "How Motir works", the developer page.
       'https://motir.co/how-it-works',
+      // 2026-10 — "How to use Motir": the three parts, three ways in.
+      'https://motir.co/how-to-use',
       'https://motir.co/design',
       'https://motir.co/explore',
       'https://motir.co/docs',
@@ -129,8 +131,8 @@ describe('sitemap', () => {
     // binding text is English in every language version, so it is listed once,
     // at its English address, with no alternates.
     const localizedPaths =
-      ['/', '/how-it-works', '/design', '/explore', '/legal'].length +
-      DOCS_ROUTES.length
+      ['/', '/how-it-works', '/how-to-use', '/design', '/explore', '/legal']
+        .length + DOCS_ROUTES.length
     const englishOnlyPaths = legalDocumentSlugs().length
     expect(entries).toHaveLength(
       localizedPaths * LOCALES.length + englishOnlyPaths,

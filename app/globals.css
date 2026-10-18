@@ -570,6 +570,39 @@ body {
   fill: var(--r-soft);
 }
 
+/* "How to use Motir" (`StackArt`): the three parts, Motir's or yours. A part
+   of yours is a peach panel with a dashed warm outline, its cables warm. */
+.hiw-use .use-yours {
+  fill: var(--r-warm-panel);
+  stroke: var(--r-warm);
+  stroke-width: 1.5;
+  stroke-dasharray: 7 5;
+  rx: var(--radius-card);
+}
+.hiw-use .use-lcd {
+  font-size: 12.5px;
+  text-transform: none;
+}
+.hiw-use .use-wire,
+.hiw-use .use-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--r-cool);
+}
+.hiw-use .use-wire-w,
+.hiw-use .use-tag-w {
+  fill: var(--r-warm);
+}
+.hiw-use .klbl {
+  font-size: 11px;
+}
+.hiw-use .ttl {
+  font-size: 22px;
+}
+
 /* The toy (`ToyPanel`): vibe coding, small and plastic. */
 .hiw-toy .toy-face {
   fill: color-mix(in srgb, var(--el-danger) 5%, var(--el-surface-soft));

@@ -107,7 +107,12 @@ export function SiteShell({
 }>) {
   const copy = useCopy()
   return (
+    // `data-app-shell`: the design system's hook for a shell that paints its
+    // own page fill. A style that draws a canvas on `body` (glassmorphism's
+    // wash, cybercore's grid, retrofuturism's sky, …) repaints the same layers
+    // here, so this opaque frame no longer hides it (theme.css, MOTIR-4234).
     <div
+      data-app-shell=""
       className={cn(
         'relative flex min-h-dvh flex-col bg-(--el-page-bg) text-(--el-text)',
         className,

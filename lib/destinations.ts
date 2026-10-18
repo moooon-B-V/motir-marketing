@@ -178,9 +178,13 @@ export const MOTIR_BUILDS_ITSELF = '/motir-builds-itself'
 /** The "How Motir works" page for developers. */
 export const HOW_IT_WORKS = '/how-it-works'
 
+/** "How to use Motir": the three parts, and the three ways to use them. */
+export const HOW_TO_USE = '/how-to-use'
+
 export const SITE_PATHS = [
   SITE_ROOT,
   HOW_IT_WORKS,
+  HOW_TO_USE,
   EXPLORE,
   DOCS,
   DESIGN,

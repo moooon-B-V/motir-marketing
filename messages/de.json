@@ -125,6 +125,7 @@
     "skipToContent": "Zum Inhalt springen",
     "menu": "Menü",
     "howItWorks": "So funktioniert Motir",
+    "howToUse": "Nutzung",
     "explore": "Öffentlich entwickeln",
     "ideas": "Ideen",
     "buildsItself": "Motir baut sich selbst",
@@ -206,7 +207,7 @@
       "errorRetry": "Erneut versuchen",
       "errorFallback": "Weiter zu Motir",
       "existingProject": "Sie haben schon ein Projekt?",
-      "existingProjectLink": "Auch das können wir viben"
+      "existingProjectLink": "Projekt importieren"
     },
     "projectManager": {
       "eyebrow": "Motir Projektmanager",
@@ -655,7 +656,8 @@
     "copyright": "© {year} moooon B.V.",
     "howItWorks": "So funktioniert Motir",
     "ideas": "Ideen zum Bauen",
-    "buildsItself": "Motir baut sich selbst"
+    "buildsItself": "Motir baut sich selbst",
+    "howToUse": "So nutzen Sie Motir"
   },
   "legal": {
     "metaTitle": "Rechtliches",
@@ -2482,6 +2484,115 @@
       "headline": "Bauen Sie Ihr Projekt auf dieselbe Weise.",
       "body": "Beginnen Sie mit einer Idee. Motir plant sie, baut sie und hält das ganze Projekt zusammen.",
       "cta": "Kostenlos starten"
+    }
+  },
+  "howToUse": {
+    "metaTitle": "So nutzen Sie Motir: ein Teil, zwei oder alle drei",
+    "metaDescription": "Motir besteht aus drei Teilen: einem Planer, dem Projektmanagement-Tool in der Mitte und einem Agent-Runner. Nutzen Sie die Mitte mit Ihrem eigenen Planer und Ihren eigenen Agenten über MCP, nehmen Sie den Motir-Planer hinzu, oder lassen Sie Motir alle drei betreiben.",
+    "eyebrow": "So nutzen Sie Motir",
+    "headline": "Nutzen Sie einen Teil, zwei oder alle drei.",
+    "lede": "Motir besteht aus drei Teilen. Das Projektmanagement-Tool bildet die Mitte und enthält den Plan. Der Planer erstellt den Plan darin. Der Agent-Runner übernimmt Aufgaben daraus und setzt sie um. Jeden dieser Teile können Sie auch selbst betreiben.",
+    "parts": [
+      {
+        "lead": "Plant",
+        "name": "Motir AI Planer",
+        "body": "Macht aus Ihrer Idee Epics, Stories und Aufgaben und legt sie nach Ihrer Genehmigung im Projekt an."
+      },
+      {
+        "lead": "Enthält den Plan",
+        "name": "Motir Projektmanagement",
+        "body": "Board, Backlog, Sprints und Roadmap. Alle Planer und Agenten, ob Ihre eigenen oder die von Motir, arbeiten damit."
+      },
+      {
+        "lead": "Baut",
+        "name": "Motir Agentenflotte",
+        "body": "Übernimmt jede bereite Aufgabe, lässt sie von einem Agenten auf einer eigenen Maschine parallel zu den anderen bearbeiten und öffnet den Pull Request."
+      }
+    ],
+    "waysHeadline": "Drei Wege, Motir zu nutzen",
+    "youRun": "Sie betreiben",
+    "motirRuns": "Motir betreibt",
+    "ways": [
+      {
+        "label": "1 · Nur Projektmanagement",
+        "title": "Ihr Planer, Ihre Agenten, Motir in der Mitte.",
+        "paras": [
+          "Nutzen Sie Motir als Projektmanagement-Tool und behalten Sie alles Weitere in eigener Hand.",
+          "Die Planung über MCP steht Ihnen offen. Schreiben Sie Ihren eigenen Planer als Skript oder Agenten: Er legt den Plan mit denselben Tools in Motir an, die auch der Planer von Motir nutzt, nämlich `create_plan`, `add_plan_items` und `validate_plan`. Bevor es den Motir AI Planer gab, plante Motir sich auf diese Weise selbst, mit einem Skript namens plan.py.",
+          "Ihre Agenten verbinden sich über MCP. Jeder Agent übernimmt mit `claim_next_ready` die nächste bereite Aufgabe, führt sie aus und meldet das Ergebnis mit `close_work_item_run` zurück. Motir hält fest, wer welche Aufgabe hat und was ausgeliefert wurde."
+        ],
+        "you": [
+          "Ihr Planer",
+          "Ihre Agenten und wann sie laufen",
+          "Die Genehmigung des Plans"
+        ],
+        "motir": [
+          "Board, Backlog, Sprints und Roadmap",
+          "Eine Prüfung jedes Plans vor der Übernahme",
+          "Wer welche Aufgabe hat und was ausgeliefert wurde"
+        ],
+        "links": ["Über MCP verbinden", "Alle MCP-Tools"]
+      },
+      {
+        "label": "2 · Planer und Projektmanagement",
+        "title": "Motir plant. Ihre Agenten bauen.",
+        "paras": [
+          "Nehmen Sie den Motir AI Planer hinzu. Geben Sie ihm Ihre Idee: Er klärt offene Fragen, gliedert die Arbeit in Epics, Stories und Aufgaben und legt den Plan im Projekt an, sobald Sie ihn genehmigen.",
+          "Das Bauen bleibt bei Ihnen. Ihre eigene Orchestrierung holt bereite Aufgaben über MCP aus Motir, übergibt jede an einen Agenten und meldet das Ergebnis zurück."
+        ],
+        "you": [
+          "Die Genehmigung des Plans",
+          "Ihre Agenten und wann sie laufen"
+        ],
+        "motir": [
+          "Planung aus Ihrer Idee",
+          "Board, Backlog, Sprints und Roadmap",
+          "Wer welche Aufgabe hat und was ausgeliefert wurde"
+        ],
+        "links": ["Über MCP verbinden", "Die Motir CLI"]
+      },
+      {
+        "label": "3 · Alle drei Teile",
+        "title": "Idee eingeben. Planung verfolgen. Umsetzung verfolgen.",
+        "paras": [
+          "Motir übernimmt alles dazwischen. Der Planer macht aus Ihrer Idee einen Plan, den Sie genehmigen. Der genehmigte Plan wird auf das Board übernommen. Die Motir Agentenflotte übernimmt jede bereite Aufgabe, lässt sie von einem Agenten bearbeiten und öffnet den Pull Request.",
+          "Sie entscheiden an zwei Stellen: Sie genehmigen den Plan und prüfen anschließend, was gemergt wird."
+        ],
+        "you": ["Die Idee", "Die Genehmigung des Plans und der Pull Requests"],
+        "motir": [
+          "Planung",
+          "Board, Backlog, Sprints und Roadmap",
+          "Betrieb der Agenten"
+        ],
+        "links": ["Kostenlos starten", "So funktioniert Motir"]
+      }
+    ],
+    "art": {
+      "planner": "Planer",
+      "pm": "Projektmanagement",
+      "runner": "Agent-Runner",
+      "motir": "Motir",
+      "yours": "Eigenes",
+      "plannerName": "Motir AI Planer",
+      "pmName": "Motir Projektmanagement",
+      "fleetName": "Motir Agentenflotte",
+      "plannerLcd": "Epic › Story › Aufgabe",
+      "pmSub": "Der Plan auf dem Board",
+      "fleetLcd": "Agenten parallel",
+      "yourPlanner": "Ihr Planer",
+      "yourPlannerSub": "Ein Skript oder ein Agent",
+      "yourAgents": "Ihre Agenten",
+      "yourAgentsSub": "Ihre Orchestrierung, jeder MCP-Client",
+      "orchestration": "your-orchestrator",
+      "columns": ["Bereit", "Läuft", "Erledigt"],
+      "plan": "Plan",
+      "tasks": "Aufgaben",
+      "results": "Ergebnisse",
+      "you": "Sie",
+      "idea": "Ihre Idee",
+      "approve": "Plan genehmigen",
+      "outputs": "Code · Design · Doku · Video",
+      "mcp": "MCP"
     }
   }
 }
