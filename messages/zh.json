@@ -124,6 +124,7 @@
     "brandAriaLabel": "Motir——首页",
     "skipToContent": "跳到正文",
     "menu": "菜单",
+    "howItWorks": "Motir 的工作方式",
     "explore": "公开构建",
     "ideas": "值得构建的想法",
     "buildsItself": "Motir 构建自身",
@@ -1775,14 +1776,135 @@
   "howItWorks": {
     "metaTitle": "Motir 的工作方式",
     "metaDescription": "“vibe the project”背后的工作流程：AI 规划、计划关口、智能体运行、合并关口、修复、学习循环，以及项目的记忆。",
-    "eyebrow": "面向开发者 · “vibe the project”背后的机器",
-    "headline": "Motir 的工作方式",
+    "eyebrow": "Motir 的工作方式 · 面向开发者",
+    "headlineNot": "不是 vibe coding。",
+    "headline": "Vibe the project。",
     "lede": "每个 Motir 项目都运行在同一台“仪器”上。模块是 Motir 和它的智能体，旋钮和开关属于你：在有人拨动它们之前，什么都不会往前走。",
     "legendMotir": "Motir 与智能体",
     "legendYou": "由你决定",
-    "scrollHint": "横向滚动查看图示 →",
+    "stage": {
+      "toyCaption": "Vibe coding：输入提示，输出代码",
+      "shellCaption": "Vibe coding 只有一个旋钮。这里有三个。",
+      "rackCaption": "代码只是一个模块。项目是全部模块。",
+      "schematicCaption": "模块之下：提示生成代码的工具所没有的一切",
+      "scrollHint": "继续滚动以打开"
+    },
+    "toyTitle": "把 vibe coding 画成只有一个旋钮的玩具",
+    "toyDesc": "一个只有一个旋钮的小塑料玩意儿：输入提示，出来的是一堆文件，import 互相缠绕，其中还有循环 import。改一个文件的一行，就有七个文件跟着坏掉。没有计划，没有面板，没有审阅，也没有记忆；其余的一切都留给你。继续滚动，它会被完整的 Motir 乐器取代。",
+    "toy": {
+      "outside": "不属于 Motir",
+      "brand": "Vibe coding",
+      "model": "玩具 · 单旋钮",
+      "knob": "提示",
+      "screen": ["> 做个应用_"],
+      "out": "代码",
+      "cycle": "循环 import",
+      "edited": "改了 1 行",
+      "broken": "7 个文件坏了",
+      "foot": "提示进，代码出。其余的全靠你。"
+    },
+    "shellTitle": "Motir：一台带三个控件的乐器",
+    "shellDesc": "一个合上的合成器机箱。前面板上有三个控件，由跳线相连：输入想法的想法输入口、把想法变成计划的 Motir 计划旋钮，以及负责构建的 Motir 构建旋钮。向下滚动会打开机箱，露出内部的模块。",
+    "shell": {
+      "brand": "Motir",
+      "model": "项目合成器 · 01 型",
+      "power": "电源",
+      "idea": {
+        "label": "[01] 你",
+        "title": "想法输入",
+        "screen": ["> 一个帮助人们", "  实现目标的", "  AI 私人", "  助理_"],
+        "out": "出"
+      },
+      "plan": {
+        "label": "[02] Motir",
+        "title": "Motir 计划",
+        "min": "问",
+        "max": "计划",
+        "screen": "篇章 › 故事 › 任务",
+        "in": "入",
+        "out": "出"
+      },
+      "build": {
+        "label": "[03] Motir",
+        "title": "Motir 构建",
+        "min": "运行",
+        "max": "合并",
+        "screen": "每仓库 1 个 PR",
+        "in": "入",
+        "out": "完成"
+      },
+      "foot": "输入想法 · 产出可用软件"
+    },
     "rackTitle": "以模块机架呈现的 Motir 工作流程",
-    "rackDesc": "你的想法接入规划器，然后接入一个旋钮，由你在那里批准计划，然后是面板，然后是一次智能体运行，然后是一个旋钮，由你在那里审阅和合并，最后是已完成。手动任务从面板直接走到已完成。智能体运行可以把它发现的缺陷登记到缺陷文件夹，然后继续工作。修复模块把失败的运行接回智能体运行。学习循环从智能体运行出发，经过裁定、重新规划和经验库，回到规划器。底部的记忆库保存设计、决策、文档、经验、运行历史、修订记录，以及谁做了什么决定。",
+    "rackDesc": "你的想法接入规划器，然后接入一个旋钮，由你在那里批准计划，然后是面板，然后是一次智能体运行，然后是一个旋钮，由你在那里审阅和合并，最后是已完成。手动任务从面板直接走到已完成。智能体运行可以把它发现的缺陷登记到缺陷文件夹，然后继续工作。修复模块把失败的运行接回智能体运行。学习循环从智能体运行出发，经过裁定、重新规划和经验库，回到规划器。底部的记忆库保存设计、决策、文档、经验、运行历史、修订记录，以及谁做了什么决定。机架上的开关可在 vibe coding 和 vibe the project 之间切换：前者只保留你的想法和智能体运行，后者用上每一个模块。",
+    "schematicTitle": "以电路原理图呈现的 Motir 架构",
+    "schematicDesc": "Motir 背后的各项服务，画成由信号线相连的元器件。公网区：motir.co、设计系统包、智能体终端中继、motir-core（Web 与 REST API、MCP 服务器、登录，以及带作业队列的后台进程）和规划器 motir-ai。私网区：为每次模型调用计量的 motir-gateway，以及代码图谱服务。集群区：智能体主机、智能体运行器、索引运行器和 CI 运行器，全部按需启动。数据区：Postgres 和文件存储。外部：你的浏览器、通过 MCP 连接的你自己的智能体、支付服务商、模型提供方和你的代码托管平台。",
+    "schematic": {
+      "title": "原理图",
+      "sub": "模块内部",
+      "zones": {
+        "outside": "外部",
+        "public": "公网 · 互联网，TLS",
+        "private": "私网 · Fly 私有网络",
+        "fleet": "集群 · 按需启动的机器",
+        "data": "数据"
+      },
+      "legend": {
+        "title": "信号线",
+        "mcp": "MCP",
+        "http": "HTTP · REST",
+        "stream": "流 · SSE / WebSocket",
+        "data": "数据库 · 对象存储",
+        "build": "构建期 · npm",
+        "public": "公网",
+        "private": "私网",
+        "oneWay": "单向",
+        "both": "双向"
+      },
+      "parts": {
+        "browser": ["浏览器", "任意设备上"],
+        "agent": ["你的智能体", "Claude Code · Codex · CLI"],
+        "payments": ["支付", "结账 · 订阅"],
+        "llm": ["模型提供方", "任意模型，按量计费"],
+        "codeHost": ["代码托管", "仓库 · CI · 应用"],
+        "marketing": ["motir.co", "文档 · 探索 · 公开页面"],
+        "designSystem": ["设计系统", "@motir/design-system"],
+        "relay": ["智能体终端中继", "motir-relay"],
+        "core": ["motir-core", "应用本体"],
+        "coreWeb": "Web · REST API",
+        "coreMcp": "MCP 服务器",
+        "coreAuth": "登录 · OAuth",
+        "coreWorker": "后台 · 作业队列",
+        "ai": ["motir-ai", "规划器"],
+        "aiConversation": "对话",
+        "aiPlanning": "规划",
+        "aiLessons": "经验 · 向量嵌入",
+        "aiBilling": "积分",
+        "gateway": ["motir-gateway", "为每次模型调用计量"],
+        "codegraph": ["代码图谱", "服务"],
+        "host": ["智能体主机", "你的智能体机器"],
+        "runner": ["智能体运行器", "一次运行，一项"],
+        "indexer": ["索引运行器", "一个仓库"],
+        "ci": ["CI 运行器", "一个作业"],
+        "postgres": ["Postgres", "三个数据库"],
+        "files": ["文件存储", "对象存储"],
+        "filesAttachments": "附件",
+        "filesDesigns": "设计存储",
+        "filesGraphs": "图谱快照",
+        "postgresRows": ["motir-core", "motir-ai · pgvector", "motir-gateway"]
+      },
+      "wires": {
+        "boot": "启动",
+        "runKey": "运行密钥",
+        "webhooks": "Webhook",
+        "wss": "WSS",
+        "sse": "SSE",
+        "mcp": "MCP",
+        "tarball": "压缩包",
+        "jit": "作业",
+        "snapshot": "快照"
+      }
+    },
     "rack": {
       "engine": "Motir · 项目引擎",
       "engineTitle": "从想法到完成。",
@@ -1895,12 +2017,19 @@
           "运行历史",
           "修订记录",
           "谁做的决定"
-        ]
+        ],
+        "lead": "Vibe coding 遗忘的，"
       },
       "bugs": {
         "label": "[04] 发现缺陷",
         "screen": "登记缺陷 › 缺陷文件夹",
         "note": "运行继续进行"
+      },
+      "vibe": {
+        "label": "模式",
+        "coding": "Vibe coding",
+        "project": "Vibe the project",
+        "note": "拨一下：vibe coding 只占两个模块"
       }
     },
     "modulesHeadline": "逐个模块看",

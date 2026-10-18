@@ -124,6 +124,7 @@
     "brandAriaLabel": "Motir – Startseite",
     "skipToContent": "Zum Inhalt springen",
     "menu": "Menü",
+    "howItWorks": "So funktioniert Motir",
     "explore": "Öffentlich entwickeln",
     "ideas": "Ideen zum Bauen",
     "buildsItself": "Motir baut sich selbst",
@@ -1815,14 +1816,140 @@
   "howItWorks": {
     "metaTitle": "So funktioniert Motir",
     "metaDescription": "Der Workflow hinter „vibe the project“: KI-Planung, das Plan-Gate, Agentenläufe, das Merge-Gate, Reparatur, die Lernschleife und das Gedächtnis des Projekts.",
-    "eyebrow": "Für Entwickler · die Maschine hinter „vibe the project“",
-    "headline": "So funktioniert Motir",
+    "eyebrow": "So funktioniert Motir · für Entwickler",
+    "headlineNot": "Kein Vibe Coding.",
+    "headline": "Vibe the project.",
     "lede": "Jedes Motir-Projekt läuft durch dasselbe Instrument. Die Module sind Motir und seine Agenten. Die Regler und Schalter gehören Ihnen: Nichts geht weiter, bis ein Mensch sie betätigt.",
     "legendMotir": "Motir und Agenten",
     "legendYou": "Sie entscheiden",
-    "scrollHint": "Zeichnung seitwärts scrollen →",
+    "stage": {
+      "toyCaption": "Vibe Coding: Prompt rein, Code raus",
+      "shellCaption": "Vibe Coding ist ein Regler. Hier sind es drei.",
+      "rackCaption": "Code ist ein Modul. Das Projekt sind alle.",
+      "schematicCaption": "Unter den Modulen: alles, was einem Prompt-zu-Code-Tool fehlt",
+      "scrollHint": "Weiterscrollen zum Öffnen"
+    },
+    "toyTitle": "Vibe Coding als Spielzeug mit einem Regler",
+    "toyDesc": "Ein kleines Plastikgerät mit einem einzigen Regler: Sie tippen einen Prompt, und heraus kommt ein Haufen Dateien, verheddert in Imports, darunter ein zirkulärer Import. Eine geänderte Zeile in einer Datei bricht sieben andere. Es gibt keinen Plan, kein Board, kein Review und kein Gedächtnis; alles andere bleibt Ihnen überlassen. Beim Scrollen weicht es dem vollständigen Motir-Instrument.",
+    "toy": {
+      "outside": "Nicht Teil von Motir",
+      "brand": "Vibe Coding",
+      "model": "Spielzeug · ein Regler",
+      "knob": "Prompt",
+      "screen": ["> bau mir eine App_"],
+      "out": "Code",
+      "cycle": "zirkulärer Import",
+      "edited": "1 Zeile geändert",
+      "broken": "7 Dateien kaputt",
+      "foot": "Prompt rein. Code raus. Der Rest ist Ihre Sache."
+    },
+    "shellTitle": "Motir als ein Instrument mit drei Reglern",
+    "shellDesc": "Ein geschlossenes Synthesizer-Gehäuse. Auf der Frontplatte sind drei Regler per Patchkabel verbunden: der Ideeneingang, in den Sie eintippen, was Sie wollen, der Motir-Plan-Regler, der daraus einen Plan macht, und der Motir-Build-Regler, der ihn baut. Beim Scrollen öffnet sich das Gehäuse und zeigt die Module darin.",
+    "shell": {
+      "brand": "Motir",
+      "model": "Projekt-Synthesizer · Modell 01",
+      "power": "Strom",
+      "idea": {
+        "label": "[01] Sie",
+        "title": "Ideeneingang",
+        "screen": [
+          "> ein persönlicher",
+          "  KI-Assistent, der",
+          "  Menschen zu ihren",
+          "  Zielen führt_"
+        ],
+        "out": "Aus"
+      },
+      "plan": {
+        "label": "[02] Motir",
+        "title": "Motir Plan",
+        "min": "Frage",
+        "max": "Plan",
+        "screen": "Epic › Story › Aufgabe",
+        "in": "Ein",
+        "out": "Aus"
+      },
+      "build": {
+        "label": "[03] Motir",
+        "title": "Motir Build",
+        "min": "Lauf",
+        "max": "Merge",
+        "screen": "1 PR pro Repository",
+        "in": "Ein",
+        "out": "Fertig"
+      },
+      "foot": "Ihre Idee rein · fertige Software raus"
+    },
     "rackTitle": "Der Motir-Workflow als Rack aus Modulen",
-    "rackDesc": "Ihre Idee wird in den Planer gesteckt, dann in einen Regler, an dem Sie den Plan genehmigen, dann ins Board, dann in einen Agentenlauf, dann in einen Regler, an dem Sie prüfen und mergen, dann auf „Erledigt“. Manuelle Aufgaben gehen vom Board direkt auf „Erledigt“. Ein Agentenlauf kann einen gefundenen Bug in den Bugs-Ordner eintragen und weiterlaufen. Ein Reparaturmodul führt fehlgeschlagene Läufe zurück in den Agentenlauf. Eine Lernschleife führt vom Agentenlauf über ein Urteil, eine Neuplanung und die Lektionsbibliothek zurück in den Planer. Eine Speicherbank am unteren Rand hält Designs, Entscheidungen, Dokumente, Lektionen, Laufverlauf, Revisionen und wer was entschieden hat.",
+    "rackDesc": "Ihre Idee wird in den Planer gesteckt, dann in einen Regler, an dem Sie den Plan genehmigen, dann ins Board, dann in einen Agentenlauf, dann in einen Regler, an dem Sie prüfen und mergen, dann auf „Erledigt“. Manuelle Aufgaben gehen vom Board direkt auf „Erledigt“. Ein Agentenlauf kann einen gefundenen Bug in den Bugs-Ordner eintragen und weiterlaufen. Ein Reparaturmodul führt fehlgeschlagene Läufe zurück in den Agentenlauf. Eine Lernschleife führt vom Agentenlauf über ein Urteil, eine Neuplanung und die Lektionsbibliothek zurück in den Planer. Eine Speicherbank am unteren Rand hält Designs, Entscheidungen, Dokumente, Lektionen, Laufverlauf, Revisionen und wer was entschieden hat. Ein Schalter am Rack wechselt zwischen Vibe Coding, das nur Ihre Idee und den Agentenlauf behält, und „Vibe the project“, das jedes Modul nutzt.",
+    "schematicTitle": "Motirs Architektur als Schaltplan",
+    "schematicDesc": "Die Dienste hinter Motir als Bauteile, verbunden durch Signalleitungen. In der öffentlichen Zone: motir.co, das Design-System-Paket, das Agent-Shell-Relay, motir-core (Web und REST API, der MCP-Server, die Anmeldung und der Worker mit seiner Job-Warteschlange) und motir-ai, der Planer. In der privaten Zone: motir-gateway, das jeden Modellaufruf misst, und der Code-Graph-Dienst. In der Flotte: der Agent-Host, der Agent-Runner, der Index-Runner und der CI-Runner, alle bei Bedarf gestartet. In der Datenzone: Postgres und der Dateispeicher. Außerhalb: Ihr Browser, Ihr eigener Agent über MCP, der Zahlungsanbieter, die Modellanbieter und Ihr Code-Host.",
+    "schematic": {
+      "title": "Schaltplan",
+      "sub": "In den Modulen",
+      "zones": {
+        "outside": "Außerhalb",
+        "public": "Öffentlich · Internet, TLS",
+        "private": "Privat · privates Fly-Netz",
+        "fleet": "Flotte · Maschinen bei Bedarf",
+        "data": "Daten"
+      },
+      "legend": {
+        "title": "Signalleitungen",
+        "mcp": "MCP",
+        "http": "HTTP · REST",
+        "stream": "Stream · SSE / WebSocket",
+        "data": "Datenbank · Objektspeicher",
+        "build": "Build-Zeit · npm",
+        "public": "öffentlich",
+        "private": "privat",
+        "oneWay": "einseitig",
+        "both": "beidseitig"
+      },
+      "parts": {
+        "browser": ["Browser", "Sie, auf jedem Gerät"],
+        "agent": ["Ihr Agent", "Claude Code · Codex · CLI"],
+        "payments": ["Zahlungen", "Checkout · Abos"],
+        "llm": ["Modellanbieter", "jedes Modell, gemessen"],
+        "codeHost": ["Code-Host", "Repositorys · CI · App"],
+        "marketing": ["motir.co", "Doku · Entdecken · öffentl. Seiten"],
+        "designSystem": ["Design-System", "@motir/design-system"],
+        "relay": ["Agent-Shell-Relay", "motir-relay"],
+        "core": ["motir-core", "die App"],
+        "coreWeb": "Web · REST API",
+        "coreMcp": "MCP-Server",
+        "coreAuth": "Anmeldung · OAuth",
+        "coreWorker": "Worker · Job-Queue",
+        "ai": ["motir-ai", "der Planer"],
+        "aiConversation": "Gespräch",
+        "aiPlanning": "Planung",
+        "aiLessons": "Lektionen · Embeddings",
+        "aiBilling": "Credits",
+        "gateway": ["motir-gateway", "misst jeden Modellaufruf"],
+        "codegraph": ["Code-Graph", "Dienst"],
+        "host": ["Agent-Host", "Maschine Ihres Agenten"],
+        "runner": ["Agent-Runner", "ein Lauf je Element"],
+        "indexer": ["Index-Runner", "ein Repository"],
+        "ci": ["CI-Runner", "ein Job"],
+        "postgres": ["Postgres", "drei Datenbanken"],
+        "files": ["Dateispeicher", "Objektspeicher"],
+        "filesAttachments": "Anhänge",
+        "filesDesigns": "Designspeicher",
+        "filesGraphs": "Graph-Snapshots",
+        "postgresRows": ["motir-core", "motir-ai · pgvector", "motir-gateway"]
+      },
+      "wires": {
+        "boot": "startet",
+        "runKey": "Lauf-Key",
+        "webhooks": "Webhooks",
+        "wss": "WSS",
+        "sse": "SSE",
+        "mcp": "MCP",
+        "tarball": "Tarball",
+        "jit": "Jobs",
+        "snapshot": "Snapshot"
+      }
+    },
     "rack": {
       "engine": "Motir · Projekt-Engine",
       "engineTitle": "Von der Idee bis „Erledigt“.",
@@ -1926,7 +2053,7 @@
       },
       "memory": {
         "label": "[08] Gedächtnis",
-        "title": "Das Projekt erinnert sich",
+        "title": "merkt sich das Projekt",
         "keys": [
           "Designs",
           "Entscheidungen",
@@ -1935,12 +2062,19 @@
           "Laufverlauf",
           "Revisionen",
           "Wer entschied"
-        ]
+        ],
+        "lead": "Was Vibe Coding vergisst,"
       },
       "bugs": {
         "label": "[04] Bug gefunden",
         "screen": "Bug erfassen › Bugs-Ordner",
         "note": "der Lauf geht weiter"
+      },
+      "vibe": {
+        "label": "Modus",
+        "coding": "Vibe Coding",
+        "project": "Vibe the project",
+        "note": "Umlegen: Vibe Coding sind zwei der Module"
       }
     },
     "modulesHeadline": "Modul für Modul",

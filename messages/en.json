@@ -124,6 +124,7 @@
     "brandAriaLabel": "Motir — home",
     "skipToContent": "Skip to content",
     "menu": "Menu",
+    "howItWorks": "How Motir works",
     "explore": "Build in public",
     "ideas": "Ideas to build",
     "buildsItself": "Motir builds itself",
@@ -1801,14 +1802,140 @@
   "howItWorks": {
     "metaTitle": "How Motir works",
     "metaDescription": "The workflow behind “vibe the project”: AI planning, the plan gate, agent runs, the merge gate, repair, the learning loop and the project's memory.",
-    "eyebrow": "For developers · the machine behind “vibe the project”",
-    "headline": "How Motir works",
+    "eyebrow": "How Motir works · for developers",
+    "headlineNot": "Not vibe coding.",
+    "headline": "Vibing the project.",
     "lede": "Every Motir project runs through the same instrument. The modules are Motir and its agents. The knobs and switches are yours: nothing moves forward until a person turns them.",
     "legendMotir": "Motir and agents",
     "legendYou": "You decide",
-    "scrollHint": "Scroll the drawing sideways →",
+    "stage": {
+      "toyCaption": "Vibe coding: prompt in, code out",
+      "shellCaption": "Vibe coding is one knob. Here are three.",
+      "rackCaption": "Code is one module. The project is all of them.",
+      "schematicCaption": "Under the modules: everything a prompt-to-code tool doesn't have",
+      "scrollHint": "Keep scrolling to open it"
+    },
+    "toyTitle": "Vibe coding drawn as a toy with one knob",
+    "toyDesc": "A small plastic gadget with a single knob: type a prompt and out comes a heap of files, tangled in imports, with a circular import among them. Changing one line in one file breaks seven others. There is no plan, no board, no review and no memory; everything else is left to you. Scrolling replaces it with the full Motir instrument.",
+    "toy": {
+      "outside": "Not part of Motir",
+      "brand": "Vibe coding",
+      "model": "Toy · one knob",
+      "knob": "Prompt",
+      "screen": ["> make me an app_"],
+      "out": "Code",
+      "cycle": "circular import",
+      "edited": "1 line changed",
+      "broken": "7 files broke",
+      "foot": "Prompt in. Code out. The rest is up to you."
+    },
+    "shellTitle": "Motir as one instrument with three controls",
+    "shellDesc": "A closed synthesizer case. Its front panel has three controls joined by patch cables: the idea input where you type what you want, the Motir plan knob that turns it into a plan, and the Motir build knob that builds it. Scrolling opens the case to show the modules inside.",
+    "shell": {
+      "brand": "Motir",
+      "model": "Project synthesizer · model 01",
+      "power": "Power",
+      "idea": {
+        "label": "[01] You",
+        "title": "Idea input",
+        "screen": [
+          "> an AI personal",
+          "  assistant that",
+          "  helps people reach",
+          "  their goals_"
+        ],
+        "out": "Out"
+      },
+      "plan": {
+        "label": "[02] Motir",
+        "title": "Motir plan",
+        "min": "Ask",
+        "max": "Plan",
+        "screen": "Epic › story › task",
+        "in": "In",
+        "out": "Out"
+      },
+      "build": {
+        "label": "[03] Motir",
+        "title": "Motir build",
+        "min": "Run",
+        "max": "Merge",
+        "screen": "1 PR per repository",
+        "in": "In",
+        "out": "Done"
+      },
+      "foot": "Your idea in · working software out"
+    },
     "rackTitle": "The Motir workflow as a rack of modules",
-    "rackDesc": "Your idea is patched into the planner, then into a knob where you approve the plan, then the board, then an agent run, then a knob where you review and merge, then Done. Manual tasks go from the board to Done. An agent run can log a bug it finds into the Bugs folder and keep going. A repair module loops failed runs back into the agent run. A learning loop runs from the agent run through a verdict, a re-plan and the lesson library back into the planner. A memory bank along the bottom holds designs, decisions, docs, lessons, run history, revisions and who decided what.",
+    "rackDesc": "Your idea is patched into the planner, then into a knob where you approve the plan, then the board, then an agent run, then a knob where you review and merge, then Done. Manual tasks go from the board to Done. An agent run can log a bug it finds into the Bugs folder and keep going. A repair module loops failed runs back into the agent run. A learning loop runs from the agent run through a verdict, a re-plan and the lesson library back into the planner. A memory bank along the bottom holds designs, decisions, docs, lessons, run history, revisions and who decided what. A switch on the rack flips between vibe coding, which keeps only your idea and the agent run, and vibing the project, which uses every module.",
+    "schematicTitle": "Motir's architecture as a circuit schematic",
+    "schematicDesc": "The services behind Motir drawn as components joined by signal lines. In the public zone: motir.co, the design system package, the agent shell relay, motir-core (web and REST API, the MCP server, sign-in, and the worker with its job queue) and motir-ai, the planner. In the private zone: motir-gateway, which meters every model call, and the code graph service. In the fleet: the agent host, the agent runner, the index runner and the CI runner, all booted on demand. In the data zone: Postgres and the file store. Outside: your browser, your own agent connected over MCP, the payments provider, the model providers and your code host.",
+    "schematic": {
+      "title": "Schematic",
+      "sub": "Inside the modules",
+      "zones": {
+        "outside": "Outside",
+        "public": "Public · internet, TLS",
+        "private": "Private · Fly private network",
+        "fleet": "Fleet · machines booted on demand",
+        "data": "Data"
+      },
+      "legend": {
+        "title": "Signal lines",
+        "mcp": "MCP",
+        "http": "HTTP · REST",
+        "stream": "Stream · SSE / WebSocket",
+        "data": "Database · object store",
+        "build": "Build time · npm",
+        "public": "public",
+        "private": "private",
+        "oneWay": "one way",
+        "both": "both ways"
+      },
+      "parts": {
+        "browser": ["Browser", "you, on any device"],
+        "agent": ["Your agent", "Claude Code · Codex · CLI"],
+        "payments": ["Payments", "checkout · subscriptions"],
+        "llm": ["Model providers", "any model, metered"],
+        "codeHost": ["Code host", "repositories · CI · app"],
+        "marketing": ["motir.co", "docs · explore · public pages"],
+        "designSystem": ["Design system", "@motir/design-system"],
+        "relay": ["Agent shell relay", "motir-relay"],
+        "core": ["motir-core", "the app"],
+        "coreWeb": "Web · REST API",
+        "coreMcp": "MCP server",
+        "coreAuth": "Sign-in · OAuth",
+        "coreWorker": "Worker · job queue",
+        "ai": ["motir-ai", "the planner"],
+        "aiConversation": "Conversation",
+        "aiPlanning": "Planning",
+        "aiLessons": "Lessons · embeddings",
+        "aiBilling": "Credits",
+        "gateway": ["motir-gateway", "meters every model call"],
+        "codegraph": ["Code graph", "service"],
+        "host": ["Agent host", "your agent's machine"],
+        "runner": ["Agent runner", "one run, one card"],
+        "indexer": ["Index runner", "one repository"],
+        "ci": ["CI runner", "one job"],
+        "postgres": ["Postgres", "three databases"],
+        "files": ["File store", "object storage"],
+        "filesAttachments": "Attachments",
+        "filesDesigns": "Design store",
+        "filesGraphs": "Graph snapshots",
+        "postgresRows": ["motir-core", "motir-ai · pgvector", "motir-gateway"]
+      },
+      "wires": {
+        "boot": "boots",
+        "runKey": "run key",
+        "webhooks": "webhooks",
+        "wss": "WSS",
+        "sse": "SSE",
+        "mcp": "MCP",
+        "tarball": "tarball",
+        "jit": "jobs",
+        "snapshot": "snapshot"
+      }
+    },
     "rack": {
       "engine": "Motir · project engine",
       "engineTitle": "From idea to done.",
@@ -1912,7 +2039,7 @@
       },
       "memory": {
         "label": "[08] Memory",
-        "title": "The project remembers",
+        "title": "the project remembers",
         "keys": [
           "Designs",
           "Decisions",
@@ -1921,12 +2048,19 @@
           "Run history",
           "Revisions",
           "Who decided"
-        ]
+        ],
+        "lead": "What vibe coding forgets,"
       },
       "bugs": {
         "label": "[04] Bug found",
         "screen": "Log bug › Bugs folder",
         "note": "the run keeps going"
+      },
+      "vibe": {
+        "label": "Mode",
+        "coding": "Vibe coding",
+        "project": "Vibe the project",
+        "note": "Flip it: vibe coding is two of the modules"
       }
     },
     "modulesHeadline": "Module by module",

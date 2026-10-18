@@ -15,6 +15,7 @@ import {
   DESIGN,
   DOCS,
   EXPLORE,
+  HOW_IT_WORKS,
   IDEAS,
   MOTIR_BUILDS_ITSELF,
   FREE_DOOR,
@@ -87,7 +88,9 @@ import { SetupPromptButton } from './SetupPromptButton'
  */
 const navItemsFor = (copy: Copy) =>
   [
-    { path: EXPLORE, label: copy.nav.explore },
+    // How Motir works stands where Build in public stood until projects are
+    // built in public on Motir (2026-10-18); /explore itself is unchanged.
+    { path: HOW_IT_WORKS, label: copy.nav.howItWorks },
     { path: IDEAS, label: copy.nav.ideas },
     { path: MOTIR_BUILDS_ITSELF, label: copy.nav.buildsItself, feature: true },
     { path: DOCS, label: copy.nav.docs },

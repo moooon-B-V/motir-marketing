@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useCopy } from '@/lib/copy'
+import { useCanvas } from './canvas'
 
 /*
  * The workflow drawing on "How Motir works" (2026-10 redesign): one work item,
@@ -19,6 +20,17 @@ import { useCopy } from '@/lib/copy'
  * Hovering or focusing a module highlights its explanation below (and the
  * other way round), and clicking it scrolls the explanation into view. The
  * pairing is by `data-step`.
+ *
+ * It is laid out on a 1600-wide grid and spread across a wider canvas when the
+ * frame is wider (`canvas.ts`): `el` stretches every x position and width by
+ * `sx`, and the parts that must keep their shape — jacks, LEDs, knobs, plugs —
+ * are placed at a stretched centre and drawn unstretched (`raw`).
+ *
+ * A switch on the rack flips it between "Vibe the project" (everything on)
+ * and "Vibe coding": every module but your idea and the agent run goes dark,
+ * the orange controls with them, and a single cable runs straight from the
+ * idea to the run — prompt in, code out. The mode lives on the SVG
+ * (`data-vibe`), so a redraw keeps it; globals.css does the dimming.
  */
 
 const NS = 'http://www.w3.org/2000/svg'
@@ -27,6 +39,7 @@ type Attrs = Record<string, string | number>
 export function WorkflowRack() {
   const copy = useCopy()
   const r = copy.howItWorks.rack
+  const { W, k: sx } = useCanvas()
   const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
@@ -41,10 +54,19 @@ export function WorkflowRack() {
     root.setAttribute('data-drawn', '')
     svg.appendChild(root)
 
-    const el = (tag: string, attrs: Attrs, parent: Element = root) => {
+    const STRETCH = new Set(['x', 'x1', 'x2', 'cx', 'width'])
+    const el = (
+      tag: string,
+      attrs: Attrs,
+      parent: Element = root,
+      raw = false,
+    ) => {
       const node = document.createElementNS(NS, tag)
       for (const [k, v] of Object.entries(attrs))
-        node.setAttribute(k, String(v))
+        node.setAttribute(
+          k,
+          String(!raw && STRETCH.has(k) && typeof v === 'number' ? v * sx : v),
+        )
       parent.appendChild(node)
       return node
     }
@@ -69,8 +91,8 @@ export function WorkflowRack() {
       lh: number,
     ) => rows.forEach((s, i) => text(p, x, y + i * lh, s, cls))
     const jack = (p: Element, x: number, y: number) => {
-      el('circle', { cx: x, cy: y, r: 7, class: 'jack-ring' }, p)
-      el('circle', { cx: x, cy: y, r: 2.6, class: 'jack-i' }, p)
+      el('circle', { cx: x * sx, cy: y, r: 7, class: 'jack-ring' }, p, true)
+      el('circle', { cx: x * sx, cy: y, r: 2.6, class: 'jack-i' }, p, true)
     }
     const screen = (p: Element, x: number, y: number, w: number, h: number) =>
       el('rect', { x, y, width: w, height: h, rx: 2, class: 'lcd' }, p)
@@ -83,19 +105,20 @@ export function WorkflowRack() {
       warm = false,
     ) => {
       screen(p, x, y, w, rows.length * 17 + 14)
-      lines(p, x + 11, y + 20, rows, warm ? 'lcd-w' : 'lcd-t', 17)
+      lines(p, x + 11 / sx, y + 20, rows, warm ? 'lcd-w' : 'lcd-t', 17)
     }
     const led = (p: Element, cx: number, cy: number, warm: boolean, k = 4) =>
       el(
         'rect',
         {
-          x: cx - k,
+          x: cx * sx - k,
           y: cy - k,
           width: k * 2,
           height: k * 2,
           class: warm ? 'ledw' : 'ledc',
         },
         p,
+        true,
       )
 
     const face = el('g', {})
@@ -136,20 +159,23 @@ export function WorkflowRack() {
         { x, y, width: w, height: h, rx: 4, class: human ? 'p-h' : 'p' },
         g,
       )
-      text(g, x + 16, y + 28, label, human ? 'lbl-h' : 'lbl')
-      led(g, x + w - 26, y + 24, human)
+      // Insets stay the same size on a wider canvas: `el` stretches the
+      // panel's edge, and an inset divided by `sx` comes out unstretched.
+      const inset = (d: number) => d / sx
+      text(g, x + inset(16), y + 28, label, human ? 'lbl-h' : 'lbl')
+      led(g, x + w - inset(26), y + 24, human)
       el(
         'line',
         {
-          x1: x + 16,
+          x1: x + inset(16),
           y1: y + 39,
-          x2: x + w - 16,
+          x2: x + w - inset(16),
           y2: y + 39,
           class: human ? 'rule-ah' : 'rule-a',
         },
         g,
       )
-      if (title) text(g, x + 16, y + 68, title, 'ttl')
+      if (title) text(g, x + inset(16), y + 68, title, 'ttl')
       return g
     }
     const knob = (
@@ -159,47 +185,52 @@ export function WorkflowRack() {
       minL: string,
       maxL: string,
     ) => {
+      const kx = cx * sx
       for (let i = 0; i <= 10; i++) {
         const a = ((135 + i * 27) * Math.PI) / 180
         const big = i % 5 === 0
         el(
           'line',
           {
-            x1: cx + Math.cos(a) * 31,
+            x1: kx + Math.cos(a) * 31,
             y1: cy + Math.sin(a) * 31,
-            x2: cx + Math.cos(a) * (big ? 38 : 35),
+            x2: kx + Math.cos(a) * (big ? 38 : 35),
             y2: cy + Math.sin(a) * (big ? 38 : 35),
             class: 'tick',
           },
           p,
+          true,
         )
       }
-      el('circle', { cx, cy, r: 25, class: 'knob' }, p)
+      el('circle', { cx: kx, cy, r: 25, class: 'knob' }, p, true)
       const pa = (30 * Math.PI) / 180
       el(
         'line',
         {
-          x1: cx,
+          x1: kx,
           y1: cy,
-          x2: cx + Math.cos(pa) * 19,
+          x2: kx + Math.cos(pa) * 19,
           y2: cy + Math.sin(pa) * 19,
           class: 'pointer',
         },
         p,
+        true,
       )
-      text(p, cx - 30, cy + 47, minL, 'klbl', 'middle')
-      text(p, cx + 30, cy + 47, maxL, 'klbl', 'middle')
+      text(p, cx - 30 / sx, cy + 47, minL, 'klbl', 'middle')
+      text(p, cx + 30 / sx, cy + 47, maxL, 'klbl', 'middle')
     }
     // A cable sags between two sockets; the learning loop's carry a pulse.
     const cable = (
-      x1: number,
+      gx1: number,
       y1: number,
-      x2: number,
+      gx2: number,
       y2: number,
       warm: boolean,
       sag = 40,
       pulse = false,
     ) => {
+      const x1 = gx1 * sx
+      const x2 = gx2 * sx
       const low = Math.max(y1, y2) + sag
       const d = `M${x1} ${y1} C${x1 + (x2 - x1) * 0.15} ${low} ${x1 + (x2 - x1) * 0.85} ${low} ${x2} ${y2}`
       el('path', { d, class: warm ? 'cable-w' : 'cable-c' }, cables)
@@ -207,11 +238,13 @@ export function WorkflowRack() {
         'circle',
         { cx: x1, cy: y1, r: 4, class: warm ? 'plug-w' : 'plug-c' },
         cables,
+        true,
       )
       el(
         'circle',
         { cx: x2, cy: y2, r: 4, class: warm ? 'plug-w' : 'plug-c' },
         cables,
+        true,
       )
       if (pulse && !still) {
         for (const delay of [0, 1.3]) {
@@ -233,8 +266,16 @@ export function WorkflowRack() {
     // Rack title and legend.
     const head = el('g', {}, modules)
     text(head, 40, 74, r.engine, 'lbl')
-    text(head, 40, 120, r.engineTitle, 'ttl')
-    text(head, 40, 146, r.engineSub, 'sm')
+    // The head shares its row with the mode switch: long translations are
+    // squeezed to the room left of it (see the fit pass at the end).
+    text(head, 40, 120, r.engineTitle, 'ttl').setAttribute(
+      'data-fit',
+      String(340 * sx),
+    )
+    text(head, 40, 146, r.engineSub, 'sm').setAttribute(
+      'data-fit',
+      String(340 * sx),
+    )
     el(
       'rect',
       { x: 40, y: 160, width: 120, height: 6, class: 'stripe-c' },
@@ -265,8 +306,43 @@ export function WorkflowRack() {
     )
     text(legend, 1560, 140, r.signalYou, 'sm', 'end')
 
+    // The mode switch: vibe coding | vibe the project.
+    const vibe = el(
+      'g',
+      {
+        class: 'vibe-switch',
+        role: 'switch',
+        tabindex: 0,
+        'aria-label': r.vibe.coding,
+        'aria-checked': String(svg.dataset.vibe === 'coding'),
+      },
+      modules,
+    )
+    text(vibe, 400, 74, r.vibe.label, 'lbl')
+    el(
+      'rect',
+      { x: 400, y: 90, width: 290, height: 36, rx: 3, class: 'sw-track' },
+      vibe,
+    )
+    el(
+      'rect',
+      { x: 403, y: 93, width: 142, height: 30, rx: 2, class: 'vibe-thumb-l' },
+      vibe,
+    )
+    el(
+      'rect',
+      { x: 545, y: 93, width: 142, height: 30, rx: 2, class: 'vibe-thumb-r' },
+      vibe,
+    )
+    const fitted = (t: Element, room: number) =>
+      t.setAttribute('data-fit', String(room * sx))
+    fitted(text(vibe, 474, 113, r.vibe.coding, 'vibe-t-l', 'middle'), 128)
+    fitted(text(vibe, 616, 113, r.vibe.project, 'vibe-t-r', 'middle'), 128)
+    fitted(text(vibe, 400, 146, r.vibe.note, 'sm'), 300)
+
     // Row 1: idea → planner → approve → board → run → review → done.
     let g = panel('1', 40, 250, 190, 220, r.idea.label, r.idea.title, true)
+    g.setAttribute('data-keep', '')
     lcd(g, 54, 330, 162, r.idea.screen, true)
     lines(g, 54, 410, r.idea.note, 'sm', 18)
     jack(g, 230, 360)
@@ -290,13 +366,14 @@ export function WorkflowRack() {
       el(
         'rect',
         {
-          x: 738 + i * 18,
+          x: (738 + i * 18) * sx,
           y: 428,
           width: 8,
           height: 8,
           class: i < 4 ? 'ledc' : 'ledoff',
         },
         g,
+        true,
       )
     text(g, 852, 436, r.board.ready, 'lbl')
     jack(g, 718, 360)
@@ -305,6 +382,7 @@ export function WorkflowRack() {
     jack(g, 926, 250)
 
     g = panel('4', 984, 250, 230, 220, r.run.label, r.run.title)
+    g.setAttribute('data-keep', '')
     lcd(g, 998, 330, 202, r.run.screen)
     jack(g, 984, 360)
     jack(g, 1214, 360)
@@ -391,8 +469,15 @@ export function WorkflowRack() {
       else
         el(
           'rect',
-          { x: 1268.5, y: y - 7.5, width: 7, height: 7, class: 'ledoff' },
+          {
+            x: 1272 * sx - 3.5,
+            y: y - 7.5,
+            width: 7,
+            height: 7,
+            class: 'ledoff',
+          },
           g,
+          true,
         )
       text(g, 1286, y, what, 'lbl')
       screen(g, 1380, y - 17, 160, 22)
@@ -403,7 +488,16 @@ export function WorkflowRack() {
 
     // Row 3: the memory bank.
     g = panel('8', 40, 760, 1520, 112, r.memory.label, null)
-    text(g, 56, 836, r.memory.title, 'ttl')
+    text(g, 56, 820, r.memory.lead, 'sm').setAttribute(
+      'data-fit',
+      String(320 * sx),
+    )
+    text(g, 56, 850, r.memory.title, 'ttl').setAttribute(
+      'data-fit',
+      String(320 * sx),
+    )
+    // Each memory key its own tint; the lit one (Lessons) is orange.
+    const KEY_TINTS = ['lavender', 'sky', 'mint', '', 'sage', 'rose', 'yellow']
     r.memory.keys.forEach((key, i) => {
       const x = 392 + i * 164
       const on = i === 3
@@ -412,8 +506,15 @@ export function WorkflowRack() {
       else
         el(
           'rect',
-          { x: x + 139, y: 805, width: 6, height: 6, class: 'ledoff' },
+          {
+            x: (x + 142) * sx - 3,
+            y: 805,
+            width: 6,
+            height: 6,
+            class: 'ledoff',
+          },
           g,
+          true,
         )
       el(
         'rect',
@@ -423,7 +524,7 @@ export function WorkflowRack() {
           width: 148,
           height: 32,
           rx: 2,
-          class: on ? 'ledw key' : 'key',
+          class: on ? 'ledw key' : `key t-${KEY_TINTS[i]}`,
         },
         g,
       )
@@ -447,6 +548,41 @@ export function WorkflowRack() {
     cable(381, 540, 381, 470, false, 6, true)
     cable(1192, 470, 1250, 610, false, 10)
     cable(1250, 680, 1160, 470, false, 40)
+
+    // Vibe coding: everything but the idea and the run goes dark, and one
+    // cable runs straight from the idea to the run.
+    head.setAttribute('data-keep', '')
+    legend.setAttribute('data-keep', '')
+    vibe.setAttribute('data-keep', '')
+    const kept = [...cables.children]
+    cable(230, 360, 984, 360, true, 96)
+    for (const node of [...modules.children, ...kept])
+      if (!node.hasAttribute('data-keep')) node.classList.add('vibe-dim')
+    for (const node of [...cables.children].slice(kept.length))
+      node.classList.add('vibe-only')
+    const flip = () => {
+      const coding = svg.dataset.vibe !== 'coding'
+      svg.dataset.vibe = coding ? 'coding' : 'project'
+      vibe.setAttribute('aria-checked', String(coding))
+    }
+    vibe.addEventListener('click', flip)
+    vibe.addEventListener('keydown', (event) => {
+      const key = (event as KeyboardEvent).key
+      if (key === 'Enter' || key === ' ') {
+        event.preventDefault()
+        flip()
+      }
+    })
+
+    // A translated label wider than its room is squeezed to fit.
+    svg.querySelectorAll<SVGTextElement>('[data-fit]').forEach((t) => {
+      if (typeof t.getComputedTextLength !== 'function') return
+      const room = Number(t.dataset.fit)
+      if (t.getComputedTextLength() > room) {
+        t.setAttribute('textLength', String(room))
+        t.setAttribute('lengthAdjust', 'spacingAndGlyphs')
+      }
+    })
 
     // Pair each module with its explanation below.
     const explained = (step: string) =>
@@ -487,12 +623,12 @@ export function WorkflowRack() {
       off.forEach((fn) => fn())
       root.remove()
     }
-  }, [r])
+  }, [r, sx])
 
   return (
     <svg
       ref={svgRef}
-      viewBox="0 0 1600 900"
+      viewBox={`0 0 ${W} 900`}
       role="img"
       aria-labelledby="hiw-rack-title hiw-rack-desc"
       className="hiw-rack block h-auto w-full min-w-[1100px]"
