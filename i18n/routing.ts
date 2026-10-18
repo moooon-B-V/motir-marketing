@@ -94,27 +94,26 @@ export const LOCALE_ENDONYMS: Record<Locale, string> = {
  *   b — Copy setup prompt has left; below `b` the nav and Sign in fold into
  *       the Menu panel (brand · Start free · globe · Menu)
  *
- * German and Japanese run longer than English, so the widths are MEASURED per
+ * Every language runs a different length, so the widths are MEASURED per
  * locale rather than set by shared breakpoints, which overflowed the English
- * bar between 768px and ~1100px. en, de and ja are the design's measurements
- * (de and ja on placeholder copy). The others borrow the nearest measured
- * script — the CJK locales take ja's, the Latin ones de's, the widest — until
- * their catalogue cards measure their own; a borrowed width errs wide, which
- * folds the bar early rather than letting it wrap.
+ * bar between 768px and ~1100px. Each is the bar's own width in that locale's
+ * catalogue, with the nav labels on one line, plus 16px to spare (re-measured
+ * 2026-10-18, when "How Motir works" joined the nav). Change a nav label and
+ * measure again: a bar narrower than its width wraps its labels.
  *
  * `app/_components/headerLadder.ts` turns these into the static class strings
  * Tailwind can see, and `tests/headerLadder.test.ts` holds the two together.
  */
 export const HEADER_LADDER: Record<Locale, { a: number; b: number }> = {
-  en: { a: 1364, b: 1148 },
-  zh: { a: 1488, b: 1173 },
-  ja: { a: 1488, b: 1173 },
-  ko: { a: 1488, b: 1173 },
-  de: { a: 1560, b: 1314 },
-  fr: { a: 1560, b: 1314 },
-  es: { a: 1560, b: 1314 },
-  it: { a: 1560, b: 1314 },
-  nl: { a: 1560, b: 1314 },
-  pl: { a: 1560, b: 1314 },
-  pt: { a: 1560, b: 1314 },
+  en: { a: 1396, b: 1179 },
+  zh: { a: 1152, b: 971 },
+  ja: { a: 1518, b: 1217 },
+  ko: { a: 1281, b: 1086 },
+  de: { a: 1562, b: 1268 },
+  fr: { a: 1718, b: 1396 },
+  es: { a: 1597, b: 1289 },
+  it: { a: 1513, b: 1197 },
+  nl: { a: 1480, b: 1212 },
+  pl: { a: 1533, b: 1240 },
+  pt: { a: 1584, b: 1281 },
 }

@@ -126,7 +126,7 @@
     "menu": "菜单",
     "howItWorks": "Motir 的工作方式",
     "explore": "公开构建",
-    "ideas": "值得构建的想法",
+    "ideas": "想法",
     "buildsItself": "Motir 构建自身",
     "docs": "文档",
     "design": "设计",
@@ -1777,7 +1777,7 @@
     "metaTitle": "Motir 的工作方式",
     "metaDescription": "“vibe the project”背后的工作流程：AI 规划、计划关口、智能体运行、合并关口、修复、学习循环，以及项目的记忆。",
     "eyebrow": "Motir 的工作方式 · 面向开发者",
-    "headlineNot": "不是 vibe coding。",
+    "headlineNot": "Vibe coding",
     "headline": "Vibe the project。",
     "lede": "每个 Motir 项目都运行在同一台“仪器”上。模块是 Motir 和它的智能体，旋钮和开关属于你：在有人拨动它们之前，什么都不会往前走。",
     "legendMotir": "Motir 与智能体",
@@ -1804,7 +1804,7 @@
       "foot": "提示进，代码出。其余的全靠你。"
     },
     "shellTitle": "Motir：一台带三个控件的乐器",
-    "shellDesc": "一个合上的合成器机箱。前面板上有三个控件，由跳线相连：输入想法的想法输入口、把想法变成计划的 Motir 计划旋钮，以及负责构建的 Motir 构建旋钮。向下滚动会打开机箱，露出内部的模块。",
+    "shellDesc": "一个合上的合成器机箱。前面板上有三个控件，由跳线相连：输入想法的想法输入口、把想法变成计划的 Motir 规划旋钮，以及负责构建的 Motir 构建旋钮。向下滚动会打开机箱，露出内部的模块。",
     "shell": {
       "brand": "Motir",
       "model": "项目合成器 · 01 型",
@@ -1817,7 +1817,7 @@
       },
       "plan": {
         "label": "[02] Motir",
-        "title": "Motir 计划",
+        "title": "Motir 规划",
         "min": "问",
         "max": "计划",
         "screen": "篇章 › 故事 › 任务",

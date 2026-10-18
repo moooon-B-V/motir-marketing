@@ -1201,7 +1201,7 @@
   "howItWorks.metaTitle": "How Motir works",
   "howItWorks.metaDescription": "The workflow behind “vibe the project”: AI planning, the plan gate, agent runs, the merge gate, repair, the learning loop and the project's memory.",
   "howItWorks.eyebrow": "How Motir works · for developers",
-  "howItWorks.headlineNot": "Not vibe coding.",
+  "howItWorks.headlineNot": "Vibe coding",
   "howItWorks.headline": "Vibing the project.",
   "howItWorks.lede": "Every Motir project runs through the same instrument. The modules are Motir and its agents. The knobs and switches are yours: nothing moves forward until a person turns them.",
   "howItWorks.legendMotir": "Motir and agents",

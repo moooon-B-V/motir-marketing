@@ -208,7 +208,7 @@ const isCurrent = (host: PublicHost, path: string, pathname: string) =>
       ? pathname === path || pathname.startsWith(`${path}/`)
       : pathname === path
 
-const NAV_ITEM = 'text-[17px] font-medium'
+const NAV_ITEM = 'text-[17px] font-medium whitespace-nowrap'
 const NAV_REST = 'text-(--el-text) hover:text-(--el-accent-on-surface)'
 const NAV_CURRENT = 'font-semibold text-(--el-accent-on-surface)'
 /** "Motir builds itself" is live: square and words walk the wave hues (`.mk-live`, globals.css). */
