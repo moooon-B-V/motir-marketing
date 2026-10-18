@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { FilterLink } from './FilterLink'
 import { Search, Tag, TrendingUp } from 'lucide-react'
 import { format, useCopy } from '@/lib/copy'
 import {
@@ -61,7 +61,7 @@ export function ActiveFilters({
         <TrendingUp className="h-3 w-3" aria-hidden />
         {rankSummary}
       </span>
-      <Link
+      <FilterLink
         href={buildExploreHref(basePath, query, {
           search: null,
           category: null,
@@ -69,7 +69,7 @@ export function ActiveFilters({
         className="text-xs font-medium text-(--el-link) hover:text-(--el-link-pressed)"
       >
         {copy.explore.clearFilters}
-      </Link>
+      </FilterLink>
     </div>
   )
 }

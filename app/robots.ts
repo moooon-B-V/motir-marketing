@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { FILTER_DISALLOW, REFUSED_CRAWLERS } from '@/lib/crawlPolicy'
 import { SITE_ORIGIN } from '@/lib/siteOrigin'
 
 /*
@@ -16,8 +17,9 @@ import { SITE_ORIGIN } from '@/lib/siteOrigin'
  * `main` — so the criterion this card is measured against is a read of
  * `https://motir.co/robots.txt` AFTER the merge, not a read of this file.
  *
- * Nothing is disallowed: the site is one public page and there is no private
- * surface to hold back. `sitemap` points at the sibling route, absolutely — the
+ * Nothing is disallowed but the filter URLs and the refused crawlers, both
+ * from `lib/crawlPolicy.ts`, which says why: there is no private surface to
+ * hold back, only a crawl trap to close. `sitemap` points at the sibling route, absolutely — the
  * spec requires an absolute URL there, which is the reason `SITE_ORIGIN` exists
  * as a module rather than as a literal in two files.
  *
@@ -34,7 +36,10 @@ import { SITE_ORIGIN } from '@/lib/siteOrigin'
  */
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: '*', allow: '/' },
+    rules: [
+      { userAgent: '*', allow: '/', disallow: [...FILTER_DISALLOW] },
+      { userAgent: [...REFUSED_CRAWLERS], disallow: '/' },
+    ],
     sitemap: `${SITE_ORIGIN}/sitemap.xml`,
     host: `${SITE_ORIGIN}/`,
   }

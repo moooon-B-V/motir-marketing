@@ -1,5 +1,6 @@
 import { localizedPath } from '@/i18n/localizedPath'
 import Link from 'next/link'
+import { FilterLink } from './FilterLink'
 import {
   Building2,
   ChevronUp,
@@ -175,7 +176,7 @@ export function ExploreGallery({
           }
           action={
             filtered ? (
-              <Link
+              <FilterLink
                 href={buildExploreHref(basePath, query, {
                   search: null,
                   category: null,
@@ -183,7 +184,7 @@ export function ExploreGallery({
                 className={buttonVariants({ variant: 'secondary', size: 'sm' })}
               >
                 {copy.explore.clearFilters}
-              </Link>
+              </FilterLink>
             ) : undefined
           }
         />
@@ -212,7 +213,8 @@ export function ExploreGallery({
               cursor: page.nextCursor,
             })}
             className={buttonVariants({ variant: 'secondary', size: 'md' })}
-            rel="next"
+            // `next` for the pagination, `nofollow` for the crawl (`lib/crawlPolicy.ts`).
+            rel="next nofollow"
           >
             <Plus className="mr-1.5 h-4 w-4" aria-hidden />
             {copy.explore.loadMore}

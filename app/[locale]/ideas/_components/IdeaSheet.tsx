@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { X } from 'lucide-react'
+import { filterLinkRel } from '@/lib/crawlPolicy'
 import { takeOpenedFromList } from './IdeasNav'
 
 /*
@@ -105,6 +106,7 @@ export function IdeaSheet({
     <div className="fixed inset-0 z-50" data-idea-sheet={slug}>
       <a
         href={closeHref}
+        rel={filterLinkRel(closeHref)}
         aria-hidden="true"
         tabIndex={-1}
         onClick={(event) => {
@@ -125,6 +127,7 @@ export function IdeaSheet({
           {eyebrow}
           <a
             href={closeHref}
+            rel={filterLinkRel(closeHref)}
             aria-label={closeLabel}
             onClick={(event) => {
               event.preventDefault()

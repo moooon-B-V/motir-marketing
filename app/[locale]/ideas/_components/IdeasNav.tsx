@@ -1,6 +1,7 @@
 'use client'
 
 import { localizedPath } from '@/i18n/localizedPath'
+import { filterLinkRel } from '@/lib/crawlPolicy'
 import { usePageLocale } from '@/lib/copy'
 
 import Link from 'next/link'
@@ -76,6 +77,7 @@ export function FilterLink({
   return (
     <a
       href={href}
+      rel={filterLinkRel(href)}
       onClick={(event) => {
         if (!isPlainClick(event)) return
         event.preventDefault()
@@ -186,6 +188,7 @@ export function OpenIdeaLink({
   return (
     <Link
       href={href}
+      rel={filterLinkRel(href)}
       scroll={false}
       data-idea-link={slug}
       className={className}

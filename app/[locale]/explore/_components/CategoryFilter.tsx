@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { FilterLink } from './FilterLink'
 import { Tag, X } from 'lucide-react'
 import { cn } from '@motir/design-system'
 import { useCopy } from '@/lib/copy'
@@ -40,7 +40,7 @@ export function CategoryFilter({
       aria-label={copy.explore.topicFilterAria}
       className="flex flex-wrap items-center gap-1.5"
     >
-      <Link
+      <FilterLink
         href={buildExploreHref(basePath, query, { category: null })}
         aria-pressed={!active}
         className={cn(
@@ -51,11 +51,11 @@ export function CategoryFilter({
         )}
       >
         {copy.explore.allTopics}
-      </Link>
+      </FilterLink>
       {top.map((cat) => {
         const isActive = cat.slug === active
         return (
-          <Link
+          <FilterLink
             key={cat.slug}
             href={buildExploreHref(basePath, query, {
               category: isActive ? null : cat.slug,
@@ -71,7 +71,7 @@ export function CategoryFilter({
             <Tag className="h-3 w-3" aria-hidden />
             {cat.label}
             {isActive ? <X className="h-3 w-3" aria-hidden /> : null}
-          </Link>
+          </FilterLink>
         )
       })}
     </div>

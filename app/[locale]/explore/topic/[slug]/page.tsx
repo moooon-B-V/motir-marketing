@@ -9,7 +9,6 @@ import { SITE_HOST } from '@/lib/publicHost'
 import { SiteShell } from '@/app/_components/SiteShell'
 import { siteUrl } from '@/lib/siteOrigin'
 import {
-  buildExploreHref,
   categoryLabel,
   loadSquare,
   parseExploreSearchParams,
@@ -40,13 +39,12 @@ function topicQuery(slug: string, raw: RawSearchParams): ExploreQuery {
   return parseExploreSearchParams(raw, { category: slug })
 }
 
-/** The canonical path in English (cursor and the implied category dropped). */
-function canonicalPath(slug: string, query: ExploreQuery): string {
-  return buildExploreHref(basePathFor(slug), {
-    ...query,
-    category: undefined,
-    cursor: undefined,
-  })
+/**
+ * The canonical path in English: the topic page itself, whatever its filters —
+ * the same rule as `/explore`'s, for the reason given there.
+ */
+function canonicalPath(slug: string): string {
+  return basePathFor(slug)
 }
 
 function galleryHeading(
@@ -143,7 +141,7 @@ export default async function TopicPage({
       </div>
 
       <ExploreJsonLd
-        pageUrl={siteUrl(localizedPath(locale, canonicalPath(slug, query)))}
+        pageUrl={siteUrl(localizedPath(locale, canonicalPath(slug)))}
         name={`${label} projects`}
         description={format(copy.explore.metaDescriptionTopic, {
           topic: label,
@@ -171,7 +169,7 @@ export async function generateMetadata({
   const query = topicQuery(slug, await searchParams)
   const { categories, failed } = await loadSquare(query)
   const label = (failed ? undefined : categoryLabel(categories, slug)) ?? slug
-  return localePageMetadata(params, canonicalPath(slug, query), (copy) => ({
+  return localePageMetadata(params, canonicalPath(slug), (copy) => ({
     title: format(copy.explore.metaTitleTopic, { topic: label }),
     description: format(copy.explore.metaDescriptionTopic, {
       topic: label,

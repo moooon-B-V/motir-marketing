@@ -219,19 +219,22 @@ describe('every converted page canonicalises to its own language address', () =>
     expect(roots[0]!.module).toBe('@/app/[locale]/page')
   })
 
-  it('the explore canonical keeps its query, localised, and so do the alternates', async () => {
+  it('the explore canonical is the bare square, localised, whatever the filters', async () => {
+    // `lib/crawlPolicy.ts`: a filter state is the same square re-sorted, and a
+    // canonical per combination told crawlers to index every one of them.
     const { generateMetadata } = await import('@/app/[locale]/explore/page')
     const meta = await generateMetadata({
       params: Promise.resolve({ locale: 'fr' }),
-      // The card names `?rank=new`; the square's ranks are trending · popular ·
-      // recent, and an unknown one is dropped from the canonical by design.
-      searchParams: Promise.resolve({ rank: 'recent' }),
+      searchParams: Promise.resolve({
+        rank: 'recent',
+        category: 'design',
+        q: 'roadmap',
+        cursor: 'abc',
+      }),
     })
-    const canonical = new URL(canonicalOf(meta))
-    expect(canonical.pathname).toBe('/fr/explore')
-    expect(canonical.search).toBe('?rank=recent')
+    expect(canonicalOf(meta)).toBe(siteUrl('/fr/explore'))
     expect((meta.alternates?.languages as Record<string, string>).ja).toBe(
-      siteUrl('/ja/explore?rank=recent'),
+      siteUrl('/ja/explore'),
     )
   })
 
@@ -243,8 +246,9 @@ describe('every converted page canonicalises to its own language address', () =>
       await import('@/app/[locale]/explore/topic/[slug]/page')
     const meta = await generateMetadata({
       params: Promise.resolve({ locale: 'fr', slug: 'devtools' }),
-      searchParams: Promise.resolve({}),
+      searchParams: Promise.resolve({ rank: 'popular', q: 'cli' }),
     })
+    // The slug, and none of the filters — the same rule as the square's.
     expect(canonicalOf(meta)).toBe(siteUrl('/fr/explore/topic/devtools'))
   })
 })

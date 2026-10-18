@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { FilterLink } from './FilterLink'
 import { TrendingUp, Star, Clock } from 'lucide-react'
 import { cn } from '@motir/design-system'
 import { useCopy } from '@/lib/copy'
@@ -39,7 +39,7 @@ function SegLink({
   children: React.ReactNode
 }) {
   return (
-    <Link
+    <FilterLink
       href={href}
       aria-current={active ? 'page' : undefined}
       className={cn(
@@ -50,7 +50,7 @@ function SegLink({
       )}
     >
       {children}
-    </Link>
+    </FilterLink>
   )
 }
 
