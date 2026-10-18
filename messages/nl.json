@@ -124,6 +124,7 @@
     "brandAriaLabel": "Motir — home",
     "skipToContent": "Naar de inhoud",
     "menu": "Menu",
+    "howItWorks": "Hoe Motir werkt",
     "explore": "Openbaar bouwen",
     "ideas": "Ideeën om te bouwen",
     "buildsItself": "Motir bouwt zichzelf",
@@ -1807,14 +1808,140 @@
   "howItWorks": {
     "metaTitle": "Hoe Motir werkt",
     "metaDescription": "De workflow achter ‘vibe the project’: AI-planning, de plangoedkeuring, agent-runs, de merge-goedkeuring, reparatie, de leerlus en het geheugen van het project.",
-    "eyebrow": "Voor developers · de machine achter ‘vibe the project’",
-    "headline": "Hoe Motir werkt",
+    "eyebrow": "Hoe Motir werkt · voor developers",
+    "headlineNot": "Geen vibe coding.",
+    "headline": "Vibe the project.",
     "lede": "Elk Motir-project loopt door hetzelfde instrument. De modules zijn Motir en zijn agents. De knoppen en schakelaars zijn van jou: er gaat niets verder voordat een mens eraan draait.",
     "legendMotir": "Motir en agents",
     "legendYou": "Jij beslist",
-    "scrollHint": "Scroll de tekening opzij →",
+    "stage": {
+      "toyCaption": "Vibe coding: prompt erin, code eruit",
+      "shellCaption": "Vibe coding is één knop. Hier zijn er drie.",
+      "rackCaption": "Code is één module. Het project is ze allemaal.",
+      "schematicCaption": "Onder de modules: alles wat een prompt-naar-code-tool mist",
+      "scrollHint": "Scroll verder om te openen"
+    },
+    "toyTitle": "Vibe coding getekend als speeltje met één knop",
+    "toyDesc": "Een klein plastic apparaatje met één knop: typ een prompt en er komt een berg bestanden uit, verstrikt in imports, met een circulaire import ertussen. Eén regel in één bestand wijzigen breekt er zeven andere. Er is geen plan, geen bord, geen review en geen geheugen; al het andere laat het aan jou over. Scrollen vervangt het door het volledige Motir-instrument.",
+    "toy": {
+      "outside": "Geen onderdeel van Motir",
+      "brand": "Vibe coding",
+      "model": "Speeltje · één knop",
+      "knob": "Prompt",
+      "screen": ["> maak een app_"],
+      "out": "Code",
+      "cycle": "circulaire import",
+      "edited": "1 regel gewijzigd",
+      "broken": "7 bestanden kapot",
+      "foot": "Prompt erin. Code eruit. De rest is aan jou."
+    },
+    "shellTitle": "Motir als één instrument met drie knoppen",
+    "shellDesc": "Een gesloten synthesizerkast. Op het frontpaneel zitten drie knoppen, verbonden met patchkabels: de idee-ingang waar je typt wat je wilt, de Motir-planknop die er een plan van maakt, en de Motir-bouwknop die het bouwt. Scrollen opent de kast en toont de modules erin.",
+    "shell": {
+      "brand": "Motir",
+      "model": "Projectsynthesizer · model 01",
+      "power": "Aan",
+      "idea": {
+        "label": "[01] Jij",
+        "title": "Idee-ingang",
+        "screen": [
+          "> een persoonlijke",
+          "  AI-assistent die",
+          "  mensen helpt hun",
+          "  doelen te halen_"
+        ],
+        "out": "Uit"
+      },
+      "plan": {
+        "label": "[02] Motir",
+        "title": "Motir plan",
+        "min": "Vraag",
+        "max": "Plan",
+        "screen": "Epic › Story › Taak",
+        "in": "In",
+        "out": "Uit"
+      },
+      "build": {
+        "label": "[03] Motir",
+        "title": "Motir bouw",
+        "min": "Run",
+        "max": "Merge",
+        "screen": "1 PR per repository",
+        "in": "In",
+        "out": "Klaar"
+      },
+      "foot": "Jouw idee erin · werkende software eruit"
+    },
     "rackTitle": "De Motir-workflow als een rack met modules",
-    "rackDesc": "Je idee wordt doorgeschakeld naar de planner, dan naar een knop waar jij het plan goedkeurt, dan naar het bord, dan naar een agent-run, dan naar een knop waar jij reviewt en merget, en dan naar Klaar. Handmatige taken gaan van het bord naar Klaar. Een agent-run kan een bug die hij vindt vastleggen in de map Bugs en gewoon doorgaan. Een reparatiemodule stuurt mislukte runs terug naar de agent-run. Een leerlus loopt van de agent-run via een oordeel, een herplanning en de lessenbibliotheek terug naar de planner. Een geheugenbank onderaan bewaart ontwerpen, beslissingen, docs, lessen, run-geschiedenis, revisies en wie wat besliste.",
+    "rackDesc": "Je idee wordt doorgeschakeld naar de planner, dan naar een knop waar jij het plan goedkeurt, dan naar het bord, dan naar een agent-run, dan naar een knop waar jij reviewt en merget, en dan naar Klaar. Handmatige taken gaan van het bord naar Klaar. Een agent-run kan een bug die hij vindt vastleggen in de map Bugs en gewoon doorgaan. Een reparatiemodule stuurt mislukte runs terug naar de agent-run. Een leerlus loopt van de agent-run via een oordeel, een herplanning en de lessenbibliotheek terug naar de planner. Een geheugenbank onderaan bewaart ontwerpen, beslissingen, docs, lessen, run-geschiedenis, revisies en wie wat besliste. Een schakelaar op het rack wisselt tussen vibe coding, dat alleen je idee en de agent-run overhoudt, en ‘vibe the project’, dat elke module gebruikt.",
+    "schematicTitle": "De architectuur van Motir als schakelschema",
+    "schematicDesc": "De services achter Motir, getekend als onderdelen verbonden door signaallijnen. In de publieke zone: motir.co, het design-systempakket, de agent-shellrelay, motir-core (web en REST API, de MCP-server, inloggen en de worker met zijn jobwachtrij) en motir-ai, de planner. In de privézone: motir-gateway, dat elke modelaanroep meet, en de codegraafservice. In de vloot: de agenthost, de agentrunner, de indexrunner en de CI-runner, allemaal op aanvraag gestart. In de datazone: Postgres en de bestandsopslag. Buiten: je browser, je eigen agent via MCP, de betaalprovider, de modelproviders en je codehost.",
+    "schematic": {
+      "title": "Schema",
+      "sub": "In de modules",
+      "zones": {
+        "outside": "Buiten",
+        "public": "Publiek · internet, TLS",
+        "private": "Privé · privénetwerk Fly",
+        "fleet": "Vloot · machines op aanvraag",
+        "data": "Data"
+      },
+      "legend": {
+        "title": "Signaallijnen",
+        "mcp": "MCP",
+        "http": "HTTP · REST",
+        "stream": "Stream · SSE / WebSocket",
+        "data": "Database · objectopslag",
+        "build": "Buildtijd · npm",
+        "public": "publiek",
+        "private": "privé",
+        "oneWay": "één kant op",
+        "both": "beide kanten"
+      },
+      "parts": {
+        "browser": ["Browser", "jij, op elk apparaat"],
+        "agent": ["Jouw agent", "Claude Code · Codex · CLI"],
+        "payments": ["Betalingen", "afrekenen · abonnementen"],
+        "llm": ["Modelproviders", "elk model, gemeten"],
+        "codeHost": ["Codehost", "repository's · CI · app"],
+        "marketing": ["motir.co", "docs · ontdek · publieke pagina's"],
+        "designSystem": ["Designsystem", "@motir/design-system"],
+        "relay": ["Agent-shellrelay", "motir-relay"],
+        "core": ["motir-core", "de app"],
+        "coreWeb": "Web · REST API",
+        "coreMcp": "MCP-server",
+        "coreAuth": "Inloggen · OAuth",
+        "coreWorker": "Worker · jobwachtrij",
+        "ai": ["motir-ai", "de planner"],
+        "aiConversation": "Gesprek",
+        "aiPlanning": "Planning",
+        "aiLessons": "Lessen · embeddings",
+        "aiBilling": "Credits",
+        "gateway": ["motir-gateway", "meet elke modelaanroep"],
+        "codegraph": ["Codegraaf", "service"],
+        "host": ["Agenthost", "machine van je agent"],
+        "runner": ["Agentrunner", "één run, één item"],
+        "indexer": ["Indexrunner", "één repository"],
+        "ci": ["CI-runner", "één job"],
+        "postgres": ["Postgres", "drie databases"],
+        "files": ["Bestanden", "objectopslag"],
+        "filesAttachments": "Bijlagen",
+        "filesDesigns": "Ontwerpopslag",
+        "filesGraphs": "Graafsnapshots",
+        "postgresRows": ["motir-core", "motir-ai · pgvector", "motir-gateway"]
+      },
+      "wires": {
+        "boot": "start",
+        "runKey": "run-key",
+        "webhooks": "webhooks",
+        "wss": "WSS",
+        "sse": "SSE",
+        "mcp": "MCP",
+        "tarball": "tarball",
+        "jit": "jobs",
+        "snapshot": "snapshot"
+      }
+    },
     "rack": {
       "engine": "Motir · projectmotor",
       "engineTitle": "Van idee tot klaar.",
@@ -1922,7 +2049,7 @@
       },
       "memory": {
         "label": "[08] Geheugen",
-        "title": "Het project onthoudt",
+        "title": "onthoudt het project",
         "keys": [
           "Ontwerpen",
           "Beslissingen",
@@ -1931,12 +2058,19 @@
           "Run-geschiedenis",
           "Revisies",
           "Wie besliste"
-        ]
+        ],
+        "lead": "Wat vibe coding vergeet,"
       },
       "bugs": {
         "label": "[04] Bug gevonden",
         "screen": "Bug vastleggen › map Bugs",
         "note": "de run gaat door"
+      },
+      "vibe": {
+        "label": "Modus",
+        "coding": "Vibe coding",
+        "project": "Vibe the project",
+        "note": "Omzetten: vibe coding is twee van de modules"
       }
     },
     "modulesHeadline": "Module voor module",

@@ -17,7 +17,7 @@ import {
   ReviewArt,
   RunArt,
 } from './_components/ModuleArt'
-import { WorkflowRack } from './_components/WorkflowRack'
+import { RackStage } from './_components/RackStage'
 import { enterLocale, type LocalePageProps } from '@/i18n/locale'
 
 /*
@@ -100,8 +100,11 @@ export default async function HowItWorksPage({ params }: LocalePageProps) {
               <Led />
               {h.eyebrow}
             </p>
-            <h1 className="m-0 font-(family-name:--font-serif) text-[clamp(56px,9vw,150px)] leading-[0.9] font-bold tracking-[-0.045em]">
-              {h.headline}
+            <h1 className="m-0 font-(family-name:--font-serif) text-[clamp(48px,7vw,112px)] leading-[0.92] font-bold tracking-[-0.045em] text-balance [word-break:auto-phrase]">
+              <span className="mb-[0.12em] block text-[0.5em] tracking-[-0.035em] text-(--el-text-secondary)">
+                {h.headlineNot}
+              </span>
+              <span className="block">{h.headline}</span>
             </h1>
           </div>
           <div className="grid gap-5 pb-2">
@@ -122,24 +125,7 @@ export default async function HowItWorksPage({ params }: LocalePageProps) {
         </section>
 
         <div className={GUTTER}>
-          {/* A card surface, so the style axis reaches the rack the way it
-              reaches every other panel: its border weight, its shadow, its
-              material (sheen, glass, neumorphic relief) and the 3D tilt. */}
-          <div
-            data-surface="card"
-            data-tilt=""
-            className="rounded-(--radius-card) border border-(--el-border) bg-(--el-page-bg) shadow-(--shadow-card)"
-          >
-            {/* The scroll lives INSIDE the frame: a style that draws past the
-                frame's edge (hand-drawn's roughened overlay) must not become
-                content of the scroll container, or it scrolls both ways. */}
-            <div className="overflow-x-auto overflow-y-hidden rounded-(--radius-card)">
-              <WorkflowRack />
-            </div>
-          </div>
-          <p className="mt-2.5 text-[13px] font-medium text-(--el-text-secondary) min-[1100px]:hidden">
-            {h.scrollHint}
-          </p>
+          <RackStage />
         </div>
 
         <section

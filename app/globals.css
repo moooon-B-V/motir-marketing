@@ -419,6 +419,585 @@ body {
 }
 
 /*
+ * The case and the schematic around the rack (`ShellPanel`, `Schematic`):
+ * the same inks, plus the parts only they draw.
+ */
+.hiw-rack .knob-c {
+  fill: var(--r-cool);
+}
+.hiw-rack .knob-cap {
+  fill: color-mix(in srgb, var(--el-page-bg) 22%, transparent);
+}
+.hiw-rack .vent {
+  fill: var(--r-line);
+}
+.hiw-shell .shell-brand {
+  font-family: var(--font-serif);
+  font-size: 64px;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  fill: var(--r-ink);
+}
+.hiw-shell .shell-ttl {
+  font-size: 32px;
+}
+.hiw-shell .shell-lcd {
+  font-size: 15px;
+}
+.hiw-schem .face-grid {
+  pointer-events: none;
+}
+.hiw-schem .grid {
+  fill: none;
+  stroke: color-mix(in srgb, var(--r-line) 45%, transparent);
+  stroke-width: 1;
+}
+.hiw-schem .p-cyl {
+  fill: var(--r-panel);
+  stroke: var(--r-line);
+  stroke-width: 1;
+}
+.hiw-schem .p-ext {
+  fill: var(--el-surface);
+  stroke: var(--r-soft);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+.hiw-schem .pin {
+  stroke: var(--r-soft);
+  stroke-width: 1.5;
+}
+.hiw-schem .s-name {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  fill: var(--r-ink);
+}
+.hiw-schem .s-sub {
+  font-size: 12px;
+  fill: var(--r-soft);
+}
+.hiw-schem .s-block {
+  fill: var(--el-surface-soft);
+  stroke: var(--r-line);
+  stroke-width: 1;
+  rx: var(--radius-control);
+}
+.hiw-schem .s-blbl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  fill: var(--r-ink);
+}
+.hiw-schem .zone {
+  fill: none;
+  stroke: var(--r-soft);
+  stroke-width: 1;
+  stroke-dasharray: 2 5;
+  stroke-linecap: round;
+  rx: var(--radius-card);
+}
+.hiw-schem .zone-bg {
+  fill: var(--el-surface-soft);
+}
+.hiw-schem .zone-lbl {
+  paint-order: stroke;
+  stroke: var(--el-surface-soft);
+  stroke-width: 8px;
+  stroke-linejoin: round;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--r-soft);
+}
+.hiw-schem [class^='w-'] {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hiw-schem .w-mcp {
+  stroke: var(--r-warm);
+  stroke-width: 3;
+}
+.hiw-schem .w-http,
+.hiw-schem .w-stream {
+  stroke: var(--r-cool);
+}
+.hiw-schem .w-stream {
+  stroke-width: 3.5;
+}
+.hiw-schem .w-data {
+  stroke: var(--r-soft);
+}
+.hiw-schem .w-build {
+  stroke: var(--r-soft);
+  stroke-dasharray: 0.5 5;
+}
+.hiw-schem .w-priv {
+  stroke-dasharray: 7 5;
+  stroke-linecap: butt;
+}
+.hiw-schem .w-lbl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--r-ink);
+  paint-order: stroke;
+  stroke: var(--el-surface-soft);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+.hiw-schem .arr-c,
+.hiw-schem .dot-http,
+.hiw-schem .dot-stream {
+  fill: var(--r-cool);
+}
+.hiw-schem .arr-w,
+.hiw-schem .dot-mcp {
+  fill: var(--r-warm);
+}
+.hiw-schem .arr-s,
+.hiw-schem .dot-data,
+.hiw-schem .dot-build {
+  fill: var(--r-soft);
+}
+
+/* The toy (`ToyPanel`): vibe coding, small and plastic. */
+.hiw-toy .toy-face {
+  fill: color-mix(in srgb, var(--el-danger) 5%, var(--el-surface-soft));
+}
+.hiw-toy .toy-hatch {
+  stroke: color-mix(in srgb, var(--el-danger) 14%, transparent);
+  stroke-width: 1.5;
+}
+.hiw-toy .toy-outside {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: var(--el-danger);
+}
+/* The toy's frame is dashed: it is not one of Motir's panels. */
+.hiw-layer[data-layer='toy'] .hiw-frame {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--el-danger) 45%, transparent);
+}
+.hiw-toy .toy-body {
+  fill: var(--el-tint-yellow);
+  stroke: var(--r-line);
+  stroke-width: 1.5;
+}
+.hiw-toy .toy-brand {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  fill: var(--r-ink);
+}
+.hiw-toy .toy-lcd {
+  font-size: 14px;
+}
+.hiw-toy .toy-fold {
+  fill: none;
+  stroke: var(--r-line);
+}
+.hiw-toy .toy-file {
+  fill: var(--r-panel);
+  stroke: var(--r-line);
+  stroke-width: 1.2;
+}
+.hiw-toy .toy-broken {
+  fill: color-mix(in srgb, var(--el-danger) 10%, var(--r-panel));
+  stroke: color-mix(in srgb, var(--el-danger) 55%, transparent);
+}
+.hiw-toy .toy-edited {
+  stroke: var(--r-warm);
+  stroke-width: 2.5;
+}
+.hiw-toy .toy-changed {
+  stroke: var(--r-warm);
+  stroke-width: 3;
+}
+.hiw-toy .toy-import {
+  fill: none;
+  stroke: var(--r-soft);
+  stroke-width: 1.2;
+  opacity: 0.55;
+}
+.hiw-toy .toy-cycle {
+  fill: none;
+  stroke: var(--r-warm);
+  stroke-width: 2.5;
+}
+.hiw-toy .toy-arr {
+  fill: var(--r-warm);
+}
+.hiw-toy .toy-ripple {
+  fill: none;
+  stroke: var(--el-danger);
+  stroke-width: 1.8;
+  stroke-dasharray: 5 4;
+  opacity: 0.8;
+}
+.hiw-toy .toy-x {
+  fill: var(--el-danger);
+}
+.hiw-toy .toy-x-mark {
+  fill: none;
+  stroke: var(--el-page-bg);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.hiw-toy .toy-cycle-lbl,
+.hiw-toy .toy-edit-lbl,
+.hiw-toy .toy-broke-lbl {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  paint-order: stroke;
+  stroke: var(--el-surface-soft);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+.hiw-toy .toy-cycle-lbl,
+.hiw-toy .toy-edit-lbl {
+  fill: var(--r-warm);
+}
+.hiw-toy .toy-broke-lbl {
+  font-size: 13px;
+  fill: var(--el-danger);
+}
+.hiw-toy .toy-foot {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  fill: var(--r-ink);
+}
+
+/* The rack's mode switch (`WorkflowRack`): vibe the project | vibe coding. */
+.hiw-rack .vibe-switch {
+  cursor: pointer;
+  outline: none;
+}
+.hiw-rack .vibe-switch:focus-visible .sw-track {
+  stroke: var(--r-cool);
+  stroke-width: 2.5;
+}
+.hiw-rack .vibe-thumb-l {
+  fill: var(--r-warm);
+  opacity: 0;
+}
+.hiw-rack .vibe-thumb-r {
+  fill: var(--r-cool);
+}
+.hiw-rack .vibe-t-l,
+.hiw-rack .vibe-t-r {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--r-ink);
+}
+.hiw-rack .vibe-t-r {
+  fill: var(--el-page-bg);
+}
+.hiw-rack[data-vibe='coding'] .vibe-thumb-l {
+  opacity: 1;
+}
+.hiw-rack[data-vibe='coding'] .vibe-thumb-r {
+  opacity: 0;
+}
+.hiw-rack[data-vibe='coding'] .vibe-t-l {
+  fill: var(--el-page-bg);
+}
+.hiw-rack[data-vibe='coding'] .vibe-t-r {
+  fill: var(--r-ink);
+}
+.hiw-rack .vibe-dim,
+.hiw-rack .vibe-only,
+.hiw-rack .vibe-thumb-l,
+.hiw-rack .vibe-thumb-r {
+  transition: opacity 0.35s;
+}
+.hiw-rack[data-vibe='coding'] .vibe-dim {
+  opacity: 0.1;
+}
+.hiw-rack .vibe-only {
+  opacity: 0;
+}
+.hiw-rack[data-vibe='coding'] .vibe-only {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hiw-rack .vibe-dim,
+  .hiw-rack .vibe-only,
+  .hiw-rack .vibe-thumb-l,
+  .hiw-rack .vibe-thumb-r {
+    transition: none;
+  }
+}
+
+/* Tints: the memory bank's keys and the schematic's zones. After the part
+   rules so a tint wins over `.p` / `.key`'s own fill. */
+.hiw-rack .t-sky {
+  fill: var(--el-tint-sky);
+}
+.hiw-rack .t-lavender {
+  fill: var(--el-tint-lavender);
+}
+.hiw-rack .t-mint {
+  fill: var(--el-tint-mint);
+}
+.hiw-rack .t-sage {
+  fill: var(--el-tint-sage);
+}
+.hiw-rack .t-rose {
+  fill: var(--el-tint-rose);
+}
+.hiw-rack .t-yellow {
+  fill: var(--el-tint-yellow);
+}
+/* Blocks inside a tinted part sit on the plain panel, so they stand out. */
+.hiw-schem .s-block {
+  fill: var(--r-panel);
+}
+
+/*
+ * The stage that holds the three drawings (`RackStage`). By default — narrow
+ * screens, reduced motion — they stack, each with its caption. On a wide
+ * screen that allows motion they share one frame pinned to the viewport, and
+ * the script's `--open` / `--zoom` (0–1) open the case, then zoom into the
+ * rack until the schematic replaces it.
+ */
+.hiw-stage {
+  --swap: 0;
+  --open: 0;
+  --zoom: 0;
+}
+.hiw-layers {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+}
+.hiw-cap,
+.hiw-caps a {
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--el-text-secondary);
+}
+.hiw-cap a,
+.hiw-caps a {
+  color: inherit;
+  text-decoration: none;
+}
+/* The captions are the drawings' anchors: a "#" shows on hover. */
+.hiw-cap a:hover::after,
+.hiw-caps a:hover::after {
+  content: ' #';
+  color: var(--el-accent-on-surface);
+}
+.hiw-layer {
+  scroll-margin-top: 24px;
+}
+.hiw-caps,
+.hiw-hint {
+  display: none;
+}
+
+/* A phone or small tablet: each drawing is a full-screen section. Held
+   upright, the frame turns 90° to fill the portrait screen; the script sizes
+   it to the section's room (`--turn-w` along the long side, `--turn-h`
+   across). Static — nothing moves as the page scrolls. */
+@media (max-width: 1099px) {
+  .hiw-layers {
+    gap: 0;
+  }
+  .hiw-layer {
+    display: flex;
+    flex-direction: column;
+    height: 100svh;
+    padding: 16px 0;
+    box-sizing: border-box;
+    scroll-margin-top: 0;
+  }
+  .hiw-room {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+  .hiw-turn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--turn-w, 100%);
+    height: var(--turn-h, 100%);
+    translate: -50% -50%;
+  }
+  .hiw-stage[data-turn='upright'] .hiw-turn {
+    rotate: 90deg;
+  }
+  .hiw-turn .hiw-frame,
+  .hiw-turn .hiw-scroll,
+  .hiw-turn .hiw-art,
+  .hiw-turn .hiw-art > svg {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+  }
+  .hiw-turn .hiw-scroll {
+    overflow: hidden;
+  }
+}
+@media (min-width: 1100px) and (prefers-reduced-motion: no-preference) {
+  .hiw-stage {
+    height: calc(100vh * (1 + var(--run)));
+  }
+  .hiw-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hiw-cap {
+    display: none;
+  }
+  .hiw-caps {
+    display: grid;
+    width: 100%;
+  }
+  .hiw-caps a {
+    grid-area: 1 / 1;
+    justify-self: start;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .hiw-stage[data-phase='toy'] .hiw-caps [data-for='toy'],
+  .hiw-stage[data-phase='shell'] .hiw-caps [data-for='shell'],
+  .hiw-stage[data-phase='rack'] .hiw-caps [data-for='rack'],
+  .hiw-stage[data-phase='schematic'] .hiw-caps [data-for='schematic'] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  /* The frame fills the screen's height and the page's width; the drawings
+     keep their size and gain canvas at the sides (`RackStage` widens their
+     viewBox to the frame's shape). */
+  .hiw-layers {
+    gap: 0;
+    width: 100%;
+    height: calc(100vh - 120px);
+  }
+  .hiw-layer,
+  .hiw-layer .hiw-frame,
+  .hiw-layer .hiw-scroll,
+  .hiw-art,
+  .hiw-art > svg {
+    height: 100%;
+    min-height: 0;
+  }
+  .hiw-layers > .hiw-layer {
+    grid-area: 1 / 1;
+  }
+  .hiw-layer .hiw-scroll {
+    overflow: hidden;
+  }
+  /* The frame takes the drawings' own ground, so a drawing smaller than its
+     frame mid-zoom has no visible edge. */
+  .hiw-layer .hiw-frame {
+    background: var(--el-surface-soft);
+  }
+  .hiw-art {
+    min-width: 0;
+  }
+  .hiw-art > svg {
+    min-width: 0;
+    width: 100%;
+  }
+  .hiw-art text {
+    text-rendering: geometricPrecision;
+  }
+
+  /* The toy shrinks away and fades; the full instrument grows in behind it. */
+  .hiw-layer[data-layer='toy'] {
+    z-index: 4;
+    pointer-events: none;
+    transform: scale(calc(1 - var(--swap) * 0.35));
+    opacity: clamp(0, calc(1 - var(--swap) * 2.2), 1);
+  }
+
+  /* The case: its front panel swings up and toward you on a hinge along its
+     top edge, and is gone by the time it stands edge-on. */
+  .hiw-layer[data-layer='shell'] {
+    z-index: 3;
+    pointer-events: none;
+    transform-origin: 50% 0;
+    transform: perspective(2400px) rotateX(calc(var(--open) * 82deg))
+      translateY(calc(var(--open) * -4%)) scale(calc(0.9 + var(--swap) * 0.1));
+    opacity: min(
+      clamp(0, calc((1 - var(--open)) * 7), 1),
+      clamp(0, calc((var(--swap) - 0.35) * 2.2), 1)
+    );
+  }
+  /* The rack shows as the case opens; the zoom then pushes into the agent run
+     module until the rack dissolves. */
+  /* Hidden until the lid starts to lift, so it never shows through the
+     case while the toy swaps out. */
+  .hiw-layer[data-layer='rack'] {
+    z-index: 1;
+    opacity: min(
+      clamp(0, calc(var(--open) * 12), 1),
+      clamp(0, calc((0.75 - var(--zoom)) * 3), 1)
+    );
+  }
+  .hiw-layer[data-layer='rack'] .hiw-art {
+    transform-origin: 68.75% 40%;
+    transform: scale(calc(1 + var(--zoom) * var(--zoom) * 3.4));
+  }
+  /* The schematic rises out of the same point, growing to full size. */
+  .hiw-layer[data-layer='schematic'] {
+    z-index: 2;
+    pointer-events: none;
+    opacity: clamp(0, calc((var(--zoom) - 0.35) * 3), 1);
+  }
+  .hiw-layer[data-layer='schematic'] .hiw-art {
+    transform-origin: 68.75% 40%;
+    transform: scale(calc(0.5 + var(--zoom) * 0.5));
+  }
+  .hiw-stage[data-phase='schematic'] .hiw-layer[data-layer='rack'] {
+    pointer-events: none;
+  }
+  .hiw-stage[data-phase='schematic'] .hiw-layer[data-layer='schematic'] {
+    pointer-events: auto;
+  }
+  .hiw-hint {
+    display: block;
+    margin: 12px 0 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--el-text-secondary);
+    opacity: clamp(0, calc(1 - var(--open) * 4), 1);
+  }
+}
+
+/*
  * The CJK font a zh, ja or ko visitor picks on `/design` (Yue, 2026-10-09).
  * One pick draws all of that language's text — headings, body and the mono
  * role's code and labels alike — in the face; with nothing picked, the

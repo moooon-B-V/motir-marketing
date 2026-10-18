@@ -36,22 +36,22 @@ function bar() {
 }
 
 describe('the Design nav entry', () => {
-  it('ships in the desktop bar, beside Explore and Docs', () => {
+  it('ships in the desktop bar, beside How Motir works and Docs', () => {
     render(<SiteHeader host={SITE_HOST} />)
     const link = within(bar()).getByRole('link', { name: copy.nav.design })
     expect(link).toHaveAttribute('href', '/design')
   })
 
-  it('Explore and Docs are now next/links — the bar is fully same-origin', () => {
+  it('How Motir works and Docs are next/links — the bar is fully same-origin', () => {
     render(<SiteHeader host={SITE_HOST} />)
     // Explore and Docs moved onto motir.co (MOTIR-4045 / MOTIR-4046), so both
     // are site-relative (a `next/link`); nothing in the bar is cross-origin
     // except the app doors (Sign in / Start free).
     expect(
       within(bar())
-        .getByRole('link', { name: copy.nav.explore })
+        .getByRole('link', { name: copy.nav.howItWorks })
         .getAttribute('href'),
-    ).toBe('/explore')
+    ).toBe('/how-it-works')
     expect(
       within(bar())
         .getByRole('link', { name: copy.nav.docs })
