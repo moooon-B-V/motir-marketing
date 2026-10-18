@@ -126,8 +126,11 @@ export default async function Page({ params }: LocalePageProps) {
             <a
               href={IMPORT_DOOR}
               className={cn(
-                buttonVariants({ variant: 'secondary', size: 'md' }),
-                'text-[15px]',
+                buttonVariants({ size: 'md' }),
+                // The palette's warm decision fill and its own ink — the colour
+                // the close's developers' door wears — so it reads apart from
+                // the ink Start above it.
+                'border-transparent bg-(--el-showcase-decision) text-[15px] text-(--el-showcase-decision-text) hover:bg-(--el-showcase-decision) hover:brightness-105',
               )}
             >
               {l.hero.existingProjectLink}
