@@ -14,8 +14,13 @@ import type { Locale } from '@/i18n/routing'
  *   nav   — the nav, shown from `b`
  *   wide  — Sign in, shown from `b`
  *   menu  — the Menu button and its panel, gone from `b`
+ *   bar   — the nav's text size and spacing. The full 17px everywhere but
+ *           the five languages whose nav runs longest (es, fr, it, pl, pt),
+ *           which keep their own words ("Documentazione", not "Docs") and
+ *           set them smaller instead, so their bar folds near the others'.
  */
 export interface LadderClasses {
+  bar: string
   setup: string
   nav: string
   wide: string
@@ -24,69 +29,80 @@ export interface LadderClasses {
 
 export const LADDER_CLASSES: Record<Locale, LadderClasses> = {
   en: {
+    bar: 'gap-5 text-[17px]',
     setup: 'hidden min-[1507px]:inline-flex',
     nav: 'hidden min-[1290px]:flex',
     wide: 'hidden min-[1290px]:inline-flex',
     menu: 'min-[1290px]:hidden',
   },
   zh: {
+    bar: 'gap-5 text-[17px]',
     setup: 'hidden min-[1240px]:inline-flex',
     nav: 'hidden min-[1059px]:flex',
     wide: 'hidden min-[1059px]:inline-flex',
     menu: 'min-[1059px]:hidden',
   },
   ja: {
+    bar: 'gap-5 text-[17px]',
     setup: 'hidden min-[1589px]:inline-flex',
     nav: 'hidden min-[1288px]:flex',
     wide: 'hidden min-[1288px]:inline-flex',
     menu: 'min-[1288px]:hidden',
   },
   ko: {
+    bar: 'gap-5 text-[17px]',
     setup: 'hidden min-[1368px]:inline-flex',
     nav: 'hidden min-[1173px]:flex',
     wide: 'hidden min-[1173px]:inline-flex',
     menu: 'min-[1173px]:hidden',
   },
   de: {
+    bar: 'gap-5 text-[17px]',
     setup: 'hidden min-[1652px]:inline-flex',
     nav: 'hidden min-[1358px]:flex',
     wide: 'hidden min-[1358px]:inline-flex',
     menu: 'min-[1358px]:hidden',
   },
   fr: {
-    setup: 'hidden min-[1821px]:inline-flex',
-    nav: 'hidden min-[1499px]:flex',
-    wide: 'hidden min-[1499px]:inline-flex',
-    menu: 'min-[1499px]:hidden',
+    bar: 'gap-4 text-[14px]',
+    setup: 'hidden min-[1744px]:inline-flex',
+    nav: 'hidden min-[1422px]:flex',
+    wide: 'hidden min-[1422px]:inline-flex',
+    menu: 'min-[1422px]:hidden',
   },
   es: {
-    setup: 'hidden min-[1718px]:inline-flex',
-    nav: 'hidden min-[1410px]:flex',
-    wide: 'hidden min-[1410px]:inline-flex',
-    menu: 'min-[1410px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1691px]:inline-flex',
+    nav: 'hidden min-[1383px]:flex',
+    wide: 'hidden min-[1383px]:inline-flex',
+    menu: 'min-[1383px]:hidden',
   },
   it: {
-    setup: 'hidden min-[1634px]:inline-flex',
-    nav: 'hidden min-[1318px]:flex',
-    wide: 'hidden min-[1318px]:inline-flex',
-    menu: 'min-[1318px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1618px]:inline-flex',
+    nav: 'hidden min-[1302px]:flex',
+    wide: 'hidden min-[1302px]:inline-flex',
+    menu: 'min-[1302px]:hidden',
   },
   nl: {
+    bar: 'gap-5 text-[17px]',
     setup: 'hidden min-[1562px]:inline-flex',
     nav: 'hidden min-[1294px]:flex',
     wide: 'hidden min-[1294px]:inline-flex',
     menu: 'min-[1294px]:hidden',
   },
   pl: {
-    setup: 'hidden min-[1650px]:inline-flex',
-    nav: 'hidden min-[1357px]:flex',
-    wide: 'hidden min-[1357px]:inline-flex',
-    menu: 'min-[1357px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1618px]:inline-flex',
+    nav: 'hidden min-[1325px]:flex',
+    wide: 'hidden min-[1325px]:inline-flex',
+    menu: 'min-[1325px]:hidden',
   },
   pt: {
-    setup: 'hidden min-[1690px]:inline-flex',
-    nav: 'hidden min-[1387px]:flex',
-    wide: 'hidden min-[1387px]:inline-flex',
-    menu: 'min-[1387px]:hidden',
+    bar: 'gap-4 text-[15px]',
+    setup: 'hidden min-[1656px]:inline-flex',
+    nav: 'hidden min-[1353px]:flex',
+    wide: 'hidden min-[1353px]:inline-flex',
+    menu: 'min-[1353px]:hidden',
   },
 }

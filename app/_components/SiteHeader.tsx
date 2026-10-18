@@ -210,7 +210,9 @@ const isCurrent = (host: PublicHost, path: string, pathname: string) =>
       ? pathname === path || pathname.startsWith(`${path}/`)
       : pathname === path
 
-const NAV_ITEM = 'text-[17px] font-medium whitespace-nowrap'
+// The bar's nav sets its own text size per locale (`ladder.bar`); the Menu
+// panel's items keep the full size.
+const NAV_ITEM = 'font-medium whitespace-nowrap'
 const NAV_REST = 'text-(--el-text) hover:text-(--el-accent-on-surface)'
 const NAV_CURRENT = 'font-semibold text-(--el-accent-on-surface)'
 /** "Motir builds itself" is live: square and words walk the wave hues (`.mk-live`, globals.css). */
@@ -263,7 +265,7 @@ export function SiteHeader({
 
           <nav
             aria-label={copy.nav.ariaLabel}
-            className={cn('items-center gap-5', ladder.nav)}
+            className={cn('items-center', ladder.bar, ladder.nav)}
           >
             <ProductsMenu host={host} />
             {navItemsFor(copy).map((item) => {
@@ -398,6 +400,7 @@ export function SiteHeader({
               {...('newTab' in item && item.newTab ? NEW_TAB : {})}
               className={cn(
                 NAV_ITEM,
+                'text-[17px]',
                 item.current ? NAV_CURRENT : NAV_REST,
                 'feature' in item && item.feature && LIVE_ITEM,
               )}
