@@ -2490,22 +2490,22 @@
     "metaDescription": "Motir ha tre parti: un pianificatore, lo strumento di gestione progetti al centro e un esecutore di agenti. Usa la parte centrale con il tuo pianificatore e i tuoi agenti via MCP, aggiungi il pianificatore di Motir, oppure lascia che Motir gestisca tutte e tre.",
     "eyebrow": "Come usare Motir",
     "headline": "Usa una parte, due o tutte e tre.",
-    "lede": "Motir ha tre parti. Lo strumento di gestione progetti sta al centro e custodisce il piano. Il pianificatore ci inserisce ciò che pianifica. L’esecutore di agenti ne prende le attività e le realizza. Qualsiasi parte tu preferisca gestire da solo, puoi farlo.",
+    "lede": "Motir ha tre parti. Lo strumento di gestione progetti sta al centro e custodisce il piano. Il pianificatore lo alimenta. L’esecutore di agenti ne preleva le attività e le realizza. Se preferisci, puoi gestire in autonomia qualsiasi parte.",
     "parts": [
       {
         "lead": "Pianifica",
         "name": "Pianificatore Motir AI",
-        "body": "Trasforma la tua idea in Epic, storie e attività, e le inserisce nel progetto appena approvi."
+        "body": "Trasforma la tua idea in Epic, storie e attività, e le inserisce nel progetto dopo la tua approvazione."
       },
       {
         "lead": "Custodisce il piano",
         "name": "Gestione progetti Motir",
-        "body": "Bacheca, backlog, Sprint e roadmap. Ogni pianificatore e ogni agente, tuo o di Motir, lavora passando da qui."
+        "body": "Bacheca, backlog, Sprint e roadmap. Ogni pianificatore e ogni agente, tuo o di Motir, lavora attraverso questo strumento."
       },
       {
         "lead": "Realizza",
         "name": "Flotta di agenti Motir",
-        "body": "Prende ogni attività pronta, ci fa lavorare un agente su una macchina dedicata, in parallelo con gli altri, e apre la pull request."
+        "body": "Prende ogni attività pronta, la affida a un agente su una macchina dedicata, in parallelo con gli altri, e apre la pull request."
       }
     ],
     "waysHeadline": "Tre modi per usarlo",
@@ -2517,17 +2517,17 @@
         "title": "Il tuo pianificatore, i tuoi agenti, Motir al centro.",
         "paras": [
           "Usa Motir come strumento di gestione progetti e tieni tutto il resto sotto il tuo controllo.",
-          "La pianificazione via MCP resta aperta. Scrivi il tuo pianificatore, uno script o un agente, e inserirà il piano in Motir con gli stessi strumenti che usa il pianificatore di Motir: `create_plan`, `add_plan_items` e `validate_plan`. Prima che esistesse il Pianificatore Motir AI, anche Motir pianificava sé stesso così, con uno script chiamato plan.py.",
+          "La pianificazione via MCP resta aperta. Scrivi il tuo pianificatore, uno script o un agente, che inserirà il piano in Motir con gli stessi strumenti usati dal pianificatore di Motir: `create_plan`, `add_plan_items` e `validate_plan`. Prima che esistesse il Pianificatore Motir AI, anche Motir veniva pianificato in questo modo, con uno script chiamato plan.py.",
           "I tuoi agenti si collegano via MCP. Ognuno prende la prossima attività pronta con `claim_next_ready`, la esegue e riferisce l’esito con `close_work_item_run`. Motir tiene traccia di chi ha quale attività e di cosa è stato rilasciato."
         ],
         "you": [
           "Il tuo pianificatore",
-          "I tuoi agenti, e quando parte ciascuno",
+          "I tuoi agenti e quando avviarli",
           "L’approvazione del piano"
         ],
         "motir": [
           "Bacheca, backlog, Sprint e roadmap",
-          "Un controllo su ogni piano prima che arrivi",
+          "Un controllo su ogni piano prima dell’inserimento",
           "Chi ha quale attività, e cosa è stato rilasciato"
         ],
         "links": ["Collegati via MCP", "Tutti gli strumenti MCP"]
@@ -2536,13 +2536,10 @@
         "label": "2 · Pianificatore e gestione progetti",
         "title": "Motir pianifica. I tuoi agenti realizzano.",
         "paras": [
-          "Aggiungi il Pianificatore Motir AI. Dagli la tua idea: chiede ciò che gli serve sapere, organizza il lavoro in Epic, storie e attività, e inserisce il piano nel progetto appena lo approvi.",
+          "Aggiungi il Pianificatore Motir AI. Descrivigli la tua idea: pone le domande necessarie, organizza il lavoro in Epic, storie e attività, e inserisce il piano nel progetto dopo la tua approvazione.",
           "La realizzazione resta nelle tue mani. La tua orchestrazione prende le attività pronte da Motir via MCP, affida ciascuna a un agente e riporta il risultato."
         ],
-        "you": [
-          "L’approvazione del piano",
-          "I tuoi agenti, e quando parte ciascuno"
-        ],
+        "you": ["L’approvazione del piano", "I tuoi agenti e quando avviarli"],
         "motir": [
           "La pianificazione a partire dalla tua idea",
           "Bacheca, backlog, Sprint e roadmap",
@@ -2552,9 +2549,9 @@
       },
       {
         "label": "3 · Tutte e tre le parti",
-        "title": "Scrivi l’idea. Guardala diventare un piano. Guardala prendere forma.",
+        "title": "Scrivi la tua idea. Seguine la pianificazione, poi la realizzazione.",
         "paras": [
-          "Motir si occupa di tutto ciò che sta in mezzo. Il pianificatore trasforma la tua idea in un piano da approvare. Il piano approvato finisce sulla bacheca. La Flotta di agenti Motir prende ogni attività pronta, ci fa lavorare un agente e apre la pull request.",
+          "Motir gestisce tutte le fasi intermedie. Il pianificatore trasforma la tua idea in un piano da approvare. Il piano approvato passa sulla bacheca. La Flotta di agenti Motir prende ogni attività pronta, la affida a un agente e apre la pull request.",
           "Decidi tu nei punti chiave: approvi il piano, poi rivedi ciò che viene unito."
         ],
         "you": ["L’idea", "L’approvazione del piano e delle pull request"],

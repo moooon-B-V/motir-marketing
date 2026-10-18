@@ -125,7 +125,7 @@
     "skipToContent": "Przejdź do treści",
     "menu": "Menu",
     "howItWorks": "Jak działa Motir",
-    "howToUse": "Jak używać",
+    "howToUse": "Jak korzystać",
     "explore": "Budowane publicznie",
     "ideas": "Pomysły",
     "buildsItself": "Motir buduje się sam",
@@ -2495,7 +2495,7 @@
     "metaDescription": "Motir składa się z trzech części: planera, narzędzia do zarządzania projektami pośrodku i środowiska uruchamiania agentów. Korzystaj ze środkowej części z własnym planerem i agentami przez MCP, dodaj planer Motir albo pozwól Motir obsłużyć wszystkie trzy.",
     "eyebrow": "Jak korzystać z Motir",
     "headline": "Korzystaj z jednej części, dwóch albo wszystkich trzech.",
-    "lede": "Motir składa się z trzech części. Pośrodku jest narzędzie do zarządzania projektami, które przechowuje plan. Planer planuje do niego pracę. Środowisko uruchamiania agentów pobiera z niego zadania i je buduje. Każdą część, którą wolisz prowadzić sam, możesz prowadzić sam.",
+    "lede": "Motir składa się z trzech części. Pośrodku jest narzędzie do zarządzania projektami, które przechowuje plan. Planer zapisuje w nim plan pracy. Środowisko uruchamiania agentów pobiera z niego zadania i je realizuje. Każdą z tych części możesz też prowadzić samodzielnie.",
     "parts": [
       {
         "lead": "Planuje",
@@ -2505,29 +2505,29 @@
       {
         "lead": "Przechowuje plan",
         "name": "Zarządzanie projektami Motir",
-        "body": "Tablica, backlog, sprinty i roadmapa. Każdy planer i każdy agent, Twój czy Motir, pracuje za ich pośrednictwem."
+        "body": "Tablica, backlog, sprinty i roadmapa. Za ich pośrednictwem pracuje każdy planer i każdy agent, zarówno Twój, jak i Motir."
       },
       {
         "lead": "Buduje",
         "name": "Flota agentów Motir",
-        "body": "Bierze każde gotowe zadanie, uruchamia dla niego agenta na osobnej maszynie, równolegle z pozostałymi, i otwiera pull request."
+        "body": "Pobiera każde gotowe zadanie, uruchamia dla niego agenta na osobnej maszynie, równolegle z pozostałymi, i otwiera pull request."
       }
     ],
     "waysHeadline": "Trzy sposoby korzystania",
-    "youRun": "Ty prowadzisz",
-    "motirRuns": "Motir prowadzi",
+    "youRun": "Po Twojej stronie",
+    "motirRuns": "Po stronie Motir",
     "ways": [
       {
         "label": "1 · Tylko zarządzanie projektami",
         "title": "Twój planer, Twoi agenci, Motir pośrodku.",
         "paras": [
-          "Używaj Motir jako narzędzia do zarządzania projektami, a wszystko wokół niego zachowaj po swojemu.",
-          "Planowanie przez MCP jest otwarte. Napisz własny planer, skrypt albo agenta, a doda plan do Motir tymi samymi narzędziami, których używa planer Motir: `create_plan`, `add_plan_items` i `validate_plan`. Zanim powstał Planer Motir AI, Motir też tak planował siebie, skryptem o nazwie plan.py.",
-          "Twoi agenci łączą się przez MCP. Każdy bierze kolejne gotowe zadanie przez `claim_next_ready`, wykonuje je i raportuje wynik przez `close_work_item_run`. Motir śledzi, kto ma które zadanie i co zostało wdrożone."
+          "Używaj Motir jako narzędzia do zarządzania projektami, a pozostałe elementy dobierz według własnych potrzeb.",
+          "Planowanie przez MCP jest otwarte. Napisz własny planer w postaci skryptu lub agenta, a doda on plan do Motir tymi samymi narzędziami, z których korzysta planer Motir: `create_plan`, `add_plan_items` i `validate_plan`. Zanim powstał Planer Motir AI, Motir również planował w ten sposób własny rozwój, za pomocą skryptu plan.py.",
+          "Twoi agenci łączą się przez MCP. Każdy z nich pobiera kolejne gotowe zadanie za pomocą `claim_next_ready`, wykonuje je i raportuje wynik za pomocą `close_work_item_run`. Motir śledzi, kto ma które zadanie i co zostało wdrożone."
         ],
         "you": [
           "Twój planer",
-          "Twoi agenci i to, kiedy każdy z nich działa",
+          "Twoi agenci i harmonogram ich uruchamiania",
           "Zatwierdzanie planu"
         ],
         "motir": [
@@ -2541,12 +2541,12 @@
         "label": "2 · Planer i zarządzanie projektami",
         "title": "Motir planuje. Twoi agenci budują.",
         "paras": [
-          "Dodaj Planer Motir AI. Opisz mu swój pomysł: dopyta o to, co musi wiedzieć, rozpisze pracę na epiki, historie i zadania, a po Twoim zatwierdzeniu doda plan do projektu.",
-          "Budowanie zostaje po Twojej stronie. Twoja własna orkiestracja pobiera gotowe zadania z Motir przez MCP, przekazuje każde z nich agentowi i raportuje wynik."
+          "Dodaj Planer Motir AI. Opisz swój pomysł: planer zada potrzebne pytania, rozpisze pracę na epiki, historie i zadania, a po Twoim zatwierdzeniu doda plan do projektu.",
+          "Budowanie pozostaje po Twojej stronie. Własna orkiestracja pobiera gotowe zadania z Motir przez MCP, przekazuje każde z nich agentowi i raportuje wynik."
         ],
         "you": [
           "Zatwierdzanie planu",
-          "Twoi agenci i to, kiedy każdy z nich działa"
+          "Twoi agenci i harmonogram ich uruchamiania"
         ],
         "motir": [
           "Planowanie na podstawie Twojego pomysłu",
@@ -2559,7 +2559,7 @@
         "label": "3 · Wszystkie trzy części",
         "title": "Wpisz pomysł. Zobacz, jak powstaje plan. Zobacz, jak powstaje produkt.",
         "paras": [
-          "Motir zajmuje się wszystkim pomiędzy. Planer zamienia Twój pomysł w plan do zatwierdzenia. Zatwierdzony plan trafia na tablicę. Flota agentów Motir bierze każde gotowe zadanie, uruchamia dla niego agenta i otwiera pull request.",
+          "Wszystkim, co dzieje się pomiędzy, zajmuje się Motir. Planer zamienia Twój pomysł w plan do zatwierdzenia. Zatwierdzony plan trafia na tablicę. Flota agentów Motir pobiera każde gotowe zadanie, uruchamia dla niego agenta i otwiera pull request.",
           "Decydujesz w punktach kontrolnych: zatwierdzasz plan, a potem przeglądasz to, co ma zostać scalone."
         ],
         "you": ["Pomysł", "Zatwierdzanie planu i pull requestów"],
@@ -2588,7 +2588,7 @@
       "yourAgents": "Twoi agenci",
       "yourAgentsSub": "Twoja orkiestracja, dowolny klient MCP",
       "orchestration": "your-orchestrator",
-      "columns": ["Do startu", "W toku", "Gotowe"],
+      "columns": ["Do wykonania", "W toku", "Gotowe"],
       "plan": "Plan",
       "tasks": "Zadania",
       "results": "Wyniki",

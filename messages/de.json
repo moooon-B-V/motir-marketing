@@ -2491,22 +2491,22 @@
     "metaDescription": "Motir besteht aus drei Teilen: einem Planer, dem Projektmanagement-Tool in der Mitte und einem Agent-Runner. Nutzen Sie die Mitte mit Ihrem eigenen Planer und Ihren eigenen Agenten über MCP, nehmen Sie den Motir-Planer hinzu, oder lassen Sie Motir alle drei betreiben.",
     "eyebrow": "So nutzen Sie Motir",
     "headline": "Nutzen Sie einen Teil, zwei oder alle drei.",
-    "lede": "Motir besteht aus drei Teilen. Das Projektmanagement-Tool sitzt in der Mitte und enthält den Plan. Der Planer plant hinein. Der Agent-Runner nimmt sich Aufgaben daraus und baut sie. Jeden Teil, den Sie lieber selbst betreiben, können Sie selbst betreiben.",
+    "lede": "Motir besteht aus drei Teilen. Das Projektmanagement-Tool bildet die Mitte und enthält den Plan. Der Planer erstellt den Plan darin. Der Agent-Runner übernimmt Aufgaben daraus und setzt sie um. Jeden dieser Teile können Sie auch selbst betreiben.",
     "parts": [
       {
         "lead": "Plant",
         "name": "Motir AI Planer",
-        "body": "Macht aus Ihrer Idee Epics, Stories und Aufgaben und legt sie im Projekt ab, sobald Sie genehmigen."
+        "body": "Macht aus Ihrer Idee Epics, Stories und Aufgaben und legt sie nach Ihrer Genehmigung im Projekt an."
       },
       {
         "lead": "Enthält den Plan",
         "name": "Motir Projektmanagement",
-        "body": "Board, Backlog, Sprints und Roadmap. Jeder Planer und jeder Agent, ob Ihrer oder der von Motir, arbeitet darüber."
+        "body": "Board, Backlog, Sprints und Roadmap. Alle Planer und Agenten, ob Ihre eigenen oder die von Motir, arbeiten damit."
       },
       {
         "lead": "Baut",
         "name": "Motir Agentenflotte",
-        "body": "Nimmt jede bereite Aufgabe, lässt einen Agenten auf einer eigenen Maschine daran arbeiten, parallel zu den anderen, und öffnet den Pull Request."
+        "body": "Übernimmt jede bereite Aufgabe, lässt sie von einem Agenten auf einer eigenen Maschine parallel zu den anderen bearbeiten und öffnet den Pull Request."
       }
     ],
     "waysHeadline": "Drei Wege, Motir zu nutzen",
@@ -2517,18 +2517,18 @@
         "label": "1 · Nur Projektmanagement",
         "title": "Ihr Planer, Ihre Agenten, Motir in der Mitte.",
         "paras": [
-          "Nutzen Sie Motir als Projektmanagement-Tool und behalten Sie alles drumherum in eigener Hand.",
-          "Die Planung über MCP ist offen. Schreiben Sie Ihren eigenen Planer, ein Skript oder einen Agenten, und er legt den Plan mit denselben Tools in Motir ab, die auch der Planer von Motir nutzt: `create_plan`, `add_plan_items` und `validate_plan`. Bevor es den Motir AI Planer gab, hat Motir sich selbst genauso geplant, mit einem Skript namens plan.py.",
-          "Ihre Agenten verbinden sich über MCP. Jeder holt sich mit `claim_next_ready` die nächste bereite Aufgabe, führt sie aus und meldet sich mit `close_work_item_run` zurück. Motir behält im Blick, wer welche Aufgabe hat und was ausgeliefert wurde."
+          "Nutzen Sie Motir als Projektmanagement-Tool und behalten Sie alles Weitere in eigener Hand.",
+          "Die Planung über MCP steht Ihnen offen. Schreiben Sie Ihren eigenen Planer als Skript oder Agenten: Er legt den Plan mit denselben Tools in Motir an, die auch der Planer von Motir nutzt, nämlich `create_plan`, `add_plan_items` und `validate_plan`. Bevor es den Motir AI Planer gab, plante Motir sich auf diese Weise selbst, mit einem Skript namens plan.py.",
+          "Ihre Agenten verbinden sich über MCP. Jeder Agent übernimmt mit `claim_next_ready` die nächste bereite Aufgabe, führt sie aus und meldet das Ergebnis mit `close_work_item_run` zurück. Motir hält fest, wer welche Aufgabe hat und was ausgeliefert wurde."
         ],
         "you": [
           "Ihr Planer",
-          "Ihre Agenten und wann jeder läuft",
+          "Ihre Agenten und wann sie laufen",
           "Die Genehmigung des Plans"
         ],
         "motir": [
           "Board, Backlog, Sprints und Roadmap",
-          "Eine Prüfung jedes Plans, bevor er ankommt",
+          "Eine Prüfung jedes Plans vor der Übernahme",
           "Wer welche Aufgabe hat und was ausgeliefert wurde"
         ],
         "links": ["Über MCP verbinden", "Alle MCP-Tools"]
@@ -2537,12 +2537,12 @@
         "label": "2 · Planer und Projektmanagement",
         "title": "Motir plant. Ihre Agenten bauen.",
         "paras": [
-          "Nehmen Sie den Motir AI Planer hinzu. Geben Sie ihm Ihre Idee: Er fragt nach, was er wissen muss, gliedert die Arbeit in Epics, Stories und Aufgaben und legt den Plan im Projekt ab, sobald Sie ihn genehmigen.",
+          "Nehmen Sie den Motir AI Planer hinzu. Geben Sie ihm Ihre Idee: Er klärt offene Fragen, gliedert die Arbeit in Epics, Stories und Aufgaben und legt den Plan im Projekt an, sobald Sie ihn genehmigen.",
           "Das Bauen bleibt bei Ihnen. Ihre eigene Orchestrierung holt bereite Aufgaben über MCP aus Motir, übergibt jede an einen Agenten und meldet das Ergebnis zurück."
         ],
         "you": [
           "Die Genehmigung des Plans",
-          "Ihre Agenten und wann jeder läuft"
+          "Ihre Agenten und wann sie laufen"
         ],
         "motir": [
           "Planung aus Ihrer Idee",
@@ -2553,16 +2553,16 @@
       },
       {
         "label": "3 · Alle drei Teile",
-        "title": "Idee eintippen. Zusehen, wie sie geplant wird. Zusehen, wie sie gebaut wird.",
+        "title": "Idee eingeben. Planung verfolgen. Umsetzung verfolgen.",
         "paras": [
-          "Motir kümmert sich um alles dazwischen. Der Planer macht aus Ihrer Idee einen Plan, den Sie genehmigen. Der genehmigte Plan kommt aufs Board. Die Motir Agentenflotte nimmt jede bereite Aufgabe, lässt einen Agenten daran arbeiten und öffnet den Pull Request.",
-          "Sie entscheiden an den Gates: Sie genehmigen den Plan und prüfen dann, was gemergt wird."
+          "Motir übernimmt alles dazwischen. Der Planer macht aus Ihrer Idee einen Plan, den Sie genehmigen. Der genehmigte Plan wird auf das Board übernommen. Die Motir Agentenflotte übernimmt jede bereite Aufgabe, lässt sie von einem Agenten bearbeiten und öffnet den Pull Request.",
+          "Sie entscheiden an zwei Stellen: Sie genehmigen den Plan und prüfen anschließend, was gemergt wird."
         ],
         "you": ["Die Idee", "Die Genehmigung des Plans und der Pull Requests"],
         "motir": [
           "Planung",
           "Board, Backlog, Sprints und Roadmap",
-          "Den Betrieb der Agenten"
+          "Betrieb der Agenten"
         ],
         "links": ["Kostenlos starten", "So funktioniert Motir"]
       }

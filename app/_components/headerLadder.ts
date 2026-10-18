@@ -93,10 +93,10 @@ export const LADDER_CLASSES: Record<Locale, LadderClasses> = {
   },
   pl: {
     bar: 'gap-4 text-[15px]',
-    setup: 'hidden min-[1618px]:inline-flex',
-    nav: 'hidden min-[1325px]:flex',
-    wide: 'hidden min-[1325px]:inline-flex',
-    menu: 'min-[1325px]:hidden',
+    setup: 'hidden min-[1634px]:inline-flex',
+    nav: 'hidden min-[1341px]:flex',
+    wide: 'hidden min-[1341px]:inline-flex',
+    menu: 'min-[1341px]:hidden',
   },
   pt: {
     bar: 'gap-4 text-[15px]',

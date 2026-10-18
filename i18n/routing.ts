@@ -114,6 +114,6 @@ export const HEADER_LADDER: Record<Locale, { a: number; b: number }> = {
   es: { a: 1691, b: 1383 },
   it: { a: 1618, b: 1302 },
   nl: { a: 1562, b: 1294 },
-  pl: { a: 1618, b: 1325 },
+  pl: { a: 1634, b: 1341 },
   pt: { a: 1656, b: 1353 },
 }

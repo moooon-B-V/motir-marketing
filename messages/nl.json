@@ -2487,25 +2487,25 @@
     "metaDescription": "Motir bestaat uit drie onderdelen: een planner, de projectmanagementtool in het midden en een agent-runner. Gebruik het midden met je eigen planner en agents via MCP, voeg de Motir-planner toe, of laat Motir alle drie draaien.",
     "eyebrow": "Zo gebruik je Motir",
     "headline": "Gebruik één onderdeel, twee of alle drie.",
-    "lede": "Motir bestaat uit drie onderdelen. De projectmanagementtool zit in het midden en bevat het plan. De planner plant erin. De agent-runner pakt er taken uit en bouwt ze. Elk onderdeel dat je liever zelf draait, kun je zelf draaien.",
+    "lede": "Motir bestaat uit drie onderdelen. De projectmanagementtool vormt het midden en bevat het plan. De planner stelt dat plan op. De agent-runner haalt er taken uit en voert ze uit. Elk onderdeel kun je ook zelf draaien.",
     "parts": [
       {
         "lead": "Plant",
         "name": "Motir AI Planner",
-        "body": "Maakt van je idee epics, stories en taken, en zet ze in het project zodra je goedkeurt."
+        "body": "Maakt van je idee epics, stories en taken en zet ze na je goedkeuring in het project."
       },
       {
         "lead": "Bevat het plan",
         "name": "Motir Projectmanagement",
-        "body": "Het bord, de backlog, sprints en roadmap. Elke planner en elke agent, van jou of van Motir, werkt erdoorheen."
+        "body": "Het bord, de backlog, sprints en roadmap. Alle planners en agents, die van jezelf en die van Motir, werken ermee."
       },
       {
         "lead": "Bouwt",
         "name": "Motir Agentenvloot",
-        "body": "Pakt elke taak die klaarstaat, laat er een agent aan werken op een eigen machine, parallel aan de andere, en opent de pull request."
+        "body": "Neemt elke taak die klaarstaat, laat die op een eigen machine door een agent uitvoeren, parallel aan de andere taken, en opent de pull request."
       }
     ],
-    "waysHeadline": "Drie manieren om het te gebruiken",
+    "waysHeadline": "Drie manieren om Motir te gebruiken",
     "youRun": "Jij draait",
     "motirRuns": "Motir draait",
     "ways": [
@@ -2513,18 +2513,18 @@
         "label": "1 · Alleen projectmanagement",
         "title": "Jouw planner, jouw agents, Motir in het midden.",
         "paras": [
-          "Gebruik Motir als projectmanagementtool en houd alles eromheen in eigen hand.",
-          "Plannen via MCP blijft open. Schrijf je eigen planner, een script of een agent, en die zet het plan in Motir met dezelfde tools die de planner van Motir gebruikt: `create_plan`, `add_plan_items` en `validate_plan`. Voordat Motir AI Planner er was, plande Motir zichzelf ook zo, met een script dat plan.py heet.",
-          "Je agents maken verbinding via MCP. Elke agent pakt met `claim_next_ready` de volgende taak die klaarstaat, voert die uit en meldt zich terug met `close_work_item_run`. Motir houdt bij wie welke taak heeft en wat er is opgeleverd."
+          "Gebruik Motir als projectmanagementtool en houd al het andere in eigen hand.",
+          "Plannen via MCP staat open. Schrijf je eigen planner als script of agent: die zet het plan in Motir met dezelfde tools die de planner van Motir gebruikt, namelijk `create_plan`, `add_plan_items` en `validate_plan`. Voordat Motir AI Planner bestond, plande Motir zichzelf op dezelfde manier, met een script genaamd plan.py.",
+          "Je agents maken verbinding via MCP. Elke agent haalt met `claim_next_ready` de volgende taak op die klaarstaat, voert die uit en meldt het resultaat met `close_work_item_run`. Motir houdt bij wie welke taak heeft en wat er is opgeleverd."
         ],
         "you": [
           "Je planner",
-          "Je agents, en wanneer elk ervan draait",
+          "Je agents en wanneer ze draaien",
           "Het plan goedkeuren"
         ],
         "motir": [
           "Het bord, de backlog, sprints en roadmap",
-          "Een controle van elk plan voordat het binnenkomt",
+          "Een controle van elk plan voordat het wordt toegevoegd",
           "Wie welke taak heeft, en wat er is opgeleverd"
         ],
         "links": ["Verbinden via MCP", "Alle MCP-tools"]
@@ -2533,13 +2533,10 @@
         "label": "2 · Planner en projectmanagement",
         "title": "Motir plant. Jouw agents bouwen.",
         "paras": [
-          "Voeg Motir AI Planner toe. Geef hem je idee: hij vraagt wat hij moet weten, deelt het werk op in epics, stories en taken, en zet het plan in het project zodra je het goedkeurt.",
-          "Het bouwen blijft van jou. Je eigen orkestratie haalt via MCP taken die klaarstaan uit Motir, geeft elke taak aan een agent en meldt het resultaat terug."
+          "Voeg Motir AI Planner toe. Geef hem je idee: hij stelt de vragen die nodig zijn, deelt het werk op in epics, stories en taken, en zet het plan in het project zodra je het goedkeurt.",
+          "Het bouwen houd je zelf in handen. Je eigen orkestratie haalt via MCP taken die klaarstaan uit Motir, geeft elke taak aan een agent en meldt het resultaat terug."
         ],
-        "you": [
-          "Het plan goedkeuren",
-          "Je agents, en wanneer elk ervan draait"
-        ],
+        "you": ["Het plan goedkeuren", "Je agents en wanneer ze draaien"],
         "motir": [
           "Plannen vanuit je idee",
           "Het bord, de backlog, sprints en roadmap",
@@ -2549,10 +2546,10 @@
       },
       {
         "label": "3 · Alle drie de onderdelen",
-        "title": "Typ het idee. Zie het gepland worden. Zie het gebouwd worden.",
+        "title": "Typ je idee. Volg de planning. Volg de bouw.",
         "paras": [
-          "Motir regelt alles daartussen. De planner maakt van je idee een plan dat jij goedkeurt. Het goedgekeurde plan gaat op het bord. Motir Agentenvloot pakt elke taak die klaarstaat, laat er een agent aan werken en opent de pull request.",
-          "Jij beslist bij de poorten: keur het plan goed en beoordeel daarna wat er wordt gemerged."
+          "Motir regelt alles daartussen. De planner maakt van je idee een plan dat jij goedkeurt. Het goedgekeurde plan komt op het bord. Motir Agentenvloot neemt elke taak die klaarstaat, laat die door een agent uitvoeren en opent de pull request.",
+          "Jij beslist op twee momenten: je keurt het plan goed en beoordeelt daarna wat er wordt gemerged."
         ],
         "you": ["Het idee", "Het plan en de pull requests goedkeuren"],
         "motir": [
@@ -2568,7 +2565,7 @@
       "pm": "Projectmanagement",
       "runner": "Agent-runner",
       "motir": "Motir",
-      "yours": "Van jou",
+      "yours": "Eigen",
       "plannerName": "Motir AI Planner",
       "pmName": "Motir Projectmanagement",
       "fleetName": "Motir Agentenvloot",
