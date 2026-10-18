@@ -22,35 +22,71 @@ export interface LadderClasses {
   menu: string
 }
 
-const LATIN_WIDE: LadderClasses = {
-  setup: 'hidden min-[1560px]:inline-flex',
-  nav: 'hidden min-[1314px]:flex',
-  wide: 'hidden min-[1314px]:inline-flex',
-  menu: 'min-[1314px]:hidden',
-}
-
-const CJK: LadderClasses = {
-  setup: 'hidden min-[1488px]:inline-flex',
-  nav: 'hidden min-[1173px]:flex',
-  wide: 'hidden min-[1173px]:inline-flex',
-  menu: 'min-[1173px]:hidden',
-}
-
 export const LADDER_CLASSES: Record<Locale, LadderClasses> = {
   en: {
-    setup: 'hidden min-[1364px]:inline-flex',
-    nav: 'hidden min-[1148px]:flex',
-    wide: 'hidden min-[1148px]:inline-flex',
-    menu: 'min-[1148px]:hidden',
+    setup: 'hidden min-[1396px]:inline-flex',
+    nav: 'hidden min-[1179px]:flex',
+    wide: 'hidden min-[1179px]:inline-flex',
+    menu: 'min-[1179px]:hidden',
   },
-  zh: CJK,
-  ja: CJK,
-  ko: CJK,
-  de: LATIN_WIDE,
-  fr: LATIN_WIDE,
-  es: LATIN_WIDE,
-  it: LATIN_WIDE,
-  nl: LATIN_WIDE,
-  pl: LATIN_WIDE,
-  pt: LATIN_WIDE,
+  zh: {
+    setup: 'hidden min-[1152px]:inline-flex',
+    nav: 'hidden min-[971px]:flex',
+    wide: 'hidden min-[971px]:inline-flex',
+    menu: 'min-[971px]:hidden',
+  },
+  ja: {
+    setup: 'hidden min-[1518px]:inline-flex',
+    nav: 'hidden min-[1217px]:flex',
+    wide: 'hidden min-[1217px]:inline-flex',
+    menu: 'min-[1217px]:hidden',
+  },
+  ko: {
+    setup: 'hidden min-[1281px]:inline-flex',
+    nav: 'hidden min-[1086px]:flex',
+    wide: 'hidden min-[1086px]:inline-flex',
+    menu: 'min-[1086px]:hidden',
+  },
+  de: {
+    setup: 'hidden min-[1562px]:inline-flex',
+    nav: 'hidden min-[1268px]:flex',
+    wide: 'hidden min-[1268px]:inline-flex',
+    menu: 'min-[1268px]:hidden',
+  },
+  fr: {
+    setup: 'hidden min-[1718px]:inline-flex',
+    nav: 'hidden min-[1396px]:flex',
+    wide: 'hidden min-[1396px]:inline-flex',
+    menu: 'min-[1396px]:hidden',
+  },
+  es: {
+    setup: 'hidden min-[1597px]:inline-flex',
+    nav: 'hidden min-[1289px]:flex',
+    wide: 'hidden min-[1289px]:inline-flex',
+    menu: 'min-[1289px]:hidden',
+  },
+  it: {
+    setup: 'hidden min-[1513px]:inline-flex',
+    nav: 'hidden min-[1197px]:flex',
+    wide: 'hidden min-[1197px]:inline-flex',
+    menu: 'min-[1197px]:hidden',
+  },
+  nl: {
+    setup: 'hidden min-[1480px]:inline-flex',
+    nav: 'hidden min-[1212px]:flex',
+    wide: 'hidden min-[1212px]:inline-flex',
+    menu: 'min-[1212px]:hidden',
+  },
+  pl: {
+    setup: 'hidden min-[1533px]:inline-flex',
+    nav: 'hidden min-[1240px]:flex',
+    wide: 'hidden min-[1240px]:inline-flex',
+    menu: 'min-[1240px]:hidden',
+  },
+  pt: {
+    setup: 'hidden min-[1584px]:inline-flex',
+    nav: 'hidden min-[1281px]:flex',
+    wide: 'hidden min-[1281px]:inline-flex',
+    menu: 'min-[1281px]:hidden',
+  },
 }
