@@ -73,6 +73,14 @@ describe('the root card is set in @motir/brand’s Inter, not a copy of its own'
     }
   })
 
+  it('hands satori the SAME array per locale, so it parses the faces once', async () => {
+    // satori's parsed-font cache is a WeakMap keyed by the `fonts` array; a new
+    // array per draw re-parses every face (the 2026-10-18 outage).
+    expect(await loadOgFonts('en')).toBe(await loadOgFonts('en'))
+    expect(await loadOgFonts('ja')).toBe(await loadOgFonts('ja'))
+    expect(await loadOgFonts('ja')).not.toBe(await loadOgFonts('en'))
+  })
+
   it('still renders a real PNG at 1200 x 630', async () => {
     const { default: route, size } =
       await import('@/app/[locale]/opengraph-image')

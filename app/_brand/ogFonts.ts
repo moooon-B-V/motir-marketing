@@ -136,12 +136,30 @@ export function ogFontFamily(locale = 'en'): string {
 /**
  * The `fonts` array for `new ImageResponse(..., { fonts })`.
  *
- * Read per request rather than cached at module scope: the OG route is rendered
- * rarely and by a cold function most times it is hit, so a module-level cache
- * buys nothing and would pin ~1 MB in every warm instance of a route that also
- * serves nothing else.
+ * ⚠️ ONE ARRAY PER LOCALE FOR THE LIFE OF THE PROCESS, AND THE IDENTITY IS THE
+ * POINT. satori keeps the fonts it has parsed in a `WeakMap` keyed by the
+ * `fonts` ARRAY it is handed (`next/dist/compiled/@vercel/og`), so a fresh
+ * array per request — what this used to return, on the reasoning that the
+ * route is "rendered rarely" — re-reads and re-parses every face on every
+ * draw. The per-project card is drawn at request time, and on 2026-10-18 a
+ * crawl of it ran both machines out of memory (`ogRenderGate.ts`). Pinning
+ * the faces costs ~1 MB per locale actually drawn.
+ *
+ * A failed read is not kept, so the next draw tries again.
  */
-export async function loadOgFonts(locale = 'en'): Promise<OgFont[]> {
+export function loadOgFonts(locale = 'en'): Promise<OgFont[]> {
+  let fonts = loadedFonts.get(locale)
+  if (!fonts) {
+    fonts = readOgFonts(locale)
+    loadedFonts.set(locale, fonts)
+    fonts.catch(() => loadedFonts.delete(locale))
+  }
+  return fonts
+}
+
+const loadedFonts = new Map<string, Promise<OgFont[]>>()
+
+async function readOgFonts(locale: string): Promise<OgFont[]> {
   const inter = OG_FONT_FACES.map(async ({ file, weight }) => ({
     name: OG_FONT_FAMILY,
     data: await readFile(path.join(FONT_DIR, file)),

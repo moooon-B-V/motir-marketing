@@ -146,11 +146,18 @@ export type PublicRead<T> =
  * `next: { revalidate: 0 }` keeps the read at request time: a public project
  * page shows a live board and a live changelog, and a copy frozen into the build
  * would serve a project's state as it was when the site last deployed.
+ *
+ * `revalidate` is for the one caller that must NOT read per request: the
+ * project's social card (`app/[locale]/p/[identifier]/opengraph-image.tsx`),
+ * whose route is ISR — an uncached fetch would make it dynamic again.
  */
-export async function readPublic<T>(path: string): Promise<PublicRead<T>> {
+export async function readPublic<T>(
+  path: string,
+  revalidate = 0,
+): Promise<PublicRead<T>> {
   try {
     const res = await fetch(`${PUBLIC_API_BASE}${path}`, {
-      next: { revalidate: 0 },
+      next: { revalidate },
       headers: { accept: 'application/json' },
     })
     // 404 is the API SAYING something — the project is not public, or the key is
@@ -167,9 +174,11 @@ export async function readPublic<T>(path: string): Promise<PublicRead<T>> {
 /** The project SUBJECT — the hero, the authored overview, the stats. */
 export function loadProject(
   identifier: string,
+  revalidate = 0,
 ): Promise<PublicRead<PublicProjectOverviewDto>> {
   return readPublic<PublicProjectOverviewDto>(
     `/p/${encodeURIComponent(identifier)}`,
+    revalidate,
   )
 }
 
