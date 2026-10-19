@@ -900,8 +900,12 @@ body {
   }
 }
 @media (min-width: 1100px) and (prefers-reduced-motion: no-preference) {
+  /* The open lid's perspective projection reaches past the screen's sides;
+     clip it so the page never scrolls sideways. `clip`, not `hidden`, so the
+     stage is no scroll container and the pin still sticks to the viewport. */
   .hiw-stage {
     height: calc(100vh * (1 + var(--run)));
+    overflow-x: clip;
   }
   .hiw-pin {
     position: sticky;
