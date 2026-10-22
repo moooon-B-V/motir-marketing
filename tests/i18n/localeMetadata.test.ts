@@ -8,7 +8,7 @@ import {
   projectAlternates,
 } from '@/lib/localeMetadata'
 import { englishCopy, resolveCopy } from '@/lib/copy'
-import { LOCALES, OG_LOCALE } from '@/i18n/routing'
+import { LOCALE_BCP47, LOCALES, OG_LOCALE } from '@/i18n/routing'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 
@@ -16,7 +16,7 @@ import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
  * CRAWL DATA PER LANGUAGE (MOTIR-7956).
  *
  * Every motir.co page names its own address in its own language as the
- * canonical, lists all eleven language versions plus `x-default`, and reads
+ * canonical, lists all twelve language versions plus `x-default`, and reads
  * its title and description from that locale's catalogue. One helper spells
  * all of it, and the sitemap uses the same helper, so the two cannot disagree
  * (`tests/host/crawlSurface.test.ts` holds the sitemap half).
@@ -40,11 +40,14 @@ describe('the helper', () => {
     expect(localizedPath('fr', '/?q=x')).toBe('/fr?q=x')
   })
 
-  it('lists twelve alternates — the eleven locales and x-default on English', () => {
+  it('lists thirteen alternates — the twelve locales by BCP 47 tag and x-default on English', () => {
     const languages = languageAlternates('/design')
     expect(Object.keys(languages).sort()).toEqual(
-      [...LOCALES, 'x-default'].sort(),
+      [...LOCALES.map((l) => LOCALE_BCP47[l]), 'x-default'].sort(),
     )
+    expect(languages['zh-TW']).toBe(siteUrl('/zh-tw/design'))
+    expect(languages.zh).toBe(siteUrl('/zh/design'))
+    expect(languages).not.toHaveProperty('zh-tw')
     for (const url of Object.values(languages)) {
       expect(url.startsWith(`${SITE_ORIGIN}/`)).toBe(true)
     }
@@ -53,7 +56,7 @@ describe('the helper', () => {
     expect(languages.ja).toBe(siteUrl('/ja/design'))
   })
 
-  it('canonicalises a page to its own language address, with og:locale and ten alternates', () => {
+  it('canonicalises a page to its own language address, with og:locale and eleven alternates', () => {
     const meta = localeMetadata({
       locale: 'ja',
       copy: englishCopy,
@@ -65,7 +68,7 @@ describe('the helper', () => {
     expect(meta.alternates?.languages).toEqual(languageAlternates('/design'))
     const og = meta.openGraph as Record<string, unknown>
     expect(og.locale).toBe(OG_LOCALE.ja)
-    expect(og.alternateLocale).toHaveLength(10)
+    expect(og.alternateLocale).toHaveLength(11)
     expect(og.alternateLocale).not.toContain(OG_LOCALE.ja)
     expect(og.url).toBe(siteUrl('/ja/design'))
     // A child `openGraph` replaces the root's, so the share card is named —
@@ -101,7 +104,7 @@ describe('the landing reads its words from the locale’s catalogue', () => {
     })
     expect(ja.title).toBe('モティア')
     expect(canonicalOf(ja).endsWith('/ja')).toBe(true)
-    expect(Object.keys(ja.alternates?.languages ?? {})).toHaveLength(12)
+    expect(Object.keys(ja.alternates?.languages ?? {})).toHaveLength(13)
 
     const de = await generateMetadata({
       params: Promise.resolve({ locale: 'de' }),
@@ -254,7 +257,7 @@ describe('every converted page canonicalises to its own language address', () =>
 })
 
 describe('a public project page', () => {
-  it('on motir.co: its own language address, and the twelve alternates', () => {
+  it('on motir.co: its own language address, and the thirteen alternates', () => {
     const alternates = projectAlternates('fr', 'https://motir.co/p/MOTIR')
     expect(alternates.canonical).toBe(siteUrl('/fr/p/MOTIR'))
     expect(alternates.languages).toEqual(languageAlternates('/p/MOTIR'))

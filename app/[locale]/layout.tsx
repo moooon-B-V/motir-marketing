@@ -14,10 +14,10 @@ import { siteMetadata } from '../_components/siteMetadata'
  *
  * ── ⚠️ STATIC, AND THREE LINES KEEP IT SO ────────────────────────────────
  *
- *  • `generateStaticParams` names the eleven, so each one is built ahead of
+ *  • `generateStaticParams` names the twelve, so each one is built ahead of
  *    time rather than on first request.
  *  • `dynamicParams = false` makes any other first segment — `/sv/`, a typo —
- *    a 404 without a render, and keeps a request from minting a twelfth tree.
+ *    a 404 without a render, and keeps a request from minting a thirteenth tree.
  *  • `setRequestLocale` tells next-intl the locale up front. Without it, any
  *    next-intl read below would ask the REQUEST for the locale, and a request
  *    read turns a static page dynamic — every page under this layout calls it

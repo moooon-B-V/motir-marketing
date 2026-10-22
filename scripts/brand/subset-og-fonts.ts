@@ -22,7 +22,7 @@
  * the answer is TrueType (satori cannot read WOFF2). No build, test or CI lane
  * runs it: the subsets are committed, so the build stays offline, the way the
  * Inter bytes already ship. Run it after changing one of those three keys in
- * `messages/{zh,ja,ko}.json`; `tests/ogFonts.test.ts` fails until you do.
+ * `messages/{zh,zh-tw,ja,ko}.json`; `tests/ogFonts.test.ts` fails until you do.
  *
  * Pure helpers are exported for `tests/brand/subsetOgFonts.test.ts`; `main()`
  * runs only as the entry point, the same shape as `scripts/design/render-design-mock.ts`.
@@ -34,7 +34,7 @@ import path from 'node:path'
 import { format } from 'prettier'
 
 /** The locales whose script Inter cannot draw. */
-export const OG_CJK_LOCALES = ['zh', 'ja', 'ko'] as const
+export const OG_CJK_LOCALES = ['zh', 'zh-tw', 'ja', 'ko'] as const
 export type OgCjkLocale = (typeof OG_CJK_LOCALES)[number]
 
 export const OG_WEIGHTS = [400, 700, 800] as const

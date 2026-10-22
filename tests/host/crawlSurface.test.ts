@@ -115,15 +115,15 @@ describe('the sitemap on motir.co', () => {
     const { entries } = await crawlSurfaceAs({})
     const project = entries.filter((e) => /\/p\/MOTIR(\/|$)/.test(e.url))
 
-    // Two served tabs (the page and its changelog) × eleven locales.
-    expect(project).toHaveLength(2 * 11)
+    // Two served tabs (the page and its changelog) × twelve locales.
+    expect(project).toHaveLength(2 * 12)
     expect(project.map((e) => e.url)).toContain('https://motir.co/fr/p/MOTIR')
     expect(project.map((e) => e.url)).toContain(
       'https://motir.co/ja/p/MOTIR/changelog',
     )
     for (const entry of project) {
       const languages = entry.alternates?.languages as Record<string, string>
-      expect(Object.keys(languages), entry.url).toHaveLength(12)
+      expect(Object.keys(languages), entry.url).toHaveLength(13)
       expect(Object.values(languages)).toContain(entry.url)
     }
   })

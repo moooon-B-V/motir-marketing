@@ -118,8 +118,8 @@ const bodyOf = (page: HTMLElement) =>
   page.querySelector('header')!.nextElementSibling as HTMLElement
 
 describe('the population is real', () => {
-  it('sweeps eleven locales and at least seven documents', () => {
-    expect(LOCALES).toHaveLength(11)
+  it('sweeps twelve locales and at least seven documents', () => {
+    expect(LOCALES).toHaveLength(12)
     expect(SLUGS.length).toBeGreaterThanOrEqual(7)
     expect(MATRIX).toHaveLength(LOCALES.length * SLUGS.length)
   })

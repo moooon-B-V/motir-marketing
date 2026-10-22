@@ -1034,7 +1034,7 @@ body {
 }
 
 /*
- * The CJK font a zh, ja or ko visitor picks on `/design` (Yue, 2026-10-09).
+ * The CJK font a zh, zh-tw, ja or ko visitor picks on `/design` (Yue, 2026-10-09).
  * One pick draws all of that language's text — headings, body and the mono
  * role's code and labels alike — in the face; with nothing picked, the
  * language's site default does (LXGW WenKai for Chinese, the set's default
@@ -1061,6 +1061,29 @@ body {
   --font-script-sans: var(--font-set-zh-Hans-serif-lxgw-wenkai-tc, serif);
   --font-script-serif: var(--font-set-zh-Hans-serif-lxgw-wenkai-tc, serif);
   --font-script-mono: var(--font-set-zh-Hans-serif-lxgw-wenkai-tc, serif);
+}
+/*
+ * Traditional Chinese (Taiwan), MOTIR-9248. `:lang(zh)` ALSO matches zh-TW, so
+ * these blocks sit after the zh ones at the same specificity: a visitor who
+ * picked a Simplified face on `/zh` keeps `data-cjk-zh` on `<html>` across a
+ * client-side move to `/zh-tw`, and source order is what keeps that pick off
+ * the Traditional page.
+ */
+[lang][data-cjk-zh-tw='noto-sans-tc']:lang(zh-TW) {
+  --font-script-sans: var(--font-set-zh-Hant-sans-noto-sans-tc, sans-serif);
+  --font-script-serif: var(--font-set-zh-Hant-sans-noto-sans-tc, sans-serif);
+  --font-script-mono: var(--font-set-zh-Hant-sans-noto-sans-tc, sans-serif);
+}
+[lang][data-cjk-zh-tw='noto-serif-tc']:lang(zh-TW) {
+  --font-script-sans: var(--font-set-zh-Hant-serif-noto-serif-tc, serif);
+  --font-script-serif: var(--font-set-zh-Hant-serif-noto-serif-tc, serif);
+  --font-script-mono: var(--font-set-zh-Hant-serif-noto-serif-tc, serif);
+}
+[lang]:lang(zh-TW):not([data-cjk-zh-tw]),
+[lang][data-cjk-zh-tw='lxgw-wenkai-tc']:lang(zh-TW) {
+  --font-script-sans: var(--font-set-zh-Hant-serif-lxgw-wenkai-tc, serif);
+  --font-script-serif: var(--font-set-zh-Hant-serif-lxgw-wenkai-tc, serif);
+  --font-script-mono: var(--font-set-zh-Hant-serif-lxgw-wenkai-tc, serif);
 }
 [lang]:lang(ja):not([data-cjk-ja]),
 [lang][data-cjk-ja='noto-sans-jp']:lang(ja) {

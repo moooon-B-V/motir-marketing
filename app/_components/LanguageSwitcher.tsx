@@ -5,7 +5,12 @@ import { usePathname } from 'next/navigation'
 import { Check, Globe } from 'lucide-react'
 import { buttonVariants, cn } from '@motir/design-system'
 import { stripLocale } from '@/i18n/sitePathname'
-import { LOCALE_ENDONYMS, LOCALES, type Locale } from '@/i18n/routing'
+import {
+  LOCALE_BCP47,
+  LOCALE_ENDONYMS,
+  LOCALES,
+  type Locale,
+} from '@/i18n/routing'
 import { format, useCopy, usePageLocale } from '@/lib/copy'
 import { rememberLocale, switchHref } from '@/lib/languageSwitch'
 import type { PublicHost } from '@/lib/publicHost'
@@ -14,7 +19,7 @@ import { useDismiss } from './useDismiss'
 /*
  * THE LANGUAGE SWITCHER (MOTIR-7953), built to MOTIR-7947's revision 2: a globe
  * at the bar's right edge, after Start free, at every width. It opens an
- * end-aligned group of the eleven languages, each in its own script.
+ * end-aligned group of the twelve languages, each in its own script.
  *
  * ⚠️ THE ENTRIES ARE LINKS, AND CHOOSING ONE IS A FULL NAVIGATION. motir.co
  * gives every language its own address, so an entry is the page being read
@@ -22,7 +27,7 @@ import { useDismiss } from './useDismiss'
  * click first writes the remembered-choice cookie, then `location.assign`s —
  * never `next/link` or `router.push`: `<html lang>`, the font set and the root
  * `[locale]` layout must all re-render, and a `next/link` would RSC-prefetch
- * ten other languages' pages on every render. On a tenant host the entry is
+ * eleven other languages' pages on every render. On a tenant host the entry is
  * the same address, and the cookie is the whole signal (`proxy.ts` reads it).
  *
  * ⚠️ NO `useSearchParams()`: it would bail every statically rendered page out
@@ -94,8 +99,8 @@ export function LanguageSwitcher({ host }: { host: PublicHost }) {
               <a
                 key={locale}
                 href={switchHref(host, path, locale)}
-                lang={locale}
-                hrefLang={locale}
+                lang={LOCALE_BCP47[locale]}
+                hrefLang={LOCALE_BCP47[locale]}
                 aria-current={isCurrent ? 'true' : undefined}
                 onClick={(event) => choose(event, locale)}
                 className={cn(

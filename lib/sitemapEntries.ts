@@ -79,13 +79,13 @@ import {
  * which is itself in this list, so a short sitemap is a delay rather than a hole.
  */
 /*
- * ⚠️ EVERY motir.co PAGE APPEARS ELEVEN TIMES (MOTIR-7956). The site is
- * served in eleven languages, each at its own address (English unprefixed, the
+ * ⚠️ EVERY motir.co PAGE APPEARS TWELVE TIMES (MOTIR-7956). The site is
+ * served in twelve languages, each at its own address (English unprefixed, the
  * rest under `/<locale>/`), and a crawler is told about a language version the
  * same two ways it is told about a page: by the page's own `hreflang` set and
  * by this file. So each motir.co page — the static ones below, and a project
  * whose primary address is motir.co — is one entry per locale, and every one of
- * those entries carries the same twelve alternates (the eleven plus
+ * those entries carries the same thirteen alternates (the twelve plus
  * `x-default`) the page's `<head>` does, spelled by the same helper
  * (`lib/localeMetadata.ts`), so the two cannot disagree. A tenant host is not
  * multiplied: one URL there serves every language by cookie and
@@ -98,7 +98,7 @@ import {
  * the same thing the page head does: one entry, at the English address, no
  * alternates, spelled by the same `englishOnlyCanonical`. The `/legal` INDEX
  * is not an exception: its title, intro and contact line are genuinely
- * translated, so it stays eleven entries like every other page.
+ * translated, so it stays twelve entries like every other page.
  */
 type Entry = MetadataRoute.Sitemap[number]
 
@@ -167,7 +167,7 @@ export async function projectSitemapEntries(
             // link and /explore's cards point at.
             priority: tab.segment ? 0.5 : 0.8,
           }
-          // On motir.co a project page has eleven language addresses; on a
+          // On motir.co a project page has twelve language addresses; on a
           // tenant host, one (the note above).
           return host.kind === 'site'
             ? everyLanguage(path, rest)

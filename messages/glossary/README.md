@@ -18,6 +18,7 @@ uses. (Story MOTIR-7730 · MOTIR-7744.)
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `ja.json` `ko.json` `de.json` `fr.json` `es.json` `it.json` `nl.json` `pl.json` `pt.json` | the glossaries for the nine languages added by MOTIR-7730 (`pt` is Brazilian Portuguese)                                        |
 | `zh.json`                                                                                 | the **reference column**: the terms `messages/zh.json` already uses, each cited by key path. It records; it decides nothing new |
+| `zh-tw.json`                                                                              | Traditional Chinese in **Taiwan** usage, the terms `messages/zh-tw.json` is translated under (MOTIR-8937 · MOTIR-9238)          |
 
 The files live in this subdirectory on purpose: catalogues are addressed as
 `messages/${locale}.json`, so a file here is never mistaken for a catalogue.

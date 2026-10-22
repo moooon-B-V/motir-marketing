@@ -21,11 +21,11 @@ vi.mock('next/headers', () => ({ headers: async () => new Headers() }))
  * MOTIR-8086 — a legal document's crawl data points at the English document.
  *
  * Its body, title, version and effective date are the same English in all
- * eleven language versions; only the chrome is translated. So every language
+ * twelve language versions; only the chrome is translated. So every language
  * version, English included, is canonical to the unprefixed English address and
  * carries NO `hreflang` set, and the sitemap lists each document ONCE at that
  * address. The `/legal` INDEX is not an exception (its chrome is translated):
- * it keeps its own per-language canonical, twelve alternates and eleven entries.
+ * it keeps its own per-language canonical, thirteen alternates and twelve entries.
  *
  * Driven over the real `legalDocumentSlugs()` and `LOCALES`, never a fixture
  * list, so a document added to `content/legal/` is covered by existing.
@@ -44,8 +44,8 @@ async function indexMetadata(locale: string) {
 const SLUGS = legalDocumentSlugs()
 
 describe('the population is real', () => {
-  it('covers eleven locales and every document on disk', () => {
-    expect(LOCALES).toHaveLength(11)
+  it('covers twelve locales and every document on disk', () => {
+    expect(LOCALES).toHaveLength(12)
     expect(SLUGS.length).toBeGreaterThanOrEqual(7)
   })
 })
@@ -86,7 +86,7 @@ describe('a legal document page head (every slug × every locale)', () => {
         url?: string
       }
       expect(og.locale).toBe(OG_LOCALE[locale as (typeof LOCALES)[number]])
-      expect(og.alternateLocale).toHaveLength(10)
+      expect(og.alternateLocale).toHaveLength(11)
       // The deliberate non-change: the share URL stays the page's own address.
       expect(og.url).toBe(
         siteUrl(
@@ -111,10 +111,10 @@ describe('a legal document page head (every slug × every locale)', () => {
 })
 
 describe('the /legal index head is unchanged', () => {
-  it('under fr: its own language address and twelve alternates', async () => {
+  it('under fr: its own language address and thirteen alternates', async () => {
     const meta = await indexMetadata('fr')
     expect(meta.alternates?.canonical).toBe(siteUrl('/fr/legal'))
-    expect(Object.keys(meta.alternates?.languages ?? {})).toHaveLength(12)
+    expect(Object.keys(meta.alternates?.languages ?? {})).toHaveLength(13)
     expect(meta.alternates?.languages).toEqual(languageAlternates('/legal'))
   })
 
@@ -149,11 +149,11 @@ describe('the sitemap', () => {
     expect(entries.filter((entry) => prefixed.test(entry.url))).toEqual([])
   })
 
-  it('keeps the /legal index eleven times, each with twelve alternates', () => {
+  it('keeps the /legal index twelve times, each with thirteen alternates', () => {
     const index = entries.filter((entry) => /\/legal$/.test(entry.url))
-    expect(index).toHaveLength(11)
+    expect(index).toHaveLength(12)
     for (const entry of index) {
-      expect(Object.keys(entry.alternates?.languages ?? {})).toHaveLength(12)
+      expect(Object.keys(entry.alternates?.languages ?? {})).toHaveLength(13)
     }
   })
 

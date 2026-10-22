@@ -58,8 +58,8 @@ function registryFaces() {
 describe('app/fonts.ts declares every font-set face', () => {
   const faces = registryFaces()
 
-  it('finds the nine distinct faces the installed registry names', () => {
-    expect(faces).toHaveLength(9)
+  it('finds the twelve distinct faces the installed registry names', () => {
+    expect(faces).toHaveLength(12)
   })
 
   it.each(faces.map((f) => [f.variable, f] as const))(
@@ -93,7 +93,7 @@ describe('app/fonts.ts declares every font-set face', () => {
   it('joins every loader into fontVariables', () => {
     const joined =
       /export const fontVariables = \[([^\]]*)\]/.exec(FONTS_TS)?.[1] ?? ''
-    expect(LOADERS.length).toBe(15)
+    expect(LOADERS.length).toBe(18)
     for (const l of LOADERS) expect(joined).toContain(`${l.name}.variable`)
   })
 })

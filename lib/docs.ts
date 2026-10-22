@@ -53,7 +53,7 @@ import type { Locale } from '@/i18n/routing'
  * not cache `fetch` by default, and an uncached fetch makes the page that awaits
  * it dynamic — so removing the segment `revalidate` without this would have
  * turned the four pages back into request-time renders, which is worse than the
- * ISR they replace. The build's data cache serves the one fetch to all eleven
+ * ISR they replace. The build's data cache serves the one fetch to all twelve
  * locales.
  *
  * ⚠️ PER REQUEST IN THE BROWSER LANE, AND ONLY THERE. The lane swaps the stub's

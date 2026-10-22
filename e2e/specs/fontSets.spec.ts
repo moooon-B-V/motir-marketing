@@ -1,11 +1,12 @@
 import { expect, test, type Page } from '@playwright/test'
+import { LOCALE_BCP47 } from '../../i18n/routing'
 import { t } from '../support/catalogue'
 import {
   CJK_FAMILIES,
   DEFAULT_FAMILY,
   fetchedFamilies,
-  SET_FAMILIES,
   settleFonts,
+  siblingFamilies,
   watchFontRequests,
 } from '../support/fontFaces'
 
@@ -57,13 +58,17 @@ test('the English landing fetches no CJK file, even for CJK characters', async (
   expect([...fetched].filter((f) => CJK_FAMILIES.includes(f))).toEqual([])
 })
 
-for (const locale of ['zh', 'ja', 'ko'] as const) {
+for (const locale of ['zh', 'zh-tw', 'ja', 'ko'] as const) {
   test(`/${locale} fetches its own set's face and neither sibling's`, async ({
     page,
   }) => {
     const requested = watchFontRequests(page)
     await page.goto(`/${locale}`)
-    await expect(page.locator('html')).toHaveAttribute('lang', locale)
+    // The page's tag, not its URL code: /zh-tw is `lang="zh-TW"`.
+    await expect(page.locator('html')).toHaveAttribute(
+      'lang',
+      LOCALE_BCP47[locale],
+    )
     await renderProbe(page)
 
     const own = DEFAULT_FAMILY[locale]
@@ -84,12 +89,26 @@ for (const locale of ['zh', 'ja', 'ko'] as const) {
 
     const fetched = await fetchedFamilies(page, requested)
     expect(fetched).toContain(own)
-    const siblings: readonly string[] = Object.entries(SET_FAMILIES)
-      .filter(([other]) => other !== locale)
-      .flatMap(([, families]) => families)
+    // The two Chinese sets share LXGW WenKai TC, so a family that is also
+    // this locale's own is no sibling's.
+    const siblings = siblingFamilies(locale)
     expect([...fetched].filter((f) => siblings.includes(f))).toEqual([])
   })
 }
+
+test('/zh still fetches no Traditional sans or serif now the zh-tw set exists', async ({
+  page,
+}) => {
+  const requested = watchFontRequests(page)
+  await page.goto('/zh')
+  await expect(page.locator('html')).toHaveAttribute('lang', 'zh')
+  await renderProbe(page)
+
+  const fetched = await fetchedFamilies(page, requested)
+  expect(fetched).toContain('LXGW WenKai TC')
+  expect(fetched).not.toContain('Noto Sans TC')
+  expect(fetched).not.toContain('Noto Serif TC')
+})
 
 test('/ja/design offers the three Japanese fonts by name, and each draws headings and body', async ({
   page,
@@ -126,6 +145,53 @@ test('/ja/design offers the three Japanese fonts by name, and each draws heading
     await expect.poll(() => familyOf('h1')).toContain(family)
     await expect.poll(() => familyOf('p')).toContain(family)
   }
+})
+
+test('/zh-tw/design offers the three Traditional fonts by name, and each draws headings and body', async ({
+  page,
+}) => {
+  await page.goto('/zh-tw/design')
+  const fonts = page
+    .getByRole('radiogroup', { name: t('zh-tw', 'designShowcase.type.name') })
+    .getByRole('radio')
+  const families = ['Noto Sans TC', 'Noto Serif TC', 'LXGW WenKai TC']
+  await expect(fonts).toHaveText(families.map((family) => new RegExp(family)))
+
+  const main = page.getByRole('main')
+  const familyOf = (selector: string) =>
+    main
+      .locator(selector)
+      .first()
+      .evaluate((element) => getComputedStyle(element).fontFamily)
+  for (const [index, family] of families.entries()) {
+    const font = fonts.nth(index)
+    await font.click()
+    await expect(font).toHaveAttribute('aria-checked', 'true')
+    await expect.poll(() => familyOf('h1')).toContain(family)
+    await expect.poll(() => familyOf('p')).toContain(family)
+  }
+})
+
+test('a Simplified pick on /zh is not carried to /zh-tw', async ({ page }) => {
+  await page.goto('/zh/design')
+  const fonts = page
+    .getByRole('radiogroup', { name: t('zh', 'designShowcase.type.name') })
+    .getByRole('radio')
+  const serif = fonts.filter({ hasText: 'Noto Serif SC' })
+  await serif.click()
+  await expect(serif).toHaveAttribute('aria-checked', 'true')
+
+  // Through the language menu in the same tab, where a stored pick would carry.
+  await page.locator('button[aria-controls="language-menu"]').click()
+  await page.locator('#language-menu a[lang="zh-TW"]').click()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'zh-TW')
+  const first = await page
+    .getByRole('heading', { level: 1 })
+    .first()
+    .evaluate((element) =>
+      getComputedStyle(element).fontFamily.split(',')[0]!.replace(/["']/g, ''),
+    )
+  expect(first.trim()).not.toBe('Noto Serif SC')
 })
 
 test('a Polish heading is drawn in the pairing face, as an English one is', async ({

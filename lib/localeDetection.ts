@@ -51,10 +51,24 @@ function parse(header: string): WeightedRange[] {
   return ranges.sort((a, b) => b.q - a.q || a.order - b.order)
 }
 
+/** Ranges a Traditional-Chinese reader sends: Taiwan, Hong Kong, Macau, or the Hant script. */
+function isTraditionalChinese(tag: string): boolean {
+  return (
+    tag === 'zh-tw' ||
+    tag === 'zh-hk' ||
+    tag === 'zh-mo' ||
+    tag === 'zh-hant' ||
+    tag.startsWith('zh-hant-')
+  )
+}
+
 /**
- * The best match among the eleven, or `null`. For each range in turn an exact
- * match wins, else a BASE-language one: `de-AT` reads as `de`, `pt-BR` and
- * `pt-PT` as `pt`, `zh-TW` and `zh-Hant` as `zh` (the one Chinese catalogue).
+ * The best match among the twelve, or `null`. For each range in turn an exact
+ * match wins; then the Traditional-Chinese rule (MOTIR-9250, core's
+ * MOTIR-9240): `zh-TW`, `zh-HK`, `zh-MO`, `zh-Hant` and any `zh-Hant-*` read
+ * as `zh-tw` when the locale set holds it; then a BASE-language match:
+ * `de-AT` reads as `de`, `pt-BR` and `pt-PT` as `pt`, and `zh-CN`, `zh-SG`
+ * and any `zh-Hans-*` (even `zh-Hans-TW`, which names the script) as `zh`.
  */
 export function matchAcceptLanguage(
   header: string | null | undefined,
@@ -63,6 +77,10 @@ export function matchAcceptLanguage(
   for (const { tag } of parse(header)) {
     const exact = LOCALES.find((locale) => locale === tag)
     if (exact) return exact
+    if (isTraditionalChinese(tag)) {
+      const traditional = LOCALES.find((locale) => locale === 'zh-tw')
+      if (traditional) return traditional
+    }
     const base = tag.split('-')[0]
     const byBase = LOCALES.find((locale) => locale === base)
     if (byBase) return byBase
@@ -75,7 +93,7 @@ function isLocale(value: string | null | undefined): value is Locale {
 }
 
 /**
- * The visitor's language. A cookie that is not one of the eleven — edited by
+ * The visitor's language. A cookie that is not one of the twelve — edited by
  * hand, or a code since retired — is SKIPPED, so the browser's own preference
  * still gets its say; it is never read as English.
  */

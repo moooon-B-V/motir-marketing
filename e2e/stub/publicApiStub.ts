@@ -186,8 +186,11 @@ const RECORDED_CATALOGUE = join(DOCS_FIXTURES, 'mcp-tools.production.json')
  * for a locale it has no translations for. The recordings are motir-core's own
  * `mcpToolCatalogueDocument(<l>)` output, not hand-written.
  */
+/** A locale code safe to join into a fixture path: `fr`, or `zh-tw` (MOTIR-9241). */
+const LOCALE_CODE = /^[a-z]{2}(-[a-z]{2})?$/
+
 function recordedCatalogueFile(locale: string | null): string {
-  if (locale && /^[a-z]{2}$/.test(locale)) {
+  if (locale && LOCALE_CODE.test(locale)) {
     const localized = join(DOCS_FIXTURES, `mcp-tools.production.${locale}.json`)
     if (existsSync(localized)) return localized
   }
@@ -319,7 +322,7 @@ function localizedIdeas(url: URL): { status: number; body: string } | null {
   const locale = url.searchParams.get('locale')
   if (
     !locale ||
-    !/^[a-z]{2}$/.test(locale) ||
+    !LOCALE_CODE.test(locale) ||
     !existsSync(join(IDEA_LOCALES_DIR, locale))
   )
     return null

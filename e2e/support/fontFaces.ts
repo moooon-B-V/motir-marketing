@@ -5,13 +5,14 @@ import type { Page } from '@playwright/test'
  *
  * `next/font` self-hosts under hashed names, so a request URL does not name
  * its family. The page's own `@font-face` rules do: each `src` url maps to the
- * `font-family` it declares. `fontSets.spec.ts` and the eleven-languages
+ * `font-family` it declares. `fontSets.spec.ts` and the twelve-languages
  * acceptance walk both read requests through this.
  */
 
 /** Each CJK set's faces, by the family names next/font gives them. */
 export const SET_FAMILIES = {
   zh: ['Noto Sans SC', 'Noto Serif SC', 'LXGW WenKai TC'],
+  'zh-tw': ['Noto Sans TC', 'Noto Serif TC', 'LXGW WenKai TC'],
   ja: ['Noto Sans JP', 'M PLUS Rounded 1c', 'Noto Serif JP'],
   ko: ['Noto Sans KR', 'Nanum Gothic', 'Noto Serif KR'],
 } as const
@@ -19,12 +20,26 @@ export const SET_FAMILIES = {
 /** The face each language draws in with nothing picked (`lib/cjkFaces.ts`). */
 export const DEFAULT_FAMILY = {
   zh: 'LXGW WenKai TC',
+  'zh-tw': 'LXGW WenKai TC',
   ja: 'Noto Sans JP',
   ko: 'Noto Sans KR',
 } as const
 
-export const CJK_FAMILIES: readonly string[] =
-  Object.values(SET_FAMILIES).flat()
+/** Every CJK family once: LXGW WenKai TC is a member of both Chinese sets. */
+export const CJK_FAMILIES: readonly string[] = [
+  ...new Set<string>(Object.values(SET_FAMILIES).flat()),
+]
+
+/**
+ * The families of every OTHER set, less this locale's own. The two Chinese
+ * sets share LXGW WenKai TC (MOTIR-8937), so a family that is also this
+ * locale's own is no sibling's: without the subtraction /zh would count its
+ * own default face as a leak from zh-tw's set, and /zh-tw likewise.
+ */
+export function siblingFamilies(locale: keyof typeof SET_FAMILIES): string[] {
+  const own: readonly string[] = SET_FAMILIES[locale]
+  return CJK_FAMILIES.filter((family) => !own.includes(family))
+}
 
 /** Record every font file the page requests, as a same-origin pathname. */
 export function watchFontRequests(page: Page): string[] {

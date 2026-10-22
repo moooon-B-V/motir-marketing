@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { expect, test, type Locator, type Page } from '@playwright/test'
 import { SITE_ORIGIN, STUB_ORIGIN } from '../stub/origin'
+import { LOCALE_BCP47, type Locale } from '../../i18n/routing'
 import { DOCS_ROUTES } from '../../lib/docsSurfaces'
 import { leaves, t } from '../support/catalogue'
 import {
@@ -13,8 +14,11 @@ import {
 } from '../support/fontFaces'
 
 /*
- * ⚠️ THE ACCEPTANCE WALK FOR /docs IN ELEVEN LANGUAGES (MOTIR-8052) — Story
- * MOTIR-7739, PACED FOR A PERSON TO WATCH.
+ * ⚠️ THE ACCEPTANCE WALK FOR /docs IN TWELVE LANGUAGES (MOTIR-8052) — Story
+ * MOTIR-7739, PACED FOR A PERSON TO WATCH. Traditional Chinese (Taiwan),
+ * `/zh-tw`, joined as the twelfth in Story MOTIR-8937 (MOTIR-9253) with its
+ * own chapters: the sandbox guide, the generated references and a rail walk.
+ * The file keeps its name so history and anything linking it by path holds.
  *
  * The story's eight Verification steps, in order, as one signed-out reader: ONE
  * test, ONE context, ONE page, so the run yields ONE video, and a
@@ -53,8 +57,8 @@ import {
  * into memory first and written back byte for byte in a `finally`.
  */
 
-// Eight journeys, one of them walking every docs page twice, at a watchable pace.
-test.setTimeout(420_000)
+// Twelve journeys, two of them walking every docs page, at a watchable pace.
+test.setTimeout(600_000)
 
 /** Pacing for the recording. NOT a wait for state — see the header. */
 const beat = (page: Page, ms = 900) => page.waitForTimeout(ms)
@@ -197,7 +201,7 @@ function englishLeftovers(english: string[], translated: string[]): string[] {
 const KEY_PATH = /\bdocs\.[a-zA-Z]+\./g
 const REAL_KEYS = [...leaves('en').keys()]
 
-test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async ({
+test('/docs in twelve languages, as Stories MOTIR-7739 and MOTIR-8937 ask to be accepted', async ({
   page,
   context,
 }) => {
@@ -244,6 +248,29 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
   const japanesePayload = await copyAndRead(page, runPane(page))
   expect(japanesePayload).toBe(englishPayload)
   expect(japanesePayload).toBe(japaneseRun)
+  await beat(page, 1600)
+
+  // ── 2a · THE GUIDE FOR A TAIWAN READER (MOTIR-8937) ─────────────────────
+  chapter('The sandbox guide for a Taiwan browser, and its copy button')
+  await freshVisitor(page, 'zh-TW,zh;q=0.9')
+  const requestedTw = watchFontRequests(page)
+  await page.goto('/docs/sandbox')
+  await expect(page).toHaveURL(`${SITE_ORIGIN}/zh-tw/docs/sandbox`)
+  await expect(html(page)).toHaveAttribute('lang', 'zh-TW')
+  await expect(runPane(page)).toBeVisible()
+  expect(await firstParagraph(page)).not.toBe(englishIntro)
+  await expect(
+    page.getByText(t('zh-tw', 'docs.notes.beingUpdated')),
+  ).toHaveCount(0)
+  // The Traditional set's default face was fetched for the page.
+  await expect(async () => {
+    await settleFonts(page)
+    const fetched = await fetchedFamilies(page, requestedTw)
+    expect([...fetched]).toContain(DEFAULT_FAMILY['zh-tw'])
+  }).toPass({ timeout: 20_000 })
+  const taiwanRun = (await runPane(page).textContent()) ?? ''
+  expect(taiwanRun).toBe(englishRun)
+  expect(await copyAndRead(page, runPane(page))).toBe(englishPayload)
   await beat(page, 1600)
 
   // ── 3 · THE MCP TOOLS IN KOREAN ─────────────────────────────────────────
@@ -294,6 +321,51 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
   })
   // The count the page prints is the catalogue's own.
   await expect(main(page)).toContainText(String(served.toolCount))
+  await beat(page, 1600)
+
+  // ── 3a · THE MCP TOOLS IN TRADITIONAL CHINESE ───────────────────────────
+  chapter('The MCP tools in Traditional Chinese: English summaries, marked')
+  // No zh-tw recording exists this round, so the stub answers English and the
+  // page must say so on every summary (MOTIR-8937, assumption r1).
+  const servedTw = (await (
+    await page.request.get(
+      `${STUB_ORIGIN}/api/docs/mcp-tools.json?locale=zh-tw`,
+    )
+  ).json()) as typeof served
+  const toolsTw = servedTw.groups.flatMap((group) => group.tools)
+  const toolRows = () =>
+    page.evaluate(() =>
+      Array.from(document.querySelectorAll('code[id^="tool-"]')).map((code) => {
+        const summary = code.closest('li')?.querySelector(':scope > p')
+        return {
+          id: code.id,
+          name: code.textContent ?? '',
+          summary: (summary?.textContent ?? '').trim(),
+          lang: summary?.getAttribute('lang') ?? null,
+        }
+      }),
+    )
+  await page.goto('/docs/mcp/tools')
+  await expect(html(page)).toHaveAttribute('lang', 'en')
+  await expect(page.locator('code[id^="tool-"]')).toHaveCount(toolsTw.length)
+  const englishTools = await toolRows()
+  const englishToolsIntro = await firstParagraph(page)
+
+  await page.goto('/zh-tw/docs/mcp/tools')
+  await expect(html(page)).toHaveAttribute('lang', 'zh-TW')
+  await expect(page.locator('code[id^="tool-"]')).toHaveCount(toolsTw.length)
+  expect(await firstParagraph(page)).not.toBe(englishToolsIntro)
+  const taiwanTools = await toolRows()
+  expect(taiwanTools.map((row) => row.name)).toEqual(
+    toolsTw.map((tool) => tool.name),
+  )
+  expect(taiwanTools.map((row) => row.id)).toEqual(
+    toolsTw.map((tool) => `tool-${tool.name}`),
+  )
+  taiwanTools.forEach((row, index) => {
+    expect(row.summary, row.name).toBe(englishTools[index]!.summary)
+    expect(row.lang, `${row.name}: English summary is marked`).toBe('en')
+  })
   await beat(page, 1600)
 
   // ── 4 · THE API REFERENCE IN FRENCH ─────────────────────────────────────
@@ -430,6 +502,69 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
   })
   await beat(page, 1800)
 
+  // ── 5a · THE GENERATED REFERENCES IN TRADITIONAL CHINESE ────────────────
+  chapter('The API and CLI references in Traditional Chinese')
+  await page.goto('/zh-tw/docs/api')
+  await expect(html(page)).toHaveAttribute('lang', 'zh-TW')
+  await expect(page.locator('section[id] > h2').first()).toBeVisible()
+  expect(await firstParagraph(page)).not.toBe(englishApiIntro)
+  const twApiNote = page
+    .getByRole('note')
+    .filter({ hasText: t('zh-tw', 'docs.notes.generatedReference.openapi') })
+  await expect(twApiNote).toHaveCount(1)
+  expect(
+    await twApiNote.evaluate((note) => {
+      const intro = document.querySelector('main p:not(nav p)')!
+      const first = document.querySelector('section[id]')!
+      return (
+        !!(
+          intro.compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING
+        ) &&
+        !!(
+          note.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING
+        )
+      )
+    }),
+    'the zh-tw note is between the intro and the first operation',
+  ).toBe(true)
+  const taiwanApi = await operationsOf(page)
+  expect(taiwanApi.map((o) => o.id)).toEqual(englishApi.map((o) => o.id))
+  taiwanApi.forEach((operation, index) => {
+    const english = englishApi[index]!
+    expect(operation.summaryLang, `${operation.id} summary`).toBe('en')
+    expect(operation.summary).toBe(english.summary)
+    expect(operation.description).toBe(english.description)
+    if (operation.description !== null)
+      expect(operation.descriptionLang, `${operation.id} description`).toBe(
+        'en',
+      )
+  })
+  await beat(page, 1200)
+
+  await page.goto('/zh-tw/docs/cli')
+  await expect(html(page)).toHaveAttribute('lang', 'zh-TW')
+  await expect(page.locator('li > code').first()).toBeVisible()
+  expect(await firstParagraph(page)).not.toBe(englishCliIntro)
+  await expect(
+    page
+      .getByRole('note')
+      .filter({ hasText: t('zh-tw', 'docs.notes.generatedReference.cli') }),
+  ).toHaveCount(1)
+  const taiwanCli = await commandsOf(page)
+  expect(taiwanCli.map((c) => c.invocation)).toEqual(
+    englishCli.map((c) => c.invocation),
+  )
+  taiwanCli.forEach((command, index) => {
+    const english = englishCli[index]!
+    expect(command.description, command.invocation).toBe(english.description)
+    expect(command.descriptionLang, command.invocation).toBe('en')
+    command.options.forEach((option, i) => {
+      expect(option.description).toBe(english.options[i]!.description)
+      expect(option.descriptionLang).toBe('en')
+    })
+  })
+  await beat(page, 1800)
+
   // ── 6 · THE SPANISH RAIL WALK ───────────────────────────────────────────
   chapter('Every docs page in Spanish, by the rail')
   // The English side of the comparison: each page's own-prose sentences.
@@ -452,20 +587,12 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
     'the no-English predicate catches an English page',
   ).toBe(englishSentences.filter((s) => !VERBATIM.has(s)).length)
 
-  await freshVisitor(page, 'en-US,en')
-  await page.goto('/es/docs')
-  const rail = page.getByRole('navigation', {
-    name: t('es', 'docs.indexTitle'),
-  })
-  await expect(rail).toBeVisible()
-  const visited: string[] = []
-
-  /** The checks every Spanish page owes, run on the page the walk just reached. */
-  async function checkSpanishPage(route: string) {
-    await expect(html(page)).toHaveAttribute('lang', 'es')
+  /** The checks every translated page owes, run on the page the walk reached. */
+  async function checkDocsPage(locale: Locale, route: string) {
+    await expect(html(page)).toHaveAttribute('lang', LOCALE_BCP47[locale])
     await expect(main(page).locator('h1').first()).toBeVisible()
     await expect(
-      page.getByText(t('es', 'docs.notes.beingUpdated')),
+      page.getByText(t(locale, 'docs.notes.beingUpdated')),
       `${route}: the being-updated note`,
     ).toHaveCount(0)
     const text = await page.evaluate(() => document.body.innerText)
@@ -485,55 +612,70 @@ test('/docs in eleven languages, as Story MOTIR-7739 asks to be accepted', async
       `${route}: English sentences in Motir's own prose`,
     ).toEqual([])
     console.log(
-      `${route}: ${english.length} English sentences absent from ${own.length} Spanish text nodes`,
+      `${route}: ${english.length} English sentences absent from ${own.length} ${locale} text nodes`,
     )
   }
 
-  /** Click a rail entry by its href and wait for the page it leads to. */
-  async function clickRailEntry(href: string) {
-    const link = page.getByRole('navigation', {
-      name: t('es', 'docs.indexTitle'),
-    })
-    await link.locator(`a[href="${href}"]`).click()
-    await expect(page).toHaveURL(`${SITE_ORIGIN}${href}`)
-    await expect(
-      link.locator(`a[href="${href}"]`),
-      `${href} is the rail's current page`,
-    ).toHaveAttribute('aria-current', 'page')
+  /** Every docs page in one language, reached by clicking its rail. */
+  async function railWalk(locale: Locale) {
+    await freshVisitor(page, 'en-US,en')
+    await page.goto(`/${locale}/docs`)
+    const railOf = () =>
+      page.getByRole('navigation', { name: t(locale, 'docs.indexTitle') })
+    await expect(railOf()).toBeVisible()
+    const visited: string[] = []
+    const unprefixed = (href: string) => href.replace(`/${locale}`, '') || '/'
+
+    /** Click a rail entry by its href and wait for the page it leads to. */
+    async function clickRailEntry(href: string) {
+      await railOf().locator(`a[href="${href}"]`).click()
+      await expect(page).toHaveURL(`${SITE_ORIGIN}${href}`)
+      await expect(
+        railOf().locator(`a[href="${href}"]`),
+        `${href} is the rail's current page`,
+      ).toHaveAttribute('aria-current', 'page')
+    }
+
+    const hrefsOf = (scope: Locator) =>
+      scope
+        .locator('a')
+        .evaluateAll((as) =>
+          as
+            .map((a) => a.getAttribute('href') ?? '')
+            .filter((h) => !h.includes('#')),
+        )
+    const tierOne = await hrefsOf(railOf())
+    expect(tierOne.length).toBeGreaterThan(5)
+    for (const href of tierOne) {
+      if (href === `/${locale}/docs`) {
+        // The walk starts here.
+        await checkDocsPage(locale, '/docs')
+        visited.push('/docs')
+      } else {
+        await clickRailEntry(href)
+        await checkDocsPage(locale, unprefixed(href))
+        visited.push(unprefixed(href))
+      }
+      // A surface's own pages appear in the rail only inside it: click those too.
+      const own = (await hrefsOf(railOf())).filter((h) => !tierOne.includes(h))
+      for (const sub of own) {
+        await clickRailEntry(sub)
+        await checkDocsPage(locale, unprefixed(sub))
+        visited.push(unprefixed(sub))
+      }
+      await beat(page, 400)
+    }
+    // No page skipped, none visited twice: the rail's routes are the site's routes.
+    expect([...visited].sort()).toEqual([...DOCS_ROUTES].sort())
+    console.log(`${locale} rail walk visited: ${visited.join(' ')}`)
   }
 
-  const hrefsOf = (scope: Locator) =>
-    scope
-      .locator('a')
-      .evaluateAll((as) =>
-        as
-          .map((a) => a.getAttribute('href') ?? '')
-          .filter((h) => !h.includes('#')),
-      )
-  const tierOne = await hrefsOf(rail)
-  expect(tierOne.length).toBeGreaterThan(5)
-  for (const href of tierOne) {
-    if (href === '/es/docs') {
-      // The walk starts here.
-      await checkSpanishPage('/docs')
-      visited.push('/docs')
-    } else {
-      await clickRailEntry(href)
-      await checkSpanishPage(href.replace(/^\/es/, ''))
-      visited.push(href.replace(/^\/es/, ''))
-    }
-    // A surface's own pages appear in the rail only inside it: click those too.
-    const own = (await hrefsOf(rail)).filter((h) => !tierOne.includes(h))
-    for (const sub of own) {
-      await clickRailEntry(sub)
-      await checkSpanishPage(sub.replace(/^\/es/, ''))
-      visited.push(sub.replace(/^\/es/, ''))
-    }
-    await beat(page, 400)
-  }
-  // No page skipped, none visited twice: the rail's routes are the site's routes.
-  expect([...visited].sort()).toEqual([...DOCS_ROUTES].sort())
-  console.log(`rail walk visited: ${visited.join(' ')}`)
+  await railWalk('es')
+  await beat(page, 1200)
+
+  // ── 6a · THE TRADITIONAL CHINESE RAIL WALK (MOTIR-8937) ─────────────────
+  chapter('Every docs page in Traditional Chinese, by the rail')
+  await railWalk('zh-tw')
   await beat(page, 1200)
 
   // ── 7 · A DEEP LINK UNDER /pl ───────────────────────────────────────────

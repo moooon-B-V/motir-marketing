@@ -14,7 +14,7 @@ import { routing } from './routing'
  *
  * An unknown locale falls back to English rather than throwing: the
  * `[locale]` layout already answers 404 for a segment that is not one of the
- * eleven, so the only way here with a bad value is a caller outside a route.
+ * twelve, so the only way here with a bad value is a caller outside a route.
  */
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale

@@ -148,10 +148,30 @@ function inDefaultLocaleTree(pathname: string): boolean {
   )
 }
 
-/** `/ja`, `/de/…` — any of the eleven as the first segment. */
+/** `/ja`, `/de/…` — any of the twelve as the first segment. */
 function hasLocalePrefix(pathname: string): boolean {
   const first = pathname.split('/')[1] ?? ''
   return (LOCALES as readonly string[]).includes(first)
+}
+
+/**
+ * `/zh-TW/…` → `/zh-tw/…` (MOTIR-9249): a locale segment spelled in another
+ * case, answered with the URL code's own spelling. Without it the segment is
+ * not a locale prefix, so the page 404s, or a zh-tw browser is sent to a
+ * doubled `/zh-tw/zh-TW/…`.
+ *
+ * ⚠️ 308, UNLIKE THE LANGUAGE REDIRECT'S 307, AND NO `Vary`. The answer
+ * depends on the path's spelling alone, never on the cookie or the browser's
+ * languages, so it may be cached as the permanent normalisation it is.
+ */
+function normaliseLocaleCase(request: NextRequest): NextResponse | null {
+  const [, first = '', ...rest] = request.nextUrl.pathname.split('/')
+  const lower = first.toLowerCase()
+  if (first === lower || !(LOCALES as readonly string[]).includes(lower))
+    return null
+  const destination = request.nextUrl.clone()
+  destination.pathname = ['', lower, ...rest].join('/')
+  return NextResponse.redirect(destination, 308)
 }
 
 /** The visitor's language for this request (MOTIR-7951). */
@@ -351,6 +371,8 @@ async function route(request: NextRequest): Promise<NextResponse> {
   // a root metadata route has no language. And `/en/…` here is the English
   // rewrite coming back around (see `inDefaultLocaleTree`), never a choice.
   if (!host || isSiteHost(host)) {
+    const fixed = normaliseLocaleCase(request)
+    if (fixed) return fixed
     const { pathname } = request.nextUrl
     const ogImage = ogImagePath(pathname)
     if (ogImage?.prefixed) return NextResponse.next()

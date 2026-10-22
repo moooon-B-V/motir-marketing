@@ -21,7 +21,8 @@ vi.mock('@/lib/hostResolution', async (importOriginal) => ({
 // which this lane can evaluate; the layout's CONTRACT is its exports.
 vi.mock('@/app/_components/SiteDocument', () => ({ SiteDocument: () => null }))
 
-const { LOCALES, OG_LOCALE, routing } = await import('@/i18n/routing')
+const { LOCALE_BCP47, LOCALES, OG_LOCALE, routing } =
+  await import('@/i18n/routing')
 const { enterLocale } = await import('@/i18n/locale')
 const layout = await import('@/app/[locale]/layout')
 const { proxy } = await import('@/proxy')
@@ -36,10 +37,11 @@ const rewriteOf = (res: Response) => {
 }
 
 describe('the locale list', () => {
-  it('is the eleven, English first, and English is the default', () => {
+  it('is the twelve, English first, and English is the default', () => {
     expect(LOCALES).toEqual([
       'en',
       'zh',
+      'zh-tw',
       'ja',
       'ko',
       'de',
@@ -62,16 +64,40 @@ describe('the locale list', () => {
   })
 
   it('names an og:locale for every locale, language_TERRITORY', () => {
-    for (const locale of LOCALES) {
-      expect(OG_LOCALE[locale], locale).toMatch(
-        new RegExp(`^${locale}_[A-Z]{2}$`),
+    // The pattern is derived from the code: `fr` → `fr_XX`, and a hyphenated
+    // code names its own territory, `zh-tw` → `zh_TW` (MOTIR-9241).
+    const ogLocalePattern = (code: string) => {
+      const [language, region] = code.split('-')
+      return new RegExp(
+        `^${language}_${region ? region.toUpperCase() : '[A-Z]{2}'}$`,
       )
     }
+    for (const locale of LOCALES) {
+      expect(OG_LOCALE[locale], locale).toMatch(ogLocalePattern(locale))
+    }
+    const cases: [code: string, og: string, ok: boolean][] = [
+      ['zh-tw', 'zh_TW', true],
+      ['zh-tw', 'zh-tw_TW', false],
+      ['zh-tw', 'zh_tw', false],
+      ['zh-tw', 'zh_HK', false],
+      ['fr', 'fr_FR', true],
+    ]
+    for (const [code, og, ok] of cases)
+      expect(ogLocalePattern(code).test(og), `${code} → ${og}`).toBe(ok)
+  })
+})
+
+describe('the BCP 47 tag of each locale (MOTIR-9249)', () => {
+  it('is total over the locales, zh-TW for zh-tw and the code itself elsewhere', () => {
+    expect(Object.keys(LOCALE_BCP47).sort()).toEqual([...LOCALES].sort())
+    expect(LOCALE_BCP47['zh-tw']).toBe('zh-TW')
+    for (const locale of LOCALES.filter((l) => l !== 'zh-tw'))
+      expect(LOCALE_BCP47[locale], locale).toBe(locale)
   })
 })
 
 describe('the locale layout', () => {
-  it('prerenders all eleven and no other', () => {
+  it('prerenders all twelve and no other', () => {
     expect(layout.generateStaticParams()).toEqual(
       LOCALES.map((locale) => ({ locale })),
     )
@@ -147,6 +173,31 @@ describe('the site host, through the proxy', () => {
       expect(rewriteOf(res), path).toBeNull()
       expect(res.headers.get('x-middleware-next'), path).toBe('1')
     }
+  })
+
+  it('answers a locale segment spelled in another case with a 308 to the URL code (MOTIR-9249)', async () => {
+    for (const [path, to] of [
+      ['/zh-TW/docs/mcp?x=1', '/zh-tw/docs/mcp?x=1'],
+      ['/zh-TW', '/zh-tw'],
+      ['/ZH-TW/explore', '/zh-tw/explore'],
+      ['/zh-TW/opengraph-image', '/zh-tw/opengraph-image'],
+      ['/JA/design', '/ja/design'],
+    ]) {
+      const res = await proxy(request(`https://motir.co${path}`))
+      expect(res.status, path).toBe(308)
+      const location = new URL(res.headers.get('location')!)
+      expect(`${location.pathname}${location.search}`, path).toBe(to)
+      expect(res.headers.get('vary'), path).toBeNull()
+    }
+  })
+
+  it('serves /zh-tw as it is, and leaves a near-miss segment alone', async () => {
+    const served = await proxy(request('https://motir.co/zh-tw/explore'))
+    expect(served.headers.get('location')).toBeNull()
+    expect(rewriteOf(served) ?? '/zh-tw/explore').toBe('/zh-tw/explore')
+    const nearMiss = await proxy(request('https://motir.co/zh-TWx'))
+    expect(nearMiss.status).not.toBe(308)
+    expect(rewriteOf(nearMiss)).toBe('/en/zh-TWx')
   })
 
   it('still routes a path that merely starts with the letters en', async () => {

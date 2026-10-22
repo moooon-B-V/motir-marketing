@@ -184,14 +184,14 @@ export function normaliseHost(raw: string | null | undefined): string | null {
  * host kinds it is a path segment this function alone emits.
  *
  * ⚠️ THE LOCALE IS A REQUIRED PARAMETER, AND ONLY THE SITE ARM USES IT
- * (MOTIR-7971). On motir.co a project page has eleven addresses — `/p/ACME` and
+ * (MOTIR-7971). On motir.co a project page has twelve addresses — `/p/ACME` and
  * `/fr/p/ACME` and the rest — and a tab bar on the French page must link to the
  * French tabs, or every click is a hop through the proxy back to French (or, for
  * a visitor with no cookie, a silent move into English). On a workspace or
  * customer host ONE unprefixed URL serves every language (the proxy rewrites by
  * cookie and `Accept-Language`, MOTIR-7951), so those arms return exactly what
  * they always did. Required rather than defaulted so a forgotten caller is a
- * compile error, not a link that is wrong in ten languages out of eleven.
+ * compile error, not a link that is wrong in eleven languages out of twelve.
  */
 export function publicPathFor(
   host: PublicHost,
@@ -266,14 +266,14 @@ export function publicPathWithQuery(
  * "relative" for a shape that did not exist when it was written.
  *
  * ⚠️ AND IT CARRIES THE PAGE'S LOCALE, ON EVERY HOST (MOTIR-7971). The site is
- * served in eleven languages, English unprefixed, and a link that dropped the
+ * served in twelve languages, English unprefixed, and a link that dropped the
  * prefix sent a French reader to the English page — a proxy hop back to French
  * when they had the cookie, a silent move into English when they had arrived on
  * a shared `/fr/…` link without one. Off the site the link is absolute AND
  * prefixed (`https://motir.co/fr/docs`), so a French reader on a tenant host
  * lands on French docs without detection guessing. The locale is REQUIRED, with
  * no default: a dependency in the type makes a forgotten caller a compile
- * error, not a link that is wrong in ten languages out of eleven. English
+ * error, not a link that is wrong in eleven languages out of twelve. English
  * output is byte-identical to what it was.
  *
  * `path` is root-relative and starts with a slash: `'/'`, `'/explore'`,

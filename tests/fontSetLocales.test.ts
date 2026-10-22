@@ -14,14 +14,16 @@ import { routing } from '@/i18n/routing'
 
 describe('the installed font sets cover the site’s locales', () => {
   it('maps exactly the locales the site routes', () => {
-    expect(new Set(Object.keys(LOCALE_FONT_SET))).toEqual(
-      new Set(routing.locales),
+    expect(Object.keys(LOCALE_FONT_SET).sort()).toEqual(
+      [...routing.locales].sort(),
     )
   })
 
-  it('draws zh, ja and ko in three different sets', () => {
-    const cjk = (['zh', 'ja', 'ko'] as const).map((l) => LOCALE_FONT_SET[l])
-    expect(new Set(cjk).size).toBe(3)
+  it('draws zh, zh-tw, ja and ko in four different sets', () => {
+    const cjk = (['zh', 'zh-tw', 'ja', 'ko'] as const).map(
+      (l) => LOCALE_FONT_SET[l],
+    )
+    expect(new Set(cjk).size).toBe(4)
     expect(cjk).not.toContain('latin')
   })
 

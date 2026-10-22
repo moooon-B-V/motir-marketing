@@ -127,6 +127,14 @@ describe('the reference consumes the published spec, never a copied one', () => 
   it('commits no copied spec artifact under content/docs/', () => {
     expect(contentDocsStrays()).toEqual([])
   })
+
+  it('allows a hyphenated locale’s document and nothing looser (MOTIR-9241)', () => {
+    expect(CONTENT_DOCS_FILE.test('quickstart/zh-tw.md')).toBe(true)
+    expect(CONTENT_DOCS_FILE.test('quickstart/fr.md')).toBe(true)
+    expect(CONTENT_DOCS_FILE.test('quickstart/zh-tw.txt')).toBe(false)
+    expect(CONTENT_DOCS_FILE.test('quickstart/zhtw.md')).toBe(false)
+    expect(CONTENT_DOCS_FILE.test('quickstart/zh_tw.md')).toBe(false)
+  })
 })
 
 /*
@@ -138,14 +146,16 @@ describe('the reference consumes the published spec, never a copied one', () => 
  * nothing else lives there, which is stricter about content and no longer
  * breaks on the document form.
  */
+/** A file `content/docs/` may hold: a `<locale>.md` (`fr.md`, `zh-tw.md`) or a ledger. */
+const CONTENT_DOCS_FILE = /(^|\/)([a-z]{2}(-[a-z]{2})?\.md|revisions\.json)$/
+
 function contentDocsStrays(dir = 'content/docs', prefix = ''): string[] {
   if (!existsSync(dir)) return []
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const rel = `${prefix}${entry.name}`
     if (entry.isDirectory())
       return contentDocsStrays(`${dir}/${entry.name}`, `${rel}/`)
-    const allowed =
-      rel === 'README.md' || /(^|\/)([a-z]{2}\.md|revisions\.json)$/.test(rel)
+    const allowed = rel === 'README.md' || CONTENT_DOCS_FILE.test(rel)
     return allowed ? [] : [rel]
   })
 }

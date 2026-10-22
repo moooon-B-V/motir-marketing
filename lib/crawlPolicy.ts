@@ -4,7 +4,7 @@
  * ⚠️ THE FILTER URLS ARE A CRAWL TRAP, AND THAT IS WHAT THIS MODULE CLOSES.
  * `/explore` and `/ideas` render every filter state as a real link —
  * `/ideas?category=…&tag=…&idea=…` composes 25 categories × 19 tags × 40 ideas
- * across eleven locales — and every one of those addresses renders at request
+ * across twelve locales — and every one of those addresses renders at request
  * time and reads motir-core. Before launch, with no visitors, the site served
  * ~130k requests in 48 h (Fly edge metrics, 2026-10-17/18), almost all from
  * cloud regions, and a crawl of the `/p/*` social cards ran both machines out

@@ -235,7 +235,7 @@ export function localisedPath(
 
 /**
  * Split a leading locale segment off a path — `/en/p/ACME` → `['en', '/p/ACME']`
- * — or `null` when the first segment is not one of the eleven.
+ * — or `null` when the first segment is not one of the twelve.
  */
 function splitLocale(pathname: string): [Locale, string] | null {
   const [, first, ...rest] = pathname.split('/')

@@ -1993,3 +1993,24 @@ its starting widths, under the same mechanism and test that revision 1 describes
 | `nav.language.label`           | Language: {language} | the globe's `aria-label`     |
 | `nav.language.menuLabel`       | Choose a language    | the open list's `aria-label` |
 | `nav.language.heading`         | Language             | the globe's `title` tooltip  |
+
+## The language switcher in twelve languages (MOTIR-8937 · MOTIR-9251)
+
+Amends **"The language switcher"** above (MOTIR-7947, `site-header--language-switcher.mock.html`).
+No new surface is drawn: the switcher's shape, its trigger, the open list and the Menu panel's
+section are unchanged, and only the list's length and two labels move. The MOTIR-7947 mock stays
+the record of the eleven-language moment it was drawn in.
+
+- **Twelve entries, in `LOCALES` order:** English, 简体中文, 繁體中文, 日本語, 한국어, Deutsch,
+  Français, Español, Italiano, Nederlands, Polski, Português. Traditional Chinese (`zh-tw`) sits
+  directly after Simplified.
+- **The Simplified entry is named 简体中文**, no longer 中文: with 繁體中文 beside it, a bare 中文 names
+  both. The change is the label only; the `zh` locale's address, `lang` and catalogue are untouched.
+- **`lang` and `hreflang` carry the BCP 47 tag**, from `LOCALE_BCP47` in `i18n/routing.ts`:
+  `zh-TW` on the 繁體中文 entry, the URL code itself on every other. The link is `/zh-tw/<path>`
+  and choosing it writes `NEXT_LOCALE=zh-tw`.
+- **The Menu panel's two-column list holds six rows of two**, so the section is no taller at
+  390px than it was with eleven (six rows, the last half full).
+- **Fonts:** as before, a CJK endonym on a page in another script falls back to the system face,
+  and its `lang` picks the regional forms, now `zh-TW` for 繁體中文. On a `zh-tw` page the
+  zh-Hant set (LXGW WenKai TC by default) draws the page and its own endonym.

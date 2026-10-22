@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { SITE_ORIGIN } from '../stub/origin'
-import { HEADER_LADDER } from '../../i18n/routing'
+import { HEADER_LADDER, LOCALES } from '../../i18n/routing'
 
 /*
  * THE HEADER'S LANGUAGE SWITCHER (MOTIR-7953), in a real browser, on the site.
@@ -75,7 +75,8 @@ test('on a phone the globe stays on the bar and switches the page', async ({
 
   await globe(page).click()
   const group = page.locator('#language-menu')
-  await expect(group.getByRole('link')).toHaveCount(11)
+  await expect(group.getByRole('link')).toHaveCount(LOCALES.length)
+  expect(LOCALES).toHaveLength(12)
   // It hangs from the globe and stays inside the viewport.
   const box = (await group.boundingBox())!
   expect(box.x).toBeGreaterThanOrEqual(0)
@@ -92,7 +93,7 @@ test('on a phone the globe stays on the bar and switches the page', async ({
  * one pixel under rung B it has folded to the Menu. A translator who lengthens
  * a label past a stored width turns this red rather than wrapping the bar.
  */
-for (const locale of ['en', 'de', 'ja'] as const) {
+for (const locale of ['en', 'de', 'ja', 'zh-tw'] as const) {
   const { a, b } = HEADER_LADDER[locale]
   const prefix = locale === 'en' ? '' : `/${locale}`
 

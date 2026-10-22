@@ -1,22 +1,25 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
+import { LOCALE_BCP47, type Locale } from '../../i18n/routing'
 import { SITE_ORIGIN, TENANT_ORIGIN } from '../stub/origin'
 import { catalogue, leaves, t } from '../support/catalogue'
 import {
   CJK_FAMILIES,
   DEFAULT_FAMILY,
   fetchedFamilies,
-  SET_FAMILIES,
   settleFonts,
+  siblingFamilies,
   watchFontRequests,
 } from '../support/fontFaces'
 
 /*
- * ⚠️ THE ACCEPTANCE WALK FOR ELEVEN LANGUAGES (MOTIR-7968) — Story MOTIR-7737,
- * PACED FOR A PERSON TO WATCH.
+ * ⚠️ THE ACCEPTANCE WALK FOR TWELVE LANGUAGES (MOTIR-7968) — Story MOTIR-7737,
+ * PACED FOR A PERSON TO WATCH. Traditional Chinese (Taiwan), `/zh-tw`, joined
+ * as the twelfth in Story MOTIR-8937 (MOTIR-9253), with its own chapters. The
+ * file keeps its name so history and anything linking it by path holds.
  *
- * The story's twelve Verification steps, in order, as one signed-out visitor:
+ * The stories' Verification steps, in order, as one signed-out visitor:
  * ONE test, ONE context, ONE page, so the run yields ONE video. A new browser
  * language is the `Accept-Language` header and a fresh visit is
  * `clearCookies()` — the server decides only from the header and the cookie,
@@ -29,15 +32,20 @@ import {
  *
  * Every expected string is read from `messages/<locale>.json` through
  * `e2e/support/catalogue.ts`. The only non-Latin text typed here is the
- * switcher's endonym list and the four Han characters case 9 draws.
+ * switcher's endonym list and the four Han characters the Han step draws.
+ *
+ * ⚠️ A URL CODE IS NOT A LANGUAGE TAG. `/zh-tw` is the URL code and the
+ * cookie's value; the page, the switcher entry and the hreflang key say
+ * `zh-TW`. `ORDER` is the codes, `TAGS` the tags, typed out so a wrong map in
+ * `i18n/routing.ts` turns this red instead of moving the expectation.
  *
  * Every `beat()` is pacing, NOT a wait for state: each assertion waits on a
  * response, a URL, a rendered attribute or the font set settling.
  */
 
-// Twelve journeys at a watchable pace: set here so the other specs keep the
+// Sixteen journeys at a watchable pace: set here so the other specs keep the
 // lane's tighter budget, as the sibling acceptance specs do.
-test.setTimeout(300_000)
+test.setTimeout(420_000)
 
 /** Pacing for the recording. NOT a wait for state — see the header. */
 const beat = (page: Page, ms = 900) => page.waitForTimeout(ms)
@@ -63,7 +71,8 @@ test.afterEach(({}, testInfo) => {
 /** The switcher's entries, in the order and the scripts the bar lists them. */
 const ENDONYMS = [
   'English',
-  '中文',
+  '简体中文',
+  '繁體中文',
   '日本語',
   '한국어',
   'Deutsch',
@@ -74,7 +83,34 @@ const ENDONYMS = [
   'Polski',
   'Português',
 ]
-const ORDER = ['en', 'zh', 'ja', 'ko', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'pt']
+const ORDER = [
+  'en',
+  'zh',
+  'zh-tw',
+  'ja',
+  'ko',
+  'de',
+  'fr',
+  'es',
+  'it',
+  'nl',
+  'pl',
+  'pt',
+]
+const TAGS = [
+  'en',
+  'zh',
+  'zh-TW',
+  'ja',
+  'ko',
+  'de',
+  'fr',
+  'es',
+  'it',
+  'nl',
+  'pl',
+  'pt',
+]
 
 /** The four characters whose drawn form differs between the Han regions. */
 const HAN = '直 化 骨 誤'
@@ -84,12 +120,14 @@ const html = (page: Page) => page.locator('html')
  *  headline, "Vibe the project", is English in every catalogue. */
 const lede = (page: Page) => page.locator('[data-hero-lede]')
 
-/** Open the globe and choose a language, by its `lang`; waits on the page. */
-async function choose(page: Page, locale: string) {
+/** Open the globe and choose a language by its URL code; the entry and the
+ *  page are found by its tag. Waits on the page. */
+async function choose(page: Page, locale: Locale) {
+  const tag = LOCALE_BCP47[locale]
   await page.locator('button[aria-controls="language-menu"]').click()
   await beat(page, 600)
-  await page.locator(`#language-menu a[lang="${locale}"]`).click()
-  await expect(html(page)).toHaveAttribute('lang', locale)
+  await page.locator(`#language-menu a[lang="${tag}"]`).click()
+  await expect(html(page)).toHaveAttribute('lang', tag)
 }
 
 /** A visit from a browser asking for `language`, with no cookie. */
@@ -154,7 +192,7 @@ async function noKeyNoEnglish(page: Page, path: string, english = true) {
 const firstFamily = (stack: string) =>
   stack.split(',')[0]!.replace(/["']/g, '').trim()
 
-test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', async ({
+test('twelve languages on motir.co, as Stories MOTIR-7737 and MOTIR-8937 ask to be accepted', async ({
   page,
   context,
 }) => {
@@ -167,6 +205,47 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   await expect(lede(page)).toContainText(t('ja', 'landing.hero.lede'))
   await expect(page.locator('body')).toContainText('Motir')
   await beat(page, 1600)
+
+  // ── 1a · A TAIWAN FIRST VISIT (MOTIR-8937) ──────────────────────────────
+  chapter('A Taiwan browser’s first visit')
+  await freshVisitor(page, 'zh-TW,zh;q=0.9')
+  await page.goto('/')
+  await expect(page).toHaveURL(`${SITE_ORIGIN}/zh-tw`)
+  await expect(html(page)).toHaveAttribute('lang', 'zh-TW')
+  await expect(lede(page)).toContainText(t('zh-tw', 'landing.hero.lede'))
+  await expect(page.locator('body')).toContainText('Motir')
+  await beat(page, 1600)
+
+  // ── 1b · EVERY TRADITIONAL BROWSER, AND ONLY THOSE ──────────────────────
+  chapter('Hong Kong, Macau and zh-Hant browsers land on /zh-tw; zh-CN on /zh')
+  for (const [language, locale] of [
+    ['zh-HK', 'zh-tw'],
+    ['zh-Hant-TW', 'zh-tw'],
+    ['zh-MO', 'zh-tw'],
+    ['zh-CN', 'zh'],
+    ['zh-Hans', 'zh'],
+  ] as const) {
+    await freshVisitor(page, language)
+    await page.goto('/')
+    await expect(page, language).toHaveURL(`${SITE_ORIGIN}/${locale}`)
+    await expect(html(page)).toHaveAttribute('lang', LOCALE_BCP47[locale])
+    await beat(page, 700)
+  }
+
+  // ── 1c · THE TAG SPELLING IN A URL IS MOVED, NOT LOST ───────────────────
+  chapter('/zh-TW/… answers 308 to the lower-case address')
+  await freshVisitor(page, 'en')
+  const spelled = await page.request.get('/zh-TW/docs/mcp?x=1', {
+    maxRedirects: 0,
+  })
+  expect(spelled.status()).toBe(308)
+  const moved = new URL(spelled.headers()['location']!, SITE_ORIGIN)
+  expect(`${moved.pathname}${moved.search}`).toBe('/zh-tw/docs/mcp?x=1')
+  const landed = await page.goto('/zh-TW/docs/mcp?x=1')
+  expect(landed?.status()).toBe(200)
+  await expect(page).toHaveURL(`${SITE_ORIGIN}/zh-tw/docs/mcp?x=1`)
+  await expect(html(page)).toHaveAttribute('lang', 'zh-TW')
+  await beat(page, 1400)
 
   // ── 2 · SWEDISH FALLS BACK TO ENGLISH ───────────────────────────────────
   chapter('Swedish falls back to English')
@@ -181,11 +260,22 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   chapter('Switch to French')
   await page.locator('button[aria-controls="language-menu"]').click()
   const entries = page.locator('#language-menu a')
-  await expect(entries).toHaveCount(11)
+  await expect(entries).toHaveCount(12)
   await expect(entries).toHaveText(ENDONYMS)
   expect(
     await entries.evaluateAll((as) => as.map((a) => a.getAttribute('lang'))),
-  ).toEqual(ORDER)
+  ).toEqual(TAGS)
+  // Each entry's address carries the URL code, never the tag.
+  expect(
+    await entries.evaluateAll((as) =>
+      as.map((a) => new URL((a as HTMLAnchorElement).href).pathname),
+    ),
+  ).toEqual(ORDER.map((code) => (code === 'en' ? '/' : `/${code}`)))
+  const traditional = page.locator('#language-menu a[lang="zh-TW"]')
+  await expect(traditional).toHaveAttribute('hreflang', 'zh-TW')
+  expect(
+    new URL((await traditional.getAttribute('href'))!, SITE_ORIGIN).pathname,
+  ).toBe('/zh-tw')
   await beat(page, 1400)
   await page.locator('#language-menu a[lang="fr"]').click()
   await expect(page).toHaveURL(`${SITE_ORIGIN}/fr`)
@@ -196,9 +286,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
 
   // ── 4 · WALK THE SITE IN FRENCH ─────────────────────────────────────────
   chapter('Walk the site in French')
-  // Every product address the build prerendered in French — the build's own
-  // record of `products/*` and `products/[slug]`'s static params.
-  const products = Object.keys(
+  const prerendered = Object.keys(
     (
       JSON.parse(
         readFileSync(
@@ -208,29 +296,36 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
       ) as { routes: Record<string, unknown> }
     ).routes,
   )
-    .filter((path) => path.startsWith('/fr/products/'))
-    .sort()
-  expect(products.length).toBeGreaterThan(5)
-  const walk = [
-    ...products,
-    '/fr/how-it-works',
-    '/fr/motir-builds-itself',
-    '/fr/design',
-    '/fr/ideas',
-    '/fr/explore',
-    '/fr/explore/topic/developer-tools',
-  ]
-  for (const path of walk) {
-    const response = await page.goto(path)
-    expect(response?.status(), path).toBe(200)
-    await expect(html(page)).toHaveAttribute('lang', 'fr')
-    // A product whose page IS its documentation forwards to /fr/docs, whose
-    // prose is outside this story (MOTIR-7739): no raw key, but no English
-    // check either.
-    const docs = new URL(page.url()).pathname.startsWith('/fr/docs')
-    await noKeyNoEnglish(page, docs ? `${path} → docs` : path, !docs)
-    await beat(page, 500)
+  /** Every page of the walk in one language, each checked as case 4 asks. */
+  const walkSite = async (locale: Locale) => {
+    // Every product address the build prerendered in this language — the
+    // build's own record of `products/*` and `products/[slug]`'s static params.
+    const products = prerendered
+      .filter((path) => path.startsWith(`/${locale}/products/`))
+      .sort()
+    expect(products.length).toBeGreaterThan(5)
+    const walk = [
+      ...products,
+      `/${locale}/how-it-works`,
+      `/${locale}/motir-builds-itself`,
+      `/${locale}/design`,
+      `/${locale}/ideas`,
+      `/${locale}/explore`,
+      `/${locale}/explore/topic/developer-tools`,
+    ]
+    for (const path of walk) {
+      const response = await page.goto(path)
+      expect(response?.status(), path).toBe(200)
+      await expect(html(page)).toHaveAttribute('lang', LOCALE_BCP47[locale])
+      // A product whose page IS its documentation forwards to the docs, whose
+      // prose is outside this check (MOTIR-7739): no raw key, but no English
+      // check either.
+      const docs = new URL(page.url()).pathname.startsWith(`/${locale}/docs`)
+      await noKeyNoEnglish(page, docs ? `${path} → docs` : path, !docs)
+      await beat(page, 500)
+    }
   }
+  await walkSite('fr')
 
   // ── 5 · THE DESIGN AXES IN FRENCH ───────────────────────────────────────
   chapter('The design axes in French')
@@ -298,6 +393,25 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   expect(doorPaths).toEqual(['/fr/explore', '/fr'])
   await beat(page, 1400)
 
+  // ── 6a · THE SITE AND ITS 404 IN TRADITIONAL CHINESE (MOTIR-8937) ───────
+  chapter('Walk the site in Traditional Chinese, and its 404')
+  await walkSite('zh-tw')
+  const missingTw = await page.goto('/zh-tw/no-such-page')
+  expect(missingTw?.status()).toBe(404)
+  await expect(html(page)).toHaveAttribute('lang', 'zh-TW')
+  await expect(page.getByRole('main')).toContainText(
+    t('zh-tw', 'notFound.title'),
+  )
+  expect(
+    await page
+      .getByRole('main')
+      .getByRole('link')
+      .evaluateAll((as) =>
+        as.map((a) => new URL((a as HTMLAnchorElement).href).pathname),
+      ),
+  ).toEqual(['/zh-tw/explore', '/zh-tw'])
+  await beat(page, 1400)
+
   // ── 7 · A FRENCH PUBLIC PROJECT ON A TENANT HOST ────────────────────────
   chapter('A French public project on a workspace host')
   await freshVisitor(page, 'fr')
@@ -340,8 +454,23 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   await expect(lede(page)).toContainText(t('fr', 'landing.hero.lede'))
   await beat(page, 1400)
 
-  // ── 9 · THREE HAN SCRIPTS ───────────────────────────────────────────────
-  chapter('Three Han scripts, each in its own face')
+  // ── 8a · CHOOSING 繁體中文 REMEMBERS THE URL CODE ────────────────────────
+  chapter('Choosing 繁體中文 is remembered as zh-tw, over a German browser')
+  await choose(page, 'zh-tw')
+  await expect(page).toHaveURL(`${SITE_ORIGIN}/zh-tw`)
+  const rememberedTw = await context.cookies(SITE_ORIGIN)
+  expect(rememberedTw.find((c) => c.name === 'NEXT_LOCALE')?.value).toBe(
+    'zh-tw',
+  )
+  const backTw = await page.goto('/')
+  const hopTw = backTw?.request().redirectedFrom()
+  expect(hopTw, 'the bare address was not moved').toBeTruthy()
+  expect((await hopTw!.response())?.status()).toBe(307)
+  await expect(page).toHaveURL(`${SITE_ORIGIN}/zh-tw`)
+  await beat(page, 1400)
+
+  // ── 9 · FOUR HAN SCRIPTS ────────────────────────────────────────────────
+  chapter('Four Han scripts, each in its own face')
   const glyphs: Record<string, Buffer> = {}
   // ⚠️ EACH FONT REQUEST IS FILED UNDER THE DOCUMENT THAT MADE IT. The globe's
   // menu, opened on the previous page, draws the three CJK endonyms in their own
@@ -352,7 +481,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
     if (/\.woff2$/.test(url.pathname))
       byPage.push({ path: url.pathname, doc: new URL(page.url()).pathname })
   })
-  for (const locale of ['zh', 'ja', 'ko'] as const) {
+  for (const locale of ['zh', 'zh-tw', 'ja', 'ko'] as const) {
     await choose(page, locale)
     await expect(page).toHaveURL(`${SITE_ORIGIN}/${locale}`)
     await expect(lede(page)).toContainText(t(locale, 'landing.hero.lede'))
@@ -373,7 +502,7 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
           span.style.padding = '8px'
           document.querySelector('h1')!.after(span)
         },
-        { text: HAN, lang: locale },
+        { text: HAN, lang: LOCALE_BCP47[locale] },
       )
       await settleFonts(page)
       glyphs[locale] = await page
@@ -388,14 +517,69 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
     expect(fetched, `/${locale} fetched its own face`).toContain(
       DEFAULT_FAMILY[locale],
     )
-    const siblings: readonly string[] = Object.entries(SET_FAMILIES)
-      .filter(([other]) => other !== locale)
-      .flatMap(([, families]) => families)
+    const siblings = siblingFamilies(locale)
     expect([...fetched].filter((f) => siblings.includes(f))).toEqual([])
     await beat(page, 1400)
   }
   // The same four characters, drawn in their regional forms.
   expect(glyphs.zh!.equals(glyphs.ja!)).toBe(false)
+
+  /*
+   * ⚠️ NOT ON THE DEFAULT FACE. /zh and /zh-tw both draw in LXGW WenKai TC
+   * with nothing picked, so their default-face screenshots are one face's
+   * forms twice and could not tell Simplified from Traditional. The SANS of
+   * each set is named explicitly instead — Noto Sans SC and Noto Sans TC draw
+   * 直 and 骨 differently — on /zh-tw, where every face is declared.
+   */
+  await expect(page).toHaveURL(`${SITE_ORIGIN}/ko`)
+  await choose(page, 'zh-tw')
+  const sans = {
+    'zh-TW': {
+      family: 'Noto Sans TC',
+      variable: '--font-set-zh-Hant-sans-noto-sans-tc',
+    },
+    zh: {
+      family: 'Noto Sans SC',
+      variable: '--font-set-zh-Hans-sans-noto-sans-sc',
+    },
+  } as const
+  const regional: Record<string, Buffer> = {}
+  for (const [lang, { family, variable }] of Object.entries(sans)) {
+    const selector = `span[data-han-sans="${lang}"]`
+    await expect(async () => {
+      await page.evaluate(
+        ({ text, lang, variable }) => {
+          if (document.querySelector(`span[data-han-sans="${lang}"]`)) return
+          const span = document.createElement('span')
+          span.dataset['hanSans'] = lang
+          span.lang = lang
+          span.textContent = text
+          span.style.fontFamily = `var(${variable})`
+          span.style.fontSize = '64px'
+          span.style.display = 'inline-block'
+          span.style.padding = '8px'
+          document.querySelector('h1')!.after(span)
+        },
+        { text: HAN, lang, variable },
+      )
+      await settleFonts(page)
+      regional[lang] = await page
+        .locator(selector)
+        .screenshot({ timeout: 2_000 })
+    }).toPass({ timeout: 30_000 })
+    expect(
+      firstFamily(
+        await page
+          .locator(selector)
+          .evaluate((el) => getComputedStyle(el).fontFamily),
+      ),
+      `the ${lang} span's first family`,
+    ).toBe(family)
+    await beat(page, 900)
+  }
+  expect(regional['zh-TW']!.equals(regional.zh!)).toBe(false)
+  expect(regional['zh-TW']!.equals(glyphs.ja!)).toBe(false)
+  expect(regional['zh-TW']!.equals(glyphs.ko!)).toBe(false)
 
   // ── 10 · A SHARED GERMAN LINK STAYS GERMAN ──────────────────────────────
   chapter('A shared German link stays German')
@@ -408,8 +592,8 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
   await expect(lede(page)).toContainText(t('de', 'landing.hero.lede'))
   await beat(page, 1400)
 
-  // ── 11 · CRAWL DATA ON THE JAPANESE LANDING ─────────────────────────────
-  chapter('Crawl data on the Japanese landing')
+  // ── 11 · CRAWL DATA ON THE JAPANESE AND zh-tw LANDINGS ──────────────────
+  chapter('Crawl data on the Japanese and Traditional Chinese landings')
   const head = await (await page.request.get('/ja', { maxRedirects: 0 })).text()
   expect(head).toMatch(/<html[^>]*\slang="ja"/)
   expect(head).toMatch(/<meta property="og:locale" content="ja_JP"/)
@@ -424,9 +608,32 @@ test('eleven languages on motir.co, as Story MOTIR-7737 asks to be accepted', as
       ),
     ].map((m) => [m[1]!, m[2]!]),
   )
-  expect(Object.keys(alternates).sort()).toEqual([...ORDER, 'x-default'].sort())
+  expect(Object.keys(alternates).sort()).toEqual([...TAGS, 'x-default'].sort())
+  expect(new URL(alternates['zh-TW']!).pathname).toBe('/zh-tw')
+  expect(new URL(alternates['zh']!).pathname).toBe('/zh')
   expect(new URL(alternates['x-default']!).pathname).toBe('/')
   expect(alternates['x-default']).toBe(alternates['en'])
+  // The Traditional landing's head: its tag, its OG locale, its own canonical,
+  // and the same twelve alternates.
+  const twHead = await (
+    await page.request.get('/zh-tw', { maxRedirects: 0 })
+  ).text()
+  expect(twHead).toMatch(/<html[^>]*\slang="zh-TW"/)
+  expect(twHead).toMatch(/<meta property="og:locale" content="zh_TW"/)
+  expect(
+    [...twHead.matchAll(/<link rel="canonical" href="([^"]+)"/g)].map(
+      (m) => new URL(m[1]!).pathname,
+    ),
+  ).toEqual(['/zh-tw'])
+  expect(
+    [
+      ...twHead.matchAll(
+        /<link rel="alternate" hrefLang="([^"]+)" href="([^"]+)"/gi,
+      ),
+    ]
+      .map((m) => m[1]!)
+      .sort(),
+  ).toEqual([...TAGS, 'x-default'].sort())
   // The receipt on screen, so the recording carries what was parsed.
   await page.setContent(
     `<main style="font:16px/1.6 system-ui;padding:32px"><h1>/ja — head</h1><ul>${[

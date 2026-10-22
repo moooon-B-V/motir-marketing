@@ -14,9 +14,11 @@ import {
   CJK_FACE_LABEL_CLASS,
   CJK_LANGS,
   cjkAttribute,
+  cjkFaceLabelClass,
   cjkFaces,
   cjkLangOf,
   defaultCjkFace,
+  type CjkLang,
 } from '@/lib/cjkFaces'
 import en from '@/messages/en.json'
 
@@ -27,6 +29,14 @@ import en from '@/messages/en.json'
  * installed registry, and the English catalogue to the package's registries.
  */
 
+/** The `:lang()` argument each CJK language's blocks are written with. */
+const LANG_TAG: Record<CjkLang, string> = {
+  zh: 'zh',
+  'zh-tw': 'zh-TW',
+  ja: 'ja',
+  ko: 'ko',
+}
+
 const GLOBALS = readFileSync(join(process.cwd(), 'app/globals.css'), 'utf8')
 
 describe('a CJK page offers its own fonts', () => {
@@ -34,6 +44,11 @@ describe('a CJK page offers its own fonts', () => {
     expect(cjkFaces('zh').map((f) => f.family)).toEqual([
       'Noto Sans SC',
       'Noto Serif SC',
+      'LXGW WenKai TC',
+    ])
+    expect(cjkFaces('zh-tw').map((f) => f.family)).toEqual([
+      'Noto Sans TC',
+      'Noto Serif TC',
       'LXGW WenKai TC',
     ])
     expect(cjkFaces('ja').map((f) => f.family)).toEqual([
@@ -50,12 +65,15 @@ describe('a CJK page offers its own fonts', () => {
 
   it('draws Chinese in LXGW WenKai by default, Japanese and Korean in Noto Sans', () => {
     expect(defaultCjkFace('zh')).toBe('lxgw-wenkai-tc')
+    expect(defaultCjkFace('zh-tw')).toBe('lxgw-wenkai-tc')
     expect(defaultCjkFace('ja')).toBe('noto-sans-jp')
     expect(defaultCjkFace('ko')).toBe('noto-sans-kr')
   })
 
-  it('only zh, ja and ko pages get the row', () => {
+  it('only zh, zh-tw, ja and ko pages get the row', () => {
     expect(cjkLangOf('zh')).toBe('zh')
+    expect(cjkLangOf('zh-tw')).toBe('zh-tw')
+    expect(cjkLangOf('zh-TW')).toBe('zh-tw')
     expect(cjkLangOf('ja')).toBe('ja')
     expect(cjkLangOf('ko')).toBe('ko')
     for (const latin of ['en', 'fr', 'de', 'pl']) {
@@ -64,22 +82,34 @@ describe('a CJK page offers its own fonts', () => {
   })
 
   it('draws each chip label in its face, through a class Tailwind can find', () => {
-    const ids = CJK_LANGS.flatMap((lang) => cjkFaces(lang))
-    expect(Object.keys(CJK_FACE_LABEL_CLASS).sort()).toEqual(
-      ids.map((f) => f.id).sort(),
+    const faces = CJK_LANGS.flatMap((lang) =>
+      cjkFaces(lang).map((face) => ({ lang, face })),
     )
-    for (const face of ids) {
-      expect(CJK_FACE_LABEL_CLASS[face.id]).toBe(
+    expect(Object.keys(CJK_FACE_LABEL_CLASS).sort()).toEqual(
+      faces.map(({ lang, face }) => `${lang}/${face.id}`).sort(),
+    )
+    expect(faces).toHaveLength(12)
+    for (const { lang, face } of faces) {
+      expect(cjkFaceLabelClass(lang, face.id)).toBe(
         `font-(family-name:${face.variable})`,
       )
     }
+  })
+
+  it('keeps the two Chinese sets’ LXGW WenKai TC apart (MOTIR-9248)', () => {
+    expect(cjkFaceLabelClass('zh', 'lxgw-wenkai-tc')).toBe(
+      'font-(family-name:--font-set-zh-Hans-serif-lxgw-wenkai-tc)',
+    )
+    expect(cjkFaceLabelClass('zh-tw', 'lxgw-wenkai-tc')).toBe(
+      'font-(family-name:--font-set-zh-Hant-serif-lxgw-wenkai-tc)',
+    )
   })
 
   it('globals.css draws every pick, headings and body alike, and the site default when none', () => {
     for (const lang of CJK_LANGS) {
       for (const face of cjkFaces(lang)) {
         const generic = face.role === 'serif' ? 'serif' : 'sans-serif'
-        const selector = `[lang][${cjkAttribute(lang)}='${face.id}']:lang(${lang})`
+        const selector = `[lang][${cjkAttribute(lang)}='${face.id}']:lang(${LANG_TAG[lang]})`
         const at = GLOBALS.indexOf(selector)
         expect(at, selector).toBeGreaterThan(-1)
         const body = GLOBALS.slice(at, GLOBALS.indexOf('}', at))
@@ -94,11 +124,23 @@ describe('a CJK page offers its own fonts', () => {
         )
         if (face.id === defaultCjkFace(lang)) {
           expect(GLOBALS).toContain(
-            `[lang]:lang(${lang}):not([${cjkAttribute(lang)}]),\n${selector}`,
+            `[lang]:lang(${LANG_TAG[lang]}):not([${cjkAttribute(lang)}]),\n${selector}`,
           )
         }
       }
     }
+  })
+
+  it('draws zh-TW after zh, since :lang(zh) also matches zh-TW', () => {
+    const lastZh = GLOBALS.lastIndexOf(':lang(zh) {')
+    expect(lastZh).toBeGreaterThan(-1)
+    for (const face of cjkFaces('zh-tw')) {
+      const at = GLOBALS.indexOf(`[data-cjk-zh-tw='${face.id}']:lang(zh-TW)`)
+      expect(at, face.id).toBeGreaterThan(lastZh)
+    }
+    expect(
+      GLOBALS.indexOf('[lang]:lang(zh-TW):not([data-cjk-zh-tw])'),
+    ).toBeGreaterThan(lastZh)
   })
 })
 
