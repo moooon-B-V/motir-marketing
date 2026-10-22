@@ -1,5 +1,5 @@
 ---
-source: 656e3e6e6922
+source: 09ae33222102
 ---
 
 Die öffentliche Lese-API ist versioniert. Die Version des Vertrags steht im Feld `info.version` des ausgelieferten OpenAPI-Dokuments, und eine Änderung, die einen Client bricht, ist eine neue Version und keine stille Bearbeitung.
@@ -43,4 +43,4 @@ Als ZWEITES Dokument unter einem zweiten Pfad, das neben `v1` ausgeliefert wird 
 
 Die `info.version` der Spezifikation ist die Version des API-Vertrags und nicht die Release-Nummer der App: Ihre Hauptversion ist die Pfadversion, die Nebenversion steigt bei einer additiven Änderung aus der obigen Liste, und die Patch-Version bei einer rein dokumentarischen Korrektur. Lesen Sie sie aus jeder Antwort als `X-Motir-Api-Version` aus – [Erste Schritte](/docs/api/getting-started) zeigt, wo.
 
-Diese Seite ist die veröffentlichte Zusage. Die interne Aufzeichnung, aus der sie entstanden ist, ist [das Entscheidungsprotokoll zur API](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.
+Diese Seite ist die veröffentlichte Zusage. Die interne Aufzeichnung, aus der sie entstanden ist, ist [das Entscheidungsprotokoll zur API](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.

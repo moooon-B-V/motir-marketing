@@ -58,7 +58,7 @@ describe('the three doors are built from the ONE configured origin', () => {
   })
 
   it('the ONE destination that is not motir-core is not built from the origin', () => {
-    expect(SOURCE_REPO).toBe('https://github.com/moooon-B-V/motir-core')
+    expect(SOURCE_REPO).toBe('https://github.com/motir-co/motir-core')
     expect(SOURCE_REPO.startsWith(ORIGIN)).toBe(false)
   })
 

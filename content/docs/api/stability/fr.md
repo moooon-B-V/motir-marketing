@@ -1,5 +1,5 @@
 ---
-source: 656e3e6e6922
+source: 09ae33222102
 ---
 
 L’API de lecture publique est versionnée. La version du contrat figure dans le champ `info.version` du document OpenAPI servi, et une modification qui casse un client est un changement de version, pas une édition silencieuse.
@@ -43,4 +43,4 @@ Sous la forme d’un SECOND document à un second chemin, servi en parallèle de
 
 Le `info.version` de la spécification est la version du contrat de l’API, et non le numéro de version de l’application : son majeur est la version du chemin, son mineur augmente à chaque changement additif de la liste ci-dessus, et son correctif à chaque correction qui ne touche que la documentation. Lisez-la sur n’importe quelle réponse dans `X-Motir-Api-Version` — [Premiers pas](/docs/api/getting-started) indique où.
 
-Cette page est l’engagement publié. Le document interne dont elle est tirée est [le document de décision de l’API](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.
+Cette page est l’engagement publié. Le document interne dont elle est tirée est [le document de décision de l’API](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.

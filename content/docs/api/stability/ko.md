@@ -1,5 +1,5 @@
 ---
-source: 656e3e6e6922
+source: 09ae33222102
 ---
 
 공개 읽기 API에는 버전이 있습니다. 계약 버전은 제공되는 OpenAPI 문서의 `info.version` 필드에 담기며, 클라이언트를 깨뜨리는 변경은 조용한 수정이 아니라 버전 증가로 이루어집니다.
@@ -43,4 +43,4 @@ source: 656e3e6e6922
 
 사양의 `info.version`은 앱의 릴리스 번호가 아니라 API 계약의 버전입니다. 메이저는 경로 버전이고, 마이너는 위 목록의 추가적 변경이 있을 때 증가하며, 패치는 문서만 바로잡을 때 증가합니다. 어떤 응답에서든 `X-Motir-Api-Version`으로 읽을 수 있으며, 위치는 [시작하기](/docs/api/getting-started)에 나와 있습니다.
 
-이 페이지는 공개된 약속입니다. 이 페이지의 바탕이 된 내부 기록은 [API 결정 기록](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md) §8입니다.
+이 페이지는 공개된 약속입니다. 이 페이지의 바탕이 된 내부 기록은 [API 결정 기록](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md) §8입니다.

@@ -34,7 +34,7 @@ import {
   type Batch,
 } from '@/scripts/i18n/catalogue'
 
-// Ported from moooon-B-V/motir-core `tests/i18n/catalogueScript.test.ts` at
+// Ported from motir-co/motir-core `tests/i18n/catalogueScript.test.ts` at
 // 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949), with `merge`,
 // `baseline` and the CLI awaited, and this repository's own cases at the end:
 // the prettier-clean writer and `glossary-sync`.
@@ -681,7 +681,7 @@ describe('the writer leaves prettier nothing to change', () => {
 describe('glossary-sync', () => {
   let from: string
   const README =
-    '# Catalogue glossaries\n\nMirrored from moooon-B-V/motir-core@0000000.\n'
+    '# Catalogue glossaries\n\nMirrored from motir-co/motir-core@0000000.\n'
   const git = (...args: string[]) =>
     execFileSync(
       'git',

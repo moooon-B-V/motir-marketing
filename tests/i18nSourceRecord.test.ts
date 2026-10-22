@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest'
 import { flattenCatalogue } from '../scripts/i18n/sourceRecord'
 
 /*
- * Ported from moooon-B-V/motir-core `tests/i18n-source-record.test.ts` at
+ * Ported from motir-co/motir-core `tests/i18n-source-record.test.ts` at
  * 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949).
  *
  * Every catalogue records the English it was translated from, in

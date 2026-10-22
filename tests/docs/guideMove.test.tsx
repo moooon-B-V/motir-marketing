@@ -236,7 +236,7 @@ describe('the five guides read the same after the move', () => {
       )
       expect(markdown, slug).not.toContain('git clone')
       expect(markdown, slug).not.toContain('claude mcp add')
-      expect(markdown, slug).not.toContain('github.com/moooon-B-V')
+      expect(markdown, slug).not.toContain('github.com/motir-co')
     }
   })
 })

@@ -21,7 +21,7 @@ describe('the setup prompt', () => {
       .blocks[0]!
     expect(prompt).toContain(plugin.code)
     expect(prompt).toContain(
-      `/plugin marketplace add moooon-B-V/motir-skills#${SKILLS_RELEASE_TAG}`,
+      `/plugin marketplace add motir-co/motir-skills#${SKILLS_RELEASE_TAG}`,
     )
   })
 
