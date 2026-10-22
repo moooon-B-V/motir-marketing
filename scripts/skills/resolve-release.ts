@@ -11,7 +11,7 @@ import {
 // Never fails the build: no network, a rate limit or a malformed answer falls
 // back to the committed pin, and says so on stderr.
 
-const REPO = 'moooon-B-V/motir-skills'
+const REPO = 'motir-co/motir-skills'
 
 async function readLatest(token: string | undefined): Promise<Response> {
   const headers: Record<string, string> = {

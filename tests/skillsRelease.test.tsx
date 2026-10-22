@@ -96,7 +96,7 @@ describe('every install surface follows the latest release', () => {
     expect(at.prompt).toContain(`shows motir at ${version}`)
 
     // The skills guide: every marketplace and clone command.
-    expect(at.skills).toContain(`moooon-B-V/motir-skills#${NEWER}`)
+    expect(at.skills).toContain(`motir-co/motir-skills#${NEWER}`)
     expect(at.skills).toContain(`git clone --depth 1 --branch ${NEWER}`)
     expect(at.skills).toContain(`motir at ${version}`)
 

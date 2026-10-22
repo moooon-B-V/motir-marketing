@@ -14,7 +14,7 @@ import { compareMessageShape } from '../scripts/i18n/messageShape'
 import { flattenCatalogue } from '../scripts/i18n/sourceRecord'
 
 /*
- * Ported from moooon-B-V/motir-core `tests/i18n-message-shape.test.ts` at
+ * Ported from motir-co/motir-core `tests/i18n-message-shape.test.ts` at
  * 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949), without its two
  * assertions about motir-core's own locales (that `zh` is among them, and that
  * the listing equals the app's locale list): this repository starts with no

@@ -85,7 +85,7 @@ export function generateMetadata({
 
 /** motir-core's own CLI reference — the authority beyond this page. */
 const CLI_REFERENCE_URL =
-  'https://github.com/moooon-B-V/motir-core/blob/main/docs/cli.md'
+  'https://github.com/motir-co/motir-core/blob/main/docs/cli.md'
 
 /*
  * THE PROSE LIVES IN `content/docs/cli/<locale>.md` (MOTIR-8035). This file keeps

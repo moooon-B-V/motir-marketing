@@ -335,4 +335,4 @@ export function mcpVerifyCommand(
 
 /** motir-core's own MCP reference — the authority beyond this page. */
 export const MCP_REFERENCE_URL =
-  'https://github.com/moooon-B-V/motir-core/blob/main/docs/mcp.md'
+  'https://github.com/motir-co/motir-core/blob/main/docs/mcp.md'

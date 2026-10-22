@@ -1,5 +1,5 @@
 ---
-source: 656e3e6e6922
+source: 09ae33222102
 ---
 
 De openbare lees-API heeft versies. De versie van het contract staat in het veld `info.version` van het geleverde OpenAPI-document, en een wijziging die een client breekt is een versieverhoging, geen stille aanpassing.
@@ -43,4 +43,4 @@ Als een TWEEDE document op een tweede pad, naast `v1` geleverd — niet als hers
 
 De `info.version` in de specificatie is de versie van het API-contract, niet het releasenummer van de app: de major is de padversie, de minor loopt op bij een additieve wijziging uit de lijst hierboven en de patch bij een correctie die alleen de documentatie raakt. Lees hem uit elke response als `X-Motir-Api-Version` — [Aan de slag](/docs/api/getting-started) laat zien waar.
 
-Deze pagina is de gepubliceerde toezegging. Het interne document waaruit ze is geschreven, is [het beslisdocument over de API](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.
+Deze pagina is de gepubliceerde toezegging. Het interne document waaruit ze is geschreven, is [het beslisdocument over de API](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.

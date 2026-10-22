@@ -1,5 +1,5 @@
 ---
-source: 656e3e6e6922
+source: 09ae33222102
 ---
 
 Publiczne API odczytu jest wersjonowane. Wersja kontraktu jest przekazywana w polu `info.version` udostępnianego dokumentu OpenAPI, a zmiana, która psuje klienta, to podniesienie wersji, a nie cicha edycja.
@@ -43,4 +43,4 @@ Jako DRUGI dokument pod drugą ścieżką, serwowany obok `v1` — a nie jako je
 
 `info.version` w specyfikacji to wersja kontraktu API, a nie numer wydania aplikacji: jej wersja główna to wersja ścieżki, wersja podrzędna rośnie przy zmianie przyrostowej z powyższej listy, a poprawka przy korekcie dotyczącej wyłącznie dokumentacji. Odczytaj ją z dowolnej odpowiedzi jako `X-Motir-Api-Version` — [Pierwsze kroki](/docs/api/getting-started) pokazują gdzie.
 
-Ta strona jest opublikowanym zobowiązaniem. Wewnętrzny zapis, z którego powstała, to [dokument decyzji o API](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.
+Ta strona jest opublikowanym zobowiązaniem. Wewnętrzny zapis, z którego powstała, to [dokument decyzji o API](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.

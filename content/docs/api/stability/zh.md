@@ -1,5 +1,5 @@
 ---
-source: 656e3e6e6922
+source: 09ae33222102
 ---
 
 公开读取 API 是有版本的。契约版本记录在所提供的 OpenAPI 文档的 `info.version` 字段中，会破坏客户端的更改是一次版本升级，而不是悄悄的修改。
@@ -43,4 +43,4 @@ source: 656e3e6e6922
 
 规范中的 `info.version` 是 API 契约的版本，而不是应用的发布版本号：它的主版本就是路径版本，次版本在上面列出的增量更改发生时递增，补丁版本在仅修订文档时递增。可以从任何响应中把它读作 `X-Motir-Api-Version`——[快速开始](/docs/api/getting-started)说明了在哪里看。
 
-本页是已发布的承诺。它所依据的内部记录是 [API 决策记录](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md)，第 8 节。
+本页是已发布的承诺。它所依据的内部记录是 [API 决策记录](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md)，第 8 节。

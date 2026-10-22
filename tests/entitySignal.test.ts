@@ -232,7 +232,7 @@ describe('the root JSON-LD graph', () => {
   it('lists only sameAs profiles that EXIST — a 404 there is an anti-signal', () => {
     // Product Hunt / G2 / AlternativeTo are MOTIR-1156's deliverable and none of
     // them has been created. When one lands it is one line in `SAME_AS`.
-    expect(org.sameAs).toEqual(['https://github.com/moooon-B-V'])
+    expect(org.sameAs).toEqual(['https://github.com/motir-co'])
     expect(SAME_AS).not.toContain('')
   })
 

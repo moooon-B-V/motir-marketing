@@ -32,7 +32,7 @@ import {
   type FlatCatalogue,
 } from './sourceRecord.ts'
 
-// Ported from moooon-B-V/motir-core `scripts/i18n/catalogue.ts` at
+// Ported from motir-co/motir-core `scripts/i18n/catalogue.ts` at
 // 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949). Kept in step with that
 // file, with three differences: `merge` and `baseline` are async because the
 // catalogue and the record are written through prettier (see sourceRecord.ts),
@@ -436,7 +436,7 @@ export interface GlossarySyncResult {
   readmeChanged: boolean
 }
 
-const MIRROR_LINE = /^Mirrored from moooon-B-V\/motir-core@[0-9a-f]+\.?$/m
+const MIRROR_LINE = /^Mirrored from motir-co\/motir-core@[0-9a-f]+\.?$/m
 
 /** Copy motir-core's glossaries over this repository's mirror, byte for byte,
  *  and record the commit they came from in `messages/glossary/README.md`. Every
@@ -498,7 +498,7 @@ export function glossarySync(
     throw new Error(`${readme} has no "Mirrored from" line`)
   const next = text.replace(
     MIRROR_LINE,
-    `Mirrored from moooon-B-V/motir-core@${sha}.`,
+    `Mirrored from motir-co/motir-core@${sha}.`,
   )
   if (next !== text) {
     writeFileSync(readme, next)
