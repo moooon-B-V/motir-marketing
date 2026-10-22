@@ -44,6 +44,13 @@ export const LADDER_CLASSES: Record<Locale, LadderClasses> = {
     wide: 'hidden min-[1192px]:inline-flex',
     menu: 'min-[1192px]:hidden',
   },
+  'zh-tw': {
+    bar: 'gap-5 text-[17px]',
+    setup: 'hidden min-[1373px]:inline-flex',
+    nav: 'hidden min-[1192px]:flex',
+    wide: 'hidden min-[1192px]:inline-flex',
+    menu: 'min-[1192px]:hidden',
+  },
   ja: {
     bar: 'gap-5 text-[17px]',
     setup: 'hidden min-[1589px]:inline-flex',

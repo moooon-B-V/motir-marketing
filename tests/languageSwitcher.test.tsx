@@ -5,13 +5,13 @@ import { render } from '@/tests/helpers/withCopy'
 import { LanguageSwitcher } from '@/app/_components/LanguageSwitcher'
 import { SiteHeader } from '@/app/_components/SiteHeader'
 import { SiteShell } from '@/app/_components/SiteShell'
-import { LOCALE_ENDONYMS, LOCALES } from '@/i18n/routing'
+import { LOCALE_BCP47, LOCALE_ENDONYMS, LOCALES } from '@/i18n/routing'
 import { englishCopy as copy, format } from '@/lib/copy'
 import { SITE_HOST, type PublicHost } from '@/lib/publicHost'
 
 /*
  * THE HEADER'S LANGUAGE SWITCHER (MOTIR-7953), built to MOTIR-7947 revision 2:
- * a globe at the bar's right edge at every width, opening the eleven languages
+ * a globe at the bar's right edge at every width, opening the twelve languages
  * as links, each the page being read in that language.
  */
 
@@ -47,7 +47,8 @@ const WORKSPACE: PublicHost = {
 
 const ORDER = [
   'English',
-  '中文',
+  '简体中文',
+  '繁體中文',
   '日本語',
   '한국어',
   'Deutsch',
@@ -85,15 +86,19 @@ describe('closed', () => {
 })
 
 describe('open', () => {
-  it('lists the eleven languages in order, each in its own lang', async () => {
+  it('lists the twelve languages in order, each in its own lang', async () => {
     renderJapaneseExplore()
     await userEvent.click(trigger())
     expect(trigger()).toHaveAttribute('aria-expanded', 'true')
 
     const links = within(group()).getAllByRole('link')
     expect(links.map((a) => a.textContent)).toEqual(ORDER)
-    expect(links.map((a) => a.getAttribute('lang'))).toEqual([...LOCALES])
-    expect(links.map((a) => a.getAttribute('hreflang'))).toEqual([...LOCALES])
+    const tags = LOCALES.map((l) => LOCALE_BCP47[l])
+    expect(links.map((a) => a.getAttribute('lang'))).toEqual(tags)
+    expect(links.map((a) => a.getAttribute('hreflang'))).toEqual(tags)
+    expect(links[2]).toHaveAttribute('lang', 'zh-TW')
+    expect(links[2]).toHaveAttribute('href', '/zh-tw/explore')
+    expect(links[1]).toHaveAttribute('lang', 'zh')
     expect(links.map((a) => a.getAttribute('href'))).toEqual([
       '/explore',
       ...LOCALES.slice(1).map((l) => `/${l}/explore`),
@@ -168,6 +173,16 @@ describe('on a tenant host', () => {
       .getAllByRole('link')
       .map((a) => a.getAttribute('href'))
     expect(hrefs).toEqual(LOCALES.map(() => '/MOTIR/changelog'))
+  })
+
+  it('writes the URL code, zh-tw, when Traditional Chinese is chosen', async () => {
+    renderJapaneseExplore()
+    await userEvent.click(trigger())
+    await userEvent.click(
+      within(group()).getByRole('link', { name: '繁體中文' }),
+    )
+    expect(document.cookie).toContain('NEXT_LOCALE=zh-tw')
+    expect(assign).toHaveBeenCalledExactlyOnceWith('/zh-tw/explore')
   })
 
   it('reloads the same address after writing the cookie', async () => {

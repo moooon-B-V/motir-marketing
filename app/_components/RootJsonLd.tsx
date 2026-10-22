@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/routing'
+import { LOCALE_BCP47, type Locale } from '@/i18n/routing'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 
 /*
@@ -63,8 +63,8 @@ export interface RootJsonLdInput {
  * or a string from the copy catalogue.
  *
  * ⚠️ THE DESCRIPTION AND `inLanguage` ARE THE PAGE'S (MOTIR-7956). Both nodes
- * keep their `@id`s whatever the locale — the entity is one Motir in eleven
- * languages, not eleven entities — and only the words describing it, and the
+ * keep their `@id`s whatever the locale — the entity is one Motir in twelve
+ * languages, not twelve entities — and only the words describing it, and the
  * WebSite's stated language, follow the page.
  */
 export function buildRootJsonLd({
@@ -96,7 +96,7 @@ export function buildRootJsonLd({
         name: 'Motir',
         url: siteUrl('/'),
         description,
-        inLanguage: locale,
+        inLanguage: LOCALE_BCP47[locale],
         publisher: { '@id': ORGANIZATION_ID },
         // ⚠️ THE TARGET IS A REAL, SHIPPED SEARCH, AND IT NOW LIVES ON THIS
         // ORIGIN (MOTIR-4045). `/explore` moved from motir-core onto motir.co,

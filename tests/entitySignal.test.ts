@@ -14,7 +14,7 @@ import {
 import { englishCopy as copy } from '@/lib/copy'
 import { DOCS_ROUTES } from '@/lib/docsSurfaces'
 import { legalDocumentSlugs } from '@/lib/legal/documents'
-import { LOCALES } from '@/i18n/routing'
+import { LOCALE_BCP47, LOCALES } from '@/i18n/routing'
 
 // `app/sitemap.ts` and `app/robots.ts` read the request's host (MOTIR-4222),
 // and `next/headers` throws outside a request scope. Empty headers read as
@@ -143,10 +143,10 @@ describe('sitemap', () => {
     ])
   })
 
-  it('lists each of them once per locale, every entry with the twelve alternates (MOTIR-7956) — except a legal document, once (MOTIR-8086)', () => {
+  it('lists each of them once per locale, every entry with the thirteen alternates (MOTIR-7956) — except a legal document, once (MOTIR-8086)', () => {
     // The static count is computed from the same sources the sitemap reads,
     // so the assertion moves with them: the fixed pages, the docs routes and
-    // the legal glob. A legal document is the one exception to "×11": its
+    // the legal glob. A legal document is the one exception to "×12": its
     // binding text is English in every language version, so it is listed once,
     // at its English address, with no alternates.
     const localizedPaths =
@@ -166,13 +166,13 @@ describe('sitemap', () => {
     for (const entry of entries.filter((e) => !documentUrls.includes(e.url))) {
       const languages = entry.alternates?.languages as Record<string, string>
       expect(Object.keys(languages).sort(), entry.url).toEqual(
-        [...LOCALES, 'x-default'].sort(),
+        [...LOCALES.map((l) => LOCALE_BCP47[l]), 'x-default'].sort(),
       )
       expect(Object.values(languages)).toContain(entry.url)
       expect(languages['x-default']).toBe(languages.en)
     }
     expect(entries.map((entry) => entry.url)).toContain('https://motir.co/ja')
-    // The legal INDEX is translated chrome, so it stays ×11; its documents do not.
+    // The legal INDEX is translated chrome, so it stays ×12; its documents do not.
     expect(entries.map((entry) => entry.url)).toContain(
       'https://motir.co/fr/legal',
     )
@@ -198,6 +198,20 @@ describe('sitemap', () => {
     expect(Array.isArray(entries)).toBe(true)
     expect(entries.length).toBeGreaterThan(0)
     expect(entries.some((entry) => entry.url.includes('/p/'))).toBe(false)
+  })
+})
+
+describe('the WebSite node’s language (MOTIR-9249)', () => {
+  const inLanguage = (locale: 'zh' | 'zh-tw') =>
+    (
+      buildRootJsonLd({ locale, description: 'D' })['@graph'] as Record<
+        string,
+        unknown
+      >[]
+    ).find((node) => node['@type'] === 'WebSite')!.inLanguage
+  it('is the BCP 47 tag, zh-TW for zh-tw and zh for zh', () => {
+    expect(inLanguage('zh-tw')).toBe('zh-TW')
+    expect(inLanguage('zh')).toBe('zh')
   })
 })
 

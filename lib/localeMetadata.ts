@@ -3,7 +3,13 @@ import { getCopy, type Copy } from '@/lib/copy'
 import { enterLocale, type LocaleParams } from '@/i18n/locale'
 import { SITE_ORIGIN, siteUrl } from '@/lib/siteOrigin'
 import { localizedPath } from '@/i18n/localizedPath'
-import { DEFAULT_LOCALE, LOCALES, OG_LOCALE, type Locale } from '@/i18n/routing'
+import {
+  DEFAULT_LOCALE,
+  LOCALE_BCP47,
+  LOCALES,
+  OG_LOCALE,
+  type Locale,
+} from '@/i18n/routing'
 
 /*
  * A PAGE'S CRAWL DATA, IN ONE PLACE (MOTIR-7956).
@@ -15,7 +21,7 @@ import { DEFAULT_LOCALE, LOCALES, OG_LOCALE, type Locale } from '@/i18n/routing'
  *
  * ⚠️ RECIPROCAL AND SELF-REFERENCING. Google ignores an `hreflang` pair that
  * does not point back (Search Central, "Tell Google about localized versions
- * of your page"), so every version lists ALL eleven, itself included, plus
+ * of your page"), so every version lists ALL twelve, itself included, plus
  * `x-default` on the unprefixed English address — the one the proxy detects a
  * first visit's language on (MOTIR-7951).
  *
@@ -27,11 +33,14 @@ import { DEFAULT_LOCALE, LOCALES, OG_LOCALE, type Locale } from '@/i18n/routing'
 /** A page's address in one locale — English unprefixed. Query kept as given. */
 export { localizedPath }
 
-/** The twelve `hreflang` alternates of a path: each locale, plus `x-default`. */
+/**
+ * The thirteen `hreflang` alternates of a path: each locale under its BCP 47
+ * tag (`zh-TW` for `zh-tw`), plus `x-default`.
+ */
 export function languageAlternates(path: string): Record<string, string> {
   const languages: Record<string, string> = {}
   for (const locale of LOCALES) {
-    languages[locale] = siteUrl(localizedPath(locale, path))
+    languages[LOCALE_BCP47[locale]] = siteUrl(localizedPath(locale, path))
   }
   languages['x-default'] = siteUrl(localizedPath(DEFAULT_LOCALE, path))
   return languages
@@ -42,7 +51,7 @@ export function languageAlternates(path: string): Record<string, string> {
  * (MOTIR-8086): the unprefixed English address, from every language version.
  *
  * A legal document is the case. Its body, title, version and effective date are
- * the same English in all eleven versions, and only the chrome around them is
+ * the same English in all twelve versions, and only the chrome around them is
  * translated, so each language version is a DUPLICATE of the English document
  * rather than a localized alternate of it. Its canonical is therefore the
  * English address, and it carries NO `hreflang` set: a set of alternates that
@@ -82,7 +91,7 @@ export function siteCard(locale: Locale, alt: string) {
   }
 }
 
-/** The `og:locale` set: the page's own, and the other ten as alternates. */
+/** The `og:locale` set: the page's own, and the other eleven as alternates. */
 export function openGraphLocales(locale: Locale): {
   locale: string
   alternateLocale: string[]
@@ -109,8 +118,8 @@ export interface LocaleMetadataInput {
 
 /**
  * A motir.co page's metadata in one locale: its title and description, a
- * canonical to its OWN language address, the twelve alternates, and
- * `og:locale` with the other ten as `og:locale:alternate`.
+ * canonical to its OWN language address, the thirteen alternates, and
+ * `og:locale` with the other eleven as `og:locale:alternate`.
  */
 export function localeMetadata({
   locale,
@@ -164,8 +173,8 @@ export async function localePageMetadata(
  * A public project page's canonical and alternates, from its PRIMARY address
  * (`publicUrlFor`, MOTIR-4222).
  *
- * • **Primary on motir.co** — the page exists at eleven `/<locale>/p/<id>…`
- *   addresses, so the canonical is this locale's own one and the twelve
+ * • **Primary on motir.co** — the page exists at twelve `/<locale>/p/<id>…`
+ *   addresses, so the canonical is this locale's own one and the thirteen
  *   alternates ride with it. A canonical left on the English address would tell
  *   a crawler the French version is a duplicate of it, and the `hreflang` set
  *   pointing back would be ignored.

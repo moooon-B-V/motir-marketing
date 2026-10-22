@@ -13,7 +13,7 @@ import {
  */
 
 describe('matchAcceptLanguage', () => {
-  it('matches each of the eleven by its bare tag', () => {
+  it('matches each of the twelve by its bare tag', () => {
     for (const locale of LOCALES) {
       expect(matchAcceptLanguage(locale), locale).toBe(locale)
     }
@@ -23,12 +23,15 @@ describe('matchAcceptLanguage', () => {
     ['de-AT', 'de'],
     ['pt-BR', 'pt'],
     ['pt-PT', 'pt'],
-    ['zh-TW', 'zh'],
     ['zh-Hant-HK', 'zh'],
     ['ja-JP', 'ja'],
     ['JA-jp', 'ja'],
   ])('reads %s as its base language, %s', (header, locale) => {
     expect(matchAcceptLanguage(header)).toBe(locale)
+  })
+
+  it('reads zh-TW as the routed zh-tw, an exact match before the base (MOTIR-9249)', () => {
+    expect(matchAcceptLanguage('zh-TW')).toBe('zh-tw')
   })
 
   it('finds nothing for a language motir.co does not speak', () => {
@@ -67,7 +70,7 @@ describe('chooseLocale', () => {
     expect(chooseLocale({ cookie: 'en', acceptLanguage: 'ja' })).toBe('en')
   })
 
-  it('SKIPS a cookie that is not one of the eleven, never defaulting it', () => {
+  it('SKIPS a cookie that is not one of the twelve, never defaulting it', () => {
     expect(chooseLocale({ cookie: 'xx', acceptLanguage: 'ja' })).toBe('ja')
     expect(chooseLocale({ cookie: '', acceptLanguage: 'ko' })).toBe('ko')
   })

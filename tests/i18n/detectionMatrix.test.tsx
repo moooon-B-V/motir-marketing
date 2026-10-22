@@ -7,10 +7,10 @@ import { render } from '@/tests/helpers/withCopy'
 
 /*
  * THE DETECTION MATRIX (MOTIR-7967, case 4) — the visitor's language through
- * the REAL `proxy`, on every kind of host, for every one of the eleven.
+ * the REAL `proxy`, on every kind of host, for every one of the twelve.
  *
  * `tests/host/hostRouter.test.ts` proves each branch with a representative
- * row; this file walks the whole table, so a twelfth locale, a regional tag the
+ * row; this file walks the whole table, so a thirteenth locale, a regional tag the
  * matcher stops folding, or a branch that starts redirecting where it rewrote
  * fails here by name. The host-resolution contract is the one seam stubbed,
  * the same one `tests/host/` stubs; the base domain is pinned to production's.
@@ -91,8 +91,8 @@ function expectNotMoved(res: Response) {
 beforeEach(() => resolveHost.mockReset())
 
 describe('the site host, an unprefixed address, no cookie', () => {
-  it('covers all eleven, so a twelfth locale joins this table', () => {
-    expect(LOCALES).toHaveLength(11)
+  it('covers all twelve, so a thirteenth locale joins this table', () => {
+    expect(LOCALES).toHaveLength(12)
   })
 
   it.each(NON_ENGLISH)('Accept-Language: %s → /%s/explore?q=x', async (l) => {
@@ -114,7 +114,7 @@ describe('the site host, an unprefixed address, no cookie', () => {
     ['de-AT', 'de'],
     ['pt-BR', 'pt'],
     ['pt-PT', 'pt'],
-    ['zh-TW', 'zh'],
+    ['zh-TW', 'zh-tw'],
     ['zh-Hant-HK', 'zh'],
     ['ja-JP', 'ja'],
   ])('a regional %s reads as %s', async (tag, l) => {
@@ -157,7 +157,7 @@ describe('the order: cookie, then browser, then English', () => {
     expect(rewriteOf(res)).toBe('/en')
   })
 
-  it('a cookie that is not one of the eleven is skipped, not read as English', async () => {
+  it('a cookie that is not one of the twelve is skipped, not read as English', async () => {
     expectMovedTo(
       await ask('https://motir.co/', {
         cookie: 'NEXT_LOCALE=xx',

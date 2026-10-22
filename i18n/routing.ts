@@ -3,11 +3,11 @@ import { defineRouting } from 'next-intl/routing'
 /**
  * THE LOCALE LIST (Story MOTIR-7737 · MOTIR-7948) — the ONE place motir.co's
  * languages are named. Every sibling card imports {@link LOCALES} and
- * {@link Locale} from here rather than spelling the eleven again.
+ * {@link Locale} from here rather than spelling the twelve again.
  *
  * ── `as-needed` ──────────────────────────────────────────────────────────
  *
- * English keeps every address it has today, unprefixed; the other ten sit
+ * English keeps every address it has today, unprefixed; the other eleven sit
  * under `/<locale>/…`. So no published link, crawler entry or test URL moves,
  * and `/en/…` is a redirect to the unprefixed spelling rather than a second
  * address for the same page.
@@ -23,6 +23,7 @@ import { defineRouting } from 'next-intl/routing'
 export const LOCALES = [
   'en',
   'zh',
+  'zh-tw',
   'ja',
   'ko',
   'de',
@@ -49,11 +50,13 @@ export const routing = defineRouting({
 /**
  * The OpenGraph `og:locale` for each locale — a language_TERRITORY pair, which
  * is the form the protocol defines. The territory is the market each catalogue
- * is written for: Simplified Chinese is `zh_CN`, Portuguese is Brazil's.
+ * is written for: Simplified Chinese is `zh_CN`, Traditional Chinese is
+ * Taiwan's (`zh_TW`), Portuguese is Brazil's.
  */
 export const OG_LOCALE: Record<Locale, string> = {
   en: 'en_US',
   zh: 'zh_CN',
+  'zh-tw': 'zh_TW',
   ja: 'ja_JP',
   ko: 'ko_KR',
   de: 'de_DE',
@@ -68,13 +71,15 @@ export const OG_LOCALE: Record<Locale, string> = {
 /**
  * Each language's name in its own script (MOTIR-7953) — what the header's
  * language switcher lists. NOT catalogue strings: 日本語 reads 日本語 on every
- * page, so these live once, beside the locale list, rather than in eleven
- * catalogues. `Record<Locale, …>` makes the list total over the locales at
+ * page, so these live once, beside the locale list, rather than in twelve
+ * catalogues. With two Chinese scripts listed, `zh` is named 简体中文 and
+ * `zh-tw` 繁體中文 (MOTIR-9249): a bare 中文 would name both. `Record<Locale, …>` makes the list total over the locales at
  * compile time.
  */
 export const LOCALE_ENDONYMS: Record<Locale, string> = {
   en: 'English',
-  zh: '中文',
+  zh: '简体中文',
+  'zh-tw': '繁體中文',
   ja: '日本語',
   ko: '한국어',
   de: 'Deutsch',
@@ -107,6 +112,9 @@ export const LOCALE_ENDONYMS: Record<Locale, string> = {
 export const HEADER_LADDER: Record<Locale, { a: number; b: number }> = {
   en: { a: 1483, b: 1266 },
   zh: { a: 1373, b: 1192 },
+  // zh's widths, not yet measured with the zh-tw catalogue and LXGW WenKai TC:
+  // the twelve-language E2E card (MOTIR-9253) measures the bar and replaces them.
+  'zh-tw': { a: 1373, b: 1192 },
   ja: { a: 1589, b: 1288 },
   ko: { a: 1368, b: 1173 },
   de: { a: 1652, b: 1358 },
@@ -116,4 +124,26 @@ export const HEADER_LADDER: Record<Locale, { a: number; b: number }> = {
   nl: { a: 1562, b: 1294 },
   pl: { a: 1634, b: 1341 },
   pt: { a: 1656, b: 1353 },
+}
+
+/**
+ * Each locale's BCP 47 language tag (MOTIR-9249) — what `<html lang>`, the
+ * switcher's `lang` / `hrefLang`, JSON-LD's `inLanguage` and the `hreflang`
+ * set carry. The URL code and the tag agree for every locale but `zh-tw`,
+ * whose tag is `zh-TW`; URLs, the `NEXT_LOCALE` cookie, `localizedPath` and
+ * `stripLocale` keep the URL code.
+ */
+export const LOCALE_BCP47: Record<Locale, string> = {
+  en: 'en',
+  zh: 'zh',
+  'zh-tw': 'zh-TW',
+  ja: 'ja',
+  ko: 'ko',
+  de: 'de',
+  fr: 'fr',
+  es: 'es',
+  it: 'it',
+  nl: 'nl',
+  pl: 'pl',
+  pt: 'pt',
 }

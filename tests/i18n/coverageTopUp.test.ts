@@ -23,7 +23,7 @@ afterEach(() => {
 })
 
 describe('app/fonts.ts', () => {
-  it('joins every loader’s variable class, the six pairings and the nine CJK faces', async () => {
+  it('joins every loader’s variable class, the six pairings and the twelve CJK faces', async () => {
     // next/font is a compiler transform; outside Next each loader is a plain
     // call, so it is stubbed to echo the variable it was given.
     vi.doMock('next/font/google', () => {
@@ -42,9 +42,11 @@ describe('app/fonts.ts', () => {
           'Noto_Sans_JP',
           'Noto_Sans_KR',
           'Noto_Sans_SC',
+          'Noto_Sans_TC',
           'Noto_Serif_JP',
           'Noto_Serif_KR',
           'Noto_Serif_SC',
+          'Noto_Serif_TC',
           'Source_Serif_4',
           'Space_Grotesk',
         ].map((name) => [name, loader]),
@@ -52,7 +54,7 @@ describe('app/fonts.ts', () => {
     })
     const { fontVariables } = await import('@/app/fonts')
     const names = fontVariables.split(' ')
-    expect(names).toHaveLength(15)
+    expect(names).toHaveLength(18)
     expect(names).toContain('--font-sans-source')
     expect(names).toContain('--font-set-ko-serif-noto-serif-kr')
   })
@@ -81,7 +83,7 @@ describe('i18n/request.ts', () => {
 })
 
 describe('i18n/navigation.ts', () => {
-  it('builds next-intl’s navigation over the eleven', async () => {
+  it('builds next-intl’s navigation over the twelve', async () => {
     const navigation = await import('@/i18n/navigation')
     expect(navigation.getPathname({ href: '/explore', locale: 'ja' })).toBe(
       '/ja/explore',

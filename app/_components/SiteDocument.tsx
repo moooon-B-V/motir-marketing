@@ -4,7 +4,7 @@ import {
   clearStoredAppearanceScript,
   siteAppearanceAttributes,
 } from '@/lib/siteDefaults'
-import type { Locale } from '@/i18n/routing'
+import { LOCALE_BCP47, type Locale } from '@/i18n/routing'
 import { fontVariables } from '../fonts'
 import { RootJsonLd } from './RootJsonLd'
 import '../globals.css'
@@ -33,7 +33,7 @@ export function SiteDocument({
 }>) {
   return (
     <html
-      lang={lang}
+      lang={LOCALE_BCP47[lang]}
       suppressHydrationWarning
       className={`${fontVariables} antialiased`}
       /*
