@@ -1,3 +1,4 @@
+import https from 'node:https'
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 import { assertTenantDomainConfigured } from './lib/tenantDomain'
@@ -23,6 +24,22 @@ import { assertTenantDomainConfigured } from './lib/tenantDomain'
  * green build this guard exists to prevent.
  */
 assertTenantDomainConfigured(process.env.NODE_ENV === 'production')
+
+/*
+ * ⚠️ AT MOST 24 FONT DOWNLOADS AT ONCE, AND THIS IS THE ONE PLACE THAT CAN SAY
+ * SO (MOTIR-8937). `next/font/google` fetches every `unicode-range` slice of
+ * every face in `app/fonts.ts` at build time, all at once, through Node's
+ * global HTTPS agent, whose socket count is unbounded, and its retry waits only
+ * 100–400 ms. With the Traditional set the build asks fonts.gstatic.com for
+ * ~1,850 files in one burst, and on a GitHub runner Google refused the
+ * connections three builds running (ECONNREFUSED), while main, ~400 files
+ * lighter, still built. The cap queues the same requests instead of opening
+ * them together. It sits here because this file is evaluated by `next build`
+ * AND again by its webpack build worker, where the font loaders run, and by
+ * every route to a build: `pnpm build`, the e2e lane and the Dockerfile's
+ * `pnpm next build`.
+ */
+https.globalAgent.maxSockets = 24
 
 // `output: 'standalone'` is not a preference here — it is what the host implies.
 // `docs/decisions/marketing-site-hosting.md` (motir-core) Q1 puts motir.co on
