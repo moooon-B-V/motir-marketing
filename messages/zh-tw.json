@@ -1,0 +1,2532 @@
+{
+  "publicProject": {
+    "appHost": "app.motir.co",
+    "tabs": {
+      "overview": "概觀",
+      "board": "看板",
+      "items": "工作項目",
+      "tree": "樹狀檢視",
+      "roadmap": "路線圖",
+      "changelog": "更新日誌"
+    },
+    "stats": {
+      "requests": "需求",
+      "upvotes": "贊同",
+      "planned": "已規劃",
+      "shipped": "已發布"
+    },
+    "header": {
+      "navAria": "專案",
+      "inTheApp": "在應用程式中",
+      "opensInApp": "——在 Motir 應用程式中開啟，需要帳戶"
+    },
+    "actRail": {
+      "follow": "追蹤",
+      "followSr": "——在 app.motir.co 上繼續",
+      "requestFeature": "提出功能需求",
+      "atomFeed": "Atom 訂閱來源"
+    },
+    "subscribe": {
+      "label": "透過電子郵件接收更新日誌",
+      "placeholder": "you@example.com",
+      "submit": "訂閱",
+      "submitting": "正在訂閱…",
+      "messages": {
+        "sent": "請查收郵件並完成確認。",
+        "invalid": "這看起來不是有效的電子郵件地址。",
+        "unavailable": "此專案已關閉更新日誌郵件。",
+        "limited": "嘗試次數過多，請幾分鐘後再試。",
+        "failed": "無法連線 Motir，請稍後再試。"
+      }
+    },
+    "watchLive": {
+      "titleNamed": "觀看 {name} 的建置過程",
+      "titleUnnamed": "觀看這個專案的建置過程",
+      "lede": "即時看板、正在起草的計畫、正在進行的代理程式執行——都在 Motir 應用程式中。",
+      "cost": "你需要一個 Motir 帳戶。如果繼續，{managers}將能看到你的{nameAndEmail}，以及你造訪的時間。",
+      "costNameAndEmail": "姓名和電子郵件",
+      "costManagers": "此專案所在工作區的管理者",
+      "cta": "即時觀看",
+      "ctaSr": "——在 Motir 應用程式中開啟"
+    },
+    "states": {
+      "error": {
+        "project": "無法載入此專案",
+        "changelog": "無法載入此專案的更新日誌",
+        "request": "無法載入此功能需求",
+        "workspaceProjects": "無法載入此工作區的專案",
+        "address": "無法載入此網址",
+        "body": "Motir 應用程式暫時沒有回應。你所在的頁面運作正常——這部分內容讀取自 {host}，那是一個獨立的部署。請稍後再試。",
+        "bodyWithFeed": "Motir 應用程式暫時沒有回應。你所在的頁面運作正常——這部分內容讀取自 {host}，那是一個獨立的部署。請稍後再試，或者閱讀透過訂閱來源提供的更新日誌。",
+        "feed": "更新日誌訂閱來源"
+      }
+    },
+    "overview": {
+      "empty": {
+        "title": "此專案還沒有撰寫概觀",
+        "body": "它的即時看板、工作項目和路線圖都在 Motir 應用程式中——可以在旁邊觀看它的建置過程。"
+      }
+    },
+    "changelog": {
+      "empty": {
+        "title": "尚未發布任何內容",
+        "body": "此專案完成公開工作後，會記錄在這裡，也會出現在訂閱來源中。"
+      },
+      "older": "更早",
+      "subscribeAtom": "透過 Atom 訂閱"
+    },
+    "requestNew": {
+      "heading": "提出功能需求",
+      "intro": "告訴 {project} 團隊你需要什麼。需求是公開的：任何閱讀此專案的人都能看到並贊同你的需求。",
+      "signInTitle": "需要先登入",
+      "signInBody": "提交需求需要帳戶，因此表單位於 {host}。登入後，你會看到已有人提出過的類似需求（可以直接贊同它），然後回到此專案。",
+      "continue": "前往 Motir ↗",
+      "closing": "無需帳戶，任何人都可以閱讀{projectPage}、它的更新日誌以及每個需求的獨立頁面。",
+      "projectPage": "專案頁面"
+    },
+    "request": {
+      "openedBy": "由 {author} 發起 · {date}",
+      "discussion": "討論",
+      "noComments": "還沒有留言。",
+      "commentHandoff": "參與討論需要在 {host} 登入，之後會帶你回到此需求。",
+      "addComment": "新增留言",
+      "demand": "需求熱度",
+      "upvote": "贊同",
+      "upvoteNote": "贊同操作在 app.motir.co 上完成，之後會回到這裡。",
+      "askHeading": "提出你的需要",
+      "requestFeature": "提出功能需求 ↗"
+    },
+    "workspaceRoot": {
+      "heading": "公開專案",
+      "empty": {
+        "title": "這裡還沒有公開內容",
+        "body": "此工作區已認領了網址，但尚未公開任何專案。公開後，專案會顯示在這裡。"
+      }
+    },
+    "meta": {
+      "overviewFallback": "一個在 Motir 上公開建置的專案——它的概觀、更新日誌和功能需求，以及 Motir 應用程式中的即時看板。",
+      "jsonLdFallback": "{name}——Motir 上的公開專案計畫。",
+      "tabTitle": "{label} · {name}",
+      "tabDescription": "{name} 的{label}——在 Motir 上公開。",
+      "requestNewTitle": "提出功能需求 · {name}",
+      "requestNewDescription": "向 {name} 團隊提出你的需要。需求是公開的。",
+      "workspaceTitle": "公開專案",
+      "workspaceDescription": "此工作區在 Motir 上發布的公開專案。",
+      "hostUnavailableTitle": "暫時無法存取"
+    }
+  },
+  "meta": {
+    "title": "Motir——AI 規劃、專案管理與代理程式編排",
+    "description": "AI 規劃、專案管理與代理程式編排平台。描述你想建置的東西——Motir 起草計畫，隨後由代理程式接手工作。"
+  },
+  "nav": {
+    "ariaLabel": "主要導覽",
+    "brandAriaLabel": "Motir——首頁",
+    "skipToContent": "跳至主要內容",
+    "menu": "選單",
+    "howItWorks": "Motir 的工作方式",
+    "howToUse": "如何使用 Motir",
+    "explore": "公開建置",
+    "ideas": "值得建置的想法",
+    "buildsItself": "Motir 建置自身",
+    "docs": "文件",
+    "design": "設計",
+    "signIn": "登入",
+    "startFree": "免費開始",
+    "language": {
+      "label": "語言：{language}",
+      "menuLabel": "選擇語言",
+      "heading": "語言"
+    },
+    "products": "產品",
+    "productsMenuLabel": "Motir 產品",
+    "productGroups": {
+      "ai": "AI 產品",
+      "tooling": "工具",
+      "infrastructure": "基礎設施"
+    },
+    "productItems": {
+      "aiPlanner": {
+        "name": "Motir AI 規劃器",
+        "blurb": "把想法變成由你核准的計畫"
+      },
+      "projectManagement": {
+        "name": "Motir 專案管理",
+        "blurb": "看板、Sprint、待辦清單與路線圖"
+      },
+      "projectManager": {
+        "name": "Motir 專案經理",
+        "blurb": "負責整個專案，並向你回報"
+      },
+      "aiDebugging": {
+        "name": "Motir AI 偵錯",
+        "blurb": "每個錯誤都追溯到程式碼並納入計畫"
+      },
+      "mcp": {
+        "name": "Motir MCP",
+        "blurb": "讓你的專案進入任何支援 MCP 的 AI 助手"
+      },
+      "cli": {
+        "name": "Motir CLI",
+        "blurb": "在終端機裡把工作交給你自己的代理程式"
+      },
+      "claudeCodeConnector": {
+        "name": "Motir Claude Code connector",
+        "blurb": "在 claude.ai 上連線一次，即可在 Claude Code 中使用 Motir"
+      },
+      "claudeCodePlugin": {
+        "name": "Motir Claude Code plugin",
+        "blurb": "技能、MCP 伺服器和 CLI，一次安裝"
+      },
+      "agentFleet": {
+        "name": "Motir 代理程式叢集",
+        "blurb": "託管代理程式，並行推進你的計畫"
+      },
+      "agentHosting": {
+        "name": "Motir 代理程式託管",
+        "blurb": "你自己的代理程式，執行在 Motir 的機器上"
+      },
+      "sandbox": {
+        "name": "Motir 沙箱",
+        "blurb": "在你自己的機器上為代理程式提供一個密封容器"
+      }
+    }
+  },
+  "landing": {
+    "hero": {
+      "headline": "Vibe the project",
+      "lede": "你帶來想法，Motir 交付整個專案：計畫、設計、建置、文件，以及它如何一步步成形的完整經過。",
+      "ideaLabel": "你在建置什麼？",
+      "placeholder": "一個幫助人們實現目標的 AI 私人助理…",
+      "hint": "幾句話就夠了，剩下的 Motir 會來問。",
+      "cta": "開始",
+      "ctaSubmitting": "正在開始…",
+      "statusSubmitting": "正在儲存你的想法，並帶你前往 Motir…",
+      "errorTitle": "暫時無法儲存你的想法。",
+      "errorBody": "你輸入的內容都沒有丟失。請重試，或者帶著你的想法繼續前往 Motir。",
+      "errorRetry": "重試",
+      "errorFallback": "繼續前往 Motir",
+      "existingProject": "已經有專案了？",
+      "existingProjectLink": "匯入專案"
+    },
+    "projectManager": {
+      "eyebrow": "Motir 專案經理",
+      "headline": "已經有專案了？交給 Motir 專案經理。",
+      "lede": "你是產品負責人。Motir 專案經理會讀取你已有的專案，規劃下一步，安排代理程式投入工作，再向你回報。它負責運轉專案，由你決定發布什麼。",
+      "points": [
+        "在改動任何東西之前，先讀懂你的程式碼、工作和歷史",
+        "規劃後續步驟，並讓計畫始終保持最新",
+        "全天候讓代理程式推進工作",
+        "把每一個決定、每一次發布都交給你"
+      ],
+      "importLabel": "匯入自",
+      "sources": {
+        "codebase": "程式碼儲存庫",
+        "jira": "Jira",
+        "linear": "Linear",
+        "plane": "Plane"
+      },
+      "report": {
+        "ariaLabel": "Motir 專案經理的週報範例",
+        "title": "週報 · AI 私人助理",
+        "range": "10月6日 – 10月12日",
+        "done": "本週完成",
+        "inProgress": "進行中",
+        "waiting": "等你處理",
+        "log": [
+          {
+            "day": "週一",
+            "what": "日曆連線已發布",
+            "state": "已完成",
+            "tone": "plain"
+          },
+          {
+            "day": "週二",
+            "what": "計畫已更新：郵件摘要拆分為兩部分",
+            "state": "已規劃",
+            "tone": "cool"
+          },
+          {
+            "day": "週三",
+            "what": "核准每位使用者的 AI 費用上限",
+            "state": "由你決定",
+            "tone": "you"
+          },
+          {
+            "day": "週四",
+            "what": "發現並修復了 Android 上的登入錯誤",
+            "state": "已修復",
+            "tone": "plain"
+          },
+          {
+            "day": "週五",
+            "what": "晨間簡報可以試用了",
+            "state": "待審閱",
+            "tone": "you"
+          }
+        ]
+      }
+    },
+    "builtByMotir": {
+      "eyebrow": "用 Motir 建置",
+      "headline": "Motir 建置自身。",
+      "body": "Motir 由 Motir 規劃、建置、測試和發布。它的代理程式執行它自己的路線圖，每一份計畫、每一次發布都由人來核准。它也能以同樣的方式運轉你的專案。",
+      "points": [
+        "每一份計畫、每一次執行、每一個決定都公開可見",
+        "工作進行時，即時觀看",
+        "與你將使用的 Project Manager 完全相同"
+      ],
+      "watch": "觀看 Motir 建置自身",
+      "runs": "建立帳戶，觀看它的代理程式執行",
+      "start": "開始你的專案",
+      "note": "Motir 專案，即時呈現在 app.motir.co",
+      "story": "Motir 如何建置自身"
+    },
+    "moreThanCode": {
+      "headline": "專案不只是程式碼",
+      "lede": "Vibe coding 只交給你程式碼，剩下的讓你自己摸索。Motir 交付一個真正的產品上線和持續成長所需的一切。",
+      "items": {
+        "plan": {
+          "tab": "計畫",
+          "title": "計畫",
+          "body": "要做什麼、按什麼順序、為什麼這樣做。Motir 會先提出一個好搭檔會問的那些疑問。"
+        },
+        "design": {
+          "tab": "設計",
+          "title": "設計",
+          "body": "在動手建置之前，先確定它的外觀和感覺。方向由你來選。"
+        },
+        "product": {
+          "tab": "產品",
+          "title": "產品",
+          "body": "產品本身：能執行、經過測試，從第一個使用者到第十萬個使用者都能撐得住。"
+        },
+        "docs": {
+          "tab": "文件",
+          "title": "文件",
+          "body": "決策、指南和筆記，與工作放在一起，沒人需要事後再補寫。"
+        },
+        "history": {
+          "tab": "歷史",
+          "title": "歷史",
+          "body": "每一個決定都附有理由和日期，上下文永遠不會丟失。"
+        }
+      }
+    },
+    "calls": {
+      "headline": "AI 做事，你拍板。",
+      "lede": "Motir 推進得很快，但只要遇到該由你做的選擇，它就會停下。沒有你的同意，什麼都不會往前走。",
+      "items": {
+        "say": {
+          "tab": "說出來",
+          "title": "說出你想要什麼",
+          "body": "幾句話，或者一堆零散的想法都行。Motir 會一直問，直到弄明白為止。"
+        },
+        "watch": {
+          "tab": "看著它",
+          "title": "看著它逐步成形",
+          "body": "計畫、設計、產品和文件一步步做出來，全程公開透明。"
+        },
+        "decide": {
+          "tab": "你來決定",
+          "title": "你來決定",
+          "body": "每一部分都會回到你手上，供你檢視、試用和核准。發布什麼，始終由你掌控。"
+        }
+      }
+    },
+    "resume": {
+      "headline": "從上次停下的地方繼續",
+      "body": "明天回來也好，六個月後回來也好，或者交給新人接手。專案記得一切，沒有人需要從頭開始，也沒有人需要再解釋一遍。"
+    },
+    "close": {
+      "headline": "Vibe the project",
+      "body": "從幾句話開始，或者把現有專案交給 Motir 專案經理。",
+      "start": "開始一個專案",
+      "import": "匯入一個專案",
+      "developers": "面向開發者：Motir 的工作方式",
+      "openCore": "核心開源 · 你的專案永遠屬於你",
+      "free": {
+        "lead": "只想要專案管理？",
+        "cta": "免費開始",
+        "tail": "——看板、Sprint 和待辦清單，沒有 AI 來打擾。"
+      }
+    },
+    "art": {
+      "plan": {
+        "title": "AI 私人助理",
+        "rows": [
+          ["帳戶與登入", "已完成"],
+          ["日曆與郵件", "3 / 5"],
+          ["每位使用者的 AI 費用", "由你決定"],
+          ["行動應用程式", "稍後"]
+        ]
+      },
+      "design": {
+        "screen": "你的晨間簡報",
+        "time": "07:30",
+        "items": [
+          ["09:00", "審查改到 10:00"],
+          ["郵件", "3 封回覆待處理"],
+          ["待辦", "傳送合約"]
+        ],
+        "optionA": "方案 A",
+        "optionB": "方案 B"
+      },
+      "product": {
+        "greeting": "早安",
+        "needs": "有 3 件事需要你處理",
+        "rows": [
+          ["回覆合約相關郵件", "先詢問"],
+          ["把健身改到 18:00", "日曆"]
+        ],
+        "edit": "編輯",
+        "send": "傳送",
+        "count": "64",
+        "countLabel": "項檢查通過",
+        "checks": [
+          "未經詢問絕不傳送",
+          "每位使用者的資料彼此隔離",
+          "10 萬使用者時依然快速"
+        ]
+      },
+      "docs": {
+        "title": "邊做邊寫",
+        "page": "助理可以讀取哪些內容",
+        "decisionLabel": "決定 · 你",
+        "decision": "由使用者選擇它能看到什麼",
+        "chips": ["設定指南", "隱私", "AI 費用上限"]
+      },
+      "history": {
+        "title": "誰決定了什麼",
+        "events": [
+          ["10月1日", "你描述了它", "一段話", "you"],
+          ["10月2日", "你核准了計畫", "經過 3 輪", "you"],
+          ["10月3日", "你選擇了設計 B", "簡報優先", "you"],
+          ["10月9日", "日曆已建置並測試", "64 項檢查", "motir"]
+        ]
+      },
+      "say": {
+        "idea": "一個幫助人們實現目標的 AI 私人助理。",
+        "qa": [
+          ["它應該自主行動，還是在傳送任何內容前先詢問？", "始終先詢問。"],
+          ["面向個人，還是也面向團隊？", "先面向個人，明年再做團隊版。"]
+        ]
+      },
+      "watch": {
+        "lanes": [
+          ["計畫", "done"],
+          ["設計", "done"],
+          ["建置", "running"],
+          ["測試", "waiting"],
+          ["文件", "ready"]
+        ],
+        "states": {
+          "done": "已完成",
+          "running": "代理程式執行中",
+          "ready": "就緒",
+          "waiting": "等待建置"
+        },
+        "live": "pricing-page.tsx"
+      },
+      "decide": {
+        "stamp": "等你檢視",
+        "title": "日曆連線已建置完成",
+        "body": "先看錄影，再親自試一試。",
+        "changes": "要求修改",
+        "approve": "核准",
+        "video": {
+          "chapterCount": "{count} 個章節",
+          "label": "驗收影片",
+          "length": "0:48",
+          "chapters": ["連線日曆", "調整一場會議", "簡報隨之更新"]
+        }
+      },
+      "resume": {
+        "tab": "3 週後回來",
+        "hello": "歡迎回來。這是 AI 私人助理目前的進展。",
+        "cells": [
+          ["上次", "日曆連線已發布"],
+          ["進行中", "郵件摘要"],
+          ["等你處理", "2 個決定"]
+        ]
+      }
+    }
+  },
+  "designShowcase": {
+    "specimen": {
+      "sectionLabel": "組合介面",
+      "primary": "主要",
+      "secondary": "次要",
+      "ghost": "幽靈",
+      "danger": "危險",
+      "badge": "徽章",
+      "done": "已完成",
+      "inProgress": "進行中",
+      "tooltip": "一個提示框，取自同一套設計權杖。",
+      "hoverMe": "將游標移到這裡",
+      "titleLabel": "工作項目標題",
+      "titleValue": "發布計費流程",
+      "assigneeLabel": "負責人",
+      "assigneePlaceholder": "選擇…",
+      "unassigned": "未分配",
+      "viewLabel": "檢視",
+      "board": "看板",
+      "list": "清單",
+      "liveUpdates": "即時更新",
+      "notesLabel": "備註",
+      "notesValue": "這個範例介面上的每個控制項，都是已發布的基礎元件。",
+      "popover": "彈出視窗",
+      "popoverBody": "一個取自同一套設計權杖的浮動層。它的圓角、邊框和陰影隨風格變化，顏色隨配色變化。",
+      "modal": "對話方塊",
+      "modalDescription": "對話方塊同樣會隨風格軸改變形態。",
+      "emptyTitle": "這裡還沒有內容",
+      "emptyDescription": "EmptyState——已發布的基礎元件。",
+      "errorTitle": "出錯了",
+      "errorDescription": "ErrorState——已發布的基礎元件。"
+    },
+    "heading": "選一種外觀，整個網站隨之改變。",
+    "subline": "這是每個 Motir 專案起步時使用的設計系統。它放在這裡而不是風格指南裡，因為展示你的產品可能是什麼樣子，最快的方式就是讓你給我們的網站換個樣式。",
+    "theme": {
+      "name": "主題",
+      "help": "淺色、深色，或跟隨裝置設定。",
+      "light": "淺色",
+      "dark": "深色",
+      "system": "跟隨系統"
+    },
+    "style": {
+      "name": "風格",
+      "help": "形狀與質感——輪廓、層次與疏密。"
+    },
+    "palette": {
+      "name": "配色",
+      "help": "介面所採用的顏色方案。"
+    },
+    "type": {
+      "name": "字型",
+      "help": "標題與正文的字型搭配。"
+    },
+    "reset": "重設為預設值",
+    "closing": "這裡的三個維度，正是你在 Motir 中新增專案時選擇的那三個——底層也是同一套設計系統。這個網站展示的不是它的示範，而是用它建置出來的。",
+    "styles": {
+      "warm-editorial": {
+        "name": "溫暖編輯風",
+        "tagline": "深思、溫暖，有技術感卻不冰冷，略帶編輯風。"
+      },
+      "soft-playful": {
+        "name": "柔和 / 活潑",
+        "tagline": "更有活力——圓潤、舒展、動效輕柔。"
+      },
+      "swiss-minimal-flat": {
+        "name": "瑞士 / 極簡扁平",
+        "tagline": "國際主義排版風格，結構清晰、沉穩——扁平、銳利、網格化。"
+      },
+      "neo-brutalism": {
+        "name": "新粗野主義",
+        "tagline": "粗獷、有力、實用至上——0px 圓角、粗邊框、硬朗的偏移陰影。"
+      },
+      "glassmorphism": {
+        "name": "玻璃擬態",
+        "tagline": "半透明的磨砂玻璃，懸浮在柔和而鮮明的漸層之上。"
+      },
+      "cybercore-y2k": {
+        "name": "賽博核 / Y2K",
+        "tagline": "暗底霓虹的復古科技風——發光的 HUD 面板、科技網格、等寬標題。"
+      },
+      "aurora": {
+        "name": "極光",
+        "tagline": "柔和流動的極光，映在流暢、微微發光的介面之後。"
+      },
+      "3d-immersive": {
+        "name": "3D / 沉浸式",
+        "tagline": "縱深與透視——立體面板懸浮於頁面之上。"
+      },
+      "neumorphism": {
+        "name": "新擬態",
+        "tagline": "從單色底面中隆起的柔和凸起表面。"
+      },
+      "hand-drawn-indie": {
+        "name": "手繪 / 獨立風",
+        "tagline": "隨性又親切——粗糙的手繪墨線、歪斜的邊角、柔和的偏移陰影、俏皮的彈跳。"
+      },
+      "retrofuturism": {
+        "name": "復古未來主義",
+        "tagline": "鉻金屬、流動漸層與合成波地平線——七八十年代的科幻。"
+      }
+    },
+    "palettes": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "冷峻而具編輯感——冷灰階表面加墨色、墨色 CTA、克制的冷藍強調色，外加幾處暖色點綴。"
+      },
+      "amethyst": {
+        "name": "紫水晶",
+        "tagline": "溫暖而具編輯感——奶油色表面、炭黑墨色、紫色主色、粉彩色調。"
+      },
+      "cobalt": {
+        "name": "鈷藍",
+        "tagline": "冷靜而穩重——石板冷色表面、自信的鈷藍主色、偏冷的色調。"
+      },
+      "evergreen": {
+        "name": "常青",
+        "tagline": "清新而專業——祖母綠主色搭配偏冷的森林中性色，整體偏綠的介面。"
+      },
+      "spectrum": {
+        "name": "光譜",
+        "tagline": "鮮明而活潑——清爽的冷色表面、明亮的紫羅蘭主色、糖果般明豔的多彩強調色與色調組合。"
+      },
+      "amber": {
+        "name": "琥珀",
+        "tagline": "溫暖而充滿電力——Binance 交易大廳的金色，配交易所的石墨近黑色；金色上用深色標籤。"
+      },
+      "sienna": {
+        "name": "赭石",
+        "tagline": "溫暖而鮮明——Mistral 的火焰橙，配地中海式暖奶油色表面；火焰色上用深色標籤。"
+      },
+      "garnet": {
+        "name": "石榴石",
+        "tagline": "濃郁而大膽——Pinterest 的 Pushpin 紅，配品牌的中性灰；紅色上用白色標籤。"
+      },
+      "citrine": {
+        "name": "黃水晶",
+        "tagline": "明亮而富協作感——Miro 的 Sunglow 黃，配白板灰，並以 Miro 的操作藍作強調色。"
+      },
+      "candy": {
+        "name": "糖果",
+        "tagline": "甜美而活潑——淺泡泡糖粉主色，配糖紙般的粉色，再加一整套粉彩糖果彩虹。"
+      }
+    },
+    "types": {
+      "motir": {
+        "name": "Motir",
+        "tagline": "編輯風襯線標題配簡潔無襯線正文——Motir 的招牌搭配。"
+      },
+      "motir-sans": {
+        "name": "Motir Sans",
+        "tagline": "全無襯線——標題與正文均用 Inter；結構感強，不用襯線。"
+      },
+      "motir-mono": {
+        "name": "Motir Mono",
+        "tagline": "通篇等寬——標題、正文全部如此的程式碼原生介面。"
+      },
+      "grotesk": {
+        "name": "怪誕體",
+        "tagline": "整個介面採用幾何新怪誕體——緊湊、自信、富有產品感。"
+      },
+      "editorial": {
+        "name": "編輯風",
+        "tagline": "個性鮮明的展示襯線體配人文無襯線體——雜誌般考究。"
+      },
+      "mono-technical": {
+        "name": "等寬技術風",
+        "tagline": "通篇使用 IBM Plex Mono——精準、開發者級的介面。"
+      }
+    }
+  },
+  "footer": {
+    "ariaLabel": "頁尾",
+    "tagline": "AI 規劃、專案管理與代理程式編排平台。",
+    "productHeading": "產品",
+    "resourcesHeading": "資源",
+    "legalHeading": "法律",
+    "explore": "公開建置的專案",
+    "docs": "文件",
+    "signIn": "登入",
+    "startFree": "免費開始",
+    "github": "GitHub",
+    "openSource": "專案管理核心以 GPL-3.0 授權開源。",
+    "terms": "服務條款",
+    "privacy": "隱私政策",
+    "legalIndex": "全部法律檔案",
+    "entity": "Motir 是 moooon B.V. 旗下的產品。",
+    "copyright": "© {year} moooon B.V.",
+    "howItWorks": "Motir 的工作方式",
+    "ideas": "值得建置的想法",
+    "buildsItself": "Motir 建置自身",
+    "howToUse": "如何使用 Motir"
+  },
+  "legal": {
+    "metaTitle": "法律",
+    "metaDescription": "由 moooon B.V. 營運的 Motir 託管服務的條款、政策與揭露資訊。",
+    "metaDocDescription": "{title}——版本 {version}。由 moooon B.V. 為 Motir 託管服務發布。",
+    "breadcrumbAria": "法律檔案",
+    "allDocuments": "← 全部法律檔案",
+    "versionAndEffective": "版本 {version} · 自 {date} 起生效",
+    "versionNotYetEffective": "版本 {version} · 尚未生效",
+    "indexTitle": "法律",
+    "indexIntro": "moooon B.V. 就 Motir 託管服務發布的全部內容——你同意的條款、我們如何處理你的資料，以及資料還會到達哪些地方。如果你自行執行 Motir，你就是自己的資料控制者，這些檔案描述的是我們的服務，而不是你的。",
+    "indexContact": "對其中任何內容有疑問，請聯絡：legal@motir.co",
+    "bindingNote": {
+      "document": "本檔案僅以英文發布，以英文版本為準。<link>開啟英文版本</link>",
+      "index": "這些檔案僅以英文發布，每份檔案均以英文版本為準。"
+    }
+  },
+  "explore": {
+    "topicNavAria": "專案廣場",
+    "topicHeading": "{topic} 專案",
+    "metaTitle": "公開建置 · Motir 上的專案",
+    "metaDescription": "團隊在 Motir 上公開建置的專案：它們的路線圖、看板、計畫和代理程式執行。閱讀任何專案的概觀，並用免費帳戶追蹤即時工作。",
+    "metaTitleTopic": "公開建置的 {topic} 專案 · Motir",
+    "metaDescriptionTopic": "標記為 {topic} 的公開專案：來自在 Motir 上公開建置 {topic} 的團隊的真實路線圖、看板和 Sprint。",
+    "heroEyebrow": "公開建置",
+    "heroTitle": "在 Motir 上公開建置的專案",
+    "heroLede": "團隊在 Motir 上公開建置。閱讀任何專案的概觀和更新日誌，建立免費帳戶即可追蹤它的即時看板、路線圖、計畫和代理程式執行。",
+    "trustCrawlable": "概觀和更新日誌公開可讀",
+    "trustNoSignup": "免費帳戶即可追蹤即時工作",
+    "trustUpdated": "每日更新",
+    "searchAria": "搜尋公開專案",
+    "searchPlaceholder": "按名稱或主題搜尋公開專案…",
+    "searchSubmit": "搜尋",
+    "sortAria": "公開專案排序",
+    "rankTrending": "熱門趨勢",
+    "rankPopular": "最受歡迎",
+    "rankNew": "最新",
+    "windowDay": "今天",
+    "windowWeek": "本週",
+    "windowMonth": "本月",
+    "topicFilterAria": "按主題篩選公開專案",
+    "allTopics": "全部主題",
+    "activeLabel": "目前篩選",
+    "summarySearch": "「{query}」",
+    "summaryRankTrending": "熱門趨勢 · {window}",
+    "summaryRankPopular": "最受歡迎",
+    "summaryRankNew": "最新",
+    "galleryHeadingSearch": "「{query}」的搜尋結果",
+    "galleryHeadingPopular": "最受歡迎的公開專案",
+    "galleryHeadingNew": "最近發布的公開專案",
+    "galleryHeadingTrending": "熱門趨勢公開專案",
+    "noResultsTitle": "沒有符合篩選條件的專案",
+    "noResultsBody": "換個搜尋詞或主題試試，或者清除篩選條件，瀏覽整個廣場。",
+    "emptyTitle": "還沒有公開專案",
+    "emptyBody": "當有團隊公開一個專案時，它會出現在這裡供所有人發現。請稍後再來看看。",
+    "clearFilters": "清除篩選",
+    "loadMore": "載入更多專案",
+    "browseTitle": "按主題瀏覽",
+    "browseSubtitle": "主題按公開專案數量排序——每個主題都有自己可被搜尋引擎收錄的專屬頁面。",
+    "browseCountAria": "{count} 個公開專案",
+    "faqHeading": "什麼是公開建置？",
+    "faqLede": "公開建置會把一個 Motir 專案變成網路上任何人都能找到的頁面：它的概觀和更新日誌對所有人開放，任何擁有免費 Motir 帳戶的人都能追蹤它的即時看板、路線圖和工作項目。本頁列出了所有公開建置的專案。",
+    "faqQ1": "哪些內容會公開，哪些保持私密？",
+    "faqA1": "看板、路線圖和工作項目，包括它們的標題、類型和描述。負責人、預估工時和內部留言永遠不會顯示。你第一次開啟某個專案的即時檢視時，Motir 會告訴你，你的姓名和電子郵件將對該專案的團隊可見。",
+    "faqQ2": "需要帳戶嗎？",
+    "faqA2": "閱讀專案的概觀和更新日誌不需要。要追蹤它的即時看板、路線圖、計畫和代理程式執行，需要用免費的 Motir 帳戶登入。沒有付費牆。",
+    "faqQ3": "專案如何排名？",
+    "faqA3": "「熱門趨勢」呈現近期獲得贊同和有動態的專案，「最受歡迎」按累計贊同數排名，「最新」列出最近發布的專案——每一種都有可分享、可被收錄的網址。",
+    "cardViewAria": "{name}——公開專案",
+    "statUpvotesAria": "{count} 個贊同",
+    "statActivityAria": "最近活動於 {time}",
+    "statActivityNone": "暫無活動",
+    "errorTitle": "無法載入專案廣場",
+    "errorBody": "目錄暫時無法存取，請稍後再試。",
+    "featured": {
+      "eyebrow": "由 Motir 公開建置",
+      "title": "Motir 建置自身。",
+      "body": "Motir 由 Motir 公開規劃、建置和發布。每一份計畫、每一次執行、每一個決定都公開可見。",
+      "cta": "觀看 Motir 建置自身"
+    },
+    "close": {
+      "headline": "公開建置你自己的專案。",
+      "body": "只需一個開關，就能把任何 Motir 專案變成公開頁面。展示你正在建置的東西，收集功能需求和贊同，同時讓內部細節保持私密。",
+      "cta": "免費開始"
+    }
+  },
+  "docs": {
+    "notes": {
+      "beingUpdated": "本頁的翻譯正在更新中。在翻譯完成之前，將顯示英文內容。",
+      "generatedReference": {
+        "openapi": "下方的操作說明以及參數和欄位表格由 Motir 的 OpenAPI 文件產生，因此保持英文。",
+        "cli": "下方的指令和選項說明是已安裝的 motir 指令輸出的文字，因此保持英文。"
+      }
+    },
+    "operationCount": "{count} 個操作",
+    "operationCountFiltered": "共 {total} 個操作，顯示 {shown} 個",
+    "metaTitle": "文件 · Motir",
+    "metaDescription": "Motir API 與 MCP 伺服器的文件——公開讀取契約、代理程式呼叫的伺服器，以及 CLI。",
+    "metaTitleReference": "API 參考 · Motir 文件",
+    "metaDescriptionReference": "Motir 公開 REST API 的每一個操作，附帶其權限範圍、參數、回應，以及可直接複製的帶認證範例。",
+    "metaTitleGuide": "快速入門 · API 參考 · Motir 文件",
+    "metaDescriptionGuide": "從註冊帳戶到成功呼叫 Motir REST API，只需五步——一個權杖、第一個請求，以及各種錯誤的含義。",
+    "metaTitleStability": "穩定性與棄用 · API 參考 · Motir 文件",
+    "metaDescriptionStability": "Motir v1 REST API 承諾不變的內容、可能不經通知而變化的內容，以及任何功能如何被棄用。",
+    "metaTitleMcp": "MCP 伺服器 · Motir 文件",
+    "metaDescriptionMcp": "用個人存取權杖把任何 Model Context Protocol 用戶端接入 Motir，並了解何時該用 MCP 伺服器、何時該用 REST API。",
+    "metaTitleMcpTools": "工具 · MCP 伺服器 · Motir 文件",
+    "metaDescriptionMcpTools": "Motir MCP 伺服器提供的每一個工具、各自的作用，以及控制它的權杖權限範圍。",
+    "metaTitleCli": "Motir CLI · Motir 文件",
+    "metaDescriptionCli": "安裝 Motir CLI，登入，指向你的專案，然後把一個工作項目交給你自己的代理程式——無需複製任何東西。",
+    "metaTitleSandbox": "代理程式沙箱 · Motir 文件",
+    "metaDescriptionSandbox": "設定已發布的容器：它讓無人值守的代理程式只針對你的工作區目錄執行，不觸碰你機器上的其他任何東西。",
+    "metaTitlePublicAddress": "公開網址 · Motir 文件",
+    "metaDescriptionPublicAddress": "為公開專案設定你選擇的地址——工作區的 Motir 子網域，或你已擁有的網域，以及各自所需的 DNS 記錄。",
+    "metaTitleSentry": "Sentry · Motir 文件",
+    "metaDescriptionSentry": "把 Sentry 連線到 Motir 專案：新的錯誤事件會成為錯誤工作項目，修好錯誤後，Sentry 中的錯誤事件也會隨之解決。",
+    "metaTitleDifficulty": "難度等級 · Motir 文件",
+    "metaDescriptionDifficulty": "工作項目可以設定的四個難度等級、我們建議每個等級使用的模型，以及每個工作的成本。",
+    "metaTitleSkills": "技能 · Motir 文件",
+    "metaTitleClaudeCodeConnector": "Claude Code 聯結器 · Motir 文件",
+    "metaTitleClaudeCodePlugin": "Claude Code 外掛 · Motir 文件",
+    "metaDescriptionSkills": "在 Claude Code、Codex、Cursor、Gemini CLI、GitHub Copilot 或 OpenCode 中安裝 Motir 的技能，用你已經在用的代理程式運轉你的 Motir 專案。",
+    "metaDescriptionClaudeCodeConnector": "把 Motir 作為遠端 MCP 聯結器接入 Claude Code：在 claude.ai 上新增一次，或用一條指令新增，用 Motir 帳戶登入，並核准 Claude 可以執行的操作。",
+    "metaDescriptionClaudeCodePlugin": "安裝 Motir 的 Claude Code 外掛：一次安裝即可獲得技能、Motir MCP 伺服器和 CLI 執行器，無需權杖即可連線 Motir。",
+    "indexTitle": "文件",
+    "indexIntro": "基於 Motir 建置所需的一切：公開讀取 API、代理程式呼叫的 MCP 伺服器，以及 CLI。",
+    "api": "API 參考",
+    "apiGettingStarted": "快速入門",
+    "apiStability": "穩定性與棄用",
+    "mcp": "MCP 伺服器",
+    "mcpTools": "MCP 工具",
+    "mcpHintReads": "讀取",
+    "mcpHintWrites": "寫入",
+    "mcpHintDestructive": "破壞性",
+    "mcpHintsUnpublished": "此 Motir 版本未發布該工具的行為提示。",
+    "mcpHintLedeIntro": "每個工具都會說明它對你的資料做什麼：",
+    "mcpHintReadsMeans": "不做任何更改，",
+    "mcpHintWritesMeans": "只做新增，",
+    "mcpHintDestructiveMeans": "可能更改或刪除已有內容。",
+    "mcpHintLedeClaude": "Claude 會讀取這些提示，在使用非只讀工具前會先詢問，除非你已允許。",
+    "cli": "CLI",
+    "sandbox": "沙箱",
+    "publicAddress": "公開網址",
+    "sentry": "Sentry",
+    "difficulty": "難度等級",
+    "skills": "技能",
+    "claudeCodeConnector": "Claude Code 聯結器",
+    "claudeCodePlugin": "Claude Code 外掛",
+    "descApi": "公開讀取 API——每個端點、參數和狀態碼，均由線上提供的 OpenAPI 文件產生。",
+    "descApiGettingStarted": "從權杖到第一個請求的五步路徑。",
+    "descApiStability": "版本管理、棄用，以及什麼算破壞性變更。",
+    "descMcp": "代理程式和 CLI 呼叫的 Model Context Protocol 伺服器。",
+    "descMcpTools": "伺服器提供的每一個工具，附帶其權限範圍和授權。",
+    "descCli": "指令列用戶端，以及它能自動化的工作。",
+    "descSandbox": "代理程式執行工作所在的託管沙箱。",
+    "descPublicAddress": "你的工作區子網域、你已擁有的網域，以及各自所需的 DNS 記錄。",
+    "descSentry": "把 Sentry 錯誤事件變成錯誤工作項目，並在錯誤完成時於 Sentry 中解決該事件。",
+    "descDifficulty": "每個難度等級的含義、適合執行的模型，以及每個工作的成本。",
+    "descSkills": "在你的代理程式中安裝 Motir 的技能，以及使用每個技能時該說什麼。",
+    "descClaudeCodeConnector": "用你的 Motir 帳戶、無需權杖，從 claude.ai 或透過一條指令把 Motir 連線到 Claude Code。",
+    "descClaudeCodePlugin": "在 Claude Code 中一次安裝，即可獲得 Motir 的技能、MCP 伺服器和 CLI，無需權杖即已登入。",
+    "apiSpecSummary": "{title} · 版本 {version} · {count, plural, other {# 個操作}} · <link>{path}</link>",
+    "apiUnreachable": "API 參考暫時無法存取。請稍後再試。",
+    "mcpToolsSummary": "<code>{endpoint}</code> 上共有 {count, plural, other {# 個工具}}，按控制它們的權限分組",
+    "mcpToolsUnreachable": "工具目錄暫時無法存取。此頁面顯示的清單由 Motir 自身發布，從不在此處複製，因此目前沒有可展示的內容。請對該端點發起 <code>tools/list</code> 握手，或稍後再試。",
+    "mcpArgsUnpublished": "此 Motir 版本未發布該工具的參數。針對該端點的 <code>tools/list</code> 握手會返回這些參數。",
+    "mcpNoArguments": "不接受參數。",
+    "mcpGrantedByDefault": " · 預設授予",
+    "sectionRequest": "請求",
+    "sectionBody": "請求本文",
+    "sectionExample": "範例",
+    "sectionResponses": "回應",
+    "sectionResponseSchema": "回應結構",
+    "thStatus": "狀態碼",
+    "thCondition": "條件",
+    "filterOperations": "篩選操作",
+    "filterEmpty": "沒有符合該篩選條件的操作。",
+    "guideLabels": {
+      "candidateModel": "模型",
+      "candidatePrice": "每百萬 token 價格",
+      "candidateCost": "每個工作的成本",
+      "costBasisPrice": "按價格折算",
+      "costBasisSamePrice": "同價",
+      "captionInClaudeCode": "在 Claude Code 中",
+      "captionCopySkillsOnly": "或僅複製技能，在終端機中",
+      "captionInTerminal": "在終端機中",
+      "captionYourTerminal": "你的終端機",
+      "captionMcpServerUrl": "遠端 MCP 伺服器 URL",
+      "captionYourMachine": "你的電腦",
+      "captionCursorConfig": "~/.cursor/mcp.json — 若只用於一個專案，則為 .cursor/mcp.json",
+      "captionOtherClientConfig": "你的用戶端所稱的設定檔",
+      "copyClaudeCodePlugin": "複製 Claude Code 外掛指令",
+      "copyClaudeCodeCopy": "複製 Claude Code 複製安裝指令",
+      "copyClaudeCodeUpdate": "複製 Claude Code 更新指令",
+      "copyCodex": "複製 Codex 安裝指令",
+      "copyCursor": "複製 Cursor 安裝指令",
+      "copyGeminiCli": "複製 Gemini CLI 安裝指令",
+      "copyCopilot": "複製 GitHub Copilot 安裝指令",
+      "copyOpenCode": "複製 OpenCode 安裝指令",
+      "copyMcpServerUrl": "複製 Motir MCP 伺服器 URL",
+      "copyClaudeCodeCommand": "複製 Claude Code 指令",
+      "captionSandboxPull": "pull",
+      "captionSandboxRun": "run",
+      "captionSandboxDevcontainerCommand": "你的機器 — 在你掛載的資料夾中",
+      "captionInContainer": "在容器中",
+      "captionSandboxGrant": "透過裝置簽發的權杖所帶有的授權",
+      "copySandboxDevcontainer": "複製開發容器設定指令",
+      "copySandboxSignIn": "複製登入指令",
+      "copySandboxLink": "複製關聯指令",
+      "copySandboxCheck": "複製檢查指令",
+      "sandboxAgentProfile": "代理程式設定檔"
+    }
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "這個頁面不在這裡",
+    "lede": "網址可能輸入錯誤，或者它指向的頁面已不再公開。",
+    "exploreDoor": "檢視公開建置的專案",
+    "homeDoor": "回到首頁"
+  },
+  "products": {
+    "eyebrow": "Motir 產品",
+    "comingSoon": "這個頁面即將上線。在此之前，了解它最快的方式就是試用 Motir。",
+    "start": "開始一個專案",
+    "back": "回到 motir.co",
+    "metaTitle": "{name}——Motir",
+    "worksWith": "相容",
+    "aiPlanner": {
+      "metaDescription": "Motir AI 規劃器會一直提問，直到弄清你要建置什麼，然後起草完整的計畫：每一項工作、先後順序，以及由誰來做。在你核准之前，什麼都不會開始。",
+      "headline": "先弄清做什麼，再給出完整計畫。",
+      "lede": "描述你想建置的東西。規劃器會一直問到弄清你的意思為止，因為它不會基於猜測做計畫。然後它讀取已有的一切，起草完整的計畫：每一項工作、必須遵循的先後順序，以及由誰來做。在你核准之前，什麼都不會開始。",
+      "steps": {
+        "eyebrow": "它如何規劃",
+        "headline": "它和你一起把事情想清楚",
+        "items": [
+          {
+            "title": "問到清楚為止",
+            "body": "如果還不清楚你要建置什麼，它就會問。弄明白之前，它不會開始規劃。"
+          },
+          {
+            "title": "讀取已有內容",
+            "body": "你的程式碼儲存庫、文件和看板，或者你從 Jira、Linear 或 Plane 帶來的專案。它從你的現狀出發規劃，而不是從一張白紙開始。"
+          },
+          {
+            "title": "起草完整計畫",
+            "body": "從大目標到小步驟的每一項工作，各自標明由誰來做、要等待什麼。"
+          },
+          {
+            "title": "自我檢查",
+            "body": "每份計畫在你看到之前都會經過檢查，所以到你手上的是一份能夠落地建置的計畫。"
+          }
+        ]
+      },
+      "gate": {
+        "eyebrow": "由你決定",
+        "headline": "計畫由你核准",
+        "body": "在你點頭之前，什麼都不會進入看板。用平常的話提出修改：把這個往後放、把那個拆開、去掉匯出功能。每一輪都是新的一次對話，計畫會保留每一個版本以及修改的原因。",
+        "motirPlans": "建立帳戶，看看 Motir 為自己規劃了什麼"
+      },
+      "holds": {
+        "eyebrow": "計畫包含什麼",
+        "headline": "工作所需的一切",
+        "items": [
+          {
+            "title": "完整的樹",
+            "body": "史詩、使用者故事、工作和子工作，從目標一直細化到具體步驟。"
+          },
+          {
+            "title": "由誰來做",
+            "body": "每個工作項目都會分配給代理程式或某個人。只有人能完成的工作是手動工作。"
+          },
+          {
+            "title": "先後順序",
+            "body": "什麼要等待什麼，讓每一部分都能在條件具備時立即開始。"
+          },
+          {
+            "title": "難度",
+            "body": "每個工作項目都有一個難度等級，以便在合適的模型上執行。"
+          },
+          {
+            "title": "工作類型",
+            "body": "程式碼、設計、測試、文件、研究、審查：每種類型都有標記。"
+          },
+          {
+            "title": "行程",
+            "body": "在你核准之後：Sprint、待辦清單和路線圖。"
+          }
+        ]
+      },
+      "learns": {
+        "eyebrow": "它會越來越好",
+        "headline": "它從每一次失誤中學習",
+        "body": "當代理程式無法建置計畫要求的內容時，Motir 會先檢查是計畫本身有誤，還是在你核准後被改動過。真正的規劃失誤會成為一條經驗，或強化已有的經驗。每份新計畫都會先讀取這些經驗，而 90 天內未被用到的經驗會自動淘汰。",
+        "library": "經驗",
+        "lessons": [
+          ["把登入放在任何需要使用者的功能之前", "已用 14 次"],
+          ["郵件服務供應商的選擇保留為手動工作", "已用 6 次"],
+          ["拆分需要兩類工作的使用者故事", "已用 9 次"],
+          ["把空狀態和介面一起規劃", "新"]
+        ]
+      },
+      "close": {
+        "headline": "帶上你的想法。",
+        "body": "剩下的思考，規劃器會和你一起完成。"
+      },
+      "ui": {
+        "railLabel": "Motir AI",
+        "modeFirstPlan": "第一個計畫",
+        "asking": "提問中",
+        "close": "關閉",
+        "esc": "Esc",
+        "composer": "回覆，或進一步完善…",
+        "chat": [
+          {
+            "role": "user",
+            "text": "一個幫助人們實現目標的 AI 私人助理。"
+          },
+          {
+            "role": "assistant",
+            "tone": "asking",
+            "text": "由誰設定目標：每個人為自己設定，還是教練為客戶設定？"
+          },
+          {
+            "role": "user",
+            "text": "每個人為自己設定。教練功能以後再說。"
+          },
+          {
+            "role": "assistant",
+            "text": "明白了。我會讀取你已有的內容，起草第一份計畫。"
+          }
+        ],
+        "newItem": "新",
+        "opAdd": "新增",
+        "cards": [
+          {
+            "kind": "story",
+            "title": "設定帶截止日期的目標",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "把目標拆分為每週里程碑",
+            "children": true
+          },
+          {
+            "kind": "task",
+            "title": "決定支援哪種日曆",
+            "difficulty": "低",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "title": "連線日曆以找出空閒時間",
+            "children": true
+          },
+          {
+            "kind": "story",
+            "title": "把本週的時段安排進空閒時間",
+            "children": true
+          }
+        ],
+        "project": "AI 私人助理",
+        "list": "清單",
+        "canvas": "畫布",
+        "changeTurns": [
+          {
+            "role": "user",
+            "text": "提醒功能這個使用者故事先去掉吧。大家可以自己打卡。"
+          },
+          {
+            "role": "assistant",
+            "text": "已去掉。安排本週時段仍然要等待里程碑和日曆。"
+          }
+        ],
+        "barCounts": "新增 17 項",
+        "consequence": "核准後會把這些新增到你的待辦清單。拒絕則結束本次計畫，不做任何改動。",
+        "approve": "核准",
+        "decline": "拒絕",
+        "roadmap": "路線圖",
+        "epic": "個人行程與目標規劃器",
+        "back": "返回",
+        "modeInContext": "結合上下文",
+        "manual": "手動"
+      }
+    },
+    "importExisting": "從 Jira、Linear 或 Plane 帶入專案",
+    "projectManagement": {
+      "metaDescription": "看板、Sprint、待辦清單和路線圖：代理程式和人按同一份計畫工作，每一個決定都等待人來做出。",
+      "headline": "代理程式和人，按同一份計畫工作。",
+      "lede": "看板、Sprint、待辦清單和路線圖，就像你的團隊一直以來的工作方式。代理程式和人從同一個看板領取工作，凡是需要決定的事都會等待人來拍板。",
+      "board": {
+        "eyebrow": "看板",
+        "headline": "一個懂得代理程式在做什麼的看板",
+        "body": "代理程式的工作和其他人一樣經過相同的列，另有兩列如實反映它的狀態。「已實作」表示代理程式已經開了一個還沒人檢查的提取要求。「已核准」表示有人同意了，但尚未發布。失敗的檢查會直接顯示在工作項目上。",
+        "motirBoard": "建立帳戶，檢視 Motir 自己的看板"
+      },
+      "roadmap": {
+        "eyebrow": "路線圖",
+        "headline": "看清哪些工作可以開始",
+        "body": "路線圖會畫出每個工作項目以及它要等待的內容。現在就能開始的工作會標為就緒，因此你、你的隊友或代理程式總能知道下一步該做什麼。",
+        "motirRoadmap": "建立帳戶，檢視 Motir 自己的路線圖"
+      },
+      "holds": {
+        "eyebrow": "團隊期望的一切",
+        "headline": "你已經熟悉的工具",
+        "items": [
+          {
+            "title": "Sprint 與待辦清單",
+            "body": "從待辦清單規劃 Sprint，設定目標並跟進燃盡圖。"
+          },
+          {
+            "title": "隨你設定的看板",
+            "body": "每個專案可以有多個看板，支援泳道、在製品限制和篩選。"
+          },
+          {
+            "title": "帶入你的專案",
+            "body": "從 Jira、Linear、Plane、GitHub 或 CSV 檔案匯入。"
+          },
+          {
+            "title": "向公眾開放",
+            "body": "公開一個專案，收集功能需求，支援贊同和留言。"
+          },
+          {
+            "title": "手動工作",
+            "body": "只有人能完成的工作是一類獨立的工作項目，會一步一步引導完成。"
+          },
+          {
+            "title": "開源",
+            "body": "專案管理核心以 GPL-3.0 授權開源。"
+          }
+        ]
+      },
+      "ui": {
+        "boardsHeading": "看板",
+        "boardsSubtitle": "AI 私人助理的看板",
+        "newItem": "新增工作項目",
+        "columns": [
+          {
+            "name": "待辦",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-23",
+                "title": "把本週的時段安排進空閒時間",
+                "pill": "blocked",
+                "points": 5,
+                "who": "–"
+              },
+              {
+                "kind": "task",
+                "key": "PA-24",
+                "title": "決定支援哪種日曆",
+                "pill": "high",
+                "points": 1,
+                "who": "Y"
+              }
+            ]
+          },
+          {
+            "name": "進行中",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-28",
+                "title": "目標頁上的里程碑",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "已實作",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-27",
+                "title": "把目標拆分到每週",
+                "pill": "medium",
+                "points": 5,
+                "who": "A",
+                "ci": "failing"
+              }
+            ]
+          },
+          {
+            "name": "審查中",
+            "cards": [
+              {
+                "kind": "subtask",
+                "key": "PA-26",
+                "title": "把里程碑與其目標一起儲存",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "已完成",
+            "cards": [
+              {
+                "kind": "story",
+                "key": "PA-21",
+                "title": "設定帶截止日期的目標",
+                "pill": "low",
+                "points": 3,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "pill": {
+          "blocked": "已封鎖",
+          "high": "高",
+          "medium": "中",
+          "low": "低",
+          "awaiting": "等你處理",
+          "running": "檢查執行中",
+          "failing": "檢查失敗"
+        },
+        "waitingOnYou": "等你處理",
+        "waitedHeader": ["等待事項", "已等待"],
+        "rows": [
+          {
+            "kind": "plan",
+            "title": "AI 私人助理",
+            "sentence": "{title} 的計畫",
+            "key": "",
+            "waited": "2 小時",
+            "action": "審閱"
+          },
+          {
+            "kind": "pr",
+            "title": "密碼重置郵件",
+            "sentence": "{title}已完成",
+            "key": "PA-7",
+            "waited": "1 天",
+            "action": "審閱"
+          },
+          {
+            "kind": "design",
+            "title": "登入頁面",
+            "sentence": "{title}的設計",
+            "key": "PA-8",
+            "waited": "3 小時",
+            "action": "審閱"
+          },
+          {
+            "kind": "video",
+            "title": "帳戶與登入",
+            "sentence": "使用者故事「{title}」的驗收影片",
+            "key": "PA-2",
+            "waited": "40 分鐘",
+            "action": "審閱"
+          },
+          {
+            "kind": "manual",
+            "title": "選擇郵件服務供應商",
+            "sentence": "{title}正在等你處理",
+            "key": "PA-19",
+            "waited": "1 天",
+            "action": "標記完成"
+          }
+        ],
+        "roadmap": [
+          {
+            "kind": "story",
+            "key": "PA-21",
+            "title": "設定帶截止日期的目標",
+            "status": "done",
+            "label": "已完成"
+          },
+          {
+            "kind": "task",
+            "key": "PA-24",
+            "title": "決定支援哪種日曆",
+            "status": "ready",
+            "label": "就緒",
+            "manual": true
+          },
+          {
+            "kind": "story",
+            "key": "PA-22",
+            "title": "把目標拆分為每週里程碑",
+            "status": "in_progress",
+            "label": "進行中",
+            "progress": "2 / 5"
+          },
+          {
+            "kind": "story",
+            "key": "PA-25",
+            "title": "連線日曆以找出空閒時間",
+            "status": "todo",
+            "label": "待辦"
+          },
+          {
+            "kind": "story",
+            "key": "PA-23",
+            "title": "把本週的時段安排進空閒時間",
+            "status": "todo",
+            "label": "待辦"
+          }
+        ],
+        "roadmapRoot": "路線圖",
+        "roadmapEpic": "個人行程與目標規劃器",
+        "back": "返回",
+        "manual": "手動"
+      },
+      "close": {
+        "headline": "帶上你的專案。",
+        "body": "從一個想法開始，或者帶上你已有的專案。"
+      }
+    },
+    "aiDebugging": {
+      "metaDescription": "來自正式環境、團隊成員以及執行途中的代理程式的錯誤，送達時就已追溯到程式碼並納入計畫。Motir AI 指出可能的原因，檢查是否已有工作項目涵蓋它，並在錯誤完成時解決 Sentry 中的錯誤事件。",
+      "headline": "每個錯誤送達時，都已追溯到程式碼並納入計畫。",
+      "lede": "無論來自正式環境、團隊裡的某個人，還是正在執行中的代理程式：每個錯誤送達時都附帶完成標準、該從程式碼的哪裡入手，以及可能出了什麼錯。由你決定誰來修復。",
+      "plan": {
+        "eyebrow": "AI 為每個錯誤做計畫",
+        "headline": "列出可能的原因，絕不把猜測當作答案",
+        "body": "規劃器把堆疊追蹤與你的程式碼儲存庫對照閱讀，像隊友一樣寫出錯誤：完成標準是什麼、該從程式碼的哪裡入手、為什麼重要。可能的原因以待確認或排除的假設列出；當堆疊追蹤無法與你的程式碼匹配時，錯誤裡會如實說明。"
+      },
+      "fix": {
+        "eyebrow": "如何修復由你決定",
+        "headline": "親手修復，或交給代理程式",
+        "body": "規劃好的錯誤就是一個普通的工作項目。你可以自己修復，也可以讓代理程式接手錯誤資料夾，為每個錯誤開一個提取要求。你審閱並合併後，錯誤即完成，Sentry 中的錯誤事件也隨之解決。"
+      },
+      "setup": {
+        "eyebrow": "兩步完成設定",
+        "headline": "連線一次，自訂標準",
+        "body": "連線你的 Sentry 組織，然後選擇其中哪些專案把錯誤事件傳送到這個看板。為每個專案設定最低計入等級，以及完成錯誤時是否解決錯誤事件、是否沿用 Sentry 中的負責人。"
+      },
+      "ui": {
+        "errorsTitle": "錯誤事件",
+        "errorsGloss": "——已關聯的 Sentry 錯誤事件 · 計數截至上次檢查",
+        "linkError": "關聯錯誤事件",
+        "error": {
+          "title": "TypeError: Cannot read properties of undefined (reading 'goalId')",
+          "where": "acme / web-frontend · 正式環境 · 2.14.0",
+          "level": "錯誤",
+          "seenPre": "出現 ",
+          "count": "1,284",
+          "seenPost": " 次",
+          "lastSeen": "最近一次在 6 分鐘前",
+          "hideEvidence": "隱藏證據",
+          "summary": "· TypeError · POST /api/check-ins · 最新事件在 6 分鐘前",
+          "exception": "例外",
+          "exceptionType": "TypeError",
+          "exceptionMessage": ": Cannot read properties of undefined (reading 'goalId')",
+          "stack": "堆疊追蹤",
+          "stackGloss": "· 2 個在你的程式碼中 · 14 個屬於框架 · 最近的呼叫在前",
+          "frames": [
+            ["app/api/check-ins/route.ts:42", "位於 saveCheckIn"],
+            ["lib/goals/progress.ts:18", "位於 currentGoalFor"]
+          ],
+          "showFramework": "顯示 14 個框架幀"
+        },
+        "aiDrafted": "AI 起草",
+        "explanation": "說明",
+        "explanationGloss": "——為什麼重要",
+        "explanationBody": "對於沒有進行中目標的人，每一次每日打卡都會失敗，他們回來想保持的連續記錄也就斷了。這個情況始於 2.14.0 版本。",
+        "description": "描述",
+        "descriptionGloss": "——要做什麼",
+        "sections": [
+          {
+            "heading": "驗收標準",
+            "items": [
+              "沒有進行中目標的人也能成功儲存打卡",
+              "目標缺失時，打卡端點返回 422 而不是 500"
+            ]
+          },
+          {
+            "heading": "上下文引用",
+            "items": ["app/api/check-ins/route.ts", "lib/goals/progress.ts"]
+          },
+          {
+            "heading": "候選機制",
+            "note": "以下均未得到證實。每一條都是與堆疊追蹤相符的假設，列出來是為了讓第一個檢視的人去確認或排除——而不是診斷結論。",
+            "items": [
+              "最後一個目標被歸檔後，currentGoalFor 返回 undefined",
+              "用戶端在目標清單載入完成前就傳送了打卡"
+            ]
+          }
+        ],
+        "monitoring": "監控",
+        "monitoringBody": "連線你的服務已在回報的錯誤監控工具，Motir 會把其中的錯誤事件變成此專案看板上的工作項目。",
+        "sentry": "Sentry",
+        "connected": "已連線",
+        "org": "acme",
+        "checked": "4 分鐘前檢查過",
+        "recheck": "重新檢查",
+        "monitored": "受監控的專案",
+        "monitoredBody": "來自這些 Sentry 專案的錯誤事件會成為此看板上的錯誤工作項目。",
+        "project": "web-frontend",
+        "bound": "3 天前繫結",
+        "poll": "2 分鐘前檢查過新的錯誤事件 · ",
+        "filed": "已登記 3 個錯誤",
+        "minLevel": "最低等級",
+        "everyLevel": "所有等級",
+        "sync": "與 Sentry 同步",
+        "toggles": [
+          [
+            "錯誤完成時，在 Sentry 中解決錯誤事件",
+            "關閉後，錯誤完成時 Sentry 中的錯誤事件保持原樣。"
+          ],
+          ["沿用 Sentry 中的負責人", "關閉後，忽略在 Sentry 中做出的分配。"]
+        ],
+        "add": "新增受監控的專案",
+        "board": [
+          {
+            "name": "待辦",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-41",
+                "title": "沒有目標的人在 saveCheckIn 中觸發 TypeError",
+                "pill": "high",
+                "points": 2,
+                "who": "–"
+              }
+            ]
+          },
+          {
+            "name": "進行中",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-38",
+                "title": "提醒郵件在午夜被發送兩次",
+                "pill": "medium",
+                "points": 3,
+                "who": "A",
+                "ci": "running"
+              }
+            ]
+          },
+          {
+            "name": "審查中",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-35",
+                "title": "時區變化時連續記錄被重置",
+                "pill": "awaiting",
+                "points": 2,
+                "who": "A"
+              }
+            ]
+          },
+          {
+            "name": "已完成",
+            "cards": [
+              {
+                "kind": "bug",
+                "key": "PA-31",
+                "title": "目標標題為空時目標清單崩潰",
+                "pill": "low",
+                "points": 1,
+                "who": "A"
+              }
+            ]
+          }
+        ],
+        "debug": {
+          "mode": "計畫",
+          "turnLabel": "第 1 輪",
+          "user": "歸檔了最後一個目標的人，每日打卡會失敗。連續記錄被重置，打卡也丟失了。",
+          "acts": [
+            ["閱讀", "正在閱讀你的請求…"],
+            ["移交", "正在追溯錯誤…"],
+            ["檢索", "已讀取程式碼圖譜"],
+            ["檢索", "已讀取計畫樹"],
+            ["匹配", "已檢查是否有工作項目涵蓋它"]
+          ],
+          "causeLabel": "可能的原因：",
+          "cause": "最後一個目標被歸檔後，currentGoalFor 返回 undefined，而 saveCheckIn 未做檢查就從中讀取 goalId。",
+          "cause2": "目前還沒有工作項目涵蓋這一點。",
+          "outcomePre": "已在待分類中登記 ",
+          "outcomeKey": "PA-44",
+          "outcomeTitle": "最後一個目標被歸檔後打卡失敗",
+          "outcomePost": "，並附上診斷。其他內容均未改動。"
+        },
+        "run": {
+          "title": "PA-8 · 登入頁面",
+          "status": "執行中",
+          "findings": "本次執行的產出",
+          "bugFiled": "已登記錯誤",
+          "key": "PA-45",
+          "open": "開啟 →",
+          "found": "發現於：執行 PA-8 時",
+          "bugTitle": "密碼重置連結在郵件送達前就已過期"
+        }
+      },
+      "close": {
+        "headline": "讓錯誤自己做計畫。",
+        "body": "描述一個錯誤、連線 Sentry，或者讓你的代理程式報告它們的發現。"
+      },
+      "sources": {
+        "eyebrow": "錯誤從哪裡來",
+        "headline": "三個入口，同一種錯誤",
+        "items": [
+          {
+            "title": "向 Motir AI 描述",
+            "body": "告訴它哪裡壞了。它會閱讀程式碼，指出可能的原因，檢查是否已有工作項目涵蓋它，然後只寫一條：一個新錯誤，或在已有工作項目上補充一條說明。"
+          },
+          {
+            "title": "來自正式環境",
+            "body": "連線 Sentry 後，每個新的錯誤事件都會成為一個附帶堆疊追蹤的錯誤。同一事件再次發生時，增加的是計數，而不是堆積的條目。"
+          },
+          {
+            "title": "來自代理程式執行",
+            "body": "代理程式在自身工作之外發現錯誤時，會把它登記下來，寫明看到了什麼、在哪裡看到，然後繼續工作。"
+          }
+        ]
+      },
+      "describe": {
+        "eyebrow": "描述它",
+        "headline": "說出哪裡壞了，Motir AI 來追溯。",
+        "body": "用你自己的話描述錯誤，或者報告後直接交給它。Motir AI 會閱讀你的程式碼和計畫，指出可能的原因，並檢查是否已有工作項目涵蓋它。它只寫一處，並明確告訴你寫了什麼：在待分類中新增一個附帶診斷的錯誤，或者把診斷補充到已經跟進此事的工作項目上。如果無法把錯誤追溯到程式碼，它什麼都不寫。"
+      },
+      "production": {
+        "eyebrow": "來自正式環境",
+        "headline": "錯誤事件以錯誤工作項目的形式送達，附帶證據",
+        "body": "每個新的 Sentry 錯誤事件都會成為一個錯誤工作項目，附帶例外資訊、堆疊追蹤和反向連結。錯誤完成後，Motir 會在 Sentry 中解決該事件。如果它再次出現，會登記一個新錯誤，並關聯到舊的那個。"
+      },
+      "runs": {
+        "eyebrow": "來自代理程式執行",
+        "headline": "代理程式會報告它們的發現",
+        "body": "正在建置某個工作項目的代理程式，如果在別處碰到錯誤，既不會停下，也不會隱瞞。它會登記這個錯誤，寫明看到了什麼，註明是在哪次執行中發現的，然後繼續自己的工作。執行會列出它登記的每一個錯誤。"
+      }
+    },
+    "agentFleet": {
+      "metaDescription": "Motir 的託管代理程式同時處理你計畫中每一個就緒的工作項目，每個都在自己的機器上執行，並使用適合該工作的模型。你可以親自啟動它們，也可以讓 Motir 專案經理讓它們一直保持忙碌。",
+      "headline": "你的整個計畫，並行推進。",
+      "lede": "Motir 的託管代理程式會接手每一個就緒的工作項目並同時處理，每個都在一台全新的機器上執行，擁有自己的分支和提取要求。你可以親自啟動它們，也可以讓 Motir 專案經理讓它們一直保持忙碌，專案就會在所有方面同時推進。",
+      "parallel": {
+        "eyebrow": "規模",
+        "headline": "每個就緒的工作項目，一台機器",
+        "body": "所有能開始的工作都會開始。每次執行都會認領自己的工作項目，因此不會有兩個代理程式接手同一項，並在一台獨佔的機器上完成它。一個使用者故事會按照各部分之間的依賴順序執行。就緒的工作越多，同時進行的執行就越多。"
+      },
+      "pm": {
+        "eyebrow": "無需操心",
+        "headline": "Motir 專案經理讓代理程式叢集一直保持忙碌",
+        "body": "把專案交給 Motir 專案經理，只要有工作項目就緒，它就會立即啟動一次執行、選好模型，只把需要你決定的事帶給你：提取要求、設計和計畫。"
+      },
+      "models": {
+        "eyebrow": "每項工作用對的模型",
+        "headline": "每個工作項目都有難度，由它決定模型。",
+        "body": "規劃器為每個工作、子工作和錯誤設定難度：衡量的是把工作做對有多難，而不是工作量有多大。一行修改鎖順序的改動可能是高難度，而一次大規模重新命名卻可能很簡單。代理程式叢集據此選擇模型，因此重新命名不必為最強的模型付費，而資料遷移也絕不會跑在最便宜的模型上。",
+        "items": [
+          {
+            "title": "簡單",
+            "body": "規格明確的機械性工作：重新命名、修改文案、切換設定。在更快、更便宜的模型上執行。"
+          },
+          {
+            "title": "低",
+            "body": "遵循程式碼中已有模式的常規工作，比如在現有表單中貫通一個新欄位。在更快、更便宜的模型上執行。"
+          },
+          {
+            "title": "中",
+            "body": "跨越多個檔案或服務的真正設計抉擇，或者原因尚未查明的錯誤。在最強的模型上執行。"
+          },
+          {
+            "title": "高",
+            "body": "一個細微失誤就會代價高昂的工作：併發、安全、線上資料遷移。在最強的模型上執行。"
+          },
+          {
+            "title": "由你選擇",
+            "body": "為專案中的任意等級設定你自己的模型，或為單次執行挑選一個，可選 Claude、DeepSeek、GLM 和 Qwen。"
+          },
+          {
+            "title": "按執行付費",
+            "body": "模型呼叫和機器時長以點數計費。沒有執行，就沒有費用。"
+          }
+        ],
+        "docsLink": "難度等級如何運作，以及每個工作在各模型上的成本"
+      },
+      "care": {
+        "eyebrow": "自我照料的執行",
+        "headline": "難題無需你來處理",
+        "items": [
+          {
+            "title": "檢查失敗",
+            "body": "執行會在同一分支上修復它的提取要求，最多嘗試五次。"
+          },
+          {
+            "title": "執行中斷",
+            "body": "工作保留在它的分支上，新的執行會接著繼續，而不必從頭開始。"
+          },
+          {
+            "title": "代理程式停滯",
+            "body": "沉默 15 分鐘的執行會被停止，因此卡住的代理程式永遠不會白白消耗點數。"
+          },
+          {
+            "title": "途中發現錯誤",
+            "body": "代理程式在自身工作之外發現錯誤時，會把它登記下來並繼續工作。"
+          }
+        ]
+      },
+      "record": {
+        "eyebrow": "全程留痕",
+        "headline": "每一次執行，每一個步驟",
+        "body": "每次執行都會記錄所用的模型、每一個步驟、花費多少，以及每個工作項目的結局：已實作、失敗、重新規劃或跳過。"
+      },
+      "ui": {
+        "runsHeading": "執行",
+        "runsSubtitle": "AI 私人助理的每一次執行——目前的和過去的。",
+        "runningNow": "正在執行",
+        "pastRuns": "過去的執行",
+        "columns": ["指令", "範圍", "代理程式", "開始時間", "狀態", "工作項目"],
+        "live": [
+          {
+            "command": "執行",
+            "scope": "PA-8 · 登入頁面",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:42",
+            "status": "執行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "執行",
+            "scope": "PA-21 · 目標提醒",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:42",
+            "status": "執行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "執行",
+            "scope": "PA-22 · 提醒時間選擇器",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:41",
+            "status": "執行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "執行",
+            "scope": "使用者故事 PA-2 · 帳戶與登入",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:38",
+            "status": "執行中",
+            "tone": "running",
+            "summary": "已完成 2/5"
+          },
+          {
+            "command": "執行",
+            "scope": "PA-17 · 設定頁面",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "10:35",
+            "status": "執行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          },
+          {
+            "command": "執行",
+            "scope": "PA-30 · 每週摘要",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "10:31",
+            "status": "執行中",
+            "tone": "running",
+            "summary": "已完成 0/1"
+          }
+        ],
+        "past": [
+          {
+            "command": "執行",
+            "scope": "使用者故事 PA-6 · 目標",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨天 18:04",
+            "status": "已成功",
+            "tone": "implemented",
+            "summary": "已完成 4/4 · 1 項等你處理"
+          },
+          {
+            "command": "motir fix",
+            "scope": "PA-9 · 登入服務",
+            "agent": "opencode · claude-sonnet-5-5",
+            "started": "昨天 16:20",
+            "status": "已成功",
+            "tone": "implemented",
+            "summary": "已完成 1/1"
+          },
+          {
+            "command": "執行",
+            "scope": "PA-31 · 匯出到日曆",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨天 14:55",
+            "status": "已失敗",
+            "tone": "failed",
+            "summary": "1 項失敗"
+          },
+          {
+            "command": "motir continue",
+            "scope": "PA-12 · 目標與每日打卡",
+            "agent": "opencode · claude-opus-5-5",
+            "started": "昨天 11:02",
+            "status": "已成功",
+            "tone": "implemented",
+            "summary": "已完成 1/1"
+          }
+        ],
+        "readyHeading": "可以開始",
+        "readyLane": "可以執行",
+        "ready": [
+          {
+            "kind": "task",
+            "key": "PA-19",
+            "title": "選擇郵件服務供應商"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-22",
+            "title": "提醒時間選擇器"
+          },
+          {
+            "kind": "subtask",
+            "key": "PA-23",
+            "title": "提醒郵件模板"
+          },
+          {
+            "kind": "bug",
+            "key": "PA-44",
+            "title": "最後一個目標被歸檔後打卡失敗"
+          }
+        ]
+      },
+      "close": {
+        "headline": "所有方面，同時推進。",
+        "body": "帶上你的想法或已有的專案，讓代理程式叢集處理所有就緒的工作。"
+      }
+    },
+    "agentHosting": {
+      "metaDescription": "在 Motir 雲端的獨立機器上執行 Claude Code、Codex 或你已經在用的代理程式，用你自己的帳戶登入。從 Motir 給它派發工作；你完成後它會休眠，你只需為它的機器時長付費。",
+      "headline": "你自己的代理程式，執行在 Motir 的機器上。",
+      "lede": "在 Motir 雲端執行 Claude Code、Codex 或你已經在用的代理程式，用你自己的帳戶登入，並設定好你專案的程式碼。給它派一個工作項目，然後合上筆電：它會繼續工作，在你完成後進入休眠。",
+      "setup": {
+        "eyebrow": "一次設定",
+        "headline": "三步把你的代理程式搬上雲端",
+        "items": [
+          {
+            "title": "建立",
+            "body": "為它命名，選擇專案和代理程式：Claude Code、Codex、OpenCode、Kimi Code、Aider 或 Goose。你專案的程式碼儲存庫會被複製到它的主目錄中。"
+          },
+          {
+            "title": "以你的身份登入",
+            "body": "在它的終端機裡用你自己的帳戶登入，就像在你的筆電上一樣。"
+          },
+          {
+            "title": "給它派發工作",
+            "body": "在任何就緒的工作項目上點選「傳送給我的代理程式」。它會認領該工作項目，在自己的分支上建置，並開一個提取要求。"
+          }
+        ]
+      },
+      "away": {
+        "eyebrow": "離開工位時",
+        "headline": "合上筆電，它依然在工作",
+        "items": [
+          {
+            "title": "獨立的機器",
+            "body": "你的筆電上什麼都不執行，所以合上蓋子或斷開連線都不會讓工作停下。"
+          },
+          {
+            "title": "隨時隨地觀看",
+            "body": "它的執行和其他所有代理程式的執行一起顯示在「執行」中，在「我的代理程式」裡點一下就能開啟它的終端機。"
+          },
+          {
+            "title": "同時執行多個",
+            "body": "最多保留十個代理程式，每個處理自己的工作項目。"
+          }
+        ]
+      },
+      "ui": {
+        "title": "我的代理程式",
+        "subtitle": "你自己的代理程式，用你自己的登入，執行在 Motir 雲端——AI 私人助理",
+        "newAgent": "新增代理程式",
+        "columns": ["名稱", "代理程式", "狀態", "本月機器時長", "點數"],
+        "rows": [
+          {
+            "name": "yue-claude",
+            "agent": "Claude Code",
+            "state": "執行中",
+            "tone": "implemented",
+            "time": "3 小時 12 分鐘",
+            "credits": "212"
+          },
+          {
+            "name": "yue-codex",
+            "agent": "Codex",
+            "state": "已休眠",
+            "tone": "cancelled",
+            "time": "1 小時 05 分鐘",
+            "credits": "95"
+          },
+          {
+            "name": "night-shift",
+            "agent": "OpenCode",
+            "state": "喚醒中",
+            "tone": "running",
+            "time": "6 小時 40 分鐘",
+            "credits": "430"
+          }
+        ]
+      },
+      "close": {
+        "headline": "給你的代理程式一張工位。",
+        "body": "帶上你在用的代理程式，你休息時讓它繼續工作。"
+      },
+      "terms": {
+        "eyebrow": "你的登入，我們的機器",
+        "headline": "你為機器付費，而且只在它工作時付費",
+        "items": [
+          {
+            "title": "你的帳戶，你的模型",
+            "body": "代理程式使用你自己的登入執行，採用你選擇的模型和設定。它的模型用量由其供應商向你計費，Motir 永遠看不到你的登入資訊。"
+          },
+          {
+            "title": "每分鐘一個點數",
+            "body": "Motir 只收取代理程式的機器時長費用：執行期間每分鐘一個點數。"
+          },
+          {
+            "title": "你完成後它就休眠",
+            "body": "閒置 30 分鐘後它會進入休眠，除了少量儲存外不產生任何費用。你給它派發下一個工作項目時，它就會醒來。"
+          }
+        ]
+      }
+    }
+  },
+  "howItWorks": {
+    "metaTitle": "Motir 的工作方式",
+    "metaDescription": "「vibe the project」背後的工作流程：AI 規劃、計畫關口、代理程式執行、合併關口、修復、學習迴圈，以及專案的記憶。",
+    "eyebrow": "Motir 的工作方式 · 面向開發者",
+    "headlineNot": "Vibe coding",
+    "headline": "Vibe the project。",
+    "lede": "每個 Motir 專案都執行在同一台「儀器」上。模組是 Motir 和它的代理程式，旋鈕和開關屬於你：在有人撥動它們之前，什麼都不會往前走。",
+    "legendMotir": "Motir 與代理程式",
+    "legendYou": "由你決定",
+    "stage": {
+      "toyCaption": "Vibe coding：輸入提示，輸出程式碼",
+      "shellCaption": "Vibe coding 只有一個旋鈕。這裡有三個。",
+      "rackCaption": "程式碼只是一個模組。專案是全部模組。",
+      "schematicCaption": "模組之下：提示產生程式碼的工具所沒有的一切",
+      "scrollHint": "繼續滾動以開啟"
+    },
+    "toyTitle": "把 vibe coding 畫成只有一個旋鈕的玩具",
+    "toyDesc": "一個只有一個旋鈕的小塑膠玩意兒：輸入提示，出來的是一堆檔案，import 互相纏繞，其中還有迴圈 import。改一個檔案的一行，就有七個檔案跟著壞掉。沒有計畫，沒有看板，沒有審閱，也沒有記憶；其餘的一切都留給你。繼續滾動，它會被完整的 Motir 樂器取代。",
+    "toy": {
+      "outside": "不屬於 Motir",
+      "brand": "Vibe coding",
+      "model": "玩具 · 單旋鈕",
+      "knob": "提示",
+      "screen": ["> 做個應用程式_"],
+      "out": "程式碼",
+      "cycle": "迴圈 import",
+      "edited": "改了 1 行",
+      "broken": "7 個檔案壞了",
+      "foot": "提示進，程式碼出。其餘的全靠你。"
+    },
+    "shellTitle": "Motir：一台帶三個控制項的樂器",
+    "shellDesc": "一個合上的合成器機箱。前面板上有三個控制項，由跳線相連：輸入想法的想法輸入口、把想法變成計畫的 Motir 規劃旋鈕，以及負責建置的 Motir 建置旋鈕。向下滾動會開啟機箱，露出內部的模組。",
+    "shell": {
+      "brand": "Motir",
+      "model": "專案合成器 · 01 型",
+      "power": "電源",
+      "idea": {
+        "label": "[01] 你",
+        "title": "想法輸入",
+        "screen": ["> 一個幫助人們", "  實現目標的", "  AI 私人", "  助理_"],
+        "out": "出"
+      },
+      "plan": {
+        "label": "[02] Motir",
+        "title": "Motir 規劃",
+        "min": "問",
+        "max": "計畫",
+        "screen": "史詩 › 使用者故事 › 工作",
+        "in": "入",
+        "out": "出"
+      },
+      "build": {
+        "label": "[03] Motir",
+        "title": "Motir 建置",
+        "min": "執行",
+        "max": "合併",
+        "screen": "每儲存庫 1 個 PR",
+        "in": "入",
+        "out": "完成"
+      },
+      "foot": "輸入想法 · 產出可用軟體"
+    },
+    "rackTitle": "以模組機架呈現的 Motir 工作流程",
+    "rackDesc": "你的想法接入規劃器，然後接入一個旋鈕，由你在那裡核准計畫，然後是看板，然後是一次代理程式執行，然後是一個旋鈕，由你在那裡審閱和合並，最後是已完成。手動工作從看板直接走到已完成。代理程式執行可以把它發現的錯誤登記到錯誤資料夾，然後繼續工作。修復模組把失敗的執行接回代理程式執行。學習迴圈從代理程式執行出發，經過裁定、重新規劃和經驗庫，回到規劃器。底部的記憶庫儲存設計、決策、文件、經驗、執行歷史、修訂記錄，以及誰做了什麼決定。機架上的開關可在 vibe coding 和 vibe the project 之間切換：前者只保留你的想法和代理程式執行，後者用上每一個模組。",
+    "schematicTitle": "以電路原理圖呈現的 Motir 架構",
+    "schematicDesc": "Motir 背後的各項服務，畫成由訊號線相連的元件。公用網路區：motir.co、設計系統包、代理程式終端機中繼、motir-core（Web 與 REST API、MCP 伺服器、登入，以及帶作業佇列的背景程序）和規劃器 motir-ai。私有網路區：為每次模型呼叫計量的 motir-gateway，以及程式碼圖譜服務。叢集區：代理程式主機、代理程式執行器、索引執行器和 CI 執行器，全部按需啟動。資料區：Postgres 和檔案儲存。外部：你的瀏覽器、透過 MCP 連線的你自己的代理程式、支付服務供應商、模型提供方和你的程式碼託管平台。",
+    "schematic": {
+      "title": "原理圖",
+      "sub": "模組內部",
+      "zones": {
+        "outside": "外部",
+        "public": "公用網路 · 網際網路，TLS",
+        "private": "私有網路 · Fly 私有網路",
+        "fleet": "叢集 · 按需啟動的機器",
+        "data": "資料"
+      },
+      "legend": {
+        "title": "訊號線",
+        "mcp": "MCP",
+        "http": "HTTP · REST",
+        "stream": "串流 · SSE / WebSocket",
+        "data": "資料庫 · 物件儲存",
+        "build": "建置期 · npm",
+        "public": "公用網路",
+        "private": "私有網路",
+        "oneWay": "單向",
+        "both": "雙向"
+      },
+      "parts": {
+        "browser": ["瀏覽器", "任意裝置上"],
+        "agent": ["你的代理程式", "Claude Code · Codex · CLI"],
+        "payments": ["支付", "結帳 · 訂閱"],
+        "llm": ["模型提供方", "任意模型，按量計費"],
+        "codeHost": ["程式碼託管", "儲存庫 · CI · 應用程式"],
+        "marketing": ["motir.co", "文件 · 探索 · 公開頁面"],
+        "designSystem": ["設計系統", "@motir/design-system"],
+        "relay": ["代理程式終端機中繼", "motir-relay"],
+        "core": ["motir-core", "應用程式本體"],
+        "coreWeb": "Web · REST API",
+        "coreMcp": "MCP 伺服器",
+        "coreAuth": "登入 · OAuth",
+        "coreWorker": "背景 · 作業佇列",
+        "ai": ["motir-ai", "規劃器"],
+        "aiConversation": "對話",
+        "aiPlanning": "規劃",
+        "aiLessons": "經驗 · 向量嵌入",
+        "aiBilling": "點數",
+        "gateway": ["motir-gateway", "為每次模型呼叫計量"],
+        "codegraph": ["程式碼圖譜", "服務"],
+        "host": ["代理程式主機", "你的代理程式機器"],
+        "runner": ["代理程式執行器", "一次執行，一項"],
+        "indexer": ["索引執行器", "一個儲存庫"],
+        "ci": ["CI 執行器", "一個作業"],
+        "postgres": ["Postgres", "三個資料庫"],
+        "files": ["檔案儲存", "物件儲存"],
+        "filesAttachments": "附件",
+        "filesDesigns": "設計儲存",
+        "filesGraphs": "圖譜快照",
+        "postgresRows": ["motir-core", "motir-ai · pgvector", "motir-gateway"]
+      },
+      "wires": {
+        "boot": "啟動",
+        "runKey": "執行金鑰",
+        "webhooks": "Webhook",
+        "wss": "WSS",
+        "sse": "SSE",
+        "mcp": "MCP",
+        "tarball": "壓縮檔",
+        "jit": "作業",
+        "snapshot": "快照"
+      }
+    },
+    "rack": {
+      "engine": "Motir · 專案引擎",
+      "engineTitle": "從想法到完成。",
+      "engineSub": "藍色模組負責幹活，橙色控制項歸你掌控。",
+      "signal": "訊號",
+      "signalMotir": "Motir 與代理程式",
+      "signalYou": "由你決定",
+      "idea": {
+        "label": "[01] 你",
+        "title": "你的想法",
+        "screen": ["> 一個 AI 私人", "  助理…_"],
+        "note": ["或匯入程式碼儲存庫、", "Jira、Linear 或 Plane"]
+      },
+      "planner": {
+        "label": "[01] AI 規劃",
+        "title": "規劃器",
+        "screen": [
+          "? 追問",
+          "史詩 › 使用者故事 › 工作",
+          "blocked_by · 規模",
+          "validate_plan  OK"
+        ]
+      },
+      "approve": {
+        "label": "[02] 你",
+        "title": "核准",
+        "min": "修改",
+        "max": "通過",
+        "screen": "計畫 · 全部輪次"
+      },
+      "board": {
+        "label": "[03] 工作項目",
+        "title": "看板",
+        "screen": ["執行者 agent|human", "Sprint · 待辦清單", "路線圖"],
+        "ready": "就緒 4/6"
+      },
+      "run": {
+        "label": "[04] 代理程式執行",
+        "title": "代理程式執行",
+        "screen": [
+          "認領 › 獨立分支",
+          "每個程式碼儲存庫 1 個 PR",
+          "執行框架 · 模型",
+          "步驟 ▮▮▮▮▯"
+        ]
+      },
+      "review": {
+        "label": "[05] 你",
+        "title": "審閱",
+        "min": "修復",
+        "max": "合併",
+        "screen": "測試 · 影片"
+      },
+      "done": {
+        "label": "[05]",
+        "title": "已完成",
+        "note": ["合併即關閉", "工作項目"]
+      },
+      "manual": {
+        "label": "[03] 你 · 手動工作",
+        "title": "手動工作",
+        "screen": "motir guide · 3/7"
+      },
+      "learning": {
+        "label": "[07] 學習迴圈",
+        "title": ["規劃器", "在學習"],
+        "note": ["每一次失誤都讓", "下一份計畫更好"]
+      },
+      "lessons": {
+        "label": "[07] 經驗",
+        "title": "經驗",
+        "screen": [
+          "失誤 › 經驗",
+          "再犯 › 強化",
+          "無規則 › 規劃錯誤",
+          "90 天未用 › 淘汰"
+        ]
+      },
+      "replan": {
+        "label": "[07] 重新規劃",
+        "title": "重新規劃",
+        "screen": ["變更已分類", "原因已記錄", "計畫歷史 +1"]
+      },
+      "verdict": {
+        "label": "[07] 裁定",
+        "title": "裁定",
+        "screen": [
+          "仍是計畫所",
+          "核准的內容？",
+          "是 › 規劃器疏漏",
+          "否 › 後來的修改"
+        ]
+      },
+      "repair": {
+        "label": "[06] 修復",
+        "title": "當執行出錯時",
+        "rows": [
+          ["PR 變紅", "motir fix"],
+          ["執行中斷", "motir continue"]
+        ]
+      },
+      "memory": {
+        "label": "[08] 記憶",
+        "title": "專案會記住一切",
+        "keys": [
+          "設計",
+          "決策",
+          "文件",
+          "經驗",
+          "執行歷史",
+          "修訂記錄",
+          "誰做的決定"
+        ],
+        "lead": "vibe coding 遺忘的，"
+      },
+      "bugs": {
+        "label": "[04] 發現錯誤",
+        "screen": "登記錯誤 › 錯誤資料夾",
+        "note": "執行繼續進行"
+      },
+      "vibe": {
+        "label": "模式",
+        "coding": "Vibe coding",
+        "project": "Vibe the project",
+        "note": "撥一下：vibe coding 只佔兩個模組"
+      }
+    },
+    "modulesHeadline": "逐個模組看",
+    "modulesLede": "上圖中的每個模組，近距離看。將滑鼠游標停在某個模組上，即可在圖中找到它。",
+    "modules": [
+      {
+        "step": "1",
+        "human": false,
+        "label": "[01] AI 規劃",
+        "title": "從一句提示到一份計畫",
+        "paras": [
+          "從一句話、一個程式碼儲存庫，或從 Jira、Linear 或 Plane 匯入開始。規劃器會讀取已有的一切，包括你程式碼儲存庫的程式碼圖譜，並在需求含糊的地方追問。",
+          "它會起草史詩、使用者故事、工作和子工作，每一項都有類型、執行者、規模以及它的 `blocked_by` 依賴關係。在你看到之前，`validate_plan` 會先檢查整棵樹。"
+        ]
+      },
+      {
+        "step": "2",
+        "human": true,
+        "label": "[02] 你 · 計畫關口",
+        "title": "計畫由你核准",
+        "paras": [
+          "在有人核准計畫之前，什麼都不會進入看板。用平常的話提出修改；每一輪都是新的一次對話，計畫的歷史會保留每一個版本以及修改的原因。"
+        ]
+      },
+      {
+        "step": "3",
+        "human": false,
+        "label": "[03] 工作項目",
+        "title": "看板",
+        "paras": [
+          "核准後的計畫會變成工作項目，配有 Sprint、待辦清單和路線圖。每個工作項目的執行者是 `agent` 或 `human`。",
+          "手動工作（一個帳戶、一個金鑰、一條 DNS 記錄、一次發布籤核）由 `motir guide` 一步一步地引導完成。"
+        ]
+      },
+      {
+        "step": "4",
+        "human": false,
+        "label": "[04] 代理程式執行",
+        "title": "代理程式負責建置",
+        "paras": [
+          "代理程式領取下一個就緒的工作項目（`motir next` 或 `motir run <KEY>`），認領它，在自己的分支上建置，並為每個程式碼儲存庫開一個提取要求，關聯到該工作項目。",
+          "它在自身工作項目之外發現的錯誤不會讓執行停下：代理程式會找出根本原因，用 `motir log bug` 把它作為一個獨立的工作項目登記到錯誤資料夾，然後繼續工作。",
+          "每次執行都會記錄代理程式的執行框架、模型、每一個步驟和結果。代理程式透過 MCP 連線，可以在你的機器上，也可以是 Motir 的託管代理程式。"
+        ]
+      },
+      {
+        "step": "5",
+        "human": true,
+        "label": "[05] 你 · 合併關口",
+        "title": "由你審閱並合並",
+        "paras": [
+          "工作項目進入 `Implemented`，代理程式發布測試方法。使用者故事會附帶一段在 CI 中錄製的驗收影片。由你審閱、核准並合並；合併即關閉該工作項目。沒有人的參與，任何東西都不會進入 `Done`。"
+        ]
+      },
+      {
+        "step": "6",
+        "human": false,
+        "label": "[06] 修復",
+        "title": "當執行出錯時",
+        "paras": [
+          "變紅或存在衝突的提取要求會用 `motir fix` 在它自己的分支上修復，最多嘗試五次。中斷的執行（筆電合上了、沙箱丟失了）會用 `motir continue` 在它留下的分支上繼續。",
+          "途中登記的錯誤會在錯誤資料夾中等待；`motir fix bugs` 會從最早的開始逐一處理。"
+        ]
+      },
+      {
+        "step": "7",
+        "human": false,
+        "label": "[07] 學習迴圈",
+        "title": "規劃器在學習",
+        "paras": [
+          "無法建置某個工作項目的代理程式，會先確認它是否仍是已核准的計畫所核准的內容（`get_approved_shape_verdict`），這樣後來的修改就不會被歸咎於規劃器。如果是計畫有誤，它會被重新規劃，變更連同原因一起被記錄下來。",
+          "這次失誤會成為一條經驗，或強化已有的經驗；如果沒有規則可以覆蓋，就登記一個規劃錯誤。下一份計畫會先讀取這些經驗。90 天內沒有再出現的經驗會淘汰。"
+        ]
+      },
+      {
+        "step": "8",
+        "human": false,
+        "label": "[08] 記憶",
+        "title": "專案會記住一切",
+        "paras": [
+          "設計、決策頁面、文件、經驗、計畫修訂以及每次執行的歷史，都與工作項目放在一起。你、新加入的隊友或下一個代理程式，即使幾個月後接手專案，也無需任何人再解釋一遍。"
+        ]
+      }
+    ],
+    "art": {
+      "plan": {
+        "prompt": "一個幫助人們實現目標的 AI 私人助理",
+        "question": "自主行動，還是傳送前先詢問？",
+        "answers": ["自主行動", "先詢問"],
+        "tree": [
+          ["0", "史詩 · 連線", ""],
+          ["1", "使用者故事 · 日曆同步", ""],
+          ["2", "工作 · 讀取行程", "blocked_by 2"],
+          ["1", "使用者故事 · 晨間簡報", ""],
+          ["2m", "手動工作 · 郵件服務供應商帳戶", ""]
+        ]
+      },
+      "approve": {
+        "title": "計畫 · 第 3 輪",
+        "turns": [
+          ["第 1 輪", "根據你的提示起草"],
+          ["第 2 輪", "「把郵件拆成兩個使用者故事」"],
+          ["第 3 輪", "等你拍板"]
+        ],
+        "min": "修改",
+        "max": "核准",
+        "cta": "核准計畫"
+      },
+      "board": {
+        "title": "工作項目",
+        "sub": "Sprint 1 · 連線",
+        "count": "24",
+        "columns": ["待辦", "進行中", "已實作", "已完成"],
+        "agent": "代理程式",
+        "manual": "手動工作"
+      },
+      "run": {
+        "run": "執行 ·",
+        "key": "PA-12",
+        "agent": "你的代理程式",
+        "title": "日曆同步",
+        "faders": ["認領", "分支", "建置", "測試", "PR"],
+        "stats": [
+          ["步驟", "9 / 14"],
+          ["登記的錯誤", "1"],
+          ["分支", "pa-12"]
+        ]
+      },
+      "review": {
+        "title": "測試方法",
+        "checks": [
+          "連線一個測試日曆",
+          "調整一場會議，檢視簡報隨之更新",
+          "撤銷存取權限，確認它停止讀取"
+        ],
+        "video": "acceptance.mp4",
+        "length": "0:42",
+        "merge": "合併"
+      },
+      "repair": {
+        "title": "當執行出錯時",
+        "rows": [
+          ["提取要求變紅", "motir fix"],
+          ["執行中斷", "motir continue"],
+          ["錯誤資料夾", "motir fix bugs"]
+        ],
+        "attempt": "第 2 次嘗試，共 5 次"
+      },
+      "learning": {
+        "loop": ["先讀", "再", "規劃"],
+        "title": "經驗庫",
+        "lessons": [
+          ["每個程式碼儲存庫一道測試關口", "已強化 ×3", 80],
+          ["不要重複建立已存在的分支", "新 · 90 天未用即淘汰", 25]
+        ]
+      },
+      "memory": {
+        "title": ":: 歷史",
+        "span": "PA · 41 天",
+        "tip": "傳送前先詢問 · 你 · 10月3日",
+        "axis": ["第 1 天", "第 20 天", "第 41 天"],
+        "tabs": ["設計", "決策", "文件", "經驗", "執行"]
+      }
+    },
+    "closeHeadline": "核心開源",
+    "closeBody": "專案管理核心以 GPL-3.0 授權開源。你可以自行託管，也可以在 motir.co 上使用。",
+    "closeStart": "Vibe a project",
+    "closeDocs": "閱讀文件",
+    "closeMcp": "連線你的代理程式"
+  },
+  "ideas": {
+    "metaTitle": "值得建置的想法 · Motir",
+    "metaDescription": "Motir 願意購買的產品：為軟體公司無法單靠程式碼完成的工作而打造的 AI 平台。做出一個能規模化的產品，Motir 就會成為你的第一個客戶。",
+    "eyebrow": "值得建置的想法",
+    "headline": "建置 Motir 願意購買的產品。",
+    "lede": "一家軟體公司的運轉不只靠程式碼。它需要律師、會計、安全團隊，以及了解其他市場的人，Motir 也不例外。我們更願意從基於 Motir 建置的產品那裡購買這些工作。以下就是我們需要的。做出一個能規模化的產品，Motir 就會成為你的第一個客戶。",
+    "promiseTitle": "Motir 是你的第一個客戶",
+    "promiseBody": "在 Motir 上公開建置其中一個，我們就會使用它、為它付費，並告訴你還缺什麼。",
+    "rulesEyebrow": "什麼樣的想法適合這裡",
+    "rulesHeadline": "能規模化的產品，而不是只服務一個團隊的工具",
+    "rules": [
+      {
+        "title": "眾多客戶，一個產品",
+        "body": "每個想法都服務於成千上萬有著相同需求的公司，而不是某一家公司自己的流程。"
+      },
+      {
+        "title": "難以低成本僱到的專業能力",
+        "body": "法律、稅務、安全、語言：需要專家的工作，由 AI 變得負擔得起，由人來把關。"
+      },
+      {
+        "title": "仍然由人簽字",
+        "body": "AI 起草、檢查並提交工作。承擔風險的部分由合格的專業人士核准，就像 Motir 在每一道關口都安排了人一樣。"
+      }
+    ],
+    "listEyebrow": "Motir 願意購買 · {n}",
+    "listHeadline": "Motir 今天就願意購買的產品",
+    "needLabel": "Motir 為什麼需要它",
+    "whoLabel": "還有誰會購買",
+    "close": {
+      "headline": "做出一個，我們就是你的第一個客戶。",
+      "body": "從想法開始，用 Motir 規劃，並公開建置。從這些裡挑一個，或者帶上你自己的想法。"
+    },
+    "placeholder": "一個面向初創公司的 AI 財務團隊：為套餐定價、申報銷售稅並向供應商付款…",
+    "more": {
+      "eyebrow": "更多方向 · {n}",
+      "headline": "Motir 需要之外，同樣值得建置的好產品",
+      "body": "對於這些，Motir 不會成為你的第一個客戶。每一個都是有據可查的市場需求、現有參與者留下的空白，以及一個現在而不是五年前才能做出來的理由。證據連結列在每一項下方。",
+      "evidenceLabel": "證據",
+      "gapLabel": "空白"
+    },
+    "find": {
+      "heading": "查詢想法",
+      "searchPlaceholder": "搜尋想法、證據和空白",
+      "searchAria": "搜尋想法",
+      "searchSubmit": "搜尋",
+      "searchClear": "清除搜尋",
+      "categoryGroup": "類別",
+      "allCategories": "全部類別",
+      "tags": "標籤",
+      "tagsSelected": "標籤 · 已選 {n} 個",
+      "activeLabel": "篩選條件",
+      "pillCategory": "類別：{label}",
+      "pillTag": "標籤：{label}",
+      "pillSearch": "「{q}」",
+      "remove": "移除",
+      "clearAll": "全部清除",
+      "countAll": "{n} 個想法",
+      "countMatch": "{n} 個想法符合",
+      "countMatchOne": "1 個想法符合",
+      "countNone": "沒有符合的想法",
+      "updating": "正在更新…"
+    },
+    "card": {
+      "open": "開啟這個想法",
+      "moreSources": "還有 {n} 個來源",
+      "tagsAria": "標籤"
+    },
+    "detail": {
+      "kindBuys": "Motir 願意購買",
+      "kindDirection": "一個方向",
+      "capabilities": "它能做什麼",
+      "evidence": "證據",
+      "gap": "空白",
+      "whyNow": "為什麼是現在",
+      "whyMotir": "Motir 為什麼需要它",
+      "whoElse": "還有誰會購買",
+      "close": "關閉",
+      "foot": "按 {key} 或「返回」回到清單。",
+      "opensInNewTab": "（在新標籤頁中開啟）"
+    },
+    "empty": {
+      "title": "沒有符合這些篩選條件的想法",
+      "body": "試試減少標籤、換個類別或換些詞。所有想法都還在。",
+      "action": "清除所有篩選"
+    },
+    "error": {
+      "eyebrow": "暫時無法存取",
+      "title": "暫時無法載入這些想法",
+      "body": "清單即時讀取自 Motir，而 Motir 沒有回應。沒有任何內容丟失，請稍後再試。",
+      "action": "重試"
+    }
+  },
+  "setupPrompt": {
+    "title": "在你的代理程式中設定 Motir",
+    "body": "複製一段提示詞，貼上到 Claude Code、Codex、Cursor 或任何其他代理程式中。它會連線 Motir 的 MCP 伺服器，安裝 CLI 和技能，並檢查它們能否正常工作。在 Claude Code 中，它會安裝 Motir 外掛。",
+    "button": "複製設定提示詞",
+    "copied": "已複製，貼上到你的代理程式中即可",
+    "failed": "無法複製，請改為選中下方的提示詞",
+    "menuLabel": "為你的代理程式複製設定提示詞",
+    "show": "顯示提示詞",
+    "menuHint": "貼上到任何代理程式中——它會在那裡設定好 Motir。",
+    "headerLabel": "複製設定提示詞",
+    "headerCopied": "已複製",
+    "headerFailed": "無法複製"
+  },
+  "builtByMotirPage": {
+    "metaTitle": "Motir 建置自身 · Motir",
+    "metaDescription": "Motir 如何建置 Motir：它最初只是一個裝著提示詞的資料夾、一份工作清單和一個失誤記錄庫，而它發布的每一個功能，都成了建置下一個功能的工具。",
+    "eyebrow": "Motir 建置自身",
+    "headline": "Motir 如何建置 Motir。",
+    "lede": "這聽起來像是先有雞還是先有蛋的難題，其實不是。Motir 最初只是一個裝著提示詞的資料夾，而它發布的每一個功能，都成了建置下一個功能的工具。",
+    "watch": "觀看 Motir 建置自身",
+    "runs": "建立帳戶，觀看它的代理程式執行",
+    "lost": {
+      "scenes": {
+        "fixLater": "以後再修",
+        "features": ["日曆", "提醒", "計費", "匯出", "搜尋"],
+        "inProgress": "進行中",
+        "question": "為什麼這樣做？",
+        "answer": "因為那個…",
+        "sessionEnded": "工作階段已結束"
+      },
+      "eyebrow": "起點",
+      "headline": "我們 Vibe coding，結果專案散了架。",
+      "body": "Vibe coding 讓寫程式碼變快了。但我們走得越遠，丟失的專案內容就越多——因為專案不只是程式碼。",
+      "items": [
+        {
+          "title": "發現了錯誤，卻從未記錄",
+          "body": "在工作階段中途被發現，到工作階段結束時就被忘了。"
+        },
+        {
+          "title": "同時鋪開太多",
+          "body": "五個功能同時在做，卻無從判斷下一個該先做哪個。"
+        },
+        {
+          "title": "缺失的測試",
+          "body": "要麼沒有，要麼達不到其餘程式碼所需的標準。"
+        },
+        {
+          "title": "淹沒在聊天裡的決定",
+          "body": "某個東西為什麼要這樣建置，隨著編碼工作階段的結束而消失了。"
+        }
+      ]
+    },
+    "missing": {
+      "eyebrow": "我們需要的",
+      "headline": "Jira 和 Linear 能記錄工作，但我們需要更多。",
+      "body": "我們把自己的流程接入熟悉的專案工具。它們裝得下工作，卻裝不下我們缺少的東西。",
+      "items": [
+        {
+          "title": "先有計畫，再寫程式碼",
+          "body": "代理程式應該從一份經人核准的計畫出發，而不是從一句提示詞出發。",
+          "product": "ai-planner"
+        },
+        {
+          "title": "已就緒，還是被什麼阻塞",
+          "body": "看清哪些工作現在就能開始，哪些在等待——具體在等待哪些其他工作。"
+        },
+        {
+          "title": "有人統管整個專案",
+          "body": "一個專案經理，無需吩咐就能統籌全局、把一切整合起來。",
+          "product": "project-manager"
+        }
+      ],
+      "after": "於是我們自己做了。"
+    },
+    "bootstrap": {
+      "eyebrow": "自舉",
+      "headline": "每一個功能，都成為下一個功能的工具。",
+      "body": "Motir 沒有等到完工才開始使用自己。它發布的每一個功能，都替換掉了建置它時所用的鷹架。",
+      "steps": [
+        {
+          "tag": "第 0 天",
+          "title": "motir-meta",
+          "body": "一個內部專案：一組提示詞、一份工作清單和一個失誤記錄庫。它引導一個模型建置了 Motir 最早的功能。",
+          "uses": "提示詞和一個工作檔案"
+        },
+        {
+          "tag": "然後",
+          "title": "工作項目",
+          "body": "工作項目發布之後，Motir 開始問自己下一步該建置什麼，而不再依賴外部工具。",
+          "uses": "它自己的工作項目"
+        },
+        {
+          "tag": "然後",
+          "title": "MCP 伺服器",
+          "body": "MCP 發布之後，那些查詢變成了 MCP 呼叫，狀態也自動保持同步。",
+          "uses": "它自己的 MCP 伺服器"
+        },
+        {
+          "tag": "然後",
+          "title": "AI 規劃",
+          "body": "規劃功能發布之後，Motir 用它自己的規劃器規劃接下來的功能。",
+          "uses": "它自己的規劃器"
+        },
+        {
+          "tag": "現在",
+          "title": "代理程式與核准",
+          "body": "代理程式建置 Motir 的工作項目；每一份計畫、每一次合併都由人來核准。",
+          "uses": "以上全部"
+        }
+      ],
+      "loop": ["建置一個功能", "使用它", "用它建置下一個"]
+    },
+    "howItWorks": {
+      "eyebrow": "幕後",
+      "headline": "建置 Motir 的工作流程，就是你將獲得的那一套。",
+      "body": "AI 規劃、計畫關口、代理程式執行、合併關口、修復和學習迴圈：每個 Motir 專案都執行在同一套工作流程上，Motir 自己也不例外。",
+      "cta": "了解 Motir 的工作方式"
+    },
+    "live": {
+      "eyebrow": "仍在建置",
+      "headline": "它從未停下。",
+      "body": "Motir 仍在公開地為自己新增功能。這些數字即時來自 Motir 自己的專案。",
+      "stats": {
+        "shipped": "已發布",
+        "planned": "已規劃",
+        "requests": "功能需求",
+        "upvotes": "贊同"
+      },
+      "recent": "最近發布",
+      "unavailable": "暫時無法載入即時數字。Motir 的專案頁面上有這些資料。"
+    },
+    "close": {
+      "headline": "用同樣的方式建置你的專案。",
+      "body": "從一個想法開始。Motir 負責規劃、建置，並讓整個專案井井有條。",
+      "cta": "免費開始"
+    }
+  },
+  "howToUse": {
+    "metaTitle": "如何使用 Motir：選用一部分、兩部分或全部三部分",
+    "metaDescription": "Motir 由三部分組成：規劃器、居中的專案管理工具，以及代理程式執行器。你可以只用中間的專案管理，透過 MCP 接入自己的規劃器和代理程式；也可以加上 Motir 的規劃器；或者讓 Motir 包攬全部三部分。",
+    "eyebrow": "如何使用 Motir",
+    "headline": "選用一部分、兩部分，或全部三部分。",
+    "lede": "Motir 由三部分組成。專案管理工具居中，承載整個計畫；規劃器將工作規劃到其中；代理程式執行器從中領取工作並完成建置。其中任何一部分，都可以由你自行執行。",
+    "parts": [
+      {
+        "lead": "規劃",
+        "name": "Motir AI 規劃器",
+        "body": "把你的想法拆解為史詩、使用者故事和工作，經你核准後錄入專案。"
+      },
+      {
+        "lead": "承載計畫",
+        "name": "Motir 專案管理",
+        "body": "看板、待辦清單、Sprint 與路線圖。所有規劃器和代理程式，無論來自你還是 Motir，都透過它協同工作。"
+      },
+      {
+        "lead": "建置",
+        "name": "Motir 代理程式叢集",
+        "body": "逐一領取就緒的工作，在獨立的機器上為每個工作執行代理程式，多個工作並行推進，並提交提取要求。"
+      }
+    ],
+    "waysHeadline": "三種使用方式",
+    "youRun": "由你負責",
+    "motirRuns": "由 Motir 負責",
+    "ways": [
+      {
+        "label": "1 · 僅專案管理",
+        "title": "你的規劃器，你的代理程式，Motir 居中。",
+        "paras": [
+          "把 Motir 當作專案管理工具，周邊的一切都由你自己掌控。",
+          "透過 MCP 進行規劃的方式始終開放。你可以自行編寫規劃器（指令碼或代理程式均可），用與 Motir 規劃器相同的工具將計畫錄入 Motir：`create_plan`、`add_plan_items` 和 `validate_plan`。在 Motir AI 規劃器問世之前，Motir 自身也採用這種方式規劃，使用的是名為 plan.py 的指令碼。",
+          "你的代理程式透過 MCP 接入。每個代理程式用 `claim_next_ready` 領取下一個就緒的工作，執行完成後用 `close_work_item_run` 回報結果。Motir 會記錄每個工作由誰領取、哪些已經交付。"
+        ],
+        "you": ["你的規劃器", "你的代理程式，以及各自何時執行", "核准計畫"],
+        "motir": [
+          "看板、待辦清單、Sprint 與路線圖",
+          "每個計畫落地前的檢查",
+          "工作由誰領取，哪些已經交付"
+        ],
+        "links": ["透過 MCP 接入", "全部 MCP 工具"]
+      },
+      {
+        "label": "2 · 規劃器與專案管理",
+        "title": "Motir 規劃，你的代理程式建置。",
+        "paras": [
+          "新增 Motir AI 規劃器。把想法交給它：它會詢問需要了解的資訊，將工作拆解為史詩、使用者故事和工作，並在你核准後把計畫錄入專案。",
+          "建置仍由你掌控。你自己的編排系統透過 MCP 從 Motir 領取就緒的工作，將每個工作交給一個代理程式，並回報結果。"
+        ],
+        "you": ["核准計畫", "你的代理程式，以及各自何時執行"],
+        "motir": [
+          "根據你的想法進行規劃",
+          "看板、待辦清單、Sprint 與路線圖",
+          "工作由誰領取，哪些已經交付"
+        ],
+        "links": ["透過 MCP 接入", "Motir CLI"]
+      },
+      {
+        "label": "3 · 全部三部分",
+        "title": "寫下想法，見證它從規劃到建置。",
+        "paras": [
+          "一切都交給 Motir。規劃器將你的想法拆解為計畫，供你核准；核准後的計畫進入看板；Motir 代理程式叢集逐一領取就緒的工作，交由代理程式執行，並提交提取要求。",
+          "關鍵節點由你決定：先核准計畫，再審核要合併的內容。"
+        ],
+        "you": ["想法", "核准計畫和提取要求"],
+        "motir": ["規劃", "看板、待辦清單、Sprint 與路線圖", "執行代理程式"],
+        "links": ["免費開始", "Motir 的工作方式"]
+      }
+    ],
+    "art": {
+      "planner": "規劃器",
+      "pm": "專案管理",
+      "runner": "代理程式執行器",
+      "motir": "Motir",
+      "yours": "你的",
+      "plannerName": "Motir AI 規劃器",
+      "pmName": "Motir 專案管理",
+      "fleetName": "Motir 代理程式叢集",
+      "plannerLcd": "史詩 › 使用者故事 › 工作",
+      "pmSub": "看板上的計畫",
+      "fleetLcd": "代理程式並行執行",
+      "yourPlanner": "你的規劃器",
+      "yourPlannerSub": "指令碼或代理程式",
+      "yourAgents": "你的代理程式",
+      "yourAgentsSub": "你的編排，任意 MCP 用戶端",
+      "orchestration": "your-orchestrator",
+      "columns": ["就緒", "執行中", "已完成"],
+      "plan": "計畫",
+      "tasks": "工作",
+      "results": "結果",
+      "you": "你",
+      "idea": "你的想法",
+      "approve": "核准計畫",
+      "outputs": "程式碼 · 設計 · 文件 · 影片",
+      "mcp": "MCP"
+    }
+  }
+}

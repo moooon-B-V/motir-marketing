@@ -153,12 +153,12 @@ describe('every catalogue’s card is drawable in the faces it loads', () => {
     ).toEqual([])
   })
 
-  it('loads a CJK face only for zh, ja and ko, under its own family', async () => {
+  it('loads a CJK face only for zh, zh-tw, ja and ko, under its own family', async () => {
     for (const locale of ['en', 'pl', 'de']) {
       expect((await loadOgFonts(locale)).length, locale).toBe(3)
       expect(ogFontFamily(locale), locale).toBe(OG_FONT_FAMILY)
     }
-    for (const locale of ['zh', 'ja', 'ko']) {
+    for (const locale of ['zh', 'zh-tw', 'ja', 'ko']) {
       const fonts = await loadOgFonts(locale)
       expect(fonts.map((f) => f.weight).sort(), locale).toEqual([
         400, 400, 700, 700, 800, 800,

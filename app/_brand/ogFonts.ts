@@ -99,6 +99,12 @@ function cjkFaces(locale: string): { path: string; weight: Weight }[] {
         { path: path.join(OG_CJK_DIR, 'zh-700.ttf'), weight: 700 },
         { path: path.join(OG_CJK_DIR, 'zh-800.ttf'), weight: 800 },
       ]
+    case 'zh-tw':
+      return [
+        { path: path.join(OG_CJK_DIR, 'zh-tw-400.ttf'), weight: 400 },
+        { path: path.join(OG_CJK_DIR, 'zh-tw-700.ttf'), weight: 700 },
+        { path: path.join(OG_CJK_DIR, 'zh-tw-800.ttf'), weight: 800 },
+      ]
     case 'ja':
       return [
         { path: path.join(OG_CJK_DIR, 'ja-400.ttf'), weight: 400 },

@@ -27,6 +27,14 @@ const catalogueFiles = readdirSync(messages)
 const locales = catalogueFiles.map((f) => f.replace(/\.json$/, ''))
 const translated = locales.filter((l) => l !== 'en')
 
+/*
+ * A catalogue that has landed before its locale is routed (MOTIR-9244). It is
+ * held to every per-catalogue check below; only the routed-set equality skips
+ * it. MOTIR-9249 registers `zh-tw` and empties this list.
+ */
+const STAGED: readonly string[] = ['zh-tw']
+const routed = locales.filter((l) => !STAGED.includes(l))
+
 /** Every leaf path, with an array's length recorded as a path of its own. */
 function shape(node: unknown, prefix = '', out: string[] = []): string[] {
   if (Array.isArray(node)) {
@@ -43,20 +51,20 @@ function shape(node: unknown, prefix = '', out: string[] = []): string[] {
 
 describe('the set of catalogues', () => {
   it('is exactly the routed locales — none missing, none extra', () => {
-    expect(locales).toEqual([...LOCALES].sort())
-    expect(locales).toHaveLength(11)
+    expect(routed).toEqual([...LOCALES].sort())
+    expect(routed).toHaveLength(11)
   })
 
-  it('has a source record for each of the ten translations, and nothing else', () => {
+  it('has a source record for each translation, and nothing else', () => {
     expect(readdirSync(join(messages, 'sources')).sort()).toEqual(
       translated.map((l) => `${l}.json`),
     )
   })
 
-  it('is what the shape gate and the copy sweeps iterate — ten beside English', () => {
+  it('is what the shape gate and the copy sweeps iterate — every translation beside English', () => {
     // Both list `messages/` with this same pattern; a pattern that matched
     // nothing would leave them reading zero catalogues and passing.
-    expect(translated).toHaveLength(10)
+    expect(translated).toHaveLength(10 + STAGED.length)
     for (const gate of ['tests/i18nMessageShape.test.ts', 'tests/copy.test.ts'])
       expect(readFileSync(gate, 'utf8'), gate).toContain(
         String.raw`/^[a-z]{2,3}(-[A-Za-z0-9]+)?\.json$/`,
