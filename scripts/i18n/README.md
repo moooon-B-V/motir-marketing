@@ -37,7 +37,7 @@ case the sentence needs ("au Chef de projet Motir", "Kierownikowi projektu
 Motir").
 
 After changing `meta.title`, `landing.hero.headline` or `footer.tagline` in
-`zh`, `ja` or `ko`, run `pnpm brand:og-fonts`: the share image draws those
+`zh`, `zh-tw`, `ja` or `ko`, run `pnpm brand:og-fonts`: the share image draws those
 three strings from font subsets cut to their characters, and
 `tests/ogFonts.test.ts` fails until the subsets are re-cut (MOTIR-7972).
 

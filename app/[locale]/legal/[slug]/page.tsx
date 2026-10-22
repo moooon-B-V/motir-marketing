@@ -44,9 +44,9 @@ export async function generateMetadata({
     }),
     // Every language version of a document is canonical to the unprefixed
     // ENGLISH document, with no `hreflang` set (MOTIR-8086): the binding text
-    // is English in all eleven, so the others are duplicates of it, not
+    // is English in all twelve, so the others are duplicates of it, not
     // alternates. `localeMetadata` spreads this AFTER its own `alternates`, so
-    // it replaces the self-canonical and the twelve languages wholesale.
+    // it replaces the self-canonical and the thirteen languages wholesale.
     alternates: englishOnlyAlternates(`/legal/${slug}`),
   }))
 }

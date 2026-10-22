@@ -63,7 +63,7 @@ export const runtime = 'nodejs'
  * cut from exactly these three strings (`pnpm brand:og-fonts`;
  * `tests/ogFonts.test.ts` fails when a catalogue edit leaves a glyph out).
  *
- * The card is generated at BUILD time for each of the eleven locales the
+ * The card is generated at BUILD time for each of the twelve locales the
  * layout's `generateStaticParams` names: nothing below reads the request, and
  * nothing fetches. A fallback font fetched at render would be a face this site
  * did not choose, so `tests/og/localeShareImage.test.ts` spies on `fetch`.
@@ -76,7 +76,7 @@ function ogLocale(locale: string | undefined): Locale {
 }
 
 /*
- * ⚠️ THE ROUTE NAMES THE ELEVEN ITSELF. An image file is a ROUTE HANDLER, and
+ * ⚠️ THE ROUTE NAMES THE TWELVE ITSELF. An image file is a ROUTE HANDLER, and
  * a route handler does not inherit the layout's `generateStaticParams` — so
  * without this the route is `●` in the table and prerenders nothing, rendering
  * each card on its first request instead. Measured on `next build`: the
