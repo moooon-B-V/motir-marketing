@@ -115,7 +115,10 @@ describe('the site host, an unprefixed address, no cookie', () => {
     ['pt-BR', 'pt'],
     ['pt-PT', 'pt'],
     ['zh-TW', 'zh-tw'],
-    ['zh-Hant-HK', 'zh'],
+    ['zh-Hant', 'zh-tw'],
+    ['zh-HK', 'zh-tw'],
+    ['zh-Hant-HK', 'zh-tw'],
+    ['zh-CN', 'zh'],
     ['ja-JP', 'ja'],
   ])('a regional %s reads as %s', async (tag, l) => {
     expectMovedTo(
@@ -155,6 +158,16 @@ describe('the order: cookie, then browser, then English', () => {
     })
     expectNotMoved(res)
     expect(rewriteOf(res)).toBe('/en')
+  })
+
+  it('a remembered zh-tw beats a browser asking for de', async () => {
+    expectMovedTo(
+      await ask('https://motir.co/', {
+        cookie: 'NEXT_LOCALE=zh-tw',
+        'accept-language': 'de',
+      }),
+      '/zh-tw',
+    )
   })
 
   it('a cookie that is not one of the twelve is skipped, not read as English', async () => {

@@ -23,7 +23,6 @@ describe('matchAcceptLanguage', () => {
     ['de-AT', 'de'],
     ['pt-BR', 'pt'],
     ['pt-PT', 'pt'],
-    ['zh-Hant-HK', 'zh'],
     ['ja-JP', 'ja'],
     ['JA-jp', 'ja'],
   ])('reads %s as its base language, %s', (header, locale) => {
@@ -32,6 +31,32 @@ describe('matchAcceptLanguage', () => {
 
   it('reads zh-TW as the routed zh-tw, an exact match before the base (MOTIR-9249)', () => {
     expect(matchAcceptLanguage('zh-TW')).toBe('zh-tw')
+  })
+
+  it.each([
+    'zh-Hant',
+    'zh-HK',
+    'zh-MO',
+    'zh-Hant-TW',
+    'zh-Hant-HK',
+    'ZH-hant',
+    'zh-hk',
+  ])('reads the Traditional range %s as zh-tw (MOTIR-9250)', (header) => {
+    expect(matchAcceptLanguage(header)).toBe('zh-tw')
+  })
+
+  it.each(['zh', 'zh-CN', 'zh-SG', 'zh-Hans', 'zh-Hans-CN', 'zh-Hans-TW'])(
+    'reads the Simplified range %s as zh',
+    (header) => {
+      expect(matchAcceptLanguage(header)).toBe('zh')
+    },
+  )
+
+  it('keeps q order across the Traditional rule', () => {
+    expect(matchAcceptLanguage('zh-TW, en;q=0.5')).toBe('zh-tw')
+    expect(matchAcceptLanguage('en, zh-TW;q=0.5')).toBe('en')
+    expect(matchAcceptLanguage('zh-TW;q=0, de')).toBe('de')
+    expect(matchAcceptLanguage('zh-HK;q=0.4, zh-CN;q=0.8')).toBe('zh')
   })
 
   it('finds nothing for a language motir.co does not speak', () => {
@@ -68,6 +93,12 @@ describe('chooseLocale', () => {
   it('takes the remembered choice over the browser', () => {
     expect(chooseLocale({ cookie: 'fr', acceptLanguage: 'de' })).toBe('fr')
     expect(chooseLocale({ cookie: 'en', acceptLanguage: 'ja' })).toBe('en')
+  })
+
+  it('honours a remembered zh-tw over the browser', () => {
+    expect(chooseLocale({ cookie: 'zh-tw', acceptLanguage: 'de' })).toBe(
+      'zh-tw',
+    )
   })
 
   it('SKIPS a cookie that is not one of the twelve, never defaulting it', () => {
