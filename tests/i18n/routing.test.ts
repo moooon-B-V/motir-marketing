@@ -62,11 +62,26 @@ describe('the locale list', () => {
   })
 
   it('names an og:locale for every locale, language_TERRITORY', () => {
-    for (const locale of LOCALES) {
-      expect(OG_LOCALE[locale], locale).toMatch(
-        new RegExp(`^${locale}_[A-Z]{2}$`),
+    // The pattern is derived from the code: `fr` → `fr_XX`, and a hyphenated
+    // code names its own territory, `zh-tw` → `zh_TW` (MOTIR-9241).
+    const ogLocalePattern = (code: string) => {
+      const [language, region] = code.split('-')
+      return new RegExp(
+        `^${language}_${region ? region.toUpperCase() : '[A-Z]{2}'}$`,
       )
     }
+    for (const locale of LOCALES) {
+      expect(OG_LOCALE[locale], locale).toMatch(ogLocalePattern(locale))
+    }
+    const cases: [code: string, og: string, ok: boolean][] = [
+      ['zh-tw', 'zh_TW', true],
+      ['zh-tw', 'zh-tw_TW', false],
+      ['zh-tw', 'zh_tw', false],
+      ['zh-tw', 'zh_HK', false],
+      ['fr', 'fr_FR', true],
+    ]
+    for (const [code, og, ok] of cases)
+      expect(ogLocalePattern(code).test(og), `${code} → ${og}`).toBe(ok)
   })
 })
 

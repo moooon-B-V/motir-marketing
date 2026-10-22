@@ -260,9 +260,9 @@ test('legal pages stay English, as Story MOTIR-7740 asks to be accepted', async 
   expect(locs.filter((loc) => loc.endsWith('/legal/terms'))).toEqual([
     `${CRAWL_ORIGIN}/legal/terms`,
   ])
-  expect(locs.filter((loc) => /\/[a-z]{2}\/legal\/[^/]+$/.test(loc))).toEqual(
-    [],
-  )
+  expect(
+    locs.filter((loc) => /\/[a-z]{2}(-[a-z]{2})?\/legal\/[^/]+$/.test(loc)),
+  ).toEqual([])
   expect(locs).toContain(`${CRAWL_ORIGIN}/fr/legal`)
   await beat(page, 2000)
 
