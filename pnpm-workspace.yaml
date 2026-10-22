@@ -91,4 +91,4 @@ allowBuilds:
 # match nothing once the pins move, so they were deleted.
 minimumReleaseAgeExclude:
   - '@motir/brand@0.4.4'
-  - '@motir/design-system@0.13.0'
+  - '@motir/design-system@0.17.0'

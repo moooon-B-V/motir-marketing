@@ -10,7 +10,7 @@ import {
   type TypeId,
 } from '@motir/design-system'
 import { useCopy } from '@/lib/copy'
-import { CJK_FACE_LABEL_CLASS, cjkFaces, type CjkLang } from '@/lib/cjkFaces'
+import { cjkFaceLabelClass, cjkFaces, type CjkLang } from '@/lib/cjkFaces'
 
 /*
  * The `/design` rail's chip rows, in the reader's language (Yue, 2026-10-09).
@@ -71,7 +71,7 @@ export function TypeChips(props: PickerProps<TypeId>) {
   return <AxisRadioGroup {...props} options={options} />
 }
 
-/** A zh, ja or ko page's own fonts, each chip named and drawn in its face. */
+/** A zh, zh-tw, ja or ko page's own fonts, each chip named and drawn in its face. */
 export function CjkFaceChips({
   lang,
   ...props
@@ -79,7 +79,7 @@ export function CjkFaceChips({
   const options = cjkFaces(lang).map((face) => ({
     id: face.id,
     label: face.family,
-    labelClassName: CJK_FACE_LABEL_CLASS[face.id],
+    labelClassName: cjkFaceLabelClass(lang, face.id),
   }))
   return <AxisRadioGroup {...props} options={options} />
 }

@@ -13,15 +13,20 @@ import { routing } from '@/i18n/routing'
  */
 
 describe('the installed font sets cover the site’s locales', () => {
-  it('maps exactly the locales the site routes', () => {
-    expect(new Set(Object.keys(LOCALE_FONT_SET))).toEqual(
-      new Set(routing.locales),
-    )
+  it('maps every locale the site routes, and only zh-tw beyond them', () => {
+    const mapped = Object.keys(LOCALE_FONT_SET)
+    for (const locale of routing.locales) expect(mapped).toContain(locale)
+    // MOTIR-9248 installs the zh-Hant set before zh-tw is routed; the
+    // registration card (MOTIR-9249) restores strict equality.
+    const routed = new Set<string>(routing.locales)
+    expect(mapped.filter((l) => !routed.has(l))).toEqual(['zh-tw'])
   })
 
-  it('draws zh, ja and ko in three different sets', () => {
-    const cjk = (['zh', 'ja', 'ko'] as const).map((l) => LOCALE_FONT_SET[l])
-    expect(new Set(cjk).size).toBe(3)
+  it('draws zh, zh-tw, ja and ko in four different sets', () => {
+    const cjk = (['zh', 'zh-tw', 'ja', 'ko'] as const).map(
+      (l) => LOCALE_FONT_SET[l],
+    )
+    expect(new Set(cjk).size).toBe(4)
     expect(cjk).not.toContain('latin')
   })
 

@@ -84,9 +84,13 @@ for (const locale of ['zh', 'ja', 'ko'] as const) {
 
     const fetched = await fetchedFamilies(page, requested)
     expect(fetched).toContain(own)
+    // The two Chinese sets share LXGW WenKai TC, so a family that is also
+    // this locale's own is no sibling's.
+    const ownFamilies: readonly string[] = SET_FAMILIES[locale]
     const siblings: readonly string[] = Object.entries(SET_FAMILIES)
       .filter(([other]) => other !== locale)
       .flatMap(([, families]) => families)
+      .filter((family) => !ownFamilies.includes(family))
     expect([...fetched].filter((f) => siblings.includes(f))).toEqual([])
   })
 }

@@ -12,6 +12,7 @@ import type { Page } from '@playwright/test'
 /** Each CJK set's faces, by the family names next/font gives them. */
 export const SET_FAMILIES = {
   zh: ['Noto Sans SC', 'Noto Serif SC', 'LXGW WenKai TC'],
+  'zh-tw': ['Noto Sans TC', 'Noto Serif TC', 'LXGW WenKai TC'],
   ja: ['Noto Sans JP', 'M PLUS Rounded 1c', 'Noto Serif JP'],
   ko: ['Noto Sans KR', 'Nanum Gothic', 'Noto Serif KR'],
 } as const
@@ -19,6 +20,7 @@ export const SET_FAMILIES = {
 /** The face each language draws in with nothing picked (`lib/cjkFaces.ts`). */
 export const DEFAULT_FAMILY = {
   zh: 'LXGW WenKai TC',
+  'zh-tw': 'LXGW WenKai TC',
   ja: 'Noto Sans JP',
   ko: 'Noto Sans KR',
 } as const
