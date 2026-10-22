@@ -214,4 +214,4 @@ export const SITE_PATHS = [
 export const DATA_PRIVACY_PANE = `${APP_ORIGIN}/settings/account/data`
 
 /** The one destination that is NOT motir-core, and so not built from the origin. */
-export const SOURCE_REPO = 'https://github.com/moooon-B-V/motir-core'
+export const SOURCE_REPO = 'https://github.com/motir-co/motir-core'

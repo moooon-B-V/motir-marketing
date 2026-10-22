@@ -1,4 +1,4 @@
-// Ported from moooon-B-V/motir-core `scripts/i18n/glossary.ts` at
+// Ported from motir-co/motir-core `scripts/i18n/glossary.ts` at
 // 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949). Kept in step with that
 // file: a change to the catalogue model belongs in both repositories.
 

@@ -6,7 +6,7 @@
 > the mirror with `pnpm i18n:glossary-sync --from <a motir-core checkout>`,
 > which copies the files byte for byte and rewrites the line below (MOTIR-7949).
 
-Mirrored from moooon-B-V/motir-core@8fd441b96719b42d7655c65021739308a687033d.
+Mirrored from motir-co/motir-core@8fd441b96719b42d7655c65021739308a687033d.
 
 One file per language, holding the **terms** every catalogue in that language
 is translated under. `messages/en.json` is the source of truth for what the app

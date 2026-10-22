@@ -39,4 +39,4 @@ As a SECOND document at a second path, served alongside `v1` — not as a rewrit
 
 The `info.version` in the specification is the API contract’s version, not the app’s release number: its major is the path version, its minor increments on an additive change from the list above, and its patch on a documentation-only correction. Read it off any response as `X-Motir-Api-Version` — [Getting started](/docs/api/getting-started) shows where.
 
-This page is the published commitment. The internal record it is written from is [the API decision record](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.
+This page is the published commitment. The internal record it is written from is [the API decision record](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md), §8.

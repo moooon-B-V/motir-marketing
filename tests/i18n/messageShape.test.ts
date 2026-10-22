@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { compareMessageShape } from '@/scripts/i18n/messageShape'
 
-// Ported from moooon-B-V/motir-core `tests/i18n/messageShape.test.ts` at
+// Ported from motir-co/motir-core `tests/i18n/messageShape.test.ts` at
 // 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949).
 //
 // Story MOTIR-7730 · MOTIR-7745 — a translation keeps its source's placeholders,

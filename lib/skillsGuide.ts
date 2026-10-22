@@ -3,7 +3,7 @@
  * where each agent reads skills from, and what each skill does.
  *
  * ⚠️ ONE TAG, AND EVERY COMMAND IS BUILT FROM IT. The page tells a reader to
- * fetch a specific release of `moooon-B-V/motir-skills`, and a page whose
+ * fetch a specific release of `motir-co/motir-skills`, and a page whose
  * blocks named two different tags would install two different sets of skills
  * depending on which section was copied. So the tag is `SKILLS_RELEASE_TAG`,
  * every command below interpolates it, and `tests/docs/skills.test.tsx`
@@ -40,7 +40,7 @@ export const SKILLS_RELEASE_TAG = pickSkillsReleaseTag(
 )
 
 /** The public repository, as `owner/name`. */
-export const SKILLS_REPO = 'moooon-B-V/motir-skills'
+export const SKILLS_REPO = 'motir-co/motir-skills'
 
 export const SKILLS_REPO_URL = `https://github.com/${SKILLS_REPO}`
 

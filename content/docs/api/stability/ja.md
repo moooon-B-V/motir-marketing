@@ -1,5 +1,5 @@
 ---
-source: 656e3e6e6922
+source: 09ae33222102
 ---
 
 公開読み取り API にはバージョンがあります。契約のバージョンは、配信される OpenAPI ドキュメントの `info.version` フィールドに含まれ、クライアントを壊す変更は、黙って編集されるのではなく、バージョンの更新として行われます。
@@ -43,4 +43,4 @@ source: 656e3e6e6922
 
 仕様の `info.version` は、アプリのリリース番号ではなく、API の契約のバージョンです。メジャーはパスのバージョンで、マイナーは上のリストにある追加的な変更で増え、パッチはドキュメントのみの修正で増えます。任意のレスポンスから `X-Motir-Api-Version` として読み取れます。どこで確認できるかは、[はじめに](/docs/api/getting-started)に記載されています。
 
-このページは公開された約束です。このページの元になった社内の記録は、[API 決定記録](https://github.com/moooon-B-V/motir-core/blob/main/docs/decisions/public-api-conventions.md)の §8 です。
+このページは公開された約束です。このページの元になった社内の記録は、[API 決定記録](https://github.com/motir-co/motir-core/blob/main/docs/decisions/public-api-conventions.md)の §8 です。

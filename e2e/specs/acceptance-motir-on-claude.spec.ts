@@ -176,7 +176,7 @@ test.describe('the receipt', () => {
     }
     await expect(
       page.locator('pre', { hasText: '/plugin marketplace add' }).first(),
-    ).toContainText(/moooon-B-V\/motir-skills#v\d+\.\d+\.\d+\b/)
+    ).toContainText(/motir-co\/motir-skills#v\d+\.\d+\.\d+\b/)
     await beat(page, 3200)
 
     // ── 4 · THE PRIVACY NOTICE ───────────────────────────────────────────────

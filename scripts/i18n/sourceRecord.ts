@@ -1,4 +1,4 @@
-// Ported from moooon-B-V/motir-core `scripts/i18n/sourceRecord.ts` at
+// Ported from motir-co/motir-core `scripts/i18n/sourceRecord.ts` at
 // 8fd441b96719b42d7655c65021739308a687033d (MOTIR-7949). Kept in step with that
 // file, with two differences. A catalogue or a record is written through
 // prettier (`writeFormattedJson`), because this repository's `format:check`

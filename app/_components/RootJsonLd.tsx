@@ -44,12 +44,12 @@ export const ORGANIZATION_ID = `${SITE_ORIGIN}/#organization`
 export const WEBSITE_ID = `${SITE_ORIGIN}/#website`
 
 /**
- * The brand's other official profile. `moooon-B-V` is the GitHub organisation
+ * The brand's other official profile. `motir-co` is the GitHub organisation
  * both repositories live under, and the footer's `GitHub` link already sends a
  * reader into it — so it is a profile a crawler can corroborate, which is the
  * only kind that belongs in `sameAs`.
  */
-export const SAME_AS = ['https://github.com/moooon-B-V']
+export const SAME_AS = ['https://github.com/motir-co']
 
 /** The page's language and its catalogue's `meta.description` (MOTIR-7956). */
 export interface RootJsonLdInput {
