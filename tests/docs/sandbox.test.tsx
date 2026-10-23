@@ -29,7 +29,7 @@ describe('the sandbox guide is instructions, not a definition', () => {
     const panes = container.querySelectorAll('pre')
     expect(panes.length).toBeGreaterThan(0)
     const text = [...panes].map((pane) => pane.textContent ?? '').join('\n')
-    expect(text).toContain('docker pull ghcr.io/moooon-b-v/motir-sandbox')
+    expect(text).toContain('docker pull ghcr.io/motir-co/motir-sandbox')
     expect(text).toContain('docker run')
     expect(text).toContain('motir link')
     expect(text).toContain('motir doctor')
