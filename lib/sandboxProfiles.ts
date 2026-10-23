@@ -37,7 +37,7 @@
  */
 
 /** The published image, without a tag. Tags are per profile. */
-export const SANDBOX_IMAGE = 'ghcr.io/moooon-b-v/motir-sandbox'
+export const SANDBOX_IMAGE = 'ghcr.io/motir-co/motir-sandbox'
 
 /** The named volume the sign-in lives in, so the container can be thrown away. */
 export const SANDBOX_AUTH_VOLUME = 'motir-auth'
